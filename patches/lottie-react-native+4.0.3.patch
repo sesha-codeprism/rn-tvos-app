@@ -1,0 +1,12 @@
+diff --git a/node_modules/lottie-react-native/lottie-react-native.podspec b/node_modules/lottie-react-native/lottie-react-native.podspec
+index 11a57bc..4d466fd 100644
+--- a/node_modules/lottie-react-native/lottie-react-native.podspec
++++ b/node_modules/lottie-react-native/lottie-react-native.podspec
+@@ -10,6 +10,7 @@ Pod::Spec.new do |s|
+   s.authors      = { "intelligibabble" => "leland.m.richardson@gmail.com" }
+   s.homepage     = "https://github.com/airbnb/lottie-react-native#readme"
+   s.license      = package['license']
++  s.platforms = { :ios => "9.0", :tvos => "9.0" }
+   s.ios.deployment_target = '9.0'
+   s.osx.deployment_target = '10.10'
+ 

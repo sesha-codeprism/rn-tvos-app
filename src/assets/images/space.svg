@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="61px" height="8px" viewBox="0 0 61 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>41E051C5-EED2-4284-A509-EBCE67C21EFD</title>
+    <defs>
+        <polygon id="path-1" points="55.0245412 0 55.0245412 5.33749026 4.97645708 5.33749026 4.97645708 0 0 0 0 5.33749026 0 8 4.97645708 8 55.0245412 8 60 8 60 0"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.692731585">
+        <g id="CreateProfile_SamsungTV_V1_sj_02" transform="translate(-968.000000, -540.000000)">
+            <g id="Molecules/forms/keyboard" transform="translate(288.000000, 517.000000)">
+                <g id="Mask-icons-Copy-6" transform="translate(680.500000, 23.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Mask" fill="#6D6D6D" xlink:href="#path-1"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

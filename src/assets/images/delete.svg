@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="47px" height="26px" viewBox="0 0 47 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>45376BD7-0CDD-4F00-A1DE-ACFA33023B5E</title>
+    <defs>
+        <path d="M33.8,18.6552115 L31.6561513,20.8 L26,15.1438487 L20.3447885,20.8 L18.2,18.6552115 L23.8552115,12.9990601 L18.2,7.34384866 L20.3447885,5.2 L26,10.8552115 L31.6561513,5.2 L33.8,7.34384866 L28.1447885,12.9990601 L33.8,18.6552115 Z M46.2490349,0 L9.16688765,0 L9.16688765,0 C8.90970959,0 8.49968906,0.211543122 8.35233793,0.428487345 L0.137283661,12.5710626 C-0.0457612203,12.8240141 -0.0457612203,13.220995 0.137283661,13.4739466 L8.3175594,25.5715127 C8.50151951,25.8244642 8.87310062,26 9.16688765,26 L46.2490349,26 C46.5428219,26 46.8,25.7479486 46.8,25.4589897 L46.8,0.541910466 C46.8,0.252951563 46.5428219,0 46.2490349,0 L46.2490349,0 Z" id="path-1"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.770066034">
+        <g id="CreateProfile_SamsungTV_V1_sj_02" transform="translate(-1082.000000, -530.000000)">
+            <g id="Molecules/forms/keyboard" transform="translate(288.000000, 517.000000)">
+                <g id="Graphics-/-Base-Icons-/-back-keyboard" transform="translate(793.500000, 13.000000)">
+                    <g id="Mask-icons-Copy-6" transform="translate(0.600000, 0.000000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="Mask" fill="#6D6D6D" xlink:href="#path-1"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

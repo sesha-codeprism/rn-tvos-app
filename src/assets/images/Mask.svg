@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="46px" height="46px" viewBox="0 0 46 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>D801B7DC-3991-4D7F-8DA0-19ADC862AE6D</title>
+    <defs>
+        <path d="M23,0 C35.696,0 46,10.304 46,23 C46,35.696 35.696,46 23,46 C10.304,46 0,35.696 0,23 C0,10.304 10.304,0 23,0 Z M35.857,10.534 L18.4,27.991 L10.143,19.757 L6.9,23 L18.4,34.5 L39.1,13.8 L35.857,10.534 Z" id="path-1"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="SignleProfileAcces-Manage_SamsungTV_V1_sj_02" transform="translate(-1014.000000, -506.000000)">
+            <g id="Mask-icons-Copy-5" transform="translate(1014.000000, 506.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="Mask" fill="#EEEEEE" xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>
