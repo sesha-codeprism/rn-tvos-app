@@ -1,0 +1,12 @@
+{
+  "strings": {
+    "pair_device": "Pair Device",
+    "pair_directions_1": "Open MediaKind app (browser, phone or tablet) and go to Settings > Device Settings",
+    "or_string": "Or",
+    "pair_directions_2": "Open a browser (computer, phone or tablet) and go to",
+    "url_link": "mediakind/activate",
+    "pair_directions_3": "and enter the following code",
+    "sample_refresh_code": "EPQTPJ",
+    "refresh_code": "Refresh Code"
+  }
+}

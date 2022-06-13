@@ -1,0 +1,78 @@
+{
+  "hubGroup1": [
+    {
+      "source": "search",
+      "label": "",
+      "width": 25,
+      "height": 25,
+      "color": "grey",
+      "variant": "Icon",
+      "focusColor": "white"
+    },
+    {
+      "source": "",
+      "label": "You",
+      "width": 25,
+      "height": 25,
+      "color": "grey",
+      "variant": "Text",
+      "focusColor": "white"
+    },
+    {
+      "source": "",
+      "label": "Live",
+      "width": 25,
+      "height": 25,
+      "color": "grey",
+      "variant": "Text",
+      "focusColor": "white"
+    },
+    {
+      "source": "",
+      "label": "On Demand",
+      "width": 25,
+      "height": 25,
+      "color": "grey",
+      "variant": "Text",
+      "focusColor": "white"
+    },
+    {
+      "source": "",
+      "label": "Apps",
+      "width": 25,
+      "height": 25,
+      "color": "grey",
+      "variant": "Text",
+      "focusColor": "white"
+    }
+  ],
+  "hubGroup2": [
+    {
+      "source": "avatar",
+      "label": "",
+      "width": 25,
+      "height": 25,
+      "color": "grey",
+      "variant": "Avatar",
+      "focusColor": "white"
+    },
+    {
+      "source": "settings",
+      "label": "",
+      "width": 50,
+      "height": 50,
+      "color": "grey",
+      "variant": "Icon",
+      "focusColor": "white"
+    },
+    {
+      "source": "logo",
+      "label": "",
+      "width": 180,
+      "height": 50,
+      "color": "grey",
+      "variant": "Image",
+      "focusColor": ""
+    }
+  ]
+}

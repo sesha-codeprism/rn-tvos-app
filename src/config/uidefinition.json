@@ -1,0 +1,323 @@
+{
+  "skin": "clientV2.default",
+  "version": "1.0.0",
+  "theme": {
+    "colors": {
+      "primary": "#ff6600",
+      "secondary": "#f5f5f5",
+      "white": "#EEEEEE",
+      "darkGrey": "#424242",
+      "blue": "#053C69"
+    },
+    "fonts": {
+      "regular": "Inter-Regular",
+      "semiBold": "Inter-SemiBold",
+      "bold": "Inter-Bold",
+      "icons": "Mediakind-Icons"
+    },
+    "fontSizes": {
+      "caption1": 21,
+      "caption2": 23,
+      "body1": 29,
+      "body2": 25,
+      "heading1": 76,
+      "heading2": 57,
+      "heading3": 48,
+      "subTitle1": 38,
+      "subTitle2": 31
+    },
+    "lineHeights": {
+      "caption1": 38,
+      "body1": 50,
+      "body2": 38,
+      "heading1": 76,
+      "heading2": 72,
+      "heading3": 60,
+      "subTitle1": 55,
+      "subTitle2": 50
+    },
+    "backgroundColors": {
+      "primary1": "#053C69",
+      "primary2": "#3DA6FF",
+      "shade1": "#00030E",
+      "shade2": "#202124",
+      "shade3": "#282828",
+      "shade4": "#424242",
+      "shade5": "#A0A0A0",
+      "white": "#EEEEEE",
+      "black": "#000000"
+    },
+    "auxiliaryColors": {
+      "overlay1": "#rgba(0,03,14,0.9)",
+      "overlay2": "#rgba(0,03,14,0.65)",
+      "overlay3": "#rgba(0,03,14,0.2)",
+      "overlay4": "#rgba(0,03,14,0.4)",
+      "statusWarning": "#E7A230",
+      "statusError": "#B22334",
+      "statusSuccess": "#48A651"
+    }
+  },
+  "assets": {
+    "images": {
+      "logo": "../assets/images/logo.png",
+      "logo_short": "../assets/images/logo_short.jpg",
+      "search": "../assets/images/search.png",
+      "message": "../assets/images/message.png",
+      "onboarding": "../assets/images/onboarding_1280x752_landscape.jpg",
+      "settings": "../assets/images/settings.png",
+      "viewMore": "../assets/images/ViewMore.png",
+      "avatar": "../assets/images/avatar.png",
+      "splashImage": "logo.png",
+      "splashAnimation": "splash.json"
+    }
+  },
+  "components": [
+    {
+      "id": "MainTopBar",
+      "subComponents": [
+        {
+          "id": "Icon Button",
+          "variant": "Icon",
+          "source": "search",
+          "style": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20
+          },
+          "iconStyles": { "height": 40, "width": 40, "resizeMode": "contain" },
+          "focusedStyle": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20,
+            "textDecorationLine": "underline"
+          }
+        },
+        {
+          "id": "Text Button",
+          "variant": "Outlined",
+          "label": "You",
+          "style": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20
+          },
+          "focusedStyle": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20,
+            "textDecorationLine": "underline"
+          },
+          "textStyle": {
+            "fontSize": 29,
+            "color": "grey"
+          },
+          "focusedTextStyle": {
+            "fontSize": 29,
+            "color": "white"
+          }
+        },
+        {
+          "id": "Text Button",
+          "variant": "Outlined",
+          "label": "Live",
+          "style": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20
+          },
+          "focusedStyle": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20,
+            "textDecorationLine": "underline"
+          },
+          "textStyle": {
+            "fontSize": 29,
+            "color": "grey"
+          },
+          "focusedTextStyle": {
+            "fontSize": 29,
+            "color": "white"
+          }
+        },
+        {
+          "id": "Text Button",
+          "variant": "Outlined",
+          "label": "On Demand",
+          "style": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20
+          },
+          "focusedStyle": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20,
+            "textDecorationLine": "underline"
+          },
+          "textStyle": {
+            "fontSize": 29,
+            "color": "grey"
+          },
+          "focusedTextStyle": {
+            "fontSize": 29,
+            "color": "white"
+          }
+        },
+        {
+          "id": "Text Button",
+          "variant": "Text",
+          "label": "Apps",
+          "style": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 10,
+            "marginTop": 10,
+            "marginRight": 500
+          },
+          "focusedStyle": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20,
+            "marginTop": 10,
+            "marginRight": 500
+          },
+          "textStyle": {
+            "fontSize": 29,
+            "color": "grey"
+          },
+          "focusedTextStyle": {
+            "fontSize": 29,
+            "color": "white"
+          }
+        },
+        {
+          "id": "Avatar Button",
+          "variant": "Avatar",
+          "source": "avatar",
+          "style": {
+            "paddingHorizontal": 25,
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20
+          },
+          "avatarStyles": {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "height": 60,
+            "width": 60,
+            "borderRadius": 30,
+            "marginTop": 30
+          },
+          "focusedStyle": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20
+          }
+        },
+        {
+          "id": "Icon Button",
+          "variant": "Icon",
+          "source": "settings",
+          "style": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20,
+            "marginTop": 10
+          },
+          "iconStyles": {
+            "height": 50,
+            "width": 50,
+            "resizeMode": "contain",
+            "marginTop": 30
+          },
+          "focusedStyle": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 20,
+            "marginTop": 10,
+            "textDecorationLine": "underline"
+          }
+        },
+        {
+          "id": "Image Button",
+          "variant": "Image",
+          "source": "logo",
+          "style": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "marginTop": 10
+          },
+          "imageStyles": {
+            "width": 300,
+            "resizeMode": "cover",
+            "display": "flex"
+          },
+          "focusedStyle": {
+            "paddingVertical": 10,
+            "paddingHorizontal": 25,
+            "display": "flex",
+            "borderRadius": 5,
+            "marginHorizontal": 20,
+            "padding": 10,
+            "marginTop": 10
+          }
+        }
+      ]
+    },
+    {
+      "id": "MFButtonGroup2",
+      "subComponents": []
+    }
+  ],
+  "config": {
+    "enableRTL": false,
+    "debounceTime": 500,
+    "protocol": "https",
+    "hostname": "reachclient.dev.mr.tv3cloud.com",
+    "currentLocale": { "full": "en-US", "short": "en" },
+    "useLottieAnimationOnSplash": false
+  }
+}

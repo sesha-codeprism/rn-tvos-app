@@ -1,0 +1,11 @@
+{
+  "images": {
+    "logo_short": "require('frontend/src/assets/images/logo_short.jpg')",
+    "logo": "require('frontend/src/assets/images/logo.png')",
+    "message": "require('frontend/src/assets/images/message.png')",
+    "landing_background": "require('../assets/images/onboarding_1280x752_landscape.jpg')",
+    "search": "require('frontend/src/assets/images/onboarding_1280x752_landscape.jpg')",
+    "settings": "require('frontend/src/assets/images/search.png')",
+    "viewMore": "require('frontend/src/assets/images/ViewMore.png')"
+  }
+}
