@@ -122,9 +122,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = (props) => {
     }
   };
 
-  const cardWidth =
-    // parseInt(props.style?.width?.toString() || "300") ||
-    (300 * 16) / 9 + 20;
+  const cardWidth = parseInt(props.style?.width?.toString() || "300");
 
   return (
     <View style={[Styles.railContainer, props.railContainerStyles]}>
@@ -147,9 +145,6 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = (props) => {
             }}
             inverted={props.enableRTL}
             data={props.libraryItems}
-            // data={Array(16)
-            //   .fill("")
-            //   .map((i, x) => x)}
             initialNumToRender={20}
             keyExtractor={(x, i) => i.toString()}
             ListHeaderComponent={
@@ -203,14 +198,21 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = (props) => {
           />
         ) : (
           /** UDL data undefined.. So basically UDL call isn't implemented or call failed with some error code. */
-          <MFViewAllButton
-            displayStyles={HomeScreenStyles.subtitleText}
-            displayText={"Feed Not Implemented"}
-            focusedStyle={props.focusedStyle}
-            style={[props.style, { marginLeft: 50 }]}
-            imageStyle={props.imageStyle}
-            onPress={() => {}}
-          />
+          <View
+            style={{
+              paddingRight: SCREEN_WIDTH,
+              paddingLeft: 50,
+            }}
+          >
+            <MFViewAllButton
+              displayStyles={Styles.railTitle}
+              displayText={"Feed Not Implemented"}
+              style={[HomeScreenStyles.landScapeCardStyles]}
+              imageStyle={HomeScreenStyles.landScapeCardImageStyles}
+              focusedStyle={HomeScreenStyles.focusedStyle}
+              onPress={() => {}}
+            />
+          </View>
         )
       ) : (
         <FlatList

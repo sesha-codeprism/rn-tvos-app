@@ -1,48 +1,63 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { BackHandler, Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFPopup from "../../../components/MFPopup";
 import { GLOBALS } from "../../../utils/globals";
+import SideMenuLayout from "../../../components/MFSideMenu";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
 const AccountSettingsScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('beforeRemove', () => {
+      // do something
+      console.warn('Warning before removing component acc settings')
+    });
+    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
+
+    return unsubscribe;
+  }, [props.navigation])
+  const handleBackButtonClick = () => {
+    console.log('back presed')
+    props.navigation.toggleDrawer();
+    return true;
+  };
   return (
-    <View style={styles.root}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.subTitle}>Account Settings</Text>
-        <Text style={styles.titleText}>Account Signout</Text>
+    <SideMenuLayout
+      title="Account Settings"
+      subTitle="Account Signout"
+      contentContainerStyle={styles.contentContainer}
+    >
+      <View>
+        <Text style={[styles.titleText, { fontSize: 29 }]}>
+          You are currently logged in as:
+        </Text>
+        <Text style={styles.emailText}>
+          {GLOBALS.bootstrapSelectors?.AccountId}
+        </Text>
       </View>
-      <View style={styles.contentContainer}>
-        <View>
-          <Text style={[styles.titleText, { fontSize: 29 }]}>
-            You are currently logged in as:
-          </Text>
-          <Text style={styles.emailText}>{GLOBALS.bootstrapSelectors?.AccountId}</Text>
-        </View>
-        <View>
-          <Pressable
-            hasTVPreferredFocus={true}
-            onFocus={() => {
-              setFocussed(true);
-            }}
-            onBlur={() => {
-              setFocussed(false);
-            }}
-            style={
-              focussed
-                ? [styles.signoutButton, { backgroundColor: "#053C69" }]
-                : styles.signoutButton
-            }
-            onPress={() => {
-              setShowAlert(true);
-            }}
-          >
-            <Text style={[styles.titleText, { fontSize: 29 }]}>Sign Out</Text>
-          </Pressable>
-        </View>
+      <View>
+        <Pressable
+          hasTVPreferredFocus={true}
+          onFocus={() => {
+            setFocussed(true);
+          }}
+          onBlur={() => {
+            setFocussed(false);
+          }}
+          style={
+            focussed
+              ? [styles.signoutButton, { backgroundColor: "#053C69" }]
+              : styles.signoutButton
+          }
+          onPress={() => {
+            setShowAlert(true);
+          }}
+        >
+          <Text style={[styles.titleText, { fontSize: 29 }]}>Sign Out</Text>
+        </Pressable>
       </View>
       {showAlert && (
         <MFPopup
@@ -65,29 +80,14 @@ const AccountSettingsScreen: React.FunctionComponent<Props> = (props: any) => {
           description={"Are you sure that you want to sign out?"}
         />
       )}
-    </View>
+    </SideMenuLayout>
   );
 };
 
 export default AccountSettingsScreen;
 
 const styles = StyleSheet.create({
-  root: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#202124",
-  },
-  headerContainer: {
-    width: "100%",
-    height: "20%",
-    backgroundColor: "#00030E",
-    padding: 50,
-    justifyContent: "center",
-  },
   contentContainer: {
-    width: "100%",
-    padding: 50,
-    height: "80%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -98,13 +98,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 55,
     color: "white",
-  },
-  subTitle: {
-    color: "#A7A7A7",
-    fontSize: 31,
-    fontWeight: "600",
-    letterSpacing: 0,
-    lineHeight: 50,
   },
   emailText: {
     color: "#A7A7A7",

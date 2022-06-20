@@ -68,14 +68,16 @@ const Styles = StyleSheet.create({
   },
   railContainer: {
     width: "100%",
-    height: 450,
+    height: 420,
     margin: 20,
     marginLeft: 20,
   },
   railTitle: {
-    color: appUIDefinition.theme.backgroundColors.white,
-    fontSize: appUIDefinition.theme.fontSizes.subTitle1,
+    color: "#A7A7A7",
+    fontSize: 31,
     marginVertical: 15,
+    fontFamily: "Inter-Regular",
+    fontWeight: "600"
   },
   railCard: {
     width: 400,

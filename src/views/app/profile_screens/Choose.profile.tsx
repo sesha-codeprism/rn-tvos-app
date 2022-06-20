@@ -9,7 +9,7 @@ import MFButton, {
 } from "../../../components/MFButton/MFButton";
 import MFText from "../../../components/MFText";
 import { appUIDefinition } from "../../../config/constants";
-import { AppImages } from "../../../config/images";
+import { AppImages } from "../../../assets/images";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import { GLOBALS } from "../../../utils/globals";
 import { MFProfileStyle } from "../../../config/styles/MFProfileStyles";

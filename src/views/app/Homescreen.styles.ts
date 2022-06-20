@@ -27,23 +27,39 @@ export const HomeScreenStyles = StyleSheet.create({
     fontSize: appUIDefinition.theme.fontSizes.body1,
     color: "white",
   },
-  cardStyles: {
-    height: 300,
-    width: 300,
-    aspectRatio: 16 / 9,
-    borderRadius: 15,
-    overflow: 'hidden',
+  landScapeCardStyles: {
+    width: 480,
+    height: 287,
+    borderRadius: 10,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  landScapeCardImageStyles: {
+    width: 460,
+    height: 263,
+    borderRadius: 10,
+  },
+  portraitCardStyles: {
+    width: 226,
+    height: 339,
+    borderRadius: 10,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  portraitCardImageStyles: {
+    width: 206,
+    height: 319,
+    borderRadius: 10,
   },
   focusedStyle: {
-    borderColor: appUIDefinition.theme.colors.primary,
     borderWidth: 5,
-    borderRadius: 15,
-    overflow: 'hidden',
-    height: 300,
-    width: 300,
-    aspectRatio: 16 / 9,
-    // overflow: 'visible'
+    borderColor: appUIDefinition.theme.colors.primary,
+    borderRadius: 10,// overflow: 'visible'
   },
+
+
   linearGradientStyles: { padding: 10 },
   posterImageStyles: {
     height: 300,

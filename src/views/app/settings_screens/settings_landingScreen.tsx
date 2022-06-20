@@ -1,15 +1,10 @@
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import React, { useState } from "react";
-import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { AppImages } from "../../../config/images";
+import { Image, Pressable, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { BackHandler } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import MFSettingsStyles from "../../../config/styles/MFSettingsStyles";
+import SideMenuLayout from "../../../components/MFSideMenu";
+import { AppImages } from "../../../assets/images";
 const menu = [
   {
     title: "Account Settings",
@@ -51,102 +46,66 @@ interface Props {
   navigation?: NativeStackNavigationProp<any>;
 }
 const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
-  const [focussed, setFocussed] = useState<any>("");
+  const [focussed, setFocussed] = useState<any>(0);
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('beforeRemove', () => {
+      // do something
+      console.warn('Warning before removing component')
+    });
+    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
+    return unsubscribe;
+  }, [props.navigation]);
+  const handleBackButtonClick = () => {
+    console.log('back presed')
+    props.navigation.toggleDrawer();
+    return true;
+  };
   return (
-    // <DrawerContentScrollView {...props}>
-    <View style={styles.root}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.titleText}>Settings</Text>
-      </View>
-      <View style={styles.contentContainer}>
-        {menu.map((item, index) => {
-          return (
-            <Pressable
-              onFocus={() => {
-                setFocussed(index);
-              }}
-              onPress={() => {
-                index === 6
-                  ? () => {
-                      props.navigation.toggleDrawer();
-                      setFocussed("");
-                    }
-                  : item.action !== ""
-                  ? props.navigation.navigate(item.action)
-                  : null;
-              }}
-              style={
-                index === focussed
-                  ? { ...styles.containerActive, ...styles.container }
-                  : styles.container
-              }
-              key={index}
+    <SideMenuLayout subTitle="Settings">
+      {menu.map((item, index) => {
+        return (
+          <Pressable
+            hasTVPreferredFocus={index === 0 ? true: false}
+            onFocus={() => {
+              setFocussed(index);
+            }}
+            onPress={() => {
+              index === 6
+                ? () => {
+                    props.navigation.toggleDrawer();
+                    setFocussed("");
+                  }
+                : item.action !== ""
+                ? props.navigation.navigate(item.action)
+                : null;
+            }}
+            style={
+              index === focussed
+                ? {
+                    ...MFSettingsStyles.containerActive,
+                    ...MFSettingsStyles.container,
+                  }
+                : MFSettingsStyles.container
+            }
+            key={index}
+          >
+            <Text
+              style={[
+                MFSettingsStyles.listText,
+                { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
+              ]}
             >
-              <Text
-                style={[
-                  styles.listText,
-                  { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
-                ]}
-              >
-                {item.title}
-              </Text>
-              <Image
-                source={AppImages.arrow_right}
-                style={{ width: 15, height: 30 }}
-              />
-            </Pressable>
-          );
-        })}
-      </View>
-    </View>
-    // </DrawerContentScrollView>
+              {item.title}
+            </Text>
+            <Image
+              source={AppImages.arrow_right}
+              style={{ width: 15, height: 30 }}
+            />
+          </Pressable>
+        );
+      })}
+    </SideMenuLayout>
   );
 };
 
 export default SettingsLandingScreen;
-
-const styles = StyleSheet.create({
-  root: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#202124",
-  },
-  headerContainer: {
-    width: "100%",
-    height: "20%",
-    backgroundColor: "#00030E",
-    padding: 50,
-    justifyContent: "center",
-  },
-  contentContainer: {
-    width: "100%",
-    padding: 50,
-    height: "80%",
-  },
-  titleText: {
-    fontSize: 38,
-    fontWeight: "bold",
-    letterSpacing: 0,
-    lineHeight: 55,
-    color: "white",
-  },
-  listText: {
-    fontSize: 29,
-    letterSpacing: 0,
-    lineHeight: 50,
-  },
-  container: {
-    width: "100%",
-    height: 100,
-    justifyContent: "space-between",
-    alignContent: "center",
-    alignItems: "center",
-    padding: 30,
-    display: "flex",
-    flexDirection: "row",
-  },
-  containerActive: {
-    backgroundColor: "#053C69",
-    borderRadius: 6,
-  },
-});

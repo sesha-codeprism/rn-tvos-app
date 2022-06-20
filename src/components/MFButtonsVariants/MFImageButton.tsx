@@ -29,6 +29,9 @@ export interface MFImageButtonProps {
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
     | undefined;
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
+  hasTVPreferredFocus?: boolean;
+  disabled?: boolean;
+  focusable?: boolean;
 }
 
 const MFImageButton: React.FunctionComponent<MFImageButtonProps> = (props) => {
@@ -48,6 +51,7 @@ const MFImageButton: React.FunctionComponent<MFImageButtonProps> = (props) => {
 
   return (
     <Pressable
+      focusable={props.focusable === false ? false : true}
       style={[
         focused
           ? StyleSheet.flatten([props.style, props.focusedStyle])
@@ -57,6 +61,7 @@ const MFImageButton: React.FunctionComponent<MFImageButtonProps> = (props) => {
       onBlur={_onBlur}
       onPress={_onPress}
       testID={"Image_Button"}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
     >
       <FastImage source={props.buttonImage} style={[props.imageStyles]}>
         {props.children}

@@ -74,11 +74,12 @@ export const GLOBALS: GLOBALSType = {
   storeID: undefined
 };
 
-export const resetGlobalStore = (fcmToken: string | null) => {
+export const resetGlobalStore = () => {
   GLOBALS.store = {
     accessToken: null,
     refreshToken: null,
     title: null,
     rightsGroupIds: null,
+    userProfile: undefined
   };
 };

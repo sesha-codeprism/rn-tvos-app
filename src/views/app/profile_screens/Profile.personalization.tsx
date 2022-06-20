@@ -7,7 +7,7 @@ import MFButton, {
 } from "../../../components/MFButton/MFButton";
 import MFText from "../../../components/MFText";
 import { appUIDefinition } from "../../../config/constants";
-import { AppImages } from "../../../config/images";
+import { AppImages } from "../../../assets/images";
 import { GLOBALS } from "../../../utils/globals";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import MFPopup from "../../../components/MFPopup";
@@ -73,7 +73,11 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
       <View style={MFProfileStyle.personalize_profileTitleContainer}>
         <MFText
           shouldRenderText
-          displayText={props.route.params.mode === "create" ? "Create Profile": "Manage Profile"}
+          displayText={
+            props.route.params.mode === "create"
+              ? "Create Profile"
+              : "Manage Profile"
+          }
           textStyle={MFProfileStyle.personalize_titleTextStyle}
         />
       </View>
@@ -107,7 +111,8 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                   subTextLabel:
                     "Enabling Profile Personalization will allow the system to  to improve the viewing experience for ndividual profiles. It is highly recommended that you enable this feature for the best viewing experience.",
                   shouldRenderImage: shouldRenderImage,
-                  placeholderStyles: MFProfileStyle.personalize_placeholderStyles,
+                  placeholderStyles:
+                    MFProfileStyle.personalize_placeholderStyles,
                 }}
               />
             </View>
@@ -126,7 +131,11 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
           <MFButton
             variant={MFButtonVariant.Contained}
             textLabel={
-              props.route.params.mode === "create" ? "Continue" : shouldRenderImage ? "Done" : "Cancel"
+              props.route.params.mode === "create"
+                ? "Continue"
+                : shouldRenderImage
+                ? "Done"
+                : "Cancel"
             }
             iconSource={0}
             imageSource={0}
@@ -140,10 +149,12 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                   mode: "create",
                   item: null,
                 });
-              } else if (shouldRenderImage && props.route.params.mode === "edit" ) {
+              } else if (
+                shouldRenderImage &&
+                props.route.params.mode === "edit"
+              ) {
                 GLOBALS.editUserProfile.AdditionalFields = {
-                  optOutPersonalDataUse:
-                    shouldRenderImage ? "false" : "true",
+                  optOutPersonalDataUse: shouldRenderImage ? "false" : "true",
                 };
                 props.navigation.navigate(Routes.ProfileFinalise, {
                   mode: "edit",
@@ -251,8 +262,6 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
   );
 };
 
-const styles = StyleSheet.create({
-  
-});
+const styles = StyleSheet.create({});
 
 export default ProfilePersonalizationScreen;

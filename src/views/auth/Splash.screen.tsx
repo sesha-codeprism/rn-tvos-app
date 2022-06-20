@@ -2,11 +2,17 @@ import React, { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
 import AnimatedLottieView from "lottie-react-native";
-import { View, StyleSheet, Image, Dimensions, Settings } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Dimensions,
+  Settings,
+  Alert,
+} from "react-native";
 import DeviceInfo from "react-native-device-info";
-import { GLOBALS } from "../../utils/globals";
-import { infoLog } from "../../utils/helpers";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GLOBALS, resetGlobalStore } from "../../utils/globals";
+import { getStore, infoLog } from "../../utils/helpers";
 import {
   getBootStrap,
   processBootStrap,
@@ -24,40 +30,66 @@ interface Props {
 const { width, height } = Dimensions.get("window");
 const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [loading, setLoading] = useState(false);
-  let test: boolean = true;
+
+  const testing: boolean = false;
 
   const checkStore = async () => {
     infoLog("checkStore INIT");
-    // Attempt to load local store
-    const MFStore = await AsyncStorage.getItem("MFStore");
-    if (MFStore) {
+    /** IF-Else added for testing only */
+    //TODO: Remove unrequired testing code
+    if (__DEV__) {
+      /** IF running debug build */
+      if (testing) {
+        /** IF testing some splash logic */
+        console.log("Done");
+      } else {
+        /** IF not testing any splash logic */
+        parseStoreAndNavigate();
+      }
+    } else {
+      /** All other cases */
+      parseStoreAndNavigate();
+    }
+  };
+
+  const parseStoreAndNavigate = async () => {
+    if (GLOBALS.store) {
       //If localstore has some data.. parse and proceed to home;
-      GLOBALS.store = JSON.parse(MFStore);
       console.log(GLOBALS.store);
       if (GLOBALS.store.accessToken && GLOBALS.store.refreshToken) {
         //Token exists in persistent storage
         //TODO: Check for expiry time. IF token is valid -> Home else shortcode
         GLOBALS.userProfile = GLOBALS.store.userProfile;
-        getBootStrap(GLOBALS.store.accessToken).then(({ data }) => {
-          let bootStrapResponse = data;
-          console.log(bootStrapResponse);
-          GLOBALS.bootstrapSelectors = bootStrapResponse;
-          GLOBALS.store.rightsGroupIds = data.RightsGroupIds;
-          processBootStrap(data, "10ft").then(() => {
-            setLoading(false);
-            initUdls();
-            setDefaultStore();
-            const GUID = generateGUID();
-            const duplexEndpoint = `wss://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/duplex/?sessionId=${GUID}`;
-            if (__DEV__) {
-              console.log(duplexEndpoint);
-              console.log("GLOBALS.Definition", GLOBALS.bootstrapSelectors);
-              console.log("StoreID:", DefaultStore.Id, DefaultStore);
+        getBootStrap(GLOBALS.store.accessToken)
+          .then(({ data }) => {
+            let bootStrapResponse = data;
+            console.log(bootStrapResponse);
+            GLOBALS.bootstrapSelectors = bootStrapResponse;
+            GLOBALS.store.rightsGroupIds = data.RightsGroupIds;
+            processBootStrap(data, "10ft").then(() => {
+              setLoading(false);
+              initUdls();
+              setDefaultStore();
+              const GUID = generateGUID();
+              const duplexEndpoint = `wss://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/duplex/?sessionId=${GUID}`;
+              if (__DEV__) {
+                console.log(duplexEndpoint);
+                console.log("GLOBALS.Definition", GLOBALS.bootstrapSelectors);
+                console.log("StoreID:", DefaultStore.Id, DefaultStore);
+              }
+              props.navigation.replace(Routes.WhoIsWatching);
+              duplex.initialize(duplexEndpoint);
+            });
+          })
+          .catch((e) => {
+            const isTokenInvalidError: boolean = e.toString().includes("401");
+            if (isTokenInvalidError) {
+              resetGlobalStore();
+              console.log("Token is invalid. Taking user to login again");
+              props.navigation.replace(Routes.ShortCode);
             }
-            props.navigation.replace(Routes.WhoIsWatching);
-            duplex.initialize(duplexEndpoint);
+            setLoading(false);
           });
-        });
       } else {
         //No Token in persistent storage
         props.navigation.replace(Routes.ShortCode);

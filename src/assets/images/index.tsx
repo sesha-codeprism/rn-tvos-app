@@ -1,8 +1,8 @@
-import { ImageObject } from "../@types/images";
+import { Source } from "react-native-fast-image";
 // const AppImages: ImageObject = require('../data/images.json')['images'];
 
-const imagesDirectory = "../assets/images";
-const AppImages = {
+const imagesDirectory = "./";
+const AppImages: { [key: string]: Source | any } = {
   logo_short: require(`${imagesDirectory}/logo_short.jpg`),
   logo: require(`${imagesDirectory}/logo.png`),
   logo_white: require(`${imagesDirectory}/logo_white.png`),
@@ -32,6 +32,10 @@ const AppImages = {
   tvshowPlaceholder:
     "https://ottapp-appgw-client-a.dev.mr.tv3cloud.com/htmlapp/20220525-6bd4d23-6-master-mr-int/images/Genre/tvshow_placeholder_94x141.jpg",
   placeholder: require(`${imagesDirectory}/placeholder.png`),
+  checked_circle: require(`${imagesDirectory}/checked_circle.png`),
+  unchecked_circle: require(`${imagesDirectory}/unchecked_circle.png`),
+  topGradient: require(`${imagesDirectory}/top_gradient.png`),
+  bottomGradient: require(`${imagesDirectory}/bottomGradient.png`),
 };
 
 export { AppImages };

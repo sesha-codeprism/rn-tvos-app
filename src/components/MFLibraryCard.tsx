@@ -15,7 +15,7 @@ import FastImage, { ImageStyle } from "react-native-fast-image";
 import { MFThemeObject } from "../@types/MFTheme";
 import { appUIDefinition } from "../config/constants";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
-import { AppImages } from "../config/images";
+import { AppImages } from "../assets/images";
 const MFTheme: MFThemeObject = require("../config/theme/theme.json");
 
 export enum AspectRatios {
@@ -168,23 +168,20 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> = (props) => {
 
   return (
     <TouchableOpacity
-      style={styles.cardContainer}
+      style={[
+        styles.rootContainer,
+        focused
+          ? StyleSheet.flatten([props.style, props.focusedStyle])
+          : StyleSheet.flatten([props.style]),
+      ]}
       activeOpacity={1}
       onPress={_onPress}
       onFocus={_onFocus}
       onBlur={_onBlur}
     >
-      <View
-        style={[
-          styles.card,
-          props.style,
-          focused
-            ? StyleSheet.flatten([props.style, props.focusedStyle])
-            : StyleSheet.flatten([props.style]),
-        ]}
-      >
+      <View style={StyleSheet.flatten([props.imageStyle])}>
         <FastImage
-          style={[styles.card, props.imageStyle]}
+          style={[props.imageStyle]}
           source={{
             uri:
               props.data.image16x9PosterURL != undefined
@@ -244,20 +241,18 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> = (props) => {
   );
 };
 const styles = StyleSheet.create({
-  cardContainer: {
-    padding: 10,
+  rootContainer: {
+    width: 480,
+    height: 287,
+    borderRadius: 10,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
   card: {
-    height: 325,
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
-  cardBlur: {
-    transform: [
-      {
-        scale: 1,
-      },
-    ],
+    width: 460,
+    height: 263,
+    borderRadius: 10,
   },
   overlay: {
     position: "absolute",
@@ -265,8 +260,8 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   cardContentContainer: {
-    width: 400,
-    height: 130,
+    width: 450,
+    height: 253,
   },
   cardTitleText: {
     color: "white",

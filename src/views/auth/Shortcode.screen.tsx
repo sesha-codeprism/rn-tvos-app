@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Pressable, Settings, View } from "react-native";
+import { Pressable, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import MFText from "../../components/MFText";
 import { MFThemeObject } from "../../@types/MFTheme";
 import MFButton, { MFButtonVariant } from "../../components/MFButton/MFButton";
 import { AppStrings } from "../../config/strings";
-import { AppImages } from "../../config/images";
+import { AppImages } from "../../assets/images";
 import { ShortCodeStyles } from "./shortCode.style";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
-import {
-  MFbootstrapLandingInfo,
-  MFDeviceInfo,
-} from "../../../backend/@types/globals";
+import { MFDeviceInfo } from "../../../backend/@types/globals";
 import {
   getShortCodeAuthenticate,
   getBootStrap,
   processBootStrap,
 } from "../../../backend/authentication/authentication";
-import { Log, infoLog, updateStore } from "../../utils/helpers";
+import { infoLog, updateStore } from "../../utils/helpers";
 import { GLOBALS } from "../../utils/globals";
 import { initUdls } from "../../../backend";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { appUIDefinition } from "../../config/constants";
+import { duplex } from "../../modules/duplex";
+import { setDefaultStore, DefaultStore } from "../../utils/DiscoveryUtils";
+import { generateGUID } from "../../utils/guid";
 
 const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
 
@@ -116,8 +116,18 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
               GLOBALS.store.rightsGroupIds = data.RightsGroupIds;
               processBootStrap(data, "10ft").then(() => {
                 initUdls();
-                props.navigation.replace(Routes.Home);
+                setDefaultStore();
+                const GUID = generateGUID();
+                const duplexEndpoint = `wss://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/duplex/?sessionId=${GUID}`;
+                if (__DEV__) {
+                  console.log(duplexEndpoint);
+                  console.log("GLOBALS.Definition", GLOBALS.bootstrapSelectors);
+                  console.log("StoreID:", DefaultStore.Id, DefaultStore);
+                }
+                props.navigation.replace(Routes.WhoIsWatching);
+                duplex.initialize(duplexEndpoint);
               });
+              props.navigation.replace(Routes.WhoIsWatching);
             });
           } else {
             const registrationCode: string = data.RegistrationCode;

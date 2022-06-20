@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleProp, TextStyle, Text} from 'react-native';
+import React from "react";
+import { StyleProp, TextStyle, Text, StyleSheet } from "react-native";
 
 export interface MFTextProps {
   displayText?: string;
@@ -8,16 +8,24 @@ export interface MFTextProps {
   shouldRenderText: boolean;
 }
 
-const MFText: React.FunctionComponent<MFTextProps> = props => {
+const MFText: React.FunctionComponent<MFTextProps> = (props) => {
   return (
     <Text
       style={[
+        textStyleSheet.defaultStyle,
         props.textStyle,
-        {writingDirection: props.enableRTL ? 'rtl' : 'ltr'},
-      ]}>
-      {props.shouldRenderText ? props.displayText : ''}
+        { writingDirection: props.enableRTL ? "rtl" : "ltr" },
+      ]}
+    >
+      {props.shouldRenderText ? props.displayText : ""}
     </Text>
   );
 };
+
+const textStyleSheet = StyleSheet.create({
+  defaultStyle: {
+    fontFamily: "Inter-Regular",
+  },
+});
 
 export default MFText;
