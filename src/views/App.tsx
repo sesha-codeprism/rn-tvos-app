@@ -4,6 +4,7 @@ import { GlobalContext } from "../contexts/globalContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { initUIDef } from "../utils/uidefinition";
 import { UserProfile } from "../@types/UserProfile";
+import { GLOBALS } from "../utils/globals";
 
 interface AppProps {}
 
@@ -34,7 +35,12 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalContext.Provider value={appSettings}>
-        <RouterOutlet />
+        <RouterOutlet
+          isAuthorized={
+            GLOBALS.store.accessToken !== null &&
+            GLOBALS.store.refreshToken !== null
+          }
+        />
       </GlobalContext.Provider>
     </QueryClientProvider>
   );

@@ -1,5 +1,5 @@
 import { ImageSourcePropType } from "react-native";
-import { appUIDefinition, globalConfig } from "../config/constants";
+import { appUIDefinition } from "../config/constants";
 import {
   ContentType,
   Definition,
@@ -40,9 +40,8 @@ export function durationInDaysHoursMinutes(seconds: number): string {
   const hours = Math.floor((seconds % (24 * 3600)) / 3600);
   const mins = Math.floor((((seconds % (24 * 3600)) / 3600) % 1) * 60);
 
-  return `${days ? days + "d " : ""}${hours ? hours + "h " : ""}${
-    mins ? mins + "m" : seconds ? seconds + "s " : ""
-  }`;
+  return `${days ? days + "d " : ""}${hours ? hours + "h " : ""}${mins ? mins + "m" : seconds ? seconds + "s " : ""
+    }`;
 }
 
 function getMetadataLine2(item: any): string {
@@ -91,8 +90,8 @@ export const isTimeRangeCurrent = (
     // now check if the show is a current or a future show
     // if no start or end time then setting the value to 0.
     const startTimeDelta = startTime
-        ? startTime - (rangeStartTime ? rangeStartTime.getTime() : Date.now())
-        : 0,
+      ? startTime - (rangeStartTime ? rangeStartTime.getTime() : Date.now())
+      : 0,
       endTimeDelta = endTime
         ? endTime - (rangeEndTime ? rangeEndTime.getTime() : Date.now())
         : 0;
@@ -317,9 +316,6 @@ export function generateType(
 export const filterUsablePlayActions = (action: any): boolean => {
   return (
     action.VideoProfile &&
-    (globalConfig.configuration.playerConfig.supportedEncodings as any)[
-      action.VideoProfile.Encoding
-    ] &&
     action.VideoProfile.Encoding in encodings &&
     action.VideoProfile.QualityLevel in orderedQualityLevels
   );
@@ -355,9 +351,6 @@ export function chooseRating(ratings: any): string {
     value = rating.Value;
     return true;
 
-    // if (ratingProvidersObject[rating.System]) {
-    // }
-    return false;
   });
 
   // Otherwise pick the first. There's generally only one anyway.
@@ -422,8 +415,8 @@ export const massageSubscriberFeed = (
     item["Rating"] = chooseRating(item.Ratings || item.CatalogInfo?.Ratings);
     item?.CatalogInfo?.RuntimeSeconds
       ? (item["runtime"] = ` • ${fromSecondsToHHMMSS(
-          item.CatalogInfo.RuntimeSeconds
-        )}`)
+        item.CatalogInfo.RuntimeSeconds
+      )}`)
       : (item["runtime"] = "");
     item["metadataLine2"] = item?.metadataLine2 || getMetadataLine2(item);
 

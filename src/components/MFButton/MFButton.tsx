@@ -127,7 +127,7 @@ export interface MFButtonProps {
   /** Source of image to be rendered. For Image variant only*/
   imageSource: Source | number;
   /** Source of avatar image to be rendered. For Avatar variant only*/
-  avatarSource: Source | number;
+  avatarSource: Source | number | any;
   /** Props for Avatar button*/
   avatarButtonProps?: MFAvatarButtonProps;
   /** Props for Contained button*/
@@ -158,6 +158,8 @@ export interface MFButtonProps {
   /** Event to be triggered with selected */
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
   hasTVPreferredFocus?: boolean;
+  disabled?: boolean;
+  focusable?: boolean;
 }
 
 const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
@@ -177,6 +179,7 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
 
   return props.variant === MFButtonVariant.Text ? (
     <Pressable
+      focusable={props.focusable === false ? false : true}
       style={[
         focused
           ? StyleSheet.flatten([
@@ -189,7 +192,8 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
       onFocus={_onFocus}
       onBlur={_onBlur}
       onPress={_onPress}
-      hasTVPreferredFocus={props.hasTVPreferredFocus || false}
+      disabled={props.disabled ? props.disabled : false}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
     >
       <MFText
         textStyle={props.textStyle}
@@ -200,6 +204,8 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
     </Pressable>
   ) : props.variant === MFButtonVariant.Image ? (
     <MFImageButton
+      focusable={props.focusable === false ? false : true}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       buttonImage={props.imageSource}
       imageStyles={props.imageStyles}
       style={props.style}
@@ -207,9 +213,12 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
       onBlur={_onBlur}
       onFocus={_onFocus}
       onPress={_onPress}
+      disabled={props.disabled ? props.disabled : false}
     ></MFImageButton>
   ) : props.variant === MFButtonVariant.Contained ? (
     <MFContainedButton
+      focusable={props.focusable === false ? false : true}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       onBlur={_onBlur}
       onFocus={_onFocus}
       onPress={_onPress}
@@ -222,6 +231,8 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
     ></MFContainedButton>
   ) : props.variant === MFButtonVariant.Outlined ? (
     <MFOutlinedButton
+      focusable={props.focusable === false ? false : true}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       onBlur={_onBlur}
       onFocus={_onFocus}
       onPress={_onPress}
@@ -232,6 +243,8 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
     ></MFOutlinedButton>
   ) : props.variant === MFButtonVariant.Icon ? (
     <MFIconButton
+      focusable={props.focusable === false ? false : true}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       imageSrc={props.iconSource}
       imageStyle={props.iconStyles}
       onBlur={_onBlur}
@@ -249,6 +262,8 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
     ></MFIconButton>
   ) : props.variant === MFButtonVariant.Avatar ? (
     <MFAvatarButton
+      focusable={props.focusable === false ? false : true}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       imageSrc={props.avatarSource}
       avatarStyle={props.avatarStyles}
       style={props.style}
@@ -259,6 +274,8 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
     ></MFAvatarButton>
   ) : props.variant === MFButtonVariant.Underlined ? (
     <MFUnderlinedButton
+      focusable={props.focusable === false ? false : true}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       onBlur={_onBlur}
       onFocus={_onFocus}
       onPress={_onPress}
@@ -269,6 +286,7 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
     />
   ) : (
     <Pressable
+      focusable={props.focusable === false ? false : true}
       style={[
         Styles.Contained,
         focused
@@ -278,6 +296,7 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
       onFocus={_onFocus}
       onBlur={_onBlur}
       onPress={_onPress}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
     >
       {props.children}
     </Pressable>

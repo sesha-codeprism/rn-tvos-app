@@ -1,26 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GLOBALS } from "./globals";
 import { logger, consoleTransport } from "react-native-logs";
 import DeviceInfo from "react-native-device-info";
+import { Settings } from "react-native";
 
-const defaultConfig = {
-  severity: "debug",
-  transport: consoleTransport,
-  transportOptions: {
-    color: "ansi", // custom option that color consoleTransport logs
-  },
-  levels: {
-    debug: 0,
-    info: 1,
-    warn: 2,
-    error: 3,
-  },
-  async: true,
-  dateFormat: "time",
-  printLevel: true,
-  printDate: true,
-  enabled: true,
-};
 
 export const Log =
   __DEV__ && global && global.console
@@ -28,11 +10,15 @@ export const Log =
     : () => { };
 
 export const updateStore = (MFStore: string) =>
-  AsyncStorage.setItem("MFStore", MFStore).then(() => {
-    Log("Update Store: ", GLOBALS.store);
-  });
+  /** Removing Async Store code. Switching to React Native default Settings API */
+  // AsyncStorage.setItem("MFStore", MFStore).then(() => {
+  //   Log("Update Store: ", GLOBALS.store);
+  // }
+  Settings.set({ store: MFStore });
 
-export const getStore = () => AsyncStorage.getItem("MFStore");
+export const getStore = () => Settings.get("store");
+// AsyncStorage.getItem("MFStore");
+
 
 export const getGloablStore = () => GLOBALS.store;
 

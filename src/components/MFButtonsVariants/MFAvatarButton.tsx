@@ -36,6 +36,9 @@ export interface MFAvatarButtonProps {
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
     | undefined;
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
+  hasTVPreferredFocus?: boolean;
+  focusable?: boolean;
+
 }
 
 const MFAvatarButton: React.FunctionComponent<MFAvatarButtonProps> = (
@@ -70,6 +73,8 @@ const MFAvatarButton: React.FunctionComponent<MFAvatarButtonProps> = (
       onFocus={_onFocus}
       onBlur={_onBlur}
       onPress={_onPress}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
+      focusable={props.focusable === false ? false : true}
     >
       <FastImage
         source={props.imageSrc}

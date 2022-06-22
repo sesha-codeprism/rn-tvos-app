@@ -22,7 +22,7 @@ import MFLoader from "../../../components/MFLoader";
 import MFPopup from "../../../components/MFPopup";
 import MFText from "../../../components/MFText";
 import { appUIDefinition } from "../../../config/constants";
-import { AppImages } from "../../../config/images";
+import { AppImages } from "../../../assets/images";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import { MFProfileStyle } from "../../../config/styles/MFProfileStyles";
 import { GlobalContext } from "../../../contexts/globalContext";

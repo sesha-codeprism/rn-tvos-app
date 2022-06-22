@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GestureResponderEvent, StyleSheet, View } from "react-native";
 import { HubsList, HubObject } from "../../@types/Hubs";
 import { enableRTL, appUIDefinition } from "../../config/constants";
-import { AppImages } from "../../config/images";
+import { AppImages } from "../../assets/images";
 import MFButton, { MFButtonVariant } from "../MFButton/MFButton";
 import MFButtonGroup, {
   ButtonVariantProps,

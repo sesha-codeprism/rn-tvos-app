@@ -10,8 +10,8 @@ const MFMenuStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignContent: "center",
-    height: 145,
-    width: width,
+    // height: 145,
+    // width: width,
   },
   avatarStyles: {
     alignItems: "center",
@@ -46,13 +46,13 @@ const MFMenuStyles = StyleSheet.create({
   textStyle: {
     fontSize: appUIDefinition.theme.fontSizes.subTitle2,
     color: "#828282",
-    fontFamily: "Inter",
+    fontFamily: "Inter-Regular",
     lineHeight: 50,
   },
   focusedTextStyle: {
     fontSize: 34,
     color: appUIDefinition.theme.backgroundColors.white,
-    fontFamily: "Inter",
+    fontFamily: "Inter-Regular",
     fontWeight: "bold",
   },
   buttonGroup2: {

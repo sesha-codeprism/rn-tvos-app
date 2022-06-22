@@ -42,6 +42,8 @@ export interface MFIconButtonProps {
   shouldRenderImage?: boolean;
   /** Style of the Placeholder view to be rendered when icon is not. */
   placeholderStyles?: StyleProp<ViewStyle>;
+  hasTVPreferredFocus?: boolean;
+  focusable?:boolean;
 }
 
 const MFIconButton: React.FunctionComponent<MFIconButtonProps> = (props) => {
@@ -74,6 +76,8 @@ const MFIconButton: React.FunctionComponent<MFIconButtonProps> = (props) => {
       onFocus={_onFocus}
       onBlur={_onBlur}
       onPress={_onPress}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
+      focusable={props.focusable === false ? false : true}
     >
       {props.shouldRenderImage ? (
         <FastImage source={props.imageSrc} style={props.imageStyle} />

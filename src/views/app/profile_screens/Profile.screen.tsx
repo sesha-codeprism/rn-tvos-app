@@ -16,7 +16,7 @@ import MFUserProfile from "../../../components/MFUserProfile";
 import MFButton, {
   MFButtonVariant,
 } from "../../../components/MFButton/MFButton";
-import { AppImages } from "../../../config/images";
+import { AppImages } from "../../../assets/images";
 import { TargetedEvent } from "react-native";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import MFPopup from "../../../components/MFPopup";

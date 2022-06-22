@@ -67,7 +67,7 @@ export const isScheduleCurrent = (
     }
     return false;
 };
-const liveSchedulesObject = {};
+const liveSchedulesObject: { [key: string]: any } = {};
 const updateLiveSchedulesObject = (liveSchedules: any) => {
     for (const liveSchedule of liveSchedules) {
         if (
@@ -108,7 +108,7 @@ export const getEpisodeInfo = (item: any): string | undefined => {
         return;
     }
 
-    const { str_seasonNumber, str_episodeNumber } = global.lStrings || {};
+    const { str_seasonNumber, str_episodeNumber } = global["lStrings"] || {};
 
     const { SeasonNumber, EpisodeNumber } = item;
 

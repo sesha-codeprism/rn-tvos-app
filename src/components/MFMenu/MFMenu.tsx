@@ -1,8 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
+import {
+  GestureResponderEvent,
+  ImageBackground,
+  StyleSheet,
+  View,
+} from "react-native";
 import { HubsList } from "../../@types/Hubs";
 import { enableRTL, appUIDefinition } from "../../config/constants";
-import { AppImages } from "../../config/images";
+import { AppImages } from "../../assets/images";
 import MFButton, { MFButtonVariant } from "../MFButton/MFButton";
 import MFButtonGroup, {
   ButtonVariantProps,
@@ -13,9 +18,10 @@ import { FeedItem } from "../../@types/HubsResponse";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { GlobalContext } from "../../contexts/globalContext";
 import { useDrawerStatus } from "@react-navigation/drawer";
-import FastImage from "react-native-fast-image";
+import FastImage, { Source } from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
 import { isFeatureAssigned } from "../../utils/helpers";
+import { screenWidth } from "../../utils/dimensions";
 
 interface MFMenuProps {
   navigation: any;
@@ -74,7 +80,18 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   return (
     <GlobalContext.Consumer>
       {({ userProfile, setProfile }) => (
-        <LinearGradient colors={["black", "transparent"]}>
+        <LinearGradient
+          colors={[
+            "rgba(0,3,14,1)",
+            "rgba(0,3,14,0.4)",
+            "rgba(0,3,14,0.4)",
+            "rgba(0,7,32,0.2)",
+            "rgba(0,7,32,0)",
+            "transparent",
+            "transparent",
+          ]}
+          style={{ height: 150 }}
+        >
           <View style={MFMenuStyles.hubsContainer}>
             <View style={{ flex: 0.2 }}>
               <MFButton
@@ -108,7 +125,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                     focusedBorderColor: appUIDefinition.theme.colors.primary,
                     unFocusedBorderColor:
                       appUIDefinition.theme.colors.secondary,
-                    focusedBorderWidth: 4,
+                    focusedBorderWidth: 5,
                     unFocusedBorderWidth: 2,
                     isDisabled: false,
                   },

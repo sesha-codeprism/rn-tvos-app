@@ -31,6 +31,9 @@ export interface MFUnderlinedButtonProps {
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
     | undefined;
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
+  hasTVPreferredFocus?: boolean;
+  focusable?: boolean;
+
 }
 
 const MFUnderlinedButton: React.FunctionComponent<MFUnderlinedButtonProps> = (
@@ -80,6 +83,8 @@ const MFUnderlinedButton: React.FunctionComponent<MFUnderlinedButtonProps> = (
       onFocus={_onFocus}
       onBlur={_onBlur}
       onPress={_onPress}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
+      focusable={props.focusable === false ? false : true}
     >
       <MFText
         textStyle={props.textStyle}

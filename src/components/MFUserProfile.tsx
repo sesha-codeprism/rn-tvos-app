@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import FastImage from "react-native-fast-image";
-import { AppImages } from "../config/images";
+import { AppImages } from "../assets/images";
 import MFText from "./MFText";
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

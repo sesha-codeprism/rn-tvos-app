@@ -31,6 +31,8 @@ export interface MFOutlinedButtonProps {
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
     | undefined;
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
+  hasTVPreferredFocus?: boolean;
+  focusable?: boolean;
 }
 
 const MFOutlinedButton: React.FunctionComponent<MFOutlinedButtonProps> = (
@@ -52,7 +54,9 @@ const MFOutlinedButton: React.FunctionComponent<MFOutlinedButtonProps> = (
 
   return (
     <Pressable
+      focusable={props.focusable === false ? false : true}
       disabled={props.outlinedButtonStyle?.isDisabled}
+      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       style={[
         props.style,
         Styles.outlined,

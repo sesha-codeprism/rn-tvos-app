@@ -5,7 +5,7 @@ import MFText from "../../../components/MFText";
 import { MFButtonVariant } from "../../../components/MFButton/MFButton";
 import { appUIDefinition } from "../../../config/constants";
 import { FormKeyBoard } from "../../../@types/FomKeyBoard";
-import { AppImages } from "../../../config/images";
+import { AppImages } from "../../../assets/images";
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Routes } from "../../../config/navigation/RouterOutlet";
@@ -248,7 +248,10 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                 props.route.params.mode === "edit"
                   ? onPressSave()
                   : ((GLOBALS.createUserProfile.name = titleString),
-                    props.navigation.navigate(Routes.ChooseProfile,{mode:'create', item: null}));
+                    props.navigation.navigate(Routes.ChooseProfile, {
+                      mode: "create",
+                      item: null,
+                    }));
               }
             }}
             style={{ width: 274, height: 62, margin: 20 }}
@@ -295,6 +298,5 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
     </View>
   );
 };
-
 
 export default CreateProfileScreen;

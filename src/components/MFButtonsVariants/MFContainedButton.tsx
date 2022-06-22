@@ -29,6 +29,8 @@ export interface MFContainedButtonProps {
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
     | undefined;
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
+  hasTVPreferredFocus?: boolean;
+  focusable?: boolean;
 }
 
 const MFContainedButton: React.FunctionComponent<MFContainedButtonProps> = (
@@ -80,6 +82,7 @@ const MFContainedButton: React.FunctionComponent<MFContainedButtonProps> = (
               ]),
             ],
       ]}
+      focusable={props.focusable === false ? false : true}
     >
       <MFText
         textStyle={[

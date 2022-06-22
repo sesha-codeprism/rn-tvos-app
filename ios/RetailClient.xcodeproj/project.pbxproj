@@ -70,6 +70,42 @@
 		2DCD954D1E0B4F2C00145EB5 /* RetailClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RetailClientTests.m */; };
 		41BF5F3596F87FEE707DDD11 /* libPods-RetailClient-RetailClientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F21F13455730034D850CD1C /* libPods-RetailClient-RetailClientTests.a */; };
 		47EB63F3390701B2260096C6 /* libPods-RetailClient-tvOS-RetailClient-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0216F1136BF7C90703C880F /* libPods-RetailClient-tvOS-RetailClient-tvOSTests.a */; };
+		59A99A9A2853229A00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
+		59A99A9B2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
+		59A99A9C2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
+		59A99A9D2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
+		59A99A9E2853229B00560F39 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A922853229900560F39 /* Inter-SemiBold.ttf */; };
+		59A99A9F2853229B00560F39 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A922853229900560F39 /* Inter-SemiBold.ttf */; };
+		59A99AA02853229B00560F39 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A922853229900560F39 /* Inter-SemiBold.ttf */; };
+		59A99AA12853229B00560F39 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A922853229900560F39 /* Inter-SemiBold.ttf */; };
+		59A99AA22853229B00560F39 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A932853229900560F39 /* Inter-Regular.ttf */; };
+		59A99AA32853229B00560F39 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A932853229900560F39 /* Inter-Regular.ttf */; };
+		59A99AA42853229B00560F39 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A932853229900560F39 /* Inter-Regular.ttf */; };
+		59A99AA52853229B00560F39 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A932853229900560F39 /* Inter-Regular.ttf */; };
+		59A99AA62853229B00560F39 /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A942853229A00560F39 /* Inter-Thin.ttf */; };
+		59A99AA72853229B00560F39 /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A942853229A00560F39 /* Inter-Thin.ttf */; };
+		59A99AA82853229B00560F39 /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A942853229A00560F39 /* Inter-Thin.ttf */; };
+		59A99AA92853229B00560F39 /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A942853229A00560F39 /* Inter-Thin.ttf */; };
+		59A99AAA2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A952853229A00560F39 /* Inter-ExtraLight.ttf */; };
+		59A99AAB2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A952853229A00560F39 /* Inter-ExtraLight.ttf */; };
+		59A99AAC2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A952853229A00560F39 /* Inter-ExtraLight.ttf */; };
+		59A99AAD2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A952853229A00560F39 /* Inter-ExtraLight.ttf */; };
+		59A99AAE2853229B00560F39 /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A962853229A00560F39 /* Inter-Light.ttf */; };
+		59A99AAF2853229B00560F39 /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A962853229A00560F39 /* Inter-Light.ttf */; };
+		59A99AB02853229B00560F39 /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A962853229A00560F39 /* Inter-Light.ttf */; };
+		59A99AB12853229B00560F39 /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A962853229A00560F39 /* Inter-Light.ttf */; };
+		59A99AB22853229B00560F39 /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A972853229A00560F39 /* Inter-Black.ttf */; };
+		59A99AB32853229B00560F39 /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A972853229A00560F39 /* Inter-Black.ttf */; };
+		59A99AB42853229B00560F39 /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A972853229A00560F39 /* Inter-Black.ttf */; };
+		59A99AB52853229B00560F39 /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A972853229A00560F39 /* Inter-Black.ttf */; };
+		59A99AB62853229B00560F39 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A982853229A00560F39 /* Inter-Bold.ttf */; };
+		59A99AB72853229B00560F39 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A982853229A00560F39 /* Inter-Bold.ttf */; };
+		59A99AB82853229B00560F39 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A982853229A00560F39 /* Inter-Bold.ttf */; };
+		59A99AB92853229B00560F39 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A982853229A00560F39 /* Inter-Bold.ttf */; };
+		59A99ABA2853229B00560F39 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A992853229A00560F39 /* Inter-Medium.ttf */; };
+		59A99ABB2853229B00560F39 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A992853229A00560F39 /* Inter-Medium.ttf */; };
+		59A99ABC2853229B00560F39 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A992853229A00560F39 /* Inter-Medium.ttf */; };
+		59A99ABD2853229B00560F39 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A992853229A00560F39 /* Inter-Medium.ttf */; };
 		813F8FE0273CF985005EB165 /* NKSearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 813F8FDA273CF985005EB165 /* NKSearchComponent.m */; };
 		813F8FE1273CF985005EB165 /* NKSearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 813F8FDA273CF985005EB165 /* NKSearchComponent.m */; };
 		813F8FE2273CF985005EB165 /* NKSearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 813F8FDA273CF985005EB165 /* NKSearchComponent.m */; };
@@ -166,6 +202,15 @@
 		388308430DF4BE056B0CEF13 /* Pods-RetailClient-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS.release.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS/Pods-RetailClient-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		3BDF8C4CCF278F944E8C6CBF /* Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS-RetailClient-tvOSTests/Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		4F21F13455730034D850CD1C /* libPods-RetailClient-RetailClientTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RetailClient-RetailClientTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		59A99A912853229900560F39 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraBold.ttf"; path = "../src/assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
+		59A99A922853229900560F39 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
+		59A99A932853229900560F39 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
+		59A99A942853229A00560F39 /* Inter-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Thin.ttf"; path = "../src/assets/fonts/Inter-Thin.ttf"; sourceTree = "<group>"; };
+		59A99A952853229A00560F39 /* Inter-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraLight.ttf"; path = "../src/assets/fonts/Inter-ExtraLight.ttf"; sourceTree = "<group>"; };
+		59A99A962853229A00560F39 /* Inter-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Light.ttf"; path = "../src/assets/fonts/Inter-Light.ttf"; sourceTree = "<group>"; };
+		59A99A972853229A00560F39 /* Inter-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Black.ttf"; path = "../src/assets/fonts/Inter-Black.ttf"; sourceTree = "<group>"; };
+		59A99A982853229A00560F39 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Bold.ttf"; path = "../src/assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
+		59A99A992853229A00560F39 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Medium.ttf"; path = "../src/assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		813F8FDA273CF985005EB165 /* NKSearchComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NKSearchComponent.m; sourceTree = "<group>"; };
 		813F8FDB273CF985005EB165 /* NKSearchComponentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NKSearchComponentManager.h; sourceTree = "<group>"; };
 		813F8FDC273CF985005EB165 /* NKSearchComponentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NKSearchComponentManager.m; sourceTree = "<group>"; };
@@ -304,6 +349,7 @@
 		13B07FAE1A68108700A75B9A /* RetailClient */ = {
 			isa = PBXGroup;
 			children = (
+				59A99A902853227300560F39 /* Resources */,
 				813F8FEE273D0257005EB165 /* RNSearchControllerViewManager.h */,
 				813F8FED273D0257005EB165 /* RNSearchControllerViewManager.m */,
 				813F8FEC273D0257005EB165 /* SearchControllerView.h */,
@@ -342,6 +388,22 @@
 				A0216F1136BF7C90703C880F /* libPods-RetailClient-tvOS-RetailClient-tvOSTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		59A99A902853227300560F39 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				59A99A972853229A00560F39 /* Inter-Black.ttf */,
+				59A99A982853229A00560F39 /* Inter-Bold.ttf */,
+				59A99A912853229900560F39 /* Inter-ExtraBold.ttf */,
+				59A99A952853229A00560F39 /* Inter-ExtraLight.ttf */,
+				59A99A962853229A00560F39 /* Inter-Light.ttf */,
+				59A99A992853229A00560F39 /* Inter-Medium.ttf */,
+				59A99A932853229900560F39 /* Inter-Regular.ttf */,
+				59A99A922853229900560F39 /* Inter-SemiBold.ttf */,
+				59A99A942853229A00560F39 /* Inter-Thin.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -494,7 +556,7 @@
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = FVSWHZ399Q;
+						DevelopmentTeam = Y6TVXWHZRK;
 						LastSwiftMigration = 1250;
 						ProvisioningStyle = Automatic;
 					};
@@ -531,7 +593,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59A99A9F2853229B00560F39 /* Inter-SemiBold.ttf in Resources */,
+				59A99AAB2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */,
 				008B0288271EF933009DED3B /* MKFullGuide in Resources */,
+				59A99AB72853229B00560F39 /* Inter-Bold.ttf in Resources */,
+				59A99AA32853229B00560F39 /* Inter-Regular.ttf in Resources */,
+				59A99AA72853229B00560F39 /* Inter-Thin.ttf in Resources */,
+				59A99A9B2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */,
+				59A99AAF2853229B00560F39 /* Inter-Light.ttf in Resources */,
+				59A99ABB2853229B00560F39 /* Inter-Medium.ttf in Resources */,
+				59A99AB32853229B00560F39 /* Inter-Black.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -540,10 +611,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				0072522127A9222300E3BF46 /* EditedData.json in Resources */,
+				59A99AA22853229B00560F39 /* Inter-Regular.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				0035DCA2276BB1A600360F43 /* SampleStoryboard.storyboard in Resources */,
+				59A99A9A2853229A00560F39 /* Inter-ExtraBold.ttf in Resources */,
+				59A99A9E2853229B00560F39 /* Inter-SemiBold.ttf in Resources */,
+				59A99AB22853229B00560F39 /* Inter-Black.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				59A99ABA2853229B00560F39 /* Inter-Medium.ttf in Resources */,
 				00352444276BBF4200360F43 /* EPGViewController.storyboard in Resources */,
+				59A99AAA2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */,
+				59A99AB62853229B00560F39 /* Inter-Bold.ttf in Resources */,
+				59A99AA62853229B00560F39 /* Inter-Thin.ttf in Resources */,
+				59A99AAE2853229B00560F39 /* Inter-Light.ttf in Resources */,
 				008B0287271EF933009DED3B /* MKFullGuide in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -553,10 +633,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				008B0289271EF933009DED3B /* MKFullGuide in Resources */,
+				59A99AAC2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */,
 				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
+				59A99AB82853229B00560F39 /* Inter-Bold.ttf in Resources */,
+				59A99ABC2853229B00560F39 /* Inter-Medium.ttf in Resources */,
+				59A99AA82853229B00560F39 /* Inter-Thin.ttf in Resources */,
 				00352445276BBF4200360F43 /* EPGViewController.storyboard in Resources */,
 				0035DCA3276BB1A600360F43 /* SampleStoryboard.storyboard in Resources */,
 				004DE6DA27A95D1D003439C1 /* EditedData.json in Resources */,
+				59A99AB42853229B00560F39 /* Inter-Black.ttf in Resources */,
+				59A99A9C2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */,
+				59A99AB02853229B00560F39 /* Inter-Light.ttf in Resources */,
+				59A99AA42853229B00560F39 /* Inter-Regular.ttf in Resources */,
+				59A99AA02853229B00560F39 /* Inter-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,7 +653,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59A99AA12853229B00560F39 /* Inter-SemiBold.ttf in Resources */,
+				59A99AAD2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */,
 				008B028A271EF933009DED3B /* MKFullGuide in Resources */,
+				59A99AB92853229B00560F39 /* Inter-Bold.ttf in Resources */,
+				59A99AA52853229B00560F39 /* Inter-Regular.ttf in Resources */,
+				59A99AA92853229B00560F39 /* Inter-Thin.ttf in Resources */,
+				59A99A9D2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */,
+				59A99AB12853229B00560F39 /* Inter-Light.ttf in Resources */,
+				59A99ABD2853229B00560F39 /* Inter-Medium.ttf in Resources */,
+				59A99AB52853229B00560F39 /* Inter-Black.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1034,8 +1132,10 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = FVSWHZ399Q;
+				DEVELOPMENT_TEAM = Y6TVXWHZRK;
 				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1046,8 +1146,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.RetailClient-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mediakind.mediafirst;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SWIFT_OBJC_BRIDGING_HEADER = "RetailClient-tvOS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1068,9 +1169,11 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = FVSWHZ399Q;
+				DEVELOPMENT_TEAM = Y6TVXWHZRK;
 				ENABLE_BITCODE = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "RetailClient-tvOS/Info.plist";
@@ -1081,8 +1184,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.RetailClient-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mediakind.mediafirst;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SWIFT_OBJC_BRIDGING_HEADER = "RetailClient-tvOS-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;

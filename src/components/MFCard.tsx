@@ -7,13 +7,15 @@ import {
   StyleProp,
   StyleSheet,
   TargetedEvent,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
 import FastImage, { ImageStyle } from "react-native-fast-image";
 import { Feed } from "../@types/HubsResponse";
 import { appUIDefinition, debounceTime } from "../config/constants";
-import { AppImages } from "../config/images";
+import Styles from "./MFButtonsVariants/MFButtonStyles";
+import { AppImages } from "../assets/images";
 
 export enum AspectRatios {
   "2:3" = "2:3",
@@ -74,7 +76,7 @@ const MFCard: React.FunctionComponent<MFCardProps> = (props) => {
       duration: 250,
     }).start();
     setTimeout(() => {
-      props.onFocus && props.onFocus && props.data && props.data;
+      props.onFocus && props.data && props.data;
     }, debounceTime);
   };
 
@@ -109,11 +111,13 @@ const MFCard: React.FunctionComponent<MFCardProps> = (props) => {
       >
         <MFText
           textStyle={[
-            styles.cardTitleText,
+            Styles.railTitle,
             {
               alignSelf:
                 props.layoutType === "Circular" ? "center" : "flex-start",
               paddingRight: props.layoutType === "Circular" ? 150 : 0,
+              color: appUIDefinition.theme.colors.white,
+              fontFamily: "Inter-Bold",
             },
           ]}
           displayText={props.title}
@@ -122,11 +126,13 @@ const MFCard: React.FunctionComponent<MFCardProps> = (props) => {
         />
         <MFText
           textStyle={[
-            styles.cardSubTitleText,
+            Styles.railTitle,
             {
               alignSelf:
                 props.layoutType === "Circular" ? "center" : "flex-start",
               paddingRight: props.layoutType === "Circular" ? 150 : 0,
+              color: appUIDefinition.theme.colors.white,
+              fontFamily: "Inter-Bold",
             },
           ]}
           displayText={props.subTitle}
@@ -138,11 +144,13 @@ const MFCard: React.FunctionComponent<MFCardProps> = (props) => {
       <View>
         <MFText
           textStyle={[
-            styles.cardTitleText,
+            Styles.railTitle,
             {
               alignSelf:
                 props.layoutType === "Circular" ? "center" : "flex-start",
               paddingRight: props.layoutType === "Circular" ? 150 : 0,
+              color: appUIDefinition.theme.colors.white,
+              fontFamily: "Inter-Bold",
             },
           ]}
           displayText={props.title}
@@ -151,11 +159,14 @@ const MFCard: React.FunctionComponent<MFCardProps> = (props) => {
         />
         <MFText
           textStyle={[
-            styles.cardSubTitleText,
+            Styles.railTitle,
+            ,
             {
               alignSelf:
                 props.layoutType === "Circular" ? "center" : "flex-start",
               paddingRight: props.layoutType === "Circular" ? 150 : 0,
+              color: appUIDefinition.theme.colors.white,
+              fontFamily: "Inter-Bold",
             },
           ]}
           displayText={props.subTitle}
@@ -166,23 +177,20 @@ const MFCard: React.FunctionComponent<MFCardProps> = (props) => {
     );
 
   return (
-    <Pressable
-      style={[styles.cardContainer]}
+    <TouchableOpacity
+      style={[
+        styles.rootContainer,
+        focused
+          ? StyleSheet.flatten([props.style, props.focusedStyle])
+          : StyleSheet.flatten([props.style]),
+      ]}
+      activeOpacity={1}
       onPress={_onPress}
       onFocus={_onFocus}
       onBlur={_onBlur}
     >
-      <View
-        style={[
-          styles.card,
-          props.style,
-          focused ? props.focusedStyle : styles.cardBlur,
-        ]}
-      >
-        <FastImage
-          style={[styles.card, props.imageStyle]}
-          source={AppImages.placeholder}
-        >
+      <View style={StyleSheet.flatten([props.imageStyle])}>
+        <FastImage style={[props.imageStyle]} source={AppImages.placeholder}>
           {props.overlayComponent}
           <View>
             {props.showProgress && props.progressComponent != undefined
@@ -230,32 +238,22 @@ const MFCard: React.FunctionComponent<MFCardProps> = (props) => {
           )
         ) : undefined}
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({
-  cardContainer: {
-    padding: 10,
+  rootContainer: {
+    width: 480,
+    height: 287,
+    borderRadius: 10,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
   card: {
-    height: 325,
-    marginRight: 20,
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
-  cardFocus: {
-    transform: [
-      {
-        scale: 1.1,
-      },
-    ],
-  },
-  cardBlur: {
-    transform: [
-      {
-        scale: 1,
-      },
-    ],
+    width: 460,
+    height: 263,
+    borderRadius: 10,
   },
   overlay: {
     position: "absolute",
@@ -263,9 +261,8 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   cardContentContainer: {
-    width: 500,
-    height: 130,
-    padding: 20,
+    width: 450,
+    height: 253,
   },
   cardTitleText: {
     color: "white",

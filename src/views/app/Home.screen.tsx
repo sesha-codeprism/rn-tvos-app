@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { View, ImageBackground } from "react-native";
 import { enableRTL } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -11,7 +11,6 @@ import MFMenu from "../../components/MFMenu/MFMenu";
 import MFLoader from "../../components/MFLoader";
 import { AppStrings } from "../../config/strings";
 import MFPopup from "../../components/MFPopup";
-import { useDrawerStatus } from "@react-navigation/drawer";
 import MFSwim from "../../components/MFSwim";
 import { getAllHubs } from "../../config/queries";
 import LinearGradient from "react-native-linear-gradient";
@@ -70,8 +69,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
       setFeeds(hubsResponse[index]);
     }
   };
-
-  const isDrawerOpen = useDrawerStatus() === "open";
 
   useEffect(() => {}, []);
 
