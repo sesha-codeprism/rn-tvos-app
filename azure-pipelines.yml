@@ -15,12 +15,9 @@ steps:
     versionSpec: '18.x'
   displayName: 'Install Node.js'
 
-- script: |
-    npm install yarn
-  displayName: 'yarn install'
 
 - script: |
-    yarn install
+    yarn
   displayName: 'yarn install'
 
 - script: |
