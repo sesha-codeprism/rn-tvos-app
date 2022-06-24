@@ -5,10 +5,9 @@ const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
 export const HomeScreenStyles = StyleSheet.create({
   container: {
     height: "100%",
-    backgroundColor: "black",
+    backgroundColor: "white",
   },
   contentContainer: {
-    paddingBottom: 250,
     marginTop: Dimensions.get('window').height * 0.3,
   },
   viewContainer: {

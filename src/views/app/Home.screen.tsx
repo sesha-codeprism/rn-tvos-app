@@ -14,6 +14,8 @@ import MFPopup from "../../components/MFPopup";
 import MFSwim from "../../components/MFSwim";
 import { getAllHubs } from "../../config/queries";
 import LinearGradient from "react-native-linear-gradient";
+import { AppImages } from "../../assets/images";
+import { screenHeight, screenWidth } from "../../utils/dimensions";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -75,76 +77,78 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   setHubsData();
 
   return (
-    <ImageBackground
-      source={require("../../assets/images/onboarding_1280x752_landscape.jpg")}
-      imageStyle={HomeScreenStyles.imageBackGroundStyles}
-      style={HomeScreenStyles.container}
-    >
-      <LinearGradient
-        colors={[
-          "#00030E",
-          "rgba(0,3,16,0.96)",
-          "rgba(0,4,18,0.9)",
-          "rgba(0,5,21,0.74)",
-          "rgba(0, 7, 32, 0)",
-        ]}
-        start={{ x: 0, y: 1 }}
-        end={{ x: 0, y: 0.3 }}
+    <View style={HomeScreenStyles.container}>
+      <ImageBackground
+        source={AppImages.landing_background}
+        style={{ height: screenHeight, width: screenWidth }}
       >
-        <MFMenu
-          navigation={props.navigation}
-          enableRTL={enableRTL}
-          hubList={hubs}
-          onPress={(event) => {
-            // setIndex(event);
-            setFeeds(hubs[event]);
-            // setHubsData();
-          }}
-        />
-        <View>
-          {showDescription != "" && (
-            <View style={HomeScreenStyles.posterViewContainerStyles}>
-              <View style={HomeScreenStyles.posterImageContainerStyles}>
-                <FastImage
-                  source={backgroundURI}
-                  style={HomeScreenStyles.posterImageStyles}
-                />
-              </View>
-              <View style={HomeScreenStyles.postContentContainerStyles}>
-                <MFText
-                  shouldRenderText
-                  displayText={showTitle}
-                  textStyle={HomeScreenStyles.titleTextStyle}
-                />
-                <View style={HomeScreenStyles.posterContainerDescriptionStyles}>
-                  <MFText
-                    shouldRenderText
-                    displayText={showDescription}
-                    textStyle={[HomeScreenStyles.subtitleText]}
-                  />
+        <ImageBackground
+          source={AppImages.bottomGradient}
+          style={{ width: screenWidth, height: screenHeight }}
+        >
+          <ImageBackground
+            source={AppImages.topGradient}
+            style={{ width: screenWidth, height: screenHeight }}
+          >
+            <>
+              <MFMenu
+                navigation={props.navigation}
+                enableRTL={enableRTL}
+                hubList={hubs}
+                onPress={(event) => {
+                  // setIndex(event);
+                  setFeeds(hubs[event]);
+                  // setHubsData();
+                }}
+              />
+              <View>
+                {showDescription != "" && (
+                  <View style={HomeScreenStyles.posterViewContainerStyles}>
+                    <View style={HomeScreenStyles.posterImageContainerStyles}>
+                      <FastImage
+                        source={backgroundURI}
+                        style={HomeScreenStyles.posterImageStyles}
+                      />
+                    </View>
+                    <View style={HomeScreenStyles.postContentContainerStyles}>
+                      <MFText
+                        shouldRenderText
+                        displayText={showTitle}
+                        textStyle={HomeScreenStyles.titleTextStyle}
+                      />
+                      <View
+                        style={
+                          HomeScreenStyles.posterContainerDescriptionStyles
+                        }
+                      >
+                        <MFText
+                          shouldRenderText
+                          displayText={showDescription}
+                          textStyle={[HomeScreenStyles.subtitleText]}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                )}
+                <View style={HomeScreenStyles.contentContainer}>
+                  {!isLoading && <MFSwim feeds={feeds} index={index} />}
                 </View>
               </View>
-            </View>
-          )}
-          <View style={HomeScreenStyles.contentContainer}>
-            {!isLoading && <MFSwim feeds={feeds} index={index} />}
-          </View>
-        </View>
-        {isLoading && (
-          // <ActivityIndicator size="large" />
-          <MFLoader transparent={true} />
-        )}
-        {showPopup ? (
-          <MFPopup
-            buttons={[
-              {
-                title: "Done",
-                onPress: () => {
-                  togglePopup(false);
-                },
-              },
-            ]}
-            description={`Uri - ${feedItem?.Uri}
+              {isLoading && (
+                // <ActivityIndicator size="large" />
+                <MFLoader transparent={true} />
+              )}
+              {showPopup ? (
+                <MFPopup
+                  buttons={[
+                    {
+                      title: "Done",
+                      onPress: () => {
+                        togglePopup(false);
+                      },
+                    },
+                  ]}
+                  description={`Uri - ${feedItem?.Uri}
             ShowcardAspectRatio - ${feedItem?.ShowcardAspectRatio}
             NavigationTargetUri - ${feedItem?.NavigationTargetUri}
             NavigationTargetText - ${feedItem?.NavigationTargetText}
@@ -152,10 +156,13 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
             Layout ${feedItem?.Layout}
             IsStacked - ${feedItem?.IsStacked}
             DefaultSortType - ${feedItem?.DefaultSortType}`}
-          />
-        ) : undefined}
-      </LinearGradient>
-    </ImageBackground>
+                />
+              ) : undefined}
+            </>
+          </ImageBackground>
+        </ImageBackground>
+      </ImageBackground>
+    </View>
   );
 };
 

@@ -1,6 +1,5 @@
 import { Image, Pressable, Text } from "react-native";
 import React, { useEffect, useState } from "react";
-import { BackHandler } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFSettingsStyles from "../../../config/styles/MFSettingsStyles";
 import SideMenuLayout from "../../../components/MFSideMenu";
@@ -48,24 +47,18 @@ interface Props {
 const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>(0);
   useEffect(() => {
-    const unsubscribe = props.navigation.addListener('beforeRemove', () => {
+    const unsubscribe = props.navigation.addListener("beforeRemove", () => {
       // do something
-      console.warn('Warning before removing component')
+      console.warn("Warning before removing component");
     });
-    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
     return unsubscribe;
   }, [props.navigation]);
-  const handleBackButtonClick = () => {
-    console.log('back presed')
-    props.navigation.toggleDrawer();
-    return true;
-  };
   return (
     <SideMenuLayout subTitle="Settings">
       {menu.map((item, index) => {
         return (
           <Pressable
-            hasTVPreferredFocus={index === 0 ? true: false}
+            hasTVPreferredFocus={index === 0 ? true : false}
             onFocus={() => {
               setFocussed(index);
             }}

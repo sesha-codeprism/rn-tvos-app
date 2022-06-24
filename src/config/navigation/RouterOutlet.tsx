@@ -16,7 +16,7 @@ import ChooseProfileScreen from "../../views/app/profile_screens/Choose.profile"
 import ProfilePersonalizationScreen from "../../views/app/profile_screens/Profile.personalization";
 import ProfileFinalisationScreen from "../../views/app/profile_screens/Profile.Finalise";
 import WhoIsWatchingScreen from "../../views/app/WhoIsWatching.screen";
-import { BackHandler, Dimensions } from "react-native";
+import { BackHandler, Dimensions, TVMenuControl } from "react-native";
 import SettingsLandingScreen from "../../views/app/settings_screens/settings_landingScreen";
 import AccountSettingsScreen from "../../views/app/settings_screens/account_settings";
 import ParentalControllScreen from "../../views/app/settings_screens/parental_controll/parental_controll.screen";
@@ -27,6 +27,8 @@ import AdultLockScreen from "../../views/app/settings_screens/parental_controll/
 import { GLOBALS } from "../../utils/globals";
 import { getStore } from "../../utils/helpers";
 import RatingScreen from "../../views/app/settings_screens/parental_controll/rating.screen";
+// import TVMenuControl from "react-native";
+import { useDrawerStatus } from "@react-navigation/drawer";
 
 interface RouterOutletProps {}
 const { width, height } = Dimensions.get("window");
@@ -62,6 +64,22 @@ const Drawer = createDrawerNavigator();
 export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
   props
 ) => {
+  const isDrawerOpen = useDrawerStatus() === "open";
+
+  const backAction = () => {
+    console.log("Capturing hadware back presses");
+    return null;
+  };
+  useEffect(() => {
+    console.log("isDrawerOpen", isDrawerOpen);
+    if (isDrawerOpen) {
+      TVMenuControl.enableTVMenuKey();
+      BackHandler.addEventListener("hardwareBackPress", backAction);
+    } else {
+      TVMenuControl.disableTVMenuKey();
+      BackHandler.removeEventListener("hardwareBackPress", backAction);
+    }
+  }, [isDrawerOpen]);
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator
@@ -70,6 +88,7 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           headerShown: false,
           animation: "slide_from_left",
           animationTypeForReplace: "push",
+          gestureEnabled: false,
           // presentation:'modal'
         }}
         // screenListeners={{
@@ -139,6 +158,7 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
       initialRouteName="splash"
       screenOptions={{
         headerShown: false,
+        gestureEnabled: false,
       }}
     >
       <Stack.Screen name={Routes.Splash} component={SplashScreen} />
@@ -182,19 +202,12 @@ interface RouterOutletProps {
 const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
   routerProps: RouterOutletProps
 ) => {
-  useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
-  }, []);
-  const handleBackButtonClick = () => {
-    console.log("back presed");
-    // props.navigation.toggleDrawer();
-    return true;
-  };
   return (
     <NavigationContainer>
       <Drawer.Navigator
         initialRouteName="app"
         // backBehavior={''}
+        detachInactiveScreens
         drawerContent={(props) => (
           <SettingsNavigator
             {...props}
@@ -212,6 +225,7 @@ const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
           },
           drawerType: "front",
           drawerPosition: "right",
+          swipeEnabled: false,
           // swipeEnabled: false,
           // gestureEnabled:false,
           // gestureHandlerProps:{
