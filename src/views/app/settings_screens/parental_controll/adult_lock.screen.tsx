@@ -1,40 +1,63 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideMenuLayout from "../../../../components/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
+import { GLOBALS } from "../../../../utils/globals";
+import { updateStore } from "../../../../utils/helpers";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
 const list = [
   {
     title: "Hide Adult Store",
-    action: true,
+    action: "allowAdultLocks",
   },
   {
     title: "Hide Adult Content",
-    action: false,
+    action: "adultContentMasking",
   },
 ];
 const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
-  const [selected, setSelected] = useState<any>([]);
-  const onPress = (item: number) => {
+  const [selected, setSelected] = useState<{ [key: string]: boolean }>({});
+  const onPress = (item: any) => {
     const selectedItems = selected;
-    if (selectedItems.includes(item)) {
-      const index = selectedItems.indexOf(item);
-      console.log("index found", index);
-      if (index > -1) {
-        selectedItems.splice(index, 1);
-        setSelected([...selectedItems]);
-      }
-    } else {
-      console.log("inside else item not in selected list");
-      setSelected([...selected, item]);
-    }
+    selectedItems[item.action] !== undefined
+      ? (selectedItems[item.action] = !selectedItems[item.action])
+      : (selectedItems[item.action] = true);
+    setSelected({...selected,...selectedItems});
+    GLOBALS.store.settings.parentalControll.adultLock = {...selected,...selectedItems};
+    updateStore(JSON.stringify(GLOBALS.store));
   };
+  // const onPress = (value: any) => {
+  //   try {
+  //     setLocked(value);
+  //     GLOBALS.store.settings.parentalControll.contentLock &&
+  //     GLOBALS.store.settings.parentalControll.purchaseLock["locked"]
+  //       ? (GLOBALS.store.settings.parentalControll.purchaseLock[
+  //           "locked"
+  //         ] = value === 0 ? true : false)
+  //       : (GLOBALS.store.settings.parentalControll.purchaseLock = {
+  //           ...GLOBALS.store.settings.parentalControll.contentLock,
+  //           ["locked"]: value === 0 ? true : false,
+  //         });
+  //     updateStore(JSON.stringify(GLOBALS.store));
+  //   } catch (error) {
+  //     console.log("Error", error);
+  //   }
+  // };
+  const getData = () => {
+    try {
+      const selectedLocks = GLOBALS.store.settings.parentalControll.adultLock;
+      setSelected(selectedLocks);
+    } catch (error) {}
+  };
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <SideMenuLayout
       title="Parental Controls"
@@ -53,7 +76,7 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
                   setFocussed(index);
                 }}
                 onPress={() => {
-                  onPress(index);
+                  onPress(item);
                 }}
                 style={
                   index === focussed
@@ -66,7 +89,7 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
                 key={index}
               >
                 <View style={styles.icContainer}>
-                  {selected.includes(index) ? (
+                  {selected[item.action] === true ? (
                     <Image
                       source={AppImages.checked_circle}
                       style={styles.icCircle}
@@ -129,7 +152,7 @@ const styles = StyleSheet.create({
     height: 38,
     marginBottom: 16,
     marginTop: 30,
-    paddingLeft: 30
+    paddingLeft: 30,
   },
   contentTitle: {
     color: "#EEEEEE",

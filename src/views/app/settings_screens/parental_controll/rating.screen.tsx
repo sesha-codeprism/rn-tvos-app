@@ -5,6 +5,8 @@ import { AppImages } from "../../../../assets/images";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStrings } from "../../../../config/strings";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
+import { GLOBALS } from "../../../../utils/globals";
+import { updateStore } from "../../../../utils/helpers";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
   providers: string;
@@ -13,7 +15,7 @@ interface Props {
 const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [ratingList, setRatingList] = useState<any>([]);
-  const [selectedItems, setSelectedItems] = useState<any>([]);
+  const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const formatList = () => {
     const strings: any = AppStrings;
     const listItem: any = strings.str_ratings[props.route.params.action];
@@ -29,12 +31,34 @@ const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
     list.sort((a, b) => {
       return b.age - a.age;
     });
+    console.log("rating list", list);
     setRatingList(list);
   };
+  const getSelectedItems = () => {
+    try {
+      console.log(" GLOBALS.store.settings in get", GLOBALS.store);
+      const selectedlist =
+        GLOBALS.store.settings.parentalControll.contentLock &&
+        GLOBALS.store.settings.parentalControll.contentLock[
+          props.route.params.action
+        ]
+          ? GLOBALS.store.settings.parentalControll.contentLock[
+              props.route.params.action
+            ]
+          : [];
+      console.log("selected items", selectedlist);
+      setSelectedItems([...selectedlist]);
+    } catch (error) {
+      console.log("error getting selected items", error);
+    }
+  };
+
   useEffect(() => {
     console.log("props coming to rating screen", props);
     formatList();
+    getSelectedItems();
   }, []);
+
   const onPress = (data: any) => {
     const list = ratingList;
     const selectedList = list.filter(
@@ -42,12 +66,37 @@ const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
     );
     const selected = selectedItems;
     if (selected.includes(data)) {
-       const unselected = selected.filter(
-          (item: any, index: any) => item.age > data.age
-        );
-        setSelectedItems([...unselected]);
+      const unselected = selected.filter(
+        (item: any, index: any) => item.age > data.age
+      );
+      setSelectedItems([...unselected]);
+      console.log("GLOBALS.store.settings", GLOBALS.store);
+      GLOBALS.store.settings.parentalControll.contentLock &&
+      GLOBALS.store.settings.parentalControll.contentLock[
+        props.route.params.action
+      ]
+        ? (GLOBALS.store.settings.parentalControll.contentLock[
+            props.route.params.action
+          ] = [...unselected])
+        : (GLOBALS.store.settings.parentalControll.contentLock = {
+            ...GLOBALS.store.settings.parentalControll.contentLock,
+            [props.route.params.action]: [...unselected],
+          });
+      updateStore(JSON.stringify(GLOBALS.store));
     } else {
       setSelectedItems([...selectedList]);
+      GLOBALS.store.settings.parentalControll.contentLock &&
+      GLOBALS.store.settings.parentalControll.contentLock[
+        props.route.params.action
+      ]
+        ? (GLOBALS.store.settings.parentalControll.contentLock[
+            props.route.params.action
+          ] = [...selectedList])
+        : (GLOBALS.store.settings.parentalControll.contentLock = {
+            ...GLOBALS.store.settings.parentalControll.contentLock,
+            [props.route.params.action]: [...selectedList],
+          });
+      updateStore(JSON.stringify(GLOBALS.store));
     }
   };
   return (
@@ -78,7 +127,7 @@ const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
             key={index}
           >
             <View style={styles.icContainer}>
-              {selectedItems.includes(item) ? (
+              {selectedItems.some((value) => value.age === item.age) ? (
                 <Image
                   source={AppImages.checked_circle}
                   style={styles.icCircle}

@@ -19,21 +19,21 @@ const list = [
     action: false,
   },
 ];
-const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
+const PurchaseLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [locked, setLocked] = useState<any>("");
 
   const onPress = (value: any) => {
     try {
       setLocked(value);
-      GLOBALS.store.settings.parentalControll.contentLock &&
-      GLOBALS.store.settings.parentalControll.contentLock["lockUnratedContent"]
-        ? (GLOBALS.store.settings.parentalControll.contentLock[
-            "lockUnratedContent"
+      GLOBALS.store.settings.parentalControll.purchaseLock &&
+      GLOBALS.store.settings.parentalControll.purchaseLock["locked"]
+        ? (GLOBALS.store.settings.parentalControll.purchaseLock[
+            "locked"
           ] = value === 0 ? true : false)
-        : (GLOBALS.store.settings.parentalControll.contentLock = {
-            ...GLOBALS.store.settings.parentalControll.contentLock,
-            ["lockUnratedContent"]: value === 0 ? true : false,
+        : (GLOBALS.store.settings.parentalControll.purchaseLock = {
+            ...GLOBALS.store.settings.parentalControll.purchaseLock,
+            ["locked"]: value === 0 ? true : false,
           });
       updateStore(JSON.stringify(GLOBALS.store));
     } catch (error) {
@@ -43,12 +43,12 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
   const getData = () => {
     try {
       const selected =
-        GLOBALS.store.settings.parentalControll.contentLock &&
-        GLOBALS.store.settings.parentalControll.contentLock[
-          "lockUnratedContent"
+        GLOBALS.store.settings.parentalControll.purchaseLock &&
+        GLOBALS.store.settings.parentalControll.purchaseLock[
+          "locked"
         ] !== undefined
-          ? GLOBALS.store.settings.parentalControll.contentLock[
-              "lockUnratedContent"
+          ? GLOBALS.store.settings.parentalControll.purchaseLock[
+              "locked"
             ] === true
             ? 0
             : 1
@@ -61,10 +61,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
   }, []);
 
   return (
-    <SideMenuLayout title="Content Locks" subTitle="Unrated Content">
-      <View style={styles.contentTitleContainer}>
-        <Text style={styles.contentTitle}>Lock unrated content</Text>
-      </View>
+    <SideMenuLayout title="Parental Controls" subTitle="Purchase Locks">
       {list.map((item: any, index: any) => {
         return (
           <Pressable
@@ -111,7 +108,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
   );
 };
 
-export default UnratedContentScreen;
+export default PurchaseLockScreen;
 
 const styles = StyleSheet.create({
   contentTitleContainer: {

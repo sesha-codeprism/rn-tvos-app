@@ -1,60 +1,52 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import SideMenuLayout from "../../../../components/MFSideMenu";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
-import { GLOBALS } from "../../../../utils/globals";
-import _ from "lodash";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-
-const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
+const listItem = [
+  {
+    title: "On Screen Language",
+    subTitle: "English (US)",
+    action: "on_screen_language",
+    icon: "",
+  },
+  {
+    title: "Closed Captions",
+    subTitle: "On",
+    action: "closed_caption",
+    icon: "",
+  },
+  {
+    title: "Primary Subtitle Language",
+    subTitle: "English",
+    action: "subtitle_language",
+    type: "primary",
+    icon: "",
+  },
+  {
+    title: "Secondary Subtitle Language",
+    subTitle: "None",
+    action: "subtitle_language",
+    type: "secondary",
+    icon: "",
+  },
+  {
+    title: "Video Quality",
+    subTitle: "Better",
+    action: "video_quality",
+    icon: "",
+  },
+];
+const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
-  const [list, setList] = useState<any[]>([]);
-
-  const formatList = () => {
-    try {
-      const values = GLOBALS.store.settings.parentalControll;
-      const listItem = [
-        {
-          title: "Content Locks",
-          subTitle: _.isEmpty(values.contentLock) ? "Unrestricted" : "Locked",
-          action: "content_lock",
-          icon: "",
-        },
-        {
-          title: "Adult Locks",
-          subTitle: values.adultLock['adultContentMasking'] || values.adultLock['allowAdultLocks'] ? 'Locked' : 'Unrestricted',
-          action: "adult_lock",
-          icon: "",
-        },
-        {
-          title: "Purchase Locks",
-          subTitle: values.purchaseLock['locked'] ? 'Locked': 'Unrestricted',
-          action: "purchase_lock",
-          icon: "",
-        },
-      ];
-      setList(listItem);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-  useEffect(() => {
-    const unsubscribe = props.navigation.addListener("focus", () => {
-      // The screen is focused
-      // Call any action
-      formatList();
-    });
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
-  }, []);
 
   return (
-    <SideMenuLayout title="Settings" subTitle="Parental Controls">
-      {list.map((item: any, index: number) => {
+    <SideMenuLayout title="Settings" subTitle="Display">
+      {listItem.map((item, index) => {
         return (
           <Pressable
             onFocus={() => {
@@ -106,19 +98,10 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
         );
       })}
     </SideMenuLayout>
-    // <View style={styles.root}>
-    //   <View style={styles.headerContainer}>
-    //     <Text style={styles.subTitle}>Settings</Text>
-    //     <Text style={styles.titleText}>Parental Controls</Text>
-    //   </View>
-    //   <View style={styles.contentContainer}>
-
-    //   </View>
-    // </View>
   );
 };
 
-export default ParentalControllScreen;
+export default DiaplayScreen;
 
 const styles = StyleSheet.create({
   listText: {

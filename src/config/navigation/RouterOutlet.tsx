@@ -27,8 +27,13 @@ import AdultLockScreen from "../../views/app/settings_screens/parental_controll/
 import { GLOBALS } from "../../utils/globals";
 import { getStore } from "../../utils/helpers";
 import RatingScreen from "../../views/app/settings_screens/parental_controll/rating.screen";
-// import TVMenuControl from "react-native";
 import { useDrawerStatus } from "@react-navigation/drawer";
+import DiaplayScreen from "../../views/app/settings_screens/display/display.screen";
+import OnScreenLanguageScreen from "../../views/app/settings_screens/display/on_screen_language.screen";
+import ClosedCaptionScreen from "../../views/app/settings_screens/display/ closed_caption.screen";
+import PurchaseLockScreen from "../../views/app/settings_screens/parental_controll/purchase_lock.screen";
+import VideoQualityScreen from "../../views/app/settings_screens/display/video_quality.screen";
+import SubtitleLanguageScreen from "../../views/app/settings_screens/display/subtitle_language.screen";
 
 interface RouterOutletProps {}
 const { width, height } = Dimensions.get("window");
@@ -57,6 +62,12 @@ export const Routes = {
   Rating: "ratings",
   UnratedContent: "unrated_content",
   AdultLock: "adult_lock",
+  Diaplay: "display",
+  OnScreenLanguage: "on_screen_language",
+  ClosedCaption: "closed_caption",
+  PurchaseLock: "purchase_lock",
+  VideoQuality: "video_quality",
+  SubtitleLanguage: "subtitle_language",
 };
 
 const Stack = createNativeStackNavigator();
@@ -123,6 +134,27 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           component={UnratedContentScreen}
         />
         <Stack.Screen name={Routes.AdultLock} component={AdultLockScreen} />
+        <Stack.Screen name={Routes.Diaplay} component={DiaplayScreen} />
+        <Stack.Screen
+          name={Routes.OnScreenLanguage}
+          component={OnScreenLanguageScreen}
+        />
+        <Stack.Screen
+          name={Routes.ClosedCaption}
+          component={ClosedCaptionScreen}
+        />
+        <Stack.Screen
+          name={Routes.PurchaseLock}
+          component={PurchaseLockScreen}
+        />
+        <Stack.Screen
+          name={Routes.SubtitleLanguage}
+          component={SubtitleLanguageScreen}
+        />
+        <Stack.Screen
+          name={Routes.VideoQuality}
+          component={VideoQualityScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
