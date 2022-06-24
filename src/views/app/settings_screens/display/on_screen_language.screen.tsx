@@ -1,29 +1,44 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideMenuLayout from "../../../../components/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
+import { GLOBALS } from "../../../../utils/globals";
+import { updateStore } from "../../../../utils/helpers";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
 const list = [
   {
     title: "English (US)",
-    action: 'en',
+    action: "en",
   },
   {
     title: "English (Canada)",
-    action: 'en-ca',
+    action: "en-ca",
   },
   {
     title: "Francais (Canada)",
-    action: 'ca',
+    action: "ca",
   },
 ];
 const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedLang, setSelectedLang] = useState<any>("");
+  const onPress = (item: string) => {
+    console.log('first')
+    setSelectedLang(item);
+    GLOBALS.store.settings.display.onScrreenLanguage = item;
+    updateStore(JSON.stringify(GLOBALS.store));
+  };
+  const getValues = () => {
+    setSelectedLang(GLOBALS.store.settings.display.onScrreenLanguage);
+  };
+  useEffect(() => {
+    getValues();
+  }, []);
+
   return (
     <SideMenuLayout title="Diaplay" subTitle="On Screen Language">
       {list.map((item: any, index: any) => {
@@ -33,7 +48,7 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
               setFocussed(index);
             }}
             onPress={() => {
-              setSelectedLang(item.action);
+              onPress(item.title);
             }}
             style={
               index === focussed
@@ -43,7 +58,7 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
             key={index}
           >
             <View style={styles.icContainer}>
-              {selectedLang === item.action ? (
+              {selectedLang === item.title ? (
                 <Image
                   source={AppImages.checked_circle}
                   style={styles.icCircle}

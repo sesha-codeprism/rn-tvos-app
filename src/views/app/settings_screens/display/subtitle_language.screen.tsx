@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideMenuLayout from "../../../../components/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
@@ -14,23 +14,45 @@ interface Props {
 const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedLang, setSelectedLang] = useState<any>("");
-  const list = GLOBALS.store.settings.display.subtitleConfig.tracks;
- const onPress = (item: string)=>{
+  const [list, setList] = useState<string[]>([]);
+  const onPress = (item: string) => {
     try {
-        setSelectedLang(item)
-        if(props.route.params.item === 'primary'){
-            GLOBALS.store.settings.display.subtitleConfig.primary = selectedLang;
-        } else {
-            GLOBALS.store.settings.display.subtitleConfig.secondary = selectedLang;
-
-        }
-        updateStore(JSON.stringify(GLOBALS.store));
+      setSelectedLang(item);
+      console.log("props.route.params.type", props.route.params.type);
+      if (props.route.params.type === "primary") {
+        GLOBALS.store.settings.display.subtitleConfig.primary = item;
+      } else {
+        GLOBALS.store.settings.display.subtitleConfig.secondary = item;
+      }
+      updateStore(JSON.stringify(GLOBALS.store));
     } catch (error) {
-        
+      console.log("error", error);
     }
- }
+  };
+  const getValues = () => {
+    const selectedValue =
+      props.route.params.type === "primary"
+        ? GLOBALS.store.settings.display.subtitleConfig.primary
+        : GLOBALS.store.settings.display.subtitleConfig.secondary;
+    setSelectedLang(selectedValue);
+  };
+  useEffect(() => {
+    const langList = GLOBALS.store.settings.display.subtitleConfig.tracks;
+    props.route.params.type === "secondary"
+      ? setList([...["None"], ...langList])
+      : setList(langList);
+    // console.log("lang list", langList);
+
+    getValues();
+  }, []);
+
   return (
-    <SideMenuLayout title="Diaplay" subTitle="On Screen Language">
+    <SideMenuLayout
+      title="Diaplay"
+      subTitle={`${
+        props.route.params.type === "primary" ? "Primary" : "Secondary"
+      } Subtitle Language`}
+    >
       {list.map((item: string, index: any) => {
         return (
           <Pressable
@@ -38,7 +60,7 @@ const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
               setFocussed(index);
             }}
             onPress={() => {
-              onPress(item)
+              onPress(item);
             }}
             style={
               index === focussed
@@ -67,7 +89,9 @@ const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
                   { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
                 ]}
               >
-                {AppStrings.ISO[item]}
+                {props.route.params.type === "secondary" && index === 0
+                  ? item
+                  : AppStrings.ISO[item]}
               </Text>
             </View>
           </Pressable>

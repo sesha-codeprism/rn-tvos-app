@@ -1,25 +1,39 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideMenuLayout from "../../../../components/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
+import { GLOBALS } from "../../../../utils/globals";
+import { updateStore } from "../../../../utils/helpers";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
 const list = [
   {
     title: "On",
-    action: 'on',
+    action: 'On',
   },
   {
     title: "Off",
-    action: 'off',
+    action: 'Off',
   },
 ];
 const ClosedCaptionScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [closedCaption, setClosedCaption] = useState<any>("");
+  const onPress = (item: string) => {
+    setClosedCaption(item);
+    GLOBALS.store.settings.display.closedCaption = item;
+    updateStore(JSON.stringify(GLOBALS.store));
+  };
+  const getValues = () => {
+    setClosedCaption(GLOBALS.store.settings.display.closedCaption);
+  };
+  useEffect(() => {
+    getValues();
+  }, []);
+
   return (
     <SideMenuLayout title="Display" subTitle="Closed Captions">
       {list.map((item: any, index: any) => {
@@ -29,7 +43,7 @@ const ClosedCaptionScreen: React.FunctionComponent<Props> = (props: any) => {
               setFocussed(index);
             }}
             onPress={() => {
-              setClosedCaption(item.action);
+              onPress(item.action);
             }}
             style={
               index === focussed
