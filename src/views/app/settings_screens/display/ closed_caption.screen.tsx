@@ -1,70 +1,27 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SideMenuLayout from "../../../../components/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
-import { GLOBALS } from "../../../../utils/globals";
-import { updateStore } from "../../../../utils/helpers";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
 const list = [
   {
-    title: "Yes",
-    action: true,
+    title: "On",
+    action: 'on',
   },
   {
-    title: "No",
-    action: false,
+    title: "Off",
+    action: 'off',
   },
 ];
-const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
+const ClosedCaptionScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
-  const [locked, setLocked] = useState<any>("");
-
-  const onPress = (value: any) => {
-    try {
-      setLocked(value);
-      GLOBALS.store.settings.parentalControll.contentLock &&
-      GLOBALS.store.settings.parentalControll.contentLock["lockUnratedContent"]
-        ? (GLOBALS.store.settings.parentalControll.contentLock[
-            "lockUnratedContent"
-          ] = value === 0 ? true : false)
-        : (GLOBALS.store.settings.parentalControll.contentLock = {
-            ...GLOBALS.store.settings.parentalControll.contentLock,
-            ["lockUnratedContent"]: value === 0 ? true : false,
-          });
-      updateStore(JSON.stringify(GLOBALS.store));
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
-  const getData = () => {
-    try {
-      const selected =
-        GLOBALS.store.settings.parentalControll.contentLock &&
-        GLOBALS.store.settings.parentalControll.contentLock[
-          "lockUnratedContent"
-        ] !== undefined
-          ? GLOBALS.store.settings.parentalControll.contentLock[
-              "lockUnratedContent"
-            ] === true
-            ? 0
-            : 1
-          : "";
-      setLocked(selected);
-    } catch (error) {}
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-
+  const [closedCaption, setClosedCaption] = useState<any>("");
   return (
-    <SideMenuLayout title="Content Locks" subTitle="Unrated Content">
-      <View style={styles.contentTitleContainer}>
-        <Text style={styles.contentTitle}>Lock unrated content</Text>
-      </View>
+    <SideMenuLayout title="Display" subTitle="Closed Captions">
       {list.map((item: any, index: any) => {
         return (
           <Pressable
@@ -72,7 +29,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
               setFocussed(index);
             }}
             onPress={() => {
-              onPress(index);
+              setClosedCaption(item.action);
             }}
             style={
               index === focussed
@@ -82,7 +39,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
             key={index}
           >
             <View style={styles.icContainer}>
-              {locked === index ? (
+              {closedCaption === item.action ? (
                 <Image
                   source={AppImages.checked_circle}
                   style={styles.icCircle}
@@ -111,7 +68,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
   );
 };
 
-export default UnratedContentScreen;
+export default ClosedCaptionScreen;
 
 const styles = StyleSheet.create({
   contentTitleContainer: {

@@ -1,78 +1,44 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SideMenuLayout from "../../../../components/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
+import { AppStrings } from "../../../../config/strings";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const list = [
-  {
-    title: "Yes",
-    action: true,
-  },
-  {
-    title: "No",
-    action: false,
-  },
-];
-const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
+
+const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
-  const [locked, setLocked] = useState<any>("");
-
-  const onPress = (value: any) => {
+  const [selectedLang, setSelectedLang] = useState<any>("");
+  const list = GLOBALS.store.settings.display.subtitleConfig.tracks;
+ const onPress = (item: string)=>{
     try {
-      setLocked(value);
-      GLOBALS.store.settings.parentalControll.contentLock &&
-      GLOBALS.store.settings.parentalControll.contentLock["lockUnratedContent"]
-        ? (GLOBALS.store.settings.parentalControll.contentLock[
-            "lockUnratedContent"
-          ] = value === 0 ? true : false)
-        : (GLOBALS.store.settings.parentalControll.contentLock = {
-            ...GLOBALS.store.settings.parentalControll.contentLock,
-            ["lockUnratedContent"]: value === 0 ? true : false,
-          });
-      updateStore(JSON.stringify(GLOBALS.store));
+        setSelectedLang(item)
+        if(props.route.params.item === 'primary'){
+            GLOBALS.store.settings.display.subtitleConfig.primary = selectedLang;
+        } else {
+            GLOBALS.store.settings.display.subtitleConfig.secondary = selectedLang;
+
+        }
+        updateStore(JSON.stringify(GLOBALS.store));
     } catch (error) {
-      console.log("Error", error);
+        
     }
-  };
-  const getData = () => {
-    try {
-      const selected =
-        GLOBALS.store.settings.parentalControll.contentLock &&
-        GLOBALS.store.settings.parentalControll.contentLock[
-          "lockUnratedContent"
-        ] !== undefined
-          ? GLOBALS.store.settings.parentalControll.contentLock[
-              "lockUnratedContent"
-            ] === true
-            ? 0
-            : 1
-          : "";
-      setLocked(selected);
-    } catch (error) {}
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-
+ }
   return (
-    <SideMenuLayout title="Content Locks" subTitle="Unrated Content">
-      <View style={styles.contentTitleContainer}>
-        <Text style={styles.contentTitle}>Lock unrated content</Text>
-      </View>
-      {list.map((item: any, index: any) => {
+    <SideMenuLayout title="Diaplay" subTitle="On Screen Language">
+      {list.map((item: string, index: any) => {
         return (
           <Pressable
             onFocus={() => {
               setFocussed(index);
             }}
             onPress={() => {
-              onPress(index);
+              onPress(item)
             }}
             style={
               index === focussed
@@ -82,7 +48,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
             key={index}
           >
             <View style={styles.icContainer}>
-              {locked === index ? (
+              {selectedLang === item ? (
                 <Image
                   source={AppImages.checked_circle}
                   style={styles.icCircle}
@@ -101,7 +67,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
                   { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
                 ]}
               >
-                {item.title}
+                {AppStrings.ISO[item]}
               </Text>
             </View>
           </Pressable>
@@ -111,7 +77,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
   );
 };
 
-export default UnratedContentScreen;
+export default SubtitleLanguageScreen;
 
 const styles = StyleSheet.create({
   contentTitleContainer: {

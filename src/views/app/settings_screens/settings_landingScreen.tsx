@@ -18,7 +18,7 @@ const menu = [
   },
   {
     title: "Display",
-    action: "",
+    action: "display",
     icon: "",
   },
   {

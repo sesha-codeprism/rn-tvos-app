@@ -22,7 +22,17 @@ export interface EditUserProfileObject {
   UserCreated: boolean;
   // optOutPersonalDataUse: boolean;
 }
-
+interface ParentalControll {
+  contentLock: { [key: string]: any };
+  adultLock: { [key: string]: any };
+  purchaseLock: any;
+}
+interface Ratings {
+  action: string;
+  age: number;
+  subTitle: string;
+  title: string;
+}
 interface GLOBALSType {
   /** Information about the device running the app */
   deviceInfo: MFDeviceInfo;
@@ -41,8 +51,21 @@ interface GLOBALSType {
     accessToken: string | null;
     refreshToken: string | null;
     title: string | null;
-    userProfile?: UserProfile
+    userProfile?: UserProfile;
     rightsGroupIds: string | null;
+    settings: {
+      parentalControll: ParentalControll;
+      display: {
+        subtitleConfig: {
+          primary: string;
+          secondary: string;
+          tracks: string[];
+        };
+        bitrates10ft: any;
+        onScrreenLanguage: any;
+        closedCaption: any;
+      };
+    };
   };
   [key: string]: any;
 }
@@ -59,7 +82,7 @@ export const GLOBALS: GLOBALSType = {
     Name: "",
     Id: "",
     Image: "",
-    AdditionalFields: { optOutPersonalDataUse: 'false' },
+    AdditionalFields: { optOutPersonalDataUse: "false" },
     UserCreated: true,
   },
   bootstrapSelectors: null,
@@ -70,8 +93,25 @@ export const GLOBALS: GLOBALSType = {
     title: null,
     userProfile: undefined,
     rightsGroupIds: null,
+    settings: {
+      parentalControll: {
+        contentLock: {},
+        adultLock: {},
+        purchaseLock: {},
+      },
+      display: {
+        subtitleConfig: {
+          primary: "en",
+          secondary: "fr",
+          tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
+        },
+        bitrates10ft: {},
+        onScrreenLanguage: "",
+        closedCaption: "",
+      },
+    },
   },
-  storeID: undefined
+  storeID: undefined,
 };
 
 export const resetGlobalStore = () => {
@@ -80,6 +120,23 @@ export const resetGlobalStore = () => {
     refreshToken: null,
     title: null,
     rightsGroupIds: null,
-    userProfile: undefined
+    userProfile: undefined,
+    settings: {
+      parentalControll: {
+        contentLock: {},
+        adultLock: {},
+        purchaseLock: {},
+      },
+      display: {
+        subtitleConfig: {
+          primary: "en",
+          secondary: "fr",
+          tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
+        },
+        bitrates10ft: {},
+        onScrreenLanguage: "",
+        closedCaption: "",
+      },
+    },
   };
 };

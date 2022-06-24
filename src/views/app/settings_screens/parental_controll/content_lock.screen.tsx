@@ -7,6 +7,7 @@ import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
 import { AppStrings } from "../../../../config/strings";
 import { getList } from "../../../../../backend/udl/provider";
+import { GLOBALS } from "../../../../utils/globals";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -14,45 +15,56 @@ interface Props {
 const ContentLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [list, setList] = useState<any>([]);
-  const listItem = [
-    // {
-    //   title: "Movie Ratings",
-    //   subTitle: "Locked: R and above",
-    //   action: "movie_rating",
-    //  navigation: "",
-    //   icon: "",
-    // },
-    // {
-    //   title: "TV Ratings",
-    //   subTitle: "Locked: TV-MA and above",
-    //   action: "tv_rating",
-    //   navigation: "",
-    //   icon: "",
-    // },
-    {
-      title: "Unrated Content",
-      subTitle: "Locked",
-      action: "unrated_content",
-      icon: "",
-      navigation: "",
-    },
-  ];
   const getList = () => {
+    const listItem: any[] = [];
     const menuList: any = AppStrings.str_rating_providers;
+    const data = GLOBALS.store.settings.parentalControll.contentLock;
     for (let key in menuList) {
-      listItem.unshift({
+      const selectedList = data[key];
+      const item = {
         title: menuList[key],
-        subTitle: "Locked: R and above",
-        action: 'ratings',
+        subTitle:
+          selectedList && selectedList.length
+            ? selectedList.length === 1
+              ? `Locked: ${selectedList[selectedList.length - 1].title}`
+              : `Locked: ${
+                  selectedList[selectedList.length - 1].title
+                } and above`
+            : "Unrestricted",
+        action: "ratings",
         navigation: key,
         icon: "",
-      });
+      };
+      console.log(
+        "selected list in content lock ",
+        selectedList,
+        listItem.some((value) => value.title === item.title)
+      );
+
+      listItem.some((value) => value.title === item.title)
+        ? null
+        : listItem.unshift(item);
     }
-    setList(listItem.sort());
+    setList([
+      ...listItem,
+      {
+        title: "Unrated Content",
+        subTitle: data['lockUnratedContent'] === true ? 'Locked' : "Unrestricted",
+        action: "unrated_content",
+        icon: "",
+        navigation: "",
+      },
+    ]);
   };
   useEffect(() => {
-    getList();
-  }, []);
+    const unsubscribe = props.navigation.addListener("focus", () => {
+      // The screen is focused
+      // Call any action
+      getList();
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [GLOBALS.store.settings.parentalControll.contentLock]);
 
   return (
     <SideMenuLayout
@@ -69,7 +81,10 @@ const ContentLockScreen: React.FunctionComponent<Props> = (props: any) => {
               }}
               onPress={() => {
                 item.action !== ""
-                  ? props.navigation.navigate(item.action,{action: item.navigation, title: item.title})
+                  ? props.navigation.navigate(item.action, {
+                      action: item.navigation,
+                      title: item.title,
+                    })
                   : null;
               }}
               style={
