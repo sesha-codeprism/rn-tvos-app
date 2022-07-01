@@ -8,7 +8,7 @@ import HomeScreen from "../../views/app/Home.screen";
 import SplashScreen from "../../views/auth/Splash.screen";
 import GuideScreen from "../../views/app/Guide.screen";
 import SearchScreen from "../../views/search.screen";
-import TestScreen from "../../views/app/ShowcaseApp/Test.screen";
+// import TestScreen from "../../views/app/ShowcaseApp/Test.screen";
 import ShortCodeScreen from "../../views/auth/Shortcode.screen";
 import CreateProfileScreen from "../../views/app/profile_screens/Create.profile.screen";
 import ProfileScreen from "../../views/app/profile_screens/Profile.screen";
@@ -204,7 +204,7 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
       <Stack.Screen name={Routes.Home} component={HomeScreen} />
       <Stack.Screen name={Routes.Guide} component={GuideScreen} />
       <Stack.Screen name={Routes.Search} component={SearchScreen} />
-      <Stack.Screen name={Routes.Test} component={TestScreen} />
+      {/* <Stack.Screen name={Routes.Test} component={TestScreen} /> */}
       <Stack.Screen name={Routes.Profile} component={ProfileScreen} />
       <Stack.Screen
         name={Routes.CreateProfile}

@@ -14,7 +14,9 @@
     "Install Pods": "cd ios && pod install && cd ..",
     "Install Pods for M1 Mac": "cd ios && arch -x86-64 pod install && cd ..",
     "test": "jest ",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "Archive project": "cd ios && xcodebuild archive -workspace RetailClient.xcworkspace -scheme RetailClient-tvOS -archivePath ~/Downloads/MFRetailClient.xcarchive | xcpretty",
+    "Generate IPA from Archive": "cd ios && xcodebuild -exportArchive -archivePath ~/Downloads/MFRetailClient.xcarchive -exportPath ~/Downloads -exportOptionsPlist ExportOptions.plist -allowProvisioningUpdates | xcpretty"
   },
   "engines": {
     "node": "<17",

@@ -140,19 +140,12 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                 iconStyles={MFMenuStyles.iconStyles}
                 iconButtonStyles={{ shouldRenderImage: true }}
                 onPress={() => {
-                  // props.navigation.dispatch(DrawerActions.toggleDrawer());
                   props.navigation.toggleDrawer();
                   console.log(
                     "setting pressed",
                     props.navigation,
                     isDrawerOpen
                   );
-                  // const parsedUDL = parseUdl("udl://discovery/hubs");
-                  // console.log(
-                  //   "Parsed udl is:",
-                  //   parsedUDL,
-                  //   parsedUDL?.id.split("/")[0]
-                  // );
                 }}
               />
             </View>
