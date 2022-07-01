@@ -26,13 +26,17 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
         },
         {
           title: "Adult Locks",
-          subTitle: values.adultLock['adultContentMasking'] || values.adultLock['allowAdultLocks'] ? 'Locked' : 'Unrestricted',
+          subTitle:
+            values.adultLock["adultContentMasking"] ||
+            values.adultLock["allowAdultLocks"]
+              ? "Locked"
+              : "Unrestricted",
           action: "adult_lock",
           icon: "",
         },
         {
           title: "Purchase Locks",
-          subTitle: values.purchaseLock['locked'] ? 'Locked': 'Unrestricted',
+          subTitle: values.purchaseLock["locked"] ? "Locked" : "Unrestricted",
           action: "purchase_lock",
           icon: "",
         },
@@ -50,7 +54,11 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, []);
+  }, [
+    GLOBALS.store.settings.parentalControll.adultLock,
+    GLOBALS.store.settings.parentalControll.contentLock,
+    GLOBALS.store.settings.parentalControll.purchaseLock,
+  ]);
 
   return (
     <SideMenuLayout title="Settings" subTitle="Parental Controls">

@@ -11,11 +11,11 @@ const AccountSettingsScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   useEffect(() => {
-    const unsubscribe = props.navigation.addListener("beforeRemove", () => {
-      // do something
-      console.warn("Warning before removing component acc settings");
-    });
-    return unsubscribe;
+    // const unsubscribe = props.navigation.addListener("beforeRemove", () => {
+    //   // do something
+    //   console.warn("Warning before removing component acc settings");
+    // });
+    // return unsubscribe;
   }, [props.navigation]);
 
   return (

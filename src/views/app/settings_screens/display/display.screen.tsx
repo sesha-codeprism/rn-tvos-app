@@ -14,23 +14,25 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [list, setList] = useState<any[]>([]);
   const formatList = () => {
-    const values = GLOBALS.store.settings.display;
+    const { onScrreenLanguage, closedCaption, subtitleConfig, bitrates10ft } =
+      GLOBALS.store.settings.display;
+      console.log('format list called', GLOBALS.store.settings.display)
     const listItem = [
       {
         title: "On Screen Language",
-        subTitle: values.onScrreenLanguage,
+        subTitle: onScrreenLanguage,
         action: "on_screen_language",
         icon: "",
       },
       {
         title: "Closed Captions",
-        subTitle: values.closedCaption,
+        subTitle: closedCaption,
         action: "closed_caption",
         icon: "",
       },
       {
         title: "Primary Subtitle Language",
-        subTitle: AppStrings.ISO[values.subtitleConfig.primary],
+        subTitle: AppStrings.ISO[subtitleConfig.primary],
         action: "subtitle_language",
         type: "primary",
         icon: "",
@@ -38,26 +40,27 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
       {
         title: "Secondary Subtitle Language",
         subTitle:
-          values.subtitleConfig.secondary !== "None"
-            ? AppStrings.ISO[values.subtitleConfig.secondary]
-            : values.subtitleConfig.secondary,
+          subtitleConfig.secondary !== "None"
+            ? AppStrings.ISO[subtitleConfig.secondary]
+            : subtitleConfig.secondary,
         action: "subtitle_language",
         type: "secondary",
         icon: "",
       },
       {
         title: "Video Quality",
-        subTitle: AppStrings[values.bitrates10ft.localizedText],
+        subTitle: AppStrings[bitrates10ft.localizedText],
         action: "video_quality",
         icon: "",
       },
     ];
-    setList([...listItem]);
+    return setList([...listItem]);
   };
   useEffect(() => {
     const unsubscribe = props.navigation.addListener("focus", () => {
+      console.log("focussed fired in display screen");
       // The screen is focused
-      // Call any action
+      // Call for action
       formatList();
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -65,6 +68,7 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
   }, []);
   return (
     <SideMenuLayout title="Settings" subTitle="Display">
+      {/* {console.log('screen rendered', list)} */}
       {list.map((item, index) => {
         return (
           <Pressable
