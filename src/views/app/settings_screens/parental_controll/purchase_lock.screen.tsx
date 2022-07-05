@@ -57,8 +57,14 @@ const PurchaseLockScreen: React.FunctionComponent<Props> = (props: any) => {
     } catch (error) {}
   };
   useEffect(() => {
-    getData();
-  }, []);
+    const unsubscribe = props.navigation.addListener("focus", () => {
+      // The screen is focused
+      // Call any action
+      getData();
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [GLOBALS.store.settings.parentalControll.purchaseLock]);
 
   return (
     <SideMenuLayout title="Parental Controls" subTitle="Purchase Locks">

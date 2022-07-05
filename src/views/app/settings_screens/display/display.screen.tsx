@@ -1,52 +1,75 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import SideMenuLayout from "../../../../components/MFSideMenu";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
+import { GLOBALS } from "../../../../utils/globals";
+import { AppStrings } from "../../../../config/strings";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const listItem = [
-  {
-    title: "On Screen Language",
-    subTitle: "English (US)",
-    action: "on_screen_language",
-    icon: "",
-  },
-  {
-    title: "Closed Captions",
-    subTitle: "On",
-    action: "closed_caption",
-    icon: "",
-  },
-  {
-    title: "Primary Subtitle Language",
-    subTitle: "English",
-    action: "subtitle_language",
-    type: "primary",
-    icon: "",
-  },
-  {
-    title: "Secondary Subtitle Language",
-    subTitle: "None",
-    action: "subtitle_language",
-    type: "secondary",
-    icon: "",
-  },
-  {
-    title: "Video Quality",
-    subTitle: "Better",
-    action: "video_quality",
-    icon: "",
-  },
-];
+
 const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
-
+  const [list, setList] = useState<any[]>([]);
+  const formatList = () => {
+    const { onScrreenLanguage, closedCaption, subtitleConfig, bitrates10ft } =
+      GLOBALS.store.settings.display;
+      console.log('format list called', GLOBALS.store.settings.display)
+    const listItem = [
+      {
+        title: "On Screen Language",
+        subTitle: onScrreenLanguage,
+        action: "on_screen_language",
+        icon: "",
+      },
+      {
+        title: "Closed Captions",
+        subTitle: closedCaption,
+        action: "closed_caption",
+        icon: "",
+      },
+      {
+        title: "Primary Subtitle Language",
+        subTitle: AppStrings.ISO[subtitleConfig.primary],
+        action: "subtitle_language",
+        type: "primary",
+        icon: "",
+      },
+      {
+        title: "Secondary Subtitle Language",
+        subTitle:
+          subtitleConfig.secondary !== "None"
+            ? AppStrings.ISO[subtitleConfig.secondary]
+            : subtitleConfig.secondary,
+        action: "subtitle_language",
+        type: "secondary",
+        icon: "",
+      },
+      {
+        title: "Video Quality",
+        subTitle: AppStrings[bitrates10ft.localizedText],
+        action: "video_quality",
+        icon: "",
+      },
+    ];
+    return setList([...listItem]);
+  };
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener("focus", () => {
+      console.log("focussed fired in display screen");
+      // The screen is focused
+      // Call for action
+      formatList();
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, []);
   return (
     <SideMenuLayout title="Settings" subTitle="Display">
-      {listItem.map((item, index) => {
+      {/* {console.log('screen rendered', list)} */}
+      {list.map((item, index) => {
         return (
           <Pressable
             onFocus={() => {
@@ -59,7 +82,11 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
                     setFocussed("");
                   }
                 : item.action !== ""
-                ? props.navigation.navigate(item.action)
+                ? item.type
+                  ? props.navigation.navigate(item.action, {
+                      type: item.type,
+                    })
+                  : props.navigation.navigate(item.action)
                 : null;
             }}
             style={

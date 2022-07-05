@@ -1,10 +1,12 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideMenuLayout from "../../../../components/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { AppStrings } from "../../../../config/strings";
+import { GLOBALS } from "../../../../utils/globals";
+import { updateStore } from "../../../../utils/helpers";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -28,6 +30,17 @@ const list = [
 const VideoQualityScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedQyality, setSelectedQyality] = useState<any>({});
+  const onPress = (item: any) => {
+    setSelectedQyality(item);
+    GLOBALS.store.settings.display.bitrates10ft = item;
+    updateStore(JSON.stringify(GLOBALS.store));
+  };
+  const getValues = () => {
+    setSelectedQyality(GLOBALS.store.settings.display.bitrates10ft);
+  };
+  useEffect(() => {
+    getValues();
+  }, []);
   return (
     <SideMenuLayout title="Diaplay" subTitle="On Screen Language">
       {list.map((item: any, index: any) => {
@@ -37,7 +50,7 @@ const VideoQualityScreen: React.FunctionComponent<Props> = (props: any) => {
               setFocussed(index);
             }}
             onPress={() => {
-              setSelectedQyality(item);
+              onPress(item);
             }}
             style={
               index === focussed

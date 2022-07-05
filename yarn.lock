@@ -1801,6 +1801,15 @@
   dependencies:
     nanoid "^3.1.23"
 
+"@react-navigation/stack@^6.2.1":
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/@react-navigation/stack/-/stack-6.2.1.tgz#2b14473579eced6def5cca06860044d60e59d06e"
+  integrity sha512-JI7boxtPAMCBXi4VJHVEq61jLVHFW5f3npvbndS+XfOsv7Gf0f91HOVJ28DS5c2Fn4+CO4AByjUozzlN296X+A==
+  dependencies:
+    "@react-navigation/elements" "^1.3.3"
+    color "^3.1.3"
+    warn-once "^0.1.0"
+
 "@rollup/plugin-node-resolve@^7.1.1":
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-node-resolve/-/plugin-node-resolve-7.1.3.tgz#80de384edfbd7bfc9101164910f86078151a3eca"
@@ -12069,7 +12078,7 @@ react-native-syntax-highlighter@2.0.0:
     babel-runtime "^6.23.0"
     react-syntax-highlighter "^6.0.4"
 
-react-native-tvos@^0.64.2-2:
+react-native-tvos@^0.64.2-4:
   version "0.64.2-5"
   resolved "https://registry.yarnpkg.com/react-native-tvos/-/react-native-tvos-0.64.2-5.tgz#870c5343e2af92331d0f0a364bb1e31c8a47e7c2"
   integrity sha512-F25DrniVWQrTWdXkucFLhHajhDvefCmnKnphm6gnbfZSLaK1n6nPX4uzK6DrPR/51wKSUhruC5NioEQnstP+NQ==
@@ -12115,10 +12124,10 @@ react-native-webview@^11.13.0:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
 
-"react-native@npm:react-native-tvos@0.64.2-2":
-  version "0.64.2-2"
-  resolved "https://registry.yarnpkg.com/react-native-tvos/-/react-native-tvos-0.64.2-2.tgz#f5f6e7485af03ab01e4fae614c20c856f3112af9"
-  integrity sha512-Om71nkpHDkV9/1sNZKsCFkAk8UNazQb8qQW6cbw8v++U5ZCbG2M0i+hcsWKJbCaXoaZ7f7vmqTIsnnzg9ADbjg==
+"react-native@npm:react-native-tvos@0.64.2-4":
+  version "0.64.2-4"
+  resolved "https://registry.yarnpkg.com/react-native-tvos/-/react-native-tvos-0.64.2-4.tgz#7f17177415efd8d8dddb804f81a1a98c8d8ee8db"
+  integrity sha512-eLkH1TtNm91YsC833OuChajmU6v+XwyVtER66Jg8tUpctyjz0tRo7Yw9zHNPIdtBtDd50rl27HcwezQkF+6lBQ==
   dependencies:
     "@jest/create-cache-key-function" "^26.5.0"
     "@react-native-community/cli" "^5.0.1-alpha.1"

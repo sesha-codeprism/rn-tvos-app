@@ -52,7 +52,7 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const getData = () => {
     try {
       const selectedLocks = GLOBALS.store.settings.parentalControll.adultLock;
-      setSelected(selectedLocks);
+      setSelected({...selectedLocks});
     } catch (error) {}
   };
   useEffect(() => {
