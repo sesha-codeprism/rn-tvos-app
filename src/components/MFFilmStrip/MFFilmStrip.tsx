@@ -139,6 +139,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = (props) => {
             ref={flatListRef}
             scrollEnabled={false}
             horizontal
+            disableIntervalMomentum
             contentContainerStyle={{
               paddingRight: SCREEN_WIDTH,
               paddingLeft: 50,

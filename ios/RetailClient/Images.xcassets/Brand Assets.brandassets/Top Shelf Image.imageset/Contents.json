@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "1920 x720.jpeg",
+      "filename" : "mk_logo_1920x720.jpeg",
       "idiom" : "tv",
       "scale" : "1x"
     },
     {
-      "filename" : "3840x1440.jpeg",
+      "filename" : "mk_logo_3840x1440.jpeg",
       "idiom" : "tv",
       "scale" : "2x"
     }
