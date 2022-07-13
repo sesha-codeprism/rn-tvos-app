@@ -101,6 +101,13 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           animationTypeForReplace: "push",
           gestureEnabled: false,
         }}
+        // screenListeners={{
+        //   beforeRemove: (e: any) => {
+        //     // Prevent default action
+        //     console.log('removing/ closing drawer')
+        //     e.preventDefault();
+        //   },
+        // }}
       >
         <Stack.Screen
           name={Routes.Settings}
