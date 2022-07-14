@@ -27,7 +27,6 @@ const { width, height } = Dimensions.get("window");
 
 interface ProfileScreenProps {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
-  whoIsWatching?: boolean;
 }
 
 const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
@@ -81,17 +80,38 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
   };
   return (
     <View style={MFProfileStyle.container}>
-      <View style={MFProfileStyle.profileTitleContainer}>
-        <MFText
-          shouldRenderText
-          displayText={
-            props.route.params && props.route.params.whoIsWatching
-              ? `Who's Watching?`
-              : "Choose Your Profile"
-          }
-          textStyle={MFProfileStyle.titleTextStyle}
-        />
-      </View>
+      {/* {props.route.params && props.route.params.whoIsWatching ? (
+        <View
+          style={{
+            width: 399,
+            height: 48,
+            marginTop: 233,
+            alignSelf: "center",
+            marginBottom: 103,
+          }}
+        >
+          <MFText
+            shouldRenderText={true}
+            displayText={`Who's Watching?`}
+            textStyle={{
+              fontSize: 48,
+              fontWeight: "600",
+              letterSpacing: 0,
+              lineHeight: 48,
+              textAlign: "center",
+              color: "#EEEEEE",
+            }}
+          ></MFText>
+        </View>
+      ) : ( */}
+        <View style={MFProfileStyle.profileTitleContainer}>
+          <MFText
+            shouldRenderText
+            displayText={"Choose Your Profile"}
+            textStyle={MFProfileStyle.titleTextStyle}
+          />
+        </View>
+      {/* )} */}
       <View
         style={{
           flex: 7,
@@ -104,14 +124,14 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
       >
         <View
           style={{
-            width: "60%",
+            width: "100%",
             height: "100%",
             alignItems: "center",
             alignContent: "center",
             justifyContent: "center",
             display: "flex",
             flexDirection: "row",
-            flexWrap: "wrap",
+            // flexWrap: "wrap",
           }}
         >
           {userProfiles.map((item, index) => {
@@ -126,8 +146,9 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
                   onFocus={(e) => {
                     onFocus(e, index);
                   }}
+                  checkedOnFocus={true}
                 />
-                {focused === index && (
+                {focused === index ? (
                   <Pressable
                     onPress={() => {
                       _onEdit(item);
@@ -166,7 +187,7 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
                       iconButtonStyles={{ shouldRenderImage: true }}
                     />
                   </Pressable>
-                )}
+                ) : null}
               </View>
             ) : (
               <View />

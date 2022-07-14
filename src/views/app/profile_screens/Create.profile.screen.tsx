@@ -25,12 +25,13 @@ interface CreateProfileProps {
 const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
   props: any
 ) => {
+  console.log('props coming to create profile', props);
   const [titleString, setTitleString] = useState(
-    // props.route.params &&
-    //   props.route.params.item &&
-    //   props.route.params.item.name
-    //   ? props.route.params.item.name
-    //   :
+    props.route.params &&
+      props.route.params.item &&
+      props.route.params.item.Name
+      ? props.route.params.item.Name
+      :
     ""
   );
 

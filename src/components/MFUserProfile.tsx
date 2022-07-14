@@ -49,6 +49,7 @@ interface MFUserProfileProps {
   /** Event to be triggered with selected */
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
   onEdit?: null | ((item: any) => void) | undefined;
+  checkedOnFocus?: boolean 
 }
 
 const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
@@ -115,10 +116,11 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
           style={[
             styles.imageContainer,
             {
-              borderColor: focused ? "#053C69" : "transparent",
+              borderColor: focused ? "#053C69" : "#151214",
               borderWidth: 5,
               padding: 5,
-              borderRadius: 200 / 2,
+              borderRadius: 220 / 2,
+              backgroundColor: !props.userProfile ? "grey" : "transparent",
             },
           ]}
         >
@@ -128,21 +130,27 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
                 ? AppImages[props.userProfile.Image]
                 : AppImages.icon_add
             }
-            style={{
-              width: props.userProfile ? 200 : 62,
-              height: props.userProfile ? 200 : 62,
-              borderRadius: props.userProfile ? 200 / 2 : 62 / 2,
-            }}
+            style={
+              !focused
+                ? {
+                    width: props.userProfile ? 200 : 62,
+                    height: props.userProfile ? 200 : 62,
+                    borderRadius: props.userProfile ? 200 / 2 : 62 / 2,
+                  }
+                : {
+                    width: props.userProfile ? 180 : 62,
+                    height: props.userProfile ? 180 : 62,
+                    borderRadius: 180 / 2,
+                  }
+            }
           />
-          {props.userProfile && focused ? (
-            <>
-              <View style={styles.activeProfileIndicator}>
-                <FastImage
-                  source={AppImages.tick_active}
-                  style={styles.activeProfileIndicatorImage}
-                />
-              </View>
-            </>
+          {props.userProfile && focused && props.checkedOnFocus ? (
+            <View style={styles.activeProfileIndicator}>
+              <FastImage
+                source={AppImages.tick_active}
+                style={styles.activeProfileIndicatorImage}
+              />
+            </View>
           ) : (
             <View />
           )}
@@ -175,12 +183,12 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "grey",
+    backgroundColor: "transparent",
   },
   focusedStyle: {
     transform: [
       {
-        scale: 1.1,
+        scale: 1.2,
       },
     ],
   },
