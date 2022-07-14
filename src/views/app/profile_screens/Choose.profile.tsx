@@ -1,9 +1,8 @@
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useState } from "react";
-import { Alert, Dimensions, FlatList, StyleSheet, View } from "react-native";
+import { Alert, Dimensions, FlatList, View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { updateUserProfile } from "../../../../backend/subscriber/subscriber";
 import MFButton, {
   MFButtonVariant,
 } from "../../../components/MFButton/MFButton";

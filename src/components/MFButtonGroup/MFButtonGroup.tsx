@@ -107,6 +107,7 @@ const MFButtonGroup: React.FunctionComponent<MFButtonGroupProps> = (props) => {
       <FlatList
         data={props.buttonsList}
         horizontal
+        disableIntervalMomentum
         inverted={props.enableRTL}
         keyExtractor={(e, index) => `Index${index}`}
         renderItem={({ item, index }) => (

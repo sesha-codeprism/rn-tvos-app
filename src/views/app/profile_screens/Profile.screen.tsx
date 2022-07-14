@@ -6,6 +6,8 @@ import {
   FlatList,
   Pressable,
   NativeSyntheticEvent,
+  BackHandler,
+  TVMenuControl,
 } from "react-native";
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -78,6 +80,17 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
     GLOBALS.editUserProfile = item;
     props.navigation.navigate(Routes.ProfileFinalise, { item, mode: "edit" });
   };
+
+  const backAction = () => {
+    console.log("Capturing hadware back presses");
+    return null;
+  };
+
+  useEffect(() => {
+    console.log("Enabling TVMenuKey");
+    TVMenuControl.enableTVMenuKey();
+    BackHandler.addEventListener("hardwareBackPress", backAction);
+  });
   return (
     <View style={MFProfileStyle.container}>
       {/* {props.route.params && props.route.params.whoIsWatching ? (

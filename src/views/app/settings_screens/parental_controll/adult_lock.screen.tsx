@@ -28,8 +28,11 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
     selectedItems[item.action] !== undefined
       ? (selectedItems[item.action] = !selectedItems[item.action])
       : (selectedItems[item.action] = true);
-    setSelected({...selected,...selectedItems});
-    GLOBALS.store.settings.parentalControll.adultLock = {...selected,...selectedItems};
+    setSelected({ ...selected, ...selectedItems });
+    GLOBALS.store.settings.parentalControll.adultLock = {
+      ...selected,
+      ...selectedItems,
+    };
     updateStore(JSON.stringify(GLOBALS.store));
   };
   // const onPress = (value: any) => {
@@ -52,7 +55,7 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const getData = () => {
     try {
       const selectedLocks = GLOBALS.store.settings.parentalControll.adultLock;
-      setSelected({...selectedLocks});
+      setSelected({ ...selectedLocks });
     } catch (error) {}
   };
   useEffect(() => {

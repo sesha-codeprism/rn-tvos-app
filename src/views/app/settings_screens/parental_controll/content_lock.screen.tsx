@@ -49,7 +49,8 @@ const ContentLockScreen: React.FunctionComponent<Props> = (props: any) => {
       ...listItem,
       {
         title: "Unrated Content",
-        subTitle: data['lockUnratedContent'] === true ? 'Locked' : "Unrestricted",
+        subTitle:
+          data["lockUnratedContent"] === true ? "Locked" : "Unrestricted",
         action: "unrated_content",
         icon: "",
         navigation: "",

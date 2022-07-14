@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "Open XCWorkSpace": "cd ios && open RetailClient.xcworkspace && cd ..",
+    "Generate TvOS build": "sh MakeIPA.sh",
     "start": "sh ./pre-build.sh $npm_config_skin && react-native start",
     "postinstall": "patch-package",
     "Setup project": "yarn install && cd ios && pod install && cd ..",

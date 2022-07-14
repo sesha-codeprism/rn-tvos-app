@@ -79,7 +79,7 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
 
   const backAction = () => {
     console.log("Capturing hadware back presses");
-    return null;
+    return true;
   };
   useEffect(() => {
     console.log("isDrawerOpen", isDrawerOpen);
@@ -100,7 +100,6 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           animation: "slide_from_left",
           animationTypeForReplace: "push",
           gestureEnabled: false,
-          // presentation:'modal'
         }}
         // screenListeners={{
         //   beforeRemove: (e: any) => {

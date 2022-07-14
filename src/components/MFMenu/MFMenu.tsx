@@ -1,5 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
+import {
+  GestureResponderEvent,
+  ImageBackground,
+  StyleSheet,
+  View,
+} from "react-native";
 import { HubsList } from "../../@types/Hubs";
 import { enableRTL, appUIDefinition } from "../../config/constants";
 import { AppImages } from "../../assets/images";
@@ -15,6 +20,7 @@ import { GlobalContext } from "../../contexts/globalContext";
 import { useDrawerStatus } from "@react-navigation/drawer";
 import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
+import { screenWidth } from "../../utils/dimensions";
 
 interface MFMenuProps {
   navigation: any;
