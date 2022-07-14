@@ -18,8 +18,7 @@ import { FeedItem } from "../../@types/HubsResponse";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { GlobalContext } from "../../contexts/globalContext";
 import { useDrawerStatus } from "@react-navigation/drawer";
-import FastImage, { Source } from "react-native-fast-image";
-import LinearGradient from "react-native-linear-gradient";
+import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
 import { screenWidth } from "../../utils/dimensions";
 
@@ -80,121 +79,99 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   return (
     <GlobalContext.Consumer>
       {({ userProfile, setProfile }) => (
-        <LinearGradient
-          colors={[
-            "rgba(0,3,14,1)",
-            "rgba(0,3,14,0.4)",
-            "rgba(0,3,14,0.4)",
-            "rgba(0,7,32,0.2)",
-            "rgba(0,7,32,0)",
-            "transparent",
-            "transparent",
-          ]}
-          style={{ height: 150 }}
-        >
-          <View style={MFMenuStyles.hubsContainer}>
-            <View style={{ flex: 0.2 }}>
-              <MFButton
-                variant={MFButtonVariant.Icon}
-                iconSource={AppImages.search}
-                iconStyles={MFMenuStyles.iconStyles}
-                avatarSource={{}}
-                imageSource={{}}
-                iconButtonStyles={{ shouldRenderImage: true }}
-              />
-            </View>
-            <View style={{ flex: 2.2, paddingBottom: 10, overflow: "visible" }}>
-              <MFButtonGroup
-                onPress={(event, index) => _onPressMain(event, index)}
-                buttonsList={hubs1}
-                onHubChanged={() => {}}
-                containedButtonProps={{
-                  containedButtonStyle: {
-                    enabled: true,
-                    focusedBackgroundColor:
-                      appUIDefinition.theme.colors.primary,
-                    elevation: 5,
-                    hoverColor: "red",
-                    unFocusedBackgroundColor:
-                      appUIDefinition.theme.colors.secondary,
-                  },
-                }}
-                enableRTL={enableRTL}
-                outlinedButtonProps={{
-                  outlinedButtonStyle: {
-                    focusedBorderColor: appUIDefinition.theme.colors.primary,
-                    unFocusedBorderColor:
-                      appUIDefinition.theme.colors.secondary,
-                    focusedBorderWidth: 5,
-                    unFocusedBorderWidth: 2,
-                    isDisabled: false,
-                  },
-                }}
-              />
-            </View>
-            <View style={{ flex: 0.9, flexDirection: "row" }}>
-              {isIdentityAssigned && (
-                <View style={MFMenuStyles.profileContainerStyles}>
-                  <MFButton
-                    variant={MFButtonVariant.Avatar}
-                    avatarSource={
-                      userProfile && userProfile.Image != null
-                        ? AppImages[userProfile.Image] || AppImages.avatar
-                        : AppImages.avatar
-                    }
-                    imageSource={{}}
-                    iconSource={{}}
-                    avatarStyles={MFMenuStyles.avatarStyles}
-                    onPress={() => {
-                      console.log("Profile pressed");
-                      props.navigation.navigate(Routes.Profile);
-                    }}
-                  />
-                </View>
-              )}
-              <View style={MFMenuStyles.settingsContainerStyles}>
+        <View style={MFMenuStyles.hubsContainer}>
+          <View style={{ flex: 0.2 }}>
+            <MFButton
+              variant={MFButtonVariant.Icon}
+              iconSource={AppImages.search}
+              iconStyles={MFMenuStyles.iconStyles}
+              avatarSource={{}}
+              imageSource={{}}
+              iconButtonStyles={{ shouldRenderImage: true }}
+            />
+          </View>
+          <View style={{ flex: 2.2, paddingBottom: 10, overflow: "visible" }}>
+            <MFButtonGroup
+              onPress={(event, index) => _onPressMain(event, index)}
+              buttonsList={hubs1}
+              onHubChanged={() => {}}
+              containedButtonProps={{
+                containedButtonStyle: {
+                  enabled: true,
+                  focusedBackgroundColor: appUIDefinition.theme.colors.primary,
+                  elevation: 5,
+                  hoverColor: "red",
+                  unFocusedBackgroundColor:
+                    appUIDefinition.theme.colors.secondary,
+                },
+              }}
+              enableRTL={enableRTL}
+              outlinedButtonProps={{
+                outlinedButtonStyle: {
+                  focusedBorderColor: appUIDefinition.theme.colors.primary,
+                  unFocusedBorderColor: appUIDefinition.theme.colors.secondary,
+                  focusedBorderWidth: 5,
+                  unFocusedBorderWidth: 2,
+                  isDisabled: false,
+                },
+              }}
+            />
+          </View>
+          <View style={{ flex: 0.9, flexDirection: "row" }}>
+            {isIdentityAssigned && (
+              <View style={MFMenuStyles.profileContainerStyles}>
                 <MFButton
-                  variant={MFButtonVariant.Icon}
-                  iconSource={AppImages.settings_grey}
+                  variant={MFButtonVariant.Avatar}
+                  avatarSource={
+                    userProfile && userProfile.Image != null
+                      ? AppImages[userProfile.Image] || AppImages.avatar
+                      : AppImages.avatar
+                  }
                   imageSource={{}}
-                  avatarSource={{}}
-                  iconStyles={MFMenuStyles.iconStyles}
-                  iconButtonStyles={{ shouldRenderImage: true }}
+                  iconSource={{}}
+                  avatarStyles={MFMenuStyles.avatarStyles}
                   onPress={() => {
-                    // props.navigation.dispatch(DrawerActions.toggleDrawer());
-                    props.navigation.toggleDrawer();
-                    console.log(
-                      "setting pressed",
-                      props.navigation,
-                      isDrawerOpen
-                    );
-                    // const parsedUDL = parseUdl("udl://discovery/hubs");
-                    // console.log(
-                    //   "Parsed udl is:",
-                    //   parsedUDL,
-                    //   parsedUDL?.id.split("/")[0]
-                    // );
+                    console.log("Profile pressed");
+                    props.navigation.navigate(Routes.Profile);
                   }}
                 />
               </View>
-              <View
-                style={{
-                  flex: 3,
-                  alignSelf: "flex-end",
-                  height: 145,
-                  alignContent: "flex-end",
-                  alignItems: "center",
-                  justifyContent: "center",
+            )}
+            <View style={MFMenuStyles.settingsContainerStyles}>
+              <MFButton
+                variant={MFButtonVariant.Icon}
+                iconSource={AppImages.settings_grey}
+                imageSource={{}}
+                avatarSource={{}}
+                iconStyles={MFMenuStyles.iconStyles}
+                iconButtonStyles={{ shouldRenderImage: true }}
+                onPress={() => {
+                  props.navigation.toggleDrawer();
+                  console.log(
+                    "setting pressed",
+                    props.navigation,
+                    isDrawerOpen
+                  );
                 }}
-              >
-                <FastImage
-                  source={AppImages.logo_white}
-                  style={MFMenuStyles.logoStyles}
-                />
-              </View>
+              />
+            </View>
+            <View
+              style={{
+                flex: 3,
+                alignSelf: "flex-end",
+                height: 145,
+                alignContent: "flex-end",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <FastImage
+                source={AppImages.logo_white}
+                style={MFMenuStyles.logoStyles}
+              />
             </View>
           </View>
-        </LinearGradient>
+        </View>
       )}
     </GlobalContext.Consumer>
   );

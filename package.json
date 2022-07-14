@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "Open XCWorkSpace": "cd ios && open RetailClient.xcworkspace && cd ..",
+    "Generate TvOS build": "sh MakeIPA.sh",
     "start": "sh ./pre-build.sh $npm_config_skin && react-native start",
     "postinstall": "patch-package",
     "Setup project": "yarn install && cd ios && pod install && cd ..",
@@ -14,7 +15,9 @@
     "Install Pods": "cd ios && pod install && cd ..",
     "Install Pods for M1 Mac": "cd ios && arch -x86-64 pod install && cd ..",
     "test": "jest ",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "Archive project": "cd ios && xcodebuild archive -workspace RetailClient.xcworkspace -scheme RetailClient-tvOS -archivePath ~/Downloads/MFRetailClient.xcarchive | xcpretty",
+    "Generate IPA from Archive": "cd ios && xcodebuild -exportArchive -archivePath ~/Downloads/MFRetailClient.xcarchive -exportPath ~/Downloads -exportOptionsPlist ExportOptions.plist -allowProvisioningUpdates | xcpretty"
   },
   "engines": {
     "node": "<17",
@@ -25,6 +28,7 @@
     "@react-navigation/drawer": "^6.4.1",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
+    "@react-navigation/stack": "^6.2.1",
     "asyncro": "^3.0.0",
     "axios": "^0.21.4",
     "jsonc": "^2.0.0",
@@ -34,7 +38,7 @@
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
     "react": "17.0.1",
-    "react-native": "npm:react-native-tvos@0.64.2-2",
+    "react-native": "npm:react-native-tvos@0.64.2-4",
     "react-native-device-info": "^8.4.8",
     "react-native-fast-image": "^8.5.11",
     "react-native-gesture-handler": "^2.4.2",
@@ -44,7 +48,7 @@
     "react-native-safe-area-context": "^4.2.5",
     "react-native-screens": "^3.13.1",
     "react-native-syntax-highlighter": "2.0.0",
-    "react-native-tvos": "^0.64.2-2",
+    "react-native-tvos": "^0.64.2-4",
     "react-native-webview": "^11.13.0",
     "react-query": "^3.34.12",
     "react-syntax-highlighter": "^15.4.5"

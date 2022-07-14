@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "mk_logo_1280x768.jpeg",
+      "idiom" : "tv"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -32,6 +32,8 @@ local.properties
 # node.js
 #
 node_modules/
+coverage/
+.jest/cache
 npm-debug.log
 yarn-error.log
 
@@ -57,3 +59,4 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+/outputs/*

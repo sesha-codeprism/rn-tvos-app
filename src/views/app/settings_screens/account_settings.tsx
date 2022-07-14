@@ -11,19 +11,13 @@ const AccountSettingsScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   useEffect(() => {
-    const unsubscribe = props.navigation.addListener('beforeRemove', () => {
-      // do something
-      console.warn('Warning before removing component acc settings')
-    });
-    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
+    // const unsubscribe = props.navigation.addListener("beforeRemove", () => {
+    //   // do something
+    //   console.warn("Warning before removing component acc settings");
+    // });
+    // return unsubscribe;
+  }, [props.navigation]);
 
-    return unsubscribe;
-  }, [props.navigation])
-  const handleBackButtonClick = () => {
-    console.log('back presed')
-    props.navigation.toggleDrawer();
-    return true;
-  };
   return (
     <SideMenuLayout
       title="Account Settings"

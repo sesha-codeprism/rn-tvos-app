@@ -16,7 +16,7 @@ const ContentLockPinScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [pin, setPin] = useState<any>(["", "", "", ""]);
   useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
+    // BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
   }, []);
   const handleBackButtonClick = () => {
     props.navigation.goBack();

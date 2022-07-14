@@ -1,9 +1,11 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideMenuLayout from "../../../../components/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
+import { GLOBALS } from "../../../../utils/globals";
+import { updateStore } from "../../../../utils/helpers";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -20,6 +22,44 @@ const list = [
 const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [locked, setLocked] = useState<any>("");
+
+  const onPress = (value: any) => {
+    try {
+      setLocked(value);
+      GLOBALS.store.settings.parentalControll.contentLock &&
+      GLOBALS.store.settings.parentalControll.contentLock["lockUnratedContent"]
+        ? (GLOBALS.store.settings.parentalControll.contentLock[
+            "lockUnratedContent"
+          ] = value === 0 ? true : false)
+        : (GLOBALS.store.settings.parentalControll.contentLock = {
+            ...GLOBALS.store.settings.parentalControll.contentLock,
+            ["lockUnratedContent"]: value === 0 ? true : false,
+          });
+      updateStore(JSON.stringify(GLOBALS.store));
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+  const getData = () => {
+    try {
+      const selected =
+        GLOBALS.store.settings.parentalControll.contentLock &&
+        GLOBALS.store.settings.parentalControll.contentLock[
+          "lockUnratedContent"
+        ] !== undefined
+          ? GLOBALS.store.settings.parentalControll.contentLock[
+              "lockUnratedContent"
+            ] === true
+            ? 0
+            : 1
+          : "";
+      setLocked(selected);
+    } catch (error) {}
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <SideMenuLayout title="Content Locks" subTitle="Unrated Content">
       <View style={styles.contentTitleContainer}>
@@ -32,7 +72,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
               setFocussed(index);
             }}
             onPress={() => {
-              setLocked(index);
+              onPress(index);
             }}
             style={
               index === focussed
