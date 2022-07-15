@@ -36,6 +36,8 @@ const AppImages: { [key: string]: Source | any } = {
   unchecked_circle: require(`${imagesDirectory}/unchecked_circle.png`),
   topGradient: require(`${imagesDirectory}/top_gradient.png`),
   bottomGradient: require(`${imagesDirectory}/bottomGradient.png`),
+  overlayPortrait: require(`${imagesDirectory}/overlay_ portrait.png`),
+  overlayLandscape: require(`${imagesDirectory}/overlay_landscape.png`),
 };
 
 export { AppImages };

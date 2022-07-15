@@ -93,30 +93,6 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
   });
   return (
     <View style={MFProfileStyle.container}>
-      {/* {props.route.params && props.route.params.whoIsWatching ? (
-        <View
-          style={{
-            width: 399,
-            height: 48,
-            marginTop: 233,
-            alignSelf: "center",
-            marginBottom: 103,
-          }}
-        >
-          <MFText
-            shouldRenderText={true}
-            displayText={`Who's Watching?`}
-            textStyle={{
-              fontSize: 48,
-              fontWeight: "600",
-              letterSpacing: 0,
-              lineHeight: 48,
-              textAlign: "center",
-              color: "#EEEEEE",
-            }}
-          ></MFText>
-        </View>
-      ) : ( */}
         <View style={MFProfileStyle.profileTitleContainer}>
           <MFText
             shouldRenderText
@@ -124,7 +100,6 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
             textStyle={MFProfileStyle.titleTextStyle}
           />
         </View>
-      {/* )} */}
       <View
         style={{
           flex: 7,
@@ -144,7 +119,6 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
             justifyContent: "center",
             display: "flex",
             flexDirection: "row",
-            // flexWrap: "wrap",
           }}
         >
           {userProfiles.map((item, index) => {
@@ -153,9 +127,6 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
                 <MFUserProfile
                   userProfile={item}
                   navigation={props.navigation}
-                  // onBlur={(e) => {
-                  //   onBlur(e, index);
-                  // }}
                   onFocus={(e) => {
                     onFocus(e, index);
                   }}

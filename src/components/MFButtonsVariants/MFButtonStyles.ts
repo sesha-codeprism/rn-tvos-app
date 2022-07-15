@@ -76,9 +76,10 @@ const Styles = StyleSheet.create({
     color: "#A7A7A7",
     fontSize: 31,
     marginVertical: 15,
-    fontFamily: "Inter-Regular",
+    fontFamily: "Inter-SemiBold",
     fontWeight: "600",
-    marginLeft: 10
+    marginLeft: 10,
+    lineHeight: 50
   },
   railCard: {
     width: 400,

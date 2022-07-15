@@ -9,6 +9,7 @@ import Styles from "./MFButtonsVariants/MFButtonStyles";
 import { TitlePlacement } from "./MFCard";
 import MFFilmStrip, { OverlayComponent } from "./MFFilmStrip/MFFilmStrip";
 import MFViewAllButton from "./MFFilmStrip/ViewAllComponent";
+import MFOverlay from "./MFOverlay";
 
 interface MFSwimLaneProps {
   feed: Feed;
@@ -72,7 +73,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
         props.data &&
         props.data.length > 0
       }
-      overlayComponent={<OverlayComponent displayString={"New Episode"} />}
+      overlayComponent={<MFOverlay displayString={"New Episode"} />}
       viewAll={
         <MFViewAllButton
           displayStyles={Styles.railTitle}
