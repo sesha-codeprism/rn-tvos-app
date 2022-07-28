@@ -48,7 +48,11 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
       var buttonProps = getButtonVariantProps(e);
       array1.push(buttonProps);
     });
-    setHubs1(array1);
+    if(__DEV__){
+      setHubs1([...array1,...array1,...array1,...array1,...array1]);
+    }else{
+      setHubs1(array1);
+    }
   }, [props.hubList, globalContext]);
 
   const getButtonVariantProps = (hubObject: FeedItem) => {
@@ -80,7 +84,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
     <GlobalContext.Consumer>
       {({ userProfile, setProfile }) => (
         <View style={MFMenuStyles.hubsContainer}>
-          <View style={{ flex: 0.2 }}>
+          <View style={{ marginLeft: 70,marginRight: 30 }}>
             <MFButton
               variant={MFButtonVariant.Icon}
               iconSource={AppImages.search}
@@ -90,7 +94,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               iconButtonStyles={{ shouldRenderImage: true }}
             />
           </View>
-          <View style={{ flex: 2.2, paddingBottom: 10, overflow: "visible" }}>
+          <View style={{ flex: 2.2, paddingBottom: 10, overflow: "visible"}}>
             <MFButtonGroup
               onPress={(event, index) => _onPressMain(event, index)}
               buttonsList={hubs1}
@@ -117,7 +121,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               }}
             />
           </View>
-          <View style={{ flex: 0.9, flexDirection: "row" }}>
+          <View style={{ flex: 1,marginLeft: 50, flexDirection: "row" }}>
             {isIdentityAssigned && (
               <View style={MFMenuStyles.profileContainerStyles}>
                 <MFButton

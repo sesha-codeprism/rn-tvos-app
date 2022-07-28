@@ -41,7 +41,7 @@ const MFMenuStyles = StyleSheet.create({
     width: 32,
     color: "grey",
     tintColor: "red",
-    resizeMode: "cover",
+    resizeMode: "contain",
   },
   textStyle: {
     fontSize: appUIDefinition.theme.fontSizes.subTitle2,
