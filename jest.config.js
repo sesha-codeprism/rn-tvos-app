@@ -1,7 +1,10 @@
 module.exports = {
   preset: "react-native",
   // presets: ["module:metro-react-native-babel-preset"],
-  setupFiles: ["./jest/setup.js"],
+  setupFiles: [
+    "./node_modules/react-native-gesture-handler/jestSetup.js",
+    "./jest/setup.js",
+  ],
   testEnvironment: "node",
   testEnvironmentOptions: {
     url: "http://localhost/",
@@ -21,6 +24,9 @@ module.exports = {
     "^.+\\.(ts|tsx)$": "ts-jest",
     "^.+\\.js$": require.resolve("react-native/jest/preprocessor.js"),
   },
+  transformIgnorePatterns: [
+    "node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation)",
+  ],
   verbose: true,
   testRegex: "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
 

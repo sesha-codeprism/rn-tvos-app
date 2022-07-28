@@ -21,7 +21,7 @@ const Styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 10,
+    marginHorizontal: 20,
     borderBottomWidth: 2,
     borderBottomColor: appUIDefinition.theme.colors.primary,
   },

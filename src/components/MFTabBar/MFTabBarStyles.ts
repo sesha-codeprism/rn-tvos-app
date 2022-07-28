@@ -17,11 +17,11 @@ export const MFTabBarStyles = StyleSheet.create({
   },
   tabBarItem: {
     paddingVertical: 10,
-    paddingHorizontal: 25,
+    paddingHorizontal: 30,
     display: "flex",
     borderRadius: 5,
-    marginHorizontal: 20,
-    padding: 20,
+    marginHorizontal: 30,
+    padding: 30,
   },
   tabBarItemUnFocused: {
     transform: [
