@@ -176,12 +176,15 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                 }
               >
                 <MFButton
-                  variant={MFButtonVariant.Icon}
-                  iconSource={AppImages.settings_grey}
+                  variant={MFButtonVariant.Avatar}
+                  avatarSource={
+                    userProfile && userProfile.Image != null
+                      ? AppImages[userProfile.Image] || AppImages.avatar
+                      : AppImages.avatar
+                  }
                   imageSource={{}}
-                  avatarSource={{}}
-                  iconStyles={MFMenuStyles.iconStyles}
-                  iconButtonStyles={{ shouldRenderImage: true }}
+                  iconSource={{}}
+                  avatarStyles={MFMenuStyles.avatarStyles}
                   onPress={() => {
                     props.navigation.toggleDrawer();
                     console.log(
