@@ -72,6 +72,7 @@ const MFMenuStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: 10,
+    // marginLeft: 70,marginRight: 30
     // backgroundColor: __DEV__ ? 'red' : 'transparent'
   },
   hubsContainerStyles: {
@@ -93,6 +94,7 @@ const MFMenuStyles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+    // marginLeft: 50
     // backgroundColor: __DEV__ ? 'blue' : 'transparent'
   },
   tabBarItem: {
