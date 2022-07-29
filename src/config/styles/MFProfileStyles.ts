@@ -589,11 +589,8 @@ export const MFProfileStyle = StyleSheet.create({
     borderRadius: 37 / 2,
     borderColor: appUIDefinition.theme.colors.white,
     borderWidth: 2,
-    marginTop: 10,
-    marginRight: 52,
-    alignContent: "center",
-    alignItems: "center",
-    justifyContent: "center",
+    // marginTop: 10,
+    marginRight: 50,
     alignSelf: "flex-start",
   },
 });

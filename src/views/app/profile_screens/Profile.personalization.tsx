@@ -105,23 +105,23 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                     ? setShowPersonalizationPopup(true)
                     : false;
                 }}
-                style={{height: '100%'}}
+                style={{ height: "100%" }}
               >
-                <View style={MFProfileStyle.personalize_placeholderStyles}>
-                  {shouldRenderImage && (
-                    <FastImage
-                      source={AppImages.selected}
-                      style={
-                        focused
-                          ? {
-                              ...MFProfileStyle.personalize_imageStyles,
-                              ...MFProfileStyle.personalize_activeProfileStyles,
-                            }
-                          : MFProfileStyle.personalize_imageStyles
-                      }
-                    />
-                  )}
-                </View>
+                {shouldRenderImage ? (
+                  <FastImage
+                    source={AppImages.selected}
+                    style={
+                      focused
+                        ? {
+                            ...MFProfileStyle.personalize_imageStyles,
+                            ...MFProfileStyle.personalize_activeProfileStyles,
+                          }
+                        : MFProfileStyle.personalize_imageStyles
+                    }
+                  />
+                ) : (
+                  <View style={MFProfileStyle.personalize_placeholderStyles} />
+                )}
               </Pressable>
               <View>
                 <MFText
