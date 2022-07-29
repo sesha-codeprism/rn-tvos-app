@@ -1,10 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  GestureResponderEvent,
-  ImageBackground,
-  StyleSheet,
-  View,
-} from "react-native";
+import { GestureResponderEvent, StyleSheet, View } from "react-native";
 import { HubsList } from "../../@types/Hubs";
 import { enableRTL, appUIDefinition } from "../../config/constants";
 import { AppImages } from "../../assets/images";
@@ -20,7 +15,6 @@ import { GlobalContext } from "../../contexts/globalContext";
 import { useDrawerStatus } from "@react-navigation/drawer";
 import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
-import { screenWidth } from "../../utils/dimensions";
 
 interface MFMenuProps {
   navigation: any;
@@ -71,10 +65,10 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
         focusedStyle: StyleSheet.flatten([MFMenuStyles.focusedTextStyle]),
         unfocusedStyle: StyleSheet.flatten([MFMenuStyles.textStyle]),
       },
-      style: StyleSheet.flatten([MFTabBarStyles.tabBarItem]),
+      style: StyleSheet.flatten([MFMenuStyles.tabBarItem]),
       focusedStyle: StyleSheet.flatten([
-        MFTabBarStyles.tabBarItem,
-        MFTabBarStyles.tabBarItemFocused,
+        MFMenuStyles.tabBarItem,
+        MFMenuStyles.tabBarItemFocused,
       ]),
     };
     return element;
@@ -83,8 +77,10 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   return (
     <GlobalContext.Consumer>
       {({ userProfile, setProfile }) => (
-        <View style={MFMenuStyles.hubsContainer}>
-          <View style={{ marginLeft: 70,marginRight: 30 }}>
+        <View style={MFMenuStyles.rootContainerStyles}>
+          <View
+            style={StyleSheet.flatten([MFMenuStyles.searchContainerStyles])}
+          >
             <MFButton
               variant={MFButtonVariant.Icon}
               iconSource={AppImages.search}
@@ -94,7 +90,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               iconButtonStyles={{ shouldRenderImage: true }}
             />
           </View>
-          <View style={{ flex: 2.2, paddingBottom: 10, overflow: "visible"}}>
+          <View style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles])}>
             <MFButtonGroup
               onPress={(event, index) => _onPressMain(event, index)}
               buttonsList={hubs1}
@@ -121,7 +117,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               }}
             />
           </View>
-          <View style={{ flex: 1,marginLeft: 50, flexDirection: "row" }}>
+          <View style={StyleSheet.flatten([MFMenuStyles.profileViewStyles])}>
             {isIdentityAssigned && (
               <View style={MFMenuStyles.profileContainerStyles}>
                 <MFButton

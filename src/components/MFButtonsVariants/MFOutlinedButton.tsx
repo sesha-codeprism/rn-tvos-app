@@ -58,8 +58,8 @@ const MFOutlinedButton: React.FunctionComponent<MFOutlinedButtonProps> = (
       disabled={props.outlinedButtonStyle?.isDisabled}
       hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       style={[
-        props.style,
         Styles.outlined,
+        props.style,
         focused
           ? StyleSheet.flatten([
               Styles.focused,

@@ -73,7 +73,6 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
         props.data &&
         props.data.length > 0
       }
-      overlayComponent={<MFOverlay displayString={"New Episode"} />}
       viewAll={
         <MFViewAllButton
           displayStyles={Styles.railTitle}

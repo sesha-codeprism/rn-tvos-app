@@ -13,7 +13,6 @@ import { AppStrings } from "../../config/strings";
 import MFPopup from "../../components/MFPopup";
 import MFSwim from "../../components/MFSwim";
 import { getAllHubs } from "../../config/queries";
-import LinearGradient from "react-native-linear-gradient";
 import { AppImages } from "../../assets/images";
 import { screenHeight, screenWidth } from "../../utils/dimensions";
 interface Props {

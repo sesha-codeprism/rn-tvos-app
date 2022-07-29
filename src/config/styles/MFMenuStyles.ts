@@ -1,11 +1,12 @@
 import { Dimensions, StyleSheet } from "react-native";
 import { MFThemeObject } from "../../@types/MFTheme";
+import { SCREEN_WIDTH } from "../../components/MFFilmStrip/MFFilmStrip";
 import { appUIDefinition } from "../constants";
 const { width, height } = Dimensions.get("window");
 const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
 
 const MFMenuStyles = StyleSheet.create({
-  hubsContainer: {
+  rootContainerStyles: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
@@ -19,7 +20,6 @@ const MFMenuStyles = StyleSheet.create({
     height: 70,
     width: 70,
     borderRadius: 70 / 2,
-    marginTop: 20,
   },
   profileContainerStyles: {
     flex: 1,
@@ -64,6 +64,48 @@ const MFMenuStyles = StyleSheet.create({
     height: 40,
     width: 240,
     alignSelf: "center",
+  },
+  searchContainerStyles: {
+    width: SCREEN_WIDTH * 0.05,
+    height: 147,
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 10,
+    // backgroundColor: __DEV__ ? 'red' : 'transparent'
+  },
+  hubsContainerStyles: {
+    flex: 2.8,
+    paddingBottom: 10,
+    paddingRight: 20,
+    overflow: "visible",
+    height: 147,
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: __DEV__ ? 'green' : 'transparent'
+  },
+  profileViewStyles: {
+    flex: 0.9,
+    flexDirection: "row",
+    paddingLeft: 20,
+    height: 147,
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: __DEV__ ? 'blue' : 'transparent'
+  },
+  tabBarItem: {
+    display: "flex",
+    borderRadius: 5,
+    padding: 30,
+  },
+  tabBarItemFocused: {
+    transform: [
+      {
+        scale: 1.1,
+      },
+    ],
   },
 });
 
