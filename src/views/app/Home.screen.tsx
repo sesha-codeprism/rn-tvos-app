@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, ImageBackground } from "react-native";
-import { enableRTL } from "../../config/constants";
+import { View, ImageBackground, ScrollView, ViewComponent } from "react-native";
+import { debounceTime, enableRTL } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
@@ -15,6 +15,7 @@ import MFSwim from "../../components/MFSwim";
 import { getAllHubs } from "../../config/queries";
 import { AppImages } from "../../assets/images";
 import { screenHeight, screenWidth } from "../../utils/dimensions";
+import { SubscriberFeed } from "../../@types/SubscriberFeed";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -24,13 +25,14 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
     require("../../assets/images/onboarding_1280x752_landscape.jpg")
   );
 
-  const [showTitle, setShowTitle] = useState("");
-  const [showDescription, setShowDescription] = useState("");
+  let timeOut: any = null;
+
   const [feeds, setFeeds] = useState<FeedItem>();
   const [hubs, setHubs] = useState(Array<FeedItem>());
   const [index, setIndex] = useState(0);
   const [showPopup, togglePopup] = useState(false);
   const [feedItem, setFeedItem] = useState<Feed>();
+  const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
 
   const { data, isLoading } = getAllHubs();
   props.navigation.addListener("focus", () => {
@@ -40,6 +42,33 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   props.navigation.addListener("blur", () => {
     console.log("blurred");
   });
+
+  const onFeedFocus = (event: SubscriberFeed) => {
+    console.log(event);
+    clearTimeout(timeOut);
+    timeOut = setTimeout(async () => {
+      if (event != null) {
+        setCurrentFeed(event);
+        // if (event.image16x9PosterURL != undefined) {
+        //   setBackgroundURI({
+        //     uri: event.image16x9PosterURL.uri,
+        //   });
+        // } else {
+        //   setBackgroundURI({
+        //     uri: "https://picsum.photos/500/150/",
+        //   });
+        // }
+        // if (event.CatalogInfo) {
+        //   setShowTitle(event.title),
+        //     event.CatalogInfo.Description &&
+        //       setShowDescription(event.CatalogInfo.Description);
+        // } else {
+        //   setShowTitle(event.title),
+        //     event.metadataLine2 && setShowDescription(event.metadataLine2);
+        // }
+      }
+    }, debounceTime);
+  };
 
   const setHubsData = () => {
     if (data && hubs.length <= 0) {
@@ -95,24 +124,29 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                 enableRTL={enableRTL}
                 hubList={hubs}
                 onPress={(event) => {
-                  // setIndex(event);
                   setFeeds(hubs[event]);
-                  // setHubsData();
                 }}
               />
-              <View>
-                {showDescription != "" && (
-                  <View style={HomeScreenStyles.posterViewContainerStyles}>
+              <View style={HomeScreenStyles.posterViewContainerStyles}>
+                {currentFeed && (
+                  <>
                     <View style={HomeScreenStyles.posterImageContainerStyles}>
-                      <FastImage
-                        source={backgroundURI}
-                        style={HomeScreenStyles.posterImageStyles}
-                      />
+                      {currentFeed.image16x9PosterURL !== undefined ? (
+                        <FastImage
+                          source={{ uri: currentFeed.image16x9PosterURL.uri }}
+                          style={HomeScreenStyles.posterImageStyles}
+                        />
+                      ) : (
+                        <FastImage
+                          source={{ uri: AppImages.tvshowPlaceholder }}
+                          style={HomeScreenStyles.posterImageStyles}
+                        />
+                      )}
                     </View>
                     <View style={HomeScreenStyles.postContentContainerStyles}>
                       <MFText
                         shouldRenderText
-                        displayText={showTitle}
+                        displayText={currentFeed.title}
                         textStyle={HomeScreenStyles.titleTextStyle}
                       />
                       <View
@@ -122,21 +156,24 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                       >
                         <MFText
                           shouldRenderText
-                          displayText={showDescription}
+                          displayText={
+                            currentFeed.CatalogInfo
+                              ? currentFeed.CatalogInfo.Description
+                              : currentFeed.metadataLine2
+                          }
                           textStyle={[HomeScreenStyles.subtitleText]}
                         />
                       </View>
                     </View>
-                  </View>
+                  </>
                 )}
-                <View style={HomeScreenStyles.contentContainer}>
-                  {!isLoading && <MFSwim feeds={feeds} index={index} />}
-                </View>
               </View>
-              {isLoading && (
-                // <ActivityIndicator size="large" />
-                <MFLoader transparent={true} />
-              )}
+              <View style={HomeScreenStyles.contentContainer}>
+                {!isLoading && (
+                  <MFSwim feeds={feeds} index={index} onFocus={onFeedFocus} />
+                )}
+              </View>
+              {isLoading && <MFLoader transparent={true} />}
               {showPopup ? (
                 <MFPopup
                   buttons={[

@@ -7,7 +7,7 @@ import { SourceType } from "../utils/common";
 import { DefaultStore, massageDiscoveryFeed } from "../utils/DiscoveryUtils";
 import { GLOBALS } from "../utils/globals";
 import { massageSubscriberFeed } from "../utils/Subscriber.utils";
-import { lang, pivots } from "./constants";
+import { appUIDefinition, lang, pivots } from "./constants";
 
 export interface QueryResponse {
     data: any;
@@ -43,7 +43,7 @@ export function getProfiles() {
     //     refetch,
     //     isSuccess,
     // };
-    return useQuery(query, getAllUserProfiles, { staleTime: 36000, cacheTime: 36000 });
+    return useQuery(query, getAllUserProfiles, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime });
 }
 
 // export const getAllHubs = async () => {
@@ -54,11 +54,11 @@ export function getProfiles() {
 // }
 
 export function getDataForUDL(query: string, pageNo: number = 0) {
-    return useQuery(query, () => { return getUDLData(query, pageNo) }, { cacheTime: 86400, staleTime: 86400, keepPreviousData: true });
+    return useQuery(query, () => { return getUDLData(query, pageNo) }, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true });
 }
 
 export function getAllHubs(): any {
-    return useQuery('get-hubs', getHubs, { staleTime: 36000, cacheTime: 36000 });
+    return useQuery('get-hubs', getHubs, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime });
 }
 
 const getUDLData = async (uri: string, pageNo: number = 0) => {
@@ -101,8 +101,7 @@ export function getAllFeedDataForFeed(feed: FeedItem) {
             return {
                 queryKey: ['feed', element.Uri],
                 queryFn: () => getUDLData(element.Uri),
-                cacheTime: 86400,
-                staleTime: 86400
+                staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime
             }
         }),
     )

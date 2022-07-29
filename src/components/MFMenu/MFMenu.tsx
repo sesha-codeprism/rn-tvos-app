@@ -15,6 +15,7 @@ import { GlobalContext } from "../../contexts/globalContext";
 import { useDrawerStatus } from "@react-navigation/drawer";
 import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
+import { enableScreens } from "react-native-screens";
 
 interface MFMenuProps {
   navigation: any;
@@ -148,6 +149,9 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                     props.navigation,
                     isDrawerOpen
                   );
+                  if (!isDrawerOpen) {
+                    enableScreens();
+                  }
                 }}
               />
             </View>

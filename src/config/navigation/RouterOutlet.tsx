@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// import { TransitionPresets } from '@react-navigation/stack';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import LoginScreen from "../../views/auth/Login.screen";
 import HomeScreen from "../../views/app/Home.screen";
 import SplashScreen from "../../views/auth/Splash.screen";
 import GuideScreen from "../../views/app/Guide.screen";
 import SearchScreen from "../../views/search.screen";
-// import TestScreen from "../../views/app/ShowcaseApp/Test.screen";
 import ShortCodeScreen from "../../views/auth/Shortcode.screen";
 import CreateProfileScreen from "../../views/app/profile_screens/Create.profile.screen";
 import ProfileScreen from "../../views/app/profile_screens/Profile.screen";
@@ -34,6 +32,7 @@ import ClosedCaptionScreen from "../../views/app/settings_screens/display/ close
 import PurchaseLockScreen from "../../views/app/settings_screens/parental_controll/purchase_lock.screen";
 import VideoQualityScreen from "../../views/app/settings_screens/display/video_quality.screen";
 import SubtitleLanguageScreen from "../../views/app/settings_screens/display/subtitle_language.screen";
+import { enableScreens } from "react-native-screens";
 
 interface RouterOutletProps {}
 const { width, height } = Dimensions.get("window");
@@ -70,6 +69,7 @@ export const Routes = {
   SubtitleLanguage: "subtitle_language",
 };
 
+enableScreens();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
@@ -257,8 +257,11 @@ const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
           drawerType: "front",
           drawerPosition: "right",
           swipeEnabled: false,
+          unmountOnBlur: true,
+          drawerHideStatusBarOnOpen: true,
           // swipeEnabled: false,
-          // gestureEnabled:false,
+          //@ts-ignore
+          gestureEnabled: false,
           // gestureHandlerProps:{
           //   ge
           // }

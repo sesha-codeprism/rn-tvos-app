@@ -1,6 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
 import { MFThemeObject } from "../../@types/MFTheme";
 import { appUIDefinition } from "../../config/constants";
+import { screenHeight } from "../../utils/dimensions";
 const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
 export const HomeScreenStyles = StyleSheet.create({
   container: {
@@ -8,8 +9,9 @@ export const HomeScreenStyles = StyleSheet.create({
     backgroundColor: "white",
   },
   contentContainer: {
-    marginTop: Dimensions.get('window').height * 0.3,
-    paddingBottom: 130
+    height: '100%',
+    // paddingBottom: 500
+    flex: 1
   },
   viewContainer: {
     paddingHorizontal: 50,
@@ -65,12 +67,15 @@ export const HomeScreenStyles = StyleSheet.create({
   posterImageStyles: {
     height: 300,
     width: (300 * 16) / 9,
+    borderRadius: 8
   },
   posterViewContainerStyles: {
     flexDirection: "row",
     alignContent: "space-around",
     marginTop: 50,
     paddingHorizontal: 50,
+    height: screenHeight * 0.3,
+    width: '100%'
   },
   posterImageContainerStyles: { flex: 0.38 },
   titleTextStyle: {
