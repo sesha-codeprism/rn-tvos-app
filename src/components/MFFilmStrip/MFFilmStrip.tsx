@@ -270,7 +270,8 @@ export const OverlayComponent = ({
 }) => (
   <View
     style={{
-      backgroundColor: "#222222",
+      backgroundColor: "transparent",
+      // backgroundColor: "#222222",
       alignSelf: "flex-end",
       // marginRight: 30,
       // marginTop: 10,

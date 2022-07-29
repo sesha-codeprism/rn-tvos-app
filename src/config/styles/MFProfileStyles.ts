@@ -1,13 +1,13 @@
 import { Dimensions, StyleSheet } from "react-native";
 import { appUIDefinition } from "../constants";
 const { width, height } = Dimensions.get("window");
-export  const MFProfileStyle = StyleSheet.create({
+export const MFProfileStyle = StyleSheet.create({
   container: {
     width: width,
     height: height,
     backgroundColor: "#151214",
     padding: 20,
-    justifyContent:'center'
+    justifyContent: "center",
   },
   profileTitleContainer: {
     flex: 0.6,
@@ -279,14 +279,14 @@ export  const MFProfileStyle = StyleSheet.create({
   },
   create_keyboardSpace: {
     height: 9,
-    width: 70,
+    width: 60,
     marginTop: 15,
-    marginRight: 15,
+    // marginRight: 15,
   },
   create_keyboardDelete: {
     height: 26,
     width: 48,
-    marginLeft: 50,
+    // marginLeft: 50,
   },
   finalise_container: {
     width: width,
@@ -476,6 +476,7 @@ export  const MFProfileStyle = StyleSheet.create({
     paddingTop: height * 0.15,
     borderRightColor: "#424242",
     borderWidth: StyleSheet.hairlineWidth,
+    marginTop: 50
   },
   personalize_profileTitleContainer: {
     flex: 0.6,
@@ -558,7 +559,7 @@ export  const MFProfileStyle = StyleSheet.create({
   personalize_activeProfileStyles: {
     transform: [
       {
-        scale: 1.1,
+        scale: 1.2,
       },
     ],
   },
@@ -576,19 +577,19 @@ export  const MFProfileStyle = StyleSheet.create({
     marginTop: 20,
   },
   personalize_imageStyles: {
-    height: 50,
-    width: 50,
-    marginTop: 10,
+    height: 37,
+    width: 37,
+    // marginTop: 10,
     marginRight: 50,
     alignSelf: "flex-start",
   },
   personalize_placeholderStyles: {
-    height: 50,
-    width: 50,
-    borderRadius: 50 / 2,
+    height: 37,
+    width: 37,
+    borderRadius: 37 / 2,
     borderColor: appUIDefinition.theme.colors.white,
     borderWidth: 2,
-    marginTop: 10,
+    // marginTop: 10,
     marginRight: 50,
     alignSelf: "flex-start",
   },

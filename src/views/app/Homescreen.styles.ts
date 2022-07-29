@@ -1,6 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
 import { MFThemeObject } from "../../@types/MFTheme";
 import { appUIDefinition } from "../../config/constants";
+import { screenHeight } from "../../utils/dimensions";
 const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
 export const HomeScreenStyles = StyleSheet.create({
   container: {
@@ -8,7 +9,9 @@ export const HomeScreenStyles = StyleSheet.create({
     backgroundColor: "white",
   },
   contentContainer: {
-    marginTop: Dimensions.get('window').height * 0.3,
+    height: '100%',
+    // paddingBottom: 500
+    flex: 1
   },
   viewContainer: {
     paddingHorizontal: 50,
@@ -27,29 +30,30 @@ export const HomeScreenStyles = StyleSheet.create({
     color: "white",
   },
   landScapeCardStyles: {
-    width: 480,
-    height: 287,
+    width: (appUIDefinition.config.height16x9 * 16) / 9,
+    height: appUIDefinition.config.height16x9,
     borderRadius: 10,
     alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
+    paddingVertical: 10
   },
   landScapeCardImageStyles: {
-    width: 460,
-    height: 263,
-    borderRadius: 10,
+    width: ((appUIDefinition.config.height16x9 * 16) / 9) - 25,
+    height: appUIDefinition.config.height16x9 * 0.9,
+    borderRadius: 5,
   },
   portraitCardStyles: {
-    width: 226,
-    height: 339,
+    width: (appUIDefinition.config.height2x3 * 2) / 3,
+    height: appUIDefinition.config.height2x3,
     borderRadius: 10,
     alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
   },
   portraitCardImageStyles: {
-    width: 206,
-    height: 319,
+    width: ((appUIDefinition.config.height2x3 * 2) / 3) - 25,
+    height: appUIDefinition.config.height2x3 * 0.9,
     borderRadius: 10,
   },
   focusedStyle: {
@@ -63,12 +67,15 @@ export const HomeScreenStyles = StyleSheet.create({
   posterImageStyles: {
     height: 300,
     width: (300 * 16) / 9,
+    borderRadius: 8
   },
   posterViewContainerStyles: {
     flexDirection: "row",
     alignContent: "space-around",
     marginTop: 50,
     paddingHorizontal: 50,
+    height: screenHeight * 0.3,
+    width: '100%'
   },
   posterImageContainerStyles: { flex: 0.38 },
   titleTextStyle: {
@@ -106,5 +113,21 @@ export const HomeScreenStyles = StyleSheet.create({
     alignItems: "flex-end",
     flexDirection: "row",
   },
-  content: {},
+  overlayStyle: {
+    width: '80%',
+    height: '80%',
+    alignSelf: "flex-end",
+    alignContent: 'flex-start',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start'
+  },
+  overlayImageStyles: {
+    width: '90%',
+    height: '80%',
+    alignSelf: "flex-end",
+    alignContent: 'flex-start',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+
+  }
 });

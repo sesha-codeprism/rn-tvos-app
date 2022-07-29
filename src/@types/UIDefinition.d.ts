@@ -14,6 +14,11 @@ interface Config {
   hostname: string;
   currentLocale: CurrentLocale;
   useLottieAnimationOnSplash: boolean;
+  height16x9: number;
+  height2x3: number;
+  height4x3: number;
+  queryCacheTime: number;
+  queryStaleTime: number;
 }
 
 interface CurrentLocale {

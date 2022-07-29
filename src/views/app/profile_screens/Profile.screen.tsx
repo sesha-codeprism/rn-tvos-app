@@ -29,7 +29,6 @@ const { width, height } = Dimensions.get("window");
 
 interface ProfileScreenProps {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
-  whoIsWatching?: boolean;
 }
 
 const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
@@ -94,17 +93,13 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
   });
   return (
     <View style={MFProfileStyle.container}>
-      <View style={MFProfileStyle.profileTitleContainer}>
-        <MFText
-          shouldRenderText
-          displayText={
-            props.route.params && props.route.params.whoIsWatching
-              ? `Who's Watching?`
-              : "Choose Your Profile"
-          }
-          textStyle={MFProfileStyle.titleTextStyle}
-        />
-      </View>
+        <View style={MFProfileStyle.profileTitleContainer}>
+          <MFText
+            shouldRenderText
+            displayText={"Choose Your Profile"}
+            textStyle={MFProfileStyle.titleTextStyle}
+          />
+        </View>
       <View
         style={{
           flex: 7,
@@ -117,14 +112,13 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
       >
         <View
           style={{
-            width: "60%",
+            width: "100%",
             height: "100%",
             alignItems: "center",
             alignContent: "center",
             justifyContent: "center",
             display: "flex",
             flexDirection: "row",
-            flexWrap: "wrap",
           }}
         >
           {userProfiles.map((item, index) => {
@@ -133,14 +127,12 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
                 <MFUserProfile
                   userProfile={item}
                   navigation={props.navigation}
-                  // onBlur={(e) => {
-                  //   onBlur(e, index);
-                  // }}
                   onFocus={(e) => {
                     onFocus(e, index);
                   }}
+                  checkedOnFocus={true}
                 />
-                {focused === index && (
+                {focused === index ? (
                   <Pressable
                     onPress={() => {
                       _onEdit(item);
@@ -179,7 +171,7 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
                       iconButtonStyles={{ shouldRenderImage: true }}
                     />
                   </Pressable>
-                )}
+                ) : null}
               </View>
             ) : (
               <View />

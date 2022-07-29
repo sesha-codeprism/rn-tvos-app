@@ -58,7 +58,7 @@ const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
       {menu.map((item, index) => {
         return (
           <Pressable
-            hasTVPreferredFocus={index === 0 ? true : false}
+            // hasTVPreferredFocus={index === 0 ? true : false}
             onFocus={() => {
               setFocussed(index);
             }}

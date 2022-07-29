@@ -21,7 +21,7 @@ const Styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 10,
+    marginHorizontal: 20,
     borderBottomWidth: 2,
     borderBottomColor: appUIDefinition.theme.colors.primary,
   },
@@ -76,8 +76,10 @@ const Styles = StyleSheet.create({
     color: "#A7A7A7",
     fontSize: 31,
     marginVertical: 15,
-    fontFamily: "Inter-Regular",
-    fontWeight: "600"
+    fontFamily: "Inter-SemiBold",
+    fontWeight: "600",
+    marginLeft: 10,
+    lineHeight: 50
   },
   railCard: {
     width: 400,

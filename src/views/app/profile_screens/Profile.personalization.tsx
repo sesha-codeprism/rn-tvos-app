@@ -13,6 +13,7 @@ import { Routes } from "../../../config/navigation/RouterOutlet";
 import MFPopup from "../../../components/MFPopup";
 import { updateUserProfile } from "../../../../backend/subscriber/subscriber";
 import { MFProfileStyle } from "../../../config/styles/MFProfileStyles";
+import FastImage from "react-native-fast-image";
 
 const { width, height } = Dimensions.get("window");
 
@@ -35,7 +36,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
   const [showClearHistory, setShowClearHistory] = useState(false);
   const [showPersonalizationPopup, setShowPersonalizationPopup] =
     useState(false);
-
+  const [focused, setFocus] = useState(false);
   console.log("props in personalization", props);
   const onpressDisable = () => {
     GLOBALS.editUserProfile.AdditionalFields = {
@@ -88,34 +89,78 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
             displayText="Profile personalization"
             textStyle={MFProfileStyle.personalize_profileTitleStyle}
           />
-          <View style={{ marginTop: 50 }}>
+          <View style={{ marginTop: 80 }}>
             <View style={{ flexDirection: "row" }}>
-              <MFButton
-                variant={MFButtonVariant.Icon}
-                iconSource={AppImages.selected}
-                imageSource={0}
-                avatarSource={0}
-                iconStyles={MFProfileStyle.personalize_imageStyles}
-                focusedStyle={MFProfileStyle.personalize_activeProfileStyles}
-                textLabel="Allow Profile Personalization"
-                textStyle={MFProfileStyle.personalize_titleStyles}
+              <Pressable
+                hasTVPreferredFocus
+                onFocus={() => {
+                  setFocus(true);
+                }}
+                onBlur={() => {
+                  setFocus(false);
+                }}
                 onPress={() => {
                   toggleShouldRenderImage(!shouldRenderImage);
                   !shouldRenderImage
                     ? setShowPersonalizationPopup(true)
                     : false;
                 }}
-                iconButtonStyles={{
-                  iconPlacement: "Left",
-                  subTextStyle: MFProfileStyle.personalize_subTitleStyles,
-                  subTextLabel:
-                    "Enabling Profile Personalization will allow the system to  to improve the viewing experience for ndividual profiles. It is highly recommended that you enable this feature for the best viewing experience.",
-                  shouldRenderImage: shouldRenderImage,
-                  placeholderStyles:
-                    MFProfileStyle.personalize_placeholderStyles,
-                }}
-              />
+                style={{ height: "100%" }}
+              >
+                {shouldRenderImage ? (
+                  <FastImage
+                    source={AppImages.selected}
+                    style={
+                      focused
+                        ? {
+                            ...MFProfileStyle.personalize_imageStyles,
+                            ...MFProfileStyle.personalize_activeProfileStyles,
+                          }
+                        : MFProfileStyle.personalize_imageStyles
+                    }
+                  />
+                ) : (
+                  <View style={MFProfileStyle.personalize_placeholderStyles} />
+                )}
+              </Pressable>
+              <View>
+                <MFText
+                  textStyle={MFProfileStyle.personalize_titleStyles}
+                  shouldRenderText={true}
+                  displayText={"Allow Profile Personalization"}
+                />
+
+                <MFText
+                  textStyle={MFProfileStyle.personalize_subTitleStyles}
+                  shouldRenderText={true}
+                  displayText={
+                    "Enabling Profile Personalization will allow the system to to improve the viewing experience for ndividual profiles. It is highly recommended that you enable this feature for the best viewing experience."
+                  }
+                />
+              </View>
             </View>
+            {/* <MFButton
+              variant={MFButtonVariant.Icon}
+              iconSource={AppImages.selected}
+              imageSource={0}
+              avatarSource={0}
+              iconStyles={MFProfileStyle.personalize_imageStyles}
+              focusedStyle={MFProfileStyle.personalize_activeProfileStyles}
+              textLabel="Allow Profile Personalization"
+              textStyle={MFProfileStyle.personalize_titleStyles}
+              onPress={() => {
+                toggleShouldRenderImage(!shouldRenderImage);
+                !shouldRenderImage ? setShowPersonalizationPopup(true) : false;
+              }}
+              iconButtonStyles={{
+                iconPlacement: "Left",
+                subTextStyle: MFProfileStyle.personalize_subTitleStyles,
+                subTextLabel:
+                  "Enabling Profile Personalization will allow the system to  to improve the viewing experience for ndividual profiles. It is highly recommended that you enable this feature for the best viewing experience.",
+                shouldRenderImage: shouldRenderImage,
+                placeholderStyles: MFProfileStyle.personalize_placeholderStyles,
+              }}
+            /> */}
           </View>
         </View>
         <View

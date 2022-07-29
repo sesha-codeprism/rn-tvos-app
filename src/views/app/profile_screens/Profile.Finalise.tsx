@@ -27,6 +27,7 @@ import { Routes } from "../../../config/navigation/RouterOutlet";
 import { MFProfileStyle } from "../../../config/styles/MFProfileStyles";
 import { GlobalContext } from "../../../contexts/globalContext";
 import { GLOBALS } from "../../../utils/globals";
+import { updateStore } from "../../../utils/helpers";
 const { width, height } = Dimensions.get("window");
 
 interface ProfileFinalisationScreenProps {
@@ -92,11 +93,15 @@ const ProfileFinalisationScreen: React.FunctionComponent<
       );
       console.log("create profile rsponse", response);
       if (response.status === 201) {
-        currentContext.setUserProfile(response.data);
+        console.log("create profile success rsponse", response.data);
         GLOBALS.userProfile = response.data;
+        GLOBALS.store.userProfile = GLOBALS.userProfile;
+        updateStore(JSON.stringify(GLOBALS.store));
+        currentContext.setUserProfile(GLOBALS.userProfile);
       }
       setLoading(false);
-      props.navigation.pop(5);
+      // props.navigation.pop(5);
+      props.navigation.replace(Routes.Home);
     } catch (error) {
       console.log("error saving profile", error);
       setLoading(false);

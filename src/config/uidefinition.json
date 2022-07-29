@@ -318,6 +318,11 @@
     "protocol": "https",
     "hostname": "reachclient.dev.mr.tv3cloud.com",
     "currentLocale": { "full": "en-US", "short": "en" },
-    "useLottieAnimationOnSplash": false
+    "useLottieAnimationOnSplash": false,
+    "height16x9": 253,
+    "height2x3": 339,
+    "height4x3": 234,
+    "queryCacheTime": 3600000,
+    "queryStaleTime": 3600000
   }
 }

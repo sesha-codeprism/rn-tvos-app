@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Dimensions, FlatList, StyleSheet, View } from "react-native";
+import {
+  Alert,
+  Dimensions,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 import MFButton from "../../../components/MFButton/MFButton";
 import MFText from "../../../components/MFText";
 import { MFButtonVariant } from "../../../components/MFButton/MFButton";
@@ -12,6 +19,7 @@ import { Routes } from "../../../config/navigation/RouterOutlet";
 import { GLOBALS } from "../../../utils/globals";
 import { updateUserProfile } from "../../../../backend/subscriber/subscriber";
 import { MFProfileStyle } from "../../../config/styles/MFProfileStyles";
+import FastImage from "react-native-fast-image";
 const { width, height } = Dimensions.get("window");
 
 const keyboard: FormKeyBoard = require("../../../config/keyboards/FormKeyboard.json");
@@ -25,15 +33,15 @@ interface CreateProfileProps {
 const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
   props: any
 ) => {
+  console.log("props coming to create profile", props);
   const [titleString, setTitleString] = useState(
-    // props.route.params &&
-    //   props.route.params.item &&
-    //   props.route.params.item.name
-    //   ? props.route.params.item.name
-    //   :
-    ""
+    props.route.params &&
+      props.route.params.item &&
+      props.route.params.item.Name
+      ? props.route.params.item.Name
+      : ""
   );
-
+  const [focus, setFocus] = useState("");
   const onPressSave = async () => {
     if (props.route.params.item.Name === titleString) {
       Alert.alert(
@@ -97,35 +105,54 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
               horizontal
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
-                <View style={MFProfileStyle.create_keyboardButton}>
+                <View style={{ flexDirection: "row" }}>
                   {item.type === "number" || item.type === "text" ? (
-                    <MFButton
-                      iconSource={0}
-                      imageSource={0}
-                      avatarSource={0}
-                      style={MFProfileStyle.create_keyboardButton}
-                      variant={MFButtonVariant.Contained}
-                      textLabel={item.content?.toString()}
-                      textStyle={MFProfileStyle.create_keyboardButtonText}
-                      onPress={() => {
-                        setTitleString(titleString + item.content);
-                      }}
-                      onFocus={() => {}}
-                      containedButtonProps={{
-                        containedButtonStyle: {
-                          enabled: true,
-                          focusedBackgroundColor: "#053C69",
-                          unFocusedBackgroundColor: "transparent",
-                          elevation: 5,
-                          unFocusedTextColor: "grey",
-                          hoverColor: "transparent",
-                        },
-                      }}
-                    />
+                    <View style={MFProfileStyle.create_keyboardButton}>
+                      <MFButton
+                        iconSource={0}
+                        imageSource={0}
+                        avatarSource={0}
+                        style={MFProfileStyle.create_keyboardButton}
+                        variant={MFButtonVariant.Contained}
+                        textLabel={item.content?.toString()}
+                        textStyle={MFProfileStyle.create_keyboardButtonText}
+                        onPress={() => {
+                          setTitleString(titleString + item.content);
+                        }}
+                        onFocus={() => {
+                          setFocus("");
+                        }}
+                        containedButtonProps={{
+                          containedButtonStyle: {
+                            enabled: true,
+                            focusedBackgroundColor: "#053C69",
+                            unFocusedBackgroundColor: "transparent",
+                            elevation: 5,
+                            unFocusedTextColor: "grey",
+                            hoverColor: "transparent",
+                          },
+                        }}
+                      />
+                    </View>
                   ) : (
-                    <MFButton
-                      variant={MFButtonVariant.Image}
-                      iconSource={0}
+                    <Pressable
+                      style={{
+                        height: 70,
+                        width: 70,
+                        // padding: 10,
+                        marginLeft: 25,
+                        alignItems: "center",
+                        alignContent: "center",
+                        justifyContent: "center",
+                        // alignSelf: "center",
+                        backgroundColor:
+                          focus === item.image?.split("")[0]
+                            ? "#053C69"
+                            : "transparent",
+                      }}
+                      onFocus={() => {
+                        setFocus(item.image === "space" ? "s" : "d");
+                      }}
                       onPress={() => {
                         if (item.image === "space") {
                           setTitleString(titleString + " ");
@@ -133,19 +160,54 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                           setTitleString(titleString.slice(0, -1));
                         }
                       }}
-                      onFocus={() => {}}
-                      imageSource={
-                        item.image === "space"
-                          ? AppImages.space_png
-                          : AppImages.delete_png
-                      }
-                      imageStyles={
-                        item.image === "space"
-                          ? MFProfileStyle.create_keyboardSpace
-                          : MFProfileStyle.create_keyboardDelete
-                      }
-                      avatarSource={0}
-                    />
+                      // onBlur={()=>{setFocus('')}}
+                    >
+                      <FastImage
+                        source={
+                          item.image === "space"
+                            ? AppImages.space_png
+                            : AppImages.delete_png
+                        }
+                        style={
+                          item.image === "space"
+                            ? MFProfileStyle.create_keyboardSpace
+                            : MFProfileStyle.create_keyboardDelete
+                        }
+                      />
+                      {/* <MFButton
+                        variant={MFButtonVariant.Image}
+                        iconSource={0}
+                        onPress={() => {
+                          if (item.image === "space") {
+                            setTitleString(titleString + " ");
+                          } else {
+                            setTitleString(titleString.slice(0, -1));
+                          }
+                        }}
+                        onFocus={() => {}}
+                        imageSource={
+                          item.image === "space"
+                            ? AppImages.space_png
+                            : AppImages.delete_png
+                        }
+                        imageStyles={
+                          item.image === "space"
+                            ? MFProfileStyle.create_keyboardSpace
+                            : MFProfileStyle.create_keyboardDelete
+                        }
+                        avatarSource={0}
+                        containedButtonProps={{
+                          containedButtonStyle: {
+                            enabled: true,
+                            focusedBackgroundColor: "#053C69",
+                            unFocusedBackgroundColor: "transparent",
+                            elevation: 5,
+                            unFocusedTextColor: "grey",
+                            hoverColor: "transparent",
+                          },
+                        }}
+                      /> */}
+                    </Pressable>
                   )}
                 </View>
               )}
@@ -168,7 +230,9 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                       onPress={() => {
                         setTitleString(titleString + item.content);
                       }}
-                      onFocus={() => {}}
+                      onFocus={() => {
+                        setFocus("");
+                      }}
                       containedButtonProps={{
                         containedButtonStyle: {
                           enabled: true,
@@ -204,7 +268,9 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                       onPress={() => {
                         setTitleString(titleString + item.content);
                       }}
-                      onFocus={() => {}}
+                      onFocus={() => {
+                        setFocus("");
+                      }}
                       containedButtonProps={{
                         containedButtonStyle: {
                           enabled: true,
@@ -235,64 +301,69 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
             justifyContent: "center",
           }}
         >
-          <MFButton
-            variant={MFButtonVariant.Contained}
-            textLabel={props.route.params.mode === "edit" ? "Done" : "Continue"}
-            iconSource={0}
-            imageSource={0}
-            avatarSource={0}
-            onPress={() => {
-              if (titleString == "") {
-                Alert.alert("Please enter some name");
-              } else {
-                props.route.params.mode === "edit"
-                  ? onPressSave()
-                  : ((GLOBALS.createUserProfile.name = titleString),
-                    props.navigation.navigate(Routes.ChooseProfile, {
-                      mode: "create",
-                      item: null,
-                    }));
+          <View style={{ marginTop: 70, alignSelf: "center" }}>
+            <MFButton
+              variant={MFButtonVariant.Contained}
+              textLabel={
+                props.route.params.mode === "edit" ? "Done" : "Continue"
               }
-            }}
-            style={{ width: 274, height: 62, margin: 20 }}
-            focusedStyle={{ width: 274, height: 62 }}
-            textStyle={{ color: "white", fontSize: 25, textAlign: "center" }}
-            containedButtonProps={{
-              containedButtonStyle: {
-                unFocusedTextColor: "grey",
-                enabled: true,
-                elevation: 5,
-                focusedBackgroundColor: "#053C69",
-                unFocusedBackgroundColor: "#424242",
-                hoverColor: appUIDefinition.theme.colors.secondary,
-              },
-            }}
-          />
-          <MFButton
-            variant={MFButtonVariant.Contained}
-            iconSource={0}
-            style={{ width: 274, height: 62, margin: 20 }}
-            focusedStyle={{ width: 274, height: 62 }}
-            textStyle={{ color: "white", fontSize: 25, textAlign: "center" }}
-            onPress={() => {
-              props.route.params.mode === "edit"
-                ? props.navigation.goBack()
-                : props.navigation.pop(2);
-            }}
-            textLabel="Cancel"
-            imageSource={0}
-            avatarSource={0}
-            containedButtonProps={{
-              containedButtonStyle: {
-                unFocusedTextColor: "grey",
-                enabled: true,
-                elevation: 5,
-                focusedBackgroundColor: "#053C69",
-                unFocusedBackgroundColor: "#424242",
-                hoverColor: appUIDefinition.theme.colors.secondary,
-              },
-            }}
-          />
+              iconSource={0}
+              imageSource={0}
+              avatarSource={0}
+              onFocus={()=>{setFocus('')}}
+              onPress={() => {
+                if (titleString == "") {
+                  Alert.alert("Please enter some name");
+                } else {
+                  props.route.params.mode === "edit"
+                    ? onPressSave()
+                    : ((GLOBALS.createUserProfile.name = titleString),
+                      props.navigation.navigate(Routes.ChooseProfile, {
+                        mode: "create",
+                        item: null,
+                      }));
+                }
+              }}
+              style={{ width: 274, height: 62, margin: 20 }}
+              focusedStyle={{ width: 274, height: 62 }}
+              textStyle={{ color: "white", fontSize: 25, textAlign: "center" }}
+              containedButtonProps={{
+                containedButtonStyle: {
+                  unFocusedTextColor: "grey",
+                  enabled: true,
+                  elevation: 5,
+                  focusedBackgroundColor: "#053C69",
+                  unFocusedBackgroundColor: "#424242",
+                  hoverColor: appUIDefinition.theme.colors.secondary,
+                },
+              }}
+            />
+            <MFButton
+              variant={MFButtonVariant.Contained}
+              iconSource={0}
+              style={{ width: 274, height: 62, margin: 20 }}
+              focusedStyle={{ width: 274, height: 62 }}
+              textStyle={{ color: "white", fontSize: 25, textAlign: "center" }}
+              onPress={() => {
+                props.route.params.mode === "edit"
+                  ? props.navigation.goBack()
+                  : props.navigation.pop(2);
+              }}
+              textLabel="Cancel"
+              imageSource={0}
+              avatarSource={0}
+              containedButtonProps={{
+                containedButtonStyle: {
+                  unFocusedTextColor: "grey",
+                  enabled: true,
+                  elevation: 5,
+                  focusedBackgroundColor: "#053C69",
+                  unFocusedBackgroundColor: "#424242",
+                  hoverColor: appUIDefinition.theme.colors.secondary,
+                },
+              }}
+            />
+          </View>
         </View>
       </View>
     </View>
