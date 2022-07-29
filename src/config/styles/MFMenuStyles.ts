@@ -15,8 +15,8 @@ const MFMenuStyles = StyleSheet.create({
     // width: width,
   },
   avatarStyles: {
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
     height: 70,
     width: 70,
     borderRadius: 70 / 2,
@@ -68,9 +68,9 @@ const MFMenuStyles = StyleSheet.create({
   searchContainerStyles: {
     width: SCREEN_WIDTH * 0.05,
     height: 147,
-    alignContent: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
     paddingTop: 10,
     // marginLeft: 70,marginRight: 30
     // backgroundColor: __DEV__ ? 'red' : 'transparent'
@@ -81,9 +81,9 @@ const MFMenuStyles = StyleSheet.create({
     paddingRight: 20,
     overflow: "visible",
     height: 147,
-    alignContent: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
     // backgroundColor: __DEV__ ? 'green' : 'transparent'
   },
   profileViewStyles: {
@@ -91,9 +91,9 @@ const MFMenuStyles = StyleSheet.create({
     flexDirection: "row",
     paddingLeft: 20,
     height: 147,
-    alignContent: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
     // marginLeft: 50
     // backgroundColor: __DEV__ ? 'blue' : 'transparent'
   },
@@ -108,6 +108,24 @@ const MFMenuStyles = StyleSheet.create({
         scale: 1.1,
       },
     ],
+  },
+  serchCircleStyle: {
+    height: 60,
+    width: 60,
+    borderRadius: 30,
+    borderWidth: 5,
+    borderColor: appUIDefinition.theme.colors.primary,
+    justifyContent: "center",
+  },
+  profileCircleStyle: {
+    height: 95,
+    width: 95,
+    borderRadius: 50,
+    borderWidth: 5,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    borderColor: appUIDefinition.theme.colors.primary,
   },
 });
 
