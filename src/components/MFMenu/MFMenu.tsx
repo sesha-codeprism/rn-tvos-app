@@ -29,7 +29,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   const [hubs1, setHubs1] = useState(Array<ButtonVariantProps>());
   const [isIdentityAssigned, setIdentityAssigned] = useState(false);
   const globalContext = useContext(GlobalContext);
-
+  const [focused, setFocused] = useState("");
   const _onPressMain = (event: GestureResponderEvent, index: number) => {
     props.onPress && props.onPress(index);
   };
@@ -43,7 +43,11 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
       var buttonProps = getButtonVariantProps(e);
       array1.push(buttonProps);
     });
-    setHubs1(array1);
+    if (__DEV__) {
+      setHubs1([...array1, ...array1, ...array1, ...array1, ...array1]);
+    } else {
+      setHubs1(array1);
+    }
   }, [props.hubList, globalContext]);
 
   const getButtonVariantProps = (hubObject: FeedItem) => {
@@ -78,14 +82,28 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
           <View
             style={StyleSheet.flatten([MFMenuStyles.searchContainerStyles])}
           >
-            <MFButton
-              variant={MFButtonVariant.Icon}
-              iconSource={AppImages.search}
-              iconStyles={MFMenuStyles.iconStyles}
-              avatarSource={{}}
-              imageSource={{}}
-              iconButtonStyles={{ shouldRenderImage: true }}
-            />
+            <View
+              style={
+                focused === "search"
+                  ? MFMenuStyles.serchCircleStyle
+                  : { ...MFMenuStyles, borderColor: "transparent" }
+              }
+            >
+              <MFButton
+                variant={MFButtonVariant.Icon}
+                iconSource={AppImages.search}
+                iconStyles={MFMenuStyles.iconStyles}
+                avatarSource={{}}
+                imageSource={{}}
+                iconButtonStyles={{ shouldRenderImage: true }}
+                onFocus={() => {
+                  setFocused("search");
+                }}
+                onBlur={() => {
+                  setFocused("");
+                }}
+              />
+            </View>
           </View>
           <View style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles])}>
             <MFButtonGroup
@@ -112,48 +130,71 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                   isDisabled: false,
                 },
               }}
+              onFocus={() => {
+                setFocused("");
+              }}
             />
           </View>
           <View style={StyleSheet.flatten([MFMenuStyles.profileViewStyles])}>
             {isIdentityAssigned && (
               <View style={MFMenuStyles.profileContainerStyles}>
-                <MFButton
-                  variant={MFButtonVariant.Avatar}
-                  avatarSource={
-                    userProfile && userProfile.Image != null
-                      ? AppImages[userProfile.Image] || AppImages.avatar
-                      : AppImages.avatar
+                <View
+                  style={
+                    focused === "profile"
+                      ? MFMenuStyles.profileCircleStyle
+                      : {
+                          ...MFMenuStyles.profileCircleStyle,
+                          borderColor: "transparent",
+                        }
                   }
-                  imageSource={{}}
-                  iconSource={{}}
-                  avatarStyles={MFMenuStyles.avatarStyles}
-                  onPress={() => {
-                    console.log("Profile pressed");
-                    props.navigation.navigate(Routes.Profile);
-                  }}
-                />
+                >
+                  <MFButton
+                    variant={MFButtonVariant.Avatar}
+                    avatarSource={
+                      userProfile && userProfile.Image != null
+                        ? AppImages[userProfile.Image] || AppImages.avatar
+                        : AppImages.avatar
+                    }
+                    imageSource={{}}
+                    iconSource={{}}
+                    avatarStyles={MFMenuStyles.avatarStyles}
+                    onPress={() => {
+                      console.log("Profile pressed");
+                      props.navigation.navigate(Routes.Profile);
+                    }}
+                    onFocus={() => {
+                      setFocused("profile");
+                    }}
+                  />
+                </View>
               </View>
             )}
             <View style={MFMenuStyles.settingsContainerStyles}>
-              <MFButton
-                variant={MFButtonVariant.Icon}
-                iconSource={AppImages.settings_grey}
-                imageSource={{}}
-                avatarSource={{}}
-                iconStyles={MFMenuStyles.iconStyles}
-                iconButtonStyles={{ shouldRenderImage: true }}
-                onPress={() => {
-                  props.navigation.toggleDrawer();
-                  console.log(
-                    "setting pressed",
-                    props.navigation,
-                    isDrawerOpen
-                  );
-                  if (!isDrawerOpen) {
-                    enableScreens();
-                  }
-                }}
-              />
+              <View
+                style={
+                  focused === "settings" ? MFMenuStyles.serchCircleStyle : {}
+                }
+              >
+                <MFButton
+                  variant={MFButtonVariant.Icon}
+                  iconSource={AppImages.settings_grey}
+                  imageSource={{}}
+                  avatarSource={{}}
+                  iconStyles={MFMenuStyles.iconStyles}
+                  iconButtonStyles={{ shouldRenderImage: true }}
+                  onPress={() => {
+                    props.navigation.toggleDrawer();
+                    console.log(
+                      "setting pressed",
+                      props.navigation,
+                      isDrawerOpen
+                    );
+                  }}
+                  onFocus={() => {
+                    setFocused("settings");
+                  }}
+                />
+              </View>
             </View>
             <View
               style={{
