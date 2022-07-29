@@ -82,7 +82,6 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
     return true;
   };
   useEffect(() => {
-    console.log("isDrawerOpen", isDrawerOpen);
     if (isDrawerOpen) {
       TVMenuControl.enableTVMenuKey();
       BackHandler.addEventListener("hardwareBackPress", backAction);
