@@ -4,6 +4,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFSettingsStyles from "../../../config/styles/MFSettingsStyles";
 import SideMenuLayout from "../../../components/MFSideMenu";
 import { AppImages } from "../../../assets/images";
+import { DrawerActions } from "@react-navigation/native";
 const menu = [
   {
     title: "Account Settings",
@@ -60,17 +61,25 @@ const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
           <Pressable
             // hasTVPreferredFocus={index === 0 ? true : false}
             onFocus={() => {
+              console.log("index", index);
               setFocussed(index);
             }}
             onPress={() => {
-              index === 6
-                ? () => {
-                    props.navigation.toggleDrawer();
-                    setFocussed("");
-                  }
-                : item.action !== ""
-                ? props.navigation.navigate(item.action)
-                : null;
+              if (index === 6) {
+                console.log("Props", props.navigation);
+                props.navigation.dispatch(DrawerActions.toggleDrawer());
+                // if (props.navigation.canGoBack) {
+                //   console.log("Can go back");
+                //   props.navigation.goBack();
+                // } else {
+                //   console.log("Can't go back");
+                // }
+                setFocussed("");
+              } else if (item.action !== "") {
+                props.navigation.navigate(item.action);
+              } else {
+                null;
+              }
             }}
             style={
               index === focussed

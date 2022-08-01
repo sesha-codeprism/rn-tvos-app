@@ -12,7 +12,6 @@ import MFMenuStyles from "../../config/styles/MFMenuStyles";
 import { FeedItem } from "../../@types/HubsResponse";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { GlobalContext } from "../../contexts/globalContext";
-import { useDrawerStatus } from "@react-navigation/drawer";
 import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
 import { enableScreens } from "react-native-screens";
@@ -30,10 +29,10 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   const [isIdentityAssigned, setIdentityAssigned] = useState(false);
   const globalContext = useContext(GlobalContext);
   const [focused, setFocused] = useState("");
+  const testing = false;
   const _onPressMain = (event: GestureResponderEvent, index: number) => {
     props.onPress && props.onPress(index);
   };
-  const isDrawerOpen = useDrawerStatus() === "open";
   useEffect(() => {
     console.log("HubsList", props.hubList);
     let array1: Array<ButtonVariantProps> = [];
@@ -43,7 +42,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
       var buttonProps = getButtonVariantProps(e);
       array1.push(buttonProps);
     });
-    if (__DEV__) {
+    if (__DEV__ && testing) {
       setHubs1([...array1, ...array1, ...array1, ...array1, ...array1]);
     } else {
       setHubs1(array1);
@@ -176,21 +175,17 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                 }
               >
                 <MFButton
-                  variant={MFButtonVariant.Avatar}
-                  avatarSource={
-                    userProfile && userProfile.Image != null
-                      ? AppImages[userProfile.Image] || AppImages.avatar
-                      : AppImages.avatar
-                  }
+                  variant={MFButtonVariant.Icon}
+                  avatarSource={{}}
                   imageSource={{}}
-                  iconSource={{}}
-                  avatarStyles={MFMenuStyles.avatarStyles}
+                  iconSource={AppImages.settings_grey}
+                  iconStyles={MFMenuStyles.iconStyles}
+                  iconButtonStyles={{ shouldRenderImage: true }}
                   onPress={() => {
                     props.navigation.toggleDrawer();
                     console.log(
                       "setting pressed",
                       props.navigation,
-                      isDrawerOpen
                     );
                   }}
                   onFocus={() => {

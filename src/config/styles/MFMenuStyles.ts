@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet } from "react-native";
 import { MFThemeObject } from "../../@types/MFTheme";
-import { SCREEN_WIDTH } from "../../components/MFFilmStrip/MFFilmStrip";
+import { SCREEN_WIDTH } from "../../utils/dimensions";
 import { appUIDefinition } from "../constants";
 const { width, height } = Dimensions.get("window");
 const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
@@ -11,12 +11,8 @@ const MFMenuStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignContent: "center",
-    // height: 145,
-    // width: width,
   },
   avatarStyles: {
-    // alignItems: "center",
-    // justifyContent: "center",
     height: 70,
     width: 70,
     borderRadius: 70 / 2,

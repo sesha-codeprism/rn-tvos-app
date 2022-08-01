@@ -50,6 +50,7 @@
     "react-native-syntax-highlighter": "2.0.0",
     "react-native-tvos": "^0.64.2-4",
     "react-native-webview": "^11.13.0",
+    "react-navigation-drawer": "^2.7.2",
     "react-query": "^3.34.12",
     "react-syntax-highlighter": "^15.4.5"
   },

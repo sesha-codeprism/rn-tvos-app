@@ -1,10 +1,8 @@
 import React, { useRef, useState } from "react";
 import {
-  Dimensions,
   FlatList,
   StyleProp,
   TextStyle,
-  TouchableOpacityBase,
   View,
   ViewStyle,
 } from "react-native";
@@ -13,16 +11,14 @@ import Styles from "../MFButtonsVariants/MFButtonStyles";
 import MFCard from "../MFCard";
 import { MFTabBarStyles } from "../MFTabBar/MFTabBarStyles";
 import MFText from "../MFText";
-import { TouchableOpacity } from "react-native";
-import { TitlePlacement, MFCardProps } from "../MFCard";
+import { TitlePlacement } from "../MFCard";
 import { ImageStyle } from "react-native-fast-image";
 import { Feed } from "../../@types/HubsResponse";
 import MFLibraryCard from "../MFLibraryCard";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import { HomeScreenStyles } from "../../views/app/Homescreen.styles";
 import MFViewAllButton from "./ViewAllComponent";
-export const SCREEN_WIDTH = Dimensions.get("window").width;
-export const SCREEN_HEIGHT = Dimensions.get("window").height;
+import { SCREEN_WIDTH } from "../../utils/dimensions";
 
 // export interface FeedsObject {
 //   imageSource?: string;

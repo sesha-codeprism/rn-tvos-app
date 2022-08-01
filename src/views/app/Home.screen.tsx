@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, ImageBackground, ScrollView, ViewComponent } from "react-native";
+import {
+  View,
+  ImageBackground,
+  ScrollView,
+  ViewComponent,
+  BackHandler,
+  TVMenuControl,
+} from "react-native";
 import { debounceTime, enableRTL } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
@@ -14,25 +21,24 @@ import MFPopup from "../../components/MFPopup";
 import MFSwim from "../../components/MFSwim";
 import { getAllHubs } from "../../config/queries";
 import { AppImages } from "../../assets/images";
-import { screenHeight, screenWidth } from "../../utils/dimensions";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
+import { useDrawerStatus } from "@react-navigation/drawer";
+import { DrawerActions } from "react-navigation-drawer";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
 
 const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
-  const [backgroundURI, setBackgroundURI] = useState(
-    require("../../assets/images/onboarding_1280x752_landscape.jpg")
-  );
-
-  let timeOut: any = null;
-
   const [feeds, setFeeds] = useState<FeedItem>();
   const [hubs, setHubs] = useState(Array<FeedItem>());
   const [index, setIndex] = useState(0);
   const [showPopup, togglePopup] = useState(false);
   const [feedItem, setFeedItem] = useState<Feed>();
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
+
+  const isDrawerOpen = useDrawerStatus() === "open";
+  let timeOut: any = null;
 
   const { data, isLoading } = getAllHubs();
   props.navigation.addListener("focus", () => {
@@ -49,23 +55,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
     timeOut = setTimeout(async () => {
       if (event != null) {
         setCurrentFeed(event);
-        // if (event.image16x9PosterURL != undefined) {
-        //   setBackgroundURI({
-        //     uri: event.image16x9PosterURL.uri,
-        //   });
-        // } else {
-        //   setBackgroundURI({
-        //     uri: "https://picsum.photos/500/150/",
-        //   });
-        // }
-        // if (event.CatalogInfo) {
-        //   setShowTitle(event.title),
-        //     event.CatalogInfo.Description &&
-        //       setShowDescription(event.CatalogInfo.Description);
-        // } else {
-        //   setShowTitle(event.title),
-        //     event.metadataLine2 && setShowDescription(event.metadataLine2);
-        // }
       }
     }, debounceTime);
   };
@@ -100,23 +89,47 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
     }
   };
 
-  useEffect(() => {}, []);
+  const backAction = () => {
+    console.log("Capturing hadware back presses", isDrawerOpen);
+    if (isDrawerOpen) {
+      //@ts-ignore
+      props.navigation.toggleDrawer();
+      return true;
+    } else {
+      console.log(
+        props.navigation.getState(),
+        props.navigation.getParent()?.getState()
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (!isDrawerOpen) {
+      console.log(
+        "Drawer status (Hopefully false):",
+        isDrawerOpen,
+        "setting TVMenuKey"
+      );
+      TVMenuControl.enableTVMenuKey();
+      BackHandler.addEventListener("hardwareBackPress", backAction);
+    }
+  }, []);
 
   setHubsData();
 
   return (
-    <View style={HomeScreenStyles.container}>
+    <View style={HomeScreenStyles.container} pointerEvents="box-none">
       <ImageBackground
         source={AppImages.landing_background}
-        style={{ height: screenHeight, width: screenWidth }}
+        style={{ height: SCREEN_HEIGHT, width: SCREEN_WIDTH }}
       >
         <ImageBackground
           source={AppImages.bottomGradient}
-          style={{ width: screenWidth, height: screenHeight }}
+          style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
         >
           <ImageBackground
             source={AppImages.topGradient}
-            style={{ width: screenWidth, height: screenHeight }}
+            style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
           >
             <>
               <MFMenu
