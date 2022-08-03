@@ -141,7 +141,7 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
                       MFProfileStyle.editIconContainerStyles,
                       editFocused
                         ? StyleSheet.flatten([
-                            MFProfileStyle.focusedStyle,
+                            // MFProfileStyle.focusedStyle,
                             {
                               ...MFProfileStyle.editIconContainerStyles,
                               borderWidth: 5,
@@ -162,9 +162,9 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
                       iconSource={AppImages.edit}
                       iconStyles={[
                         MFProfileStyle.editIconStyles,
-                        editFocused
-                          ? StyleSheet.flatten([MFProfileStyle.focusedStyle])
-                          : StyleSheet.flatten(MFProfileStyle.unfocusedStyle),
+                        // editFocused
+                        //   ? StyleSheet.flatten([MFProfileStyle.focusedStyle])
+                           StyleSheet.flatten(MFProfileStyle.unfocusedStyle),
                       ]}
                       avatarSource={{}}
                       imageSource={{}}

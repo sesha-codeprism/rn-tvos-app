@@ -22,6 +22,7 @@ interface MFMenuProps {
   enableRTL?: boolean;
   hubList?: Array<FeedItem>;
   onPress?: null | ((event: number) => void) | undefined;
+  onPressSettings?: any;
 }
 
 const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
@@ -183,6 +184,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                   iconButtonStyles={{ shouldRenderImage: true }}
                   onPress={() => {
                     props.navigation.toggleDrawer();
+                    // props.onPressSettings()
                     console.log(
                       "setting pressed",
                       props.navigation,

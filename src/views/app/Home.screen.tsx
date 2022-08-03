@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   ImageBackground,
@@ -6,6 +6,7 @@ import {
   ViewComponent,
   BackHandler,
   TVMenuControl,
+  Dimensions,
 } from "react-native";
 import { debounceTime, enableRTL } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -25,10 +26,12 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import { useDrawerStatus } from "@react-navigation/drawer";
 import { DrawerActions } from "react-navigation-drawer";
+import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
+import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-
+const { width, height } = Dimensions.get("window");
 const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [feeds, setFeeds] = useState<FeedItem>();
   const [hubs, setHubs] = useState(Array<FeedItem>());
@@ -36,10 +39,10 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [showPopup, togglePopup] = useState(false);
   const [feedItem, setFeedItem] = useState<Feed>();
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
-
+  const [open, setOpen] = useState(false);
   const isDrawerOpen = useDrawerStatus() === "open";
   let timeOut: any = null;
-
+  const drawerRef: React.MutableRefObject<any> = useRef();
   const { data, isLoading } = getAllHubs();
   props.navigation.addListener("focus", () => {
     console.log("focused");
@@ -94,6 +97,8 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
     if (isDrawerOpen) {
       //@ts-ignore
       props.navigation.toggleDrawer();
+      // drawerRef.current.closeDrawer();
+      // setOpen(false)
       return true;
     } else {
       console.log(
@@ -139,6 +144,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                 onPress={(event) => {
                   setFeeds(hubs[event]);
                 }}
+                // onPressSettings={()=>{setOpen(false)}}
               />
               <View style={HomeScreenStyles.posterViewContainerStyles}>
                 {currentFeed && (
@@ -211,6 +217,18 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
           </ImageBackground>
         </ImageBackground>
       </ImageBackground>
+      {/* <MFDrawer
+        ref={drawerRef}
+        drawerPercentage={45}
+        animationTime={200}
+        overlay={false}
+        opacity={0.4}
+        open={open}
+        animatedWidth={width * 0.5}
+        closeOnPressBack={false}
+        navigation={props.navigation}
+        drawerContent={false}
+      ><SettingsNavigator isAuthorized={true} /></MFDrawer> */}
     </View>
   );
 };
