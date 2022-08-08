@@ -1,8 +1,16 @@
-import { Image, Pressable, Text } from "react-native";
+import {
+  Image,
+  Pressable,
+  Text,
+  useTVEventHandler,
+  TVEventHandler,
+  FlatList,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFSettingsStyles from "../../../config/styles/MFSettingsStyles";
-import SideMenuLayout from "../../../components/MFSideMenu";
+import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
 import { AppImages } from "../../../assets/images";
 import { DrawerActions } from "@react-navigation/native";
 const menu = [
@@ -47,35 +55,79 @@ interface Props {
 }
 const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>(0);
+  // const [lastEventType, setLastEventType] = React.useState("");
+
+  // const myTVEventHandler = (evt: any) => {
+  //   setLastEventType(evt.eventType);
+  // };
+
+  // useTVEventHandler(myTVEventHandler);
   useEffect(() => {
-    const unsubscribe = props.navigation.addListener("beforeRemove", () => {
-      // do something
-      console.warn("Warning before removing component");
-    });
-    return unsubscribe;
-  }, [props.navigation]);
+    // const unsubscribe = props.navigation.addListener("beforeRemove", () => {
+    //   // do something
+    //   // console.warn("Warning before removing component");
+    // });
+    // return unsubscribe;
+  }, []);
   return (
     <SideMenuLayout subTitle="Settings">
-      {menu.map((item, index) => {
+      <FlatList
+        data={menu}
+        keyExtractor={(item) => item.title}
+        renderItem={({ item, index }) => {
+          return (
+            <Pressable
+              hasTVPreferredFocus={index === 0 ? true : false}
+              onFocus={() => {
+                setFocussed(index);
+              }}
+              onPress={() => {
+                if (item.action !== "") {
+                  props.navigation.navigate(item.action);
+                } else {
+                  null;
+                }
+              }}
+              style={
+                index === focussed
+                  ? {
+                      ...MFSettingsStyles.containerActive,
+                      ...MFSettingsStyles.container,
+                    }
+                  : MFSettingsStyles.container
+              }
+              key={index}
+              isTVSelectable={true}
+            >
+              <Text
+                style={[
+                  MFSettingsStyles.listText,
+                  { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
+                ]}
+              >
+                {item.title}
+              </Text>
+              <Image
+                source={AppImages.arrow_right}
+                style={{ width: 15, height: 30 }}
+              />
+            </Pressable>
+          );
+        }}
+      />
+      {/* {menu.map((item, index) => {
         return (
-          <Pressable
+          <TouchableOpacity
             // hasTVPreferredFocus={index === 0 ? true : false}
             onFocus={() => {
-              console.log("index", index);
+              console.log("on focus triggered", index, lastEventType);
               setFocussed(index);
             }}
+            onBlur={() => {
+              console.log("Blur triggered", index, lastEventType);
+            }}
             onPress={() => {
-              if (index === 6) {
-                console.log("Props", props.navigation);
-                props.navigation.dispatch(DrawerActions.toggleDrawer());
-                // if (props.navigation.canGoBack) {
-                //   console.log("Can go back");
-                //   props.navigation.goBack();
-                // } else {
-                //   console.log("Can't go back");
-                // }
-                setFocussed("");
-              } else if (item.action !== "") {
+              if (item.action !== "") {
                 props.navigation.navigate(item.action);
               } else {
                 null;
@@ -90,6 +142,7 @@ const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
                 : MFSettingsStyles.container
             }
             key={index}
+            // isTVSelectable={true}
           >
             <Text
               style={[
@@ -103,9 +156,9 @@ const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
               source={AppImages.arrow_right}
               style={{ width: 15, height: 30 }}
             />
-          </Pressable>
+          </TouchableOpacity>
         );
-      })}
+      })} */}
     </SideMenuLayout>
   );
 };

@@ -7,7 +7,7 @@ import { TextInput } from "react-native-gesture-handler";
 import MFButton, {
   MFButtonVariant,
 } from "../../../../components/MFButton/MFButton";
-import SideMenuLayout from "../../../../components/MFSideMenu";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }

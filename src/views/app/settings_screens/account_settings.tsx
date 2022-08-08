@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFPopup from "../../../components/MFPopup";
 import { GLOBALS } from "../../../utils/globals";
-import SideMenuLayout from "../../../components/MFSideMenu";
+import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }

@@ -1,6 +1,13 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import SideMenuLayout from "../../../../components/MFSideMenu";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
@@ -65,7 +72,53 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
       <View style={styles.contentTitleContainer}>
         <Text style={styles.contentTitle}>Lock unrated content</Text>
       </View>
-      {list.map((item: any, index: any) => {
+      <FlatList
+        data={list}
+        keyExtractor={(item) => item.title}
+        renderItem={({ item, index }) => {
+          return (
+            <Pressable
+              onFocus={() => {
+                setFocussed(index);
+              }}
+              onPress={() => {
+                onPress(index);
+              }}
+              style={
+                index === focussed
+                  ? { ...MFSettingsStyles.containerActive, ...styles.container }
+                  : styles.container
+              }
+              key={index}
+            >
+              <View style={styles.icContainer}>
+                {locked === index ? (
+                  <Image
+                    source={AppImages.checked_circle}
+                    style={styles.icCircle}
+                  />
+                ) : (
+                  <Image
+                    source={AppImages.unchecked_circle}
+                    style={styles.icCircle}
+                  />
+                )}
+              </View>
+              <View style={styles.listContent}>
+                <Text
+                  style={[
+                    styles.listText,
+                    { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
+                  ]}
+                >
+                  {item.title}
+                </Text>
+              </View>
+            </Pressable>
+          );
+        }}
+      />
+      {/* {list.map((item: any, index: any) => {
         return (
           <Pressable
             onFocus={() => {
@@ -106,7 +159,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
             </View>
           </Pressable>
         );
-      })}
+      })} */}
     </SideMenuLayout>
   );
 };

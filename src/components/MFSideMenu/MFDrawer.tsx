@@ -14,8 +14,10 @@ import {
   SafeAreaView,
   Platform,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import PropTypes from "prop-types";
+import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -33,25 +35,38 @@ interface MFDrawerProps {
   navigation?: any;
   children?: any;
 }
-const Drawer = (props: MFDrawerProps, ref:Ref<any>) => {
-  const [expanded, setExpanded] = useState(false);
+const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
+  const [expanded, setExpanded] = useState(props.open);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
-  const leftOffset = new Animated.Value(0);
+  const leftOffset = new Animated.Value(
+    SCREEN_WIDTH * (props.drawerPercentage / 100)
+  );
 
   useEffect(() => {
-    props.open ? openDrawer() : closeDrawer();
-  }, [props.open]);
+    console.log('inside useEffect', expanded, props.open);
+    expanded ? openDrawer() : closeDrawer();
+  }, [expanded]);
   useImperativeHandle(ref, () => ({
     openDrawer,
     closeDrawer,
+    open,
+    close,
   }));
+  const open = () => {
+    console.log('open');
+    setExpanded(true);
+  };
+  const close = () => {
+    console.log('close');
+    setExpanded(false);
+  };
   const openDrawer = () => {
+    console.log("Drawer is open", expanded);
     const { drawerPercentage, animationTime, opacity } = props;
     const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
-
     Animated.parallel([
       Animated.timing(leftOffset, {
-        toValue: DRAWER_WIDTH,
+        toValue: 0,
         duration: animationTime,
         useNativeDriver: true,
       }),
@@ -64,10 +79,12 @@ const Drawer = (props: MFDrawerProps, ref:Ref<any>) => {
   };
 
   const closeDrawer = () => {
-    const { animationTime } = props;
+    console.log("Drawer is closed");
+    const { animationTime, drawerPercentage } = props;
+    const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
     Animated.parallel([
       Animated.timing(leftOffset, {
-        toValue: 0,
+        toValue: DRAWER_WIDTH,
         duration: animationTime,
         useNativeDriver: true,
       }),
@@ -78,143 +95,122 @@ const Drawer = (props: MFDrawerProps, ref:Ref<any>) => {
       }),
     ]).start();
   };
-  const drawerFallback = () => {
-    return (
-      <TouchableOpacity onPress={closeDrawer}>
-        <Text>Close</Text>
-      </TouchableOpacity>
-    );
-  };
   const renderPush = () => {
     const { children, drawerContent, drawerPercentage } = props;
     const animated = { transform: [{ translateX: leftOffset }] };
     const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
-
-    if (isIOS && VERSION >= 11) {
-      return (
-        <Animated.View style={[animated, styles.main]}>
-          <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-            <View
-              style={[
-                styles.drawer,
-                {
-                  width: DRAWER_WIDTH,
-                  left: -DRAWER_WIDTH,
-                },
-              ]}
-            >
-              {drawerContent ? drawerContent : drawerFallback()}
-            </View>
-            <Animated.View
-              style={[
-                styles.container,
-                {
-                  opacity: fadeAnim,
-                },
-              ]}
-            >
-              {children}
-            </Animated.View>
-          </SafeAreaView>
-        </Animated.View>
-      );
-    }
-
+    console.log("renderPush");
     return (
-      <Animated.View
-        style={[animated, styles.main, { width: SCREEN_WIDTH + DRAWER_WIDTH }]}
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={expanded}
+        // onShow={(e) => {
+        //   e.preventDefault();
+        //   console.log("modal visible", e, expanded);
+        // }}
+        onRequestClose={() => {
+          setExpanded(false);
+          closeDrawer();
+          console.log("Modal has been closed.", expanded);
+        }}
+        style={styles.main}
+        onDismiss={() => {
+          console.log("Modal dismissed", expanded);
+        }}
+        presentationStyle={'overFullScreen'}
+        
       >
-        <View
-          style={[
-            styles.drawer,
-            {
-              width: DRAWER_WIDTH,
-              left: -DRAWER_WIDTH,
-            },
-          ]}
-        >
-          {drawerContent ? drawerContent : drawerFallback()}
-        </View>
-        <Animated.View
-          style={[
-            styles.container,
-            {
-              opacity: fadeAnim,
-            },
-          ]}
-        >
-          {children}
-        </Animated.View>
-      </Animated.View>
-    );
-  };
-
-  const renderOverlay = () => {
-    const { children, drawerContent, drawerPercentage } = props;
-    const animated = { transform: [{ translateX: leftOffset }] };
-    const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
-
-    if (isIOS && VERSION >= 11) {
-      return (
-        <View style={[styles.main]}>
-          <Animated.View
-            style={[
-              animated,
-              styles.drawer,
-              { width: DRAWER_WIDTH, left: -DRAWER_WIDTH },
-            ]}
-          >
-            {drawerContent ? drawerContent : drawerFallback()}
-          </Animated.View>
-          <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-            {children}
-          </Animated.View>
-        </View>
-      );
-    }
-
-    return (
-      <View style={styles.main}>
         <Animated.View
           style={[
             animated,
-            styles.drawer,
-            {
-              width: DRAWER_WIDTH,
-              left: -DRAWER_WIDTH,
-            },
+            // styles.main,
+            { width: SCREEN_WIDTH },
           ]}
         >
-          {drawerContent ? drawerContent : drawerFallback()}
+          <Animated.View
+            style={[
+              styles.container,
+              {
+                opacity: fadeAnim,
+              },
+            ]}
+          >
+            <SettingsNavigator isAuthorized={true} />
+          </Animated.View>
         </Animated.View>
-        <Animated.View
-          style={[
-            styles.container,
-            {
-              opacity: fadeAnim,
-            },
-          ]}
-        >
-          {children}
-        </Animated.View>
-      </View>
+      </Modal>
     );
   };
-  return <>{props.overlay ? renderOverlay() : renderPush()}</>;
+
+  //   const renderOverlay = () => {
+  //     const { children, drawerContent, drawerPercentage } = props;
+  //     const animated = { transform: [{ translateX: leftOffset }] };
+  //     const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
+  //     console.log("renderOverlay");
+
+  //     if (isIOS && VERSION >= 11) {
+  //       return (
+  //         <View style={[styles.main]}>
+  //           <Animated.View
+  //             style={[
+  //               animated,
+  //               styles.drawer,
+  //               { width: DRAWER_WIDTH, left: -DRAWER_WIDTH },
+  //             ]}
+  //           >
+  //             {drawerContent ? drawerContent : drawerFallback()}
+  //           </Animated.View>
+  //           <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+  //             {children}
+  //           </Animated.View>
+  //         </View>
+  //       );
+  //     }
+
+  //     return (
+  //       <View style={styles.main}>
+  //         <Animated.View
+  //           style={[
+  //             animated,
+  //             styles.drawer,
+  //             {
+  //               width: DRAWER_WIDTH,
+  //               left: -DRAWER_WIDTH,
+  //             },
+  //           ]}
+  //         >
+  //           {drawerContent ? drawerContent : drawerFallback()}
+  //         </Animated.View>
+  //         <Animated.View
+  //           style={[
+  //             styles.container,
+  //             {
+  //               opacity: fadeAnim,
+  //             },
+  //           ]}
+  //         >
+  //           {children}
+  //         </Animated.View>
+  //       </View>
+  //     );
+  //   };
+  return renderPush();
 };
 export const MFDrawer = forwardRef(Drawer);
 
 const styles = StyleSheet.create({
   main: {
     position: "absolute",
-    left: 0,
+    right: 0,
     top: 0,
-    width: SCREEN_WIDTH * .5
+    width: SCREEN_WIDTH,
+    backgroundColor: "green",
   },
   container: {
     position: "absolute",
-    left: 0,
-    width: SCREEN_WIDTH,
+    right: 0,
+    width: SCREEN_WIDTH * 0.37,
     height: SCREEN_HEIGHT,
     zIndex: 0,
   },

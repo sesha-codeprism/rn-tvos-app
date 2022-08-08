@@ -1,6 +1,13 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import SideMenuLayout from "../../../../components/MFSideMenu";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
@@ -53,7 +60,55 @@ const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
         props.route.params.type === "primary" ? "Primary" : "Secondary"
       } Subtitle Language`}
     >
-      {list.map((item: string, index: any) => {
+      <FlatList
+        data={list}
+        keyExtractor={(item) => item}
+        renderItem={({ item, index }) => {
+          return (
+            <Pressable
+              onFocus={() => {
+                setFocussed(index);
+              }}
+              onPress={() => {
+                onPress(item);
+              }}
+              style={
+                index === focussed
+                  ? { ...MFSettingsStyles.containerActive, ...styles.container }
+                  : styles.container
+              }
+              key={index}
+            >
+              <View style={styles.icContainer}>
+                {selectedLang === item ? (
+                  <Image
+                    source={AppImages.checked_circle}
+                    style={styles.icCircle}
+                  />
+                ) : (
+                  <Image
+                    source={AppImages.unchecked_circle}
+                    style={styles.icCircle}
+                  />
+                )}
+              </View>
+              <View style={styles.listContent}>
+                <Text
+                  style={[
+                    styles.listText,
+                    { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
+                  ]}
+                >
+                  {props.route.params.type === "secondary" && index === 0
+                    ? item
+                    : AppStrings.ISO[item]}
+                </Text>
+              </View>
+            </Pressable>
+          );
+        }}
+      />
+      {/* {list.map((item: string, index: any) => {
         return (
           <Pressable
             onFocus={() => {
@@ -96,7 +151,7 @@ const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
             </View>
           </Pressable>
         );
-      })}
+      })} */}
     </SideMenuLayout>
   );
 };

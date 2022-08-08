@@ -93,12 +93,14 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   };
 
   const backAction = () => {
-    console.log("Capturing hadware back presses", isDrawerOpen);
-    if (isDrawerOpen) {
+    console.log("Capturing hadware back presses", open);
+    console.log("drawerRef.current", drawerRef);
+    if (open) {
+      setOpen(false);
+      drawerRef.current.close();
+      // if (isDrawerOpen) {
       //@ts-ignore
-      props.navigation.toggleDrawer();
-      // drawerRef.current.closeDrawer();
-      // setOpen(false)
+      // props.navigation.toggleDrawer();
       return true;
     } else {
       console.log(
@@ -109,7 +111,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   };
 
   useEffect(() => {
-    if (!isDrawerOpen) {
+    if (!open) {
       console.log(
         "Drawer status (Hopefully false):",
         isDrawerOpen,
@@ -144,7 +146,11 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                 onPress={(event) => {
                   setFeeds(hubs[event]);
                 }}
-                // onPressSettings={()=>{setOpen(false)}}
+                onPressSettings={() => {
+                  console.log("local state", open);
+                  setOpen(open);
+                  drawerRef.current.open();
+                }}
               />
               <View style={HomeScreenStyles.posterViewContainerStyles}>
                 {currentFeed && (
@@ -217,18 +223,20 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
           </ImageBackground>
         </ImageBackground>
       </ImageBackground>
-      {/* <MFDrawer
+      {/* {open && ( */}
+      <MFDrawer
         ref={drawerRef}
-        drawerPercentage={45}
+        drawerPercentage={37}
         animationTime={200}
         overlay={false}
-        opacity={0.4}
+        opacity={1}
         open={open}
-        animatedWidth={width * 0.5}
+        animatedWidth={width * 0.37}
         closeOnPressBack={false}
         navigation={props.navigation}
         drawerContent={false}
-      ><SettingsNavigator isAuthorized={true} /></MFDrawer> */}
+      ></MFDrawer>
+      {/* )} */}
     </View>
   );
 };

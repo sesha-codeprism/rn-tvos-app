@@ -183,8 +183,8 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                   iconStyles={MFMenuStyles.iconStyles}
                   iconButtonStyles={{ shouldRenderImage: true }}
                   onPress={() => {
-                    props.navigation.toggleDrawer();
-                    // props.onPressSettings()
+                    // props.navigation.toggleDrawer();
+                    props.onPressSettings()
                     console.log(
                       "setting pressed",
                       props.navigation,

@@ -86,7 +86,9 @@ const styles = StyleSheet.create({
     height: "100%",
     position: "absolute",
     backgroundColor: "#00030E",
-    justifyContent:'center'
+    justifyContent:'center',
+    alignItems: "center",
+    alignSelf: "center",
   },
   container: {
     height: 682,

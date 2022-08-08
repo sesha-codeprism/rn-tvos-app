@@ -179,6 +179,7 @@ const ProfileFinalisationScreen: React.FunctionComponent<
                     })
                   : null;
               }}
+              isTVSelectable={props.route.params.mode === "edit" ? true : false}
             >
               <FastImage
                 source={AppImages[image]}
@@ -225,6 +226,7 @@ const ProfileFinalisationScreen: React.FunctionComponent<
                     })
                   : null;
               }}
+              isTVSelectable={props.route.params.mode === "edit" ? true : false}
             >
               <View
                 style={
@@ -266,7 +268,6 @@ const ProfileFinalisationScreen: React.FunctionComponent<
                 )}
               </View>
             </Pressable>
-
             <Pressable
               style={MFProfileStyle.finalise_profileStyles}
               onFocus={() => {
@@ -280,6 +281,7 @@ const ProfileFinalisationScreen: React.FunctionComponent<
                     })
                   : null;
               }}
+              isTVSelectable={props.route.params.mode === "edit" ? true : false}
             >
               <View
                 style={

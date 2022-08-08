@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import SideMenuLayout from "../../../../components/MFSideMenu";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { AppImages } from "../../../../assets/images";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStrings } from "../../../../config/strings";
