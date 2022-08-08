@@ -77,8 +77,16 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
             replace_hub[0].Name = AppStrings.str_hub_name_you;
           } else {
             /** If user created profile is chosen to login, replace with profile name */
-            replace_hub[0].Name =
-              GLOBALS.userProfile.Name || AppStrings.str_hub_name_you;
+            // replace_hub[0].Name =
+            // GLOBALS.userProfile.Name || AppStrings.str_hub_name_you;
+            if (GLOBALS.userProfile.Name!.length > 10) {
+              replace_hub[0].Name =
+                GLOBALS.userProfile.Name!.substring(0, 9) + "..." ||
+                AppStrings.str_hub_name_you;
+            } else {
+              replace_hub[0].Name =
+                GLOBALS.userProfile.Name || AppStrings.str_hub_name_you;
+            }
           }
         } else {
           /** If there's no @param GLOBALS.UserProfile set*/
