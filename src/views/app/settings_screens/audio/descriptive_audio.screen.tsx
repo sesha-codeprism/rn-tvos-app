@@ -31,11 +31,11 @@ import {
     const [descriptiveAudio, setDescriptiveAudio] = useState<any>("");
     const onPress = (item: string) => {
       setDescriptiveAudio(item);
-    //   GLOBALS.store.settings.display.closedCaption = item;
-    //   updateStore(JSON.stringify(GLOBALS.store));
+      GLOBALS.store.settings.audio.descriptiveAudio = item;
+      updateStore(JSON.stringify(GLOBALS.store));
     };
     const getValues = () => {
-    //   setDescriptiveAudio(GLOBALS.store.settings.display.closedCaption);
+      setDescriptiveAudio(GLOBALS.store.settings.audio.descriptiveAudio);
     };
     useEffect(() => {
       getValues();

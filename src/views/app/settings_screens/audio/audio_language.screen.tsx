@@ -17,35 +17,33 @@ import { updateStore } from "../../../../utils/helpers";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const languages = ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"];
 const AudioLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedLang, setSelectedLang] = useState<any>("");
   const [list, setList] = useState<string[]>([]);
   const onPress = (item: string) => {
-    // try {
-    //   setSelectedLang(item);
-    //   console.log("props.route.params.type", props.route.params.type);
-    //   if (props.route.params.type === "primary") {
-    //     GLOBALS.store.settings.display.subtitleConfig.primary = item;
-    //   } else {
-    //     GLOBALS.store.settings.display.subtitleConfig.secondary = item;
-    //   }
-    //   updateStore(JSON.stringify(GLOBALS.store));
-    // } catch (error) {
-    //   console.log("error", error);
-    // }
+    try {
+      setSelectedLang(item);
+      console.log("props.route.params.type", props.route.params.type);
+      if (props.route.params.type === "primary") {
+        GLOBALS.store.settings.audio.audioLanguages.primary = item;
+      } else {
+        GLOBALS.store.settings.audio.audioLanguages.secondary = item;
+      }
+      updateStore(JSON.stringify(GLOBALS.store));
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   const getValues = () => {
-    // const selectedValue =
-    //   props.route.params.type === "primary"
-    //     ? GLOBALS.store.settings.display.subtitleConfig.primary
-    //     : GLOBALS.store.settings.display.subtitleConfig.secondary;
-    // setSelectedLang(selectedValue);
+    const selectedValue =
+      props.route.params.type === "primary"
+        ? GLOBALS.store.settings.audio.audioLanguages.primary
+        : GLOBALS.store.settings.audio.audioLanguages.secondary;
+    setSelectedLang(selectedValue);
   };
   useEffect(() => {
-    // const langList = GLOBALS.store.settings.display.subtitleConfig.tracks;
-    const langList = languages;
+    const langList = GLOBALS.store.settings.audio.audioLanguages.tracks;
     setList(langList);
     // console.log("lang list", langList);
 

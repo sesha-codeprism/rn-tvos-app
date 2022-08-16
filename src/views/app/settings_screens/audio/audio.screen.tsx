@@ -21,27 +21,27 @@ import {
     const [focussed, setFocussed] = useState<any>("");
     const [list, setList] = useState<any[]>([]);
     const formatList = () => {
-      // const { onScrreenLanguage, closedCaption, subtitleConfig, bitrates10ft } =
-      //   GLOBALS.store.settings.display;
+      const { descriptiveAudio, audioLanguages} =
+        GLOBALS.store.settings.audio;
       // console.log("format list called", GLOBALS.store.settings.display);
       const listItem = [
         {
           title: "Primary Audio Language",
-          subTitle: "English (US)",
+          subTitle: AppStrings.ISO[audioLanguages.primary],
           action: "audio_language",
           type: "primary",
           icon: "",
         },
         {
           title: "Secondary Audio Language",
-          subTitle: "Select audio language",
+          subTitle:  AppStrings.ISO[audioLanguages.secondary] || "Select audio language",
           action: "audio_language",
           type: "secondary",
           icon: "",
         },
         {
           title: "Descriptive Audio",
-          subTitle: "On",
+          subTitle: descriptiveAudio,
           action: "descriptive_audio",
           icon: "",
         },

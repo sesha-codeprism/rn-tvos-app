@@ -65,6 +65,14 @@ interface GLOBALSType {
         onScrreenLanguage: any;
         closedCaption: any;
       };
+      audio: {
+        audioLanguages: {
+          primary: string;
+          secondary: string;
+          tracks: string[];
+        };
+        descriptiveAudio: string;
+      };
     };
   };
   [key: string]: any;
@@ -109,6 +117,14 @@ export const GLOBALS: GLOBALSType = {
         onScrreenLanguage: "",
         closedCaption: "",
       },
+      audio: {
+        audioLanguages: {
+          primary: "en",
+          secondary: "fr",
+          tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
+        },
+        descriptiveAudio: "",
+      },
     },
   },
   storeID: undefined,
@@ -136,6 +152,14 @@ export const resetGlobalStore = () => {
         bitrates10ft: {},
         onScrreenLanguage: "",
         closedCaption: "",
+      },
+      audio: {
+        audioLanguages: {
+          primary: "en",
+          secondary: "fr",
+          tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
+        },
+        descriptiveAudio: "",
       },
     },
   };
