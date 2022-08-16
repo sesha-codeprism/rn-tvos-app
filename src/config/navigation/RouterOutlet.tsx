@@ -58,7 +58,7 @@ export const Routes = {
   SubtitleLanguage: "subtitle_language",
   Audio: "audio",
   AudioLanguage: "audio_language",
-  DescriptiveAudio:"descriptive_audio"
+  DescriptiveAudio: "descriptive_audio",
 };
 
 enableScreens();
@@ -146,10 +146,7 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           name={Routes.VideoQuality}
           component={VideoQualityScreen}
         />
-        <Stack.Screen
-          name={Routes.Audio}
-          component={AudioScreen}
-        />
+        <Stack.Screen name={Routes.Audio} component={AudioScreen} />
         <Stack.Screen
           name={Routes.AudioLanguage}
           component={AudioLanguageScreen}
@@ -195,13 +192,9 @@ const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
           drawerPosition: "right",
           swipeEnabled: false,
           unmountOnBlur: true,
-          drawerHideStatusBarOnOpen: true,
-          unmountOnBlur: true,
-          drawerHideStatusBarOnOpen: true,
-          // swipeEnabled: false,
+          drawerHideStatusBarOnOpen: true, // swipeEnabled: false,
           //@ts-ignore
-         @ts-ignore
-          gestureEnabled:  false,
+          gestureEnabled: false,
           // gestureHandlerProps:{
           //   ge
           // }
