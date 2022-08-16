@@ -2,18 +2,6 @@ import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import LoginScreen from "../../views/auth/Login.screen";
-import HomeScreen from "../../views/app/Home.screen";
-import SplashScreen from "../../views/auth/Splash.screen";
-import GuideScreen from "../../views/app/Guide.screen";
-import SearchScreen from "../../views/search.screen";
-import ShortCodeScreen from "../../views/auth/Shortcode.screen";
-import CreateProfileScreen from "../../views/app/profile_screens/Create.profile.screen";
-import ProfileScreen from "../../views/app/profile_screens/Profile.screen";
-import ChooseProfileScreen from "../../views/app/profile_screens/Choose.profile";
-import ProfilePersonalizationScreen from "../../views/app/profile_screens/Profile.personalization";
-import ProfileFinalisationScreen from "../../views/app/profile_screens/Profile.Finalise";
-import WhoIsWatchingScreen from "../../views/app/WhoIsWatching.screen";
 import { BackHandler, Dimensions, TVMenuControl } from "react-native";
 import SettingsLandingScreen from "../../views/app/settings_screens/settings_landingScreen";
 import AccountSettingsScreen from "../../views/app/settings_screens/account_settings";
@@ -22,8 +10,6 @@ import ContentLockPinScreen from "../../views/app/settings_screens/parental_cont
 import ContentLockScreen from "../../views/app/settings_screens/parental_controll/content_lock.screen";
 import UnratedContentScreen from "../../views/app/settings_screens/parental_controll/unrated_content.screen";
 import AdultLockScreen from "../../views/app/settings_screens/parental_controll/adult_lock.screen";
-import { GLOBALS } from "../../utils/globals";
-import { getStore } from "../../utils/helpers";
 import RatingScreen from "../../views/app/settings_screens/parental_controll/rating.screen";
 import { useDrawerStatus } from "@react-navigation/drawer";
 import DiaplayScreen from "../../views/app/settings_screens/display/display.screen";
@@ -33,7 +19,10 @@ import PurchaseLockScreen from "../../views/app/settings_screens/parental_contro
 import VideoQualityScreen from "../../views/app/settings_screens/display/video_quality.screen";
 import SubtitleLanguageScreen from "../../views/app/settings_screens/display/subtitle_language.screen";
 import { enableScreens } from "react-native-screens";
-
+import { AppNavigator } from "./MainStack.Navigator";
+import AudioScreen from "../../views/app/settings_screens/audio/audio.screen";
+import AudioLanguageScreen from "../../views/app/settings_screens/audio/audio_language.screen";
+import DescriptiveAudioScreen from "../../views/app/settings_screens/audio/descriptive_audio.screen";
 interface RouterOutletProps {}
 const { width, height } = Dimensions.get("window");
 
@@ -67,8 +56,12 @@ export const Routes = {
   PurchaseLock: "purchase_lock",
   VideoQuality: "video_quality",
   SubtitleLanguage: "subtitle_language",
+  Audio: "audio",
+  AudioLanguage: "audio_language",
+  DescriptiveAudio:"descriptive_audio"
 };
 
+enableScreens();
 enableScreens();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -153,75 +146,20 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           name={Routes.VideoQuality}
           component={VideoQualityScreen}
         />
+        <Stack.Screen
+          name={Routes.Audio}
+          component={AudioScreen}
+        />
+        <Stack.Screen
+          name={Routes.AudioLanguage}
+          component={AudioLanguageScreen}
+        />
+        <Stack.Screen
+          name={Routes.DescriptiveAudio}
+          component={DescriptiveAudioScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
-  );
-};
-export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
-  props
-) => {
-  const setStore = () => {
-    try {
-      // Attempt to load local store
-      var store = getStore();
-      console.log("Store", store);
-    } catch (e) {
-      console.log("Some error", e);
-    }
-    if (store) {
-      GLOBALS.store = JSON.parse(store);
-      console.log("Settings store successful", GLOBALS.store);
-      const isLoggedIn =
-        GLOBALS.store.accessToken !== null &&
-        GLOBALS.store.refreshToken !== null;
-      setIsSignedIn(isLoggedIn);
-    }
-  };
-  const [isSignedIn, setIsSignedIn] = React.useState(false);
-
-  useEffect(() => {
-    setStore();
-  }, []);
-
-  return (
-    <Stack.Navigator
-      initialRouteName="splash"
-      screenOptions={{
-        headerShown: false,
-        gestureEnabled: false,
-      }}
-    >
-      <Stack.Screen name={Routes.Splash} component={SplashScreen} />
-      <Stack.Screen
-        name={Routes.WhoIsWatching}
-        component={WhoIsWatchingScreen}
-      />
-      <Stack.Screen name={Routes.Login} component={LoginScreen} />
-      <Stack.Screen name={Routes.ShortCode} component={ShortCodeScreen} />
-
-      <Stack.Screen name={Routes.Home} component={HomeScreen} />
-      <Stack.Screen name={Routes.Guide} component={GuideScreen} />
-      <Stack.Screen name={Routes.Search} component={SearchScreen} />
-      {/* <Stack.Screen name={Routes.Test} component={TestScreen} /> */}
-      <Stack.Screen name={Routes.Profile} component={ProfileScreen} />
-      <Stack.Screen
-        name={Routes.CreateProfile}
-        component={CreateProfileScreen}
-      />
-      <Stack.Screen
-        name={Routes.ChooseProfile}
-        component={ChooseProfileScreen}
-      />
-      <Stack.Screen
-        name={Routes.PersonlizeProfile}
-        component={ProfilePersonalizationScreen}
-      />
-      <Stack.Screen
-        name={Routes.ProfileFinalise}
-        component={ProfileFinalisationScreen}
-      />
-      {/* {isSignedIn ? <></> : <></>} */}
-    </Stack.Navigator>
   );
 };
 
@@ -258,9 +196,12 @@ const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
           swipeEnabled: false,
           unmountOnBlur: true,
           drawerHideStatusBarOnOpen: true,
+          unmountOnBlur: true,
+          drawerHideStatusBarOnOpen: true,
           // swipeEnabled: false,
           //@ts-ignore
-          gestureEnabled: false,
+         @ts-ignore
+          gestureEnabled:  false,
           // gestureHandlerProps:{
           //   ge
           // }

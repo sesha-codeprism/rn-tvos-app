@@ -20,8 +20,8 @@ export function getScaledHeight(value: number): number {
 export const TopBarHeight = getScaledValue(120);
 export const PagePadding = getScaledValue(100);
 
-export const screenWidth = width;
-export const screenHeight = height;
+export const SCREEN_WIDTH = width;
+export const SCREEN_HEIGHT = height;
 
 export const showcardWidth = getScaledValue(650);
 export const showcardHeight = getScaledValue(590);

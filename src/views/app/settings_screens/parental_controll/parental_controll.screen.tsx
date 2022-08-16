@@ -1,8 +1,15 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
-import SideMenuLayout from "../../../../components/MFSideMenu";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import _ from "lodash";
@@ -62,7 +69,62 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
 
   return (
     <SideMenuLayout title="Settings" subTitle="Parental Controls">
-      {list.map((item: any, index: number) => {
+      <FlatList
+        data={list}
+        keyExtractor={(item) => item.title}
+        renderItem={({ item, index }) => {
+          return (
+            <Pressable
+              onFocus={() => {
+                setFocussed(index);
+              }}
+              onPress={() => {
+                index === 6
+                  ? () => {
+                      props.navigation.toggleDrawer();
+                      setFocussed("");
+                    }
+                  : item.action !== ""
+                  ? props.navigation.navigate(item.action)
+                  : null;
+              }}
+              style={
+                index === focussed
+                  ? { ...MFSettingsStyles.containerActive, ...styles.container }
+                  : styles.container
+              }
+              key={index}
+            >
+              <View>
+                <Text
+                  style={[
+                    styles.listText,
+                    { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
+                  ]}
+                >
+                  {item.title}
+                </Text>
+                <Text
+                  style={[
+                    styles.listText,
+                    {
+                      color: index === focussed ? "#EEEEEE" : "#A7A7A7",
+                      fontSize: 23,
+                    },
+                  ]}
+                >
+                  {item.subTitle}
+                </Text>
+              </View>
+              <Image
+                source={AppImages.arrow_right}
+                style={{ width: 15, height: 30 }}
+              />
+            </Pressable>
+          );
+        }}
+      />
+      {/* {list.map((item: any, index: number) => {
         return (
           <Pressable
             onFocus={() => {
@@ -112,7 +174,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
             />
           </Pressable>
         );
-      })}
+      })} */}
     </SideMenuLayout>
     // <View style={styles.root}>
     //   <View style={styles.headerContainer}>

@@ -11,70 +11,55 @@ import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
+import { AppStrings } from "../../../../config/strings";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const list = [
-  {
-    title: "Yes",
-    action: true,
-  },
-  {
-    title: "No",
-    action: false,
-  },
-];
-const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
+const AudioLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
-  const [locked, setLocked] = useState<any>("");
-
-  const onPress = (value: any) => {
+  const [selectedLang, setSelectedLang] = useState<any>("");
+  const [list, setList] = useState<string[]>([]);
+  const onPress = (item: string) => {
     try {
-      setLocked(value);
-      GLOBALS.store.settings.parentalControll.contentLock &&
-      GLOBALS.store.settings.parentalControll.contentLock["lockUnratedContent"]
-        ? (GLOBALS.store.settings.parentalControll.contentLock[
-            "lockUnratedContent"
-          ] = value === 0 ? true : false)
-        : (GLOBALS.store.settings.parentalControll.contentLock = {
-            ...GLOBALS.store.settings.parentalControll.contentLock,
-            ["lockUnratedContent"]: value === 0 ? true : false,
-          });
+      setSelectedLang(item);
+      console.log("props.route.params.type", props.route.params.type);
+      if (props.route.params.type === "primary") {
+        GLOBALS.store.settings.audio.audioLanguages.primary = item;
+      } else {
+        GLOBALS.store.settings.audio.audioLanguages.secondary = item;
+      }
       updateStore(JSON.stringify(GLOBALS.store));
     } catch (error) {
-      console.log("Error", error);
+      console.log("error", error);
     }
   };
-  const getData = () => {
-    try {
-      const selected =
-        GLOBALS.store.settings.parentalControll.contentLock &&
-        GLOBALS.store.settings.parentalControll.contentLock[
-          "lockUnratedContent"
-        ] !== undefined
-          ? GLOBALS.store.settings.parentalControll.contentLock[
-              "lockUnratedContent"
-            ] === true
-            ? 0
-            : 1
-          : "";
-      setLocked(selected);
-    } catch (error) {}
+  const getValues = () => {
+    const selectedValue =
+      props.route.params.type === "primary"
+        ? GLOBALS.store.settings.audio.audioLanguages.primary
+        : GLOBALS.store.settings.audio.audioLanguages.secondary;
+    setSelectedLang(selectedValue);
   };
   useEffect(() => {
-    getData();
+    const langList = GLOBALS.store.settings.audio.audioLanguages.tracks;
+    setList(langList);
+    // console.log("lang list", langList);
+
+    getValues();
   }, []);
 
   return (
-    <SideMenuLayout title="Content Locks" subTitle="Unrated Content">
-      <View style={styles.contentTitleContainer}>
-        <Text style={styles.contentTitle}>Lock unrated content</Text>
-      </View>
+    <SideMenuLayout
+      title="Audio"
+      subTitle={`${
+        props.route.params.type === "primary" ? "Primary" : "Secondary"
+      } Audio Language`}
+    >
       <FlatList
         data={list}
-        keyExtractor={(item) => item.title}
+        keyExtractor={(item) => item}
         renderItem={({ item, index }) => {
           return (
             <Pressable
@@ -82,7 +67,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
                 setFocussed(index);
               }}
               onPress={() => {
-                onPress(index);
+                onPress(item);
               }}
               style={
                 index === focussed
@@ -92,7 +77,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
               key={index}
             >
               <View style={styles.icContainer}>
-                {locked === index ? (
+                {selectedLang === item ? (
                   <Image
                     source={AppImages.checked_circle}
                     style={styles.icCircle}
@@ -111,60 +96,18 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
                     { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
                   ]}
                 >
-                  {item.title}
+                  {AppStrings.ISO[item]}
                 </Text>
               </View>
             </Pressable>
           );
         }}
       />
-      {/* {list.map((item: any, index: any) => {
-        return (
-          <Pressable
-            onFocus={() => {
-              setFocussed(index);
-            }}
-            onPress={() => {
-              onPress(index);
-            }}
-            style={
-              index === focussed
-                ? { ...MFSettingsStyles.containerActive, ...styles.container }
-                : styles.container
-            }
-            key={index}
-          >
-            <View style={styles.icContainer}>
-              {locked === index ? (
-                <Image
-                  source={AppImages.checked_circle}
-                  style={styles.icCircle}
-                />
-              ) : (
-                <Image
-                  source={AppImages.unchecked_circle}
-                  style={styles.icCircle}
-                />
-              )}
-            </View>
-            <View style={styles.listContent}>
-              <Text
-                style={[
-                  styles.listText,
-                  { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
-                ]}
-              >
-                {item.title}
-              </Text>
-            </View>
-          </Pressable>
-        );
-      })} */}
     </SideMenuLayout>
   );
 };
 
-export default UnratedContentScreen;
+export default AudioLanguageScreen;
 
 const styles = StyleSheet.create({
   contentTitleContainer: {

@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
 import { MFThemeObject } from "../../@types/MFTheme";
 import { appUIDefinition } from "../../config/constants";
-import { screenHeight } from "../../utils/dimensions";
+import { SCREEN_HEIGHT } from "../../utils/dimensions";
 const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
 export const HomeScreenStyles = StyleSheet.create({
   container: {
@@ -74,7 +74,7 @@ export const HomeScreenStyles = StyleSheet.create({
     alignContent: "space-around",
     marginTop: 50,
     paddingHorizontal: 50,
-    height: screenHeight * 0.3,
+    height: SCREEN_HEIGHT * 0.3,
     width: '100%'
   },
   posterImageContainerStyles: { flex: 0.38 },

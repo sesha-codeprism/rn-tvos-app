@@ -1,6 +1,13 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import SideMenuLayout from "../../../../components/MFSideMenu";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
@@ -71,8 +78,56 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
         <View style={styles.contentTitleContainer}>
           <Text style={styles.contentTitle}>Adult lock options</Text>
         </View>
-        <View>
-          {list.map((item: any, index: any) => {
+          <FlatList
+            data={list}
+            keyExtractor={(item) => item.title}
+            renderItem={({ item, index }) => {
+              return (
+                <Pressable
+                  onFocus={() => {
+                    setFocussed(index);
+                  }}
+                  onPress={() => {
+                    onPress(item);
+                  }}
+                  style={
+                    index === focussed
+                      ? {
+                          ...MFSettingsStyles.containerActive,
+                          ...styles.container,
+                        }
+                      : styles.container
+                  }
+                  key={index}
+                >
+                  <View style={styles.icContainer}>
+                    {selected[item.action] === true ? (
+                      <Image
+                        source={AppImages.checked_circle}
+                        style={styles.icCircle}
+                      />
+                    ) : (
+                      <Image
+                        source={AppImages.unchecked_circle}
+                        style={styles.icCircle}
+                      />
+                    )}
+                  </View>
+                  <View style={styles.listContent}>
+                    <Text
+                      style={[
+                        styles.listText,
+                        { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
+                      ]}
+                    >
+                      {item.title}
+                    </Text>
+                  </View>
+                </Pressable>
+              );
+            }}
+          />
+          {/* {list.map((item: any, index: any) => {
             return (
               <Pressable
                 onFocus={() => {
@@ -116,8 +171,7 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
                 </View>
               </Pressable>
             );
-          })}
-        </View>
+          })} */}
       </View>
       <View>
         <Pressable
@@ -135,6 +189,7 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
           onPress={() => {
             props.navigation.navigate(Routes.ContentLockPin);
           }}
+          isTVSelectable={true}
         >
           <Text style={styles.changePinText}>Change PIN</Text>
         </Pressable>

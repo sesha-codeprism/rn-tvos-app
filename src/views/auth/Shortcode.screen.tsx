@@ -33,36 +33,14 @@ export interface ShortCodeScreenProps {
   /** Navigation params. Used to send verification code. */
   navigation: NativeStackNavigationProp<ParamListBase, string>;
 }
-
 /** Screen to render short code auth screen */
-
 const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
   props
 ) => {
   let intervalTimer: NodeJS.Timer;
-  // const queryClient = useQueryClient();
-  // const [intervalMs, setIntervalMs] = React.useState(1000);
   const [code, setCode] = useState("");
-
+  const [isTesting, setIsTesting] = useState(false);
   const [verificationCode, setVerficationCode] = useState(Array());
-
-  // const { status, data, error, isFetching } = useQuery(
-  //   "Fetch code",
-  //   async () => {
-  //     const { data } = await getShortCodeAuthenticate(GLOBALS.deviceInfo);
-  //     const registrationCode: string = data.RegistrationCode;
-  //     const currentCode: string = verificationCode.join("");
-  //     if (registrationCode && registrationCode !== currentCode) {
-  //       setVerficationCode(registrationCode.split(""));
-  //     }
-  //     if(data.AccessToken){
-
-  //     }
-  //   },
-  //   {
-  //     refetchInterval: intervalMs,
-  //   }
-  // );
 
   const makeBackendRequest = async (deviceInfo: MFDeviceInfo) => {
     const { data } = await getShortCodeAuthenticate(deviceInfo);
@@ -82,15 +60,29 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
   };
 
   const onRefresh = async () => {
-    clearInterval(intervalTimer);
-    setVerficationCode([]);
-    makeBackendRequest(GLOBALS.deviceInfo);
+    if (__DEV__ && isTesting) {
+      console.log("Testing..");
+      setVerficationCode([]);
+      setTimeout(() => {
+        setVerficationCode("TESTIN".split(""));
+      }, 1000);
+    } else {
+      clearInterval(intervalTimer);
+      setVerficationCode([]);
+      makeBackendRequest(GLOBALS.deviceInfo);
+    }
   };
 
   useEffect(() => {
-    makeBackendRequest(GLOBALS.deviceInfo).catch((err) => {
-      infoLog(`Something went wrong ${err}`);
-    });
+    if (__DEV__ && isTesting) {
+      console.log("Testing right now..");
+      setVerficationCode("TESTIN".split(""));
+    } else {
+      console.log("Dev build.. so testing for now");
+      makeBackendRequest(GLOBALS.deviceInfo).catch((err) => {
+        infoLog(`Something went wrong ${err}`);
+      });
+    }
   }, []);
 
   const getAccessToken = async (
@@ -198,7 +190,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
         <View style={{ flexDirection: "row" }}>
           {verificationCode.map((i, e) => {
             return (
-              <Pressable
+              <View
                 key={`Index${e}`}
                 style={ShortCodeStyles.verificationCodeTileStyle}
               >
@@ -207,7 +199,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
                   displayText={i}
                   textStyle={ShortCodeStyles.titleTextStyle}
                 />
-              </Pressable>
+              </View>
             );
           })}
         </View>
@@ -219,6 +211,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
             avatarSource={AppImages.settings}
             imageSource={AppImages.settings}
             iconSource={AppImages.search}
+            hasTVPreferredFocus
             containedButtonProps={{
               containedButtonStyle: {
                 enabled: true,

@@ -1,6 +1,13 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import SideMenuLayout from "../../../../components/MFSideMenu";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
@@ -28,9 +35,8 @@ const PurchaseLockScreen: React.FunctionComponent<Props> = (props: any) => {
       setLocked(value);
       GLOBALS.store.settings.parentalControll.purchaseLock &&
       GLOBALS.store.settings.parentalControll.purchaseLock["locked"]
-        ? (GLOBALS.store.settings.parentalControll.purchaseLock[
-            "locked"
-          ] = value === 0 ? true : false)
+        ? (GLOBALS.store.settings.parentalControll.purchaseLock["locked"] =
+            value === 0 ? true : false)
         : (GLOBALS.store.settings.parentalControll.purchaseLock = {
             ...GLOBALS.store.settings.parentalControll.purchaseLock,
             ["locked"]: value === 0 ? true : false,
@@ -44,12 +50,10 @@ const PurchaseLockScreen: React.FunctionComponent<Props> = (props: any) => {
     try {
       const selected =
         GLOBALS.store.settings.parentalControll.purchaseLock &&
-        GLOBALS.store.settings.parentalControll.purchaseLock[
-          "locked"
-        ] !== undefined
-          ? GLOBALS.store.settings.parentalControll.purchaseLock[
-              "locked"
-            ] === true
+        GLOBALS.store.settings.parentalControll.purchaseLock["locked"] !==
+          undefined
+          ? GLOBALS.store.settings.parentalControll.purchaseLock["locked"] ===
+            true
             ? 0
             : 1
           : "";
@@ -68,7 +72,53 @@ const PurchaseLockScreen: React.FunctionComponent<Props> = (props: any) => {
 
   return (
     <SideMenuLayout title="Parental Controls" subTitle="Purchase Locks">
-      {list.map((item: any, index: any) => {
+      <FlatList
+        data={list}
+        keyExtractor={(item) => item.title}
+        renderItem={({ item, index }) => {
+          return (
+            <Pressable
+              onFocus={() => {
+                setFocussed(index);
+              }}
+              onPress={() => {
+                onPress(index);
+              }}
+              style={
+                index === focussed
+                  ? { ...MFSettingsStyles.containerActive, ...styles.container }
+                  : styles.container
+              }
+              key={index}
+            >
+              <View style={styles.icContainer}>
+                {locked === index ? (
+                  <Image
+                    source={AppImages.checked_circle}
+                    style={styles.icCircle}
+                  />
+                ) : (
+                  <Image
+                    source={AppImages.unchecked_circle}
+                    style={styles.icCircle}
+                  />
+                )}
+              </View>
+              <View style={styles.listContent}>
+                <Text
+                  style={[
+                    styles.listText,
+                    { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
+                  ]}
+                >
+                  {item.title}
+                </Text>
+              </View>
+            </Pressable>
+          );
+        }}
+      />
+      {/* {list.map((item: any, index: any) => {
         return (
           <Pressable
             onFocus={() => {
@@ -109,7 +159,7 @@ const PurchaseLockScreen: React.FunctionComponent<Props> = (props: any) => {
             </View>
           </Pressable>
         );
-      })}
+      })} */}
     </SideMenuLayout>
   );
 };

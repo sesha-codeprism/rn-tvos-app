@@ -1,6 +1,13 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import SideMenuLayout from "../../../../components/MFSideMenu";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { AppImages } from "../../../../assets/images";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStrings } from "../../../../config/strings";
@@ -110,7 +117,63 @@ const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
           above your selected rating will also be locked.
         </Text>
       </View>
-      {ratingList.map((item: any, index: any) => {
+      <FlatList
+        data={ratingList}
+        keyExtractor={(item) => item.title}
+        renderItem={({ item, index }) => {
+          return (
+            <Pressable
+              onFocus={() => {
+                setFocussed(index);
+              }}
+              onPress={() => {
+                onPress(item);
+              }}
+              style={
+                index === focussed
+                  ? { ...MFSettingsStyles.containerActive, ...styles.container }
+                  : styles.container
+              }
+              key={index}
+            >
+              <View style={styles.icContainer}>
+                {selectedItems.some((value) => value.age === item.age) ? (
+                  <Image
+                    source={AppImages.checked_circle}
+                    style={styles.icCircle}
+                  />
+                ) : (
+                  <Image
+                    source={AppImages.unchecked_circle}
+                    style={styles.icCircle}
+                  />
+                )}
+              </View>
+              <View style={styles.listContent}>
+                <Text
+                  style={[
+                    styles.listText,
+                    { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
+                  ]}
+                >
+                  {item.title}
+                </Text>
+                <Text
+                  style={[
+                    styles.listSubtitleText,
+                    {
+                      color: index === focussed ? "#EEEEEE" : "#A7A7A7",
+                    },
+                  ]}
+                >
+                  {item.subTitle}
+                </Text>
+              </View>
+            </Pressable>
+          );
+        }}
+      />
+      {/* {ratingList.map((item: any, index: any) => {
         return (
           <Pressable
             onFocus={() => {
@@ -161,7 +224,7 @@ const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
             </View>
           </Pressable>
         );
-      })}
+      })} */}
     </SideMenuLayout>
   );
 };

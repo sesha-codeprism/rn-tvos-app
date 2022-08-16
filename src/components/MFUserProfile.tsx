@@ -9,6 +9,7 @@ import {
   StyleSheet,
   ViewStyle,
   View,
+  Text,
 } from "react-native";
 import FastImage from "react-native-fast-image";
 import { AppImages } from "../assets/images";
@@ -49,7 +50,7 @@ interface MFUserProfileProps {
   /** Event to be triggered with selected */
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
   onEdit?: null | ((item: any) => void) | undefined;
-  checkedOnFocus?: boolean 
+  checkedOnFocus?: boolean;
 }
 
 const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
@@ -96,17 +97,15 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
         }
         style={[
           styles.rootContainer,
-          focused
-            ? StyleSheet.flatten([
-                styles.focusedStyle,
-                styles.rootContainer,
-                props.focusedStyle,
-              ])
-            : StyleSheet.flatten(
-                (styles.unfocusedStyle,
-                styles.rootContainer,
-                props.focusedStyle)
-              ),
+          // focused
+          //   ? StyleSheet.flatten([
+          //       styles.focusedStyle,
+          //       styles.rootContainer,
+          //       props.focusedStyle,
+          //     ])
+          StyleSheet.flatten(
+            (styles.unfocusedStyle, styles.rootContainer, props.focusedStyle)
+          ),
         ]}
         onFocus={_onFocus}
         onBlur={_onBlur}
@@ -132,11 +131,17 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
             }
             style={
               !focused
-                ? {
-                    width: props.userProfile ? 200 : 62,
-                    height: props.userProfile ? 200 : 62,
-                    borderRadius: props.userProfile ? 200 / 2 : 62 / 2,
-                  }
+                ? !focused
+                  ? {
+                      width: props.userProfile ? 200 : 62,
+                      height: props.userProfile ? 200 : 62,
+                      borderRadius: props.userProfile ? 200 / 2 : 62 / 2,
+                    }
+                  : {
+                      width: props.userProfile ? 180 : 62,
+                      height: props.userProfile ? 180 : 62,
+                      borderRadius: 180 / 2,
+                    }
                 : {
                     width: props.userProfile ? 180 : 62,
                     height: props.userProfile ? 180 : 62,
@@ -156,13 +161,14 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
           )}
         </View>
         <View style={styles.textContainer}>
-          <MFText
-            shouldRenderText
-            displayText={props.userProfile ? props.userProfile.Name : "New"}
-            textStyle={
+          <Text
+            numberOfLines={1}
+            style={
               focused ? styles.focusedTextStyle : styles.unFocusedTextStyle
             }
-          />
+          >
+            {props.userProfile ? props.userProfile.Name : "New"}
+          </Text>
         </View>
       </Pressable>
     </View>
@@ -206,11 +212,17 @@ const styles = StyleSheet.create({
     fontSize: 38,
     color: appUIDefinition.theme.backgroundColors.white,
     lineHeight: 55,
+    width: 200,
+    fontFamily: "Inter-Regular",
+    textAlign: "center",
   },
   unFocusedTextStyle: {
     fontSize: 31,
     color: "#828282",
     lineHeight: 55,
+    fontFamily: "Inter-Regular",
+    width: 200,
+    textAlign: "center",
   },
   activeProfileIndicator: {
     width: 46,

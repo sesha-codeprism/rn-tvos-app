@@ -1,6 +1,13 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import SideMenuLayout from "../../../../components/MFSideMenu";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
@@ -43,7 +50,53 @@ const VideoQualityScreen: React.FunctionComponent<Props> = (props: any) => {
   }, []);
   return (
     <SideMenuLayout title="Diaplay" subTitle="On Screen Language">
-      {list.map((item: any, index: any) => {
+      <FlatList
+        data={list}
+        keyExtractor={(item) => item.localizedText}
+        renderItem={({ item, index }) => {
+          return (
+            <Pressable
+              onFocus={() => {
+                setFocussed(index);
+              }}
+              onPress={() => {
+                onPress(item);
+              }}
+              style={
+                index === focussed
+                  ? { ...MFSettingsStyles.containerActive, ...styles.container }
+                  : styles.container
+              }
+              key={index}
+            >
+              <View style={styles.icContainer}>
+                {item.id === selectedQyality.id ? (
+                  <Image
+                    source={AppImages.checked_circle}
+                    style={styles.icCircle}
+                  />
+                ) : (
+                  <Image
+                    source={AppImages.unchecked_circle}
+                    style={styles.icCircle}
+                  />
+                )}
+              </View>
+              <View style={styles.listContent}>
+                <Text
+                  style={[
+                    styles.listText,
+                    { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
+                  ]}
+                >
+                  {AppStrings[item.localizedText]}
+                </Text>
+              </View>
+            </Pressable>
+          );
+        }}
+      />
+      {/* {list.map((item: any, index: any) => {
         return (
           <Pressable
             onFocus={() => {
@@ -84,7 +137,7 @@ const VideoQualityScreen: React.FunctionComponent<Props> = (props: any) => {
             </View>
           </Pressable>
         );
-      })}
+      })} */}
     </SideMenuLayout>
   );
 };

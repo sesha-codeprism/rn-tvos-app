@@ -8,7 +8,7 @@ interface Props {
 
 const SideMenuLayout: React.FunctionComponent<Props> = (props) => {
   return (
-    <View style={styles.root}>
+    <View style={styles.root} pointerEvents="box-none">
       <View style={styles.headerContainer}>
         <Text style={styles.subTitle}>{props.title}</Text>
         {props.subTitle ? (

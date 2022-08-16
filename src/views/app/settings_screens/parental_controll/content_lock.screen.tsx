@@ -1,6 +1,13 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import SideMenuLayout from "../../../../components/MFSideMenu";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { AppImages } from "../../../../assets/images";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
@@ -73,8 +80,10 @@ const ContentLockScreen: React.FunctionComponent<Props> = (props: any) => {
       subTitle="Content Locks"
       contentContainerStyle={styles.contentContainer}
     >
-      <View>
-        {list.map((item: any, index: any) => {
+      <FlatList
+        data={list}
+        keyExtractor={(item) => item.title}
+        renderItem={({ item, index }) => {
           return (
             <Pressable
               onFocus={() => {
@@ -122,8 +131,59 @@ const ContentLockScreen: React.FunctionComponent<Props> = (props: any) => {
               />
             </Pressable>
           );
-        })}
-      </View>
+        }}
+      />
+      {/* <View> */}
+      {/* {list.map((item: any, index: any) => {
+          return (
+            <Pressable
+              onFocus={() => {
+                setFocussed(index);
+              }}
+              onPress={() => {
+                item.action !== ""
+                  ? props.navigation.navigate(item.action, {
+                      action: item.navigation,
+                      title: item.title,
+                    })
+                  : null;
+              }}
+              style={
+                index === focussed
+                  ? { ...MFSettingsStyles.containerActive, ...styles.container }
+                  : styles.container
+              }
+              key={index}
+            >
+              <View>
+                <Text
+                  style={[
+                    styles.listText,
+                    { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
+                  ]}
+                >
+                  {item.title}
+                </Text>
+                <Text
+                  style={[
+                    styles.listText,
+                    {
+                      color: index === focussed ? "#EEEEEE" : "#A7A7A7",
+                      fontSize: 23,
+                    },
+                  ]}
+                >
+                  {item.subTitle}
+                </Text>
+              </View>
+              <Image
+                source={AppImages.arrow_right}
+                style={{ width: 15, height: 30 }}
+              />
+            </Pressable>
+          );
+        })} */}
+      {/* </View> */}
       <View>
         <Pressable
           onFocus={() => {

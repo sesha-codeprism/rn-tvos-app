@@ -7,15 +7,12 @@ import MFButton, { MFButtonVariant } from "../MFButton/MFButton";
 import MFButtonGroup, {
   ButtonVariantProps,
 } from "../MFButtonGroup/MFButtonGroup";
-import { MFTabBarStyles } from "../MFTabBar/MFTabBarStyles";
 import MFMenuStyles from "../../config/styles/MFMenuStyles";
 import { FeedItem } from "../../@types/HubsResponse";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { GlobalContext } from "../../contexts/globalContext";
-import { useDrawerStatus } from "@react-navigation/drawer";
 import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
-import { enableScreens } from "react-native-screens";
 
 interface MFMenuProps {
   navigation: any;
@@ -23,6 +20,8 @@ interface MFMenuProps {
   enableRTL?: boolean;
   hubList?: Array<FeedItem>;
   onPress?: null | ((event: number) => void) | undefined;
+  onFocus?: null | ((event: number) => void) | undefined;
+  onPressSettings?: any;
 }
 
 const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
@@ -30,10 +29,13 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   const [isIdentityAssigned, setIdentityAssigned] = useState(false);
   const globalContext = useContext(GlobalContext);
   const [focused, setFocused] = useState("");
+  const testing = false;
   const _onPressMain = (event: GestureResponderEvent, index: number) => {
     props.onPress && props.onPress(index);
   };
-  const isDrawerOpen = useDrawerStatus() === "open";
+  const _onFocus = (index: number) => {
+    props.onFocus && props.onFocus(index);
+  };
   useEffect(() => {
     console.log("HubsList", props.hubList);
     let array1: Array<ButtonVariantProps> = [];
@@ -43,7 +45,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
       var buttonProps = getButtonVariantProps(e);
       array1.push(buttonProps);
     });
-    if (__DEV__) {
+    if (__DEV__ && testing) {
       setHubs1([...array1, ...array1, ...array1, ...array1, ...array1]);
     } else {
       setHubs1(array1);
@@ -66,10 +68,10 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
         focusedStyle: StyleSheet.flatten([MFMenuStyles.focusedTextStyle]),
         unfocusedStyle: StyleSheet.flatten([MFMenuStyles.textStyle]),
       },
-      style: StyleSheet.flatten([MFMenuStyles.tabBarItem]),
+      style: StyleSheet.flatten([MFMenuStyles.tabBarItem1]),
       focusedStyle: StyleSheet.flatten([
-        MFMenuStyles.tabBarItem,
-        MFMenuStyles.tabBarItemFocused,
+        MFMenuStyles.tabBarItem1,
+        MFMenuStyles.tabBarItemFocused1,
       ]),
     };
     return element;
@@ -80,12 +82,12 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
       {({ userProfile, setProfile }) => (
         <View style={MFMenuStyles.rootContainerStyles}>
           <View
-            style={StyleSheet.flatten([MFMenuStyles.searchContainerStyles])}
+            style={StyleSheet.flatten([MFMenuStyles.searchContainerStyles1])}
           >
             <View
               style={
                 focused === "search"
-                  ? MFMenuStyles.serchCircleStyle
+                  ? MFMenuStyles.serchCircleStyle1
                   : { ...MFMenuStyles, borderColor: "transparent" }
               }
             >
@@ -105,7 +107,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               />
             </View>
           </View>
-          <View style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles])}>
+          <View style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles1])}>
             <MFButtonGroup
               onPress={(event, index) => _onPressMain(event, index)}
               buttonsList={hubs1}
@@ -130,12 +132,12 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                   isDisabled: false,
                 },
               }}
-              onFocus={() => {
-                setFocused("");
+              onFocus={(event, index) => {
+                _onFocus(index);
               }}
             />
           </View>
-          <View style={StyleSheet.flatten([MFMenuStyles.profileViewStyles])}>
+          <View style={StyleSheet.flatten([MFMenuStyles.profileViewStyles1])}>
             {isIdentityAssigned && (
               <View style={MFMenuStyles.profileContainerStyles}>
                 <View
@@ -172,26 +174,20 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
             <View style={MFMenuStyles.settingsContainerStyles}>
               <View
                 style={
-                  focused === "settings" ? MFMenuStyles.serchCircleStyle : {}
+                  focused === "settings" ? MFMenuStyles.serchCircleStyle1 : {}
                 }
               >
                 <MFButton
-                  variant={MFButtonVariant.Avatar}
-                  avatarSource={
-                    userProfile && userProfile.Image != null
-                      ? AppImages[userProfile.Image] || AppImages.avatar
-                      : AppImages.avatar
-                  }
+                  variant={MFButtonVariant.Icon}
+                  avatarSource={{}}
                   imageSource={{}}
-                  iconSource={{}}
-                  avatarStyles={MFMenuStyles.avatarStyles}
+                  iconSource={AppImages.settings_grey}
+                  iconStyles={MFMenuStyles.iconStyles}
+                  iconButtonStyles={{ shouldRenderImage: true }}
                   onPress={() => {
-                    props.navigation.toggleDrawer();
-                    console.log(
-                      "setting pressed",
-                      props.navigation,
-                      isDrawerOpen
-                    );
+                    // props.navigation.toggleDrawer();
+                    props.onPressSettings();
+                    console.log("setting pressed", props.navigation);
                   }}
                   onFocus={() => {
                     setFocused("settings");

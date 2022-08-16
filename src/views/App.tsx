@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { initUIDef } from "../utils/uidefinition";
 import { UserProfile } from "../@types/UserProfile";
 import { GLOBALS } from "../utils/globals";
+import "react-native-gesture-handler";
 
 interface AppProps {}
 

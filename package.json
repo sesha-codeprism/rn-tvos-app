@@ -13,7 +13,7 @@
     "Setup project for M1 Mac": "yarn install && cd ios && arch -x86_64 pod install && cd ..",
     "Yarn install": "yarn install",
     "Install Pods": "cd ios && pod install && cd ..",
-    "Install Pods for M1 Mac": "cd ios && arch -x86-64 pod install && cd ..",
+    "Install Pods for M1 Mac": "cd ios && arch -x86_64 pod install && cd ..",
     "test": "jest ",
     "lint": "eslint .",
     "Archive project": "cd ios && xcodebuild archive -workspace RetailClient.xcworkspace -scheme RetailClient-tvOS -archivePath ~/Downloads/MFRetailClient.xcarchive | xcpretty",
@@ -50,6 +50,7 @@
     "react-native-syntax-highlighter": "2.0.0",
     "react-native-tvos": "^0.64.2-4",
     "react-native-webview": "^11.13.0",
+    "react-navigation-drawer": "^2.7.2",
     "react-query": "^3.34.12",
     "react-syntax-highlighter": "^15.4.5"
   },

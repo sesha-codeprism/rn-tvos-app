@@ -3,7 +3,7 @@ import renderer from "react-test-renderer";
 import { configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { Text } from "react-native";
-import SideMenuLayout from "../../src/components/MFSideMenu";
+import SideMenuLayout from "../../src/components/MFSideMenu/MFSideMenu";
 
 test("MFSideMenu Layout", () => {
   const component = renderer.create(
