@@ -61,7 +61,7 @@ const MFMenuStyles = StyleSheet.create({
     width: 240,
     alignSelf: "center",
   },
-  searchContainerStyles: {
+  searchContainerStyles1: {
     width: SCREEN_WIDTH * 0.05,
     height: 147,
     alignContent: "center",
@@ -71,7 +71,7 @@ const MFMenuStyles = StyleSheet.create({
     // marginLeft: 70,marginRight: 30
     // backgroundColor: __DEV__ ? 'red' : 'transparent'
   },
-  hubsContainerStyles: {
+  hubsContainerStyles1: {
     flex: 2.8,
     paddingBottom: 10,
     paddingRight: 20,
@@ -82,7 +82,7 @@ const MFMenuStyles = StyleSheet.create({
     justifyContent: "center",
     // backgroundColor: __DEV__ ? 'green' : 'transparent'
   },
-  profileViewStyles: {
+  profileViewStyles1: {
     flex: 0.9,
     flexDirection: "row",
     paddingLeft: 20,
@@ -93,19 +93,19 @@ const MFMenuStyles = StyleSheet.create({
     // marginLeft: 50
     // backgroundColor: __DEV__ ? 'blue' : 'transparent'
   },
-  tabBarItem: {
+  tabBarItem1: {
     display: "flex",
     borderRadius: 5,
     padding: 30,
   },
-  tabBarItemFocused: {
+  tabBarItemFocused1: {
     transform: [
       {
         scale: 1.1,
       },
     ],
   },
-  serchCircleStyle: {
+  serchCircleStyle1: {
     height: 60,
     width: 60,
     borderRadius: 30,

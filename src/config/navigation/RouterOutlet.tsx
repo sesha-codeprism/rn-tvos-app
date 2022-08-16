@@ -62,6 +62,7 @@ export const Routes = {
 };
 
 enableScreens();
+enableScreens();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
@@ -195,9 +196,12 @@ const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
           swipeEnabled: false,
           unmountOnBlur: true,
           drawerHideStatusBarOnOpen: true,
+          unmountOnBlur: true,
+          drawerHideStatusBarOnOpen: true,
           // swipeEnabled: false,
           //@ts-ignore
-          gestureEnabled: false,
+         @ts-ignore
+          gestureEnabled:  false,
           // gestureHandlerProps:{
           //   ge
           // }

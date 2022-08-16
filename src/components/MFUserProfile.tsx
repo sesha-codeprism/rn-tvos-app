@@ -131,11 +131,17 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
             }
             style={
               !focused
-                ? {
-                    width: props.userProfile ? 200 : 62,
-                    height: props.userProfile ? 200 : 62,
-                    borderRadius: props.userProfile ? 200 / 2 : 62 / 2,
-                  }
+                ? !focused
+                  ? {
+                      width: props.userProfile ? 200 : 62,
+                      height: props.userProfile ? 200 : 62,
+                      borderRadius: props.userProfile ? 200 / 2 : 62 / 2,
+                    }
+                  : {
+                      width: props.userProfile ? 180 : 62,
+                      height: props.userProfile ? 180 : 62,
+                      borderRadius: 180 / 2,
+                    }
                 : {
                     width: props.userProfile ? 180 : 62,
                     height: props.userProfile ? 180 : 62,
