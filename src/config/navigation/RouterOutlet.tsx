@@ -20,6 +20,9 @@ import VideoQualityScreen from "../../views/app/settings_screens/display/video_q
 import SubtitleLanguageScreen from "../../views/app/settings_screens/display/subtitle_language.screen";
 import { enableScreens } from "react-native-screens";
 import { AppNavigator } from "./MainStack.Navigator";
+import AudioScreen from "../../views/app/settings_screens/audio/audio.screen";
+import AudioLanguageScreen from "../../views/app/settings_screens/audio/audio_language.screen";
+import DescriptiveAudioScreen from "../../views/app/settings_screens/audio/descriptive_audio.screen";
 interface RouterOutletProps {}
 const { width, height } = Dimensions.get("window");
 
@@ -53,6 +56,9 @@ export const Routes = {
   PurchaseLock: "purchase_lock",
   VideoQuality: "video_quality",
   SubtitleLanguage: "subtitle_language",
+  Audio: "audio",
+  AudioLanguage: "audio_language",
+  DescriptiveAudio:"descriptive_audio"
 };
 
 enableScreens();
@@ -138,6 +144,18 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
         <Stack.Screen
           name={Routes.VideoQuality}
           component={VideoQualityScreen}
+        />
+        <Stack.Screen
+          name={Routes.Audio}
+          component={AudioScreen}
+        />
+        <Stack.Screen
+          name={Routes.AudioLanguage}
+          component={AudioLanguageScreen}
+        />
+        <Stack.Screen
+          name={Routes.DescriptiveAudio}
+          component={DescriptiveAudioScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
