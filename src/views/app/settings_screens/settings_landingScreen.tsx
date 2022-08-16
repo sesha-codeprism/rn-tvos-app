@@ -31,7 +31,7 @@ const menu = [
   },
   {
     title: "Audio",
-    action: "",
+    action: "audio",
     icon: "",
   },
   {
