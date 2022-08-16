@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   ImageBackground,
-  ScrollView,
-  ViewComponent,
   BackHandler,
   TVMenuControl,
   Dimensions,
@@ -25,9 +23,7 @@ import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import { useDrawerStatus } from "@react-navigation/drawer";
-import { DrawerActions } from "react-navigation-drawer";
 import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
-import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -41,7 +37,8 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const [open, setOpen] = useState(false);
   const isDrawerOpen = useDrawerStatus() === "open";
-  let timeOut: any = null;
+  let feedTimeOut: any = null;
+  let hubTimeOut: any = null;
   const drawerRef: React.MutableRefObject<any> = useRef();
   const { data, isLoading } = getAllHubs();
   props.navigation.addListener("focus", () => {
@@ -53,9 +50,8 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   });
 
   const onFeedFocus = (event: SubscriberFeed) => {
-    console.log(event);
-    clearTimeout(timeOut);
-    timeOut = setTimeout(async () => {
+    clearTimeout(feedTimeOut);
+    feedTimeOut = setTimeout(async () => {
       if (event != null) {
         setCurrentFeed(event);
       }
@@ -151,8 +147,12 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                 navigation={props.navigation}
                 enableRTL={enableRTL}
                 hubList={hubs}
-                onPress={(event) => {
-                  setFeeds(hubs[event]);
+                onPress={(event) => {}}
+                onFocus={(event) => {
+                  setTimeout(() => {
+                    clearTimeout(hubTimeOut);
+                    hubTimeOut = setFeeds(hubs[event]);
+                  }, debounceTime);
                 }}
                 onPressSettings={() => {
                   console.log("local state", open);

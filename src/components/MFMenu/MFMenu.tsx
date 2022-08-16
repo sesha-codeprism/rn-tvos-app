@@ -7,14 +7,12 @@ import MFButton, { MFButtonVariant } from "../MFButton/MFButton";
 import MFButtonGroup, {
   ButtonVariantProps,
 } from "../MFButtonGroup/MFButtonGroup";
-import { MFTabBarStyles } from "../MFTabBar/MFTabBarStyles";
 import MFMenuStyles from "../../config/styles/MFMenuStyles";
 import { FeedItem } from "../../@types/HubsResponse";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { GlobalContext } from "../../contexts/globalContext";
 import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
-import { enableScreens } from "react-native-screens";
 
 interface MFMenuProps {
   navigation: any;
@@ -22,6 +20,7 @@ interface MFMenuProps {
   enableRTL?: boolean;
   hubList?: Array<FeedItem>;
   onPress?: null | ((event: number) => void) | undefined;
+  onFocus?: null | ((event: number) => void) | undefined;
   onPressSettings?: any;
 }
 
@@ -33,6 +32,9 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   const testing = false;
   const _onPressMain = (event: GestureResponderEvent, index: number) => {
     props.onPress && props.onPress(index);
+  };
+  const _onFocus = (index: number) => {
+    props.onFocus && props.onFocus(index);
   };
   useEffect(() => {
     console.log("HubsList", props.hubList);
@@ -130,8 +132,8 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                   isDisabled: false,
                 },
               }}
-              onFocus={() => {
-                setFocused("");
+              onFocus={(event, index) => {
+                _onFocus(index);
               }}
             />
           </View>
@@ -184,11 +186,8 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                   iconButtonStyles={{ shouldRenderImage: true }}
                   onPress={() => {
                     // props.navigation.toggleDrawer();
-                    props.onPressSettings()
-                    console.log(
-                      "setting pressed",
-                      props.navigation,
-                    );
+                    props.onPressSettings();
+                    console.log("setting pressed", props.navigation);
                   }}
                   onFocus={() => {
                     setFocused("settings");
