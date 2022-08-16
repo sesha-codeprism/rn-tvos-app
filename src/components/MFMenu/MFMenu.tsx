@@ -68,10 +68,10 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
         focusedStyle: StyleSheet.flatten([MFMenuStyles.focusedTextStyle]),
         unfocusedStyle: StyleSheet.flatten([MFMenuStyles.textStyle]),
       },
-      style: StyleSheet.flatten([MFMenuStyles.tabBarItem]),
+      style: StyleSheet.flatten([MFMenuStyles.tabBarItem1]),
       focusedStyle: StyleSheet.flatten([
-        MFMenuStyles.tabBarItem,
-        MFMenuStyles.tabBarItemFocused,
+        MFMenuStyles.tabBarItem1,
+        MFMenuStyles.tabBarItemFocused1,
       ]),
     };
     return element;
@@ -82,12 +82,12 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
       {({ userProfile, setProfile }) => (
         <View style={MFMenuStyles.rootContainerStyles}>
           <View
-            style={StyleSheet.flatten([MFMenuStyles.searchContainerStyles])}
+            style={StyleSheet.flatten([MFMenuStyles.searchContainerStyles1])}
           >
             <View
               style={
                 focused === "search"
-                  ? MFMenuStyles.serchCircleStyle
+                  ? MFMenuStyles.serchCircleStyle1
                   : { ...MFMenuStyles, borderColor: "transparent" }
               }
             >
@@ -107,7 +107,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               />
             </View>
           </View>
-          <View style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles])}>
+          <View style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles1])}>
             <MFButtonGroup
               onPress={(event, index) => _onPressMain(event, index)}
               buttonsList={hubs1}
@@ -137,7 +137,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               }}
             />
           </View>
-          <View style={StyleSheet.flatten([MFMenuStyles.profileViewStyles])}>
+          <View style={StyleSheet.flatten([MFMenuStyles.profileViewStyles1])}>
             {isIdentityAssigned && (
               <View style={MFMenuStyles.profileContainerStyles}>
                 <View
@@ -174,7 +174,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
             <View style={MFMenuStyles.settingsContainerStyles}>
               <View
                 style={
-                  focused === "settings" ? MFMenuStyles.serchCircleStyle : {}
+                  focused === "settings" ? MFMenuStyles.serchCircleStyle1 : {}
                 }
               >
                 <MFButton
