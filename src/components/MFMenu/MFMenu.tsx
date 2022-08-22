@@ -134,6 +134,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               }}
               onFocus={(event, index) => {
                 _onFocus(index);
+                setFocused('')
               }}
             />
           </View>
