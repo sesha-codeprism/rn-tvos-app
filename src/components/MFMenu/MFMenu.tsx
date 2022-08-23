@@ -45,7 +45,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
       var buttonProps = getButtonVariantProps(e);
       array1.push(buttonProps);
     });
-    if (__DEV__ && testing) {
+    if (__DEV__ && testing && testing) {
       setHubs1([...array1, ...array1, ...array1, ...array1, ...array1]);
     } else {
       setHubs1(array1);
@@ -134,6 +134,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               }}
               onFocus={(event, index) => {
                 _onFocus(index);
+                setFocused("");
               }}
             />
           </View>
