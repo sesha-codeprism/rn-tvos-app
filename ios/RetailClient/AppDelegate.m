@@ -4,7 +4,6 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTI18nUtil.h>
-#import <React/RCTDevLoadingView.h>
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -40,9 +39,6 @@ static void InitializeFlipper(UIApplication *application) {
                                                    moduleName:@"RetailClient"
                                             initialProperties:nil];
 
-#if RCT_DEV
-  [bridge moduleForClass:[RCTDevLoadingView class]];
-#endif
 #if TARGET_OS_TV
   rootView.backgroundColor = [UIColor whiteColor];
 #else

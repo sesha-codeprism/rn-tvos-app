@@ -24,6 +24,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import { useDrawerStatus } from "@react-navigation/drawer";
 import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
+import MFMetaData from "../../components/MFMetaData";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -162,43 +163,13 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
               />
               <View style={HomeScreenStyles.posterViewContainerStyles}>
                 {currentFeed && (
-                  <>
-                    <View style={HomeScreenStyles.posterImageContainerStyles}>
-                      {currentFeed.image16x9PosterURL !== undefined ? (
-                        <FastImage
-                          source={{ uri: currentFeed.image16x9PosterURL.uri }}
-                          style={HomeScreenStyles.posterImageStyles}
-                        />
-                      ) : (
-                        <FastImage
-                          source={{ uri: AppImages.tvshowPlaceholder }}
-                          style={HomeScreenStyles.posterImageStyles}
-                        />
-                      )}
-                    </View>
-                    <View style={HomeScreenStyles.postContentContainerStyles}>
-                      <MFText
-                        shouldRenderText
-                        displayText={currentFeed.title}
-                        textStyle={HomeScreenStyles.titleTextStyle}
-                      />
-                      <View
-                        style={
-                          HomeScreenStyles.posterContainerDescriptionStyles
-                        }
-                      >
-                        <MFText
-                          shouldRenderText
-                          displayText={
-                            currentFeed.CatalogInfo
-                              ? currentFeed.CatalogInfo.Description
-                              : currentFeed.metadataLine2
-                          }
-                          textStyle={[HomeScreenStyles.subtitleText]}
-                        />
-                      </View>
-                    </View>
-                  </>
+                  <MFMetaData
+                    currentFeed={currentFeed}
+                    rootContainerStyles={{
+                      flexDirection: "row",
+                      alignContent: "space-around",
+                    }}
+                  />
                 )}
               </View>
               <View style={HomeScreenStyles.contentContainer}>
