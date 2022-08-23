@@ -22,9 +22,8 @@ import { getAllHubs } from "../../config/queries";
 import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
-import { useDrawerStatus } from "@react-navigation/drawer";
-import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
 import MFMetaData from "../../components/MFMetaData";
+import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -37,7 +36,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [feedItem, setFeedItem] = useState<Feed>();
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const [open, setOpen] = useState(false);
-  const isDrawerOpen = useDrawerStatus() === "open";
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;
   const drawerRef: React.MutableRefObject<any> = useRef();
@@ -117,11 +115,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
 
   useEffect(() => {
     if (!open) {
-      console.log(
-        "Drawer status (Hopefully false):",
-        isDrawerOpen,
-        "setting TVMenuKey"
-      );
+      console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
       TVMenuControl.enableTVMenuKey();
       BackHandler.addEventListener("hardwareBackPress", backAction);
     }
