@@ -19,40 +19,42 @@ const AccountSettingsScreen: React.FunctionComponent<Props> = (props: any) => {
   }, [props.navigation]);
 
   return (
-    <SideMenuLayout
-      title="Account Settings"
-      subTitle="Account Signout"
-      contentContainerStyle={styles.contentContainer}
-    >
-      <View>
-        <Text style={[styles.titleText, { fontSize: 29 }]}>
-          You are currently logged in as:
-        </Text>
-        <Text style={styles.emailText}>
-          {GLOBALS.bootstrapSelectors?.AccountId}
-        </Text>
-      </View>
-      <View>
-        <Pressable
-          hasTVPreferredFocus={true}
-          onFocus={() => {
-            setFocussed(true);
-          }}
-          onBlur={() => {
-            setFocussed(false);
-          }}
-          style={
-            focussed
-              ? [styles.signoutButton, { backgroundColor: "#053C69" }]
-              : styles.signoutButton
-          }
-          onPress={() => {
-            setShowAlert(true);
-          }}
-        >
-          <Text style={[styles.titleText, { fontSize: 29 }]}>Sign Out</Text>
-        </Pressable>
-      </View>
+    <>
+      <SideMenuLayout
+        title="Account Settings"
+        subTitle="Account Signout"
+        contentContainerStyle={styles.contentContainer}
+      >
+        <View>
+          <Text style={[styles.titleText, { fontSize: 29 }]}>
+            You are currently logged in as:
+          </Text>
+          <Text style={styles.emailText}>
+            {GLOBALS.bootstrapSelectors?.AccountId}
+          </Text>
+        </View>
+        <View>
+          <Pressable
+            hasTVPreferredFocus={true}
+            onFocus={() => {
+              setFocussed(true);
+            }}
+            onBlur={() => {
+              setFocussed(false);
+            }}
+            style={
+              focussed
+                ? [styles.signoutButton, { backgroundColor: "#053C69" }]
+                : styles.signoutButton
+            }
+            onPress={() => {
+              setShowAlert(true);
+            }}
+          >
+            <Text style={[styles.titleText, { fontSize: 29 }]}>Sign Out</Text>
+          </Pressable>
+        </View>
+      </SideMenuLayout>
       {showAlert && (
         <MFPopup
           buttons={[
@@ -74,7 +76,7 @@ const AccountSettingsScreen: React.FunctionComponent<Props> = (props: any) => {
           description={"Are you sure that you want to sign out?"}
         />
       )}
-    </SideMenuLayout>
+    </>
   );
 };
 

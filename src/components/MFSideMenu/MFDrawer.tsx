@@ -9,20 +9,12 @@ import {
   Animated,
   Dimensions,
   StyleSheet,
-  View,
-  Text,
-  SafeAreaView,
-  Platform,
-  TouchableOpacity,
   Modal,
 } from "react-native";
-import PropTypes from "prop-types";
 import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-const isIOS = Platform.OS === "ios";
-const VERSION = parseInt(Platform.Version.toString(), 10);
 interface MFDrawerProps {
   open: boolean;
   drawerPercentage: number;
@@ -43,7 +35,7 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
   );
 
   useEffect(() => {
-    console.log('inside useEffect', expanded, props.open);
+    console.log("inside useEffect", expanded, props.open);
     expanded ? openDrawer() : closeDrawer();
   }, [expanded]);
   useImperativeHandle(ref, () => ({
@@ -53,17 +45,16 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
     close,
   }));
   const open = () => {
-    console.log('open');
+    console.log("open");
     setExpanded(true);
   };
   const close = () => {
-    console.log('close');
+    console.log("close");
     setExpanded(false);
   };
   const openDrawer = () => {
     console.log("Drawer is open", expanded);
-    const { drawerPercentage, animationTime, opacity } = props;
-    const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
+    const { animationTime, opacity } = props;
     Animated.parallel([
       Animated.timing(leftOffset, {
         toValue: 0,
@@ -96,9 +87,8 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
     ]).start();
   };
   const renderPush = () => {
-    const { children, drawerContent, drawerPercentage } = props;
+    const { drawerPercentage } = props;
     const animated = { transform: [{ translateX: leftOffset }] };
-    const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
     console.log("renderPush");
     return (
       <Modal
@@ -118,8 +108,7 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
         onDismiss={() => {
           console.log("Modal dismissed", expanded);
         }}
-        presentationStyle={'overFullScreen'}
-        
+        presentationStyle={"overFullScreen"}
       >
         <Animated.View
           style={[
@@ -142,59 +131,6 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
       </Modal>
     );
   };
-
-  //   const renderOverlay = () => {
-  //     const { children, drawerContent, drawerPercentage } = props;
-  //     const animated = { transform: [{ translateX: leftOffset }] };
-  //     const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
-  //     console.log("renderOverlay");
-
-  //     if (isIOS && VERSION >= 11) {
-  //       return (
-  //         <View style={[styles.main]}>
-  //           <Animated.View
-  //             style={[
-  //               animated,
-  //               styles.drawer,
-  //               { width: DRAWER_WIDTH, left: -DRAWER_WIDTH },
-  //             ]}
-  //           >
-  //             {drawerContent ? drawerContent : drawerFallback()}
-  //           </Animated.View>
-  //           <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-  //             {children}
-  //           </Animated.View>
-  //         </View>
-  //       );
-  //     }
-
-  //     return (
-  //       <View style={styles.main}>
-  //         <Animated.View
-  //           style={[
-  //             animated,
-  //             styles.drawer,
-  //             {
-  //               width: DRAWER_WIDTH,
-  //               left: -DRAWER_WIDTH,
-  //             },
-  //           ]}
-  //         >
-  //           {drawerContent ? drawerContent : drawerFallback()}
-  //         </Animated.View>
-  //         <Animated.View
-  //           style={[
-  //             styles.container,
-  //             {
-  //               opacity: fadeAnim,
-  //             },
-  //           ]}
-  //         >
-  //           {children}
-  //         </Animated.View>
-  //       </View>
-  //     );
-  //   };
   return renderPush();
 };
 export const MFDrawer = forwardRef(Drawer);

@@ -27,6 +27,7 @@ import {
       const listItem = [
         {
           title: "Primary Audio Language",
+          //@ts-ignore
           subTitle: AppStrings.ISO[audioLanguages.primary],
           action: "audio_language",
           type: "primary",
@@ -34,6 +35,7 @@ import {
         },
         {
           title: "Secondary Audio Language",
+          //@ts-ignore
           subTitle:  AppStrings.ISO[audioLanguages.secondary] || "Select audio language",
           action: "audio_language",
           type: "secondary",
