@@ -1,5 +1,4 @@
 import React from "react";
-import { View } from "react-native";
 import { Feed } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { enableRTL, layout2x3 } from "../config/constants";
@@ -7,9 +6,8 @@ import { format } from "../utils/DiscoveryUtils";
 import { HomeScreenStyles } from "../views/app/Homescreen.styles";
 import Styles from "./MFButtonsVariants/MFButtonStyles";
 import { TitlePlacement } from "./MFCard";
-import MFFilmStrip, { OverlayComponent } from "./MFFilmStrip/MFFilmStrip";
+import MFFilmStrip from "./MFFilmStrip/MFFilmStrip";
 import MFViewAllButton from "./MFFilmStrip/ViewAllComponent";
-import MFOverlay from "./MFOverlay";
 
 interface MFSwimLaneProps {
   feed: Feed;
@@ -17,10 +15,27 @@ interface MFSwimLaneProps {
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
+  onListEmptyElementFocus?:
+    | null
+    | ((event: SubscriberFeed) => void)
+    | undefined;
+  onListEmptyElementPress?:
+    | null
+    | ((event: SubscriberFeed) => void)
+    | undefined;
+  onListFooterElementFocus?:
+    | null
+    | ((event: SubscriberFeed) => void)
+    | undefined;
+  onListFooterElementOnPress?:
+    | null
+    | ((event: SubscriberFeed) => void)
+    | undefined;
 }
 
 const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
   const [page, setPage] = React.useState(0);
+  console.log(props);
   return (
     <MFFilmStrip
       limitItemsTo={16}
@@ -63,7 +78,8 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
               : HomeScreenStyles.landScapeCardImageStyles
           }
           focusedStyle={HomeScreenStyles.focusedStyle}
-          onPress={() => {}}
+          onPress={props.onListEmptyElementPress}
+          onFocus={props.onListEmptyElementFocus}
         />
       }
       shouldRenderFooter={
@@ -93,9 +109,12 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
               : HomeScreenStyles.landScapeCardImageStyles
           }
           focusedStyle={HomeScreenStyles.focusedStyle}
-          onPress={() => {}}
+          onPress={props.onListFooterElementOnPress}
+          onFocus={props.onListFooterElementFocus}
         />
       }
+      onListFooterElementOnPress={props.onListFooterElementOnPress}
+      onListFooterElementFocus={props.onListFooterElementFocus}
     />
   );
 };

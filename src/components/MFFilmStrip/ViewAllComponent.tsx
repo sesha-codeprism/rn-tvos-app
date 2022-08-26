@@ -29,7 +29,9 @@ const MFViewAllButton: React.FunctionComponent<MFViewAllButtonProps> = (
 
   const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
     setFocused(true);
+    props.onFocus && props.onFocus(event);
   };
+  console.log("ViewAll Props", props);
 
   return (
     <MFCard
@@ -42,6 +44,7 @@ const MFViewAllButton: React.FunctionComponent<MFViewAllButtonProps> = (
       shouldRenderText={true}
       titlePlacement={TitlePlacement.overlayCenter}
       onFocus={(event) => {
+        console.log("MFViewAll focused", props.onFocus);
         props.onFocus && props.onFocus(event);
       }}
       onPress={(event) => {

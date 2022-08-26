@@ -15,13 +15,14 @@ import MFMenu from "../../components/MFMenu/MFMenu";
 import MFLoader from "../../components/MFLoader";
 import { AppStrings } from "../../config/strings";
 import MFPopup from "../../components/MFPopup";
-import MFSwim from "../../components/MFSwim";
+import MFSwimProps from "../../components/MFSwim";
 import { getAllHubs } from "../../config/queries";
 import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import MFMetaData from "../../components/MFMetaData";
 import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
+import MFSwim from "../../components/MFSwim";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -93,15 +94,16 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
     }
   };
 
+  const clearCurrentHub = (event: SubscriberFeed) => {
+    console.log("Clear current hub");
+    setCurrentFeed(undefined);
+  };
+
   const backAction = () => {
     console.log("Capturing hadware back presses", open);
-    // console.log("drawerRef.current", drawerRef);
     if (open) {
       setOpen(false);
       drawerRef.current.close();
-      // if (isDrawerOpen) {
-      //@ts-ignore
-      // props.navigation.toggleDrawer();
       return true;
     } else {
       console.log(
@@ -113,11 +115,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
 
   useEffect(() => {
     if (!open) {
-      // console.log(
-      //   "Drawer status (Hopefully false):",
-      //   isDrawerOpen,
-      //   "setting TVMenuKey"
-      // );
       TVMenuControl.enableTVMenuKey();
       BackHandler.addEventListener("hardwareBackPress", backAction);
     }
@@ -170,7 +167,13 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
               </View>
               <View style={HomeScreenStyles.contentContainer}>
                 {!isLoading && (
-                  <MFSwim feeds={feeds} index={index} onFocus={onFeedFocus} />
+                  <MFSwim
+                    feeds={feeds}
+                    index={index}
+                    onFocus={onFeedFocus}
+                    onListEmptyElementFocus={clearCurrentHub}
+                    onListFooterElementFocus={clearCurrentHub}
+                  />
                 )}
               </View>
               {isLoading && <MFLoader transparent={true} />}

@@ -1,11 +1,5 @@
 import React, { useRef, useState } from "react";
-import {
-  FlatList,
-  StyleProp,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native";
+import { FlatList, StyleProp, TextStyle, View, ViewStyle } from "react-native";
 // import { FeedObject } from '../../@types/FeedObject';
 import Styles from "../MFButtonsVariants/MFButtonStyles";
 import MFCard from "../MFCard";
@@ -99,6 +93,14 @@ export interface MFFilmStripProps {
 
   libraryItems?: Array<SubscriberFeed>;
   renderLibraryItemList?: boolean;
+  onListFooterElementFocus?:
+    | null
+    | ((event: SubscriberFeed) => void)
+    | undefined;
+  onListFooterElementOnPress?:
+    | null
+    | ((event: SubscriberFeed) => void)
+    | undefined;
 }
 
 /**
@@ -207,7 +209,8 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = (props) => {
               style={[HomeScreenStyles.landScapeCardStyles]}
               imageStyle={HomeScreenStyles.landScapeCardImageStyles}
               focusedStyle={HomeScreenStyles.focusedStyle}
-              onPress={() => {}}
+              onPress={props.onListFooterElementOnPress}
+              onFocus={props.onListFooterElementFocus}
             />
           </View>
         )
