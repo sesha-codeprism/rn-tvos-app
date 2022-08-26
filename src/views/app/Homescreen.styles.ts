@@ -70,8 +70,6 @@ export const HomeScreenStyles = StyleSheet.create({
     borderRadius: 8
   },
   posterViewContainerStyles: {
-    flexDirection: "row",
-    alignContent: "space-around",
     marginTop: 50,
     paddingHorizontal: 50,
     height: SCREEN_HEIGHT * 0.3,
@@ -91,6 +89,8 @@ export const HomeScreenStyles = StyleSheet.create({
   postContentContainerStyles: {
     justifyContent: "flex-start",
     flex: 0.62,
+    marginTop: 50,
+    paddingHorizontal: 50
   },
   posterContainerDescriptionStyles: { marginTop: 10 },
 

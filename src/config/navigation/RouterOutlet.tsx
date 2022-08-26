@@ -18,7 +18,6 @@ import PurchaseLockScreen from "../../views/app/settings_screens/parental_contro
 import VideoQualityScreen from "../../views/app/settings_screens/display/video_quality.screen";
 import SubtitleLanguageScreen from "../../views/app/settings_screens/display/subtitle_language.screen";
 import { enableScreens } from "react-native-screens";
-import { AppNavigator } from "./MainStack.Navigator";
 import AudioScreen from "../../views/app/settings_screens/audio/audio.screen";
 import AudioLanguageScreen from "../../views/app/settings_screens/audio/audio_language.screen";
 import DescriptiveAudioScreen from "../../views/app/settings_screens/audio/descriptive_audio.screen";
@@ -26,6 +25,20 @@ import SystemSettingsScreen from "../../views/app/settings_screens/system/system
 import SystemInformationScreen from "../../views/app/settings_screens/system/system_info.screen";
 import DvrSettingsScreen from "../../views/app/settings_screens/dvr/dvr.screen";
 import StopRecordingScreen from "../../views/app/settings_screens/dvr/stop_recording.screen";
+import { GLOBALS } from "../../utils/globals";
+import { getStore } from "../../utils/helpers";
+import GuideScreen from "../../views/app/Guide.screen";
+import HomeScreen from "../../views/app/Home.screen";
+import ChooseProfileScreen from "../../views/app/profile_screens/Choose.profile";
+import CreateProfileScreen from "../../views/app/profile_screens/Create.profile.screen";
+import ProfileFinalisationScreen from "../../views/app/profile_screens/Profile.Finalise";
+import ProfilePersonalizationScreen from "../../views/app/profile_screens/Profile.personalization";
+import ProfileScreen from "../../views/app/profile_screens/Profile.screen";
+import WhoIsWatchingScreen from "../../views/app/WhoIsWatching.screen";
+import LoginScreen from "../../views/auth/Login.screen";
+import ShortCodeScreen from "../../views/auth/Shortcode.screen";
+import SplashScreen from "../../views/auth/Splash.screen";
+import SearchScreen from "../../views/search.screen";
 interface RouterOutletProps {}
 const { width, height } = Dimensions.get("window");
 
@@ -177,6 +190,73 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
         />
       </Stack.Navigator>
     </NavigationContainer>
+  );
+};
+export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
+  props
+) => {
+  const setStore = () => {
+    try {
+      // Attempt to load local store
+      var store = getStore();
+      console.log("Store", store);
+    } catch (e) {
+      console.log("Some error", e);
+    }
+    if (store) {
+      GLOBALS.store = JSON.parse(store);
+      console.log("Settings store successful", GLOBALS.store);
+      const isLoggedIn =
+        GLOBALS.store.accessToken !== null &&
+        GLOBALS.store.refreshToken !== null;
+      setIsSignedIn(isLoggedIn);
+    }
+  };
+  const [isSignedIn, setIsSignedIn] = React.useState(false);
+
+  useEffect(() => {
+    setStore();
+  }, []);
+
+  return (
+    <Stack.Navigator
+      initialRouteName="splash"
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false,
+      }}
+    >
+      <Stack.Screen name={Routes.Splash} component={SplashScreen} />
+      <Stack.Screen
+        name={Routes.WhoIsWatching}
+        component={WhoIsWatchingScreen}
+      />
+      <Stack.Screen name={Routes.Login} component={LoginScreen} />
+      <Stack.Screen name={Routes.ShortCode} component={ShortCodeScreen} />
+
+      <Stack.Screen name={Routes.Home} component={HomeScreen} />
+      <Stack.Screen name={Routes.Guide} component={GuideScreen} />
+      <Stack.Screen name={Routes.Search} component={SearchScreen} />
+      {/* <Stack.Screen name={Routes.Test} component={TestScreen} /> */}
+      <Stack.Screen name={Routes.Profile} component={ProfileScreen} />
+      <Stack.Screen
+        name={Routes.CreateProfile}
+        component={CreateProfileScreen}
+      />
+      <Stack.Screen
+        name={Routes.ChooseProfile}
+        component={ChooseProfileScreen}
+      />
+      <Stack.Screen
+        name={Routes.PersonlizeProfile}
+        component={ProfilePersonalizationScreen}
+      />
+      <Stack.Screen
+        name={Routes.ProfileFinalise}
+        component={ProfileFinalisationScreen}
+      />
+      {/* {isSignedIn ? <></> : <></>} */}
+    </Stack.Navigator>
   );
 };
 

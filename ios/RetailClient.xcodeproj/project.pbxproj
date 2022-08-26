@@ -70,6 +70,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* RetailClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RetailClientTests.m */; };
 		41BF5F3596F87FEE707DDD11 /* libPods-RetailClient-RetailClientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F21F13455730034D850CD1C /* libPods-RetailClient-RetailClientTests.a */; };
 		47EB63F3390701B2260096C6 /* libPods-RetailClient-tvOS-RetailClient-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0216F1136BF7C90703C880F /* libPods-RetailClient-tvOS-RetailClient-tvOSTests.a */; };
+		593AF51228AE700E002740B8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 593AF51128AE700E002740B8 /* CoreData.framework */; };
 		59A99A9A2853229A00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
 		59A99A9B2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
 		59A99A9C2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
@@ -202,6 +203,7 @@
 		388308430DF4BE056B0CEF13 /* Pods-RetailClient-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS.release.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS/Pods-RetailClient-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		3BDF8C4CCF278F944E8C6CBF /* Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS-RetailClient-tvOSTests/Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		4F21F13455730034D850CD1C /* libPods-RetailClient-RetailClientTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RetailClient-RetailClientTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		593AF51128AE700E002740B8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS15.4.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		59A99A912853229900560F39 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraBold.ttf"; path = "../src/assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		59A99A922853229900560F39 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		59A99A932853229900560F39 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				593AF51228AE700E002740B8 /* CoreData.framework in Frameworks */,
 				EE57DEA5314790D63C074D03 /* libPods-RetailClient-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -379,6 +382,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				593AF51128AE700E002740B8 /* CoreData.framework */,
 				8168723E2730760300960AFF /* Pods */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
@@ -562,6 +566,7 @@
 					};
 					2D02E48F1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = Y6TVXWHZRK;
 						DevelopmentTeam = Y6TVXWHZRK;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
@@ -1141,10 +1146,12 @@
 				DEVELOPMENT_TEAM = Y6TVXWHZRK;
 				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "RetailClient-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.7;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1181,6 +1188,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = Y6TVXWHZRK;
 				ENABLE_BITCODE = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "RetailClient-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1215,6 +1223,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = Y6TVXWHZRK;
+				DEVELOPMENT_TEAM = Y6TVXWHZRK;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "RetailClient-tvOSTests/Info.plist";
@@ -1248,6 +1257,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = Y6TVXWHZRK;
 				DEVELOPMENT_TEAM = Y6TVXWHZRK;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "RetailClient-tvOSTests/Info.plist";
