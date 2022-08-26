@@ -2,21 +2,38 @@ import { BackHandler, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFPopup from "../../../components/MFPopup";
-import { GLOBALS } from "../../../utils/globals";
+import { GLOBALS, resetGlobalStore } from "../../../utils/globals";
 import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
-interface Props {
+import { updateStore } from "../../../utils/helpers";
+import { Routes } from "../../../config/navigation/RouterOutlet";
+import { resetCaches } from "../../../config/queries";
+import { useNavigation } from "@react-navigation/native";
+
+interface AccountSettingsProps {
   navigation: NativeStackNavigationProp<any>;
 }
-const AccountSettingsScreen: React.FunctionComponent<Props> = (props: any) => {
+const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
+  props
+) => {
   const [focussed, setFocussed] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  useEffect(() => {
-    // const unsubscribe = props.navigation.addListener("beforeRemove", () => {
-    //   // do something
-    //   console.warn("Warning before removing component acc settings");
-    // });
-    // return unsubscribe;
-  }, [props.navigation]);
+  const [isTesting, setTesting] = useState(true);
+  useEffect(() => {}, [props.navigation]);
+
+  const logUserOut = async () => {
+    if (__DEV__ && !isTesting) {
+      /** Get default store for user */
+      const resetStore = resetGlobalStore();
+      /** Update the current Async NSUserDefaults store with resetStore */
+      updateStore(JSON.stringify(resetStore));
+      /** Reset the Query cache to make sure no cached API data is returned by React-Query */
+      resetCaches();
+    } else {
+      console.log("Test functions.. so just simply trying to navigate");
+    }
+    /** Async store is done.. now move user to logout screen */
+    GLOBALS.rootNavigation.replace(Routes.ShortCode);
+  };
 
   return (
     <SideMenuLayout
@@ -59,9 +76,9 @@ const AccountSettingsScreen: React.FunctionComponent<Props> = (props: any) => {
             {
               title: "Yes",
               onPress: () => {
-                console.log("signout pressed");
                 setShowAlert(false);
-                props.navigation.goBack();
+                console.log("signout pressed");
+                logUserOut();
               },
             },
             {

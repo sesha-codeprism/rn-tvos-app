@@ -10,8 +10,6 @@ import { debounceTime, enableRTL } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
-import FastImage from "react-native-fast-image";
-import MFText from "../../components/MFText";
 import { Feed, FeedItem } from "../../@types/HubsResponse";
 import MFMenu from "../../components/MFMenu/MFMenu";
 import MFLoader from "../../components/MFLoader";
@@ -35,10 +33,10 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [showPopup, togglePopup] = useState(false);
   const [feedItem, setFeedItem] = useState<Feed>();
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
+  const drawerRef: React.MutableRefObject<any> = useRef();
   const [open, setOpen] = useState(false);
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;
-  const drawerRef: React.MutableRefObject<any> = useRef();
   const { data, isLoading } = getAllHubs();
   props.navigation.addListener("focus", () => {
     console.log("focused");
@@ -72,8 +70,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
             replace_hub[0].Name = AppStrings.str_hub_name_you;
           } else {
             /** If user created profile is chosen to login, replace with profile name */
-            // replace_hub[0].Name =
-            // GLOBALS.userProfile.Name || AppStrings.str_hub_name_you;
             if (GLOBALS.userProfile.Name!.length > 10) {
               replace_hub[0].Name =
                 GLOBALS.userProfile.Name!.substring(0, 9) + "..." ||
@@ -92,6 +88,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
       }
       setHubs(hubsResponse);
       setFeeds(hubsResponse[index]);
+      GLOBALS.rootNavigation = props.navigation;
     }
   };
 
@@ -208,7 +205,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
         closeOnPressBack={false}
         navigation={props.navigation}
         drawerContent={false}
-      ></MFDrawer>
+      />
       {/* )} */}
     </View>
   );

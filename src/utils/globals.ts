@@ -46,6 +46,8 @@ interface GLOBALSType {
   userProfile?: UserProfile;
   /** Token for Duplex connectivity */
   continuationToken: string;
+  /** Root navigation */
+  rootNavigation: any;
   /** Async store data */
   store: {
     accessToken: string | null;
@@ -93,6 +95,7 @@ export const GLOBALS: GLOBALSType = {
     AdditionalFields: { optOutPersonalDataUse: "false" },
     UserCreated: true,
   },
+  rootNavigation: null,
   bootstrapSelectors: null,
   continuationToken: "",
   store: {
@@ -131,7 +134,7 @@ export const GLOBALS: GLOBALSType = {
 };
 
 export const resetGlobalStore = () => {
-  GLOBALS.store = {
+  return {
     accessToken: null,
     refreshToken: null,
     title: null,
@@ -162,5 +165,5 @@ export const resetGlobalStore = () => {
         descriptiveAudio: "",
       },
     },
-  };
+  }
 };
