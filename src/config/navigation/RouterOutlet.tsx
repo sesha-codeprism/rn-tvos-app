@@ -39,6 +39,7 @@ import LoginScreen from "../../views/auth/Login.screen";
 import ShortCodeScreen from "../../views/auth/Shortcode.screen";
 import SplashScreen from "../../views/auth/Splash.screen";
 import SearchScreen from "../../views/search.screen";
+import FossLicenseScreen from "../../views/app/settings_screens/system/foss_license";
 interface RouterOutletProps {}
 const { width, height } = Dimensions.get("window");
 
@@ -79,6 +80,7 @@ export const Routes = {
   SystemInformation: "system_info",
   DVRSettings: "dvr_settings",
   StopRecording: "stop_recording",
+  FOSSLicense: 'foss_license'
 };
 
 enableScreens();
@@ -187,6 +189,10 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
         <Stack.Screen
           name={Routes.StopRecording}
           component={StopRecordingScreen}
+        />
+        <Stack.Screen
+          name={Routes.FOSSLicense}
+          component={FossLicenseScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
