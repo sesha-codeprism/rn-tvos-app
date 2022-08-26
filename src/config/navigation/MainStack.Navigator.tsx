@@ -14,7 +14,7 @@ import LoginScreen from "../../views/auth/Login.screen";
 import ShortCodeScreen from "../../views/auth/Shortcode.screen";
 import SplashScreen from "../../views/auth/Splash.screen";
 import SearchScreen from "../../views/search.screen";
-import { Routes } from "./RouterOutlet";
+import { Routes, SettingsNavigator } from "./RouterOutlet";
 
 const Stack = createNativeStackNavigator();
 

@@ -35,6 +35,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const drawerRef: React.MutableRefObject<any> = useRef();
   const [open, setOpen] = useState(false);
+  // const isDrawerOpen = useDrawerStatus() === "open";
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;
   const { data, isLoading } = getAllHubs();
@@ -94,7 +95,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
 
   const backAction = () => {
     console.log("Capturing hadware back presses", open);
-    console.log("drawerRef.current", drawerRef);
+    // console.log("drawerRef.current", drawerRef);
     if (open) {
       setOpen(false);
       drawerRef.current.close();
@@ -112,7 +113,11 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
 
   useEffect(() => {
     if (!open) {
-      console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
+      // console.log(
+      //   "Drawer status (Hopefully false):",
+      //   isDrawerOpen,
+      //   "setting TVMenuKey"
+      // );
       TVMenuControl.enableTVMenuKey();
       BackHandler.addEventListener("hardwareBackPress", backAction);
     }

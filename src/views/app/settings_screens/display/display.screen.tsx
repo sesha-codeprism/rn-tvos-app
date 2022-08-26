@@ -39,6 +39,7 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
       },
       {
         title: "Primary Subtitle Language",
+        //@ts-ignore
         subTitle: AppStrings.ISO[subtitleConfig.primary],
         action: "subtitle_language",
         type: "primary",
@@ -48,6 +49,7 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
         title: "Secondary Subtitle Language",
         subTitle:
           subtitleConfig.secondary !== "None"
+          //@ts-ignore
             ? AppStrings.ISO[subtitleConfig.secondary]
             : subtitleConfig.secondary,
         action: "subtitle_language",
@@ -56,6 +58,7 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
       },
       {
         title: "Video Quality",
+        //@ts-ignore
         subTitle: AppStrings[bitrates10ft.localizedText],
         action: "video_quality",
         icon: "",
@@ -135,61 +138,6 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
           );
         }}
       />
-      {/* {list.map((item, index) => {
-        return (
-          <Pressable
-            onFocus={() => {
-              setFocussed(index);
-            }}
-            onPress={() => {
-              index === 6
-                ? () => {
-                    props.navigation.toggleDrawer();
-                    setFocussed("");
-                  }
-                : item.action !== ""
-                ? item.type
-                  ? props.navigation.navigate(item.action, {
-                      type: item.type,
-                    })
-                  : props.navigation.navigate(item.action)
-                : null;
-            }}
-            style={
-              index === focussed
-                ? { ...MFSettingsStyles.containerActive, ...styles.container }
-                : styles.container
-            }
-            key={index}
-          >
-            <View>
-              <Text
-                style={[
-                  styles.listText,
-                  { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
-                ]}
-              >
-                {item.title}
-              </Text>
-              <Text
-                style={[
-                  styles.listText,
-                  {
-                    color: index === focussed ? "#EEEEEE" : "#A7A7A7",
-                    fontSize: 23,
-                  },
-                ]}
-              >
-                {item.subTitle}
-              </Text>
-            </View>
-            <Image
-              source={AppImages.arrow_right}
-              style={{ width: 15, height: 30 }}
-            />
-          </Pressable>
-        );
-      })} */}
     </SideMenuLayout>
   );
 };

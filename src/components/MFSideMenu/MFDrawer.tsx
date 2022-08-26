@@ -9,20 +9,12 @@ import {
   Animated,
   Dimensions,
   StyleSheet,
-  View,
-  Text,
-  SafeAreaView,
-  Platform,
-  TouchableOpacity,
   Modal,
 } from "react-native";
-import PropTypes from "prop-types";
 import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-const isIOS = Platform.OS === "ios";
-const VERSION = parseInt(Platform.Version.toString(), 10);
 interface MFDrawerProps {
   open: boolean;
   drawerPercentage: number;
@@ -62,8 +54,7 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
   };
   const openDrawer = () => {
     console.log("Drawer is open", expanded);
-    const { drawerPercentage, animationTime, opacity } = props;
-    const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
+    const { animationTime, opacity } = props;
     Animated.parallel([
       Animated.timing(leftOffset, {
         toValue: 0,
@@ -96,9 +87,8 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
     ]).start();
   };
   const renderPush = () => {
-    const { children, drawerContent, drawerPercentage } = props;
+    const { drawerPercentage } = props;
     const animated = { transform: [{ translateX: leftOffset }] };
-    const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
     console.log("renderPush");
     return (
       <Modal
