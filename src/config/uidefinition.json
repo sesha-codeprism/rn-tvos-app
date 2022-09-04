@@ -312,6 +312,20 @@
       "subComponents": []
     }
   ],
+  "onScreenLanguages":[
+    {
+      "title": "English (US)",
+      "action": "en"
+    },
+    {
+      "title": "English (Canada)",
+      "action": "en-ca"
+    },
+    {
+      "title": "Francais (Canada)",
+      "action": "ca"
+    }
+  ],
   "config": {
     "enableRTL": false,
     "debounceTime": 500,

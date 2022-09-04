@@ -5,12 +5,8 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import {
-  Animated,
-  Dimensions,
-  StyleSheet,
-  Modal,
-} from "react-native";
+import { Animated, Dimensions, StyleSheet, Modal } from "react-native";
+import { enableRTL } from "../../config/constants";
 import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -31,7 +27,9 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
   const [expanded, setExpanded] = useState(props.open);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
   const leftOffset = new Animated.Value(
-    SCREEN_WIDTH * (props.drawerPercentage / 100)
+    enableRTL
+      ? SCREEN_WIDTH * (props.drawerPercentage / 100)
+      : -(SCREEN_WIDTH * (props.drawerPercentage / 100))
   );
 
   useEffect(() => {
@@ -53,14 +51,22 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
     setExpanded(false);
   };
   const openDrawer = () => {
-    console.log("Drawer is open", expanded);
-    const { animationTime, opacity } = props;
+    const { animationTime, opacity, drawerPercentage } = props;
+    const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
+    console.log("Drawer is open", expanded, DRAWER_WIDTH, enableRTL);
+
     Animated.parallel([
-      Animated.timing(leftOffset, {
-        toValue: 0,
-        duration: animationTime,
-        useNativeDriver: true,
-      }),
+      enableRTL
+        ? Animated.timing(leftOffset, {
+            toValue: 0,
+            duration: animationTime,
+            useNativeDriver: true,
+          })
+        : Animated.timing(leftOffset, {
+            toValue: 0,
+            duration: animationTime,
+            useNativeDriver: true,
+          }),
       Animated.timing(fadeAnim, {
         toValue: opacity,
         duration: animationTime,
@@ -74,11 +80,17 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
     const { animationTime, drawerPercentage } = props;
     const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
     Animated.parallel([
-      Animated.timing(leftOffset, {
-        toValue: DRAWER_WIDTH,
-        duration: animationTime,
-        useNativeDriver: true,
-      }),
+      enableRTL
+        ? Animated.timing(leftOffset, {
+            toValue: DRAWER_WIDTH,
+            duration: animationTime,
+            useNativeDriver: true,
+          })
+        : Animated.timing(leftOffset, {
+            toValue: 0,
+            duration: animationTime,
+            useNativeDriver: true,
+          }),
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: animationTime,
@@ -100,7 +112,7 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
           closeDrawer();
           console.log("Modal has been closed.", expanded);
         }}
-        style={styles.main}
+        style={[styles.main, enableRTL ? { right: 0 } : { left: 0 }]}
         onDismiss={() => {
           console.log("Modal dismissed", expanded);
         }}
@@ -116,6 +128,7 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
           <Animated.View
             style={[
               styles.container,
+              enableRTL ? { right: 0 } : { left: 0 },
               {
                 opacity: fadeAnim,
               },
@@ -134,14 +147,14 @@ export const MFDrawer = forwardRef(Drawer);
 const styles = StyleSheet.create({
   main: {
     position: "absolute",
-    right: 0,
+    // right: 0,
     top: 0,
     width: SCREEN_WIDTH,
     backgroundColor: "green",
   },
   container: {
     position: "absolute",
-    right: 0,
+    // right: 0,
     width: SCREEN_WIDTH * 0.37,
     height: SCREEN_HEIGHT,
     zIndex: 0,

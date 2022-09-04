@@ -13,23 +13,11 @@ import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
+import { appUIDefinition } from "../../../../config/constants";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const list = [
-  {
-    title: "English (US)",
-    action: "en",
-  },
-  {
-    title: "English (Canada)",
-    action: "en-ca",
-  },
-  {
-    title: "Francais (Canada)",
-    action: "ca",
-  },
-];
+const list = appUIDefinition.onScreenLanguages;
 const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedLang, setSelectedLang] = useState<any>("");
