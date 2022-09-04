@@ -76,8 +76,13 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
                 console.log(duplexEndpoint);
                 console.log("GLOBALS.Definition", GLOBALS.bootstrapSelectors);
                 console.log("StoreID:", DefaultStore.Id, DefaultStore);
+                console.log(
+                  "Current locale",
+                  GLOBALS.store.settings.display.onScreenLanguage
+                );
               }
               props.navigation.replace(Routes.WhoIsWatching);
+
               duplex.initialize(duplexEndpoint);
             });
           })

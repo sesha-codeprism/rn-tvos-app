@@ -13,6 +13,7 @@ import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import _ from "lodash";
+import { AppStrings } from "../../../../config/strings";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -26,24 +27,28 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
       const values = GLOBALS.store.settings.parentalControll;
       const listItem = [
         {
-          title: "Content Locks",
-          subTitle: _.isEmpty(values.contentLock) ? "Unrestricted" : "Locked",
+          title: AppStrings.str_settings_pcon_contentlock,
+          subTitle: _.isEmpty(values.contentLock)
+            ? AppStrings.str_rating_unrestricted
+            : AppStrings.str_pcon_challenge_pinLockedState,
           action: "content_lock",
           icon: "",
         },
         {
-          title: "Adult Locks",
+          title: AppStrings.str_settings_pcon_adultlock_description,
           subTitle:
             values.adultLock["adultContentMasking"] ||
             values.adultLock["allowAdultLocks"]
-              ? "Locked"
-              : "Unrestricted",
+              ? AppStrings.str_pcon_challenge_pinLockedState
+              : AppStrings.str_rating_unrestricted,
           action: "adult_lock",
           icon: "",
         },
         {
-          title: "Purchase Locks",
-          subTitle: values.purchaseLock["locked"] ? "Locked" : "Unrestricted",
+          title: AppStrings.str_settings_pcon_purchaselock,
+          subTitle: values.purchaseLock["locked"]
+            ? AppStrings.str_pcon_challenge_pinLockedState
+            : AppStrings.str_rating_unrestricted,
           action: "purchase_lock",
           icon: "",
         },
@@ -68,7 +73,10 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
   ]);
 
   return (
-    <SideMenuLayout title="Settings" subTitle="Parental Controls">
+    <SideMenuLayout
+      title={AppStrings.str_navigation_settings}
+      subTitle={AppStrings.str_settings_pcon_label}
+    >
       <FlatList
         data={list}
         keyExtractor={(item) => item.title}

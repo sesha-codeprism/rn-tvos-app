@@ -80,7 +80,7 @@ export const Routes = {
   SystemInformation: "system_info",
   DVRSettings: "dvr_settings",
   StopRecording: "stop_recording",
-  FOSSLicense: 'foss_license'
+  FOSSLicense: "foss_license",
 };
 
 enableScreens();
@@ -90,21 +90,6 @@ const Drawer = createDrawerNavigator();
 export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
   props
 ) => {
-  // const isDrawerOpen = useDrawerStatus() === "open";
-
-  // const backAction = () => {
-  //   console.log("Capturing hadware back presses");
-  //   return true;
-  // };
-  // useEffect(() => {
-  //   if (isDrawerOpen) {
-  //     TVMenuControl.enableTVMenuKey();
-  //     BackHandler.addEventListener("hardwareBackPress", backAction);
-  //   } else {
-  //     TVMenuControl.disableTVMenuKey();
-  //     BackHandler.removeEventListener("hardwareBackPress", backAction);
-  //   }
-  // }, [isDrawerOpen]);
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator
@@ -115,13 +100,6 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           animationTypeForReplace: "push",
           gestureEnabled: false,
         }}
-        // screenListeners={{
-        //   beforeRemove: (e: any) => {
-        //     // Prevent default action
-        //     console.log('removing/ closing drawer')
-        //     e.preventDefault();
-        //   },
-        // }}
       >
         <Stack.Screen
           name={Routes.Settings}
@@ -190,10 +168,7 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           name={Routes.StopRecording}
           component={StopRecordingScreen}
         />
-        <Stack.Screen
-          name={Routes.FOSSLicense}
-          component={FossLicenseScreen}
-        />
+        <Stack.Screen name={Routes.FOSSLicense} component={FossLicenseScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -5,13 +5,9 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import {
-  Animated,
-  Dimensions,
-  StyleSheet,
-  Modal,
-} from "react-native";
+import { Animated, Dimensions, StyleSheet, Modal } from "react-native";
 import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
+import { AppStrings } from "../../config/strings";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -90,6 +86,8 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
     const { drawerPercentage } = props;
     const animated = { transform: [{ translateX: leftOffset }] };
     console.log("renderPush");
+    console.log("AppStrings - OnScreenLanguageScreen", AppStrings);
+
     return (
       <Modal
         animationType="none"

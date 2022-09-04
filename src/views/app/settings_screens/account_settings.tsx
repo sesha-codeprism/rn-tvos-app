@@ -8,6 +8,7 @@ import { updateStore } from "../../../utils/helpers";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import { resetCaches } from "../../../config/queries";
 import { useNavigation } from "@react-navigation/native";
+import { AppStrings } from "../../../config/strings";
 
 interface AccountSettingsProps {
   navigation: NativeStackNavigationProp<any>;
@@ -17,7 +18,7 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
 ) => {
   const [focussed, setFocussed] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [isTesting, setTesting] = useState(true);
+  const [isTesting, setTesting] = useState(false);
   useEffect(() => {}, [props.navigation]);
 
   const logUserOut = async () => {
@@ -38,13 +39,13 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
   return (
     <>
       <SideMenuLayout
-        title="Account Settings"
-        subTitle="Account Signout"
+        title={AppStrings.str_settings_signout_Account_Settings}
+        subTitle={AppStrings.str_settings_signout_Account}
         contentContainerStyle={styles.contentContainer}
       >
         <View>
           <Text style={[styles.titleText, { fontSize: 29 }]}>
-            You are currently logged in as:
+            {AppStrings.str_settings_signout_Account_loginaccount_label}
           </Text>
           <Text style={styles.emailText}>
             {GLOBALS.bootstrapSelectors?.AccountId}
@@ -68,7 +69,9 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
               setShowAlert(true);
             }}
           >
-            <Text style={[styles.titleText, { fontSize: 29 }]}>Sign Out</Text>
+            <Text style={[styles.titleText, { fontSize: 29 }]}>
+              {AppStrings.str_settings_signout}
+            </Text>
           </Pressable>
         </View>
       </SideMenuLayout>

@@ -5,81 +5,77 @@ import MFSettingsStyles from "../../../config/styles/MFSettingsStyles";
 import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
 import { AppImages } from "../../../assets/images";
 import { Routes } from "../../../config/navigation/RouterOutlet";
-const menu = [
-  {
-    title: "Account Settings",
-    action: "accounts_screen",
-    icon: "",
-  },
-  {
-    title: "Parental Controls",
-    action: "parental_controll",
-    icon: "",
-  },
-  {
-    title: "Display",
-    action: "display",
-    icon: "",
-  },
-  {
-    title: "Audio",
-    action: "audio",
-    icon: "",
-  },
-  {
-    title: "DVR Settings",
-    action: "dvr_settings",
-    icon: "",
-  },
-  {
-    title: "System",
-    action: "system_settings",
-    icon: "",
-  },
-  // {
-  //   title: "Developers",
-  //   action: "shortCode",
-  //   icon: "",
-  // },
-];
+import { AppStrings } from "../../../config/strings";
 interface Props {
   navigation?: NativeStackNavigationProp<any>;
 }
 const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
-  const [focussed, setFocussed] = useState<any>(0);
+  const [focused, setFocused] = useState<any>(0);
+  const menu = [
+    {
+      title: AppStrings.str_settings_account_label,
+      action: "accounts_screen",
+      icon: "",
+    },
+    {
+      title: AppStrings.str_settings_pcon_label,
+      action: "parental_controll",
+      icon: "",
+    },
+    {
+      title: AppStrings.str_settings_display_label,
+      action: "display",
+      icon: "",
+    },
+    {
+      title: AppStrings.str_playback_audio_title,
+      action: "audio",
+      icon: "",
+    },
+    {
+      title: AppStrings.str_menu_dvr,
+      action: "dvr_settings",
+      icon: "",
+    },
+    {
+      title: AppStrings.str_settings_system_tab_label,
+      action: "system_settings",
+      icon: "",
+    },
+    // {
+    //   title: "Developers",
+    //   action: "shortCode",
+    //   icon: "",
+    // },
+  ];
 
-  useEffect(() => {
-    // const unsubscribe = props.navigation.addListener("beforeRemove", () => {
-    //   // do something
-    //   // console.warn("Warning before removing component");
-    // });
-    // return unsubscribe;
-  }, []);
+  useEffect(() => {}, [AppStrings]);
   return (
-    <SideMenuLayout subTitle="Settings">
+    <SideMenuLayout subTitle={AppStrings.str_navigation_settings}>
       <FlatList
         data={menu}
         keyExtractor={(item) => item.title}
         renderItem={({ item, index }) => {
+          console.log(item.title);
           return (
             <Pressable
               hasTVPreferredFocus={index === 0 ? true : false}
               onFocus={() => {
-                setFocussed(index);
+                setFocused(index);
               }}
               onPress={() => {
                 if (item.action !== "") {
                   props.navigation.navigate(item.action);
-                } 
-                else if (index === menu.length - 1) {
-                  props.navigation.navigate('app', { screen: Routes.ShortCode })
-                }
-                 else {
+                } else if (index === menu.length - 1) {
+                  props.navigation.navigate("app", {
+                    screen: Routes.ShortCode,
+                  });
+                } else {
                   null;
                 }
               }}
               style={
-                index === focussed
+                index === focused
                   ? {
                       ...MFSettingsStyles.containerActive,
                       ...MFSettingsStyles.container,
@@ -92,7 +88,7 @@ const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
               <Text
                 style={[
                   MFSettingsStyles.listText,
-                  { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
+                  { color: index === focused ? "#EEEEEE" : "#A7A7A7" },
                 ]}
               >
                 {item.title}

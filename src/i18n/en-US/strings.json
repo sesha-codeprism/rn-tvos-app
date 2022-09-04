@@ -1,6 +1,6 @@
 {
   "pair_device": "Pair Device",
-  "pair_directions_1": "Open MediaKind app (browser, phone or tablet) and go to Settings > Device Settings",
+  "pair_directions_1": "  ",
   "or_string": "Or",
   "pair_directions_2": "Open a browser (computer, phone or tablet) and go to",
   "url_link": "mediakind/activate",
@@ -984,7 +984,7 @@
   "str_settings_download_label": "Downloads",
   "str_settings_download_network_label": "Use Cellular Data",
   "str_settings_download_network_description": "Downloading video over cellular connection such as 3G and LTE may incur charges from your provider.",
-  "str_settings_download_quality_description": "Select the default download quality. Higher quality downloads will require more storage space, data and time to download.",
+  "str_settings_download_quality_description": "Select the defaulstr_settings_subtitle_primary_labelt download quality. Higher quality downloads will require more storage space, data and time to download.",
   "str_settings_download_quality_label": "Video Quality",
   "str_settings_download_language_label": "Language",
   "str_settings_download_language_description": "Choose default language for downloads.",

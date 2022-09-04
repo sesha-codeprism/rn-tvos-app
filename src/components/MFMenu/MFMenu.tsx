@@ -13,6 +13,8 @@ import { Routes } from "../../config/navigation/RouterOutlet";
 import { GlobalContext } from "../../contexts/globalContext";
 import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
+import { useDispatch } from "react-redux";
+import { setLanguage } from "../../redux/language_slice";
 
 interface MFMenuProps {
   navigation: any;
@@ -29,6 +31,8 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   const [isIdentityAssigned, setIdentityAssigned] = useState(false);
   const globalContext = useContext(GlobalContext);
   const [focused, setFocused] = useState("");
+  const dispatch = useDispatch();
+
   const testing = false;
   const _onPressMain = (event: GestureResponderEvent, index: number) => {
     props.onPress && props.onPress(index);
@@ -103,6 +107,9 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                 }}
                 onBlur={() => {
                   setFocused("");
+                }}
+                onPress={() => {
+                  dispatch(setLanguage("jp"));
                 }}
               />
             </View>

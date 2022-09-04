@@ -33,6 +33,11 @@ interface Ratings {
   subTitle: string;
   title: string;
 }
+
+interface OnScreenLanguage {
+  title: string;
+  languageCode: string
+}
 interface GLOBALSType {
   /** Information about the device running the app */
   deviceInfo: MFDeviceInfo;
@@ -64,7 +69,7 @@ interface GLOBALSType {
           tracks: string[];
         };
         bitrates10ft: any;
-        onScrreenLanguage: any;
+        onScreenLanguage: OnScreenLanguage;
         closedCaption: any;
       };
       audio: {
@@ -117,7 +122,11 @@ export const GLOBALS: GLOBALSType = {
           tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
         },
         bitrates10ft: {},
-        onScrreenLanguage: "",
+        onScreenLanguage: {
+          title: "English (US)",
+          languageCode: "en-US",
+
+        },
         closedCaption: "",
       },
       audio: {

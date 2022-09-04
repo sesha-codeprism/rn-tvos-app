@@ -6,7 +6,12 @@ import {
   TVMenuControl,
   Dimensions,
 } from "react-native";
-import { debounceTime, enableRTL } from "../../config/constants";
+import {
+  appUIDefinition,
+  debounceTime,
+  enableRTL,
+  onscreenLanguageList,
+} from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
@@ -15,7 +20,6 @@ import MFMenu from "../../components/MFMenu/MFMenu";
 import MFLoader from "../../components/MFLoader";
 import { AppStrings } from "../../config/strings";
 import MFPopup from "../../components/MFPopup";
-import MFSwimProps from "../../components/MFSwim";
 import { getAllHubs } from "../../config/queries";
 import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
@@ -23,9 +27,14 @@ import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import MFMetaData from "../../components/MFMetaData";
 import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
 import MFSwim from "../../components/MFSwim";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux";
+import MFText from "../../components/MFText";
+
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
+
 const { width, height } = Dimensions.get("window");
 const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [feeds, setFeeds] = useState<FeedItem>();
@@ -36,9 +45,11 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const drawerRef: React.MutableRefObject<any> = useRef();
   const [open, setOpen] = useState(false);
-  // const isDrawerOpen = useDrawerStatus() === "open";
+  const { language } = useSelector((state: RootState) => state.language);
+
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;
+
   const { data, isLoading } = getAllHubs();
   props.navigation.addListener("focus", () => {
     console.log("focused");
@@ -91,6 +102,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
       setHubs(hubsResponse);
       setFeeds(hubsResponse[index]);
       GLOBALS.rootNavigation = props.navigation;
+      console.log("AppStrings", AppStrings);
     }
   };
 
@@ -149,20 +161,27 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                   }, debounceTime);
                 }}
                 onPressSettings={() => {
-                  console.log("local state", open);
+                  console.log("local state", open, onscreenLanguageList);
                   setOpen(open);
                   drawerRef.current.open();
                 }}
               />
               <View style={HomeScreenStyles.posterViewContainerStyles}>
                 {currentFeed && (
-                  <MFMetaData
-                    currentFeed={currentFeed}
-                    rootContainerStyles={{
-                      flexDirection: "row",
-                      alignContent: "space-around",
-                    }}
-                  />
+                  <>
+                    <MFMetaData
+                      currentFeed={currentFeed}
+                      rootContainerStyles={{
+                        flexDirection: "row",
+                        alignContent: "space-around",
+                      }}
+                    />
+                    <MFText
+                      shouldRenderText
+                      displayText={language}
+                      textStyle={HomeScreenStyles.subtitleText}
+                    />
+                  </>
                 )}
               </View>
               <View style={HomeScreenStyles.contentContainer}>

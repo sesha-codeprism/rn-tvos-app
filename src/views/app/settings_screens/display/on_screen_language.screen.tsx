@@ -13,6 +13,12 @@ import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
+import { onscreenLanguageList } from "../../../../config/constants";
+import { useDispatch } from "react-redux";
+import { setLanguage } from "../../../../redux/language_slice";
+import { OnScreenLanguage } from "../../../../@types/UIDefinition";
+import { AppStrings, setOnScreenLanguage } from "../../../../config/strings";
+
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -33,24 +39,30 @@ const list = [
 const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedLang, setSelectedLang] = useState<any>("");
-  const onPress = (item: string) => {
+
+  const onPress = (item: OnScreenLanguage) => {
     console.log("first");
-    setSelectedLang(item);
-    GLOBALS.store.settings.display.onScrreenLanguage = item;
+    setSelectedLang(item.onScreenName);
+    GLOBALS.store.settings.display.onScreenLanguage.title = item.onScreenName;
+    GLOBALS.store.settings.display.onScreenLanguage.languageCode =
+      item.languageCode;
     updateStore(JSON.stringify(GLOBALS.store));
+    console.log("Item.langID", item.languageCode);
+    setOnScreenLanguage(item.languageCode);
   };
   const getValues = () => {
-    setSelectedLang(GLOBALS.store.settings.display.onScrreenLanguage);
+    setSelectedLang(GLOBALS.store.settings.display.onScreenLanguage);
   };
   useEffect(() => {
+    console.log("onscreenLanguageList", onscreenLanguageList);
     getValues();
   }, []);
 
   return (
     <SideMenuLayout title="Diaplay" subTitle="On Screen Language">
       <FlatList
-        data={list}
-        keyExtractor={(item) => item.title}
+        data={onscreenLanguageList}
+        keyExtractor={(x, i) => i.toString()}
         renderItem={({ item, index }) => {
           return (
             <Pressable
@@ -58,7 +70,7 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
                 setFocussed(index);
               }}
               onPress={() => {
-                onPress(item.title);
+                onPress(item);
               }}
               style={
                 index === focussed
@@ -68,7 +80,7 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
               key={index}
             >
               <View style={styles.icContainer}>
-                {selectedLang === item.title ? (
+                {selectedLang === item.onScreenName ? (
                   <Image
                     source={AppImages.checked_circle}
                     style={styles.icCircle}
@@ -87,7 +99,7 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
                     { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
                   ]}
                 >
-                  {item.title}
+                  {item.onScreenName}
                 </Text>
               </View>
             </Pressable>
