@@ -22,20 +22,7 @@ import { AppStrings, setOnScreenLanguage } from "../../../../config/strings";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const list = [
-  {
-    title: "English (US)",
-    action: "en",
-  },
-  {
-    title: "English (Canada)",
-    action: "en-ca",
-  },
-  {
-    title: "Francais (Canada)",
-    action: "ca",
-  },
-];
+const list = appUIDefinition.onScreenLanguages;
 const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedLang, setSelectedLang] = useState<any>("");
