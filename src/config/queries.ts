@@ -1,4 +1,4 @@
-import { Query, RefetchOptions, RefetchQueryFilters, useQueries, useQuery } from "react-query";
+import { useQueries, useQuery, useQueryClient } from "react-query";
 import { getDataFromUDL } from "../../backend";
 import { getAllSubscriberProfiles } from "../../backend/subscriber/subscriber";
 import { parseUdl, UdlProviders } from "../../backend/udl/provider";
@@ -9,6 +9,7 @@ import { GLOBALS } from "../utils/globals";
 import { massageSubscriberFeed } from "../utils/Subscriber.utils";
 import { appUIDefinition, lang, pivots } from "./constants";
 
+const queryClient = useQueryClient()
 export interface QueryResponse {
     data: any;
     isError: boolean;
@@ -34,24 +35,8 @@ const getAllUserProfiles = async () => {
 
 export function getProfiles() {
     const query = 'get-profiles';
-    // const { isLoading, isError, data, error, refetch, isSuccess } = ;
-    // const getProfilesResponse: QueryResponse = {
-    //     data,
-    //     isError,
-    //     isLoading,
-    //     error,
-    //     refetch,
-    //     isSuccess,
-    // };
     return useQuery(query, getAllUserProfiles, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime });
 }
-
-// export const getAllHubs = async () => {
-//     const query = 'get-hubs';
-//     const { isLoading, isError, data, error, refetch, isSuccess } = useQuery(query, getHubs);
-//     const getHubsResponse: QueryResponse = { data, isError, isLoading, error, refetch, isSuccess };
-//     return getHubsResponse;
-// }
 
 export function getDataForUDL(query: string, pageNo: number = 0) {
     return useQuery(query, () => { return getUDLData(query, pageNo) }, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true });
@@ -67,7 +52,6 @@ const getUDLData = async (uri: string, pageNo: number = 0) => {
         if (udlID!.id in UdlProviders) {
             try {
                 const data = await getDataFromUDL(uri);
-                // console.log(uri, data);
                 if (data) {
                     if (udlID!.id.split("/")[0] === 'discovery') {
                         const massagedData = massageDiscoveryFeed(data.data, SourceType.VOD);
@@ -106,4 +90,12 @@ export function getAllFeedDataForFeed(feed: FeedItem) {
         }),
     )
 
+}
+
+/** Function to reset React-Query Caches */
+export const resetCaches = () => {
+    /** Invalidate caches as invalidation would refetch some APIs.. */
+    queryClient.invalidateQueries();
+    /** Clear out the complete Query and Mutation caches */
+    queryClient.clear()
 }

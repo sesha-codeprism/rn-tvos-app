@@ -6,27 +6,30 @@ import {
   TVMenuControl,
   Dimensions,
 } from "react-native";
-import { debounceTime, enableRTL } from "../../config/constants";
+import { debounceTime, onscreenLanguageList } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
-import FastImage from "react-native-fast-image";
-import MFText from "../../components/MFText";
 import { Feed, FeedItem } from "../../@types/HubsResponse";
 import MFMenu from "../../components/MFMenu/MFMenu";
 import MFLoader from "../../components/MFLoader";
 import { AppStrings } from "../../config/strings";
 import MFPopup from "../../components/MFPopup";
-import MFSwim from "../../components/MFSwim";
 import { getAllHubs } from "../../config/queries";
 import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import MFMetaData from "../../components/MFMetaData";
 import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
+import MFSwim from "../../components/MFSwim";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux";
+import MFText from "../../components/MFText";
+
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
+
 const { width, height } = Dimensions.get("window");
 const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [feeds, setFeeds] = useState<FeedItem>();
@@ -35,10 +38,13 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [showPopup, togglePopup] = useState(false);
   const [feedItem, setFeedItem] = useState<Feed>();
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
+  const drawerRef: React.MutableRefObject<any> = useRef();
   const [open, setOpen] = useState(false);
+  const { language } = useSelector((state: RootState) => state.language);
+
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;
-  const drawerRef: React.MutableRefObject<any> = useRef();
+
   const { data, isLoading } = getAllHubs();
   props.navigation.addListener("focus", () => {
     console.log("focused");
@@ -72,8 +78,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
             replace_hub[0].Name = AppStrings.str_hub_name_you;
           } else {
             /** If user created profile is chosen to login, replace with profile name */
-            // replace_hub[0].Name =
-            // GLOBALS.userProfile.Name || AppStrings.str_hub_name_you;
             if (GLOBALS.userProfile.Name!.length > 10) {
               replace_hub[0].Name =
                 GLOBALS.userProfile.Name!.substring(0, 9) + "..." ||
@@ -92,18 +96,21 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
       }
       setHubs(hubsResponse);
       setFeeds(hubsResponse[index]);
+      GLOBALS.rootNavigation = props.navigation;
+      console.log("AppStrings", AppStrings);
     }
+  };
+
+  const clearCurrentHub = (event: SubscriberFeed) => {
+    console.log("Clear current hub");
+    setCurrentFeed(undefined);
   };
 
   const backAction = () => {
     console.log("Capturing hadware back presses", open);
-    console.log("drawerRef.current", drawerRef);
     if (open) {
       setOpen(false);
       drawerRef.current.close();
-      // if (isDrawerOpen) {
-      //@ts-ignore
-      // props.navigation.toggleDrawer();
       return true;
     } else {
       console.log(
@@ -115,7 +122,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
 
   useEffect(() => {
     if (!open) {
-      console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
       TVMenuControl.enableTVMenuKey();
       BackHandler.addEventListener("hardwareBackPress", backAction);
     }
@@ -140,7 +146,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
             <>
               <MFMenu
                 navigation={props.navigation}
-                enableRTL={enableRTL}
+                enableRTL={GLOBALS.enableRTL}
                 hubList={hubs}
                 onPress={(event) => {}}
                 onFocus={(event) => {
@@ -150,7 +156,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                   }, debounceTime);
                 }}
                 onPressSettings={() => {
-                  console.log("local state", open);
+                  console.log("local state", open, onscreenLanguageList);
                   setOpen(open);
                   drawerRef.current.open();
                 }}
@@ -160,7 +166,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                   <MFMetaData
                     currentFeed={currentFeed}
                     rootContainerStyles={{
-                      flexDirection: "row",
+                      flexDirection: GLOBALS.enableRTL ? "row-reverse" : "row",
                       alignContent: "space-around",
                     }}
                   />
@@ -168,7 +174,13 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
               </View>
               <View style={HomeScreenStyles.contentContainer}>
                 {!isLoading && (
-                  <MFSwim feeds={feeds} index={index} onFocus={onFeedFocus} />
+                  <MFSwim
+                    feeds={feeds}
+                    index={index}
+                    onFocus={onFeedFocus}
+                    onListEmptyElementFocus={clearCurrentHub}
+                    onListFooterElementFocus={clearCurrentHub}
+                  />
                 )}
               </View>
               {isLoading && <MFLoader transparent={true} />}
@@ -208,7 +220,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
         closeOnPressBack={false}
         navigation={props.navigation}
         drawerContent={false}
-      ></MFDrawer>
+      />
       {/* )} */}
     </View>
   );

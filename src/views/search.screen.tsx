@@ -1,28 +1,7 @@
 import React, { useState } from "react";
-import {
-  View,
-  requireNativeComponent,
-  Dimensions,
-  StyleSheet,
-  Text,
-  ImageBackground,
-  ScrollView,
-  FlatList,
-} from "react-native";
-import MFCard, {
-  AspectRatios,
-  MFCardProps,
-  TitlePlacement,
-} from "../components/MFCard";
-import MFFilmStrip, {
-  FeedObject,
-  OverlayComponent,
-} from "../components/MFFilmStrip/MFFilmStrip";
-import MFViewAllButton from "../components/MFFilmStrip/ViewAllComponent";
-import ProgressBar from "../components/MFProgress";
+import { View, Dimensions, StyleSheet, ImageBackground } from "react-native";
+import { FeedObject } from "../components/MFFilmStrip/MFFilmStrip";
 import MFSearch from "../components/MFSearch";
-import { MFTabBarStyles } from "../components/MFTabBar/MFTabBarStyles";
-import { enableRTL } from "../config/constants";
 
 // const Search = requireNativeComponent('NKSearchComponent');
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GestureResponderEvent, StyleSheet, View } from "react-native";
 import { HubsList } from "../../@types/Hubs";
-import { enableRTL, appUIDefinition } from "../../config/constants";
+import { appUIDefinition } from "../../config/constants";
 import { AppImages } from "../../assets/images";
 import MFButton, { MFButtonVariant } from "../MFButton/MFButton";
 import MFButtonGroup, {
@@ -13,6 +13,9 @@ import { Routes } from "../../config/navigation/RouterOutlet";
 import { GlobalContext } from "../../contexts/globalContext";
 import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
+import { useDispatch } from "react-redux";
+import { setLanguage } from "../../redux/language_slice";
+import { GLOBALS } from "../../utils/globals";
 
 interface MFMenuProps {
   navigation: any;
@@ -29,6 +32,8 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   const [isIdentityAssigned, setIdentityAssigned] = useState(false);
   const globalContext = useContext(GlobalContext);
   const [focused, setFocused] = useState("");
+  const dispatch = useDispatch();
+
   const testing = false;
   const _onPressMain = (event: GestureResponderEvent, index: number) => {
     props.onPress && props.onPress(index);
@@ -59,7 +64,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
       imageSource: AppImages.logo,
       avatarSource: AppImages.avatar,
       textLabel: hubObject.Name,
-      enableRTL: enableRTL,
+      enableRTL: GLOBALS.enableRTL,
       iconStyles: MFMenuStyles.iconStyles,
       imageStyles: StyleSheet.flatten([MFMenuStyles.imageStyles]),
       avatarStyles: MFMenuStyles.avatarStyles,
@@ -80,7 +85,14 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   return (
     <GlobalContext.Consumer>
       {({ userProfile, setProfile }) => (
-        <View style={MFMenuStyles.rootContainerStyles}>
+        <View
+          style={StyleSheet.flatten([
+            MFMenuStyles.rootContainerStyles,
+            GLOBALS.enableRTL
+              ? { flexDirection: "row-reverse" }
+              : { flexDirection: "row" },
+          ])}
+        >
           <View
             style={StyleSheet.flatten([MFMenuStyles.searchContainerStyles1])}
           >
@@ -104,6 +116,9 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                 onBlur={() => {
                   setFocused("");
                 }}
+                onPress={() => {
+                  dispatch(setLanguage("jp"));
+                }}
               />
             </View>
           </View>
@@ -122,7 +137,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                     appUIDefinition.theme.colors.secondary,
                 },
               }}
-              enableRTL={enableRTL}
+              enableRTL={GLOBALS.enableRTL}
               outlinedButtonProps={{
                 outlinedButtonStyle: {
                   focusedBorderColor: appUIDefinition.theme.colors.primary,
@@ -138,7 +153,14 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               }}
             />
           </View>
-          <View style={StyleSheet.flatten([MFMenuStyles.profileViewStyles1])}>
+          <View
+            style={StyleSheet.flatten([
+              MFMenuStyles.profileViewStyles1,
+              GLOBALS.enableRTL
+                ? { flexDirection: "row-reverse" }
+                : { flexDirection: "row" },
+            ])}
+          >
             {isIdentityAssigned && (
               <View style={MFMenuStyles.profileContainerStyles}>
                 <View

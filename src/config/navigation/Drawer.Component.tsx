@@ -1,7 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
-import { TVMenuControl, BackHandler } from "react-native";
 import AccountSettingsScreen from "../../views/app/settings_screens/account_settings";
 import ClosedCaptionScreen from "../../views/app/settings_screens/display/ closed_caption.screen";
 import DiaplayScreen from "../../views/app/settings_screens/display/display.screen";
@@ -25,15 +24,7 @@ export const SettingsNavigator: React.FunctionComponent = (props) => {
     console.log("Capturing hadware back presses");
     return true;
   };
-  useEffect(() => {
-    // if (isDrawerOpen) {
-    //   TVMenuControl.enableTVMenuKey();
-    //   BackHandler.addEventListener("hardwareBackPress", backAction);
-    // } else {
-    //   TVMenuControl.disableTVMenuKey();
-    //   BackHandler.removeEventListener("hardwareBackPress", backAction);
-    // }
-  }, []);
+  useEffect(() => {}, []);
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator

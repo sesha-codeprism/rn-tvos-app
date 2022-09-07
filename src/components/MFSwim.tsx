@@ -5,16 +5,33 @@ import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { getAllFeedDataForFeed } from "../config/queries";
 import MFSwimLane from "./MFSwimLane";
 
-interface MFSwim {
+interface MFSwimProps {
   index: number;
   feeds: FeedItem | undefined;
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
+  onListEmptyElementFocus?:
+    | null
+    | ((event: SubscriberFeed) => void)
+    | undefined;
+  onListEmptyElementPress?:
+    | null
+    | ((event: SubscriberFeed) => void)
+    | undefined;
+  onListFooterElementFocus?:
+    | null
+    | ((event: SubscriberFeed) => void)
+    | undefined;
+  onListFooterElementOnPress?:
+    | null
+    | ((event: SubscriberFeed) => void)
+    | undefined;
 }
 
-const MFSwim: React.FunctionComponent<MFSwim> = (props) => {
+const MFSwim: React.FunctionComponent<MFSwimProps> = (props) => {
   const data = getAllFeedDataForFeed(props.feeds!);
+  console.log("Props in MFSwim", props);
   return (
     <FlatList
       data={props.feeds?.Feeds}
@@ -28,6 +45,10 @@ const MFSwim: React.FunctionComponent<MFSwim> = (props) => {
             onPress={props.onPress}
             onBlur={props.onBlur}
             onFocus={props.onFocus}
+            onListEmptyElementFocus={props.onListEmptyElementFocus}
+            onListEmptyElementPress={props.onListEmptyElementPress}
+            onListFooterElementFocus={props.onListFooterElementFocus}
+            onListFooterElementOnPress={props.onListFooterElementOnPress}
           />
         );
       }}

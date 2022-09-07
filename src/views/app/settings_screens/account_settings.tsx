@@ -2,66 +2,88 @@ import { BackHandler, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFPopup from "../../../components/MFPopup";
-import { GLOBALS } from "../../../utils/globals";
+import { GLOBALS, resetGlobalStore } from "../../../utils/globals";
 import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
-interface Props {
+import { updateStore } from "../../../utils/helpers";
+import { Routes } from "../../../config/navigation/RouterOutlet";
+import { resetCaches } from "../../../config/queries";
+import { useNavigation } from "@react-navigation/native";
+import { AppStrings } from "../../../config/strings";
+
+interface AccountSettingsProps {
   navigation: NativeStackNavigationProp<any>;
 }
-const AccountSettingsScreen: React.FunctionComponent<Props> = (props: any) => {
+const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
+  props
+) => {
   const [focussed, setFocussed] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  useEffect(() => {
-    // const unsubscribe = props.navigation.addListener("beforeRemove", () => {
-    //   // do something
-    //   console.warn("Warning before removing component acc settings");
-    // });
-    // return unsubscribe;
-  }, [props.navigation]);
+  const [isTesting, setTesting] = useState(false);
+  useEffect(() => {}, [props.navigation]);
+
+  const logUserOut = async () => {
+    if (__DEV__ && !isTesting) {
+      /** Get default store for user */
+      const resetStore = resetGlobalStore();
+      /** Update the current Async NSUserDefaults store with resetStore */
+      updateStore(JSON.stringify(resetStore));
+      /** Reset the Query cache to make sure no cached API data is returned by React-Query */
+      resetCaches();
+    } else {
+      console.log("Test functions.. so just simply trying to navigate");
+    }
+    /** Async store is done.. now move user to logout screen */
+    GLOBALS.rootNavigation.replace(Routes.ShortCode);
+  };
 
   return (
-    <SideMenuLayout
-      title="Account Settings"
-      subTitle="Account Signout"
-      contentContainerStyle={styles.contentContainer}
-    >
-      <View>
-        <Text style={[styles.titleText, { fontSize: 29 }]}>
-          You are currently logged in as:
-        </Text>
-        <Text style={styles.emailText}>
-          {GLOBALS.bootstrapSelectors?.AccountId}
-        </Text>
-      </View>
-      <View>
-        <Pressable
-          hasTVPreferredFocus={true}
-          onFocus={() => {
-            setFocussed(true);
-          }}
-          onBlur={() => {
-            setFocussed(false);
-          }}
-          style={
-            focussed
-              ? [styles.signoutButton, { backgroundColor: "#053C69" }]
-              : styles.signoutButton
-          }
-          onPress={() => {
-            setShowAlert(true);
-          }}
-        >
-          <Text style={[styles.titleText, { fontSize: 29 }]}>Sign Out</Text>
-        </Pressable>
-      </View>
+    <>
+      <SideMenuLayout
+        title={AppStrings.str_settings_signout_Account_Settings}
+        subTitle={AppStrings.str_settings_signout_Account}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <View>
+          <Text style={[styles.titleText, { fontSize: 29 }]}>
+            {AppStrings.str_settings_signout_Account_loginaccount_label}
+          </Text>
+          <Text style={styles.emailText}>
+            {GLOBALS.bootstrapSelectors?.AccountId}
+          </Text>
+        </View>
+        <View>
+          <Pressable
+            hasTVPreferredFocus={true}
+            onFocus={() => {
+              setFocussed(true);
+            }}
+            onBlur={() => {
+              setFocussed(false);
+            }}
+            style={
+              focussed
+                ? [styles.signoutButton, { backgroundColor: "#053C69" }]
+                : styles.signoutButton
+            }
+            onPress={() => {
+              setShowAlert(true);
+            }}
+          >
+            <Text style={[styles.titleText, { fontSize: 29 }]}>
+              {AppStrings.str_settings_signout}
+            </Text>
+          </Pressable>
+        </View>
+      </SideMenuLayout>
       {showAlert && (
         <MFPopup
           buttons={[
             {
               title: "Yes",
               onPress: () => {
-                console.log("signout pressed");
                 setShowAlert(false);
-                props.navigation.goBack();
+                console.log("signout pressed");
+                logUserOut();
               },
             },
             {
@@ -74,7 +96,7 @@ const AccountSettingsScreen: React.FunctionComponent<Props> = (props: any) => {
           description={"Are you sure that you want to sign out?"}
         />
       )}
-    </SideMenuLayout>
+    </>
   );
 };
 

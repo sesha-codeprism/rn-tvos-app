@@ -47,7 +47,7 @@ export interface MFCardProps {
   titlePlacement?: TitlePlacement;
   overlayComponent?: React.ReactElement;
   shouldRenderText: boolean;
-  onFocus?: null | ((event: Feed) => void) | undefined;
+  onFocus?: null | ((event: any) => void) | undefined;
   onBlur?:
     | null
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
@@ -75,9 +75,7 @@ const MFCard: React.FunctionComponent<MFCardProps> = (props) => {
       toValue: -15,
       duration: 250,
     }).start();
-    setTimeout(() => {
-      props.onFocus && props.data && props.data;
-    }, debounceTime);
+    props.onFocus && props.onFocus(props.data);
   };
 
   const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {

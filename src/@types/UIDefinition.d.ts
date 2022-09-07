@@ -4,6 +4,7 @@ export interface UIDefinition {
   theme: Theme;
   assets: Assets;
   components: Component[];
+  onscreenLanguage: OnScreenLanguage[];
   config: Config;
 }
 
@@ -179,4 +180,10 @@ interface Colors {
   white: string;
   darkGrey: string;
   blue: string;
+}
+
+interface OnScreenLanguage {
+  onScreenName: string;
+  languageCode: string;
+  isRTL: boolean
 }

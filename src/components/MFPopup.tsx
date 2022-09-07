@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 interface MFPopupProps {
   buttons?: Buttons[];
@@ -37,7 +37,44 @@ const MFPopup = (props: MFPopupProps) => {
             {props.description ? props.description : "Are you sure ?"}
           </Text>
           <View style={{ width: "100%" }}>
-            {(props.buttons && props.buttons.length
+            <FlatList data={props.buttons && props.buttons.length
+              ? props.buttons
+              : defaultProps.buttons}
+              keyExtractor={(item)=> item.title}
+              renderItem={({item, index}) => {
+                return (
+                  <Pressable
+                    onFocus={() => {
+                      setFocused(index);
+                    }}
+                    key={index}
+                    isTVSelectable={true}
+                    nextFocusDown={1}
+                    hasTVPreferredFocus={index === 0 ? true: false}
+                    style={
+                      focused === index
+                        ? [
+                            styles.buttonInactive,
+                            {
+                              ...styles.focusedStyle,
+                              backgroundColor: "#053C69",
+                            },
+                          ]
+                        : styles.buttonInactive
+                    }
+                    onPress={
+                      item.onPress
+                        ? item.onPress
+                        : () => {
+                            console.log("action is not defined for this button");
+                          }
+                    }
+                  >
+                    <Text style={styles.buttonText}>{item.title}</Text>
+                  </Pressable>
+                );
+              }} />
+            {/* {(props.buttons && props.buttons.length
               ? props.buttons
               : defaultProps.buttons
             ).map((item, index) => {
@@ -70,7 +107,7 @@ const MFPopup = (props: MFPopupProps) => {
                   <Text style={styles.buttonText}>{item.title}</Text>
                 </Pressable>
               );
-            })}
+            })} */}
           </View>
         </View>
       </View>
@@ -92,7 +129,7 @@ const styles = StyleSheet.create({
   },
   container: {
     height: 682,
-    width: 750,
+    width: 700,
     borderRadius: 10,
     backgroundColor: "#202124",
     justifyContent: "space-between",

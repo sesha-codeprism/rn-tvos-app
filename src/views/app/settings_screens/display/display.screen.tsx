@@ -21,41 +21,48 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [list, setList] = useState<any[]>([]);
   const formatList = () => {
-    const { onScrreenLanguage, closedCaption, subtitleConfig, bitrates10ft } =
-      GLOBALS.store.settings.display;
+    const {
+      onScreenLanguage: onScrreenLanguage,
+      closedCaption,
+      subtitleConfig,
+      bitrates10ft,
+    } = GLOBALS.store.settings.display;
     console.log("format list called", GLOBALS.store.settings.display);
     const listItem = [
       {
-        title: "On Screen Language",
-        subTitle: onScrreenLanguage,
+        title: AppStrings.str_settings_android_specific_language,
+        subTitle: onScrreenLanguage.title,
         action: "on_screen_language",
         icon: "",
       },
       {
-        title: "Closed Captions",
+        title: AppStrings.str_settings_closed_captions,
         subTitle: closedCaption,
         action: "closed_caption",
         icon: "",
       },
       {
-        title: "Primary Subtitle Language",
+        title: AppStrings.str_settings_subtitle_primary_label,
+        //@ts-ignore
         subTitle: AppStrings.ISO[subtitleConfig.primary],
         action: "subtitle_language",
         type: "primary",
         icon: "",
       },
       {
-        title: "Secondary Subtitle Language",
+        title: AppStrings.str_settings_subtitle_secondary_label,
         subTitle:
           subtitleConfig.secondary !== "None"
-            ? AppStrings.ISO[subtitleConfig.secondary]
+            ? //@ts-ignore
+              AppStrings.ISO[subtitleConfig.secondary]
             : subtitleConfig.secondary,
         action: "subtitle_language",
         type: "secondary",
         icon: "",
       },
       {
-        title: "Video Quality",
+        title: AppStrings.str_settings_download_quality_label,
+        //@ts-ignore
         subTitle: AppStrings[bitrates10ft.localizedText],
         action: "video_quality",
         icon: "",
@@ -74,7 +81,10 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
     return unsubscribe;
   }, []);
   return (
-    <SideMenuLayout title="Settings" subTitle="Display">
+    <SideMenuLayout
+      title={AppStrings.str_navigation_settings}
+      subTitle={AppStrings.str_settings_display_label}
+    >
       {/* {console.log('screen rendered', list)} */}
       <FlatList
         data={list}
@@ -135,61 +145,6 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
           );
         }}
       />
-      {/* {list.map((item, index) => {
-        return (
-          <Pressable
-            onFocus={() => {
-              setFocussed(index);
-            }}
-            onPress={() => {
-              index === 6
-                ? () => {
-                    props.navigation.toggleDrawer();
-                    setFocussed("");
-                  }
-                : item.action !== ""
-                ? item.type
-                  ? props.navigation.navigate(item.action, {
-                      type: item.type,
-                    })
-                  : props.navigation.navigate(item.action)
-                : null;
-            }}
-            style={
-              index === focussed
-                ? { ...MFSettingsStyles.containerActive, ...styles.container }
-                : styles.container
-            }
-            key={index}
-          >
-            <View>
-              <Text
-                style={[
-                  styles.listText,
-                  { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
-                ]}
-              >
-                {item.title}
-              </Text>
-              <Text
-                style={[
-                  styles.listText,
-                  {
-                    color: index === focussed ? "#EEEEEE" : "#A7A7A7",
-                    fontSize: 23,
-                  },
-                ]}
-              >
-                {item.subTitle}
-              </Text>
-            </View>
-            <Image
-              source={AppImages.arrow_right}
-              style={{ width: 15, height: 30 }}
-            />
-          </Pressable>
-        );
-      })} */}
     </SideMenuLayout>
   );
 };

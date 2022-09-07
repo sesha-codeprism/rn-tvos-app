@@ -312,17 +312,53 @@
       "subComponents": []
     }
   ],
+  "onScreenLanguages": [
+    {
+      "title": "English (US)",
+      "action": "en"
+    },
+    {
+      "title": "English (Canada)",
+      "action": "en-ca"
+    },
+    {
+      "title": "Francais (Canada)",
+      "action": "ca"
+    }
+  ],
   "config": {
     "enableRTL": false,
     "debounceTime": 500,
     "protocol": "https",
     "hostname": "reachclient.dev.mr.tv3cloud.com",
-    "currentLocale": { "full": "en-US", "short": "en" },
+    "currentLocale": { "full": "fr-FR", "short": "fr" },
     "useLottieAnimationOnSplash": false,
     "height16x9": 253,
     "height2x3": 339,
     "height4x3": 234,
     "queryCacheTime": 3600000,
     "queryStaleTime": 3600000
-  }
+  },
+  "onscreenLanguage": [
+    {
+      "onScreenName": "English (US)",
+      "languageCode": "en-US",
+      "isRTL": false
+    },
+    {
+      "onScreenName": "English (Canada)",
+      "languageCode": "en-CA",
+      "isRTL": false
+    },
+    {
+      "onScreenName": "Francais (Canada)",
+      "languageCode": "fr-CA",
+      "isRTL": false
+    },
+    {
+      "onScreenName": "Arabic (Qatar)",
+      "languageCode": "ar-QA",
+      "isRTL": true
+    }
+  ]
 }

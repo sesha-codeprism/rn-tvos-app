@@ -6,13 +6,18 @@ import { initUIDef } from "../utils/uidefinition";
 import { UserProfile } from "../@types/UserProfile";
 import { GLOBALS } from "../utils/globals";
 import "react-native-gesture-handler";
+import { Provider } from "react-redux";
+import { store } from "../redux/store";
 
 interface AppProps {}
 
 const App: React.FunctionComponent<AppProps> = (props) => {
   const queryClient = new QueryClient();
   const [userProfile, setUserProfile] = useState({});
-
+  const [onScreenLanguage, setOnScreenLanguage] = useState(
+    GLOBALS.store.settings.display.onScreenLanguage
+  );
+  const [enableRTL, shouldEnableRTL] = useState(GLOBALS.enableRTL);
   async function getLandingData() {
     // Initialize UIDef
     initUIDef();
@@ -28,21 +33,35 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     }
   };
 
+  const updateLanguage = (language: any) => {
+    setOnScreenLanguage(language);
+  };
+
+  const updateRTLStatus = (rtlStatus: boolean) => {
+    shouldEnableRTL(rtlStatus);
+  };
+
   const appSettings = {
     userProfile,
     setUserProfile,
+    onScreenLanguage,
+    setOnScreenLanguage,
+    enableRTL,
+    shouldEnableRTL,
   };
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GlobalContext.Provider value={appSettings}>
-        <RouterOutlet
-          isAuthorized={
-            GLOBALS.store.accessToken !== null &&
-            GLOBALS.store.refreshToken !== null
-          }
-        />
-      </GlobalContext.Provider>
+      <Provider store={store}>
+        <GlobalContext.Provider value={appSettings}>
+          <RouterOutlet
+            isAuthorized={
+              GLOBALS.store.accessToken !== null &&
+              GLOBALS.store.refreshToken !== null
+            }
+          />
+        </GlobalContext.Provider>
+      </Provider>
     </QueryClientProvider>
   );
 };

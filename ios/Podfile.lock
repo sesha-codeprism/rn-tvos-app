@@ -198,11 +198,11 @@ PODS:
     - React-jsi (= 0.64.2-4)
     - React-perflogger (= 0.64.2-4)
   - React-jsinspector (0.64.2-4)
-  - react-native-safe-area-context (4.3.1):
+  - react-native-safe-area-context (4.3.3):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
-    - React
+    - React-Core
     - ReactCommon/turbomodule/core
   - react-native-webview (11.23.0):
     - React-Core
@@ -262,19 +262,19 @@ PODS:
     - React-cxxreact (= 0.64.2-4)
     - React-jsi (= 0.64.2-4)
     - React-perflogger (= 0.64.2-4)
-  - RNCAsyncStorage (1.17.9):
+  - RNCAsyncStorage (1.17.10):
     - React-Core
   - RNDeviceInfo (8.7.1):
     - React-Core
-  - RNFastImage (8.5.11):
+  - RNFastImage (8.6.0):
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNGestureHandler (2.5.0):
+  - RNGestureHandler (2.6.0):
     - React-Core
   - RNI18n (2.0.15):
     - React
-  - RNReanimated (2.9.1):
+  - RNReanimated (2.10.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -300,7 +300,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.15.0):
+  - RNScreens (3.17.0):
     - React-Core
     - React-RCTImage
   - SDWebImage (5.11.1):
@@ -443,7 +443,7 @@ SPEC CHECKSUMS:
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   FBLazyVector: a4376cfdaffcb31c5bccc46e40a16a4c1cb32f53
-  FBReactNativeSpec: 57b0cd8746a293ab46f5db2bf0e162b796a1b233
+  FBReactNativeSpec: b531b9089bf787d9fad06711e63e64c465aeeb86
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
   lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
@@ -459,7 +459,7 @@ SPEC CHECKSUMS:
   React-jsi: cbc87eec85f6116fac9fe0d2825a170dfd5c6f05
   React-jsiexecutor: 2401d6528ddc44681e0b8532ca1afcf47c1afbb4
   React-jsinspector: 88eee007ec941f1491c6ac2620b4b73cdd5bfb7d
-  react-native-safe-area-context: 6c12e3859b6f27b25de4fee8201cfb858432d8de
+  react-native-safe-area-context: b456e1c40ec86f5593d58b275bd0e9603169daca
   react-native-webview: e771bc375f789ebfa02a26939a57dbc6fa897336
   React-perflogger: bad096cab299aff4b87cf6ea38ac11ec7f808ef3
   React-RCTAnimation: ef487dbcce85a1674021508d5eba97c1fb08ba6c
@@ -471,13 +471,13 @@ SPEC CHECKSUMS:
   React-RCTText: 3a93a9669569cc70c70ee6d3cf5ab79966c643f5
   React-runtimeexecutor: 047a9bd45f6fc72f02329854c727288bc61b09a4
   ReactCommon: 2258f44c5d338d95b5ea1f14a5c482b3a8024c12
-  RNCAsyncStorage: b2489b49e38c85e10ed45a888d13a2a4c7b32ea1
+  RNCAsyncStorage: 0c357f3156fcb16c8589ede67cc036330b6698ca
   RNDeviceInfo: aad3c663b25752a52bf8fce93f2354001dd185aa
-  RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
-  RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
+  RNFastImage: 72a2d5802adef70f8e42fce486f78878f8b47dae
+  RNGestureHandler: 920eb17f5b1e15dae6e5ed1904045f8f90e0b11e
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
-  RNReanimated: 2c4beefb0f26bedc960dc6bc80be926ea099218d
-  RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
+  RNReanimated: fd8a8eff0de5756eb5f40366631d727d2f0632fd
+  RNScreens: 0df01424e9e0ed7827200d6ed1087ddd06c493f9
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   Yoga: e6fad7d759aada82718ccebaaeef8113c431d41e

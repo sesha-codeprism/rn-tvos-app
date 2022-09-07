@@ -6,56 +6,66 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
-import {
-  appUIDefinition,
-  onscreenLanguageList,
-} from "../../../../config/constants";
-import { OnScreenLanguage } from "../../../../@types/UIDefinition";
-import { setOnScreenLanguage } from "../../../../config/strings";
-import { GlobalContext } from "../../../../contexts/globalContext";
-
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const list = appUIDefinition.onscreenLanguage;
-const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
+const list = [
+  {
+    title: "At scheduled end time",
+    action: "",
+  },
+  {
+    title: "5 min after",
+    action: "",
+  },
+  {
+    title: "15 min after",
+    action: "",
+  },
+  {
+    title: "30 min after",
+    action: "",
+  },
+  {
+    title: "1 hr after",
+    action: "",
+  },
+  {
+    title: "2 hrs after",
+    action: "",
+  },
+  {
+    title: "3 hrs after",
+    action: "",
+  },
+];
+const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
-  const [selectedLang, setSelectedLang] = useState<any>("");
-  const currentContext = useContext(GlobalContext);
-
-  const onPress = (item: OnScreenLanguage) => {
-    console.log("first");
-    setSelectedLang(item.onScreenName);
-    GLOBALS.store.settings.display.onScreenLanguage.title = item.onScreenName;
-    GLOBALS.store.settings.display.onScreenLanguage.languageCode =
-      item.languageCode;
-    GLOBALS.store.settings.display.onScreenLanguage.enableRTL == item.isRTL;
-    updateStore(JSON.stringify(GLOBALS.store));
-    console.log("Item.langID", item.languageCode);
-    setOnScreenLanguage(item.languageCode);
-    GLOBALS.enableRTL = item.isRTL;
-    // currentContext.shouldEnableRTL(item.isRTL);
+  const [selectedItem, setSelectedItem] = useState<any>("");
+  const onPress = (item: string) => {
+    setSelectedItem(item);
+    //   GLOBALS.store.settings.display.onScrreenLanguage = item;
+    //   updateStore(JSON.stringify(GLOBALS.store));
   };
   const getValues = () => {
-    setSelectedLang(GLOBALS.store.settings.display.onScreenLanguage.title);
+    setSelectedItem(GLOBALS.store.settings.display.onScreenLanguage);
   };
   useEffect(() => {
-    console.log("onscreenLanguageList", onscreenLanguageList);
     getValues();
   }, []);
 
   return (
     <SideMenuLayout title="Diaplay" subTitle="On Screen Language">
       <FlatList
-        data={onscreenLanguageList}
-        keyExtractor={(x, i) => i.toString()}
+        data={list}
+        keyExtractor={(item) => item.title}
         renderItem={({ item, index }) => {
           return (
             <Pressable
@@ -63,7 +73,7 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
                 setFocussed(index);
               }}
               onPress={() => {
-                onPress(item);
+                onPress(item.title);
               }}
               style={
                 index === focussed
@@ -73,7 +83,7 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
               key={index}
             >
               <View style={styles.icContainer}>
-                {selectedLang === item.onScreenName ? (
+                {selectedItem === item.title ? (
                   <Image
                     source={AppImages.checked_circle}
                     style={styles.icCircle}
@@ -92,60 +102,18 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
                     { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
                   ]}
                 >
-                  {item.onScreenName}
+                  {item.title}
                 </Text>
               </View>
             </Pressable>
           );
         }}
       />
-      {/* {list.map((item: any, index: any) => {
-        return (
-          <Pressable
-            onFocus={() => {
-              setFocussed(index);
-            }}
-            onPress={() => {
-              onPress(item.title);
-            }}
-            style={
-              index === focussed
-                ? { ...MFSettingsStyles.containerActive, ...styles.container }
-                : styles.container
-            }
-            key={index}
-          >
-            <View style={styles.icContainer}>
-              {selectedLang === item.title ? (
-                <Image
-                  source={AppImages.checked_circle}
-                  style={styles.icCircle}
-                />
-              ) : (
-                <Image
-                  source={AppImages.unchecked_circle}
-                  style={styles.icCircle}
-                />
-              )}
-            </View>
-            <View style={styles.listContent}>
-              <Text
-                style={[
-                  styles.listText,
-                  { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
-                ]}
-              >
-                {item.title}
-              </Text>
-            </View>
-          </Pressable>
-        );
-      })} */}
     </SideMenuLayout>
   );
 };
 
-export default OnScreenLanguageScreen;
+export default StopRecordingScreen;
 
 const styles = StyleSheet.create({
   contentTitleContainer: {

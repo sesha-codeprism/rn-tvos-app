@@ -33,6 +33,12 @@ interface Ratings {
   subTitle: string;
   title: string;
 }
+
+interface OnScreenLanguage {
+  title: string;
+  languageCode: string;
+  enableRTL: boolean;
+}
 interface GLOBALSType {
   /** Information about the device running the app */
   deviceInfo: MFDeviceInfo;
@@ -46,6 +52,10 @@ interface GLOBALSType {
   userProfile?: UserProfile;
   /** Token for Duplex connectivity */
   continuationToken: string;
+  /** Root navigation */
+  rootNavigation: any;
+  /** Should the UI be RTL */
+  enableRTL: boolean;
   /** Async store data */
   store: {
     accessToken: string | null;
@@ -62,7 +72,7 @@ interface GLOBALSType {
           tracks: string[];
         };
         bitrates10ft: any;
-        onScrreenLanguage: any;
+        onScreenLanguage: OnScreenLanguage;
         closedCaption: any;
       };
       audio: {
@@ -93,6 +103,8 @@ export const GLOBALS: GLOBALSType = {
     AdditionalFields: { optOutPersonalDataUse: "false" },
     UserCreated: true,
   },
+  enableRTL: false,
+  rootNavigation: null,
   bootstrapSelectors: null,
   continuationToken: "",
   store: {
@@ -114,7 +126,12 @@ export const GLOBALS: GLOBALSType = {
           tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
         },
         bitrates10ft: {},
-        onScrreenLanguage: "",
+        onScreenLanguage: {
+          title: "English (US)",
+          languageCode: "en-US",
+          enableRTL: false
+
+        },
         closedCaption: "",
       },
       audio: {
@@ -131,7 +148,7 @@ export const GLOBALS: GLOBALSType = {
 };
 
 export const resetGlobalStore = () => {
-  GLOBALS.store = {
+  return {
     accessToken: null,
     refreshToken: null,
     title: null,
@@ -162,5 +179,5 @@ export const resetGlobalStore = () => {
         descriptiveAudio: "",
       },
     },
-  };
+  }
 };
