@@ -312,7 +312,7 @@
       "subComponents": []
     }
   ],
-  "onScreenLanguages":[
+  "onScreenLanguages": [
     {
       "title": "English (US)",
       "action": "en"
@@ -356,8 +356,8 @@
       "isRTL": false
     },
     {
-      "onScreenName": "Arabic",
-      "languageCode": "ar-Ar",
+      "onScreenName": "Arabic (Qatar)",
+      "languageCode": "ar-QA",
       "isRTL": true
     }
   ]

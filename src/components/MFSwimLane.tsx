@@ -1,8 +1,9 @@
 import React from "react";
 import { Feed } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
-import { enableRTL, layout2x3 } from "../config/constants";
+import { layout2x3 } from "../config/constants";
 import { format } from "../utils/DiscoveryUtils";
+import { GLOBALS } from "../utils/globals";
 import { HomeScreenStyles } from "../views/app/Homescreen.styles";
 import Styles from "./MFButtonsVariants/MFButtonStyles";
 import { TitlePlacement } from "./MFCard";
@@ -53,7 +54,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
       }
       focusedStyle={HomeScreenStyles.focusedStyle}
       titlePlacement={TitlePlacement.beneath}
-      enableRTL={enableRTL}
+      enableRTL={GLOBALS.enableRTL}
       appendViewAll
       railContainerStyles={{}}
       railTitleStyles={{ paddingLeft: 50 }}

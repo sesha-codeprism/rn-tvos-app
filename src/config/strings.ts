@@ -4,6 +4,7 @@ const frCA = require("../i18n/fr-CA/strings.json");
 const enCA = require("../i18n/en-CA/strings.json");
 const esCL = require('../i18n/es-CL/strings.json');
 const huHU = require('../i18n/hu-HU/strings.json');
+const arQA = require('../i18n/ar-QA/strings.json');
 
 
 
@@ -13,6 +14,7 @@ export const stringLocales = {
     "fr-CA": frCA,
     "es-CL": esCL,
     "hu-HU": huHU,
+    "ar-QA": arQA,
 
 }
 

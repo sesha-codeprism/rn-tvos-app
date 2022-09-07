@@ -8,7 +8,6 @@ export { groups, pivots, lang };
 
 export const appUIDefinition: UIDefinition = require("../config/uidefinition.json");
 export const debounceTime = appUIDefinition?.config?.debounceTime ?? 500;
-export const enableRTL = appUIDefinition.config.enableRTL;
 export const onscreenLanguageList = appUIDefinition.onscreenLanguage;
 export const fossLicense = require("../config/fosslicense.json")
 export const layout2x3 = "TwoByThree";

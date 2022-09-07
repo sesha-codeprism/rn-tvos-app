@@ -6,12 +6,7 @@ import {
   TVMenuControl,
   Dimensions,
 } from "react-native";
-import {
-  appUIDefinition,
-  debounceTime,
-  enableRTL,
-  onscreenLanguageList,
-} from "../../config/constants";
+import { debounceTime, onscreenLanguageList } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
@@ -151,7 +146,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
             <>
               <MFMenu
                 navigation={props.navigation}
-                enableRTL={enableRTL}
+                enableRTL={GLOBALS.enableRTL}
                 hubList={hubs}
                 onPress={(event) => {}}
                 onFocus={(event) => {
@@ -168,20 +163,13 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
               />
               <View style={HomeScreenStyles.posterViewContainerStyles}>
                 {currentFeed && (
-                  <>
-                    <MFMetaData
-                      currentFeed={currentFeed}
-                      rootContainerStyles={{
-                        flexDirection: "row",
-                        alignContent: "space-around",
-                      }}
-                    />
-                    <MFText
-                      shouldRenderText
-                      displayText={language}
-                      textStyle={HomeScreenStyles.subtitleText}
-                    />
-                  </>
+                  <MFMetaData
+                    currentFeed={currentFeed}
+                    rootContainerStyles={{
+                      flexDirection: GLOBALS.enableRTL ? "row-reverse" : "row",
+                      alignContent: "space-around",
+                    }}
+                  />
                 )}
               </View>
               <View style={HomeScreenStyles.contentContainer}>

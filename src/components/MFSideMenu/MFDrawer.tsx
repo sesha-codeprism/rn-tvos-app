@@ -6,9 +6,9 @@ import React, {
   useState,
 } from "react";
 import { Animated, Dimensions, StyleSheet, Modal } from "react-native";
-import { enableRTL } from "../../config/constants";
 import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
 import { AppStrings } from "../../config/strings";
+import { GLOBALS } from "../../utils/globals";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -28,9 +28,9 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
   const [expanded, setExpanded] = useState(props.open);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
   const leftOffset = new Animated.Value(
-    enableRTL
-      ? SCREEN_WIDTH * (props.drawerPercentage / 100)
-      : -(SCREEN_WIDTH * (props.drawerPercentage / 100))
+    GLOBALS.enableRTL
+      ? -(SCREEN_WIDTH * (props.drawerPercentage / 100))
+      : SCREEN_WIDTH * (props.drawerPercentage / 100)
   );
 
   useEffect(() => {
@@ -54,10 +54,10 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
   const openDrawer = () => {
     const { animationTime, opacity, drawerPercentage } = props;
     const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
-    console.log("Drawer is open", expanded, DRAWER_WIDTH, enableRTL);
+    console.log("Drawer is open", expanded, DRAWER_WIDTH);
 
     Animated.parallel([
-      enableRTL
+      GLOBALS.enableRTL
         ? Animated.timing(leftOffset, {
             toValue: 0,
             duration: animationTime,
@@ -81,14 +81,14 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
     const { animationTime, drawerPercentage } = props;
     const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
     Animated.parallel([
-      enableRTL
+      GLOBALS.enableRTL
         ? Animated.timing(leftOffset, {
-            toValue: DRAWER_WIDTH,
+            toValue: 0,
             duration: animationTime,
             useNativeDriver: true,
           })
         : Animated.timing(leftOffset, {
-            toValue: 0,
+            toValue: DRAWER_WIDTH,
             duration: animationTime,
             useNativeDriver: true,
           }),
@@ -115,7 +115,7 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
           closeDrawer();
           console.log("Modal has been closed.", expanded);
         }}
-        style={[styles.main, enableRTL ? { right: 0 } : { left: 0 }]}
+        style={[styles.main, GLOBALS.enableRTL ? { left: 0 } : { right: 0 }]}
         onDismiss={() => {
           console.log("Modal dismissed", expanded);
         }}
@@ -131,7 +131,7 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
           <Animated.View
             style={[
               styles.container,
-              enableRTL ? { right: 0 } : { left: 0 },
+              GLOBALS.enableRTL ? { left: 0 } : { right: 0 },
               {
                 opacity: fadeAnim,
               },

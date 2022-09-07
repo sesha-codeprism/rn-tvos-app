@@ -36,7 +36,8 @@ interface Ratings {
 
 interface OnScreenLanguage {
   title: string;
-  languageCode: string
+  languageCode: string;
+  enableRTL: boolean;
 }
 interface GLOBALSType {
   /** Information about the device running the app */
@@ -53,6 +54,8 @@ interface GLOBALSType {
   continuationToken: string;
   /** Root navigation */
   rootNavigation: any;
+  /** Should the UI be RTL */
+  enableRTL: boolean;
   /** Async store data */
   store: {
     accessToken: string | null;
@@ -100,6 +103,7 @@ export const GLOBALS: GLOBALSType = {
     AdditionalFields: { optOutPersonalDataUse: "false" },
     UserCreated: true,
   },
+  enableRTL: false,
   rootNavigation: null,
   bootstrapSelectors: null,
   continuationToken: "",
@@ -125,6 +129,7 @@ export const GLOBALS: GLOBALSType = {
         onScreenLanguage: {
           title: "English (US)",
           languageCode: "en-US",
+          enableRTL: false
 
         },
         closedCaption: "",

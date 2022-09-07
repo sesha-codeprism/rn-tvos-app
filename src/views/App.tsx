@@ -17,7 +17,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   const [onScreenLanguage, setOnScreenLanguage] = useState(
     GLOBALS.store.settings.display.onScreenLanguage
   );
-
+  const [enableRTL, shouldEnableRTL] = useState(GLOBALS.enableRTL);
   async function getLandingData() {
     // Initialize UIDef
     initUIDef();
@@ -33,8 +33,12 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     }
   };
 
-  const updateLanguage = (language: string) => {
+  const updateLanguage = (language: any) => {
     setOnScreenLanguage(language);
+  };
+
+  const updateRTLStatus = (rtlStatus: boolean) => {
+    shouldEnableRTL(rtlStatus);
   };
 
   const appSettings = {
@@ -42,6 +46,8 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     setUserProfile,
     onScreenLanguage,
     setOnScreenLanguage,
+    enableRTL,
+    shouldEnableRTL,
   };
 
   return (

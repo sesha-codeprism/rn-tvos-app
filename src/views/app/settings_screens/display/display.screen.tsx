@@ -31,7 +31,7 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
     const listItem = [
       {
         title: AppStrings.str_settings_android_specific_language,
-        subTitle: onScrreenLanguage,
+        subTitle: onScrreenLanguage.title,
         action: "on_screen_language",
         icon: "",
       },

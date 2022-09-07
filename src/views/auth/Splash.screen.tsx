@@ -81,6 +81,8 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
                   GLOBALS.store.settings.display.onScreenLanguage
                 );
               }
+              GLOBALS.enableRTL =
+                GLOBALS.store.settings.display.onScreenLanguage.enableRTL;
               props.navigation.replace(Routes.WhoIsWatching);
 
               duplex.initialize(duplexEndpoint);

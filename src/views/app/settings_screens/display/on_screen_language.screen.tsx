@@ -6,26 +6,29 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
-import { onscreenLanguageList } from "../../../../config/constants";
-import { useDispatch } from "react-redux";
-import { setLanguage } from "../../../../redux/language_slice";
+import {
+  appUIDefinition,
+  onscreenLanguageList,
+} from "../../../../config/constants";
 import { OnScreenLanguage } from "../../../../@types/UIDefinition";
-import { AppStrings, setOnScreenLanguage } from "../../../../config/strings";
+import { setOnScreenLanguage } from "../../../../config/strings";
+import { GlobalContext } from "../../../../contexts/globalContext";
 
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const list = appUIDefinition.onScreenLanguages;
+const list = appUIDefinition.onscreenLanguage;
 const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedLang, setSelectedLang] = useState<any>("");
+  const currentContext = useContext(GlobalContext);
 
   const onPress = (item: OnScreenLanguage) => {
     console.log("first");
@@ -33,12 +36,15 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
     GLOBALS.store.settings.display.onScreenLanguage.title = item.onScreenName;
     GLOBALS.store.settings.display.onScreenLanguage.languageCode =
       item.languageCode;
+    GLOBALS.store.settings.display.onScreenLanguage.enableRTL == item.isRTL;
     updateStore(JSON.stringify(GLOBALS.store));
     console.log("Item.langID", item.languageCode);
     setOnScreenLanguage(item.languageCode);
+    GLOBALS.enableRTL = item.isRTL;
+    // currentContext.shouldEnableRTL(item.isRTL);
   };
   const getValues = () => {
-    setSelectedLang(GLOBALS.store.settings.display.onScreenLanguage);
+    setSelectedLang(GLOBALS.store.settings.display.onScreenLanguage.title);
   };
   useEffect(() => {
     console.log("onscreenLanguageList", onscreenLanguageList);
