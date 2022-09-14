@@ -36,9 +36,8 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
     GLOBALS.store.settings.display.onScreenLanguage.title = item.onScreenName;
     GLOBALS.store.settings.display.onScreenLanguage.languageCode =
       item.languageCode;
-    GLOBALS.store.settings.display.onScreenLanguage.enableRTL == item.isRTL;
+    GLOBALS.store.settings.display.onScreenLanguage.enableRTL = item.isRTL;
     updateStore(JSON.stringify(GLOBALS.store));
-    console.log("Item.langID", item.languageCode);
     setOnScreenLanguage(item.languageCode);
     GLOBALS.enableRTL = item.isRTL;
     // currentContext.shouldEnableRTL(item.isRTL);

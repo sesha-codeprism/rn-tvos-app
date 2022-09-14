@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { debounceTime, onscreenLanguageList } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { GLOBALS } from "../../utils/globals";
+import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
 import { Feed, FeedItem } from "../../@types/HubsResponse";
 import MFMenu from "../../components/MFMenu/MFMenu";
@@ -25,6 +25,7 @@ import MFSwim from "../../components/MFSwim";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux";
 import MFText from "../../components/MFText";
+import { getDeviceDetails } from "../../../backend/subscriber/subscriber";
 
 interface Props {
   navigation: NativeStackNavigationProp<any>;
@@ -63,9 +64,8 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
     }, debounceTime);
   };
 
-  const setHubsData = () => {
+  const setHubsData = async () => {
     if (data && hubs.length <= 0) {
-      console.log("hubsQuery.data.data", data.data);
       const hubsResponse: Array<FeedItem> = data.data;
       const replace_hub: Array<FeedItem> = hubsResponse.filter(
         (e) => e.Name === "{profile_name}"
@@ -97,17 +97,25 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
       setHubs(hubsResponse);
       setFeeds(hubsResponse[index]);
       GLOBALS.rootNavigation = props.navigation;
-      console.log("AppStrings", AppStrings);
+      setTimeout(() => {
+        GLOBALS.store = resetAuthData();
+        console.log("GLOBALS.store", GLOBALS.store);
+      }, 50000);
+      // getDeviceDetails()
+      //   .then((val) => {
+      //     console.log("Resp val", val);
+      //   })
+      //   .catch((err) => {
+      //     console.log("Some err", err);
+      //   });
     }
   };
 
   const clearCurrentHub = (event: SubscriberFeed) => {
-    console.log("Clear current hub");
     setCurrentFeed(undefined);
   };
 
   const backAction = () => {
-    console.log("Capturing hadware back presses", open);
     if (open) {
       setOpen(false);
       drawerRef.current.close();
@@ -156,7 +164,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                   }, debounceTime);
                 }}
                 onPressSettings={() => {
-                  console.log("local state", open, onscreenLanguageList);
                   setOpen(open);
                   drawerRef.current.open();
                 }}

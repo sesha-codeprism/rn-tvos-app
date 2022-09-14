@@ -331,7 +331,7 @@
     "debounceTime": 500,
     "protocol": "https",
     "hostname": "reachclient.dev.mr.tv3cloud.com",
-    "currentLocale": { "full": "fr-FR", "short": "fr" },
+    "currentLocale": { "full": "en-US", "short": "fr" },
     "useLottieAnimationOnSplash": false,
     "height16x9": 253,
     "height2x3": 339,
@@ -343,11 +343,6 @@
     {
       "onScreenName": "English (US)",
       "languageCode": "en-US",
-      "isRTL": false
-    },
-    {
-      "onScreenName": "English (Canada)",
-      "languageCode": "en-CA",
       "isRTL": false
     },
     {

@@ -9,15 +9,12 @@ export const Log =
     ? console.log.bind(global.console)
     : () => { };
 
-export const updateStore = (MFStore: string) =>
-  /** Removing Async Store code. Switching to React Native default Settings API */
-  // AsyncStorage.setItem("MFStore", MFStore).then(() => {
-  //   Log("Update Store: ", GLOBALS.store);
-  // }
+export const updateStore = (MFStore: string) => {
   Settings.set({ store: MFStore });
+  console.log("Set store", GLOBALS.store);
+}
 
 export const getStore = () => Settings.get("store");
-// AsyncStorage.getItem("MFStore");
 
 
 export const getGloablStore = () => GLOBALS.store;

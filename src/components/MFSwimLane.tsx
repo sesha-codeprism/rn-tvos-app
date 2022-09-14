@@ -36,7 +36,6 @@ interface MFSwimLaneProps {
 
 const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
   const [page, setPage] = React.useState(0);
-  console.log(props);
   return (
     <MFFilmStrip
       limitItemsTo={16}
