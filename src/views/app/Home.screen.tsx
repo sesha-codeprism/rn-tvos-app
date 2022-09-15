@@ -97,17 +97,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
       setHubs(hubsResponse);
       setFeeds(hubsResponse[index]);
       GLOBALS.rootNavigation = props.navigation;
-      setTimeout(() => {
-        GLOBALS.store = resetAuthData();
-        console.log("GLOBALS.store", GLOBALS.store);
-      }, 50000);
-      // getDeviceDetails()
-      //   .then((val) => {
-      //     console.log("Resp val", val);
-      //   })
-      //   .catch((err) => {
-      //     console.log("Some err", err);
-      //   });
     }
   };
 
