@@ -31,8 +31,6 @@ const MFViewAllButton: React.FunctionComponent<MFViewAllButtonProps> = (
     setFocused(true);
     props.onFocus && props.onFocus(event);
   };
-  console.log("ViewAll Props", props);
-
   return (
     <MFCard
       title={props.displayText}

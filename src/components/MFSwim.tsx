@@ -31,7 +31,6 @@ interface MFSwimProps {
 
 const MFSwim: React.FunctionComponent<MFSwimProps> = (props) => {
   const data = getAllFeedDataForFeed(props.feeds!);
-  console.log("Props in MFSwim", props);
   return (
     <FlatList
       data={props.feeds?.Feeds}

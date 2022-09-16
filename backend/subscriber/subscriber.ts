@@ -298,6 +298,18 @@ export const deleteUserProfile = async (id: string) => {
   return response;
 };
 
+export const getDeviceDetails = async () => {
+  const { accessToken } = GLOBALS.store;
+  const url: string = parseUri(`${GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber}devices-byid/${GLOBALS.deviceInfo.deviceId}`);
+  const response = await DELETE({
+    url: url,
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  });
+  return response;
+}
+
 export const registerSubscriberUdls = (params?: any) => {
   const BASE = "subscriber";
 
