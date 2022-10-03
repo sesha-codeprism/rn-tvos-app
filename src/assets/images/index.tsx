@@ -38,6 +38,8 @@ const AppImages: { [key: string]: Source | any } = {
   bottomGradient: require(`${imagesDirectory}/bottomGradient.png`),
   overlayPortrait: require(`${imagesDirectory}/overlay_ portrait.png`),
   overlayLandscape: require(`${imagesDirectory}/overlay_landscape.png`),
+  series_rec: require(`${imagesDirectory}/series_rec.png`),
+  single_rec: require(`${imagesDirectory}/single_rec.png`),
 };
 
 export { AppImages };

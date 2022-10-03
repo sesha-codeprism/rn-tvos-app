@@ -9,6 +9,7 @@ import Styles from "./MFButtonsVariants/MFButtonStyles";
 import { TitlePlacement } from "./MFCard";
 import MFFilmStrip from "./MFFilmStrip/MFFilmStrip";
 import MFViewAllButton from "./MFFilmStrip/ViewAllComponent";
+import MFOverlay from "./MFOverlay";
 
 interface MFSwimLaneProps {
   feed: Feed;
@@ -36,6 +37,7 @@ interface MFSwimLaneProps {
 
 const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
   const [page, setPage] = React.useState(0);
+  console.log("data inside MFSwimlane", props.data);
   return (
     <MFFilmStrip
       limitItemsTo={16}

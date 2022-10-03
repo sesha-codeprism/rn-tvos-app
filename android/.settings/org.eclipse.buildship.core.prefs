@@ -1,4 +1,4 @@
-arguments=
+arguments=--init-script /var/folders/r2/2wk2dyn92zs8jb6mq07zs48m0000gn/T/init15446051445507663411.gradle --init-script /var/folders/r2/2wk2dyn92zs8jb6mq07zs48m0000gn/T/init16189076507804196001.gradle
 auto.sync=false
 build.scans.enabled=false
 connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)
