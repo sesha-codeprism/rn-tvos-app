@@ -9,7 +9,7 @@ import SubtitleLanguageScreen from "../../views/app/settings_screens/display/sub
 import VideoQualityScreen from "../../views/app/settings_screens/display/video_quality.screen";
 import AdultLockScreen from "../../views/app/settings_screens/parental_controll/adult_lock.screen";
 import ContentLockScreen from "../../views/app/settings_screens/parental_controll/content_lock.screen";
-import ContentLockPinScreen from "../../views/app/settings_screens/parental_controll/content_lock_pin.screen";
+import ContentLockPinScreen from "../../views/app/settings_screens/parental_controll/pin_lock.screen";
 import ParentalControllScreen from "../../views/app/settings_screens/parental_controll/parental_controll.screen";
 import PurchaseLockScreen from "../../views/app/settings_screens/parental_controll/purchase_lock.screen";
 import RatingScreen from "../../views/app/settings_screens/parental_controll/rating.screen";
@@ -49,7 +49,7 @@ export const SettingsNavigator: React.FunctionComponent = (props) => {
           component={ParentalControllScreen}
         />
         <Stack.Screen
-          name={Routes.ContentLockPin}
+          name={Routes.PinLock}
           component={ContentLockPinScreen}
         />
         <Stack.Screen name={Routes.ContentLock} component={ContentLockScreen} />

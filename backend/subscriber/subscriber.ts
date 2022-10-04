@@ -3,6 +3,8 @@ import { GLOBALS } from "../../src/utils/globals";
 import { DELETE, GET, POST, PUT } from "../utils/common/cloud";
 import { lang } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
+export type PinType = "adult" | "parentalcontrol" | "purchase";
+
 const getProgramPlayActions = async (id: string, params: Object) => {
   const res = {
     name: "subscriber/getProgramPlayActions",
@@ -34,8 +36,7 @@ const getYouMightLike = async (params: any) => {
       $skip: 0,
       $top: 16,
       $lang: lang,
-      storeId: DefaultStore.Id
-
+      storeId: DefaultStore.Id,
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
@@ -57,8 +58,7 @@ const getBookmarks = async (uri: string, params: any) => {
       $skip: 0,
       $top: 16,
       $lang: lang,
-      storeId: DefaultStore.Id
-
+      storeId: DefaultStore.Id,
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
@@ -80,8 +80,7 @@ const getSubscriberPins = async (params?: any) => {
       $skip: 0,
       $top: 16,
       $lang: lang,
-      storeId: DefaultStore.Id
-
+      storeId: DefaultStore.Id,
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
@@ -103,8 +102,7 @@ const getReminders = async (params?: any) => {
       $skip: 0,
       $top: 16,
       $lang: lang,
-      storeId: DefaultStore.Id
-
+      storeId: DefaultStore.Id,
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
@@ -125,8 +123,7 @@ const getSubscriberSubscriptions = async (params?: any) => {
       $skip: 0,
       $top: 16,
       $lang: lang,
-      storeId: DefaultStore.Id
-
+      storeId: DefaultStore.Id,
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
@@ -148,8 +145,7 @@ const getYouMightLikeByTaste = async (params?: any) => {
       $skip: 0,
       $top: 16,
       $lang: lang,
-      storeId: DefaultStore.Id
-
+      storeId: DefaultStore.Id,
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
@@ -170,8 +166,7 @@ const getYouMightLikeBySpecificTaste = async (params?: any) => {
       $skip: 0,
       $top: 16,
       $lang: lang,
-      storeId: DefaultStore.Id
-
+      storeId: DefaultStore.Id,
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
@@ -192,8 +187,7 @@ const getLibrary = async (params?: any) => {
       $skip: 0,
       $top: 16,
       $lang: lang,
-      storeId: DefaultStore.Id
-
+      storeId: DefaultStore.Id,
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
@@ -214,8 +208,7 @@ const getLiveTrendingPrograms = async () => {
       $skip: 0,
       $top: 16,
       $lang: lang,
-      storeId: DefaultStore.Id
-
+      storeId: DefaultStore.Id,
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
@@ -297,10 +290,56 @@ export const deleteUserProfile = async (id: string) => {
 
   return response;
 };
-
+export const getPasscodes = async (PasscodeType: PinType) => {
+  const url: string =
+    parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || "") +
+    `/v2/passcodes/${PasscodeType}`;
+  console.log("api url for passcode is", url);
+  const response = await GET({
+    url: url,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+  });
+  return response;
+};
+export const createPasscodes = async (PasscodeType: PinType, pin: string) => {
+  try {
+    const url: string =
+      parseUri(
+        GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || ""
+      ) + `/v2/passcodes/${PasscodeType}`;
+    console.log("api url for passcode is", url);
+    const response = await POST({
+      url: url,
+      headers: {
+        Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      },
+      params: { PasscodeType, Passcode: pin },
+    });
+    return response;
+  } catch (error) {
+    console.log("error in createPasscodes", error);
+  }
+};
+export const changePasscodes = async (PasscodeType: PinType, pin: string) => {
+  const url: string =
+    parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || "") +
+    `/v2/passcodes/${PasscodeType}`;
+  const response = await PUT({
+    url: url,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+    params: { PasscodeType, Passcode: pin },
+  });
+  return response;
+};
 export const deleteDevice = async () => {
   const { accessToken } = GLOBALS.store;
-  const url: string = parseUri(`${GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber}devices-byid/${GLOBALS.deviceInfo.deviceId}`);
+  const url: string = parseUri(
+    `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber}devices-byid/${GLOBALS.deviceInfo.deviceId}`
+  );
   const response = await DELETE({
     url: url,
     headers: {
@@ -308,7 +347,7 @@ export const deleteDevice = async () => {
     },
   });
   return response;
-}
+};
 
 export const registerSubscriberUdls = (params?: any) => {
   const BASE = "subscriber";

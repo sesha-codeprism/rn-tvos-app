@@ -6,7 +6,7 @@ import { Dimensions } from "react-native";
 import SettingsLandingScreen from "../../views/app/settings_screens/settings_landingScreen";
 import AccountSettingsScreen from "../../views/app/settings_screens/account_settings";
 import ParentalControllScreen from "../../views/app/settings_screens/parental_controll/parental_controll.screen";
-import ContentLockPinScreen from "../../views/app/settings_screens/parental_controll/content_lock_pin.screen";
+import PinLockScreen from "../../views/app/settings_screens/parental_controll/pin_lock.screen";
 import ContentLockScreen from "../../views/app/settings_screens/parental_controll/content_lock.screen";
 import UnratedContentScreen from "../../views/app/settings_screens/parental_controll/unrated_content.screen";
 import AdultLockScreen from "../../views/app/settings_screens/parental_controll/adult_lock.screen";
@@ -62,7 +62,7 @@ export const Routes = {
   Settings: "settings",
   AccountsSettings: "accounts_screen",
   ParentalControll: "parental_controll",
-  ContentLockPin: "content_lock_pin",
+  PinLock: "pin_lock",
   ContentLock: "content_lock",
   Rating: "ratings",
   UnratedContent: "unrated_content",
@@ -114,8 +114,8 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           component={ParentalControllScreen}
         />
         <Stack.Screen
-          name={Routes.ContentLockPin}
-          component={ContentLockPinScreen}
+          name={Routes.PinLock}
+          component={PinLockScreen}
         />
         <Stack.Screen name={Routes.ContentLock} component={ContentLockScreen} />
         <Stack.Screen name={Routes.Rating} component={RatingScreen} />
