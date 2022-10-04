@@ -8,6 +8,7 @@ import { GLOBALS } from "../utils/globals";
 import "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
+import { initializeAnalyticsService } from "../utils/analytics/analytics";
 
 interface AppProps {}
 
@@ -25,6 +26,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
 
   useEffect(() => {
     getLandingData();
+    initializeAnalyticsService();
   }, []);
 
   const updateProfile = (userProfile: UserProfile) => {

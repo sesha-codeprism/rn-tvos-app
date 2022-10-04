@@ -178,7 +178,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = (props) => {
                 layoutType={
                   props.enableCircularLayout ? "Circular" : "LandScape"
                 }
-                showTitleOnlyOnFocus={false}
+                showTitleOnlyOnFocus={true}
                 titlePlacement={props.titlePlacement}
                 overlayComponent={props.overlayComponent}
                 progressComponent={props.progressElement}

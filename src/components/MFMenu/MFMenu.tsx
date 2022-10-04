@@ -13,8 +13,6 @@ import { Routes } from "../../config/navigation/RouterOutlet";
 import { GlobalContext } from "../../contexts/globalContext";
 import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
-import { useDispatch } from "react-redux";
-import { setLanguage } from "../../redux/language_slice";
 import { GLOBALS } from "../../utils/globals";
 
 interface MFMenuProps {
@@ -32,10 +30,10 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   const [isIdentityAssigned, setIdentityAssigned] = useState(false);
   const globalContext = useContext(GlobalContext);
   const [focused, setFocused] = useState("");
-  const dispatch = useDispatch();
 
   const testing = false;
   const _onPressMain = (event: GestureResponderEvent, index: number) => {
+    console.log("Some log");
     props.onPress && props.onPress(index);
   };
   const _onFocus = (index: number) => {
@@ -116,9 +114,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                 onBlur={() => {
                   setFocused("");
                 }}
-                onPress={() => {
-                  dispatch(setLanguage("jp"));
-                }}
+                onPress={() => {}}
               />
             </View>
           </View>
@@ -144,7 +140,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                   unFocusedBorderColor: appUIDefinition.theme.colors.secondary,
                   focusedBorderWidth: 5,
                   unFocusedBorderWidth: 2,
-                  isDisabled: false,
+                  isDisabled: true,
                 },
               }}
               onFocus={(event, index) => {

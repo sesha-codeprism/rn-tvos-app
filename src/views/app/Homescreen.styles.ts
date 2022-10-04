@@ -36,7 +36,8 @@ export const HomeScreenStyles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 10
+    paddingVertical: 10,
+
   },
   landScapeCardImageStyles: {
     width: ((appUIDefinition.config.height16x9 * 16) / 9) - 25,
@@ -65,15 +66,16 @@ export const HomeScreenStyles = StyleSheet.create({
 
   linearGradientStyles: { padding: 10 },
   posterImageStyles: {
-    height: 300,
-    width: (300 * 16) / 9,
+    height: 220,
+    width: (220 * 16) / 9,
     borderRadius: 8
   },
   posterViewContainerStyles: {
     marginTop: 50,
     paddingHorizontal: 50,
-    height: SCREEN_HEIGHT * 0.3,
-    width: '100%'
+    height: SCREEN_HEIGHT * 0.2,
+    width: '100%',
+    marginHorizontal: 30
   },
   posterImageContainerStyles: { flex: 0.38 },
   titleTextStyle: {
@@ -128,6 +130,8 @@ export const HomeScreenStyles = StyleSheet.create({
     alignContent: 'flex-start',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-
+  },
+  rootCardStyles: {
+    flexDirection: 'column',
   }
 });

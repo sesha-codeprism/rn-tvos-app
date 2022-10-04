@@ -68,8 +68,7 @@ const Styles = StyleSheet.create({
   },
   railContainer: {
     width: "100%",
-    height: 420,
-    margin: 20,
+    height: 450,
     marginLeft: 20,
   },
   railTitle: {

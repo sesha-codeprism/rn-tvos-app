@@ -16,6 +16,7 @@ import { MFThemeObject } from "../@types/MFTheme";
 import { appUIDefinition } from "../config/constants";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { AppImages } from "../assets/images";
+import MFMetaData from "./MFMetaData";
 const MFTheme: MFThemeObject = require("../config/theme/theme.json");
 
 export enum AspectRatios {
@@ -101,69 +102,82 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> = (props) => {
       <Animated.View
         style={{
           opacity: fadeAnim,
-          transform: [
-            {
-              translateY: translateAnim,
-            },
-          ],
+          transform: [{ translateY: translateAnim }],
         }}
       >
-        <MFText
-          textStyle={[
-            styles.cardTitleText,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-            },
-          ]}
-          displayText={props.title}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
-        <MFText
-          textStyle={[
-            styles.cardSubTitleText,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-            },
-          ]}
-          displayText={props.subTitle}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
+        <View>
+          <MFMetaData currentFeed={props.data} />
+        </View>
       </Animated.View>
     ) : (
-      <View>
-        <MFText
-          textStyle={[
-            styles.cardTitleText,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-            },
-          ]}
-          displayText={props.title}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
-        <MFText
-          textStyle={[
-            styles.cardSubTitleText,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-            },
-          ]}
-          displayText={props.subTitle}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
-      </View>
+      <MFMetaData currentFeed={props.data} />
+
+      //   <Animated.View
+      //     style={{
+      //       opacity: fadeAnim,
+      //       transform: [
+      //         {
+      //           translateY: translateAnim,
+      //         },
+      //       ],
+      //     }}
+      //   >
+      //     <MFText
+      //       textStyle={[
+      //         styles.cardTitleText,
+      //         {
+      //           alignSelf:
+      //             props.layoutType === "Circular" ? "center" : "flex-start",
+      //           paddingRight: props.layoutType === "Circular" ? 150 : 0,
+      //         },
+      //       ]}
+      //       displayText={props.title}
+      //       enableRTL={props.enableRTL}
+      //       shouldRenderText={props.shouldRenderText}
+      //     />
+      //     <MFText
+      //       textStyle={[
+      //         styles.cardSubTitleText,
+      //         {
+      //           alignSelf:
+      //             props.layoutType === "Circular" ? "center" : "flex-start",
+      //           paddingRight: props.layoutType === "Circular" ? 150 : 0,
+      //         },
+      //       ]}
+      //       displayText={props.subTitle}
+      //       enableRTL={props.enableRTL}
+      //       shouldRenderText={props.shouldRenderText}
+      //     />
+      //   </Animated.View>
+      // ) : (
+      //   <View>
+      //     <MFText
+      //       textStyle={[
+      //         styles.cardTitleText,
+      //         {
+      //           alignSelf:
+      //             props.layoutType === "Circular" ? "center" : "flex-start",
+      //           paddingRight: props.layoutType === "Circular" ? 150 : 0,
+      //         },
+      //       ]}
+      //       displayText={props.title}
+      //       enableRTL={props.enableRTL}
+      //       shouldRenderText={props.shouldRenderText}
+      //     />
+      //     <MFText
+      //       textStyle={[
+      //         styles.cardSubTitleText,
+      //         {
+      //           alignSelf:
+      //             props.layoutType === "Circular" ? "center" : "flex-start",
+      //           paddingRight: props.layoutType === "Circular" ? 150 : 0,
+      //         },
+      //       ]}
+      //       displayText={props.subTitle}
+      //       enableRTL={props.enableRTL}
+      //       shouldRenderText={props.shouldRenderText}
+      //     />
+      //   </View>
     );
 
   return (

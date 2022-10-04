@@ -20,6 +20,8 @@ interface Config {
   height4x3: number;
   queryCacheTime: number;
   queryStaleTime: number;
+  enableMarquee: boolean;
+  metadataTemplate: string;
 }
 
 interface CurrentLocale {

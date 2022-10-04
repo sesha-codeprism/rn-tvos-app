@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { StringsObject } from "../@types/strings";
 const enUS = require("../i18n/en-US/strings.json");
 const frCA = require("../i18n/fr-CA/strings.json");

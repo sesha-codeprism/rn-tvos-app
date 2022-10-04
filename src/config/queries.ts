@@ -59,8 +59,6 @@ const getUDLData = async (uri: string, pageNo: number = 0) => {
                         return massagedData;
                     } else {
                         const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
-                        console.log("massageSubscriberFeed for", uri, "is", massagedData);
-
                         return massagedData;
                     }
                 } else {

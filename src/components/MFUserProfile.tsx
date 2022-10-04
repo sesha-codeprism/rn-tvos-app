@@ -126,7 +126,8 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
           <FastImage
             source={
               props.userProfile
-                ? AppImages[props.userProfile.Image]
+                ? //@ts-ignore
+                  AppImages[props.userProfile.Image]
                 : AppImages.icon_add
             }
             style={

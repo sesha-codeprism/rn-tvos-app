@@ -9,6 +9,7 @@ import { Routes } from "../../../config/navigation/RouterOutlet";
 import { resetCaches } from "../../../config/queries";
 import { useNavigation } from "@react-navigation/native";
 import { AppStrings } from "../../../config/strings";
+import { deleteDevice } from "../../../../backend/subscriber/subscriber";
 
 interface AccountSettingsProps {
   navigation: NativeStackNavigationProp<any>;
@@ -34,6 +35,8 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
     }
     /** Async store is done.. now move user to logout screen */
     GLOBALS.rootNavigation.replace(Routes.ShortCode);
+    const resp = deleteDevice();
+    console.log("Logout", resp);
   };
 
   return (
