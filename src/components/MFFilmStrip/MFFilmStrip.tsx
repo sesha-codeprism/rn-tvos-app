@@ -186,9 +186,9 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = (props) => {
                     //@ts-ignore
                     renderGradiant={true}
                     showProgress={true}
-                    displayTitle={item.title}
-                    bottomText={item.runtime}
                     progress={20}
+                    // displayTitle={item.title}
+                    bottomText={item.runtime}
                     // showRec={true}
                     // recType={"series"}
                   />

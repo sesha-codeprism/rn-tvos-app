@@ -35,7 +35,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const [subTitle, setSubTitle] = useState(props.route.params.screenName);
   const [label, setLabel] = useState(props.route.params.label);
   const [actionType, setActionType] = useState(props.route.params.action);
-
+  const [errMessage, setErrMessage] = useState("");
 
   useEffect(() => {
     getPassword(props.route.params.pinType)
@@ -69,17 +69,30 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
     try {
       console.log("action type ", actionType);
       // If pin action type is create then it will ask for pin confirmation
-      if (actionType === PinActionTypes["CREATE"] || actionType === PinActionTypes["UPDATE"]) {
+      if (
+        actionType === PinActionTypes["CREATE"] ||
+        actionType === PinActionTypes["UPDATE"]
+      ) {
         setActionType(PinActionTypes["CONFIRM"]);
         setLabel("Re-enter the new PIN");
-        // if pin action type is confirm then 
-      } else if (actionType === PinActionTypes["CONFIRM"] && props.route.params.pinType !== PinActionTypes['UPDATE']) {
+        // if pin action type is confirm
+      } else if (
+        actionType === PinActionTypes["CONFIRM"] &&
+        props.route.params.pinType !== PinActionTypes["UPDATE"]
+      ) {
         console.log("pin", pin, "pinConfirm", pinConfirm);
         if (pin.join() === pinConfirm.join()) {
+          setErrMessage("");
           const res = setPasscode(props.route.params.pinType);
           console.log("setpin response", res);
+        } else {
+          setErrMessage("Pin Mismatch");
+          setPinConfirm(["", "", "", ""]);
         }
-      } else if (actionType === PinActionTypes["CONFIRM"] && props.route.params.pinType === PinActionTypes['UPDATE']) {
+      } else if (
+        actionType === PinActionTypes["CONFIRM"] &&
+        props.route.params.pinType === PinActionTypes["UPDATE"]
+      ) {
         if (pin.join() === pinConfirm.join()) {
           const res = updatePasscode(props.route.params.pinType);
           console.log("change pin response", res);
@@ -113,6 +126,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         return true;
       } else {
         console.log("incorrect password");
+        setErrMessage("Incorrect Password");
         return false;
       }
     } catch (error) {
@@ -158,7 +172,11 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
 
   const onPressNumber = async (number: any) => {
     console.log("number pressed", number);
-    if (actionType === PinActionTypes["CREATE"] || PinActionTypes["VERIFY"]) {
+    if (
+      actionType === PinActionTypes["CREATE"] ||
+      actionType === PinActionTypes["VERIFY"]
+    ) {
+      console.log("inside create block", actionType);
       let pinCode = pin;
       pin[0] === ""
         ? (pinCode[0] = number)
@@ -178,6 +196,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         : null;
       console.log("pincode", pinCode);
     } else {
+      console.log("inside confirm block", actionType);
       let pinCode = pinConfirm;
       pinConfirm[0] === ""
         ? (pinCode[0] = number)
@@ -195,7 +214,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
       pinCode[3] !== ""
         ? await onSubmit(PinActionTypes["CONFIRM"])
         : null;
-      console.log("pincode", pinCode);
+      console.log("pinconfirm code", pinCode);
     }
   };
   const onPressDelete = () => {
@@ -212,7 +231,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
       : null;
     setPin([...pinCode]);
   };
-  
+
   return (
     <SideMenuLayout title="Parental Controls" subTitle={subTitle}>
       <Text style={styles.inputLebelText}>{label}</Text>
@@ -238,6 +257,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
           }
         )}
       </View>
+      {errMessage !== "" && <Text style={styles.errMessage}>{errMessage}</Text>}
       <View style={styles.numberPadContainer}>
         <View style={styles.numberPad}>
           <FlatList
@@ -344,7 +364,7 @@ const styles = StyleSheet.create({
     width: 437,
     height: 144,
     // backgroundColor: "red",
-    marginTop: 53,
+    // marginTop: 53,
   },
   numberPad: {
     display: "flex",
@@ -389,5 +409,11 @@ const styles = StyleSheet.create({
   },
   bottomTextContainer: {
     marginTop: 84,
+  },
+  errMessage: {
+    color: "#B22334",
+    fontSize: 23,
+    letterSpacing: 0,
+    lineHeight: 38,
   },
 });
