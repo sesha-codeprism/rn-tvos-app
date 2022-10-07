@@ -50,7 +50,6 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
     setCurrentFeed(undefined);
   };
   const _onFocus = (event?: SubscriberFeed, index?: number) => {};
-  console.log("data inside MFSwimlane", props.data);
   return (
     <View style={{ flexDirection: "column" }}>
       <MFFilmStrip

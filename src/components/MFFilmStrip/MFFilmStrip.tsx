@@ -183,6 +183,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = (props) => {
                 titlePlacement={props.titlePlacement}
                 overlayComponent={
                   <MFOverlay
+                    //@ts-ignore
                     renderGradiant={true}
                     showProgress={true}
                     displayTitle={item.title}
