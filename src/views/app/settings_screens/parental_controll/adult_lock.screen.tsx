@@ -14,6 +14,7 @@ import { Routes } from "../../../../config/navigation/RouterOutlet";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
+import { PinActionTypes } from "./parental_controll.screen";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -79,7 +80,7 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
           <Text style={styles.contentTitle}>Adult lock options</Text>
         </View>
         <FlatList
-          style={{ width: "100%", height: "100%"}}
+          style={{ width: "100%", height: "100%" }}
           data={list}
           keyExtractor={(item) => item.title}
           renderItem={({ item, index }) => {
@@ -127,7 +128,11 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
               </Pressable>
             );
           }}
-          contentContainerStyle={{height:'60%', width: '100%', justifyContent:'space-between'}}
+          contentContainerStyle={{
+            height: "60%",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
           ListFooterComponentStyle={{
             width: "100%",
             height: "100%",
@@ -148,7 +153,13 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
                     : styles.changePinButton
                 }
                 onPress={() => {
-                  props.navigation.navigate(Routes.PinLock);
+                  props.navigation.navigate(Routes.PinLock, {
+                    screenName: "Adult Locks",
+                    pinType: "adult",
+                    action: PinActionTypes["UPDATE"],
+                    label: "Enter the Changed PIN",
+                    screenTarget: Routes.AdultLock,
+                  });
                 }}
               >
                 <Text style={styles.changePinText}>Change PIN</Text>
