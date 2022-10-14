@@ -357,5 +357,377 @@
       "languageCode": "ar-QA",
       "isRTL": true
     }
-  ]
+  ],
+  "metadataByItemType": {
+    "PROGRAM-LIVE": {
+      "metadata": "{ChannelNumber} {CallLetters} <or> {Name}",
+      "metadata2": "{EpisodeName} <or> {Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{ChannelNumber} {CallLetters} <or> {Name}",
+      "metadata3_selected": "{Name}"
+    },
+    "PROGRAM-UPCOMING": {
+      "metadata": "{StartDateDay} {StartTime} <or> {Name}",
+      "metadata2": "{EpisodeName} <or> {Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{ChannelNumber} {CallLetters} <or> {Name}",
+      "metadata3_selected": "{Name}"
+    },
+    "PROGRAM-VOD": {
+      "metadata": "{ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata_selected": "{ReleaseYear} | {Rating}",
+      "metadata2_selected": "{Name}"
+    },
+    "PROGRAM-DVR": {
+      "metadata": "{TimeLeft} <or> {Duration}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{TimeLeft} <or> {Duration}",
+      "metadata3_selected": "{Name}"
+    },
+    "PROGRAM-CATCHUP": {
+      "metadata": "{FirstAired} <or> {StartDate} | {StartTime}",
+      "metadata2": "{Name}",
+      "metadata2_selected": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{FirstAired} <or> {StartDate} | {StartTime}",
+      "metadata3_selected": "{Name}"
+    },
+    "PROGRAM-PACKAGE": {
+      "metadata": "{ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata2_selected": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{ReleaseYear} | {Rating}",
+      "metadata3_selected": "{Name}"
+    },
+    "EPISODE-LIVE": {
+      "metadata": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {ChannelNumber} {CallLetters}",
+      "metadata2": "{EpisodeName} <or> {Name}",
+      "metadata2_selected": "{EpisodeName} <or> {Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {StartTimeToEndTime} <or> {EpisodeNameOnSeriesPage} {ChannelNumber} {CallLetters}",
+      "metadata3_selected": "{EpisodeName} <or> {ChannelNumber} {CallLetters}",
+      "metadata_extra_height": "40px"
+    },
+    "EPISODE-UPCOMING": {
+      "metadata": "{StartDateDay} {StartTime} <or> {ReleaseYear} | {Rating}",
+      "metadata2": "{EpisodeName} <or> {Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {ChannelNumber} {CallLetters} <or> {ReleaseYear} | {Rating}",
+      "metadata3_selected": "{EpisodeName} <or> {ChannelNumber} {CallLetters}",
+      "metadata_extra_height": "24px"
+    },
+    "EPISODE-VOD": {
+      "metadata": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} <or> {ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} <or> {ReleaseYear} | {Rating}",
+      "metadata2_selected": "{Name}",
+      "metadata3_selected": "{EpisodeName}",
+      "metadata_extra_height": "40px"
+    },
+    "EPISODE-DVR": {
+      "metadata": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}",
+      "metadata2": "{Name}",
+      "metadata2_selected": "{Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}",
+      "metadata3_selected": "{EpisodeName}",
+      "metadata_extra_height": "40px"
+    },
+    "SINGLETIME-DVR": {
+      "metadata": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}",
+      "metadata2": "{Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}",
+      "metadata3_selected": "{EpisodeName}",
+      "metadata_extra_height": "40px"
+    },
+    "EPISODE-CATCHUP": {
+      "metadata": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {FirstAired} <or> {EpisodeNameOnSeriesPage} {StartDate} | {StartTime}",
+      "metadata2": "{Name}",
+      "metadata2_selected": "{Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {EpisodeName} {FirstAired} <or> {EpisodeNameOnSeriesPage} {StartDate} | {StartTime}",
+      "metadata3_selected": "{EpisodeName}",
+      "metadata_extra_height": "40px"
+    },
+    "EPISODE-PACKAGE": {
+      "metadata": "{EpisodeNameOnSeriesPage} {ReleaseYear} | {Rating}",
+      "metadata3": "{EpisodeName} <or> {Name}",
+      "metadata_selected": "{EpisodeNameOnSeriesPage} {ReleaseYear} | {Rating}",
+      "metadata3_selected": "{EpisodeName}",
+      "metadata_extra_height": "40px"
+    },
+    "GENERIC-LIVE": {
+      "metadata": "{ChannelNumber} {CallLetters} <or> {Name}",
+      "metadata2": "{EpisodeName} <or> {Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{StartTimeToEndTime} <or> {ChannelNumber} {CallLetters}",
+      "metadata3_selected": "{Name}"
+    },
+    "GENERIC-DVR": {
+      "metadata": "{TimeLeft} <or> {Duration}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{TimeLeft} <or> {Duration}",
+      "metadata3_selected": "{Name}"
+    },
+    "GENERIC-CATCHUP": {
+      "metadata": "{FirstAired} <or> {StartDate} | {StartTime}",
+      "metadata2": "{Name}",
+      "metadata2_selected": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{FirstAired} <or> {StartDate} | {StartTime}",
+      "metadata3_selected": "{Name}"
+    },
+    "PPVEVENT-LIVE": {
+      "metadata": "{PPVAirChannelTime_short}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{PPVAirChannelTime_short}",
+      "metadata3_selected": "{Name}"
+    },
+    "SERIES": {
+      "metadata": "{ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{ReleaseYear} | {Rating}",
+      "metadata2_selected": "{Name}",
+      "metadata3_selected": "{EpisodeName}"
+    },
+    "PACKAGE": {
+      "metadata": "{PackageContentsCount}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{PackageContentsCount}",
+      "metadata2_selected": "{Name}"
+    },
+    "SVODPACKAGE": {
+      "metadata": "{PackageContentsCount}",
+      "metadata2": "{Name}",
+      "metadata_selected": "{PackageContentsCount}",
+      "metadata2_selected": "{Name}"
+    },
+    "APP": {
+      "metadata": "{Name}",
+      "metadata2": "{Name}",
+      "metadata3": "{NameDescription}",
+      "metadata_selected": "{Name}",
+      "metadata3_selected": "{NameDescription}"
+    },
+    "SERIES-NETFLIX": {
+      "metadata": "{title}",
+      "metadata3": "{groupTitle}",
+      "metadataSettingsOverride": "$metadataSettingsOverride"
+    },
+    "PROGRAM-NETFLIX": {
+      "metadata": "{title}",
+      "metadata3": "{groupTitle}",
+      "metadataSettingsOverride": "$metadataSettingsOverride"
+    },
+    "RESUMED-NETFLIX": {
+      "metadata": "{title}",
+      "metadata3": "{groupTitle}",
+      "metadataSettingsOverride": "$metadataSettingsOverride"
+    },
+    "SIGNUP-NETFLIX": {
+      "metadata": "{groupTitle}"
+    },
+    "PROFILES-NETFLIX": {
+      "metadata": "{title}",
+      "metadata3": "{groupTitle}",
+      "metadataSettingsOverride": "$metadataSettingsOverride"
+    },
+    "STATIC-NETFLIX": {
+      "metadata": "{groupTitle}"
+    },
+    "DEVICEAPP": {
+      "metadata": "{Name}",
+      "metadata_selected": "{Name}"
+    },
+    "RECOMM": {
+      "metadata1": "{Image}",
+      "metadata2": "{Name}",
+      "metadata3": "{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}"
+    },
+    "STORE": {
+      "metadata": "{Name}",
+      "metadata2": "{Name}",
+      "metadata3": "{NameDescription}",
+      "metadata_selected": "{Name}",
+      "metadata3_selected": "{NameDescription}"
+    },
+    "PERSON": {
+      "metadata": "{PersonName}",
+      "metadata2": "",
+      "metadata3": "",
+      "metadata_selected": "{RoleName}",
+      "metadata3_selected": ""
+    },
+    "CHANNEL": {
+      "metadata": "{ChannelNumber} {CallLetters}",
+      "metadata2": "{Name}",
+      "metadata3": "{CurrentEpisode}",
+      "metadata_selected": "{ChannelNumber} {CallLetters}",
+      "metadata2_selected": "{Name}",
+      "metadata3_selected": "{CurrentEpisode}"
+    },
+    "CHANNEL-LIVE": {
+      "metadata": "{Number} {CallLetters}",
+      "metadata_selected": "{Number} {CallLetters}"
+    },
+    "contentRating": {
+      "Rating_en": "{ContentRatingValue_RT_Critic} {Rating}",
+      "Rating_fr": "{ContentRatingValue_Cinoche_Critic} | {Rating}"
+    },
+    "PROGRAM-LASTWATCHED": {
+      "metadataIcon": "{NetworkLogo}",
+      "metadata": "{ChannelNumber}",
+      "metadata3": "{StartTimeToEndTime}",
+      "metadata4": "{Name}",
+      "metadata6_selected": ""
+    },
+    "CHANNEL-LASTWATCHED": {
+      "metadataIcon": "{NetworkLogo}",
+      "metadata": "{ChannelNumber}",
+      "metadata3": "{StartTimeToEndTime}",
+      "metadata4": "{Name}",
+      "metadata6_selected": ""
+    },
+    "EPISODE-LASTWATCHED": {
+      "metadataIcon": "{NetworkLogo}",
+      "metadata": "{ChannelNumber}",
+      "metadata3": "{StartTimeToEndTime}",
+      "metadata4": "{Name}",
+      "metadata5": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} <or> {EpisodeName}",
+      "metadata6_selected": ""
+    },
+    "GENERIC-LASTWATCHED": {
+      "metadataIcon": "{NetworkLogo}",
+      "metadata": "{ChannelNumber}",
+      "metadata3": "{StartTimeToEndTime}",
+      "metadata4": "{Name} <or> {EpisodeName}",
+      "metadata6_selected": ""
+    },
+    "GENERIC_SERIES-LIVE": {
+      "metadata": "{FirstAired} <or> {StartDate} {StartTime}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{FirstAired} <or> {StartDate} {StartTime}",
+      "metadata3_selected": "{Name}"
+    },
+    "GENERIC_SERIES-CATCHUP": {
+      "metadata": "{FirstAired} <or> {StartDate} {StartTime}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{FirstAired} <or> {StartDate} {StartTime}",
+      "metadata3_selected": "{Name}"
+    },
+    "GENERIC_SERIES-VOD": {
+      "metadata1": "{Image}",
+      "metadata2": "{Name}",
+      "metadata3": "{ReleaseYear} | {Rating}"
+    },
+    "Native-APP": {
+      "metadata": "{Name}",
+      "metadata2": "{Name}",
+      "metadata3": "{NameDescription}",
+      "metadata_selected": "{Name}",
+      "metadata3_selected": "{NameDescription}"
+    }
+  },
+  "metadataByFeedType": {
+    "CONTINUE": {
+      "metadata": "{ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{TimeLeftOrDuration} <or> {CurrentEpisode} <or> {groupTitle} <or> {ReleaseYear} | {Rating} <or> {TimeLeftOrDuration}",
+      "metadata3_selected": "{EpisodeName} <or> {Name} <or> {title}"
+    },
+    "PINS": {
+      "metadata": "{ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{ReleaseYear} | {Rating}",
+      "metadata3_selected": "{EpisodeName} <or> {Name}"
+    },
+    "PURCHASES": {
+      "metadata": "{RentalTimeLeft_short} <or> {ReleaseYear} {Rating}",
+      "metadata_selected": "{RentalTimeLeft_short} <or> {ReleaseYear} {Rating}",
+      "metadata2": "{Name}"
+    },
+    "SIMILAR": {
+      "metadata": "{ReleaseYear} | {Rating} <or> {Name}",
+      "metadata2": "{Name}",
+      "metadata3": "{ReleaseYear} | {Rating} <or> {Name}",
+      "metadata_selected": "{ReleaseYear} | {Rating} <or> {Name}",
+      "metadata3_selected": "{ReleaseYear} | {Rating} <or> {Name}"
+    },
+    "STACKEDCARD": {
+      "metadata": "{Name}",
+      "metadata_selected": "{Name}"
+    },
+    "STACKEDCARDFORAPP": {
+      "metadata_selected": "{Name}"
+    },
+    "NETFLIX": {
+      "metadata": "{title}",
+      "metadata_selected": "{title}"
+    },
+    "DVRSWIMLANE": {
+      "metadata1": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage}",
+      "metadata1_selected": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage}",
+      "metadata2_selected": "{DurationOrStateIndicator}",
+      "metadata2": "{DurationOrStateIndicator}",
+      "metadata3_selected": "{Name}",
+      "metadata4_selected": "{ReleaseYear} | {Rating} | {CallLetters} {ChannelNumber}",
+      "metadata5_selected": "{DvrSwimlaneDisplayStatusDescription}"
+    },
+    "DVRGROUPSWIMLANE": {
+      "metadata3_selected": "{DVRSeriesTitle}",
+      "metadata4_selected": "{NumOfSeasons} | {NumOfEpisodes}",
+      "metadata5_selected": "{DisplayStatusDescription}"
+    }
+  },
+  "metadataStyles": {
+    "RECOMM": {
+      "metadata1": {
+        "width": 94,
+        "height": 94,
+        "marginRight": 20,
+        "backgroundColor": "#282828",
+        "borderRadius": 6,
+        "opacity": 0.85,
+        "alignContent": "center",
+        "justifyContent": "center"
+      },
+      "metadata2": {
+        "fontFamily": "Inter-Bold",
+        "fontSize": 38,
+        "color": "white",
+        "lineHeight": 55,
+        "textAlign": "left"
+      },
+      "metadata3": {
+        "fontFamily": "Inter-SemiBold",
+        "fontSize": 25,
+        "lineHeight": 38,
+        "color": "#828282",
+        "textAlign": "left"
+      },
+      "metadataImageStyle": {
+        "width": 72,
+        "height": 30,
+        "alignSelf": "center"
+      },
+      "metadataIconStyles": {
+        "width": 72,
+        "height": 30,
+        "alignSelf": "center"
+      }
+    }
+  }
 }

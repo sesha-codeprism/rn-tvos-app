@@ -16,7 +16,7 @@ import { MFThemeObject } from "../@types/MFTheme";
 import { appUIDefinition } from "../config/constants";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { AppImages } from "../assets/images";
-import MFMetaData from "./MFMetaData";
+import MFMetaData from "./MFMetadata/MFMetaData";
 const MFTheme: MFThemeObject = require("../config/theme/theme.json");
 
 export enum AspectRatios {

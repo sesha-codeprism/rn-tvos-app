@@ -1,23 +1,16 @@
-import { current } from "@reduxjs/toolkit";
 import React, { useState } from "react";
 import { View } from "react-native";
-import FastImage from "react-native-fast-image";
 import { Feed } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
-import { AppImages } from "../assets/images";
-import { appUIDefinition, layout2x3 } from "../config/constants";
-import { getMetadataLine2, getNetworkInfo } from "../utils/assetUtils";
-import { SCREEN_WIDTH } from "../utils/dimensions";
+import { layout2x3 } from "../config/constants";
+import mkIcons from "../config/MKIcons";
 import { format } from "../utils/DiscoveryUtils";
 import { GLOBALS } from "../utils/globals";
-import { generateType } from "../utils/Subscriber.utils";
 import { HomeScreenStyles } from "../views/app/Homescreen.styles";
 import Styles from "./MFButtonsVariants/MFButtonStyles";
 import { TitlePlacement } from "./MFCard";
 import MFFilmStrip from "./MFFilmStrip/MFFilmStrip";
 import MFViewAllButton from "./MFFilmStrip/ViewAllComponent";
-import MFMetaData from "./MFMetaData";
-import MFText from "./MFText";
 
 interface MFSwimLaneProps {
   feed: Feed;

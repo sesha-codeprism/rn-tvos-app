@@ -2,16 +2,21 @@ import React, { useRef } from "react";
 import {
   Animated,
   NativeSyntheticEvent,
+  StyleProp,
   TargetedEvent,
+  TextStyle,
   View,
+  ViewStyle,
 } from "react-native";
-import FastImage from "react-native-fast-image";
-import { SubscriberFeed } from "../@types/SubscriberFeed";
-import { appUIDefinition } from "../config/constants";
-import { getNetworkInfo, getMetadataLine2 } from "../utils/assetUtils";
-import { SCREEN_WIDTH } from "../utils/dimensions";
-import { GLOBALS } from "../utils/globals";
-import MFText from "./MFText";
+import FastImage, { ImageStyle } from "react-native-fast-image";
+import { SubscriberFeed } from "../../@types/SubscriberFeed";
+import { MetadataStyles } from "../../@types/UIDefinition";
+import { appUIDefinition } from "../../config/constants";
+import { getNetworkInfo, getMetadataLine2 } from "../../utils/assetUtils";
+import { SCREEN_WIDTH } from "../../utils/dimensions";
+import { GLOBALS } from "../../utils/globals";
+import MFText from "../MFText";
+import { getMetadataLine1, MetadataType } from "./MFMetadataUtils";
 
 interface MFMetaDataProps {
   currentFeed: SubscriberFeed;
@@ -49,6 +54,16 @@ const MFMetaData: React.FunctionComponent<MFMetaDataProps> = (props) => {
       duration: 250,
     }).start();
   };
+  const metadataTemplate = appUIDefinition.metadataByItemType.RECOMM;
+  const metdataStyles = appUIDefinition.metadataStyles.RECOMM;
+  console.log(
+    "Metadata line 1",
+    getMetadataLine1(metadataTemplate.metadata2, props.currentFeed)
+  );
+  console.log(
+    "Metadata line 2",
+    getMetadataLine1(metadataTemplate.metadata3, props.currentFeed)
+  );
   return (
     <View
       style={{
@@ -111,6 +126,49 @@ const MFMetaData: React.FunctionComponent<MFMetaDataProps> = (props) => {
       </View>
     </View>
   );
+
+  function getImageComponent(
+    type: MetadataType | undefined,
+    metadata: string,
+    styles: StyleProp<ViewStyle | TextStyle | ImageStyle>
+  ): React.ReactElement {
+    return <View></View>;
+  }
 };
+
+function getTextComponent(
+  type: MetadataType | undefined,
+  metadata: string,
+  styles: StyleProp<ViewStyle | TextStyle | ImageStyle>
+): React.ReactElement {
+  return <View></View>;
+}
+
+function getIconComponent(
+  type: MetadataType | undefined,
+  metadata: string,
+  styles: StyleProp<ViewStyle | TextStyle | ImageStyle>
+): React.ReactElement {
+  return <View></View>;
+}
+
+function metaDataComponent1(
+  templateString: string,
+  metadataStyles: StyleProp<any>
+): React.ReactElement {
+  return <View></View>;
+}
+function metaDataComponent2(
+  templateString: string,
+  metadataStyles: StyleProp<any>
+): React.ReactElement {
+  return <View></View>;
+}
+function metaDataComponent3(
+  templateString: string,
+  metadataStyles: StyleProp<any>
+): React.ReactElement {
+  return <View></View>;
+}
 
 export default MFMetaData;
