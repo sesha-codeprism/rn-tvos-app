@@ -152,7 +152,8 @@ const PurchaseLockScreen: React.FunctionComponent<Props> = (props: any) => {
                   screenName: "Purchase Lock",
                   pinType: "purchase",
                   action:  PinActionTypes['UPDATE'],
-                  label: "Input 4-digit PIN",
+                  label: "Enter the Changed PIN",
+                  screenTarget: Routes.PurchaseLock,
                 });
               }}
             >

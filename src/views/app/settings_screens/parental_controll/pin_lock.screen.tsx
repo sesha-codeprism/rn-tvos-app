@@ -17,6 +17,8 @@ import {
 import { getPasscodeHash } from "../../../../utils/helpers";
 import { GLOBALS } from "../../../../utils/globals";
 import { PinActionTypes } from "./parental_controll.screen";
+import { Routes } from "../../../../config/navigation/RouterOutlet";
+import { AppStrings } from "../../../../config/strings";
 interface PinProps {
   screenName: string;
   pinType: PinType;
@@ -36,26 +38,41 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const [label, setLabel] = useState(props.route.params.label);
   const [actionType, setActionType] = useState(props.route.params.action);
   const [errMessage, setErrMessage] = useState("");
+  const [passwordRes, setPasswordRes] = useState("");
 
   useEffect(() => {
-    getPassword(props.route.params.pinType)
-      .then((res: Array<any>) => {
-        console.log("res inside useEffect", res);
-        if (res.length === 0) {
-          setLabel("Enter the new PIN");
-          setActionType(PinActionTypes["CREATE"]);
-        } else {
-          const password = res.find((item) => {
-            item.PasscodeType === props.route.params.pinType;
-          });
-          if (password) {
-            checkPasscode(password.Passcode, props.route.params.pinType);
+    if (actionType !== PinActionTypes["UPDATE"]) {
+      getPassword(props.route.params.pinType)
+        .then((res: any) => {
+          console.log("res inside useEffect", res);
+          if (res.length === 0) {
+            Alert.alert(
+              AppStrings.str_pcon_locks_are_unset_title,
+              AppStrings.str_pcon_locks_are_unset_description
+            );
+            setLabel("Enter the new PIN");
+            setActionType(PinActionTypes["CREATE"]);
+          } else {
+            const password = res.find((item: any) => {
+              console.log(
+                "item",
+                item,
+                item.PasscodeType.toLowerCase() == props.route.params.pinType
+              );
+              return (
+                item.PasscodeType.toLowerCase() == props.route.params.pinType
+              );
+            });
+            console.log("password", password);
+            if (password) {
+              setPasswordRes(password.Passcode);
+            }
           }
-        }
-      })
-      .catch((error) => {
-        console.log("error inside catch", error);
-      });
+        })
+        .catch((error) => {
+          console.log("error inside catch", error);
+        });
+    }
     console.log("props inside pin screen", props.route.params);
     return;
     // BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
@@ -74,11 +91,14 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         actionType === PinActionTypes["UPDATE"]
       ) {
         setActionType(PinActionTypes["CONFIRM"]);
-        setLabel("Re-enter the new PIN");
+        props.route.params.action === PinActionTypes["UPDATE"]
+          ? setLabel("Re-enter the Changed PIN")
+          : setLabel("Re-enter the new PIN");
+        // setPinConfirm(["","","",""]);
         // if pin action type is confirm
       } else if (
         actionType === PinActionTypes["CONFIRM"] &&
-        props.route.params.pinType !== PinActionTypes["UPDATE"]
+        props.route.params.action !== PinActionTypes["UPDATE"]
       ) {
         console.log("pin", pin, "pinConfirm", pinConfirm);
         if (pin.join() === pinConfirm.join()) {
@@ -91,12 +111,18 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         }
       } else if (
         actionType === PinActionTypes["CONFIRM"] &&
-        props.route.params.pinType === PinActionTypes["UPDATE"]
+        props.route.params.action === PinActionTypes["UPDATE"]
       ) {
+        console.log("pin inside UPDATE", pin, "pinConfirm", pinConfirm);
         if (pin.join() === pinConfirm.join()) {
           const res = updatePasscode(props.route.params.pinType);
           console.log("change pin response", res);
+        } else {
+          setErrMessage("Pin Mismatch");
+          setPinConfirm(["", "", "", ""]);
         }
+      } else if (actionType === PinActionTypes["VERIFY"]) {
+        checkPasscode(passwordRes, props.route.params.pinType);
       }
     } catch (error) {}
   };
@@ -113,6 +139,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
 
   const checkPasscode = async (passcode: string, type: PinType) => {
     try {
+      console.log("inside check password", passcode);
       const pinInput = pin.join();
       const hashedPin = getPasscodeHash(
         pinInput,
@@ -122,7 +149,8 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
       );
       // const data = await getPassword(type);
       if (passcode === hashedPin) {
-        console.log("password matching");
+        console.log("password matching", props.route.params.screenTarget);
+        props.navigation.replace(props.route.params.screenTarget);
         return true;
       } else {
         console.log("incorrect password");
@@ -145,7 +173,12 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
           : ""
       );
       const res = await createPasscodes(type, hashedPin);
-      console.log("Create password response", res?.data);
+      console.log("Create password response", res);
+      if (res?.status === 201 || res?.status === 200) {
+        props.navigation.replace(props.route.params.screenTarget);
+      } else {
+        setErrMessage("Something went wrong, try again later");
+      }
       return res?.data;
     } catch (error: any) {
       console.log("error in setting pin", error);
@@ -163,6 +196,9 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
           : ""
       );
       const res = await changePasscodes(type, hashedPin);
+      if (res.status === 200 || res.status === 201) {
+        props.navigation.goBack();
+      }
       console.log("update password response", res.data);
       return res.data;
     } catch (error) {
@@ -174,7 +210,8 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
     console.log("number pressed", number);
     if (
       actionType === PinActionTypes["CREATE"] ||
-      actionType === PinActionTypes["VERIFY"]
+      actionType === PinActionTypes["VERIFY"] ||
+      actionType === PinActionTypes["UPDATE"]
     ) {
       console.log("inside create block", actionType);
       let pinCode = pin;
@@ -236,26 +273,29 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
     <SideMenuLayout title="Parental Controls" subTitle={subTitle}>
       <Text style={styles.inputLebelText}>{label}</Text>
       <View style={styles.inputContainer}>
-        {(actionType === "create" ? pin : pinConfirm).map(
-          (item: any, index: any) => {
-            return (
-              <View key={index} style={styles.inputElement}>
-                {item !== "" ? (
-                  <View
-                    style={{
-                      width: 18,
-                      height: 18,
-                      borderRadius: 9,
-                      backgroundColor: "#EEEEEE",
-                    }}
-                  />
-                ) : (
-                  <Text style={styles.inputLebelText}>{item}</Text>
-                )}
-              </View>
-            );
-          }
-        )}
+        {(actionType === "create" ||
+        actionType === PinActionTypes["VERIFY"] ||
+        actionType === PinActionTypes["UPDATE"]
+          ? pin
+          : pinConfirm
+        ).map((item: any, index: any) => {
+          return (
+            <View key={index} style={styles.inputElement}>
+              {item !== "" ? (
+                <View
+                  style={{
+                    width: 18,
+                    height: 18,
+                    borderRadius: 9,
+                    backgroundColor: "#EEEEEE",
+                  }}
+                />
+              ) : (
+                <Text style={styles.inputLebelText}>{item}</Text>
+              )}
+            </View>
+          );
+        })}
       </View>
       {errMessage !== "" && <Text style={styles.errMessage}>{errMessage}</Text>}
       <View style={styles.numberPadContainer}>

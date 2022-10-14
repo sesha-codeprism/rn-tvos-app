@@ -157,8 +157,9 @@ const ContentLockScreen: React.FunctionComponent<Props> = (props: any) => {
                 props.navigation.navigate(Routes.PinLock, {
                   screenName: AppStrings.str_settings_pcon_contentlock,
                   pinType: "parentalcontrol",
-                  action: PinActionTypes['UPDATE'],
-                  label: "Create a new 4-digit PIN",
+                  action: PinActionTypes["UPDATE"],
+                  label: "Enter the Changed PIN",
+                  screenTarget: Routes.ContentLock,
                 });
               }}
             >

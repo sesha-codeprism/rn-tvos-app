@@ -14,6 +14,7 @@ import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import _ from "lodash";
 import { AppStrings } from "../../../../config/strings";
+import { Routes } from "../../../../config/navigation/RouterOutlet";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -37,6 +38,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
             ? AppStrings.str_rating_unrestricted
             : AppStrings.str_pcon_challenge_pinLockedState,
           action: _.isEmpty(values.contentLock) ? "content_lock" : "pin_lock",
+          screenTarget: Routes.ContentLock,
           icon: "",
         },
         {
@@ -51,6 +53,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
             values.adultLock["allowAdultLocks"]
               ? "pin_lock"
               : "adult_lock",
+              screenTarget: Routes.AdultLock,
           icon: "",
         },
         {
@@ -59,6 +62,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
             ? AppStrings.str_pcon_challenge_pinLockedState
             : AppStrings.str_rating_unrestricted,
           action: values.purchaseLock["locked"] ? "pin_lock" : "purchase_lock",
+          screenTarget: Routes.PurchaseLock,
           icon: "",
         },
       ];
@@ -111,6 +115,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
                           : "",
                       action: PinActionTypes["VERIFY"],
                       label: "Input 4-digit PIN",
+                      screenTarget: item.screenTarget
                     })
                   : item.action !== "" && item.action !== "pin_lock"
                   ? props.navigation.navigate(item.action)
