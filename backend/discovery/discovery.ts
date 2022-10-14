@@ -21,8 +21,7 @@ const versionString = "/v4/"
 /** API call to get all Hubs data */
 export const getHubs = async (id: string, params: any) => {
   const { rightIds, storeId, pivots, lang } = params;
-  const globalConfig: MFGlobals = MFGlobalsConfig;
-  const url: string = parseUri(globalConfig.serviceURL.discovery) + "/v3/hubs";
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + "/v3/hubs";
   const response = await GET({
     url: url,
     params: {

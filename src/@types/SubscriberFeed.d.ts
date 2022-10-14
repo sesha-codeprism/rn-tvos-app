@@ -1,3 +1,5 @@
+import { Network, NetworkInfo } from "../utils/common";
+
 export interface SubscriberFeed {
   Id: string;
   ItemType: string;
@@ -44,6 +46,7 @@ interface CatalogInfo {
   Locale: string;
   HasContentAdvisory: boolean;
   Images: Image[];
+  Network: NetworkInfo
   ImageBucketId: string;
   SupportedImages: string[];
 }

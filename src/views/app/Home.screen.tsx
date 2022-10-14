@@ -6,9 +6,9 @@ import {
   TVMenuControl,
   Dimensions,
 } from "react-native";
-import { debounceTime, onscreenLanguageList } from "../../config/constants";
+import { appUIDefinition, debounceTime } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { GLOBALS, resetAuthData } from "../../utils/globals";
+import { GLOBALS } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
 import { Feed, FeedItem } from "../../@types/HubsResponse";
 import MFMenu from "../../components/MFMenu/MFMenu";
@@ -19,13 +19,12 @@ import { getAllHubs } from "../../config/queries";
 import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
-import MFMetaData from "../../components/MFMetaData";
+import MFMarquee from "../../components/MFMarquee";
 import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
 import MFSwim from "../../components/MFSwim";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux";
-import MFText from "../../components/MFText";
-import { getDeviceDetails } from "../../../backend/subscriber/subscriber";
+import { service } from "../../utils/analytics/analytics";
+import { Routes } from "../../config/navigation/RouterOutlet";
+import { navigationAction } from "../../utils/analytics/consts";
 
 interface Props {
   navigation: NativeStackNavigationProp<any>;
@@ -41,7 +40,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const drawerRef: React.MutableRefObject<any> = useRef();
   const [open, setOpen] = useState(false);
-  const { language } = useSelector((state: RootState) => state.language);
 
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;
@@ -147,19 +145,34 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                 hubList={hubs}
                 onPress={(event) => {}}
                 onFocus={(event) => {
-                  setTimeout(() => {
-                    clearTimeout(hubTimeOut);
-                    hubTimeOut = setFeeds(hubs[event]);
+                  if (hubTimeOut) {
+                    clearInterval(hubTimeOut);
+                  }
+                  hubTimeOut = setTimeout(() => {
+                    setFeeds(hubs[event]);
                   }, debounceTime);
                 }}
                 onPressSettings={() => {
                   setOpen(open);
                   drawerRef.current.open();
+                  if (currentFeed) {
+                    service?.addNavEventOnCurPageOpenOrClose(
+                      {
+                        navigation: {
+                          params: {
+                            feed: currentFeed,
+                          },
+                        },
+                      },
+                      Routes.Settings,
+                      navigationAction.pageOpen
+                    );
+                  }
                 }}
               />
               <View style={HomeScreenStyles.posterViewContainerStyles}>
-                {currentFeed && (
-                  <MFMetaData
+                {currentFeed && appUIDefinition.config.enableMarquee && (
+                  <MFMarquee
                     currentFeed={currentFeed}
                     rootContainerStyles={{
                       flexDirection: GLOBALS.enableRTL ? "row-reverse" : "row",
@@ -204,7 +217,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
           </ImageBackground>
         </ImageBackground>
       </ImageBackground>
-      {/* {open && ( */}
       <MFDrawer
         ref={drawerRef}
         drawerPercentage={37}
@@ -217,7 +229,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
         navigation={props.navigation}
         drawerContent={false}
       />
-      {/* )} */}
     </View>
   );
 };

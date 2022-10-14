@@ -103,7 +103,6 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
     const { drawerPercentage } = props;
     const animated = { transform: [{ translateX: leftOffset }] };
     console.log("renderPush");
-    console.log("AppStrings - OnScreenLanguageScreen", AppStrings);
 
     return (
       <Modal

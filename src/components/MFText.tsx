@@ -6,6 +6,8 @@ export interface MFTextProps {
   textStyle?: StyleProp<TextStyle>;
   enableRTL?: boolean;
   shouldRenderText: boolean;
+  adjustsFontSizeToFit?: boolean;
+  numberOfLines?: number;
 }
 
 const MFText: React.FunctionComponent<MFTextProps> = (props) => {
@@ -16,6 +18,10 @@ const MFText: React.FunctionComponent<MFTextProps> = (props) => {
         props.textStyle,
         { writingDirection: props.enableRTL ? "rtl" : "ltr" },
       ]}
+      adjustsFontSizeToFit={props.adjustsFontSizeToFit || true}
+      numberOfLines={props.numberOfLines || 1}
+      textBreakStrategy="balanced"
+      ellipsizeMode="tail"
     >
       {props.shouldRenderText ? props.displayText : ""}
     </Text>

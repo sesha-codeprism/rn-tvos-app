@@ -108,7 +108,8 @@ export const getEpisodeInfo = (item: any): string | undefined => {
         return;
     }
 
-    const { str_seasonNumber, str_episodeNumber } = global["lStrings"] || {};
+    //@ts-ignore
+    const { str_seasonNumber, str_episodeNumber } = AppStrings || {};
 
     const { SeasonNumber, EpisodeNumber } = item;
 

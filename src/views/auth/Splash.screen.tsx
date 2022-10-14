@@ -56,7 +56,6 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const parseStoreAndNavigate = async () => {
     if (GLOBALS.store) {
       /** If localstore has some data.. parse and proceed to home; */
-      console.log(GLOBALS.store);
       if (GLOBALS.store.accessToken && GLOBALS.store.refreshToken) {
         //Token exists in persistent storage
         //TODO: Check for expiry time. IF token is valid -> Home else shortcode
@@ -69,7 +68,6 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
               initUdls();
               setDefaultStore();
               connectDuplex();
-              console.log(DefaultStore);
               props.navigation.replace(Routes.WhoIsWatching);
             });
           })
@@ -107,7 +105,6 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     const isEmulator: boolean = await DeviceInfo.isEmulator();
     if (isEmulator) {
       const deviceID = await DeviceInfo.getDeviceName();
-      console.log(deviceID);
       //If device is running on Emulator
       // Device info details on emulator are useless.. no need of setting values;
       return true;
@@ -115,12 +112,10 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       // If device is running on real device
       const deviceID = DeviceInfo.getUniqueId();
       GLOBALS.deviceInfo.deviceId = deviceID;
-      console.log(GLOBALS.deviceInfo);
       return true;
     }
   };
   const showAnimation = appUIDefinition.config.useLottieAnimationOnSplash;
-  console.log("showAnimation", showAnimation);
   return (
     <View style={styles.container}>
       {showAnimation ? (

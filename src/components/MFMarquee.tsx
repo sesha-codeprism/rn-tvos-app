@@ -6,14 +6,14 @@ import { AppImages } from "../assets/images";
 import { HomeScreenStyles } from "../views/app/Homescreen.styles";
 import MFText from "./MFText";
 
-interface MFMetaDataProps {
+interface MFMarqueeProps {
   rootContainerStyles?: StyleProp<ViewStyle>;
   imageContainer?: StyleProp<ViewStyle>;
   contentContainer?: StyleProp<ViewStyle>;
   currentFeed?: SubscriberFeed;
 }
 
-const MFMetaData: React.FunctionComponent<MFMetaDataProps> = (props) => {
+const MFMarquee: React.FunctionComponent<MFMarqueeProps> = (props) => {
   return (
     <View style={props.rootContainerStyles}>
       <View style={HomeScreenStyles.posterImageContainerStyles}>
@@ -51,4 +51,4 @@ const MFMetaData: React.FunctionComponent<MFMetaDataProps> = (props) => {
   );
 };
 
-export default MFMetaData;
+export default MFMarquee;

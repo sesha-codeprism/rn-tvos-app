@@ -1,11 +1,13 @@
-import React from 'react';
+// @ts-nocheck
+
 import { BootStrapResponse } from '../../@types/BootStrapResponse';
-import { UDLResponse } from '../../@types/UDLResponse';
-import { AppStrings, setOnScreenLanguage } from '../../config/strings';
+import { config } from '../../config/config';
+import { setOnScreenLanguage } from '../../config/strings';
 import { duplex } from '../../modules/duplex';
 import { deleteUserSettings, GLOBALS } from '../globals';
 import { generateGUID } from '../guid';
 import { updateStore } from '../helpers';
+import { addPrefixToUrl } from '../strings';
 
 
 export const setGlobalData = (bootStrapResponse: BootStrapResponse) => {
@@ -24,7 +26,8 @@ export const setGlobalData = (bootStrapResponse: BootStrapResponse) => {
 
 export const connectDuplex = () => {
     const GUID = generateGUID();
-    const duplexEndpoint = `wss://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/duplex/?sessionId=${GUID}`;
+    const duplexEndpoint = `${addPrefixToUrl(GLOBALS.bootstrapSelectors?.ServiceMap.Services.duplex, GLOBALS.bootstrapSelectors?.ServiceMap.Prefixes[config.prefixType])}?sessionId=${GUID}`;
+    // const duplexEndpoint = `wss://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/duplex/?sessionId=${GUID}`;
     duplex.initialize(duplexEndpoint);
 
 }
