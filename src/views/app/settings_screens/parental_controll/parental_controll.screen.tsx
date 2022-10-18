@@ -53,7 +53,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
             values.adultLock["allowAdultLocks"]
               ? "pin_lock"
               : "adult_lock",
-              screenTarget: Routes.AdultLock,
+          screenTarget: Routes.AdultLock,
           icon: "",
         },
         {
@@ -115,7 +115,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
                           : "",
                       action: PinActionTypes["VERIFY"],
                       label: "Input 4-digit PIN",
-                      screenTarget: item.screenTarget
+                      screenTarget: item.screenTarget,
                     })
                   : item.action !== "" && item.action !== "pin_lock"
                   ? props.navigation.navigate(item.action)
