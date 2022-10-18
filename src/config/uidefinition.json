@@ -549,9 +549,9 @@
       "metadata_selected": "{Name}"
     },
     "RECOMM": {
-      "metadata1": "{Image}",
-      "metadata2": "{Name}",
-      "metadata3": "{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}"
+      "metadata1": "{Name}",
+      "metadata2": "{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}",
+      "metadata3": "{Image}"
     },
     "STORE": {
       "metadata": "{Name}",
@@ -694,7 +694,7 @@
   },
   "metadataStyles": {
     "RECOMM": {
-      "metadata1": {
+      "metadata3": {
         "width": 94,
         "height": 94,
         "marginRight": 20,
@@ -704,14 +704,14 @@
         "alignContent": "center",
         "justifyContent": "center"
       },
-      "metadata2": {
+      "metadata1": {
         "fontFamily": "Inter-Bold",
         "fontSize": 38,
         "color": "white",
         "lineHeight": 55,
         "textAlign": "left"
       },
-      "metadata3": {
+      "metadata2": {
         "fontFamily": "Inter-SemiBold",
         "fontSize": 25,
         "lineHeight": 38,
@@ -727,6 +727,35 @@
         "width": 72,
         "height": 30,
         "alignSelf": "center"
+      },
+      "metadataImageContainerStyle": {
+        "width": 94,
+        "height": 94,
+        "marginRight": 20,
+        "backgroundColor": "#282828",
+        "borderRadius": 6,
+        "opacity": 0.85,
+        "alignContent": "center",
+        "justifyContent": "center"
+      },
+      "metadataIconContainerStyle": {
+        "width": 94,
+        "height": 94,
+        "marginRight": 20,
+        "backgroundColor": "#282828",
+        "borderRadius": 6,
+        "opacity": 0.85,
+        "alignContent": "center",
+        "justifyContent": "center"
+      },
+      "metadataContainer1Styles": {
+        "width": 500,
+        "height": 141,
+        "marginTop": 50,
+        "flexDirection": "column"
+      },
+      "metadataContainer2Styles": {
+        "flexDirection": "row"
       }
     }
   }
