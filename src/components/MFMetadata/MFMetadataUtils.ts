@@ -8,7 +8,7 @@ import { chooseRating, metadataSeparator } from '../../utils/Subscriber.utils';
 
 export enum MetadataType { "text", "image", "icon" }
 
-export function getMetadataLine1(templateString: string, item: SubscriberFeed): { type: MetadataType | undefined, metadataLine1: string } {
+export function getMetadataInfo(templateString: string, item: SubscriberFeed): { type: MetadataType | undefined, metadataInfo: string } {
     let metadataLine1: string = '';
     let metadataType: MetadataType | undefined = undefined;
     if (!templateString.toLowerCase().includes('image') && !templateString.toLowerCase().includes('icon')) {
@@ -19,7 +19,7 @@ export function getMetadataLine1(templateString: string, item: SubscriberFeed): 
         metadataType = MetadataType.icon
     }
     metadataLine1 = getResolvedMetadata(templateString, item)
-    return { type: metadataType, metadataLine1: metadataLine1 };
+    return { type: metadataType, metadataInfo: metadataLine1 };
 }
 
 

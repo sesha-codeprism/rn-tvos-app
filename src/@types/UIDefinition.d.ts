@@ -17,11 +17,15 @@ interface MetadataStyles {
 }
 
 interface RECOMM2 {
-  metadata1: Metadata1;
-  metadata2: Metadata2;
-  metadata3: Metadata2;
-  metadataImageStyle: MetadataImageStyle;
-  metadataIconStyles: MetadataImageStyle;
+  metadata1: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+  metadata2: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+  metadata3: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+  metadataImageStyle: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+  metadataIconStyles: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+  metadataImageContainerStyle: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+  metadataIconContainerStyle: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+  metadataContainer1Styles: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+  metadataContainer2Styles: StyleProp<ViewStyle | TextStyle | ImageStyle>;
 }
 
 interface MetadataImageStyle {
