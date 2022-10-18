@@ -17,9 +17,9 @@ import {
   appUIDefinition,
   onscreenLanguageList,
 } from "../../../../config/constants";
-import { OnScreenLanguage } from "../../../../@types/UIDefinition";
 import { setOnScreenLanguage } from "../../../../config/strings";
 import { GlobalContext } from "../../../../contexts/globalContext";
+import { OnscreenLanguage } from "../../../../@types/UIDefinition";
 
 interface Props {
   navigation: NativeStackNavigationProp<any>;
@@ -30,7 +30,7 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [selectedLang, setSelectedLang] = useState<any>("");
   const currentContext = useContext(GlobalContext);
 
-  const onPress = (item: OnScreenLanguage) => {
+  const onPress = (item: OnscreenLanguage) => {
     console.log("first");
     setSelectedLang(item.onScreenName);
     GLOBALS.store.settings.display.onScreenLanguage.title = item.onScreenName;

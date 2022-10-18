@@ -265,10 +265,7 @@ interface CurrentLocale {
   short: string;
 }
 
-interface OnScreenLanguage {
-  title: string;
-  action: string;
-}
+
 
 interface Component {
   id: string;
