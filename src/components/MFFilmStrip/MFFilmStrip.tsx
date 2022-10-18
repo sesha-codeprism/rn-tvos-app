@@ -13,6 +13,7 @@ import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import { HomeScreenStyles } from "../../views/app/Homescreen.styles";
 import MFViewAllButton from "./ViewAllComponent";
 import { SCREEN_WIDTH } from "../../utils/dimensions";
+import MFOverlay from "../MFOverlay";
 
 // export interface FeedsObject {
 //   imageSource?: string;
@@ -178,9 +179,20 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = (props) => {
                 layoutType={
                   props.enableCircularLayout ? "Circular" : "LandScape"
                 }
-                showTitleOnlyOnFocus={false}
+                showTitleOnlyOnFocus={true}
                 titlePlacement={props.titlePlacement}
-                overlayComponent={props.overlayComponent}
+                overlayComponent={
+                  <MFOverlay
+                    //@ts-ignore
+                    renderGradiant={true}
+                    showProgress={true}
+                    progress={20}
+                    // displayTitle={item.title}
+                    bottomText={item.runtime}
+                    // showRec={true}
+                    // recType={"series"}
+                  />
+                }
                 progressComponent={props.progressElement}
                 showProgress={props.shouldRenderProgress}
                 shouldRenderText

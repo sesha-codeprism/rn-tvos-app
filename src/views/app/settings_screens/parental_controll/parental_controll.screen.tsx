@@ -14,10 +14,16 @@ import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import _ from "lodash";
 import { AppStrings } from "../../../../config/strings";
+import { Routes } from "../../../../config/navigation/RouterOutlet";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-
+export enum PinActionTypes {
+  "CREATE" = "create",
+  "VERIFY" = "verify",
+  "UPDATE" = "update",
+  "CONFIRM" = "confirm",
+}
 const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [list, setList] = useState<any[]>([]);
@@ -31,7 +37,8 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
           subTitle: _.isEmpty(values.contentLock)
             ? AppStrings.str_rating_unrestricted
             : AppStrings.str_pcon_challenge_pinLockedState,
-          action: "content_lock",
+          action: _.isEmpty(values.contentLock) ? "content_lock" : "pin_lock",
+          screenTarget: Routes.ContentLock,
           icon: "",
         },
         {
@@ -41,7 +48,12 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
             values.adultLock["allowAdultLocks"]
               ? AppStrings.str_pcon_challenge_pinLockedState
               : AppStrings.str_rating_unrestricted,
-          action: "adult_lock",
+          action:
+            values.adultLock["adultContentMasking"] ||
+            values.adultLock["allowAdultLocks"]
+              ? "pin_lock"
+              : "adult_lock",
+          screenTarget: Routes.AdultLock,
           icon: "",
         },
         {
@@ -49,7 +61,8 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
           subTitle: values.purchaseLock["locked"]
             ? AppStrings.str_pcon_challenge_pinLockedState
             : AppStrings.str_rating_unrestricted,
-          action: "purchase_lock",
+          action: values.purchaseLock["locked"] ? "pin_lock" : "purchase_lock",
+          screenTarget: Routes.PurchaseLock,
           icon: "",
         },
       ];
@@ -87,12 +100,24 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
                 setFocussed(index);
               }}
               onPress={() => {
-                index === 6
-                  ? () => {
-                      props.navigation.toggleDrawer();
-                      setFocussed("");
-                    }
-                  : item.action !== ""
+                item.action === "pin_lock"
+                  ? props.navigation.navigate(item.action, {
+                      screenName: item.title,
+                      pinType:
+                        item.title === AppStrings.str_settings_pcon_contentlock
+                          ? "parentalcontrol"
+                          : item.title ===
+                            AppStrings.str_settings_pcon_purchaselock
+                          ? "purchase"
+                          : item.title ===
+                            AppStrings.str_settings_pcon_adultlock_description
+                          ? "adult"
+                          : "",
+                      action: PinActionTypes["VERIFY"],
+                      label: "Input 4-digit PIN",
+                      screenTarget: item.screenTarget,
+                    })
+                  : item.action !== "" && item.action !== "pin_lock"
                   ? props.navigation.navigate(item.action)
                   : null;
               }}
@@ -132,67 +157,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
           );
         }}
       />
-      {/* {list.map((item: any, index: number) => {
-        return (
-          <Pressable
-            onFocus={() => {
-              setFocussed(index);
-            }}
-            onPress={() => {
-              index === 6
-                ? () => {
-                    props.navigation.toggleDrawer();
-                    setFocussed("");
-                  }
-                : item.action !== ""
-                ? props.navigation.navigate(item.action)
-                : null;
-            }}
-            style={
-              index === focussed
-                ? { ...MFSettingsStyles.containerActive, ...styles.container }
-                : styles.container
-            }
-            key={index}
-          >
-            <View>
-              <Text
-                style={[
-                  styles.listText,
-                  { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
-                ]}
-              >
-                {item.title}
-              </Text>
-              <Text
-                style={[
-                  styles.listText,
-                  {
-                    color: index === focussed ? "#EEEEEE" : "#A7A7A7",
-                    fontSize: 23,
-                  },
-                ]}
-              >
-                {item.subTitle}
-              </Text>
-            </View>
-            <Image
-              source={AppImages.arrow_right}
-              style={{ width: 15, height: 30 }}
-            />
-          </Pressable>
-        );
-      })} */}
     </SideMenuLayout>
-    // <View style={styles.root}>
-    //   <View style={styles.headerContainer}>
-    //     <Text style={styles.subTitle}>Settings</Text>
-    //     <Text style={styles.titleText}>Parental Controls</Text>
-    //   </View>
-    //   <View style={styles.contentContainer}>
-
-    //   </View>
-    // </View>
   );
 };
 

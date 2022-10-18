@@ -8,4 +8,4 @@ const MFGlobalsConfig = {
 	},
 };
 
-export {MFGlobalsConfig};
+export { MFGlobalsConfig };

@@ -11,7 +11,7 @@ import {
   Alert,
 } from "react-native";
 import DeviceInfo from "react-native-device-info";
-import { GLOBALS, resetGlobalStore } from "../../utils/globals";
+import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { getStore, infoLog } from "../../utils/helpers";
 import {
   getBootStrap,
@@ -23,6 +23,7 @@ import { appUIDefinition } from "../../config/constants";
 import { duplex } from "../../modules/duplex";
 import { generateGUID } from "../../utils/guid";
 import { DefaultStore, setDefaultStore } from "../../utils/DiscoveryUtils";
+import { connectDuplex, setGlobalData } from "../../utils/splash/splash_utils";
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
@@ -54,44 +55,26 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
 
   const parseStoreAndNavigate = async () => {
     if (GLOBALS.store) {
-      //If localstore has some data.. parse and proceed to home;
-      console.log(GLOBALS.store);
+      /** If localstore has some data.. parse and proceed to home; */
       if (GLOBALS.store.accessToken && GLOBALS.store.refreshToken) {
         //Token exists in persistent storage
         //TODO: Check for expiry time. IF token is valid -> Home else shortcode
         GLOBALS.userProfile = GLOBALS.store.userProfile;
         getBootStrap(GLOBALS.store.accessToken)
           .then(({ data }) => {
-            let bootStrapResponse = data;
-            console.log(bootStrapResponse);
-            GLOBALS.bootstrapSelectors = bootStrapResponse;
-            GLOBALS.store.rightsGroupIds = data.RightsGroupIds;
             processBootStrap(data, "10ft").then(() => {
+              setGlobalData(data);
               setLoading(false);
               initUdls();
               setDefaultStore();
-              const GUID = generateGUID();
-              const duplexEndpoint = `wss://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/duplex/?sessionId=${GUID}`;
-              if (__DEV__) {
-                console.log(duplexEndpoint);
-                console.log("GLOBALS.Definition", GLOBALS.bootstrapSelectors);
-                console.log("StoreID:", DefaultStore.Id, DefaultStore);
-                console.log(
-                  "Current locale",
-                  GLOBALS.store.settings.display.onScreenLanguage
-                );
-              }
-              GLOBALS.enableRTL =
-                GLOBALS.store.settings.display.onScreenLanguage.enableRTL;
+              connectDuplex();
               props.navigation.replace(Routes.WhoIsWatching);
-
-              duplex.initialize(duplexEndpoint);
             });
           })
           .catch((e) => {
             const isTokenInvalidError: boolean = e.toString().includes("401");
             if (isTokenInvalidError) {
-              resetGlobalStore();
+              resetAuthData();
               console.log("Token is invalid. Taking user to login again");
               props.navigation.replace(Routes.ShortCode);
             }
@@ -122,7 +105,6 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     const isEmulator: boolean = await DeviceInfo.isEmulator();
     if (isEmulator) {
       const deviceID = await DeviceInfo.getDeviceName();
-      console.log(deviceID);
       //If device is running on Emulator
       // Device info details on emulator are useless.. no need of setting values;
       return true;
@@ -130,12 +112,10 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       // If device is running on real device
       const deviceID = DeviceInfo.getUniqueId();
       GLOBALS.deviceInfo.deviceId = deviceID;
-      console.log(GLOBALS.deviceInfo);
       return true;
     }
   };
   const showAnimation = appUIDefinition.config.useLottieAnimationOnSplash;
-  console.log("showAnimation", showAnimation);
   return (
     <View style={styles.container}>
       {showAnimation ? (

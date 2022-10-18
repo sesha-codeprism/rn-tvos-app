@@ -14,6 +14,7 @@ import { Routes } from "../../../../config/navigation/RouterOutlet";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
+import { PinActionTypes } from "./parental_controll.screen";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -78,56 +79,11 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
         <View style={styles.contentTitleContainer}>
           <Text style={styles.contentTitle}>Adult lock options</Text>
         </View>
-          <FlatList
-            data={list}
-            keyExtractor={(item) => item.title}
-            renderItem={({ item, index }) => {
-              return (
-                <Pressable
-                  onFocus={() => {
-                    setFocussed(index);
-                  }}
-                  onPress={() => {
-                    onPress(item);
-                  }}
-                  style={
-                    index === focussed
-                      ? {
-                          ...MFSettingsStyles.containerActive,
-                          ...styles.container,
-                        }
-                      : styles.container
-                  }
-                  key={index}
-                >
-                  <View style={styles.icContainer}>
-                    {selected[item.action] === true ? (
-                      <Image
-                        source={AppImages.checked_circle}
-                        style={styles.icCircle}
-                      />
-                    ) : (
-                      <Image
-                        source={AppImages.unchecked_circle}
-                        style={styles.icCircle}
-                      />
-                    )}
-                  </View>
-                  <View style={styles.listContent}>
-                    <Text
-                      style={[
-                        styles.listText,
-                        { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
-                      ]}
-                    >
-                      {item.title}
-                    </Text>
-                  </View>
-                </Pressable>
-              );
-            }}
-          />
-          {/* {list.map((item: any, index: any) => {
+        <FlatList
+          style={{ width: "100%", height: "100%" }}
+          data={list}
+          keyExtractor={(item) => item.title}
+          renderItem={({ item, index }) => {
             return (
               <Pressable
                 onFocus={() => {
@@ -171,28 +127,46 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
                 </View>
               </Pressable>
             );
-          })} */}
-      </View>
-      <View>
-        <Pressable
-          onFocus={() => {
-            setFocussed("cp");
           }}
-          // onBlur={() => {
-          //   setFocussed(false);
-          // }}
-          style={
-            focussed === "cp"
-              ? [styles.changePinButton, { backgroundColor: "#053C69" }]
-              : styles.changePinButton
-          }
-          onPress={() => {
-            props.navigation.navigate(Routes.ContentLockPin);
+          contentContainerStyle={{
+            height: "60%",
+            width: "100%",
+            justifyContent: "space-between",
           }}
-          isTVSelectable={true}
-        >
-          <Text style={styles.changePinText}>Change PIN</Text>
-        </Pressable>
+          ListFooterComponentStyle={{
+            width: "100%",
+            height: "100%",
+            justifyContent: "flex-end",
+          }}
+          ListFooterComponent={() => {
+            return (
+              <Pressable
+                onFocus={() => {
+                  setFocussed("cp");
+                }}
+                // onBlur={() => {
+                //   setFocussed(false);
+                // }}
+                style={
+                  focussed === "cp"
+                    ? [styles.changePinButton, { backgroundColor: "#053C69" }]
+                    : styles.changePinButton
+                }
+                onPress={() => {
+                  props.navigation.navigate(Routes.PinLock, {
+                    screenName: "Adult Locks",
+                    pinType: "adult",
+                    action: PinActionTypes["UPDATE"],
+                    label: "Enter the Changed PIN",
+                    screenTarget: Routes.AdultLock,
+                  });
+                }}
+              >
+                <Text style={styles.changePinText}>Change PIN</Text>
+              </Pressable>
+            );
+          }}
+        />
       </View>
     </SideMenuLayout>
   );

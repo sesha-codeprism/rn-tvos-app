@@ -6,7 +6,7 @@ import {
   TVMenuControl,
   Dimensions,
 } from "react-native";
-import { debounceTime, onscreenLanguageList } from "../../config/constants";
+import { appUIDefinition, debounceTime } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
@@ -19,12 +19,12 @@ import { getAllHubs } from "../../config/queries";
 import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
-import MFMetaData from "../../components/MFMetaData";
+import MFMarquee from "../../components/MFMarquee";
 import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
 import MFSwim from "../../components/MFSwim";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux";
-import MFText from "../../components/MFText";
+import { service } from "../../utils/analytics/analytics";
+import { Routes } from "../../config/navigation/RouterOutlet";
+import { navigationAction } from "../../utils/analytics/consts";
 
 interface Props {
   navigation: NativeStackNavigationProp<any>;
@@ -40,7 +40,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const drawerRef: React.MutableRefObject<any> = useRef();
   const [open, setOpen] = useState(false);
-  const { language } = useSelector((state: RootState) => state.language);
 
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;
@@ -63,9 +62,8 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
     }, debounceTime);
   };
 
-  const setHubsData = () => {
+  const setHubsData = async () => {
     if (data && hubs.length <= 0) {
-      console.log("hubsQuery.data.data", data.data);
       const hubsResponse: Array<FeedItem> = data.data;
       const replace_hub: Array<FeedItem> = hubsResponse.filter(
         (e) => e.Name === "{profile_name}"
@@ -97,17 +95,14 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
       setHubs(hubsResponse);
       setFeeds(hubsResponse[index]);
       GLOBALS.rootNavigation = props.navigation;
-      console.log("AppStrings", AppStrings);
     }
   };
 
   const clearCurrentHub = (event: SubscriberFeed) => {
-    console.log("Clear current hub");
     setCurrentFeed(undefined);
   };
 
   const backAction = () => {
-    console.log("Capturing hadware back presses", open);
     if (open) {
       setOpen(false);
       drawerRef.current.close();
@@ -150,20 +145,34 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                 hubList={hubs}
                 onPress={(event) => {}}
                 onFocus={(event) => {
-                  setTimeout(() => {
-                    clearTimeout(hubTimeOut);
-                    hubTimeOut = setFeeds(hubs[event]);
+                  if (hubTimeOut) {
+                    clearInterval(hubTimeOut);
+                  }
+                  hubTimeOut = setTimeout(() => {
+                    setFeeds(hubs[event]);
                   }, debounceTime);
                 }}
                 onPressSettings={() => {
-                  console.log("local state", open, onscreenLanguageList);
                   setOpen(open);
                   drawerRef.current.open();
+                  if (currentFeed) {
+                    service?.addNavEventOnCurPageOpenOrClose(
+                      {
+                        navigation: {
+                          params: {
+                            feed: currentFeed,
+                          },
+                        },
+                      },
+                      Routes.Settings,
+                      navigationAction.pageOpen
+                    );
+                  }
                 }}
               />
               <View style={HomeScreenStyles.posterViewContainerStyles}>
-                {currentFeed && (
-                  <MFMetaData
+                {currentFeed && appUIDefinition.config.enableMarquee && (
+                  <MFMarquee
                     currentFeed={currentFeed}
                     rootContainerStyles={{
                       flexDirection: GLOBALS.enableRTL ? "row-reverse" : "row",
@@ -208,7 +217,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
           </ImageBackground>
         </ImageBackground>
       </ImageBackground>
-      {/* {open && ( */}
       <MFDrawer
         ref={drawerRef}
         drawerPercentage={37}
@@ -221,7 +229,6 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
         navigation={props.navigation}
         drawerContent={false}
       />
-      {/* )} */}
     </View>
   );
 };

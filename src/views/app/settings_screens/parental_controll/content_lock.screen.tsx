@@ -15,6 +15,7 @@ import { Routes } from "../../../../config/navigation/RouterOutlet";
 import { AppStrings } from "../../../../config/strings";
 import { getList } from "../../../../../backend/udl/provider";
 import { GLOBALS } from "../../../../utils/globals";
+import { PinActionTypes } from "./parental_controll.screen";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -81,6 +82,7 @@ const ContentLockScreen: React.FunctionComponent<Props> = (props: any) => {
       contentContainerStyle={styles.contentContainer}
     >
       <FlatList
+        // style={{ width: "100%", height: "100%" }}
         data={list}
         keyExtractor={(item) => item.title}
         renderItem={({ item, index }) => {
@@ -132,78 +134,40 @@ const ContentLockScreen: React.FunctionComponent<Props> = (props: any) => {
             </Pressable>
           );
         }}
-      />
-      {/* <View> */}
-      {/* {list.map((item: any, index: any) => {
+        ListFooterComponentStyle={{
+          width: "100%",
+          height: "100%",
+          justifyContent: "flex-end",
+        }}
+        ListFooterComponent={() => {
           return (
             <Pressable
               onFocus={() => {
-                setFocussed(index);
+                setFocussed("cp");
               }}
-              onPress={() => {
-                item.action !== ""
-                  ? props.navigation.navigate(item.action, {
-                      action: item.navigation,
-                      title: item.title,
-                    })
-                  : null;
-              }}
+              // onBlur={() => {
+              //   setFocussed(false);
+              // }}
               style={
-                index === focussed
-                  ? { ...MFSettingsStyles.containerActive, ...styles.container }
-                  : styles.container
+                focussed === "cp"
+                  ? [styles.changePinButton, { backgroundColor: "#053C69" }]
+                  : styles.changePinButton
               }
-              key={index}
+              onPress={() => {
+                props.navigation.navigate(Routes.PinLock, {
+                  screenName: AppStrings.str_settings_pcon_contentlock,
+                  pinType: "parentalcontrol",
+                  action: PinActionTypes["UPDATE"],
+                  label: "Enter the Changed PIN",
+                  screenTarget: Routes.ContentLock,
+                });
+              }}
             >
-              <View>
-                <Text
-                  style={[
-                    styles.listText,
-                    { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
-                  ]}
-                >
-                  {item.title}
-                </Text>
-                <Text
-                  style={[
-                    styles.listText,
-                    {
-                      color: index === focussed ? "#EEEEEE" : "#A7A7A7",
-                      fontSize: 23,
-                    },
-                  ]}
-                >
-                  {item.subTitle}
-                </Text>
-              </View>
-              <Image
-                source={AppImages.arrow_right}
-                style={{ width: 15, height: 30 }}
-              />
+              <Text style={styles.changePinText}>Change PIN</Text>
             </Pressable>
           );
-        })} */}
-      {/* </View> */}
-      <View>
-        <Pressable
-          onFocus={() => {
-            setFocussed("cp");
-          }}
-          // onBlur={() => {
-          //   setFocussed(false);
-          // }}
-          style={
-            focussed === "cp"
-              ? [styles.changePinButton, { backgroundColor: "#053C69" }]
-              : styles.changePinButton
-          }
-          onPress={() => {
-            props.navigation.navigate(Routes.ContentLockPin);
-          }}
-        >
-          <Text style={styles.changePinText}>Change PIN</Text>
-        </Pressable>
-      </View>
+        }}
+      />
     </SideMenuLayout>
   );
 };

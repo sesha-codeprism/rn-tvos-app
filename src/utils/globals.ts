@@ -60,9 +60,9 @@ interface GLOBALSType {
   store: {
     accessToken: string | null;
     refreshToken: string | null;
-    title: string | null;
     userProfile?: UserProfile;
     rightsGroupIds: string | null;
+    accountID: string;
     settings: {
       parentalControll: ParentalControll;
       display: {
@@ -110,9 +110,9 @@ export const GLOBALS: GLOBALSType = {
   store: {
     accessToken: null,
     refreshToken: null,
-    title: null,
     userProfile: undefined,
     rightsGroupIds: null,
+    accountID: '',
     settings: {
       parentalControll: {
         contentLock: {},
@@ -147,13 +147,20 @@ export const GLOBALS: GLOBALSType = {
   storeID: undefined,
 };
 
-export const resetGlobalStore = () => {
+export const resetAuthData = () => {
   return {
+    ...GLOBALS.store,
     accessToken: null,
     refreshToken: null,
-    title: null,
-    rightsGroupIds: null,
+
+  }
+};
+
+export const deleteUserSettings = () => {
+  return {
+    ...GLOBALS.store,
     userProfile: undefined,
+    rightsGroupIds: null,
     settings: {
       parentalControll: {
         contentLock: {},
@@ -167,7 +174,12 @@ export const resetGlobalStore = () => {
           tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
         },
         bitrates10ft: {},
-        onScrreenLanguage: "",
+        onScreenLanguage: {
+          title: "English (US)",
+          languageCode: "en-US",
+          enableRTL: false
+
+        },
         closedCaption: "",
       },
       audio: {
@@ -179,5 +191,6 @@ export const resetGlobalStore = () => {
         descriptiveAudio: "",
       },
     },
+
   }
-};
+}

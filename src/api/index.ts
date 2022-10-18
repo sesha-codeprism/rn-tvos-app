@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { accessToken, refreshToken } from '../config/constants';
 import { GLOBALS } from '../utils/globals';
 
 export const DOMAIN: string =

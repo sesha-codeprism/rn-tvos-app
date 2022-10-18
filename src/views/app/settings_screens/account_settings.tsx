@@ -2,13 +2,14 @@ import { BackHandler, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFPopup from "../../../components/MFPopup";
-import { GLOBALS, resetGlobalStore } from "../../../utils/globals";
+import { GLOBALS, resetAuthData } from "../../../utils/globals";
 import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
 import { updateStore } from "../../../utils/helpers";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import { resetCaches } from "../../../config/queries";
 import { useNavigation } from "@react-navigation/native";
 import { AppStrings } from "../../../config/strings";
+import { deleteDevice } from "../../../../backend/subscriber/subscriber";
 
 interface AccountSettingsProps {
   navigation: NativeStackNavigationProp<any>;
@@ -24,7 +25,7 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
   const logUserOut = async () => {
     if (__DEV__ && !isTesting) {
       /** Get default store for user */
-      const resetStore = resetGlobalStore();
+      const resetStore = resetAuthData();
       /** Update the current Async NSUserDefaults store with resetStore */
       updateStore(JSON.stringify(resetStore));
       /** Reset the Query cache to make sure no cached API data is returned by React-Query */
@@ -34,6 +35,8 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
     }
     /** Async store is done.. now move user to logout screen */
     GLOBALS.rootNavigation.replace(Routes.ShortCode);
+    const resp = deleteDevice();
+    console.log("Logout", resp);
   };
 
   return (

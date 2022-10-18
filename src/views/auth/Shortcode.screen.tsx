@@ -23,6 +23,11 @@ import { appUIDefinition } from "../../config/constants";
 import { duplex } from "../../modules/duplex";
 import { setDefaultStore, DefaultStore } from "../../utils/DiscoveryUtils";
 import { generateGUID } from "../../utils/guid";
+import {
+  connectDuplex,
+  setGlobalData,
+  verifyAccountAndLogin,
+} from "../../utils/splash/splash_utils";
 
 const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
 
@@ -44,13 +49,10 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
 
   const makeBackendRequest = async (deviceInfo: MFDeviceInfo) => {
     const { data } = await getShortCodeAuthenticate(deviceInfo);
-    console.log(`Short code response:${data}`);
     const registrationCode: string = data.RegistrationCode;
-
     try {
       if (registrationCode) {
         setCode(registrationCode);
-        infoLog(`Set code: ${code}`);
         setVerficationCode(registrationCode.split(""));
         getAccessToken(deviceInfo, data.NextCheckInterval);
       }
@@ -94,32 +96,21 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
         try {
           const { data } = await getShortCodeAuthenticate(deviceInfo);
           if (data.AccessToken) {
-            //TODO: Check if token and expiry time exist
             clearInterval(intervalTimer);
             GLOBALS.store.accessToken = data.AccessToken;
             GLOBALS.store.refreshToken = data.RefreshToken;
             updateStore(JSON.stringify(GLOBALS.store));
-            // Settings.set(GLOBALS.store);
             getBootStrap(GLOBALS.store.accessToken).then(({ data }) => {
-              console.log(data);
-              GLOBALS.store.rightsGroupIds = data.RightsGroupIds;
-              let bootStrapResponse = data;
-              GLOBALS.bootstrapSelectors = bootStrapResponse;
-              GLOBALS.store.rightsGroupIds = data.RightsGroupIds;
+              setGlobalData(data);
               processBootStrap(data, "10ft").then(() => {
+                setGlobalData(data);
                 initUdls();
                 setDefaultStore();
-                const GUID = generateGUID();
-                const duplexEndpoint = `wss://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/duplex/?sessionId=${GUID}`;
-                if (__DEV__) {
-                  console.log(duplexEndpoint);
-                  console.log("GLOBALS.Definition", GLOBALS.bootstrapSelectors);
-                  console.log("StoreID:", DefaultStore.Id, DefaultStore);
-                }
+                var value = verifyAccountAndLogin();
+                console.log("verifyAccountAndLogin", value);
+                connectDuplex();
                 props.navigation.replace(Routes.WhoIsWatching);
-                duplex.initialize(duplexEndpoint);
               });
-              props.navigation.replace(Routes.WhoIsWatching);
             });
           } else {
             const registrationCode: string = data.RegistrationCode;
