@@ -5,7 +5,10 @@ import {
   BackHandler,
   TVMenuControl,
   Dimensions,
+  Text,
 } from "react-native";
+import { TVEventHandler, useTVEventHandler } from "react-native";
+
 import { appUIDefinition, debounceTime } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
@@ -39,6 +42,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [feedItem, setFeedItem] = useState<Feed>();
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const drawerRef: React.MutableRefObject<any> = useRef();
+  const [lastEventType, setLastEventType] = React.useState("");
   const [open, setOpen] = useState(false);
 
   let feedTimeOut: any = null;
@@ -115,12 +119,11 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
     }
   };
 
-  useEffect(() => {
-    if (!open) {
-      TVMenuControl.enableTVMenuKey();
-      BackHandler.addEventListener("hardwareBackPress", backAction);
-    }
-  }, []);
+  const myTVEventHandler = (evt: any) => {
+    setLastEventType(evt.eventType);
+  };
+
+  useTVEventHandler(myTVEventHandler);
 
   setHubsData();
 
@@ -181,6 +184,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                   />
                 )}
               </View>
+              <Text style={{ color: "blue" }}>{lastEventType}</Text>
               <View style={HomeScreenStyles.contentContainer}>
                 {!isLoading && (
                   <MFSwim
