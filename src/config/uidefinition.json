@@ -549,9 +549,9 @@
       "metadata_selected": "{Name}"
     },
     "RECOMM": {
-      "metadata1": "{Name}",
+      "metadata1": "{Image}",
       "metadata2": "{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}",
-      "metadata3": "{Image}"
+      "metadata3": "{Name}"
     },
     "STORE": {
       "metadata": "{Name}",
@@ -694,7 +694,7 @@
   },
   "metadataStyles": {
     "RECOMM": {
-      "metadata3": {
+      "metadata1": {
         "width": 94,
         "height": 94,
         "marginRight": 20,
@@ -704,14 +704,14 @@
         "alignContent": "center",
         "justifyContent": "center"
       },
-      "metadata1": {
+      "metadata2": {
         "fontFamily": "Inter-Bold",
         "fontSize": 38,
         "color": "white",
         "lineHeight": 55,
         "textAlign": "left"
       },
-      "metadata2": {
+      "metadata3": {
         "fontFamily": "Inter-SemiBold",
         "fontSize": 25,
         "lineHeight": 38,
@@ -752,10 +752,10 @@
         "width": 500,
         "height": 141,
         "marginTop": 50,
-        "flexDirection": "column"
+        "flexDirection": "row"
       },
       "metadataContainer2Styles": {
-        "flexDirection": "row"
+        "flexDirection": "column"
       }
     }
   }
