@@ -258,6 +258,7 @@ interface Config {
   queryStaleTime: number;
   enableMarquee: boolean;
   metadataTemplate: string;
+  limitSwimlaneItemsTo: number;
 }
 
 interface CurrentLocale {

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TargetedEvent,
   TextStyle,
+  TVFocusGuideView,
   ViewStyle,
 } from "react-native";
 
@@ -163,6 +164,9 @@ export interface MFButtonProps {
 }
 
 const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
+  const guideView = () => {
+    return <TVFocusGuideView destinations={[]} />;
+  };
   const [focused, setFocused] = useState(false);
 
   const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
@@ -173,8 +177,8 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
     setFocused(false);
     props.onBlur && props.onBlur(event);
   };
-  const _onPress = (event: GestureResponderEvent) => {
-    props.onPress && props.onPress(event);
+  const _onPress = (event?: GestureResponderEvent) => {
+    props.onPress && props.onPress(event!);
   };
 
   return props.variant === MFButtonVariant.Text ? (
@@ -235,6 +239,7 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
       hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       onBlur={_onBlur}
       onFocus={_onFocus}
+      disabled={props.disabled}
       onPress={_onPress}
       textLabel={props.textLabel}
       textStyle={props.textStyle}
@@ -244,7 +249,7 @@ const MFButton: React.FunctionComponent<MFButtonProps> = (props) => {
   ) : props.variant === MFButtonVariant.Icon ? (
     <MFIconButton
       focusable={props.focusable === false ? false : true}
-      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
+      hasTVPreferredFocus={props.hasTVPreferredFocus}
       imageSrc={props.iconSource}
       imageStyle={props.iconStyles}
       onBlur={_onBlur}

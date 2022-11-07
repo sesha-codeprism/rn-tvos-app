@@ -56,6 +56,7 @@ interface GLOBALSType {
   rootNavigation: any;
   /** Should the UI be RTL */
   enableRTL: boolean;
+  hubGroupFocused: boolean;
   /** Async store data */
   store: {
     accessToken: string | null;
@@ -96,6 +97,7 @@ export const GLOBALS: GLOBALSType = {
     tenantId: landingInfo.tenantId,
   },
   createUserProfile: { image: "", name: "", optOutPersonalDataUse: false },
+  hubGroupFocused: false,
   editUserProfile: {
     Name: "",
     Id: "",

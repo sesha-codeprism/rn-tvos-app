@@ -1,4 +1,6 @@
 import { GenericObject } from "../@types/GenericObject";
+// import uidef from "../config/";
+const uidef = require("../config/uidefinition.json")
 import { getScaledWidth, getScaledHeight } from "./dimensions";
 
 const memoizedUIDef: GenericObject = { compiledUIDef: null };
@@ -60,10 +62,17 @@ export const scaleAttributes = <T extends { [key: string]: any }>(
 };
 
 export const initUIDef = (): null | Record<string, unknown> => {
+  if (!uidef) {
+    console.log("ERROR: Undefined UIDefinition.");
+    memoizedUIDef.compiledUIDef = null;
+    return null;
+  }
+
   if (memoizedUIDef.compiledUIDef) {
     return memoizedUIDef.compiledUIDef;
   }
 
+  memoizedUIDef.compiledUIDef = scaleAttributes(uidef);
   return memoizedUIDef.compiledUIDef;
 };
 

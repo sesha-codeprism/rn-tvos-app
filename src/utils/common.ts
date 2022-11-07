@@ -278,6 +278,18 @@ export interface NetworkInfo {
   Images: Image[];
 }
 
+export interface ILibrary extends IResult {
+  Name: string;
+  Description: string;
+  LibraryItems: string[];
+  Udl: string;
+}
+
+export interface ILibrarySet {
+  Libraries: ILibrary[];
+  LibraryItems: ILibraryItem[];
+}
+
 export interface Image {
   Size: string;
   ImageType: string;
@@ -297,4 +309,264 @@ export enum DvrItemState {
   UNAVAILABLE = "Unavailable",
   DELETED = "Deleted",
   EXPIRING = "Expiring",
+}
+export type LibraryItemType = "Default" | "Title" | "PayPerView" | "Recording";
+
+
+export interface IResult {
+  Id: string;
+}
+
+export interface INetworkInfo {
+  Id: string;
+  Name: string;
+  Images: any[];
+  PFImages: any[];
+}
+
+export interface IBookmark {
+  TimeSeconds: number; // non-negative integer
+  RuntimeSeconds?: number;
+}
+
+export interface ICatchupSchedule {
+  CatchupEndUtc: string; // ISO UTC Date
+  CatchupStartUtc: string; // ISO UTC Date
+}
+
+export interface IPromotion {
+  EntityId: string;
+  EntityType: string;
+}
+
+export interface IPurchaseAction {
+  Promotions: IPromotion[];
+  titleId?: string;
+  PackageName?: string;
+}
+
+export interface IBookmarkDetail {
+  LastBookmarkSeconds: number;
+  RuntimeSeconds: number;
+}
+
+export interface ISeriesSeason extends IResult {
+  /**
+   * Season name.
+   */
+  Name: string;
+
+  /**
+   * Season number
+   */
+  SeasonNumber: number;
+
+  /**
+   * Episodes count
+   */
+  EpisodesCount: number;
+
+  OriginalName?: string; // Only supported for GraceNote universal data, not clear if back-end ever includes this
+}
+
+export interface IRating {
+  System: string;
+  Value: string;
+}
+
+export interface ITitleCatalogInfo {
+  /**
+   * Library item name.
+   */
+  Name?: string;
+
+  /**
+   * Show type. Valid Item types are ShowType.MOVIE or ShowType.TVSHOW
+   */
+  ShowType?: string;
+
+  /**
+   * Library item description.
+   */
+  Description?: string;
+
+  /**
+   * Corresponding program id.
+   */
+  UniversalProgramId: string;
+
+  /**
+   * Library item Network info.
+   */
+  Network?: INetworkInfo;
+
+  /**
+   * Runtime in seconds
+   */
+  RuntimeSeconds: number;
+
+  /**
+   * Collection of resized images.
+   */
+  Images: any[];
+
+  /**
+   * Collection of supported image types.
+   */
+  SupportedImages?: string[];
+
+  /**
+   * Collection of PCON ratings.
+   */
+  Ratings: IRating[];
+
+  /**
+   * The tags of the title.
+   */
+  Tags: string[];
+
+  /**
+   * Is "new" flag.
+   */
+  IsNew: boolean;
+
+  /**
+   * Is "adult" flag.
+   */
+  IsAdult: boolean;
+
+  /**
+   * Release date as an ISO encoded string
+   */
+  ReleaseDate?: string;
+
+  /**
+   * Release year as a number.
+   */
+  ReleaseYear?: number;
+
+  /**
+   * Catalog star rating.
+   */
+  StarRating?: number;
+
+  /**
+   * The episode's original airing date. (Series/episodes only)
+   */
+  OriginalAirDate?: string;
+
+  /**
+   * The series ID the episode belongs to. (Series/episodes only)
+   */
+  SeriesId?: string;
+
+  /**
+   * The season ID the episode belongs to. (Series/episodes only)
+   */
+  SeasonId?: string;
+
+  /**
+   * The episode's name. (Episodes only)
+   */
+  EpisodeName?: string;
+
+  /**
+   * The episode's season number. (Episodes only)
+   */
+  SeasonNumber?: number;
+
+  /**
+   * The episode's number. (Episodes only)
+   */
+  EpisodeNumber?: string;
+
+  /**
+   * The series new episode count. (Episodes only)
+   */
+  NewEpisodeCount?: number;
+
+  /**
+   * The Entitlements
+   */
+  Entitlements?: string[];
+
+  /**
+   * Locale info
+   */
+  Locale?: string;
+
+  // for Series
+  Seasons?: ISeriesSeason[];
+
+  /**
+   *  If set to true, asset has pre-stitched advisory
+   */
+  HasContentAdvisory?: boolean;
+}
+
+export interface ILibraryItem extends IResult {
+  /**
+   * Library item type. Valid Item types are "Title" or "Recording"
+   */
+  ItemType: LibraryItemType;
+
+  /**
+   * Pinned flag.
+   */
+  IsPinned?: boolean;
+
+  /**
+   * Bookmark time.
+   */
+  Bookmark?: IBookmark;
+
+  /**
+   * Schedule data for catch up content.
+   */
+  Schedule?: ICatchupSchedule;
+
+  /**
+   * List of available play actions.
+   */
+  PlayActions: IPlayAction[];
+
+  /**
+   * List of available purchase actions.
+   */
+  PurchaseActions: IPurchaseAction[];
+
+  /**
+   * Catalog information.
+   */
+  CatalogInfo: ITitleCatalogInfo;
+
+  /**
+   * Entitlements information.
+   */
+  Entitlements?: string[];
+
+  /**
+   * Geo Block information.
+   */
+  IsGeoBlocked?: boolean;
+
+  /**
+   * True if and only if the item is a trailer.
+   */
+  IsTrailer?: boolean;
+
+  /**
+   * Library item Network info.
+   */
+  Network?: INetworkInfo;
+
+  /**
+   * Bookmark detail, undefined if no bookmarks.
+   */
+  BookmarkDetail?: IBookmarkDetail;
+
+  /**
+   * on PPV items
+   */
+  ServiceCollectionId?: string;
 }

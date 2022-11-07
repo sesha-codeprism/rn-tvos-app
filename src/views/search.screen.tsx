@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { View, Dimensions, StyleSheet, ImageBackground } from "react-native";
-import { FeedObject } from "../components/MFFilmStrip/MFFilmStrip";
 import MFSearch from "../components/MFSearch";
 
 // const Search = requireNativeComponent('NKSearchComponent');
-
-const dataSample: Array<FeedObject> = require("../data/SampleData.json");
 
 const { width, height } = Dimensions.get("window");
 
@@ -15,14 +12,9 @@ interface SearchScreenProps {
 
 const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const [searchString, setSearchString] = useState("");
-  const [dataSource, setDataSource] = useState(dataSample);
   const onChangeText = (event: {
     nativeEvent: { text: React.SetStateAction<string> };
   }) => {
-    const x = dataSample.filter((e) =>
-      e.author.toLowerCase().startsWith(event.nativeEvent.text.toString())
-    );
-    setDataSource(x);
     setSearchString(event.nativeEvent.text);
   };
 

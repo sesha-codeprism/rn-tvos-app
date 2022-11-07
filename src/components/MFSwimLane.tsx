@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { View } from "react-native";
+import { set } from "react-native-reanimated";
 import { Feed } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { layout2x3 } from "../config/constants";
 import mkIcons from "../config/MKIcons";
+import { getAllFeedDataForFeed } from "../config/queries";
+import { NavigationTarget } from "../utils/analytics/consts";
 import { format } from "../utils/DiscoveryUtils";
 import { GLOBALS } from "../utils/globals";
 import { HomeScreenStyles } from "../views/app/Homescreen.styles";
@@ -11,6 +14,7 @@ import Styles from "./MFButtonsVariants/MFButtonStyles";
 import { TitlePlacement } from "./MFCard";
 import MFFilmStrip from "./MFFilmStrip/MFFilmStrip";
 import MFViewAllButton from "./MFFilmStrip/ViewAllComponent";
+import MFMetaData from "./MFMetadata/MFMetaData";
 
 interface MFSwimLaneProps {
   feed: Feed;
@@ -18,6 +22,10 @@ interface MFSwimLaneProps {
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
+  updateSwimLaneKey?: null | ((event: string) => void) | undefined;
+  swimLaneKey?: string;
+  limitSwimlaneItemsTo?: number;
+  onViewAllPressed?: null | ((event: SubscriberFeed) => void) | undefined;
   onListEmptyElementFocus?:
     | null
     | ((event: SubscriberFeed) => void)
@@ -38,15 +46,20 @@ interface MFSwimLaneProps {
 
 const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
   const [page, setPage] = React.useState(0);
-  const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
-  const _onBlur = () => {
-    setCurrentFeed(undefined);
+  const _onBlur = () => {};
+  const _onFocus = (event?: SubscriberFeed, index?: number) => {
+    props.onFocus && event && props.onFocus(event);
   };
-  const _onFocus = (event?: SubscriberFeed, index?: number) => {};
+  const showViewAll =
+    props.feed?.NavigationTargetVisibility ===
+      NavigationTarget.SHOW_FEED_ALWAYS ||
+    (props.feed?.NavigationTargetVisibility ===
+      NavigationTarget.CLIENT_DEFINED &&
+      props.data?.length >= props.limitSwimlaneItemsTo!);
   return (
     <View style={{ flexDirection: "column" }}>
       <MFFilmStrip
-        limitItemsTo={16}
+        limitSwimlaneItemsTo={props.limitSwimlaneItemsTo}
         enableCircularLayout
         title={props.feed.Name}
         style={
@@ -63,9 +76,9 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
         titlePlacement={TitlePlacement.beneath}
         enableRTL={GLOBALS.enableRTL}
         appendViewAll
+        swimLaneKey={props.swimLaneKey}
+        updateSwimLaneKey={props.updateSwimLaneKey}
         railContainerStyles={{}}
-        railTitleStyles={{ paddingLeft: 50 }}
-        renderLibraryItemList
         libraryItems={props.data}
         onBlur={(event) => {
           _onBlur();
@@ -94,16 +107,11 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
             onFocus={props.onListEmptyElementFocus}
           />
         }
-        shouldRenderFooter={
-          props.feed.NavigationTargetUri &&
-          props.feed.NavigationTargetText &&
-          props.feed.NavigationTargetVisibility &&
-          props.data &&
-          props.data.length > 0
-        }
+        shouldRenderFooter={showViewAll}
         viewAll={
           <MFViewAllButton
             displayStyles={Styles.railTitle}
+            feed={props.feed}
             displayText={
               props.feed.NavigationTargetText &&
               props.feed.NavigationTargetText.includes("{")
@@ -121,14 +129,13 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
                 : HomeScreenStyles.landScapeCardImageStyles
             }
             focusedStyle={HomeScreenStyles.focusedStyle}
-            onPress={props.onListFooterElementOnPress}
+            onPress={props.onViewAllPressed}
             onFocus={props.onListFooterElementFocus}
           />
         }
         onListFooterElementOnPress={props.onListFooterElementOnPress}
         onListFooterElementFocus={props.onListFooterElementFocus}
       />
-      {/* {currentFeed && <MFMetaData currentFeed={currentFeed} />} */}
     </View>
   );
 };

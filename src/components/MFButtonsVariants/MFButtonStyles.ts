@@ -68,8 +68,8 @@ const Styles = StyleSheet.create({
   },
   railContainer: {
     width: "100%",
-    height: 450,
-    marginLeft: 20,
+    // paddingLeft: 90,
+    paddingLeft: 10
   },
   railTitle: {
     color: "#A7A7A7",
@@ -77,7 +77,6 @@ const Styles = StyleSheet.create({
     marginVertical: 15,
     fontFamily: "Inter-SemiBold",
     fontWeight: "600",
-    marginLeft: 10,
     lineHeight: 50
   },
   railCard: {

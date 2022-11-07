@@ -1,5 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
+import React, {
+  Ref,
+  useContext,
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
+import {
+  GestureResponderEvent,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 import { HubsList } from "../../@types/Hubs";
 import { appUIDefinition } from "../../config/constants";
 import { AppImages } from "../../assets/images";
@@ -14,6 +26,7 @@ import { GlobalContext } from "../../contexts/globalContext";
 import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
 import { GLOBALS } from "../../utils/globals";
+import { current } from "@reduxjs/toolkit";
 
 interface MFMenuProps {
   navigation: any;
@@ -25,20 +38,28 @@ interface MFMenuProps {
   onPressSettings?: any;
 }
 
-const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
+const MFMenu = (props: MFMenuProps, ref: Ref<any>) => {
   const [hubs1, setHubs1] = useState(Array<ButtonVariantProps>());
   const [isIdentityAssigned, setIdentityAssigned] = useState(false);
   const globalContext = useContext(GlobalContext);
   const [focused, setFocused] = useState("");
 
+  useImperativeHandle(ref, () => ({
+    logState,
+  }));
+
+  const logState = () => {
+    console.log("From MFMenu");
+  };
   const testing = false;
-  const _onPressMain = (event: GestureResponderEvent, index: number) => {
+  const _onPress = (event: GestureResponderEvent, index: number) => {
     console.log("Some log");
     props.onPress && props.onPress(index);
   };
   const _onFocus = (index: number) => {
     props.onFocus && props.onFocus(index);
   };
+
   useEffect(() => {
     console.log("HubsList", props.hubList);
     let array1: Array<ButtonVariantProps> = [];
@@ -79,6 +100,14 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
     };
     return element;
   };
+  const updateFocus = (key?: string) => {
+    setTimeout(() => {
+      GLOBALS.hubGroupFocused = true;
+      if (key) {
+        setFocused(key);
+      }
+    }, 500);
+  };
 
   return (
     <GlobalContext.Consumer>
@@ -109,9 +138,10 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                 imageSource={{}}
                 iconButtonStyles={{ shouldRenderImage: true }}
                 onFocus={() => {
-                  setFocused("search");
+                  updateFocus("search");
                 }}
                 onBlur={() => {
+                  GLOBALS.hubGroupFocused = false;
                   setFocused("");
                 }}
                 onPress={() => {}}
@@ -120,7 +150,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
           </View>
           <View style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles1])}>
             <MFButtonGroup
-              onPress={(event, index) => _onPressMain(event, index)}
+              onPress={(event, index) => _onPress(event, index)}
               buttonsList={hubs1}
               onHubChanged={() => {}}
               containedButtonProps={{
@@ -145,6 +175,10 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               }}
               onFocus={(event, index) => {
                 _onFocus(index);
+                updateFocus("");
+              }}
+              onBlur={(event, index) => {
+                GLOBALS.hubGroupFocused = false;
                 setFocused("");
               }}
             />
@@ -184,7 +218,11 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                       props.navigation.navigate(Routes.Profile);
                     }}
                     onFocus={() => {
-                      setFocused("profile");
+                      updateFocus("profile");
+                    }}
+                    onBlur={() => {
+                      GLOBALS.hubGroupFocused = false;
+                      setFocused("");
                     }}
                   />
                 </View>
@@ -204,12 +242,15 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
                   iconStyles={MFMenuStyles.iconStyles}
                   iconButtonStyles={{ shouldRenderImage: true }}
                   onPress={() => {
-                    // props.navigation.toggleDrawer();
                     props.onPressSettings();
                     console.log("setting pressed", props.navigation);
                   }}
                   onFocus={() => {
-                    setFocused("settings");
+                    updateFocus("settings");
+                  }}
+                  onBlur={() => {
+                    GLOBALS.hubGroupFocused = false;
+                    setFocused("");
                   }}
                 />
               </View>
@@ -236,4 +277,4 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
   );
 };
 
-export default MFMenu;
+export const Menu = forwardRef(MFMenu);

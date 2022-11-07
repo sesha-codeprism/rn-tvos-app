@@ -49,7 +49,7 @@ const errorResponseHandler = (error: any) => {
     errorResponse.retrying = true;
     return axios
       .post(`/api/v1/user/auth/refreshToken`, {
-        refreshToken: refreshToken,
+        refreshToken: GLOBALS.store.refreshToken,
       })
       .then(res => {
         // Take the new ✨ assessToken and  💫 refreshToken, store them locally.

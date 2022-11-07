@@ -469,6 +469,8 @@ export const config = {
         feeds: {
             Continue: {
                 itemTypes: "Title,Catchup,Recording",
+            }, Library: {
+                itemTypes: "Title,PayPerView",
             },
             default: "Title",
         },
