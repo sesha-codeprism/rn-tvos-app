@@ -4,14 +4,16 @@ import { getUrlParts, getQueryParams, parseUri } from "../utils/url/urlUtil";
 import { registerLiveUdls } from "../live/live";
 
 export const UdlProviders: any = {};
+export const udlList: any = {}
 
 const accumulateUdls = (...listProviders: any) => {
   for (let i = 0; i < listProviders.length; i++) {
     let udl = listProviders[i];
     let prefix = parseUri(udl.prefix.toString());
     UdlProviders[prefix] = { getter: udl.getter };
+    udlList[prefix] = { prefix: prefix, getter: udl.getter }
   }
-  console.log(UdlProviders);
+  console.log(UdlProviders, "udlList", udlList);
 };
 
 export const registerUdls = () => {
@@ -31,7 +33,7 @@ export const parseUdl = (uri: string) => {
     return;
   }
 
-  let params = parts.query.substr(1) || "{}";
+  let params = parts.query.substring(1) || "{}";
   let parsedParams: any;
   try {
     parsedParams = JSON.parse(params);
@@ -70,21 +72,21 @@ export const splitId = (
   let params = null;
   if (i > -1) {
     try {
-      mergeList = JSON.parse(itemId.substr(i + 1));
+      mergeList = JSON.parse(itemId.substring(i + 1));
     } catch (error) { }
 
-    itemId = itemId.substr(0, i);
+    itemId = itemId.substring(0, i);
   }
   i = itemId.indexOf("/{"); // look for list params
   if (i > -1) {
     try {
-      params = JSON.parse(itemId.substr(i + 1));
+      params = JSON.parse(itemId.substring(i + 1));
     } catch (error) { }
-    itemId = itemId.substr(0, i);
+    itemId = itemId.substring(0, i);
   }
   i = itemId.lastIndexOf("/");
-  const prefix = itemId.substr(0, i);
-  const id = itemId.substr(i + 1);
+  const prefix = itemId.substring(0, i);
+  const id = itemId.substring(i + 1);
   return { prefix: prefix, id: id, params: params, mergeList: mergeList };
 };
 

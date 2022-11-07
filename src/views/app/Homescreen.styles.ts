@@ -71,7 +71,7 @@ export const HomeScreenStyles = StyleSheet.create({
     borderRadius: 8
   },
   posterViewContainerStyles: {
-    marginTop: 50,
+    // marginTop: 50,
     paddingHorizontal: 50,
     height: SCREEN_HEIGHT * 0.2,
     width: '100%',

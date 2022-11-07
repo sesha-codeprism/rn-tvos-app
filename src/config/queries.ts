@@ -38,28 +38,33 @@ export function getProfiles() {
     return useQuery(query, getAllUserProfiles, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime });
 }
 
-export function getDataForUDL(query: string, pageNo: number = 0) {
-    return useQuery(query, () => { return getUDLData(query, pageNo) }, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true });
+export function getDataForUDL(query: string, pageNo: number = 0, shouldMassageData: boolean = true) {
+    return useQuery(query, () => { return getUDLData(query, pageNo, shouldMassageData) }, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true });
 }
 
 export function getAllHubs(): any {
     return useQuery('get-hubs', getHubs, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime });
 }
 
-const getUDLData = async (uri: string, pageNo: number = 0) => {
+const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: boolean = true) => {
     try {
         const udlID = parseUdl(uri);
         if (udlID!.id in UdlProviders) {
             try {
                 const data = await getDataFromUDL(uri);
                 if (data) {
-                    if (udlID!.id.split("/")[0] === 'discovery') {
-                        const massagedData = massageDiscoveryFeed(data.data, SourceType.VOD);
-                        console.log("massageDiscoveryFeed for", uri, "is", massagedData);
-                        return massagedData;
+                    if (shouldMassageData) {
+                        if (udlID!.id.split("/")[0] === 'discovery') {
+                            const massagedData = massageDiscoveryFeed(data.data, SourceType.VOD);
+                            console.log("massageDiscoveryFeed for", uri, "is", massagedData);
+                            return massagedData;
+                        } else {
+                            const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
+                            console.log("massageSubscriberFeed for", uri, "is", massagedData);
+                            return massagedData;
+                        }
                     } else {
-                        const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
-                        return massagedData;
+                        return data;
                     }
                 } else {
                     return undefined

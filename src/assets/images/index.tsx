@@ -40,6 +40,7 @@ const AppImages: { [key: string]: Source | any } = {
   overlayLandscape: require(`${imagesDirectory}/overlay_landscape.png`),
   series_rec: require(`${imagesDirectory}/series_rec.png`),
   single_rec: require(`${imagesDirectory}/single_rec.png`),
+  filter: require(`${imagesDirectory}/Filter.png`),
 };
 
 export { AppImages };

@@ -6,9 +6,8 @@ import { initUIDef } from "../utils/uidefinition";
 import { UserProfile } from "../@types/UserProfile";
 import { GLOBALS } from "../utils/globals";
 import "react-native-gesture-handler";
-import { Provider } from "react-redux";
-import { store } from "../redux/store";
 import { initializeAnalyticsService } from "../utils/analytics/analytics";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 interface AppProps {}
 
@@ -20,7 +19,6 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   );
   const [enableRTL, shouldEnableRTL] = useState(GLOBALS.enableRTL);
   async function getLandingData() {
-    // Initialize UIDef
     initUIDef();
   }
 
@@ -54,16 +52,14 @@ const App: React.FunctionComponent<AppProps> = (props) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <GlobalContext.Provider value={appSettings}>
-          <RouterOutlet
-            isAuthorized={
-              GLOBALS.store.accessToken !== null &&
-              GLOBALS.store.refreshToken !== null
-            }
-          />
-        </GlobalContext.Provider>
-      </Provider>
+      <GlobalContext.Provider value={appSettings}>
+        <RouterOutlet
+          isAuthorized={
+            GLOBALS.store.accessToken !== null &&
+            GLOBALS.store.refreshToken !== null
+          }
+        />
+      </GlobalContext.Provider>
     </QueryClientProvider>
   );
 };

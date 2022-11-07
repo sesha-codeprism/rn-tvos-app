@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Dimensions } from "react-native";
 import SettingsLandingScreen from "../../views/app/settings_screens/settings_landingScreen";
 import AccountSettingsScreen from "../../views/app/settings_screens/account_settings";
 import ParentalControllScreen from "../../views/app/settings_screens/parental_controll/parental_controll.screen";
@@ -17,7 +15,6 @@ import ClosedCaptionScreen from "../../views/app/settings_screens/display/ close
 import PurchaseLockScreen from "../../views/app/settings_screens/parental_controll/purchase_lock.screen";
 import VideoQualityScreen from "../../views/app/settings_screens/display/video_quality.screen";
 import SubtitleLanguageScreen from "../../views/app/settings_screens/display/subtitle_language.screen";
-import { enableScreens } from "react-native-screens";
 import AudioScreen from "../../views/app/settings_screens/audio/audio.screen";
 import AudioLanguageScreen from "../../views/app/settings_screens/audio/audio_language.screen";
 import DescriptiveAudioScreen from "../../views/app/settings_screens/audio/descriptive_audio.screen";
@@ -40,8 +37,10 @@ import ShortCodeScreen from "../../views/auth/Shortcode.screen";
 import SplashScreen from "../../views/auth/Splash.screen";
 import SearchScreen from "../../views/search.screen";
 import FossLicenseScreen from "../../views/app/settings_screens/system/foss_license";
+import GalleryScreen from "../../views/app/Browse.Gallery.Screen";
+import RouteFallBackScreen from "../../views/app/Route.Fallback.screen";
+import BrowseCategoryScreen from "../../views/app/BrowseCategory/Browse.Category.screen";
 interface RouterOutletProps {}
-const { width, height } = Dimensions.get("window");
 
 export const Routes = {
   Splash: "splash",
@@ -81,12 +80,12 @@ export const Routes = {
   DVRSettings: "dvr_settings",
   StopRecording: "stop_recording",
   FOSSLicense: "foss_license",
+  BrowseCategory: "BrowseCategory",
+  BrowseGallery: "BrowseGallery",
+  FallBack: "fallBack",
 };
 
-enableScreens();
-enableScreens();
 const Stack = createNativeStackNavigator();
-const Drawer = createDrawerNavigator();
 export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
   props
 ) => {
@@ -113,10 +112,7 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           name={Routes.ParentalControll}
           component={ParentalControllScreen}
         />
-        <Stack.Screen
-          name={Routes.PinLock}
-          component={PinLockScreen}
-        />
+        <Stack.Screen name={Routes.PinLock} component={PinLockScreen} />
         <Stack.Screen name={Routes.ContentLock} component={ContentLockScreen} />
         <Stack.Screen name={Routes.Rating} component={RatingScreen} />
         {/* <Stack.Screen name={Routes.TvRating} component={TvRatingScreen} /> */}
@@ -218,7 +214,6 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
       <Stack.Screen name={Routes.Home} component={HomeScreen} />
       <Stack.Screen name={Routes.Guide} component={GuideScreen} />
       <Stack.Screen name={Routes.Search} component={SearchScreen} />
-      {/* <Stack.Screen name={Routes.Test} component={TestScreen} /> */}
       <Stack.Screen name={Routes.Profile} component={ProfileScreen} />
       <Stack.Screen
         name={Routes.CreateProfile}
@@ -236,7 +231,12 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
         name={Routes.ProfileFinalise}
         component={ProfileFinalisationScreen}
       />
-      {/* {isSignedIn ? <></> : <></>} */}
+      <Stack.Screen name={Routes.BrowseGallery} component={GalleryScreen} />
+      <Stack.Screen
+        name={Routes.BrowseCategory}
+        component={BrowseCategoryScreen}
+      />
+      <Stack.Screen name={Routes.FallBack} component={RouteFallBackScreen} />
     </Stack.Navigator>
   );
 };
