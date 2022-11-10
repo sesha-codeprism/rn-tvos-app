@@ -37,7 +37,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
           subTitle: _.isEmpty(values.contentLock)
             ? AppStrings.str_rating_unrestricted
             : AppStrings.str_pcon_challenge_pinLockedState,
-          action: _.isEmpty(values.contentLock) ? "content_lock" : "pin_lock",
+          action: "pin_lock",
           screenTarget: Routes.ContentLock,
           icon: "",
         },
@@ -48,11 +48,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
             values.adultLock["allowAdultLocks"]
               ? AppStrings.str_pcon_challenge_pinLockedState
               : AppStrings.str_rating_unrestricted,
-          action:
-            values.adultLock["adultContentMasking"] ||
-            values.adultLock["allowAdultLocks"]
-              ? "pin_lock"
-              : "adult_lock",
+          action: "pin_lock",
           screenTarget: Routes.AdultLock,
           icon: "",
         },
@@ -61,7 +57,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
           subTitle: values.purchaseLock["locked"]
             ? AppStrings.str_pcon_challenge_pinLockedState
             : AppStrings.str_rating_unrestricted,
-          action: values.purchaseLock["locked"] ? "pin_lock" : "purchase_lock",
+          action: "pin_lock",
           screenTarget: Routes.PurchaseLock,
           icon: "",
         },

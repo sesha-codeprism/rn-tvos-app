@@ -36,101 +36,105 @@ interface MFSwimLaneProps {
     | undefined;
 }
 
-const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
-  const [page, setPage] = React.useState(0);
-  const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
-  const _onBlur = () => {
-    setCurrentFeed(undefined);
-  };
-  const _onFocus = (event?: SubscriberFeed, index?: number) => {};
-  return (
-    <View style={{ flexDirection: "column" }}>
-      <MFFilmStrip
-        limitItemsTo={16}
-        enableCircularLayout
-        title={props.feed.Name}
-        style={
-          props.feed.ShowcardAspectRatio === layout2x3
-            ? HomeScreenStyles.portraitCardStyles
-            : HomeScreenStyles.landScapeCardStyles
-        }
-        imageStyle={
-          props.feed.ShowcardAspectRatio === layout2x3
-            ? HomeScreenStyles.portraitCardImageStyles
-            : HomeScreenStyles.landScapeCardImageStyles
-        }
-        focusedStyle={HomeScreenStyles.focusedStyle}
-        titlePlacement={TitlePlacement.beneath}
-        enableRTL={GLOBALS.enableRTL}
-        appendViewAll
-        railContainerStyles={{}}
-        railTitleStyles={{ paddingLeft: 50 }}
-        renderLibraryItemList
-        libraryItems={props.data}
-        onBlur={(event) => {
-          _onBlur();
-        }}
-        onFocus={(event) => {
-          _onFocus(event);
-          props.onFocus && props.onFocus(event);
-        }}
-        listEmptyComponent={
-          /** List length <=0. UDL Call successful but no data items returned */
-          <MFViewAllButton
-            displayStyles={Styles.railTitle}
-            displayText={"No items returned"}
-            style={
-              props.feed.ShowcardAspectRatio === layout2x3
-                ? HomeScreenStyles.portraitCardStyles
-                : HomeScreenStyles.landScapeCardStyles
-            }
-            imageStyle={
-              props.feed.ShowcardAspectRatio === layout2x3
-                ? HomeScreenStyles.portraitCardImageStyles
-                : HomeScreenStyles.landScapeCardImageStyles
-            }
-            focusedStyle={HomeScreenStyles.focusedStyle}
-            onPress={props.onListEmptyElementPress}
-            onFocus={props.onListEmptyElementFocus}
-          />
-        }
-        shouldRenderFooter={
-          props.feed.NavigationTargetUri &&
-          props.feed.NavigationTargetText &&
-          props.feed.NavigationTargetVisibility &&
-          props.data &&
-          props.data.length > 0
-        }
-        viewAll={
-          <MFViewAllButton
-            displayStyles={Styles.railTitle}
-            displayText={
-              props.feed.NavigationTargetText &&
-              props.feed.NavigationTargetText.includes("{")
-                ? format(props.feed.NavigationTargetText, props.feed.Name)
-                : props.feed.NavigationTargetText!
-            }
-            style={
-              props.feed.ShowcardAspectRatio === layout2x3
-                ? HomeScreenStyles.portraitCardStyles
-                : HomeScreenStyles.landScapeCardStyles
-            }
-            imageStyle={
-              props.feed.ShowcardAspectRatio === layout2x3
-                ? HomeScreenStyles.portraitCardImageStyles
-                : HomeScreenStyles.landScapeCardImageStyles
-            }
-            focusedStyle={HomeScreenStyles.focusedStyle}
-            onPress={props.onListFooterElementOnPress}
-            onFocus={props.onListFooterElementFocus}
-          />
-        }
-        onListFooterElementOnPress={props.onListFooterElementOnPress}
-        onListFooterElementFocus={props.onListFooterElementFocus}
-      />
-      {/* {currentFeed && <MFMetaData currentFeed={currentFeed} />} */}
-    </View>
-  );
-};
+const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
+  ({ ...props }, ref: any) => {
+    const [page, setPage] = React.useState(0);
+    const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
+    const _onBlur = () => {
+      setCurrentFeed(undefined);
+    };
+    const _onFocus = (event?: SubscriberFeed, index?: number) => {};
+    return (
+      <View style={{ flexDirection: "column" }}>
+        <MFFilmStrip
+          ref={ref}
+          limitItemsTo={16}
+          enableCircularLayout
+          title={props.feed.Name}
+          style={
+            props.feed.ShowcardAspectRatio === layout2x3
+              ? HomeScreenStyles.portraitCardStyles
+              : HomeScreenStyles.landScapeCardStyles
+          }
+          imageStyle={
+            props.feed.ShowcardAspectRatio === layout2x3
+              ? HomeScreenStyles.portraitCardImageStyles
+              : HomeScreenStyles.landScapeCardImageStyles
+          }
+          focusedStyle={HomeScreenStyles.focusedStyle}
+          titlePlacement={TitlePlacement.beneath}
+          enableRTL={GLOBALS.enableRTL}
+          appendViewAll
+          railContainerStyles={{}}
+          railTitleStyles={{ paddingLeft: 50 }}
+          renderLibraryItemList
+          libraryItems={props.data}
+          onBlur={(event) => {
+            _onBlur();
+          }}
+          onFocus={(event) => {
+            _onFocus(event);
+            props.onFocus && props.onFocus(event);
+          }}
+          listEmptyComponent={
+            /** List length <=0. UDL Call successful but no data items returned */
+            <MFViewAllButton
+            ref={ref}
+              displayStyles={Styles.railTitle}
+              displayText={"No items returned"}
+              style={
+                props.feed.ShowcardAspectRatio === layout2x3
+                  ? HomeScreenStyles.portraitCardStyles
+                  : HomeScreenStyles.landScapeCardStyles
+              }
+              imageStyle={
+                props.feed.ShowcardAspectRatio === layout2x3
+                  ? HomeScreenStyles.portraitCardImageStyles
+                  : HomeScreenStyles.landScapeCardImageStyles
+              }
+              focusedStyle={HomeScreenStyles.focusedStyle}
+              onPress={props.onListEmptyElementPress}
+              onFocus={props.onListEmptyElementFocus}
+            />
+          }
+          shouldRenderFooter={
+            props.feed.NavigationTargetUri &&
+            props.feed.NavigationTargetText &&
+            props.feed.NavigationTargetVisibility &&
+            props.data &&
+            props.data.length > 0
+          }
+          viewAll={
+            <MFViewAllButton
+              displayStyles={Styles.railTitle}
+              displayText={
+                props.feed.NavigationTargetText &&
+                props.feed.NavigationTargetText.includes("{")
+                  ? format(props.feed.NavigationTargetText, props.feed.Name)
+                  : props.feed.NavigationTargetText!
+              }
+              style={
+                props.feed.ShowcardAspectRatio === layout2x3
+                  ? HomeScreenStyles.portraitCardStyles
+                  : HomeScreenStyles.landScapeCardStyles
+              }
+              imageStyle={
+                props.feed.ShowcardAspectRatio === layout2x3
+                  ? HomeScreenStyles.portraitCardImageStyles
+                  : HomeScreenStyles.landScapeCardImageStyles
+              }
+              focusedStyle={HomeScreenStyles.focusedStyle}
+              onPress={props.onListFooterElementOnPress}
+              onFocus={props.onListFooterElementFocus}
+            />
+          }
+          onListFooterElementOnPress={props.onListFooterElementOnPress}
+          onListFooterElementFocus={props.onListFooterElementFocus}
+        />
+        {/* {currentFeed && <MFMetaData currentFeed={currentFeed} />} */}
+      </View>
+    );
+  }
+);
 
 export default MFSwimLane;

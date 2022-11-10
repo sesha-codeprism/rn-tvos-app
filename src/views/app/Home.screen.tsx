@@ -5,6 +5,9 @@ import {
   BackHandler,
   TVMenuControl,
   Dimensions,
+  PressableProps,
+  TouchableOpacity,
+  Alert,
 } from "react-native";
 import { appUIDefinition, debounceTime } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -40,6 +43,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const drawerRef: React.MutableRefObject<any> = useRef();
   const [open, setOpen] = useState(false);
+  const firstCardRef = useRef<TouchableOpacity>(null);
 
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;
@@ -123,7 +127,11 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
   }, []);
 
   setHubsData();
-
+  const setCardFocus = () => {
+    // console.log("firstCardRef.current", firstCardRef.current);
+    // Alert.alert("Set hub data called");
+    firstCardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+  };
   return (
     <View style={HomeScreenStyles.container} pointerEvents="box-none">
       <ImageBackground
@@ -152,6 +160,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
                     setFeeds(hubs[event]);
                   }, debounceTime);
                 }}
+                setCardFocus={setCardFocus}
                 onPressSettings={() => {
                   setOpen(open);
                   drawerRef.current.open();
@@ -184,6 +193,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
               <View style={HomeScreenStyles.contentContainer}>
                 {!isLoading && (
                   <MFSwim
+                    ref={firstCardRef}
                     feeds={feeds}
                     index={index}
                     onFocus={onFeedFocus}

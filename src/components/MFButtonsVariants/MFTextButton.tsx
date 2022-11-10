@@ -1,27 +1,26 @@
-import React, { useState } from "react";
-import { OutlinedButtonStyle } from "../MFButton/MFButton";
+import React, { RefObject, useState } from "react";
+import { ContainedButtonStyle } from "../MFButton/MFButton";
 import {
   GestureResponderEvent,
   NativeSyntheticEvent,
   Pressable,
+  PressableProps,
   StyleProp,
   StyleSheet,
   TargetedEvent,
+  TextStyle,
   ViewStyle,
 } from "react-native";
 import Styles from "./MFButtonStyles";
-import { TextStyle } from "react-native";
 import MFText from "../MFText";
-
-export interface MFOutlinedButtonProps {
-  outlinedButtonStyle?: OutlinedButtonStyle;
+export interface MFTextButtonProps {
+  containedButtonStyle?: ContainedButtonStyle;
   focused?: boolean;
   style?: StyleProp<ViewStyle>;
   focusedStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   textLabel?: string;
   enableRTL?: boolean;
-
   onFocus?:
     | null
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
@@ -33,10 +32,11 @@ export interface MFOutlinedButtonProps {
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
   hasTVPreferredFocus?: boolean;
   focusable?: boolean;
+  disabled?: boolean;
 }
 
-const MFOutlinedButton: React.FunctionComponent<MFOutlinedButtonProps> =
-  React.forwardRef(({ ...props }, ref: any) => {
+const MFTextButton = React.forwardRef(
+  ({ ...props }: MFTextButtonProps, ref: any) => {
     const [focused, setFocused] = useState(false);
 
     const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
@@ -55,36 +55,12 @@ const MFOutlinedButton: React.FunctionComponent<MFOutlinedButtonProps> =
       <Pressable
         ref={ref}
         focusable={props.focusable === false ? false : true}
-        disabled={props.outlinedButtonStyle?.isDisabled}
-        hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
-        style={[
-          Styles.outlined,
-          props.style,
-          focused
-            ? StyleSheet.flatten([
-                Styles.focused,
-                props.style,
-                props.focusedStyle,
-                {
-                  borderBottomColor:
-                    props.outlinedButtonStyle?.focusedBorderColor,
-                  borderBottomWidth:
-                    props.outlinedButtonStyle?.focusedBorderWidth,
-                },
-              ])
-            : StyleSheet.flatten([
-                Styles.unFcoused,
-                props.style,
-                {
-                  borderBottomColor: "transparent",
-                  borderBottomidth:
-                    props.outlinedButtonStyle?.unFocusedBorderWidth,
-                },
-              ]),
-        ]}
+        style={props.style}
         onFocus={_onFocus}
         onBlur={_onBlur}
         onPress={_onPress}
+        disabled={props.disabled ? props.disabled : false}
+        hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       >
         <MFText
           textStyle={props.textStyle}
@@ -94,6 +70,7 @@ const MFOutlinedButton: React.FunctionComponent<MFOutlinedButtonProps> =
         />
       </Pressable>
     );
-  });
+  }
+);
 
-export default MFOutlinedButton;
+export default MFTextButton;

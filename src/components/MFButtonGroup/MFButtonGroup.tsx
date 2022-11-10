@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
   GestureResponderEvent,
@@ -7,15 +7,17 @@ import {
   StyleSheet,
   TargetedEvent,
   TextStyle,
+  Pressable,
   View,
   ViewStyle,
+  PressableProps,
+  TouchableOpacity,
+  Alert,
 } from "react-native";
 import MFButton, { MFButtonVariant } from "../MFButton/MFButton";
 import { MFAvatarButtonProps } from "../MFButtonsVariants/MFAvatarButton";
 import { MFContainedButtonProps } from "../MFButtonsVariants/MFContainedButton";
 import { MFOutlinedButtonProps } from "../MFButtonsVariants/MFOutlinedButton";
-import { MFTabBarStyles } from "../MFTabBar/MFTabBarStyles";
-
 import { Source, ImageStyle } from "react-native-fast-image";
 import { MFUnderlinedButtonProps } from "../MFButtonsVariants/MFUnderlinedButton";
 
@@ -62,12 +64,20 @@ export interface MFButtonGroupProps {
     | null
     | ((event: GestureResponderEvent, hubIndex: number, param: any) => void)
     | undefined;
+  setCardFocus?: any;
 }
 
 const MFButtonGroup: React.FunctionComponent<MFButtonGroupProps> = (props) => {
   const [index, setIndex] = useState(0);
   const [hubIndex, setHubIndex] = useState(0);
   const [focused, setFocused] = useState(false);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [menuHasFocus, setMenuHasFocus] = useState(true);
+  const currentHubRef = // props.buttonsList.length ? props.buttonsList
+    Array(20)
+      .fill(0)
+      .map(() => useRef<PressableProps>(null));
+  console.log("button list in side button group", props.buttonsList);
 
   const _onFocus = (
     event: NativeSyntheticEvent<TargetedEvent>,
@@ -92,64 +102,87 @@ const MFButtonGroup: React.FunctionComponent<MFButtonGroupProps> = (props) => {
     setIndex(index);
     props.onPress && props.onPress(event, index, param);
   };
-
+  const onFocusBar = () => {
+    // setActiveIndex(null);
+    if (!menuHasFocus) {
+      console.log('currentHubRef[activeIndex]',currentHubRef[activeIndex].current)
+      currentHubRef[hubIndex].current?.setNativeProps({hasTVPreferredFocus: true});
+      // .setNativeProps({
+      //   hasTVPreferredFocus: true,
+      // });
+      setMenuHasFocus(true);
+    } else {
+      console.log('menu has no focus');
+      // Alert.alert("Card focus")
+      setMenuHasFocus(false);
+      props.setCardFocus();
+      // firstCardRef.current?.setNativeProps({hasTVPreferredFocus: true});
+    }
+  };
   return (
-    <View
-      style={{
-        flexDirection: props.vertical
-          ? "column"
-          : props.enableRTL
-          ? "row-reverse"
-          : "row",
-        marginTop: 20,
-      }}
-    >
-      <FlatList
-        data={props.buttonsList}
-        horizontal
-        disableIntervalMomentum
-        inverted={props.enableRTL}
-        keyExtractor={(e, index) => `Index${index}`}
-        renderItem={({ item, index }) => (
-          <MFButton
-            key={`Index${index}`}
-            variant={item.variant}
-            textLabel={item.textLabel}
-            containedButtonProps={props.containedButtonProps}
-            outlinedButtonProps={props.outlinedButtonProps}
-            avatarButtonProps={props.avatarButtonProps}
-            imageStyles={item.imageStyles}
-            avatarStyles={item.avatarStyles}
-            iconStyles={item.iconStyles}
-            textStyle={StyleSheet.flatten([
-              item.textStyle?.textStyle,
-              hubIndex === index
-                ? item.textStyle?.focusedStyle
-                : item.textStyle?.unfocusedStyle,
-            ])}
-            focusedStyle={item.focusedStyle}
-            onFocus={(event) => {
-              _onFocus(event, index);
-            }}
-            onBlur={(event) => {
-              _onBlur(event, index);
-            }}
-            onPress={(event) => {
-              _onPress(event, index, "");
-            }}
-            style={
-              hubIndex === index
-                ? StyleSheet.flatten([item.focusedStyle])
-                : index === index
-                ? StyleSheet.flatten(item.style)
-                : item.style
-            }
-            iconSource={item.iconSource || {}}
-            imageSource={item.imageSource || {}}
-            avatarSource={item.avatarSource || {}}
-          />
-        )}
-      />
+    <View style={{display: "flex", flexDirection:"column", marginTop: 70, width:'100%'}}>
+      <View
+        style={{
+          flexDirection: props.vertical
+            ? "column"
+            : props.enableRTL
+            ? "row-reverse"
+            : "row",
+          marginTop: 20,
+        }}
+      >
+        <FlatList
+          data={props.buttonsList}
+          horizontal
+          disableIntervalMomentum
+          inverted={props.enableRTL}
+          keyExtractor={(e, index) => `Index${index}`}
+          renderItem={({ item, index }) => (
+            <MFButton
+              ref={currentHubRef[index]}
+              key={`Index${index}`}
+              variant={item.variant}
+              textLabel={item.textLabel}
+              containedButtonProps={props.containedButtonProps}
+              outlinedButtonProps={props.outlinedButtonProps}
+              avatarButtonProps={props.avatarButtonProps}
+              imageStyles={item.imageStyles}
+              avatarStyles={item.avatarStyles}
+              iconStyles={item.iconStyles}
+              textStyle={StyleSheet.flatten([
+                item.textStyle?.textStyle,
+                hubIndex === index
+                  ? item.textStyle?.focusedStyle
+                  : item.textStyle?.unfocusedStyle,
+              ])}
+              focusedStyle={item.focusedStyle}
+              onFocus={(event) => {
+                _onFocus(event, index);
+              }}
+              onBlur={(event) => {
+                _onBlur(event, index);
+              }}
+              onPress={(event) => {
+                _onPress(event, index, "");
+              }}
+              style={
+                hubIndex === index
+                  ? StyleSheet.flatten([item.focusedStyle])
+                  : index === index
+                  ? StyleSheet.flatten(item.style)
+                  : item.style
+              }
+              iconSource={item.iconSource || {}}
+              imageSource={item.imageSource || {}}
+              avatarSource={item.avatarSource || {}}
+            />
+          )}
+        />
+      </View>
+      <TouchableOpacity
+        onFocus={onFocusBar}
+        style={{ backgroundColor: "transparent", height: 20, width: "100%", marginTop: 50}}
+      ></TouchableOpacity>
     </View>
   );
 };

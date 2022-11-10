@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { RefObject, useState } from "react";
 import { ContainedButtonStyle } from "../MFButton/MFButton";
 import {
   GestureResponderEvent,
   NativeSyntheticEvent,
   Pressable,
+  PressableProps,
   StyleProp,
   StyleSheet,
   TargetedEvent,
@@ -12,7 +13,7 @@ import {
 } from "react-native";
 import Styles from "./MFButtonStyles";
 import MFText from "../MFText";
-export interface MFContainedButtonProps {
+export interface MFDefaultButtonProps {
   containedButtonStyle?: ContainedButtonStyle;
   focused?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -31,10 +32,12 @@ export interface MFContainedButtonProps {
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
   hasTVPreferredFocus?: boolean;
   focusable?: boolean;
+  disabled?: boolean;
+  children?: any;
 }
 
-const MFContainedButton = React.forwardRef(
-  ({ ...props }: MFContainedButtonProps, ref: any) => {
+const MFDefaultButton = React.forwardRef(
+  ({ ...props }: MFDefaultButtonProps, ref: any) => {
     const [focused, setFocused] = useState(false);
 
     const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
@@ -52,52 +55,17 @@ const MFContainedButton = React.forwardRef(
     return (
       <Pressable
         ref={ref}
-        testID={"Contained_Button"}
+        focusable={props.focusable === false ? false : true}
+        style={props.style}
         onFocus={_onFocus}
         onBlur={_onBlur}
         onPress={_onPress}
-        hasTVPreferredFocus
-        disabled={props.containedButtonStyle?.enabled}
-        style={[
-          props.style,
-          Styles.Contained,
-          focused
-            ? StyleSheet.flatten([
-                Styles.focused,
-                props.style,
-                props.focusedStyle,
-                {
-                  backgroundColor:
-                    props.containedButtonStyle?.focusedBackgroundColor,
-                },
-              ])
-            : [
-                StyleSheet.flatten([
-                  Styles.unFcoused,
-                  props.style,
-                  {
-                    backgroundColor:
-                      props.containedButtonStyle?.unFocusedBackgroundColor,
-                  },
-                ]),
-              ],
-        ]}
-        focusable={props.focusable === false ? false : true}
+        hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       >
-        <MFText
-          textStyle={[
-            props.textStyle,
-            focused
-              ? { color: "white" }
-              : { color: props.containedButtonStyle?.unFocusedTextColor },
-          ]}
-          enableRTL={props.enableRTL}
-          shouldRenderText
-          displayText={props.textLabel}
-        />
+        {props.children}
       </Pressable>
     );
   }
 );
 
-export default MFContainedButton;
+export default MFDefaultButton;
