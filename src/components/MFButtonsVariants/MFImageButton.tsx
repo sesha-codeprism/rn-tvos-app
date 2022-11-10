@@ -34,40 +34,42 @@ export interface MFImageButtonProps {
   focusable?: boolean;
 }
 
-const MFImageButton: React.FunctionComponent<MFImageButtonProps> = (props) => {
-  const [focused, setFocused] = useState(false);
+const MFImageButton: React.FunctionComponent<MFImageButtonProps> =
+  React.forwardRef(({ ...props }, ref: any) => {
+    const [focused, setFocused] = useState(false);
 
-  const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(true);
-    props.onFocus && props.onFocus(event);
-  };
-  const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(false);
-    props.onBlur && props.onBlur(event);
-  };
-  const _onPress = (event: GestureResponderEvent) => {
-    props.onPress && props.onPress(event);
-  };
+    const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(true);
+      props.onFocus && props.onFocus(event);
+    };
+    const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(false);
+      props.onBlur && props.onBlur(event);
+    };
+    const _onPress = (event: GestureResponderEvent) => {
+      props.onPress && props.onPress(event);
+    };
 
-  return (
-    <Pressable
-      focusable={props.focusable === false ? false : true}
-      style={[
-        focused
-          ? StyleSheet.flatten([props.style, props.focusedStyle])
-          : StyleSheet.flatten([props.style]),
-      ]}
-      onFocus={_onFocus}
-      onBlur={_onBlur}
-      onPress={_onPress}
-      testID={"Image_Button"}
-      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
-    >
-      <FastImage source={props.buttonImage} style={[props.imageStyles]}>
-        {props.children}
-      </FastImage>
-    </Pressable>
-  );
-};
+    return (
+      <Pressable
+        ref={ref}
+        focusable={props.focusable === false ? false : true}
+        style={[
+          focused
+            ? StyleSheet.flatten([props.style, props.focusedStyle])
+            : StyleSheet.flatten([props.style]),
+        ]}
+        onFocus={_onFocus}
+        onBlur={_onBlur}
+        onPress={_onPress}
+        testID={"Image_Button"}
+        hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
+      >
+        <FastImage source={props.buttonImage} style={[props.imageStyles]}>
+          {props.children}
+        </FastImage>
+      </Pressable>
+    );
+  });
 
 export default MFImageButton;

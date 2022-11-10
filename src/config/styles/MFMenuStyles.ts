@@ -11,6 +11,9 @@ const MFMenuStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignContent: "center",
+    // paddingLeft: 90,
+    // paddingRight: 88,
+    //backgroundColor: 'red'
   },
   avatarStyles: {
     height: 70,
@@ -67,9 +70,9 @@ const MFMenuStyles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 10,
-    // marginLeft: 70,marginRight: 30
-    // backgroundColor: __DEV__ ? 'red' : 'transparent'
+    // paddingTop: 10,
+    paddingBottom: 10
+    // backgroundColor: __DEV__ ? 'blue' : 'transparent',
   },
   hubsContainerStyles1: {
     flex: 2.8,

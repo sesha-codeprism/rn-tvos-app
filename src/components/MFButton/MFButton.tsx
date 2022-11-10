@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TargetedEvent,
   TextStyle,
+  TVFocusGuideView,
   ViewStyle,
 } from "react-native";
 
@@ -176,8 +177,8 @@ const MFButton = React.forwardRef(({ ...props }: MFButtonProps, ref) => {
     setFocused(false);
     props.onBlur && props.onBlur(event);
   };
-  const _onPress = (event: GestureResponderEvent) => {
-    props.onPress && props.onPress(event);
+  const _onPress = (event?: GestureResponderEvent) => {
+    props.onPress && props.onPress(event!);
   };
 
   return props.variant === MFButtonVariant.Text ? (
@@ -201,6 +202,8 @@ const MFButton = React.forwardRef(({ ...props }: MFButtonProps, ref) => {
     />
   ) : props.variant === MFButtonVariant.Image ? (
     <MFImageButton
+    // @ts-ignore
+      ref={ref}
       focusable={props.focusable === false ? false : true}
       hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       buttonImage={props.imageSource}
@@ -229,11 +232,13 @@ const MFButton = React.forwardRef(({ ...props }: MFButtonProps, ref) => {
     ></MFContainedButton>
   ) : props.variant === MFButtonVariant.Outlined ? (
     <MFOutlinedButton
+      // @ts-ignore
       ref={ref}
       focusable={props.focusable === false ? false : true}
       hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       onBlur={_onBlur}
       onFocus={_onFocus}
+      disabled={props.disabled}
       onPress={_onPress}
       textLabel={props.textLabel}
       textStyle={props.textStyle}
@@ -242,9 +247,10 @@ const MFButton = React.forwardRef(({ ...props }: MFButtonProps, ref) => {
     ></MFOutlinedButton>
   ) : props.variant === MFButtonVariant.Icon ? (
     <MFIconButton
+      // @ts-ignore
       ref={ref}
       focusable={props.focusable === false ? false : true}
-      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
+      hasTVPreferredFocus={props.hasTVPreferredFocus}
       imageSrc={props.iconSource}
       imageStyle={props.iconStyles}
       onBlur={_onBlur}
@@ -262,6 +268,7 @@ const MFButton = React.forwardRef(({ ...props }: MFButtonProps, ref) => {
     ></MFIconButton>
   ) : props.variant === MFButtonVariant.Avatar ? (
     <MFAvatarButton
+      // @ts-ignore
       ref={ref}
       focusable={props.focusable === false ? false : true}
       hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
@@ -275,6 +282,7 @@ const MFButton = React.forwardRef(({ ...props }: MFButtonProps, ref) => {
     ></MFAvatarButton>
   ) : props.variant === MFButtonVariant.Underlined ? (
     <MFUnderlinedButton
+      // @ts-ignore
       ref={ref}
       focusable={props.focusable === false ? false : true}
       hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}

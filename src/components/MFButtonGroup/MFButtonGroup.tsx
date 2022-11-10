@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { Ref, useEffect, useRef, useState } from "react";
 import {
   FlatList,
   GestureResponderEvent,
@@ -20,6 +20,7 @@ import { MFContainedButtonProps } from "../MFButtonsVariants/MFContainedButton";
 import { MFOutlinedButtonProps } from "../MFButtonsVariants/MFOutlinedButton";
 import { Source, ImageStyle } from "react-native-fast-image";
 import { MFUnderlinedButtonProps } from "../MFButtonsVariants/MFUnderlinedButton";
+import { GLOBALS } from "../../utils/globals";
 
 export interface MFButtonTextStyle {
   textStyle: StyleProp<TextStyle>;
@@ -47,6 +48,7 @@ export interface MFButtonGroupProps {
   containedButtonProps?: MFContainedButtonProps;
   outlinedButtonProps?: MFOutlinedButtonProps;
   underlinedButtonProps?: MFUnderlinedButtonProps;
+  hasTVPreferredFocus?: boolean;
   enableRTL?: boolean;
   vertical?: boolean;
   focusedStyle?: StyleProp<ViewStyle>;
@@ -73,16 +75,20 @@ const MFButtonGroup: React.FunctionComponent<MFButtonGroupProps> = (props) => {
   const [focused, setFocused] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [menuHasFocus, setMenuHasFocus] = useState(true);
-  const currentHubRef = // props.buttonsList.length ? props.buttonsList
-    Array(20)
-      .fill(0)
-      .map(() => useRef<PressableProps>(null));
-  console.log("button list in side button group", props.buttonsList);
-
+  const currentHubRef = Array(20)
+    .fill(0)
+    .map(() => useRef<PressableProps>(null));
+  // console.log("button list in side button group", props.buttonsList);
+  // useEffect(() => {
+  //   currentHubRef = props.buttonsList.length
+  //     ? props.buttonsList.map(() => useRef<PressableProps>(null))
+  //     : [];
+  // });
   const _onFocus = (
     event: NativeSyntheticEvent<TargetedEvent>,
     index: number
   ) => {
+    // console.log('focused hub index', index, props.onFocus)
     setHubIndex(index);
     props.onHubChanged(index);
     props.onFocus && props.onFocus(event, index);
@@ -103,24 +109,29 @@ const MFButtonGroup: React.FunctionComponent<MFButtonGroupProps> = (props) => {
     props.onPress && props.onPress(event, index, param);
   };
   const onFocusBar = () => {
-    // setActiveIndex(null);
+    console.log("onFocusBar called", hubIndex, "menuHasFocus", menuHasFocus);
+    // Alert.alert("Bar focussed");
     if (!menuHasFocus) {
-      console.log('currentHubRef[activeIndex]',currentHubRef[activeIndex].current)
-      currentHubRef[hubIndex].current?.setNativeProps({hasTVPreferredFocus: true});
-      // .setNativeProps({
-      //   hasTVPreferredFocus: true,
-      // });
+      // @ts-ignore
+      currentHubRef[hubIndex].current?.setNativeProps({
+        hasTVPreferredFocus: true,
+      });
       setMenuHasFocus(true);
     } else {
-      console.log('menu has no focus');
-      // Alert.alert("Card focus")
+      console.log("menu has no focus");
       setMenuHasFocus(false);
       props.setCardFocus();
-      // firstCardRef.current?.setNativeProps({hasTVPreferredFocus: true});
     }
   };
   return (
-    <View style={{display: "flex", flexDirection:"column", marginTop: 70, width:'100%'}}>
+    <View
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        marginTop: 70,
+        width: "100%",
+      }}
+    >
       <View
         style={{
           flexDirection: props.vertical
@@ -128,7 +139,7 @@ const MFButtonGroup: React.FunctionComponent<MFButtonGroupProps> = (props) => {
             : props.enableRTL
             ? "row-reverse"
             : "row",
-          marginTop: 20,
+          // marginTop: 20,
         }}
       >
         <FlatList
@@ -180,8 +191,14 @@ const MFButtonGroup: React.FunctionComponent<MFButtonGroupProps> = (props) => {
         />
       </View>
       <TouchableOpacity
+        accessible={true}
         onFocus={onFocusBar}
-        style={{ backgroundColor: "transparent", height: 20, width: "100%", marginTop: 50}}
+        style={{
+          backgroundColor: "transparent",
+          height: 20,
+          width: "100%",
+          marginTop: 50,
+        }}
       ></TouchableOpacity>
     </View>
   );

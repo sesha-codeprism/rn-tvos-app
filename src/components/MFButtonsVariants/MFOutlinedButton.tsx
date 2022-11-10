@@ -7,11 +7,13 @@ import {
   StyleProp,
   StyleSheet,
   TargetedEvent,
+  View,
   ViewStyle,
 } from "react-native";
 import Styles from "./MFButtonStyles";
 import { TextStyle } from "react-native";
 import MFText from "../MFText";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export interface MFOutlinedButtonProps {
   outlinedButtonStyle?: OutlinedButtonStyle;
@@ -21,18 +23,24 @@ export interface MFOutlinedButtonProps {
   textStyle?: StyleProp<TextStyle>;
   textLabel?: string;
   enableRTL?: boolean;
-
   onFocus?:
     | null
+    | (() => void)
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
     | undefined;
   onBlur?:
     | null
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
+    | (() => void)
     | undefined;
-  onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
+  onPress?:
+    | null
+    | (() => void)
+    | ((event?: GestureResponderEvent) => void)
+    | undefined;
   hasTVPreferredFocus?: boolean;
   focusable?: boolean;
+  disabled?: boolean;
 }
 
 const MFOutlinedButton: React.FunctionComponent<MFOutlinedButtonProps> =

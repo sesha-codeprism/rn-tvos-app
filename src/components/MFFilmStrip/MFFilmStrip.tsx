@@ -1,6 +1,12 @@
 import React, { useRef, useState } from "react";
-import { FlatList, StyleProp, TextStyle, View, ViewStyle } from "react-native";
-// import { FeedObject } from '../../@types/FeedObject';
+import {
+  FlatList,
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native";
 import Styles from "../MFButtonsVariants/MFButtonStyles";
 import MFCard from "../MFCard";
 import { MFTabBarStyles } from "../MFTabBar/MFTabBarStyles";
@@ -14,30 +20,14 @@ import { HomeScreenStyles } from "../../views/app/Homescreen.styles";
 import MFViewAllButton from "./ViewAllComponent";
 import { SCREEN_WIDTH } from "../../utils/dimensions";
 import MFOverlay from "../MFOverlay";
-
+import MFMetaData from "../MFMetadata/MFMetaData";
 // export interface FeedsObject {
 //   imageSource?: string;
 //   imageStyles?: StyleProp<ImageStyle>;
 // }
-
 /**
  * Class representation of Feed Objects rendered in MFFilmStrip component
  */
-export interface FeedObject {
-  /** ID of the object*/
-  id: string;
-  /** Author of the content/object*/
-  author: string;
-  /** Width of the image*/
-  width: number;
-  /** Height of the image*/
-  height: number;
-  /** Web URL of the image */
-  url: string;
-  /** Render URL of the image*/
-  download_url: string;
-}
-
 /**
  * Props for the MFFilmStrip component
  */
@@ -55,7 +45,7 @@ export interface MFFilmStripProps {
   /** Specify if the View All component should be rendered with the list*/
   appendViewAll?: boolean;
   /** Specify number of elements in the list*/
-  limitItemsTo?: number;
+  limitSwimlaneItemsTo?: number;
   /** Specify where the View All component should be rendered, at the start/end of the list*/
   viewAllPlacement?: "Prepend" | "Append";
   /** Specify if the list is circular-looping*/
@@ -87,13 +77,11 @@ export interface MFFilmStripProps {
   /** Should render ListFooterComponent */
   shouldRenderFooter?: boolean;
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
-
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
-
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
-
   libraryItems?: Array<SubscriberFeed>;
-  renderLibraryItemList?: boolean;
+  updateSwimLaneKey?: null | ((event: string) => void) | undefined;
+  swimLaneKey?: string;
   onListFooterElementFocus?:
     | null
     | ((event: SubscriberFeed) => void)
@@ -102,8 +90,8 @@ export interface MFFilmStripProps {
     | null
     | ((event: SubscriberFeed) => void)
     | undefined;
+  flatListStyle?: any;
 }
-
 /**
  * Component that renders horizontal-scrolling collection of items
  * @param props - MFFilmStrip props
@@ -113,6 +101,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
   ({ ...props }, ref: any) => {
     const flatListRef = useRef<FlatList>(null);
     const [dataSource, setDataSource] = useState([...(props.dataSource || [])]);
+    const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
     const _onFocus = (index: number) => {
       flatListRef.current?.scrollToIndex({ animated: true, index: index });
       if (props.isCircular) {
@@ -120,10 +109,14 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
           setDataSource([...dataSource, ...(props.dataSource || [])]);
         }
       }
+      if (props.libraryItems && props.libraryItems[index]) {
+        setCurrentFeed(props.libraryItems![index]);
+      }
+      props.updateSwimLaneKey && props.updateSwimLaneKey(props.title!);
     };
-
+    const dataArray: Array<SubscriberFeed> | undefined =
+      props.libraryItems?.slice(0, props.limitSwimlaneItemsTo);
     const cardWidth = parseInt(props.style?.width?.toString() || "300");
-
     return (
       <View style={[Styles.railContainer, props.railContainerStyles]}>
         <MFText
@@ -132,20 +125,21 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
           enableRTL={props.enableRTL}
           shouldRenderText
         />
-        {props.renderLibraryItemList ? (
+        {
           /** Checking if UDL data is not undefined an list length > 0 */
           props.libraryItems !== undefined ? (
             <FlatList
               ref={flatListRef}
+              style={StyleSheet.flatten([props.flatListStyle])}
               scrollEnabled={false}
               horizontal
+              windowSize={4}
               disableIntervalMomentum
               contentContainerStyle={{
                 paddingRight: SCREEN_WIDTH,
-                paddingLeft: 50,
               }}
               inverted={props.enableRTL}
-              data={props.libraryItems}
+              data={dataArray}
               initialNumToRender={20}
               keyExtractor={(x, i) => i.toString()}
               ListHeaderComponent={
@@ -171,6 +165,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
               })}
               renderItem={({ item, index }) => (
                 <MFLibraryCard
+                  // @ts-ignore
                   ref={index === 0 ? ref : null}
                   key={`Index${index}`}
                   data={item}
@@ -181,7 +176,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                   layoutType={
                     props.enableCircularLayout ? "Circular" : "LandScape"
                   }
-                  showTitleOnlyOnFocus={true}
+                  showTitleOnlyOnFocus={false}
                   titlePlacement={props.titlePlacement}
                   overlayComponent={
                     <MFOverlay
@@ -214,11 +209,11 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
             <View
               style={{
                 paddingRight: SCREEN_WIDTH,
-                paddingLeft: 50,
               }}
             >
               <MFViewAllButton
-              ref = {ref}
+                // @ts-ignore
+                ref={ref}
                 displayStyles={Styles.railTitle}
                 displayText={"Feed Not Implemented"}
                 style={[HomeScreenStyles.landScapeCardStyles]}
@@ -229,57 +224,23 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
               />
             </View>
           )
-        ) : (
-          <FlatList
-            horizontal
-            inverted={props.enableRTL}
-            data={props.dataSource}
-            initialNumToRender={20}
-            keyExtractor={(x, i) => i.toString()}
-            ListHeaderComponent={
-              props.appendViewAll && props.viewAllPlacement === "Prepend"
-                ? props.viewAll
-                : null
-            }
-            ListFooterComponent={
-              props.appendViewAll &&
-              (props.viewAllPlacement === "Append" || !props.viewAllPlacement)
-                ? props.viewAll
-                : null
-            }
-            renderItem={({ item, index }) => (
-              <MFCard
-                key={`Index${index}`}
-                data={item}
-                style={props.style}
-                focusedStyle={props.focusedStyle}
-                imageStyle={props.imageStyle}
-                title={item.Name || item.Id}
-                layoutType={
-                  props.enableCircularLayout ? "Circular" : "LandScape"
-                }
-                showTitleOnlyOnFocus={true}
-                titlePlacement={props.titlePlacement}
-                overlayComponent={props.overlayComponent}
-                progressComponent={props.progressElement}
-                showProgress={props.shouldRenderProgress}
-                shouldRenderText
-                onFocus={(event) => {
-                  // props.onFocus && props.onFocus(event);
-                }}
-                onPress={(event) => {
-                  // props.onPress && props.onPress(event);
-                }}
-                onBlur={(event) => {}}
-              />
+        }
+        <View
+          style={{
+            width: 500,
+            height: 141,
+          }}
+        >
+          {currentFeed &&
+            props.swimLaneKey?.trim().length! > 0 &&
+            props.swimLaneKey === props.title && (
+              <MFMetaData currentFeed={currentFeed} />
             )}
-          />
-        )}
+        </View>
       </View>
     );
   }
 );
-
 export const OverlayComponent = ({
   displayString,
 }: {
@@ -288,11 +249,7 @@ export const OverlayComponent = ({
   <View
     style={{
       backgroundColor: "transparent",
-      // backgroundColor: "#222222",
       alignSelf: "flex-end",
-      // marginRight: 30,
-      // marginTop: 10,
-      // borderRadius: 5,
       padding: 10,
     }}
   >
@@ -306,5 +263,4 @@ export const OverlayComponent = ({
     />
   </View>
 );
-
 export default MFFilmStrip;

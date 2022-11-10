@@ -137,7 +137,6 @@ const MFMetaData: React.FunctionComponent<MFMetaDataProps> = (props) => {
     const metadataStyles = StyleSheet.flatten([
       appUIDefinition.metadataStyles.RECOMM.metadata2,
     ]);
-    console.log(metadataInfo);
     if (metadataInfo.type === MetadataType.text) {
       return getTextComponent(metadataInfo.metadataInfo, metadataStyles);
     } else if (metadataInfo.type === MetadataType.image) {

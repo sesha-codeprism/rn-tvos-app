@@ -1,5 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
+import React, {
+  Ref,
+  useContext,
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
+import {
+  GestureResponderEvent,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 import { HubsList } from "../../@types/Hubs";
 import { appUIDefinition } from "../../config/constants";
 import { AppImages } from "../../assets/images";
@@ -27,19 +39,20 @@ interface MFMenuProps {
   setCardFocus?: any;
 }
 
-const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
+const MFMenu = (props: MFMenuProps) => {
   const [hubs1, setHubs1] = useState(Array<ButtonVariantProps>());
   const [isIdentityAssigned, setIdentityAssigned] = useState(false);
   const globalContext = useContext(GlobalContext);
   const [focused, setFocused] = useState("");
   const testing = false;
-  const _onPressMain = (event: GestureResponderEvent, index: number) => {
+  const _onPress = (event: GestureResponderEvent, index: number) => {
     console.log("Some log");
     props.onPress && props.onPress(index);
   };
   const _onFocus = (index: number) => {
     props.onFocus && props.onFocus(index);
   };
+
   useEffect(() => {
     console.log("HubsList", props.hubList);
     let array1: Array<ButtonVariantProps> = [];
@@ -125,7 +138,7 @@ const MFMenu: React.FunctionComponent<MFMenuProps> = (props) => {
               style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles1])}
             >
               <MFButtonGroup
-                onPress={(event, index) => _onPressMain(event, index)}
+                onPress={(event, index) => _onPress(event, index)}
                 buttonsList={hubs1}
                 onHubChanged={() => {}}
                 containedButtonProps={{

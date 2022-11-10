@@ -24,6 +24,16 @@ export const getUrlParts = (url: string) => {
 	};
 };
 
+export const removeIdFromUri = (uri: string): string => {
+	let feedURI = uri?.split("/");
+	feedURI?.pop();
+	return feedURI?.join("/");
+};
+
+export const getBaseURI = (uri: string): string => {
+	return uri?.replace(/\/$/, "").split("/").slice(0, 4).join("/");
+};
+
 export const getQueryParams = (query: string) => {
 	let params: any = {};
 
