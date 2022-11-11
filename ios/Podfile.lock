@@ -198,7 +198,7 @@ PODS:
     - React-jsi (= 0.64.2-2)
     - React-perflogger (= 0.64.2-2)
   - React-jsinspector (0.64.2-2)
-  - react-native-safe-area-context (4.4.1):
+  - react-native-safe-area-context (4.3.3):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -438,7 +438,7 @@ SPEC CHECKSUMS:
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   FBLazyVector: 7fd7485ebdd1572a8faf2a24509ed2c37f8db77f
-  FBReactNativeSpec: 0b8215a8a6aee0fd2eb1a20a7e97b7b9fca74993
+  FBReactNativeSpec: ba350eb311bca897e3138294f83e22584bc08b58
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
   lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
@@ -454,7 +454,7 @@ SPEC CHECKSUMS:
   React-jsi: a9cfd61ea63646230601c893424090a442bd2c25
   React-jsiexecutor: 74dd9b564b4f87f7835ebe729f23bb97d281bee1
   React-jsinspector: f49fa9d09ea327d0f0bdd268fd0925db58d19951
-  react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
+  react-native-safe-area-context: b456e1c40ec86f5593d58b275bd0e9603169daca
   react-native-webview: 159034a856a6e95995f5bf2eed40d70b103d6572
   React-perflogger: 2f5ca2592cb8c2dce248f171c9193abad44ad08d
   React-RCTAnimation: fcecb04903a27253a40c5df81b142f2a82c37380

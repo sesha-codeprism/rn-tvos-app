@@ -3,6 +3,7 @@ import {
   View,
   ImageBackground,
   Dimensions,
+  TouchableOpacity,
   BackHandler,
   TVMenuControl,
 } from "react-native";
@@ -11,7 +12,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
 import { FeedItem } from "../../@types/HubsResponse";
-import { Menu } from "../../components/MFMenu/MFMenu";
+import MFMenu from "../../components/MFMenu/MFMenu";
 import MFLoader from "../../components/MFLoader";
 import { AppStrings } from "../../config/strings";
 import { getAllHubs } from "../../config/queries";
@@ -29,8 +30,6 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { getUIdef } from "../../utils/uidefinition";
-import { UdlProviders } from "../../../backend/udl/provider";
 
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
@@ -46,6 +45,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const drawerRef: React.MutableRefObject<any> = useRef();
   const menuRef: React.MutableRefObject<any> = useRef();
   const [open, setOpen] = useState(false);
+  const firstCardRef = useRef<TouchableOpacity>(null);
   const insets = useSafeAreaInsets();
 
   let feedTimeOut: any = null;
@@ -231,6 +231,11 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     }
   }, []);
   setHubsData();
+  const setCardFocus = () => {
+    // console.log("firstCardRef.current", firstCardRef.current);
+    // Alert.alert("Set hub data called");
+    firstCardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+  };
   return (
     <View style={HomeScreenStyles.container}>
       <ImageBackground
@@ -246,8 +251,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
             style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
           >
             <SafeAreaView style={{ flex: 1, paddingTop: -30 }}>
-              <Menu
-                ref={menuRef}
+              <MFMenu
                 navigation={props.navigation}
                 enableRTL={GLOBALS.enableRTL}
                 hubList={hubs}
@@ -260,6 +264,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                     setFeeds(hubs[event]);
                   }, debounceTime);
                 }}
+                setCardFocus={setCardFocus}
                 onPressSettings={() => {
                   setOpen(open);
                   drawerRef.current.open();
@@ -292,6 +297,8 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
               <View style={HomeScreenStyles.contentContainer}>
                 {!isLoading && (
                   <MFSwim
+                    // @ts-ignore
+                    ref={firstCardRef}
                     feeds={feeds}
                     onFocus={onFeedFocus}
                     onListEmptyElementFocus={clearCurrentHub}

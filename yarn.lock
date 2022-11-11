@@ -12159,6 +12159,11 @@ react-native-syntax-highlighter@2.0.0:
     babel-runtime "^6.23.0"
     react-syntax-highlighter "^6.0.4"
 
+react-native-tvfocus@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-tvfocus/-/react-native-tvfocus-0.2.0.tgz#a85e82c300feec3d5cb88b9ebc6b62597965a597"
+  integrity sha512-6UTXcRfk6BccZ0fV07ck8BsFX2r94P1r+EnH4DGz6ZjtnPVL42u/gHRsMFHmNwqRAHxJhB6c841q2HLrHAY4Bw==
+
 react-native-tvos@^0.64.2-2:
   version "0.64.2-5"
   resolved "https://registry.yarnpkg.com/react-native-tvos/-/react-native-tvos-0.64.2-5.tgz#870c5343e2af92331d0f0a364bb1e31c8a47e7c2"

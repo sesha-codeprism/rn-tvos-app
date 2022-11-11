@@ -33,67 +33,66 @@ export interface MFUnderlinedButtonProps {
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
   hasTVPreferredFocus?: boolean;
   focusable?: boolean;
-
 }
 
-const MFUnderlinedButton: React.FunctionComponent<MFUnderlinedButtonProps> = (
-  props
-) => {
-  const [focused, setFocused] = useState(false);
+const MFUnderlinedButton: React.FunctionComponent<MFUnderlinedButtonProps> =
+  React.forwardRef(({ ...props }, ref: any) => {
+    const [focused, setFocused] = useState(false);
 
-  const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(true);
-    props.onFocus && props.onFocus(event);
-  };
-  const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(false);
-    props.onBlur && props.onBlur(event);
-  };
-  const _onPress = (event: GestureResponderEvent) => {
-    props.onPress && props.onPress(event);
-  };
-  return (
-    <Pressable
-      style={[
-        props.style,
-        Styles.underlined,
-        focused
-          ? StyleSheet.flatten([
-              Styles.focused,
-              props.style,
-              props.focusedStyle,
-              {
-                borderBottomColor:
-                  props.underlinedButtonStyle?.focusedBorderColor,
-                borderBottomWidth:
-                  props.underlinedButtonStyle?.focusedBorderWidth,
-              },
-            ])
-          : StyleSheet.flatten([
-              Styles.unFcoused,
-              props.style,
-              {
-                borderBottomColor:
-                  props.underlinedButtonStyle?.unFocusedBorderColor,
-                borderBottomWidth:
-                  props.underlinedButtonStyle?.unFocusedBorderWidth,
-              },
-            ]),
-      ]}
-      onFocus={_onFocus}
-      onBlur={_onBlur}
-      onPress={_onPress}
-      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
-      focusable={props.focusable === false ? false : true}
-    >
-      <MFText
-        textStyle={props.textStyle}
-        displayText={props.textLabel}
-        enableRTL={props.enableRTL}
-        shouldRenderText
-      />
-    </Pressable>
-  );
-};
+    const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(true);
+      props.onFocus && props.onFocus(event);
+    };
+    const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(false);
+      props.onBlur && props.onBlur(event);
+    };
+    const _onPress = (event: GestureResponderEvent) => {
+      props.onPress && props.onPress(event);
+    };
+    return (
+      <Pressable
+        ref={ref}
+        style={[
+          props.style,
+          Styles.underlined,
+          focused
+            ? StyleSheet.flatten([
+                Styles.focused,
+                props.style,
+                props.focusedStyle,
+                {
+                  borderBottomColor:
+                    props.underlinedButtonStyle?.focusedBorderColor,
+                  borderBottomWidth:
+                    props.underlinedButtonStyle?.focusedBorderWidth,
+                },
+              ])
+            : StyleSheet.flatten([
+                Styles.unFcoused,
+                props.style,
+                {
+                  borderBottomColor:
+                    props.underlinedButtonStyle?.unFocusedBorderColor,
+                  borderBottomWidth:
+                    props.underlinedButtonStyle?.unFocusedBorderWidth,
+                },
+              ]),
+        ]}
+        onFocus={_onFocus}
+        onBlur={_onBlur}
+        onPress={_onPress}
+        hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
+        focusable={props.focusable === false ? false : true}
+      >
+        <MFText
+          textStyle={props.textStyle}
+          displayText={props.textLabel}
+          enableRTL={props.enableRTL}
+          shouldRenderText
+        />
+      </Pressable>
+    );
+  });
 
 export default MFUnderlinedButton;

@@ -55,190 +55,194 @@ export interface MFCardProps {
   onPress?: null | ((event: any) => void) | undefined;
 }
 
-const MFCard: React.FunctionComponent<MFCardProps> = (props) => {
-  const [focused, setFocused] = useState(false);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const translateAnim = useRef(new Animated.Value(0)).current;
-  const _onPress = () => {
-    props.onPress && props.onPress(props.data);
-  };
+const MFCard: React.FunctionComponent<MFCardProps> = React.forwardRef(
+  ({...props}, ref: any) => {
+    const [focused, setFocused] = useState(false);
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const translateAnim = useRef(new Animated.Value(0)).current;
+    const _onPress = () => {
+      props.onPress && props.onPress(props.data);
+    };
 
-  const _onFocus = () => {
-    setFocused(true);
-    Animated.timing(fadeAnim, {
-      useNativeDriver: true,
-      toValue: 1,
-      duration: 250,
-    }).start();
-    Animated.timing(translateAnim, {
-      useNativeDriver: true,
-      toValue: -15,
-      duration: 250,
-    }).start();
-    props.onFocus && props.onFocus(props.data);
-  };
+    const _onFocus = () => {
+      setFocused(true);
+      Animated.timing(fadeAnim, {
+        useNativeDriver: true,
+        toValue: 1,
+        duration: 250,
+      }).start();
+      Animated.timing(translateAnim, {
+        useNativeDriver: true,
+        toValue: -15,
+        duration: 250,
+      }).start();
+      props.onFocus && props.onFocus(props.data);
+    };
 
-  const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    fadeAnim.stopAnimation();
-    translateAnim.stopAnimation();
-    setFocused(false);
-    Animated.timing(fadeAnim, {
-      useNativeDriver: true,
-      toValue: 0,
-      duration: 250,
-    }).start();
-    Animated.timing(translateAnim, {
-      useNativeDriver: true,
-      toValue: 0,
-      duration: 250,
-    }).start();
-    props.onBlur && props.onBlur(event);
-  };
+    const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      fadeAnim.stopAnimation();
+      translateAnim.stopAnimation();
+      setFocused(false);
+      Animated.timing(fadeAnim, {
+        useNativeDriver: true,
+        toValue: 0,
+        duration: 250,
+      }).start();
+      Animated.timing(translateAnim, {
+        useNativeDriver: true,
+        toValue: 0,
+        duration: 250,
+      }).start();
+      props.onBlur && props.onBlur(event);
+    };
 
-  const TitleAndSubtitle = () =>
-    props.showTitleOnlyOnFocus ? (
-      <Animated.View
-        style={{
-          opacity: fadeAnim,
-          transform: [
-            {
-              translateY: translateAnim,
-            },
-          ],
-        }}
-      >
-        <MFText
-          textStyle={[
-            Styles.railTitle,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-              color: appUIDefinition.theme.colors.white,
-              fontFamily: "Inter-Bold",
-            },
-          ]}
-          displayText={props.title}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
-        <MFText
-          textStyle={[
-            Styles.railTitle,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-              color: appUIDefinition.theme.colors.white,
-              fontFamily: "Inter-Bold",
-            },
-          ]}
-          displayText={props.subTitle}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
-      </Animated.View>
-    ) : (
-      <View>
-        <MFText
-          textStyle={[
-            Styles.railTitle,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-              color: appUIDefinition.theme.colors.white,
-              fontFamily: "Inter-Bold",
-            },
-          ]}
-          displayText={props.title}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
-        <MFText
-          textStyle={[
-            Styles.railTitle,
-            ,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-              color: appUIDefinition.theme.colors.white,
-              fontFamily: "Inter-Bold",
-            },
-          ]}
-          displayText={props.subTitle}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
-      </View>
-    );
-
-  return (
-    <TouchableOpacity
-      style={[
-        styles.rootContainer,
-        focused
-          ? StyleSheet.flatten([props.style, props.focusedStyle])
-          : StyleSheet.flatten([props.style]),
-      ]}
-      activeOpacity={1}
-      onPress={_onPress}
-      onFocus={_onFocus}
-      onBlur={_onBlur}
-    >
-      <View style={StyleSheet.flatten([props.imageStyle])}>
-        <FastImage style={[props.imageStyle]} source={AppImages.placeholder}>
-          {props.overlayComponent}
-          <View>
-            {props.showProgress && props.progressComponent != undefined
-              ? props.progressComponent
-              : undefined}
-          </View>
-          <View
-            style={[
-              styles.overlay,
-              props.titlePlacement === TitlePlacement.overlayTop
-                ? styles.overlayTopStyles
-                : props.titlePlacement === TitlePlacement.overlayBottom
-                ? styles.overlayBottomStyles
-                : props.titlePlacement === TitlePlacement.overlayCenter
-                ? styles.overlayCenterStyles
-                : {},
+    const TitleAndSubtitle = () =>
+      props.showTitleOnlyOnFocus ? (
+        <Animated.View
+          style={{
+            opacity: fadeAnim,
+            transform: [
+              {
+                translateY: translateAnim,
+              },
+            ],
+          }}
+        >
+          <MFText
+            textStyle={[
+              Styles.railTitle,
+              {
+                alignSelf:
+                  props.layoutType === "Circular" ? "center" : "flex-start",
+                paddingRight: props.layoutType === "Circular" ? 150 : 0,
+                color: appUIDefinition.theme.colors.white,
+                fontFamily: "Inter-Bold",
+              },
             ]}
-          >
-            {props.titlePlacement != TitlePlacement.beneath ? (
-              <TitleAndSubtitle />
-            ) : undefined}
-          </View>
-        </FastImage>
-        {props.titlePlacement === TitlePlacement.beneath ? (
-          props.showTitleOnlyOnFocus ? (
-            <Animated.View
+            displayText={props.title}
+            enableRTL={props.enableRTL}
+            shouldRenderText={props.shouldRenderText}
+          />
+          <MFText
+            textStyle={[
+              Styles.railTitle,
+              {
+                alignSelf:
+                  props.layoutType === "Circular" ? "center" : "flex-start",
+                paddingRight: props.layoutType === "Circular" ? 150 : 0,
+                color: appUIDefinition.theme.colors.white,
+                fontFamily: "Inter-Bold",
+              },
+            ]}
+            displayText={props.subTitle}
+            enableRTL={props.enableRTL}
+            shouldRenderText={props.shouldRenderText}
+          />
+        </Animated.View>
+      ) : (
+        <View>
+          <MFText
+            textStyle={[
+              Styles.railTitle,
+              {
+                alignSelf:
+                  props.layoutType === "Circular" ? "center" : "flex-start",
+                paddingRight: props.layoutType === "Circular" ? 150 : 0,
+                color: appUIDefinition.theme.colors.white,
+                fontFamily: "Inter-Bold",
+              },
+            ]}
+            displayText={props.title}
+            enableRTL={props.enableRTL}
+            shouldRenderText={props.shouldRenderText}
+          />
+          <MFText
+            textStyle={[
+              Styles.railTitle,
+              ,
+              {
+                alignSelf:
+                  props.layoutType === "Circular" ? "center" : "flex-start",
+                paddingRight: props.layoutType === "Circular" ? 150 : 0,
+                color: appUIDefinition.theme.colors.white,
+                fontFamily: "Inter-Bold",
+              },
+            ]}
+            displayText={props.subTitle}
+            enableRTL={props.enableRTL}
+            shouldRenderText={props.shouldRenderText}
+          />
+        </View>
+      );
+
+    return (
+      <TouchableOpacity
+        ref={ref}
+        style={[
+          styles.rootContainer,
+          focused
+            ? StyleSheet.flatten([props.style, props.focusedStyle])
+            : StyleSheet.flatten([props.style]),
+        ]}
+        activeOpacity={1}
+        onPress={_onPress}
+        onFocus={_onFocus}
+        onBlur={_onBlur}
+      >
+        <View style={StyleSheet.flatten([props.imageStyle])}>
+          <FastImage style={[props.imageStyle]} source={AppImages.placeholder}>
+            {props.overlayComponent}
+            <View>
+              {props.showProgress && props.progressComponent != undefined
+                ? props.progressComponent
+                : undefined}
+            </View>
+            <View
               style={[
-                styles.cardContentContainer,
-                {
-                  opacity: fadeAnim,
-                  transform: [
-                    {
-                      translateY: translateAnim,
-                    },
-                  ],
-                },
+                styles.overlay,
+                props.titlePlacement === TitlePlacement.overlayTop
+                  ? styles.overlayTopStyles
+                  : props.titlePlacement === TitlePlacement.overlayBottom
+                  ? styles.overlayBottomStyles
+                  : props.titlePlacement === TitlePlacement.overlayCenter
+                  ? styles.overlayCenterStyles
+                  : {},
               ]}
             >
-              <TitleAndSubtitle />
-            </Animated.View>
-          ) : (
-            <View style={[styles.cardContentContainer]}>
-              <TitleAndSubtitle />
+              {props.titlePlacement != TitlePlacement.beneath ? (
+                <TitleAndSubtitle />
+              ) : undefined}
             </View>
-          )
-        ) : undefined}
-      </View>
-    </TouchableOpacity>
-  );
-};
+          </FastImage>
+          {props.titlePlacement === TitlePlacement.beneath ? (
+            props.showTitleOnlyOnFocus ? (
+              <Animated.View
+                style={[
+                  styles.cardContentContainer,
+                  {
+                    opacity: fadeAnim,
+                    transform: [
+                      {
+                        translateY: translateAnim,
+                      },
+                    ],
+                  },
+                ]}
+              >
+                <TitleAndSubtitle />
+              </Animated.View>
+            ) : (
+              <View style={[styles.cardContentContainer]}>
+                <TitleAndSubtitle />
+              </View>
+            )
+          ) : undefined}
+        </View>
+      </TouchableOpacity>
+    );
+  }
+);
+
 const styles = StyleSheet.create({
   rootContainer: {
     width: 480,

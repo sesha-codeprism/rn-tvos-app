@@ -43,103 +43,65 @@ export interface MFOutlinedButtonProps {
   disabled?: boolean;
 }
 
-const MFOutlinedButton: React.FunctionComponent<MFOutlinedButtonProps> = (
-  props
-) => {
-  const [focused, setFocused] = useState(false);
+const MFOutlinedButton: React.FunctionComponent<MFOutlinedButtonProps> =
+  React.forwardRef(({ ...props }, ref: any) => {
+    const [focused, setFocused] = useState(false);
 
-  const _onFocus = (event?: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(true);
-    props.onFocus && props.onFocus(event!);
-  };
-  const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(false);
-    props.onBlur && props.onBlur(event);
-  };
-  const _onPress = (event?: any) => {
-    props.onPress && props.onPress(event);
-  };
+    const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(true);
+      props.onFocus && props.onFocus(event);
+    };
+    const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(false);
+      props.onBlur && props.onBlur(event);
+    };
+    const _onPress = (event: GestureResponderEvent) => {
+      props.onPress && props.onPress(event);
+    };
 
-  const isButtonDisabled: boolean = props.disabled || false;
-  // console.log("MFOutlinedButton disabled:", isButtonDisabled, props);
-
-  return isButtonDisabled ? (
-    <View
-      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
-      style={[
-        Styles.outlined,
-        props.style,
-        focused
-          ? StyleSheet.flatten([
-              Styles.focused,
-              props.style,
-              props.focusedStyle,
-              {
-                borderBottomColor:
-                  props.outlinedButtonStyle?.focusedBorderColor,
-                borderBottomWidth:
-                  props.outlinedButtonStyle?.focusedBorderWidth,
-              },
-            ])
-          : StyleSheet.flatten([
-              Styles.unFcoused,
-              props.style,
-              {
-                borderBottomColor: "transparent",
-                borderBottomidth:
-                  props.outlinedButtonStyle?.unFocusedBorderWidth,
-              },
-            ]),
-      ]}
-    >
-      <MFText
-        textStyle={props.textStyle}
-        displayText={props.textLabel}
-        enableRTL={props.enableRTL}
-        shouldRenderText
-      />
-    </View>
-  ) : (
-    <Pressable
-      disabled={props.disabled || false}
-      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
-      style={[
-        Styles.outlined,
-        props.style,
-        focused
-          ? StyleSheet.flatten([
-              Styles.focused,
-              props.style,
-              props.focusedStyle,
-              {
-                borderBottomColor:
-                  props.outlinedButtonStyle?.focusedBorderColor,
-                borderBottomWidth:
-                  props.outlinedButtonStyle?.focusedBorderWidth,
-              },
-            ])
-          : StyleSheet.flatten([
-              Styles.unFcoused,
-              props.style,
-              {
-                borderBottomColor: "transparent",
-                borderBottomidth:
-                  props.outlinedButtonStyle?.unFocusedBorderWidth,
-              },
-            ]),
-      ]}
-      onFocus={_onFocus}
-      onBlur={_onBlur}
-      onPress={_onPress}
-    >
-      <MFText
-        textStyle={props.textStyle}
-        displayText={props.textLabel}
-        enableRTL={props.enableRTL}
-        shouldRenderText
-      />
-    </Pressable>
-  );
-};
+    return (
+      <Pressable
+        ref={ref}
+        focusable={props.focusable === false ? false : true}
+        disabled={props.outlinedButtonStyle?.isDisabled}
+        hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
+        style={[
+          Styles.outlined,
+          props.style,
+          focused
+            ? StyleSheet.flatten([
+                Styles.focused,
+                props.style,
+                props.focusedStyle,
+                {
+                  borderBottomColor:
+                    props.outlinedButtonStyle?.focusedBorderColor,
+                  borderBottomWidth:
+                    props.outlinedButtonStyle?.focusedBorderWidth,
+                },
+              ])
+            : StyleSheet.flatten([
+                Styles.unFcoused,
+                props.style,
+                {
+                  borderBottomColor: "transparent",
+                  borderBottomidth:
+                    props.outlinedButtonStyle?.unFocusedBorderWidth,
+                },
+              ]),
+        ]}
+        onFocus={_onFocus}
+        onBlur={_onBlur}
+        onPress={_onPress}
+      >
+        <MFText
+          textStyle={props.textStyle}
+          displayText={props.textLabel}
+          enableRTL={props.enableRTL}
+          shouldRenderText
+        />
+      </Pressable>
+    );
+  });
 
 export default MFOutlinedButton;

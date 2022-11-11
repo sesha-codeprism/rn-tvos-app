@@ -1,5 +1,5 @@
 import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import { BackHandler } from "react-native";
@@ -28,6 +28,7 @@ interface PinProps {
 interface Props {
   navigation: NativeStackNavigationProp<any>;
   pinProps: PinProps;
+  children?: ReactNode;
 }
 const numberPad = [1, 2, 3, 4, 5, "del", 6, 7, 8, 9, 0];
 const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {

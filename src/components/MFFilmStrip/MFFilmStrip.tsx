@@ -21,16 +21,13 @@ import MFViewAllButton from "./ViewAllComponent";
 import { SCREEN_WIDTH } from "../../utils/dimensions";
 import MFOverlay from "../MFOverlay";
 import MFMetaData from "../MFMetadata/MFMetaData";
-
 // export interface FeedsObject {
 //   imageSource?: string;
 //   imageStyles?: StyleProp<ImageStyle>;
 // }
-
 /**
  * Class representation of Feed Objects rendered in MFFilmStrip component
  */
-
 /**
  * Props for the MFFilmStrip component
  */
@@ -79,19 +76,12 @@ export interface MFFilmStripProps {
   shouldRenderProgress?: boolean;
   /** Should render ListFooterComponent */
   shouldRenderFooter?: boolean;
-
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
-
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
-
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
-
   libraryItems?: Array<SubscriberFeed>;
-
   updateSwimLaneKey?: null | ((event: string) => void) | undefined;
-
   swimLaneKey?: string;
-
   onListFooterElementFocus?:
     | null
     | ((event: SubscriberFeed) => void)
@@ -100,157 +90,157 @@ export interface MFFilmStripProps {
     | null
     | ((event: SubscriberFeed) => void)
     | undefined;
-
   flatListStyle?: any;
 }
-
 /**
  * Component that renders horizontal-scrolling collection of items
  * @param props - MFFilmStrip props
  * @returns MFFilmStrip component
  */
-const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = (props) => {
-  const flatListRef = useRef<FlatList>(null);
-  const [dataSource, setDataSource] = useState([...(props.dataSource || [])]);
-  const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
-  const _onFocus = (index: number) => {
-    flatListRef.current?.scrollToIndex({ animated: true, index: index });
-    if (props.isCircular) {
-      if (index > dataSource.length - 3) {
-        setDataSource([...dataSource, ...(props.dataSource || [])]);
+const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
+  ({ ...props }, ref: any) => {
+    const flatListRef = useRef<FlatList>(null);
+    const [dataSource, setDataSource] = useState([...(props.dataSource || [])]);
+    const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
+    const _onFocus = (index: number) => {
+      flatListRef.current?.scrollToIndex({ animated: true, index: index });
+      if (props.isCircular) {
+        if (index > dataSource.length - 3) {
+          setDataSource([...dataSource, ...(props.dataSource || [])]);
+        }
       }
-    }
-    if (props.libraryItems && props.libraryItems[index]) {
-      setCurrentFeed(props.libraryItems![index]);
-    }
-    props.updateSwimLaneKey && props.updateSwimLaneKey(props.title!);
-  };
-
-  const dataArray: Array<SubscriberFeed> | undefined =
-    props.libraryItems?.slice(0, props.limitSwimlaneItemsTo);
-
-  const cardWidth = parseInt(props.style?.width?.toString() || "300");
-
-  return (
-    <View style={[Styles.railContainer, props.railContainerStyles]}>
-      <MFText
-        textStyle={[Styles.railTitle, props.railTitleStyles]}
-        displayText={props.title}
-        enableRTL={props.enableRTL}
-        shouldRenderText
-      />
-      {
-        /** Checking if UDL data is not undefined an list length > 0 */
-        props.libraryItems !== undefined ? (
-          <FlatList
-            ref={flatListRef}
-            style={StyleSheet.flatten([props.flatListStyle])}
-            scrollEnabled={false}
-            horizontal
-            windowSize={4}
-            disableIntervalMomentum
-            contentContainerStyle={{
-              paddingRight: SCREEN_WIDTH,
-            }}
-            inverted={props.enableRTL}
-            data={dataArray}
-            initialNumToRender={20}
-            keyExtractor={(x, i) => i.toString()}
-            ListHeaderComponent={
-              props.appendViewAll && props.viewAllPlacement === "Prepend"
-                ? props.shouldRenderFooter
-                  ? props.viewAll
+      if (props.libraryItems && props.libraryItems[index]) {
+        setCurrentFeed(props.libraryItems![index]);
+      }
+      props.updateSwimLaneKey && props.updateSwimLaneKey(props.title!);
+    };
+    const dataArray: Array<SubscriberFeed> | undefined =
+      props.libraryItems?.slice(0, props.limitSwimlaneItemsTo);
+    const cardWidth = parseInt(props.style?.width?.toString() || "300");
+    return (
+      <View style={[Styles.railContainer, props.railContainerStyles]}>
+        <MFText
+          textStyle={[Styles.railTitle, props.railTitleStyles]}
+          displayText={props.title}
+          enableRTL={props.enableRTL}
+          shouldRenderText
+        />
+        {
+          /** Checking if UDL data is not undefined an list length > 0 */
+          props.libraryItems !== undefined ? (
+            <FlatList
+              ref={flatListRef}
+              style={StyleSheet.flatten([props.flatListStyle])}
+              scrollEnabled={false}
+              horizontal
+              windowSize={4}
+              disableIntervalMomentum
+              contentContainerStyle={{
+                paddingRight: SCREEN_WIDTH,
+              }}
+              inverted={props.enableRTL}
+              data={dataArray}
+              initialNumToRender={20}
+              keyExtractor={(x, i) => i.toString()}
+              ListHeaderComponent={
+                props.appendViewAll && props.viewAllPlacement === "Prepend"
+                  ? props.shouldRenderFooter
+                    ? props.viewAll
+                    : null
                   : null
-                : null
-            }
-            ListEmptyComponent={props.listEmptyComponent}
-            ListFooterComponent={
-              props.appendViewAll &&
-              (props.viewAllPlacement === "Append" || !props.viewAllPlacement)
-                ? props.shouldRenderFooter
-                  ? props.viewAll
+              }
+              ListEmptyComponent={props.listEmptyComponent}
+              ListFooterComponent={
+                props.appendViewAll &&
+                (props.viewAllPlacement === "Append" || !props.viewAllPlacement)
+                  ? props.shouldRenderFooter
+                    ? props.viewAll
+                    : null
                   : null
-                : null
-            }
-            getItemLayout={(data, index) => ({
-              length: cardWidth,
-              offset: cardWidth * index,
-              index,
-            })}
-            renderItem={({ item, index }) => (
-              <MFLibraryCard
-                key={`Index${index}`}
-                data={item}
-                style={props.style}
-                focusedStyle={props.focusedStyle}
-                imageStyle={props.imageStyle}
-                title={""}
-                layoutType={
-                  props.enableCircularLayout ? "Circular" : "LandScape"
-                }
-                showTitleOnlyOnFocus={false}
-                titlePlacement={props.titlePlacement}
-                overlayComponent={
-                  <MFOverlay
-                    //@ts-ignore
-                    renderGradiant={true}
-                    showProgress={true}
-                    progress={20}
-                    // displayTitle={item.title}
-                    bottomText={item.runtime}
-                    // showRec={true}
-                    // recType={"series"}
-                  />
-                }
-                progressComponent={props.progressElement}
-                showProgress={props.shouldRenderProgress}
-                shouldRenderText
-                onFocus={(event) => {
-                  _onFocus(index);
-                  props.onFocus && props.onFocus(event);
-                }}
-                onPress={(event) => {
-                  props.onPress && props.onPress(event);
-                }}
-                onBlur={(event) => {}}
-              />
-            )}
-          />
-        ) : (
-          /** UDL data undefined.. So basically UDL call isn't implemented or call failed with some error code. */
-          <View
-            style={{
-              paddingRight: SCREEN_WIDTH,
-            }}
-          >
-            <MFViewAllButton
-              displayStyles={Styles.railTitle}
-              displayText={"Feed Not Implemented"}
-              style={[HomeScreenStyles.landScapeCardStyles]}
-              imageStyle={HomeScreenStyles.landScapeCardImageStyles}
-              focusedStyle={HomeScreenStyles.focusedStyle}
-              onPress={props.onListFooterElementOnPress}
-              onFocus={props.onListFooterElementFocus}
+              }
+              getItemLayout={(data, index) => ({
+                length: cardWidth,
+                offset: cardWidth * index,
+                index,
+              })}
+              renderItem={({ item, index }) => (
+                <MFLibraryCard
+                  // @ts-ignore
+                  ref={index === 0 ? ref : null}
+                  key={`Index${index}`}
+                  data={item}
+                  style={props.style}
+                  focusedStyle={props.focusedStyle}
+                  imageStyle={props.imageStyle}
+                  title={""}
+                  layoutType={
+                    props.enableCircularLayout ? "Circular" : "LandScape"
+                  }
+                  showTitleOnlyOnFocus={false}
+                  titlePlacement={props.titlePlacement}
+                  overlayComponent={
+                    <MFOverlay
+                      //@ts-ignore
+                      renderGradiant={true}
+                      showProgress={true}
+                      progress={20}
+                      // displayTitle={item.title}
+                      bottomText={item.runtime}
+                      // showRec={true}
+                      // recType={"series"}
+                    />
+                  }
+                  progressComponent={props.progressElement}
+                  showProgress={props.shouldRenderProgress}
+                  shouldRenderText
+                  onFocus={(event) => {
+                    _onFocus(index);
+                    props.onFocus && props.onFocus(event);
+                  }}
+                  onPress={(event) => {
+                    props.onPress && props.onPress(event);
+                  }}
+                  onBlur={(event) => {}}
+                />
+              )}
             />
-          </View>
-        )
-      }
-      <View
-        style={{
-          width: 500,
-          height: 141,
-        }}
-      >
-        {currentFeed &&
-          props.swimLaneKey?.trim().length! > 0 &&
-          props.swimLaneKey === props.title && (
-            <MFMetaData currentFeed={currentFeed} />
-          )}
+          ) : (
+            /** UDL data undefined.. So basically UDL call isn't implemented or call failed with some error code. */
+            <View
+              style={{
+                paddingRight: SCREEN_WIDTH,
+              }}
+            >
+              <MFViewAllButton
+                // @ts-ignore
+                ref={ref}
+                displayStyles={Styles.railTitle}
+                displayText={"Feed Not Implemented"}
+                style={[HomeScreenStyles.landScapeCardStyles]}
+                imageStyle={HomeScreenStyles.landScapeCardImageStyles}
+                focusedStyle={HomeScreenStyles.focusedStyle}
+                onPress={props.onListFooterElementOnPress}
+                onFocus={props.onListFooterElementFocus}
+              />
+            </View>
+          )
+        }
+        <View
+          style={{
+            width: 500,
+            height: 141,
+          }}
+        >
+          {currentFeed &&
+            props.swimLaneKey?.trim().length! > 0 &&
+            props.swimLaneKey === props.title && (
+              <MFMetaData currentFeed={currentFeed} />
+            )}
+        </View>
       </View>
-    </View>
-  );
-};
-
+    );
+  }
+);
 export const OverlayComponent = ({
   displayString,
 }: {
@@ -273,5 +263,4 @@ export const OverlayComponent = ({
     />
   </View>
 );
-
 export default MFFilmStrip;

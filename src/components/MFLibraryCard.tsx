@@ -57,7 +57,7 @@ export interface MFLibraryCardProps {
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
 }
 
-const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> = (props) => {
+const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> = React.forwardRef(({...props}, ref: any) => {
   const [focused, setFocused] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const translateAnim = useRef(new Animated.Value(0)).current;
@@ -182,6 +182,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> = (props) => {
 
   return (
     <TouchableOpacity
+    ref={ref}
       style={[
         styles.rootContainer,
         focused
@@ -253,7 +254,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> = (props) => {
       </View>
     </TouchableOpacity>
   );
-};
+});
 const styles = StyleSheet.create({
   rootContainer: {
     width: 480,
