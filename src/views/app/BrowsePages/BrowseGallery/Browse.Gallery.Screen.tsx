@@ -31,15 +31,19 @@ import { getResolvedMetadata } from "../../../../components/MFMetadata/MFMetadat
 import LinearGradient from "react-native-linear-gradient";
 import { getUIdef } from "../../../../utils/uidefinition";
 import {
+  UNSTABLE_usePreventRemove,
+  useFocusEffect,
+} from "@react-navigation/native";
+import {
   browseType,
   feedBaseURI,
   ItemShowType,
 } from "../../../../utils/common";
-import { DefaultStore } from "../../../../utils/DiscoveryUtils";
-import { GLOBALS } from "../../../../utils/globals";
+import BrowseFilter from "./BrowseFilters";
 import { useQuery } from "react-query";
 import { getDataFromUDL } from "../../../../../backend";
-import { parseUdl } from "../../../../../backend/udl/provider";
+import { DefaultStore } from "../../../../utils/DiscoveryUtils";
+import { GLOBALS } from "../../../../utils/globals";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -140,7 +144,8 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   console.log(pivotURL);
   const menuAnim = React.useRef(new Animated.Value(SCREEN_WIDTH)).current;
   const optionsAnim = React.useRef(new Animated.Value(SCREEN_WIDTH)).current;
-
+  const [openMenu, setOpenMenu] = useState(false);
+  const [openSubMenu, setOpenSubMenu] = useState(false);
   useEffect(() => {
     console.log("Some log");
     props.navigation.addListener("beforeRemove", (e) => {
@@ -156,6 +161,15 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       }
     });
   }, []);
+
+  UNSTABLE_usePreventRemove(openMenu, (data) => {
+    openSubMenu ? setOpenSubMenu(false) : setOpenMenu(false);
+  });
+
+  const toggleMenu = () => {
+    console.log("toggleMenu called", openMenu);
+    setOpenMenu(true);
+  };
 
   const updateFeed = (focusedFeed: SubscriberFeed) => {
     setCurrentFeed(focusedFeed);
@@ -238,19 +252,23 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
             onFocus={() => {
               console.log("Filter focused");
             }}
-            onPress={() => {
-              console.log("Filter pressed");
-              if (!showFilterMenu) {
-                setShowFilterMenu(true);
-                Animated.timing(menuAnim, {
-                  useNativeDriver: true,
-                  toValue: SCREEN_WIDTH - SCREEN_WIDTH * 0.2,
-                  duration: 150,
-                }).start();
-              } else {
-                console.log("Don't be an idiot");
-              }
-            }}
+            onPress={
+              toggleMenu
+
+              // () => {
+              // console.log("Filter pressed");
+              // if (!showFilterMenu) {
+              //   setShowFilterMenu(true);
+              //   Animated.timing(menuAnim, {
+              //     useNativeDriver: true,
+              //     toValue: SCREEN_WIDTH - SCREEN_WIDTH * 0.2,
+              //     duration: 150,
+              //   }).start();
+              // } else {
+              //   console.log("Don't be an idiot");
+              // }
+              // }
+            }
             iconButtonStyles={{
               shouldRenderImage: true,
               iconPlacement: "Left",
@@ -350,14 +368,20 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
           )}
         </View>
       </View>
-      <View
+      <BrowseFilter
+        //@ts-ignore
+        open={openMenu}
+        subMenuOpen={openSubMenu}
+        setOpenSubMenu={setOpenSubMenu}
+      />
+      {/* <View
         style={{
           position: "absolute",
           flexDirection: "row",
           width: SCREEN_WIDTH,
         }}
-      >
-        {showFilterMenu && (
+      > */}
+      {/* {showFilterMenu && (
           <Animated.View
             style={{
               width: SCREEN_WIDTH * 0.2,
@@ -397,8 +421,8 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
               position: "absolute",
             }}
           ></Animated.View>
-        )}
-      </View>
+        )} */}
+      {/* </View> */}
     </View>
   );
 };

@@ -232,7 +232,9 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
         name={Routes.ProfileFinalise}
         component={ProfileFinalisationScreen}
       />
-      <Stack.Screen name={Routes.BrowseGallery} component={GalleryScreen} />
+      <Stack.Screen name={Routes.BrowseGallery} component={GalleryScreen} options={{
+          animation:"none"
+        }}/>
       <Stack.Screen
         name={Routes.BrowseCategory}
         component={BrowseCategoryScreen}
