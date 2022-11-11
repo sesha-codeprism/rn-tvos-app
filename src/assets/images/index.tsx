@@ -41,6 +41,7 @@ const AppImages: { [key: string]: Source | any } = {
   series_rec: require(`${imagesDirectory}/series_rec.png`),
   single_rec: require(`${imagesDirectory}/single_rec.png`),
   filter: require(`${imagesDirectory}/Filter.png`),
+  rightArrowWhite: require(`${imagesDirectory}/right_arrow_white.png`),
 };
 
 export { AppImages };
