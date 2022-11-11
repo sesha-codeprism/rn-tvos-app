@@ -42,6 +42,7 @@ interface MFSwimLaneProps {
     | null
     | ((event: SubscriberFeed) => void)
     | undefined;
+  flatListStyle?: any;
 }
 
 const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
@@ -61,6 +62,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = (props) => {
       <MFFilmStrip
         limitSwimlaneItemsTo={props.limitSwimlaneItemsTo}
         enableCircularLayout
+        flatListStyle={props.flatListStyle}
         title={props.feed.Name}
         style={
           props.feed.ShowcardAspectRatio === layout2x3

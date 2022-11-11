@@ -1,59 +1,166 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import MFText from "../../components/MFText";
-import { Feed } from "../../@types/HubsResponse";
-import MFButton, { MFButtonVariant } from "../../components/MFButton/MFButton";
-import { getDataForUDL } from "../../config/queries";
-import MFGridView from "../../components/MFGridView";
-import { appUIDefinition, layout2x3 } from "../../config/constants";
-import { HomeScreenStyles } from "./Homescreen.styles";
-import { SubscriberFeed } from "../../@types/SubscriberFeed";
-import MFLoader from "../../components/MFLoader";
-import FastImage from "react-native-fast-image";
-import { AppImages } from "../../assets/images";
+import React, { useEffect, useState } from "react";
 import {
-  durationInDaysHoursMinutes,
+  BackHandler,
+  Button,
+  StyleSheet,
+  Text,
+  TVMenuControl,
+  useTVEventHandler,
+  View,
+  Animated,
+  Alert,
+} from "react-native";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import MFText from "../../../../components/MFText";
+import { Feed } from "../../../../@types/HubsResponse";
+import MFButton, {
+  MFButtonVariant,
+} from "../../../../components/MFButton/MFButton";
+import { getDataForUDL } from "../../../../config/queries";
+import MFGridView from "../../../../components/MFGridView";
+import { appUIDefinition } from "../../../../config/constants";
+import { HomeScreenStyles } from "../../Homescreen.styles";
+import { SubscriberFeed } from "../../../../@types/SubscriberFeed";
+import MFLoader from "../../../../components/MFLoader";
+import FastImage from "react-native-fast-image";
+import { AppImages } from "../../../../assets/images";
+import {
+  getBrowseFeedObject,
   getNetworkInfo,
-} from "../../utils/assetUtils";
-import { getResolvedMetadata } from "../../components/MFMetadata/MFMetadataUtils";
+} from "../../../../utils/assetUtils";
+import { getResolvedMetadata } from "../../../../components/MFMetadata/MFMetadataUtils";
 import LinearGradient from "react-native-linear-gradient";
-import { galleryFilter } from "../../utils/analytics/consts";
-import { getUIdef } from "../../utils/uidefinition";
-
+import { galleryFilter } from "../../../../utils/analytics/consts";
+import { getUIdef } from "../../../../utils/uidefinition";
+import { useFocusEffect } from "@react-navigation/native";
+import {
+  browseType,
+  feedBaseURI,
+  ItemShowType,
+} from "../../../../utils/common";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
 }
+
+export const getBaseValues = (feed: any, browsePageConfig: any) => {
+  const browseFeedObject = getBrowseFeedObject(feed, browsePageConfig);
+  let pivots =
+    feed.NavigationTargetUri?.split("?")[1]?.split("&")[0] || undefined;
+  let orderBy = browseFeedObject?.params?.$orderBy;
+  if (pivots) {
+    pivots = pivots?.replace("=", "|");
+  }
+  if (browseFeedObject?.params?.baseFilters) {
+    pivots = pivots
+      ? pivots?.concat(",", browseFeedObject.params?.baseFilters)
+      : browseFeedObject.params?.baseFilters;
+  }
+  if (feed?.ItemType && feed?.ItemType === ItemShowType.App) {
+    orderBy =
+      feed.NavigationTargetUri?.split("&")[1]?.split("=")[1] ||
+      browseFeedObject?.params?.$orderBy;
+  }
+  return {
+    orderBy,
+    pivots,
+  };
+};
+
+export const getBrowseFeed = (
+  feed: any,
+  baseValues: any,
+  parsedState: { pivots?: string; orderBy?: string; showType?: string },
+  page: number,
+  browsePageConfig: any
+) => {
+  const browseFeed = { ...feed };
+  const navigationTargetUri = feed.NavigationTargetUri?.split("?")[0];
+  const browseFeedObject = getBrowseFeedObject(feed, browsePageConfig);
+
+  let pivots = parsedState?.pivots || "";
+
+  const baseValuePivots = baseValues?.pivots?.split(",") || [];
+
+  for (const pivot of baseValuePivots) {
+    if (!pivots.includes(pivot?.split("|")[0])) {
+      pivots += pivots ? "," + pivot : pivot;
+    }
+  }
+
+  if (feed.pivotGroup) {
+    pivots = pivots + `,${feed.pivotGroup}|${feed.Id}`;
+  }
+  if (
+    (navigationTargetUri === browseType.browsepromotions &&
+      feedBaseURI.subscriber.test(feed.Uri)) ||
+    navigationTargetUri === browseType.libraries
+  ) {
+    const libraryId = feed.Uri?.split("/").pop();
+    browseFeed["Uri"] = `${browseFeedObject.uri}/${libraryId}`;
+  } else {
+    browseFeed["Uri"] = browseFeedObject.uri;
+  }
+  if (feed.ItemType === ItemShowType.SvodPackage) {
+    browseFeed["CategoryId"] = parsedState.pivots
+      ? parsedState.pivots
+      : feed.CategoryId;
+  }
+
+  browseFeed["pivots"] = pivots;
+  browseFeed["$top"] = browseFeedObject.params.$top;
+  browseFeed["$orderBy"] = parsedState.orderBy || baseValues.orderBy;
+  browseFeed["types"] =
+    browseFeedObject.params.types && browseFeedObject.params.types?.split("|");
+  browseFeed["$skip"] = browseFeedObject.params.$top * page;
+  browseFeed["ShowType"] =
+    parsedState.showType || browseFeedObject.params.showType;
+  return browseFeed;
+};
 
 const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const pivotConfig = getUIdef("LoginPage")?.config;
   const { SORTBY_KEY, RESTRICTIONS_KEY } = galleryFilter;
   const gradientView = getUIdef("BrowseGallery.GradientView")?.config;
   const browsePageConfig: any = getUIdef("BrowseGallery")?.config;
-
-  console.log(
-    "pivotConfig",
-    pivotConfig,
-    "SORTBY_KEY",
-    SORTBY_KEY,
-    "RESTRICTIONS_KEY",
-    RESTRICTIONS_KEY,
-    "gradientView",
-    gradientView,
-    "browsePageConfig",
-    browsePageConfig
-  );
+  const feed: Feed = props.route.params.feed;
+  const baseValues = getBaseValues(feed, browsePageConfig);
+  const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
+  console.log("BaseValues", baseValues, "browseFeed", browseFeed);
 
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
-  const feed: Feed = props.route.params.feed;
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [showFilterOptions, setShowFilterOptions] = useState(false);
   const { data, isLoading, isError } = getDataForUDL(feed.Uri);
-  console.log("Icon", AppImages["filter"]);
+  const menuAnim = React.useRef(new Animated.Value(SCREEN_WIDTH)).current;
+  const optionsAnim = React.useRef(new Animated.Value(SCREEN_WIDTH)).current;
 
+  useEffect(() => {
+    console.log("Some log");
+
+    props.navigation.addListener("beforeRemove", (e) => {
+      console.log("Listener added to navigation");
+      if (!showFilterMenu && !showFilterOptions) {
+        // If we don't have unsaved changes, then we don't need to do anything
+        return;
+      }
+      e.preventDefault();
+      if (showFilterMenu && showFilterOptions) {
+        setShowFilterOptions(false);
+      } else if (showFilterMenu && !showFilterOptions) {
+        setShowFilterMenu(false);
+      }
+    });
+  }, []);
   const updateFeed = (focusedFeed: SubscriberFeed) => {
     setCurrentFeed(focusedFeed);
   };
+
+  const myTVEventHandler = (evt: any) => {};
+
+  useTVEventHandler(myTVEventHandler);
+
   const renderRatingValues = () => {
     //@ts-ignore
     const [first, second] = currentFeed!.ratingValues || [];
@@ -120,10 +227,28 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
             }}
             onPress={() => {
               console.log("Filter pressed");
+              if (!showFilterMenu) {
+                setShowFilterMenu(true);
+                Animated.timing(menuAnim, {
+                  useNativeDriver: true,
+                  toValue: SCREEN_WIDTH - SCREEN_WIDTH * 0.2,
+                  duration: 150,
+                }).start();
+              } else {
+                console.log("Don't be an idiot");
+              }
             }}
             iconButtonStyles={{
               shouldRenderImage: true,
               iconPlacement: "Left",
+            }}
+            containedButtonProps={{
+              containedButtonStyle: {
+                focusedBackgroundColor: appUIDefinition.theme.colors.blue,
+                enabled: true,
+                hoverColor: appUIDefinition.theme.colors.blue,
+                elevation: 5,
+              },
             }}
           />
         </View>
@@ -212,6 +337,55 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
           )}
         </View>
       </View>
+      <View
+        style={{
+          position: "absolute",
+          flexDirection: "row",
+          width: SCREEN_WIDTH,
+        }}
+      >
+        {showFilterMenu && (
+          <Animated.View
+            style={{
+              width: SCREEN_WIDTH * 0.2,
+              height: SCREEN_HEIGHT,
+              backgroundColor: "#191B1F",
+              transform: [{ translateX: menuAnim }],
+            }}
+          >
+            <Button
+              title="Open Options"
+              onPress={() => {
+                setShowFilterOptions(true);
+                Animated.parallel([
+                  Animated.timing(menuAnim, {
+                    useNativeDriver: true,
+                    toValue: SCREEN_WIDTH - SCREEN_WIDTH * 0.4,
+                    duration: 150,
+                  }),
+                  Animated.timing(optionsAnim, {
+                    useNativeDriver: true,
+                    toValue: SCREEN_WIDTH - SCREEN_WIDTH * 0.2,
+                    duration: 150,
+                  }),
+                ]).start();
+              }}
+            />
+          </Animated.View>
+        )}
+        {showFilterOptions && (
+          <Animated.View
+            style={{
+              width: SCREEN_WIDTH * 0.3,
+              height: SCREEN_HEIGHT,
+              backgroundColor: "#202124",
+              transform: [{ translateX: optionsAnim }],
+              alignSelf: "flex-end",
+              position: "absolute",
+            }}
+          ></Animated.View>
+        )}
+      </View>
     </View>
   );
 };
@@ -223,6 +397,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#00030E",
     flexDirection: "column",
     paddingBottom: 150,
+    position: "relative",
   },
   topRow: {
     width: SCREEN_WIDTH,
@@ -252,6 +427,7 @@ const styles = StyleSheet.create({
         scale: 1.1,
       },
     ],
+    backgroundColor: appUIDefinition.theme.colors.blue,
   },
   filterButtonContainerStyle: {
     flex: 0.2,

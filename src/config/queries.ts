@@ -56,11 +56,9 @@ const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: bo
                     if (shouldMassageData) {
                         if (udlID!.id.split("/")[0] === 'discovery') {
                             const massagedData = massageDiscoveryFeed(data.data, SourceType.VOD);
-                            console.log("massageDiscoveryFeed for", uri, "is", massagedData);
                             return massagedData;
                         } else {
                             const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
-                            console.log("massageSubscriberFeed for", uri, "is", massagedData);
                             return massagedData;
                         }
                     } else {

@@ -1,5 +1,12 @@
 import React, { useRef, useState } from "react";
-import { FlatList, StyleProp, TextStyle, View, ViewStyle } from "react-native";
+import {
+  FlatList,
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native";
 import Styles from "../MFButtonsVariants/MFButtonStyles";
 import MFCard from "../MFCard";
 import { MFTabBarStyles } from "../MFTabBar/MFTabBarStyles";
@@ -93,6 +100,8 @@ export interface MFFilmStripProps {
     | null
     | ((event: SubscriberFeed) => void)
     | undefined;
+
+  flatListStyle?: any;
 }
 
 /**
@@ -135,6 +144,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = (props) => {
         props.libraryItems !== undefined ? (
           <FlatList
             ref={flatListRef}
+            style={StyleSheet.flatten([props.flatListStyle])}
             scrollEnabled={false}
             horizontal
             windowSize={4}

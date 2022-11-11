@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -37,9 +38,9 @@ import ShortCodeScreen from "../../views/auth/Shortcode.screen";
 import SplashScreen from "../../views/auth/Splash.screen";
 import SearchScreen from "../../views/search.screen";
 import FossLicenseScreen from "../../views/app/settings_screens/system/foss_license";
-import GalleryScreen from "../../views/app/Browse.Gallery.Screen";
+import GalleryScreen from "../../views/app/BrowsePages/BrowseGallery/Browse.Gallery.Screen";
 import RouteFallBackScreen from "../../views/app/Route.Fallback.screen";
-import BrowseCategoryScreen from "../../views/app/BrowseCategory/Browse.Category.screen";
+import BrowseCategoryScreen from "../../views/app/BrowsePages/BrowseCategory/Browse.Category.screen";
 interface RouterOutletProps {}
 
 export const Routes = {

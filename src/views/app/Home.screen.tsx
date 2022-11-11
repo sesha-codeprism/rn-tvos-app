@@ -1,5 +1,11 @@
-import React, { useState, useRef } from "react";
-import { View, ImageBackground, Dimensions } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  View,
+  ImageBackground,
+  Dimensions,
+  BackHandler,
+  TVMenuControl,
+} from "react-native";
 import { appUIDefinition, debounceTime } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
@@ -26,12 +32,14 @@ import {
 import { getUIdef } from "../../utils/uidefinition";
 import { UdlProviders } from "../../../backend/udl/provider";
 
-interface Props {
+interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
 
 const { width, height } = Dimensions.get("window");
-const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
+const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
+  props: HomeScreenProps
+) => {
   const [feeds, setFeeds] = useState<FeedItem>();
   const [hubs, setHubs] = useState(Array<FeedItem>());
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
@@ -214,6 +222,14 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
       // Open !true. So something is happening. Removed some console.log
     }
   };
+
+  useEffect(() => {
+    if (!open) {
+      console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
+      TVMenuControl.enableTVMenuKey();
+      BackHandler.addEventListener("hardwareBackPress", backAction);
+    }
+  }, []);
   setHubsData();
   return (
     <View style={HomeScreenStyles.container}>

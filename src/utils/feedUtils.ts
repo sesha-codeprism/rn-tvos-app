@@ -9,25 +9,23 @@ export const feedActionsByURI: { [key: string]: any } = {
         "udl://device/apps/General": null,
 
         "udl://discovery/categories/items":
-            null,
+            'udl://discovery/categories/items',
         "udl://discovery/categories/items/?pivots=true":
-            null,
-
+            "udl://discovery/categories/subcategories",
         "udl://discovery/feeds/movies":
-            null,
+            "udl://discovery/feeds/movies",
         "udl://discovery/feeds/moviesandtvshows":
-            null,
+            "udl://discovery/feeds/movies",
         "udl://discovery/feeds/packages":
-            null,
+            "udl://discovery/feeds/movies",
         "udl://discovery/feeds/payperview":
-            null,
+            "udl://discovery/feeds/movies",
         "udl://discovery/feeds/tvshows":
-            null,
+            "udl://discovery/feeds/movies",
         "udl://discovery/feeds/Zones":
-            null,
-
+            "udl://discovery/feeds/movies",
         "udl://discovery/librariespivotcategories/items":
-            null,
+            "udl://discovery/libraries/complete/pivot-items",
         "udl://discovery/libraryprograms/complete":
             null,
         "udl://discovery/libraryprograms/complete/?pivots=true":

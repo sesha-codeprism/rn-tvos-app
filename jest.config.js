@@ -4,6 +4,7 @@ module.exports = {
   setupFiles: [
     "./node_modules/react-native-gesture-handler/jestSetup.js",
     "./jest/setup.js",
+    "<rootDir>/jest/setup.js",
   ],
   testEnvironment: "node",
   testEnvironmentOptions: {
@@ -57,5 +58,6 @@ module.exports = {
     "\\.svg": "<rootDir>/__mocks__/svgMock.js",
     "react-native-code-push": "<rootDir>/__mocks__/react-native-code-push.js",
     "@react-navigation": "<rootDir>/__mocks__/@react-navigation.js",
+    "/@react-navigation/": "<rootDir>/__mocks__/@react-navigation.js",
   },
 };

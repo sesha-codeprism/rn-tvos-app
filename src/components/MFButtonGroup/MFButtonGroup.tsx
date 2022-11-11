@@ -14,7 +14,6 @@ import MFButton, { MFButtonVariant } from "../MFButton/MFButton";
 import { MFAvatarButtonProps } from "../MFButtonsVariants/MFAvatarButton";
 import { MFContainedButtonProps } from "../MFButtonsVariants/MFContainedButton";
 import { MFOutlinedButtonProps } from "../MFButtonsVariants/MFOutlinedButton";
-import { MFTabBarStyles } from "../MFTabBar/MFTabBarStyles";
 
 import { Source, ImageStyle } from "react-native-fast-image";
 import { MFUnderlinedButtonProps } from "../MFButtonsVariants/MFUnderlinedButton";

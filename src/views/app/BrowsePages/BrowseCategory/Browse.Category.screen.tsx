@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ImageBackground, StyleSheet, View } from "react-native";
-import MFText from "../../../components/MFText";
-import { browseType, ItemShowType } from "../../../utils/analytics/consts";
+import MFText from "../../../../components/MFText";
+import { browseType, ItemShowType } from "../../../../utils/analytics/consts";
 import {
   getScaledValue,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
-} from "../../../utils/dimensions";
-import { getIdFromURI } from "../../../utils/helpers";
-import { getUIdef } from "../../../utils/uidefinition";
+} from "../../../../utils/dimensions";
+import { getIdFromURI } from "../../../../utils/helpers";
+import { getUIdef } from "../../../../utils/uidefinition";
 import {
   getBaseURI,
   removeIdFromUri,
-} from "../../../../backend/utils/url/urlUtil";
-import { UdlProviders } from "../../../../backend/udl/provider";
-import { removeTrailingSlash } from "../../../utils/assetUtils";
-import { Feed } from "../../../@types/HubsResponse";
-import { feedActionsByURI } from "../../../utils/feedUtils";
+} from "../../../../../backend/utils/url/urlUtil";
+import { UdlProviders } from "../../../../../backend/udl/provider";
+import { removeTrailingSlash } from "../../../../utils/assetUtils";
+import { Feed } from "../../../../@types/HubsResponse";
+import { feedActionsByURI } from "../../../../utils/feedUtils";
 import BrowseCategoryCarousel from "./CategoryCarousel";
 import LinearGradient from "react-native-linear-gradient";
-import { AppImages } from "../../../assets/images";
+import { AppImages } from "../../../../assets/images";
 
 interface BrowseCategoryProps {
   navigation: NativeStackNavigationProp<any>;
@@ -48,6 +48,7 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
     if (!feed?.FeedType) {
       return null;
     }
+
     let feedDispatchAction;
 
     if (baseURI in feedActionsByURI[feed.FeedType]) {
@@ -59,7 +60,9 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
       feedDispatchAction = feedActionsByURI[feed.FeedType][feedURIWithoutId];
     }
     const prefixedDispatch = "udl://" + feedDispatchAction.prefix;
-    setFeedDispatch(prefixedDispatch);
+    // setFeedDispatch(
+    //   browsePageConfig[props.route.params.navigationTargetUri].uri
+    // );
   };
 
   const browseFeedParams = (props: any): any => {
@@ -99,9 +102,13 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
   };
   useEffect(() => {
     fetchFeeds(feed);
+    console.log(
+      "BrowsePageConfig",
+      browsePageConfig[props.route.params.navigationTargetUri].uri
+    );
   }, []);
   return (
-    <View style={styles.root}>
+    <View style={[styles.root]}>
       <ImageBackground
         source={AppImages.landing_background}
         style={{ height: SCREEN_HEIGHT, width: SCREEN_WIDTH }}
@@ -144,7 +151,7 @@ export const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     backgroundColor: "#00030E",
     flexDirection: "column",
-    paddingBottom: 150,
+    paddingBottom: 300,
   },
   topRow: {
     width: SCREEN_WIDTH,
