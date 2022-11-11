@@ -34,7 +34,6 @@ interface MFSwimProps {
 const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
   ({ ...props }, ref: any) => {
     const data = getAllFeedDataForFeed(props.feeds!);
-    console.log("Props in MFSwim", props);
     const [swimLaneKey, setSwimLaneKey] = useState("");
     const updateSwimLaneKey = (key: string) => {
       setSwimLaneKey(key);
@@ -46,7 +45,7 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
         renderItem={({ item, index }) => {
           return (
             <MFSwimLane
-            // @ts-ignore
+              // @ts-ignore
               ref={index === 0 ? ref : null}
               key={index}
               feed={item}

@@ -4,7 +4,12 @@ export const initUdls = () => {
   registerUdls();
 };
 
-export const getDataFromUDL = async (udl: string) => {
+export const getDataFromUDL = async (udl: string, shouldSendParams: boolean = true) => {
   const udlParsed: any = parseUdl(udl);
-  return getList(udlParsed.id, udlParsed.params);
+  if (shouldSendParams) {
+    return getList(udlParsed.id, udlParsed.params);
+  } else {
+    return getList(udlParsed.id);
+
+  }
 };

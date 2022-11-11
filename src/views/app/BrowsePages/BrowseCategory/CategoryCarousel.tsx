@@ -41,38 +41,38 @@ const BrowseCategoryCarousel: React.FunctionComponent<
     }
   };
 
-  const filterData = (dataSource: ILibrarySet) => {
-    if (!dataSource) {
-      Alert.alert("No data from UDL call");
-      return undefined;
-    }
-    if (!dataSource.Libraries && !dataSource.LibraryItems) {
-      Alert.alert("No data to showcase here");
-      return undefined;
-    }
-    let dataArray: any = [];
-    let massagedData: any;
-    const udlID = parseUdl(props.feedDispatch);
-    if (udlID!.id.split("/")[0] === "discovery") {
-      massagedData = massageDiscoveryFeed(dataSource, SourceType.VOD);
-    } else {
-      massagedData = massageSubscriberFeed(dataSource, "", SourceType.VOD);
-    }
+  const filterData = (dataSource: any) => {
+    // if (!dataSource) {
+    //   Alert.alert("No data from UDL call");
+    //   return undefined;
+    // }
+    // if (!dataSource.Libraries && !dataSource.LibraryItems) {
+    //   Alert.alert("No data to showcase here");
+    //   return undefined;
+    // }
+    // let dataArray: any = [];
+    // let massagedData: any;
+    // const udlID = parseUdl(props.feedDispatch);
+    // if (udlID!.id.split("/")[0] === "discovery") {
+    //   massagedData = massageDiscoveryFeed(dataSource, SourceType.VOD);
+    // } else {
+    //   massagedData = massageSubscriberFeed(dataSource, "", SourceType.VOD);
+    // }
 
-    dataArray = dataSource.Libraries.map((library) => ({
-      library: library,
-      libraryItem: massagedData.filter(
-        (e: any) => library.LibraryItems.indexOf(e.Id) !== -1
-      ),
-    }));
+    // dataArray = dataSource.Libraries.map((library) => ({
+    //   library: library,
+    //   libraryItem: massagedData.filter(
+    //     (e: any) => library.LibraryItems.indexOf(e.Id) !== -1
+    //   ),
+    // }));
 
-    console.log("dataArray", dataArray, dataArray.length);
-    if (dataArray.length > dataSource.Libraries.length) {
-      console.warn(
-        "Something is going wrong.. we're showcasing more items than we have somehow"
-      );
-    }
-    return dataArray;
+    // console.log("dataArray", dataArray, dataArray.length);
+    // if (dataArray.length > dataSource.Libraries.length) {
+    //   console.warn(
+    //     "Something is going wrong.. we're showcasing more items than we have somehow"
+    //   );
+    // }
+    return dataSource;
   };
   const { data, isLoading } = useQuery("getFeeds", getFeedsList, {
     cacheTime: appUIDefinition.config.queryCacheTime,
@@ -100,8 +100,8 @@ const BrowseCategoryCarousel: React.FunctionComponent<
           return (
             <MFSwimLane
               key={index}
-              feed={item.library}
-              data={item.libraryItem}
+              feed={item}
+              data={item.Items}
               limitSwimlaneItemsTo={16}
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}

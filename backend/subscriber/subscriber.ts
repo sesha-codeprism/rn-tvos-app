@@ -321,7 +321,7 @@ export const createPasscodes = async (PasscodeType: PinType, pin: string) => {
   } catch (error) {
     console.log("error in createPasscodes", error);
   }
-  //   fetch("https://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/subscriber/v2/passcodes/parentalcontrol", {
+  //   fetch("https://ottapp-appgw-client-a.cim.mr.tv3cloud.com/S1/subscriber/v2/passcodes/parentalcontrol", {
   //   "headers": {
   //     "accept": "text/plain, */*; q=0.01",
   //     "accept-language": "en-US,en;q=0.9,fr;q=0.8,fr-FR;q=0.7,ar;q=0.6,zh-CN;q=0.5,zh-TW;q=0.4,zh;q=0.3,ar-SA;q=0.2,pt-BR;q=0.1,pt;q=0.1,ru-RU;q=0.1,ru;q=0.1,he-IL;q=0.1,he;q=0.1,es-ES;q=0.1,es;q=0.1,it-IT;q=0.1,it;q=0.1,th-TH;q=0.1,th;q=0.1,de-DE;q=0.1,de;q=0.1,ja-JP;q=0.1,ja;q=0.1,ko-KR;q=0.1,ko;q=0.1,tr-TR;q=0.1,tr;q=0.1,cs-CZ;q=0.1,cs;q=0.1,fa-IR;q=0.1,fa;q=0.1,hu-HU;q=0.1,hu;q=0.1,nl-NL;q=0.1,nl;q=0.1,pl-PL;q=0.1,pl;q=0.1,sk-SK;q=0.1,sk;q=0.1,uk-UA;q=0.1,uk;q=0.1,ug-CN;q=0.1,ug;q=0.1,vi-VN;q=0.1,vi;q=0.1,ro-RO;q=0.1,ro;q=0.1,ms-MY;q=0.1,ms;q=0.1,el-GR;q=0.1,el;q=0.1,da-DK;q=0.1,da;q=0.1,sv-SE;q=0.1,sv;q=0.1,fi-FI;q=0.1,fi;q=0.1",
@@ -337,7 +337,7 @@ export const createPasscodes = async (PasscodeType: PinType, pin: string) => {
   //     "x-tv3-profiles": "08a4636d-636a-4946-b7ca-828603917138",
   //     "x-tv3-transactionid": "6692f8defbb43a1752bf53b29903906c46e9fae2-18-1665137322939"
   //   },
-  //   "referrer": "https://reachclient.dev.mr.tv3cloud.com/",
+  //   "referrer": "https://reachclient.cim.mr.tv3cloud.com/",
   //   "body": "{\"PasscodeType\":\"parentalcontrol\",\"Passcode\":\"20cc2b28323fb39d3f3a55e8e347dc343e0391c71138d5ccdca56d093109be73\"}",
   //   "method": "PUT",
   //   "mode": "cors",

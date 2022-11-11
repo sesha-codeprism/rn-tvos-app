@@ -57,204 +57,205 @@ export interface MFLibraryCardProps {
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
 }
 
-const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> = React.forwardRef(({...props}, ref: any) => {
-  const [focused, setFocused] = useState(false);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const translateAnim = useRef(new Animated.Value(0)).current;
-  const _onPress = (event: GestureResponderEvent) => {
-    props.onPress && props.onPress(props.data);
-  };
+const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
+  React.forwardRef(({ ...props }, ref: any) => {
+    const [focused, setFocused] = useState(false);
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const translateAnim = useRef(new Animated.Value(0)).current;
+    const _onPress = (event: GestureResponderEvent) => {
+      props.onPress && props.onPress(props.data);
+    };
 
-  const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(true);
-    Animated.timing(fadeAnim, {
-      useNativeDriver: true,
-      toValue: 1,
-      duration: 250,
-    }).start();
-    Animated.timing(translateAnim, {
-      useNativeDriver: true,
-      toValue: -15,
-      duration: 250,
-    }).start();
-    props.onFocus && props.onFocus(props.data);
-  };
+    const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(true);
+      Animated.timing(fadeAnim, {
+        useNativeDriver: true,
+        toValue: 1,
+        duration: 250,
+      }).start();
+      Animated.timing(translateAnim, {
+        useNativeDriver: true,
+        toValue: -15,
+        duration: 250,
+      }).start();
+      props.onFocus && props.onFocus(props.data);
+    };
 
-  const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    fadeAnim.stopAnimation();
-    translateAnim.stopAnimation();
-    setFocused(false);
-    Animated.timing(fadeAnim, {
-      useNativeDriver: true,
-      toValue: 0,
-      duration: 250,
-    }).start();
-    Animated.timing(translateAnim, {
-      useNativeDriver: true,
-      toValue: 0,
-      duration: 250,
-    }).start();
-    props.onBlur && props.onBlur(event);
-  };
+    const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      fadeAnim.stopAnimation();
+      translateAnim.stopAnimation();
+      setFocused(false);
+      Animated.timing(fadeAnim, {
+        useNativeDriver: true,
+        toValue: 0,
+        duration: 250,
+      }).start();
+      Animated.timing(translateAnim, {
+        useNativeDriver: true,
+        toValue: 0,
+        duration: 250,
+      }).start();
+      props.onBlur && props.onBlur(event);
+    };
 
-  const TitleAndSubtitle = () =>
-    props.showTitleOnlyOnFocus ? (
-      //   <Animated.View
-      //     style={{
-      //       opacity: fadeAnim,
-      //       transform: [{ translateY: translateAnim }],
-      //     }}
-      //   >
-      //     <View>
-      //       <MFMetaData currentFeed={props.data} />
-      //     </View>
-      //   </Animated.View>
-      // ) : (
-      //   <MFMetaData currentFeed={props.data} />
+    const TitleAndSubtitle = () =>
+      props.showTitleOnlyOnFocus ? (
+        //   <Animated.View
+        //     style={{
+        //       opacity: fadeAnim,
+        //       transform: [{ translateY: translateAnim }],
+        //     }}
+        //   >
+        //     <View>
+        //       <MFMetaData currentFeed={props.data} />
+        //     </View>
+        //   </Animated.View>
+        // ) : (
+        //   <MFMetaData currentFeed={props.data} />
 
-      <Animated.View
-        style={{
-          opacity: fadeAnim,
-          transform: [
-            {
-              translateY: translateAnim,
-            },
-          ],
-        }}
-      >
-        <MFText
-          textStyle={[
-            styles.cardTitleText,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-            },
-          ]}
-          displayText={props.title}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
-        <MFText
-          textStyle={[
-            styles.cardSubTitleText,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-            },
-          ]}
-          displayText={props.subTitle}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
-      </Animated.View>
-    ) : (
-      <View>
-        <MFText
-          textStyle={[
-            styles.cardTitleText,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-            },
-          ]}
-          displayText={props.title}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
-        <MFText
-          textStyle={[
-            styles.cardSubTitleText,
-            {
-              alignSelf:
-                props.layoutType === "Circular" ? "center" : "flex-start",
-              paddingRight: props.layoutType === "Circular" ? 150 : 0,
-            },
-          ]}
-          displayText={props.subTitle}
-          enableRTL={props.enableRTL}
-          shouldRenderText={props.shouldRenderText}
-        />
-      </View>
-    );
-
-  return (
-    <TouchableOpacity
-    ref={ref}
-      style={[
-        styles.rootContainer,
-        focused
-          ? StyleSheet.flatten([props.style, props.focusedStyle])
-          : StyleSheet.flatten([props.style]),
-      ]}
-      activeOpacity={1}
-      onPress={_onPress}
-      onFocus={_onFocus}
-      onBlur={_onBlur}
-    >
-      <View style={StyleSheet.flatten([props.imageStyle])}>
-        <FastImage
-          style={[props.imageStyle]}
-          source={{
-            uri:
-              props.data.image16x9PosterURL != undefined
-                ? props.data.image16x9PosterURL.uri
-                : AppImages.tvshowPlaceholder,
-            priority: FastImage.priority.normal,
+        <Animated.View
+          style={{
+            opacity: fadeAnim,
+            transform: [
+              {
+                translateY: translateAnim,
+              },
+            ],
           }}
         >
-          {props.overlayComponent}
-          <View>
-            {props.showProgress && props.progressComponent != undefined
-              ? props.progressComponent
-              : undefined}
-          </View>
-          <View
-            style={[
-              styles.overlay,
-              props.titlePlacement === TitlePlacement.overlayTop
-                ? styles.overlayTopStyles
-                : props.titlePlacement === TitlePlacement.overlayBottom
-                ? styles.overlayBottomStyles
-                : props.titlePlacement === TitlePlacement.overlayCenter
-                ? styles.overlayCenterStyles
-                : {},
+          <MFText
+            textStyle={[
+              styles.cardTitleText,
+              {
+                alignSelf:
+                  props.layoutType === "Circular" ? "center" : "flex-start",
+                paddingRight: props.layoutType === "Circular" ? 150 : 0,
+              },
             ]}
+            displayText={props.title}
+            enableRTL={props.enableRTL}
+            shouldRenderText={props.shouldRenderText}
+          />
+          <MFText
+            textStyle={[
+              styles.cardSubTitleText,
+              {
+                alignSelf:
+                  props.layoutType === "Circular" ? "center" : "flex-start",
+                paddingRight: props.layoutType === "Circular" ? 150 : 0,
+              },
+            ]}
+            displayText={props.subTitle}
+            enableRTL={props.enableRTL}
+            shouldRenderText={props.shouldRenderText}
+          />
+        </Animated.View>
+      ) : (
+        <View>
+          <MFText
+            textStyle={[
+              styles.cardTitleText,
+              {
+                alignSelf:
+                  props.layoutType === "Circular" ? "center" : "flex-start",
+                paddingRight: props.layoutType === "Circular" ? 150 : 0,
+              },
+            ]}
+            displayText={props.title}
+            enableRTL={props.enableRTL}
+            shouldRenderText={props.shouldRenderText}
+          />
+          <MFText
+            textStyle={[
+              styles.cardSubTitleText,
+              {
+                alignSelf:
+                  props.layoutType === "Circular" ? "center" : "flex-start",
+                paddingRight: props.layoutType === "Circular" ? 150 : 0,
+              },
+            ]}
+            displayText={props.subTitle}
+            enableRTL={props.enableRTL}
+            shouldRenderText={props.shouldRenderText}
+          />
+        </View>
+      );
+
+    return (
+      <TouchableOpacity
+        ref={ref}
+        style={[
+          styles.rootContainer,
+          focused
+            ? StyleSheet.flatten([props.style, props.focusedStyle])
+            : StyleSheet.flatten([props.style]),
+        ]}
+        activeOpacity={1}
+        onPress={_onPress}
+        onFocus={_onFocus}
+        onBlur={_onBlur}
+      >
+        <View style={StyleSheet.flatten([props.imageStyle])}>
+          <FastImage
+            style={[props.imageStyle]}
+            source={{
+              uri:
+                props.data.image16x9PosterURL != undefined
+                  ? props.data.image16x9PosterURL.uri
+                  : AppImages.tvshowPlaceholder,
+              priority: FastImage.priority.normal,
+            }}
           >
-            {props.titlePlacement != TitlePlacement.beneath ? (
-              <TitleAndSubtitle />
-            ) : undefined}
-          </View>
-        </FastImage>
-        {props.titlePlacement === TitlePlacement.beneath ? (
-          props.showTitleOnlyOnFocus ? (
-            <Animated.View
+            {props.overlayComponent}
+            <View>
+              {props.showProgress && props.progressComponent != undefined
+                ? props.progressComponent
+                : undefined}
+            </View>
+            <View
               style={[
-                styles.cardContentContainer,
-                {
-                  opacity: fadeAnim,
-                  transform: [
-                    {
-                      translateY: translateAnim,
-                    },
-                  ],
-                },
+                styles.overlay,
+                props.titlePlacement === TitlePlacement.overlayTop
+                  ? styles.overlayTopStyles
+                  : props.titlePlacement === TitlePlacement.overlayBottom
+                  ? styles.overlayBottomStyles
+                  : props.titlePlacement === TitlePlacement.overlayCenter
+                  ? styles.overlayCenterStyles
+                  : {},
               ]}
             >
-              <TitleAndSubtitle />
-            </Animated.View>
-          ) : (
-            <View style={[styles.cardContentContainer]}>
-              <TitleAndSubtitle />
+              {props.titlePlacement != TitlePlacement.beneath ? (
+                <TitleAndSubtitle />
+              ) : undefined}
             </View>
-          )
-        ) : undefined}
-      </View>
-    </TouchableOpacity>
-  );
-});
+          </FastImage>
+          {props.titlePlacement === TitlePlacement.beneath ? (
+            props.showTitleOnlyOnFocus ? (
+              <Animated.View
+                style={[
+                  styles.cardContentContainer,
+                  {
+                    opacity: fadeAnim,
+                    transform: [
+                      {
+                        translateY: translateAnim,
+                      },
+                    ],
+                  },
+                ]}
+              >
+                <TitleAndSubtitle />
+              </Animated.View>
+            ) : (
+              <View style={[styles.cardContentContainer]}>
+                <TitleAndSubtitle />
+              </View>
+            )
+          ) : undefined}
+        </View>
+      </TouchableOpacity>
+    );
+  });
 const styles = StyleSheet.create({
   rootContainer: {
     width: 480,

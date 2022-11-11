@@ -21,6 +21,9 @@ import { feedActionsByURI } from "../../../../utils/feedUtils";
 import BrowseCategoryCarousel from "./CategoryCarousel";
 import LinearGradient from "react-native-linear-gradient";
 import { AppImages } from "../../../../assets/images";
+import { getBrowseFeed } from "../BrowseGallery/Browse.Gallery.Screen";
+import { DefaultStore } from "../../../../utils/DiscoveryUtils";
+import { GLOBALS } from "../../../../utils/globals";
 
 interface BrowseCategoryProps {
   navigation: NativeStackNavigationProp<any>;
@@ -32,6 +35,9 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
 ) => {
   const [feedDispatch, setFeedDispatch] = useState("");
   const { feed } = props.route.params;
+  const [top, setTop] = useState(16);
+  const [skip, setSkip] = useState(0);
+
   const browsePageConfig: any = getUIdef("BrowseCategory")?.config;
   const scaledSnapToInterval = getScaledValue(browsePageConfig.snapToInterval);
   const extraPadding = {
@@ -39,31 +45,7 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
   };
   let requestedTime: Date | undefined;
 
-  const fetchFeeds = async (feed: Feed) => {
-    console.log(UdlProviders);
-    const baseURI = getBaseURI(feed?.Uri);
-    const libraryID = getIdFromURI(feed?.Uri);
-    const feedURIWithoutId = removeTrailingSlash(removeIdFromUri(feed.Uri));
-    const feedURIWithoutParams = removeTrailingSlash(feed?.Uri?.split("?")[0]);
-    if (!feed?.FeedType) {
-      return null;
-    }
-
-    let feedDispatchAction;
-
-    if (baseURI in feedActionsByURI[feed.FeedType]) {
-      feedDispatchAction = feedActionsByURI[feed.FeedType][baseURI];
-    } else if (feedURIWithoutParams in feedActionsByURI[feed.FeedType]) {
-      feedDispatchAction =
-        feedActionsByURI[feed.FeedType][feedURIWithoutParams];
-    } else if (feedURIWithoutId in feedActionsByURI[feed.FeedType]) {
-      feedDispatchAction = feedActionsByURI[feed.FeedType][feedURIWithoutId];
-    }
-    const prefixedDispatch = "udl://" + feedDispatchAction.prefix;
-    // setFeedDispatch(
-    //   browsePageConfig[props.route.params.navigationTargetUri].uri
-    // );
-  };
+  const fetchFeeds = async (feed: Feed) => {};
 
   const browseFeedParams = (props: any): any => {
     const { feed } = props.route?.params;
@@ -101,11 +83,13 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
     return browseFeed;
   };
   useEffect(() => {
-    fetchFeeds(feed);
     console.log(
       "BrowsePageConfig",
       browsePageConfig[props.route.params.navigationTargetUri].uri
     );
+    const browseFeed = browseFeedParams(props);
+    const feedDispatch = `${browseFeed.Uri}/?id=${browseFeed.Id}&$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${browseFeed.pivots}`;
+    setFeedDispatch(feedDispatch);
   }, []);
   return (
     <View style={[styles.root]}>

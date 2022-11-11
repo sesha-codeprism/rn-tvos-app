@@ -67,7 +67,7 @@ const MFMenu = (props: MFMenuProps) => {
     } else {
       setHubs1(array1);
     }
-  }, [props.hubList, globalContext]);
+  }, [globalContext]);
 
   const getButtonVariantProps = (hubObject: FeedItem) => {
     const element: ButtonVariantProps = {
@@ -93,7 +93,6 @@ const MFMenu = (props: MFMenuProps) => {
     };
     return element;
   };
-  
 
   return (
     <GlobalContext.Consumer>

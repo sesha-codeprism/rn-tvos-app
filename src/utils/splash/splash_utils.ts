@@ -27,7 +27,6 @@ export const setGlobalData = (bootStrapResponse: BootStrapResponse) => {
 export const connectDuplex = () => {
     const GUID = generateGUID();
     const duplexEndpoint = `${addPrefixToUrl(GLOBALS.bootstrapSelectors?.ServiceMap.Services.duplex, GLOBALS.bootstrapSelectors?.ServiceMap.Prefixes[config.prefixType])}?sessionId=${GUID}`;
-    // const duplexEndpoint = `wss://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/duplex/?sessionId=${GUID}`;
     duplex.initialize(duplexEndpoint);
 
 }

@@ -250,68 +250,72 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
             source={AppImages.topGradient}
             style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
           >
-            <SafeAreaView style={{ flex: 1, paddingTop: -30 }}>
-              <MFMenu
-                navigation={props.navigation}
-                enableRTL={GLOBALS.enableRTL}
-                hubList={hubs}
-                onPress={(event) => {}}
-                onFocus={(event) => {
-                  if (hubTimeOut) {
-                    clearInterval(hubTimeOut);
-                  }
-                  hubTimeOut = setTimeout(() => {
-                    setFeeds(hubs[event]);
-                  }, debounceTime);
-                }}
-                setCardFocus={setCardFocus}
-                onPressSettings={() => {
-                  setOpen(open);
-                  drawerRef.current.open();
-                  if (currentFeed) {
-                    service?.addNavEventOnCurPageOpenOrClose(
-                      {
-                        navigation: {
-                          params: {
-                            feed: currentFeed,
+            {!isLoading && (
+              <SafeAreaView style={{ flex: 1, paddingTop: -30 }}>
+                <MFMenu
+                  navigation={props.navigation}
+                  enableRTL={GLOBALS.enableRTL}
+                  hubList={hubs}
+                  onPress={(event) => {}}
+                  onFocus={(event) => {
+                    if (hubTimeOut) {
+                      clearInterval(hubTimeOut);
+                    }
+                    hubTimeOut = setTimeout(() => {
+                      setFeeds(hubs[event]);
+                    }, debounceTime);
+                  }}
+                  setCardFocus={setCardFocus}
+                  onPressSettings={() => {
+                    setOpen(open);
+                    drawerRef.current.open();
+                    if (currentFeed) {
+                      service?.addNavEventOnCurPageOpenOrClose(
+                        {
+                          navigation: {
+                            params: {
+                              feed: currentFeed,
+                            },
                           },
                         },
-                      },
-                      Routes.Settings,
-                      navigationAction.pageOpen
-                    );
-                  }
-                }}
-              />
-              <View style={HomeScreenStyles.posterViewContainerStyles}>
-                {currentFeed && appUIDefinition.config.enableMarquee && (
-                  <MFMarquee
-                    currentFeed={currentFeed}
-                    rootContainerStyles={{
-                      flexDirection: GLOBALS.enableRTL ? "row-reverse" : "row",
-                      alignContent: "space-around",
-                    }}
-                  />
-                )}
-              </View>
-              <View style={HomeScreenStyles.contentContainer}>
-                {!isLoading && (
-                  <MFSwim
-                    // @ts-ignore
-                    ref={firstCardRef}
-                    feeds={feeds}
-                    onFocus={onFeedFocus}
-                    onListEmptyElementFocus={clearCurrentHub}
-                    onListFooterElementFocus={clearCurrentHub}
-                    limitSwimlaneItemsTo={
-                      appUIDefinition.config.limitSwimlaneItemsTo
+                        Routes.Settings,
+                        navigationAction.pageOpen
+                      );
                     }
-                    onViewAllPressed={onTapViewAll}
-                  />
-                )}
-              </View>
-              {isLoading && <MFLoader transparent={true} />}
-            </SafeAreaView>
+                  }}
+                />
+                <View style={HomeScreenStyles.posterViewContainerStyles}>
+                  {currentFeed && appUIDefinition.config.enableMarquee && (
+                    <MFMarquee
+                      currentFeed={currentFeed}
+                      rootContainerStyles={{
+                        flexDirection: GLOBALS.enableRTL
+                          ? "row-reverse"
+                          : "row",
+                        alignContent: "space-around",
+                      }}
+                    />
+                  )}
+                </View>
+                <View style={HomeScreenStyles.contentContainer}>
+                  {!isLoading && (
+                    <MFSwim
+                      // @ts-ignore
+                      ref={firstCardRef}
+                      feeds={feeds}
+                      onFocus={onFeedFocus}
+                      onListEmptyElementFocus={clearCurrentHub}
+                      onListFooterElementFocus={clearCurrentHub}
+                      limitSwimlaneItemsTo={
+                        appUIDefinition.config.limitSwimlaneItemsTo
+                      }
+                      onViewAllPressed={onTapViewAll}
+                    />
+                  )}
+                </View>
+                {isLoading && <MFLoader transparent={true} />}
+              </SafeAreaView>
+            )}
           </ImageBackground>
         </ImageBackground>
       </ImageBackground>

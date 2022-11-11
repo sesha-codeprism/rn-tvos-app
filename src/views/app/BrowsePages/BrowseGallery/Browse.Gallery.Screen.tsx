@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
-  BackHandler,
   Button,
   StyleSheet,
   Text,
-  TVMenuControl,
   useTVEventHandler,
   View,
   Animated,
-  Alert,
 } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -28,17 +25,21 @@ import { AppImages } from "../../../../assets/images";
 import {
   getBrowseFeedObject,
   getNetworkInfo,
+  removeTrailingSlash,
 } from "../../../../utils/assetUtils";
 import { getResolvedMetadata } from "../../../../components/MFMetadata/MFMetadataUtils";
 import LinearGradient from "react-native-linear-gradient";
-import { galleryFilter } from "../../../../utils/analytics/consts";
 import { getUIdef } from "../../../../utils/uidefinition";
-import { useFocusEffect } from "@react-navigation/native";
 import {
   browseType,
   feedBaseURI,
   ItemShowType,
 } from "../../../../utils/common";
+import { DefaultStore } from "../../../../utils/DiscoveryUtils";
+import { GLOBALS } from "../../../../utils/globals";
+import { useQuery } from "react-query";
+import { getDataFromUDL } from "../../../../../backend";
+import { parseUdl } from "../../../../../backend/udl/provider";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -120,29 +121,31 @@ export const getBrowseFeed = (
 };
 
 const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
-  const pivotConfig = getUIdef("LoginPage")?.config;
-  const { SORTBY_KEY, RESTRICTIONS_KEY } = galleryFilter;
-  const gradientView = getUIdef("BrowseGallery.GradientView")?.config;
+  const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [showFilterOptions, setShowFilterOptions] = useState(false);
+  const [top, setTop] = useState(16);
+  const [skip, setSkip] = useState(0);
   const browsePageConfig: any = getUIdef("BrowseGallery")?.config;
   const feed: Feed = props.route.params.feed;
   const baseValues = getBaseValues(feed, browsePageConfig);
   const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
   console.log("BaseValues", baseValues, "browseFeed", browseFeed);
+  const { data, isLoading, isError } = getDataForUDL(
+    `${browseFeed.Uri}?$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${browseFeed.pivots}`
+  );
 
-  const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
-  const [showFilterMenu, setShowFilterMenu] = useState(false);
-  const [showFilterOptions, setShowFilterOptions] = useState(false);
-  const { data, isLoading, isError } = getDataForUDL(feed.Uri);
+  const pivotsParam = "pivots=true";
+  const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
+  console.log(pivotURL);
   const menuAnim = React.useRef(new Animated.Value(SCREEN_WIDTH)).current;
   const optionsAnim = React.useRef(new Animated.Value(SCREEN_WIDTH)).current;
 
   useEffect(() => {
     console.log("Some log");
-
     props.navigation.addListener("beforeRemove", (e) => {
       console.log("Listener added to navigation");
       if (!showFilterMenu && !showFilterOptions) {
-        // If we don't have unsaved changes, then we don't need to do anything
         return;
       }
       e.preventDefault();
@@ -153,13 +156,10 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       }
     });
   }, []);
+
   const updateFeed = (focusedFeed: SubscriberFeed) => {
     setCurrentFeed(focusedFeed);
   };
-
-  const myTVEventHandler = (evt: any) => {};
-
-  useTVEventHandler(myTVEventHandler);
 
   const renderRatingValues = () => {
     //@ts-ignore
@@ -196,6 +196,19 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       </View>
     );
   };
+
+  const pivotQuery = useQuery(
+    "pivots",
+    async () => {
+      const pivots = await getDataFromUDL(pivotURL);
+      return pivots;
+    },
+    {
+      cacheTime: appUIDefinition.config.queryCacheTime,
+    }
+  );
+  console.log(pivotQuery.data);
+
   return (
     <View style={styles.root}>
       <View style={styles.topRow}>
