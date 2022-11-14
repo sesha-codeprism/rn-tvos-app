@@ -252,23 +252,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
             onFocus={() => {
               console.log("Filter focused");
             }}
-            onPress={
-              toggleMenu
-
-              // () => {
-              // console.log("Filter pressed");
-              // if (!showFilterMenu) {
-              //   setShowFilterMenu(true);
-              //   Animated.timing(menuAnim, {
-              //     useNativeDriver: true,
-              //     toValue: SCREEN_WIDTH - SCREEN_WIDTH * 0.2,
-              //     duration: 150,
-              //   }).start();
-              // } else {
-              //   console.log("Don't be an idiot");
-              // }
-              // }
-            }
+            onPress={toggleMenu}
             iconButtonStyles={{
               shouldRenderImage: true,
               iconPlacement: "Left",
@@ -374,55 +358,6 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
         subMenuOpen={openSubMenu}
         setOpenSubMenu={setOpenSubMenu}
       />
-      {/* <View
-        style={{
-          position: "absolute",
-          flexDirection: "row",
-          width: SCREEN_WIDTH,
-        }}
-      > */}
-      {/* {showFilterMenu && (
-          <Animated.View
-            style={{
-              width: SCREEN_WIDTH * 0.2,
-              height: SCREEN_HEIGHT,
-              backgroundColor: "#191B1F",
-              transform: [{ translateX: menuAnim }],
-            }}
-          >
-            <Button
-              title="Open Options"
-              onPress={() => {
-                setShowFilterOptions(true);
-                Animated.parallel([
-                  Animated.timing(menuAnim, {
-                    useNativeDriver: true,
-                    toValue: SCREEN_WIDTH - SCREEN_WIDTH * 0.4,
-                    duration: 150,
-                  }),
-                  Animated.timing(optionsAnim, {
-                    useNativeDriver: true,
-                    toValue: SCREEN_WIDTH - SCREEN_WIDTH * 0.2,
-                    duration: 150,
-                  }),
-                ]).start();
-              }}
-            />
-          </Animated.View>
-        )}
-        {showFilterOptions && (
-          <Animated.View
-            style={{
-              width: SCREEN_WIDTH * 0.3,
-              height: SCREEN_HEIGHT,
-              backgroundColor: "#202124",
-              transform: [{ translateX: optionsAnim }],
-              alignSelf: "flex-end",
-              position: "absolute",
-            }}
-          ></Animated.View>
-        )} */}
-      {/* </View> */}
     </View>
   );
 };
