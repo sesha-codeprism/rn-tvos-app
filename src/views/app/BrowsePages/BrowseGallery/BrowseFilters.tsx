@@ -285,10 +285,10 @@ const BrowseFilter = (props: BrowseFilterProps) => {
               }
               onFocus={() => {
                 onFocusMenu(item, index);
-                setFocusedSubMenu(null)
+                // setFocusedSubMenu(null)
               }}
               onPress={() => {
-                props.setOpenSubMenu(!props.subMenuOpen);
+                props.setOpenSubMenu(true);
               }}
             >
               <Text
@@ -315,6 +315,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
         {subMenuList.map((item, i) => {
           return (
             <Pressable
+            hasTVPreferredFocus={i === 0}
               key={i}
               style={
                 focusedSubMenu === i
