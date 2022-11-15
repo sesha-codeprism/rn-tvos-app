@@ -2,12 +2,13 @@ import {
   Dimensions,
   Image,
   Pressable,
+  PressableProps,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -230,6 +231,9 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   const [focusedMenu, setFocusedMenu] = useState(0);
   const [focusedSubMenu, setFocusedSubMenu] = useState<any>(0);
   const [selectedSubMenu, setSelectedSubMenu] = useState("");
+  const menuRef = filterData.map(() => useRef<PressableProps>(null));
+  const subMenuFirstRef = useRef<PressableProps>(null);
+  const [menuHasFocus, setMenuHasFocus] = useState(true);
 
   const offset = useSharedValue(fullCloseOffset);
   const animatedStyles = useAnimatedStyle(() => {
@@ -261,96 +265,123 @@ const BrowseFilter = (props: BrowseFilterProps) => {
     }
   }, [props.open, props.subMenuOpen]);
   const onFocusMenu = (name: string, index: number) => {
+    // @ts-ignore
     setFocusedMenu(index);
     const subMenu = filterData.find((item) => {
       return item.Name === name;
     })?.Pivots;
     setSubMenuList(subMenu ? subMenu : []);
   };
+  const onFocusBar = () => {
+    if (!menuHasFocus) {
+      // @ts-ignore
+      menuRef[focusedMenu].current?.setNativeProps({
+        hasTVPreferredFocus: true,
+      });
+      setFocusedSubMenu(null);
+      setMenuHasFocus(true);
+    } else {
+      setMenuHasFocus(false);
+      // @ts-ignore
+      subMenuFirstRef.current?.setNativeProps({
+        hasTVPreferredFocus: true,
+      });
+    }
+  };
   return (
     <Animated.View style={[styles.container, animatedStyles]}>
       <View style={styles.innerContainer}>
-        {menuList.map((item, index) => {
-          return (
-            <Pressable
-              hasTVPreferredFocus={index === 0}
-              key={index}
-              style={
-                focusedMenu === index
-                  ? [
-                      styles.menuItem,
-                      { borderRadius: 6, backgroundColor: "#252629" },
-                    ]
-                  : styles.menuItem
-              }
-              onFocus={() => {
-                onFocusMenu(item, index);
-                // setFocusedSubMenu(null)
-              }}
-              onPress={() => {
-                props.setOpenSubMenu(true);
-              }}
-            >
-              <Text
+        <>
+          {menuList.map((item, index) => {
+            return (
+              <Pressable
+                // @ts-ignore
+                ref={menuRef[index]}
+                hasTVPreferredFocus={index === 0}
+                key={index}
                 style={
                   focusedMenu === index
-                    ? { ...styles.MenuItemText, color: "white" }
-                    : styles.MenuItemText
+                    ? [
+                        styles.menuItem,
+                        { borderRadius: 6, backgroundColor: "#252629" },
+                      ]
+                    : styles.menuItem
                 }
+                onFocus={() => {
+                  onFocusMenu(item, index);
+                  // setFocusedSubMenu(null)
+                }}
+                onPress={() => {
+                  props.setOpenSubMenu(true);
+                }}
               >
-                {item}
-              </Text>
-              {focusedMenu === index && (
-                <Image
-                  source={AppImages.rightArrowWhite}
-                  style={{ width: 14, height: 24 }}
-                />
-              )}
-            </Pressable>
-          );
-        })}
+                <Text
+                  style={
+                    focusedMenu === index
+                      ? { ...styles.MenuItemText, color: "white" }
+                      : styles.MenuItemText
+                  }
+                >
+                  {item}
+                </Text>
+                {focusedMenu === index && (
+                  <Image
+                    source={AppImages.rightArrowWhite}
+                    style={{ width: 14, height: 24 }}
+                  />
+                )}
+              </Pressable>
+            );
+          })}
+          <TouchableOpacity
+            style={styles.touchableBar}
+            onFocus={onFocusBar}
+          ></TouchableOpacity>
+        </>
       </View>
       <View style={styles.subMenuContainer}>
         <ScrollView>
-        {subMenuList.map((item, i) => {
-          return (
-            <Pressable
-            hasTVPreferredFocus={i === 0}
-              key={i}
-              style={
-                focusedSubMenu === i
-                  ? [
-                      styles.subMenuItem,
-                      {
-                        backgroundColor: "#053C69",
-                        borderRadius: 6,
-                      },
-                    ]
-                  : styles.subMenuItem
-              }
-              onFocus={() => {
-                setFocusedSubMenu(i);
-              }}
-              onPress={() => {
-                setSelectedSubMenu(item.Name);
-                // props.setOpenSubMenu(!props.subMenuOpen);
-              }}
-            >
-              {selectedSubMenu === item.Name ? (
-                <Image
-                  source={AppImages.checked_circle}
-                  style={styles.icCircle}
-                />
-              ) : (
-                <Image
-                  source={AppImages.unchecked_circle}
-                  style={styles.icCircle}
-                />
-              )}
-              <Text style={styles.MenuItemText}> {item.Name}</Text>
-            </Pressable>
-          );
-        })}
+          {subMenuList.map((item, i) => {
+            return (
+              <Pressable
+                // @ts-ignore
+                ref={i === 0 ? subMenuFirstRef : null}
+                // hasTVPreferredFocus={i === 0}
+                key={i}
+                style={
+                  focusedSubMenu === i
+                    ? [
+                        styles.subMenuItem,
+                        {
+                          backgroundColor: "#053C69",
+                          borderRadius: 6,
+                        },
+                      ]
+                    : styles.subMenuItem
+                }
+                onFocus={() => {
+                  setFocusedSubMenu(i);
+                }}
+                onPress={() => {
+                  setSelectedSubMenu(item.Name);
+                  // props.setOpenSubMenu(!props.subMenuOpen);
+                }}
+              >
+                {selectedSubMenu === item.Name ? (
+                  <Image
+                    source={AppImages.checked_circle}
+                    style={styles.icCircle}
+                  />
+                ) : (
+                  <Image
+                    source={AppImages.unchecked_circle}
+                    style={styles.icCircle}
+                  />
+                )}
+                <Text style={styles.MenuItemText}> {item.Name}</Text>
+              </Pressable>
+            );
+          })}
         </ScrollView>
       </View>
     </Animated.View>
@@ -409,5 +440,16 @@ const styles = StyleSheet.create({
     padding: 20,
     width: "54%",
   },
-  icCircle: { width: 35, height: 35, marginRight: 25 },
+  icCircle: {
+    width: 35,
+    height: 35,
+    marginRight: 25,
+  },
+  touchableBar: {
+    height: "100%",
+    width: 30,
+    position: "absolute",
+    backgroundColor: "transparent",
+    right: 0,
+  },
 });
