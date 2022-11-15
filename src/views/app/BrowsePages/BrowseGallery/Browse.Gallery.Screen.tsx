@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  StyleSheet,
-  Text,
-  useTVEventHandler,
-  View,
-  Animated,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFText from "../../../../components/MFText";
@@ -23,157 +16,73 @@ import MFLoader from "../../../../components/MFLoader";
 import FastImage from "react-native-fast-image";
 import { AppImages } from "../../../../assets/images";
 import {
-  getBrowseFeedObject,
   getNetworkInfo,
   removeTrailingSlash,
 } from "../../../../utils/assetUtils";
 import { getResolvedMetadata } from "../../../../components/MFMetadata/MFMetadataUtils";
 import LinearGradient from "react-native-linear-gradient";
 import { getUIdef } from "../../../../utils/uidefinition";
-import {
-  UNSTABLE_usePreventRemove,
-  useFocusEffect,
-} from "@react-navigation/native";
-import {
-  browseType,
-  feedBaseURI,
-  ItemShowType,
-} from "../../../../utils/common";
+import { UNSTABLE_usePreventRemove } from "@react-navigation/native";
+import { FilterValue } from "../../../../utils/common";
 import BrowseFilter from "./BrowseFilters";
 import { useQuery } from "react-query";
 import { getDataFromUDL } from "../../../../../backend";
 import { DefaultStore } from "../../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../../utils/globals";
+import {
+  getBrowseFeed,
+  getBaseValues,
+  createInitialFilterState,
+} from "./BrowseUtils/BrowseUtils";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
 }
 
-export const getBaseValues = (feed: any, browsePageConfig: any) => {
-  const browseFeedObject = getBrowseFeedObject(feed, browsePageConfig);
-  let pivots =
-    feed.NavigationTargetUri?.split("?")[1]?.split("&")[0] || undefined;
-  let orderBy = browseFeedObject?.params?.$orderBy;
-  if (pivots) {
-    pivots = pivots?.replace("=", "|");
-  }
-  if (browseFeedObject?.params?.baseFilters) {
-    pivots = pivots
-      ? pivots?.concat(",", browseFeedObject.params?.baseFilters)
-      : browseFeedObject.params?.baseFilters;
-  }
-  if (feed?.ItemType && feed?.ItemType === ItemShowType.App) {
-    orderBy =
-      feed.NavigationTargetUri?.split("&")[1]?.split("=")[1] ||
-      browseFeedObject?.params?.$orderBy;
-  }
-  return {
-    orderBy,
-    pivots,
-  };
-};
-
-export const getBrowseFeed = (
-  feed: any,
-  baseValues: any,
-  parsedState: { pivots?: string; orderBy?: string; showType?: string },
-  page: number,
-  browsePageConfig: any
-) => {
-  const browseFeed = { ...feed };
-  const navigationTargetUri = feed.NavigationTargetUri?.split("?")[0];
-  const browseFeedObject = getBrowseFeedObject(feed, browsePageConfig);
-
-  let pivots = parsedState?.pivots || "";
-
-  const baseValuePivots = baseValues?.pivots?.split(",") || [];
-
-  for (const pivot of baseValuePivots) {
-    if (!pivots.includes(pivot?.split("|")[0])) {
-      pivots += pivots ? "," + pivot : pivot;
-    }
-  }
-
-  if (feed.pivotGroup) {
-    pivots = pivots + `,${feed.pivotGroup}|${feed.Id}`;
-  }
-  if (
-    (navigationTargetUri === browseType.browsepromotions &&
-      feedBaseURI.subscriber.test(feed.Uri)) ||
-    navigationTargetUri === browseType.libraries
-  ) {
-    const libraryId = feed.Uri?.split("/").pop();
-    browseFeed["Uri"] = `${browseFeedObject.uri}/${libraryId}`;
-  } else {
-    browseFeed["Uri"] = browseFeedObject.uri;
-  }
-  if (feed.ItemType === ItemShowType.SvodPackage) {
-    browseFeed["CategoryId"] = parsedState.pivots
-      ? parsedState.pivots
-      : feed.CategoryId;
-  }
-
-  browseFeed["pivots"] = pivots;
-  browseFeed["$top"] = browseFeedObject.params.$top;
-  browseFeed["$orderBy"] = parsedState.orderBy || baseValues.orderBy;
-  browseFeed["types"] =
-    browseFeedObject.params.types && browseFeedObject.params.types?.split("|");
-  browseFeed["$skip"] = browseFeedObject.params.$top * page;
-  browseFeed["ShowType"] =
-    parsedState.showType || browseFeedObject.params.showType;
-  return browseFeed;
-};
-
 const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
-  const [showFilterMenu, setShowFilterMenu] = useState(false);
-  const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [top, setTop] = useState(16);
   const [skip, setSkip] = useState(0);
+  const [openMenu, setOpenMenu] = useState(false);
+  const [openSubMenu, setOpenSubMenu] = useState(false);
+  const [filterValue, setFilterValue] = useState<FilterValue>();
+  const [intialFilter, setInitialFilter] = useState<any>();
+
   const browsePageConfig: any = getUIdef("BrowseGallery")?.config;
   const feed: Feed = props.route.params.feed;
   const baseValues = getBaseValues(feed, browsePageConfig);
   const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
-  console.log("BaseValues", baseValues, "browseFeed", browseFeed);
   const { data, isLoading, isError } = getDataForUDL(
     `${browseFeed.Uri}?$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${browseFeed.pivots}`
   );
-
   const pivotsParam = "pivots=true";
   const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
-  console.log(pivotURL);
-  const menuAnim = React.useRef(new Animated.Value(SCREEN_WIDTH)).current;
-  const optionsAnim = React.useRef(new Animated.Value(SCREEN_WIDTH)).current;
-  const [openMenu, setOpenMenu] = useState(false);
-  const [openSubMenu, setOpenSubMenu] = useState(false);
-  useEffect(() => {
-    console.log("Some log");
-    props.navigation.addListener("beforeRemove", (e) => {
-      console.log("Listener added to navigation");
-      if (!showFilterMenu && !showFilterOptions) {
-        return;
-      }
-      e.preventDefault();
-      if (showFilterMenu && showFilterOptions) {
-        setShowFilterOptions(false);
-      } else if (showFilterMenu && !showFilterOptions) {
-        setShowFilterMenu(false);
-      }
-    });
-  }, []);
+  useEffect(() => {}, []);
 
   UNSTABLE_usePreventRemove(openMenu, (data) => {
     openSubMenu ? setOpenSubMenu(false) : setOpenMenu(false);
   });
 
   const toggleMenu = () => {
-    console.log("toggleMenu called", openMenu);
     setOpenMenu(true);
   };
 
   const updateFeed = (focusedFeed: SubscriberFeed) => {
     setCurrentFeed(focusedFeed);
   };
+
+  const pivotQuery = useQuery(
+    "pivots",
+    async () => {
+      const pivots = await getDataFromUDL(pivotURL);
+      const firstFilter = createInitialFilterState(pivots.data, baseValues);
+      console.log("firstFilter", firstFilter);
+      return pivots;
+    },
+    {
+      cacheTime: appUIDefinition.config.queryCacheTime,
+    }
+  );
 
   const renderRatingValues = () => {
     //@ts-ignore
@@ -210,18 +119,6 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       </View>
     );
   };
-
-  const pivotQuery = useQuery(
-    "pivots",
-    async () => {
-      const pivots = await getDataFromUDL(pivotURL);
-      return pivots;
-    },
-    {
-      cacheTime: appUIDefinition.config.queryCacheTime,
-    }
-  );
-  console.log(pivotQuery.data);
 
   return (
     <View style={styles.root}>
@@ -352,12 +249,25 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
           )}
         </View>
       </View>
-      <BrowseFilter
-        //@ts-ignore
-        open={openMenu}
-        subMenuOpen={openSubMenu}
-        setOpenSubMenu={setOpenSubMenu}
-      />
+      {pivotQuery.isLoading ? (
+        <View />
+      ) : (
+        <BrowseFilter
+          //@ts-ignore
+          open={openMenu}
+          filterData={pivotQuery.data.data}
+          handleFilterChange={(value) => {
+            console.log("Value is", value);
+          }}
+          defaultPivots={baseValues}
+          subMenuOpen={openSubMenu}
+          setOpenSubMenu={setOpenSubMenu}
+          filterState={filterValue!}
+          onChange={function (filterState: FilterValue): void {
+            console.log("filterState", filterState);
+          }}
+        />
+      )}
     </View>
   );
 };

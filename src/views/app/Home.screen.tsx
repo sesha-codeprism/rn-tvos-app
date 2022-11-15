@@ -30,6 +30,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import { config } from "../../config/config";
 
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
@@ -122,6 +123,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     }
   };
 
+  console.log(config.guide.epgConfig.filters);
   const onTapViewAll = (feed: any) => {
     const payload: any = {
       feed,

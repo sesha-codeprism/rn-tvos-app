@@ -21,7 +21,6 @@ import { feedActionsByURI } from "../../../../utils/feedUtils";
 import BrowseCategoryCarousel from "./CategoryCarousel";
 import LinearGradient from "react-native-linear-gradient";
 import { AppImages } from "../../../../assets/images";
-import { getBrowseFeed } from "../BrowseGallery/Browse.Gallery.Screen";
 import { DefaultStore } from "../../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../../utils/globals";
 
@@ -83,11 +82,8 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
     return browseFeed;
   };
   useEffect(() => {
-    console.log(
-      "BrowsePageConfig",
-      browsePageConfig[props.route.params.navigationTargetUri].uri
-    );
     const browseFeed = browseFeedParams(props);
+    console.log("BrowsePageConfig", browseFeed);
     const feedDispatch = `${browseFeed.Uri}/?id=${browseFeed.Id}&$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${browseFeed.pivots}`;
     setFeedDispatch(feedDispatch);
   }, []);

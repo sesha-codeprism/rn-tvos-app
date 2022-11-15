@@ -4,6 +4,7 @@ import {
 } from "../../backend/@types/globals";
 import { BootStrapResponse } from "../@types/BootStrapResponse";
 import { UserProfile } from "../@types/UserProfile";
+import { BrowseGallery } from "./common";
 
 export const landingInfo: MFbootstrapLandingInfo = {
   oauth: "liveid",
@@ -56,7 +57,8 @@ interface GLOBALSType {
   rootNavigation: any;
   /** Should the UI be RTL */
   enableRTL: boolean;
-  hubGroupFocused: boolean;
+  browseGalleryData?: BrowseGallery;
+
   /** Async store data */
   store: {
     accessToken: string | null;
@@ -97,7 +99,6 @@ export const GLOBALS: GLOBALSType = {
     tenantId: landingInfo.tenantId,
   },
   createUserProfile: { image: "", name: "", optOutPersonalDataUse: false },
-  hubGroupFocused: false,
   editUserProfile: {
     Name: "",
     Id: "",
@@ -109,6 +110,12 @@ export const GLOBALS: GLOBALSType = {
   rootNavigation: null,
   bootstrapSelectors: null,
   continuationToken: "",
+  browseGalleryData: {
+    page: 0,
+    lastPageReached: false,
+    itemFeed: [],
+    filterData: {},
+  },
   store: {
     accessToken: null,
     refreshToken: null,
