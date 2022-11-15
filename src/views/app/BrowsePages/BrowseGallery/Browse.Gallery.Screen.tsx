@@ -255,17 +255,17 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
         <BrowseFilter
           //@ts-ignore
           open={openMenu}
-          filterData={pivotQuery.data.data}
-          handleFilterChange={(value) => {
-            console.log("Value is", value);
-          }}
-          defaultPivots={baseValues}
+          // filterData={pivotQuery.data.data}
+          // handleFilterChange={(value) => {
+          //   console.log("Value is", value);
+          // }}
+          // defaultPivots={baseValues}
           subMenuOpen={openSubMenu}
           setOpenSubMenu={setOpenSubMenu}
-          filterState={filterValue!}
-          onChange={function (filterState: FilterValue): void {
-            console.log("filterState", filterState);
-          }}
+          // filterState={filterValue!}
+          // onChange={function (filterState: FilterValue): void {
+          //   console.log("filterState", filterState);
+          // }}
         />
       )}
     </View>

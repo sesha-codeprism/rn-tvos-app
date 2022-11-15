@@ -1,12 +1,18 @@
 import { browseType, feedBaseURI, galleryFilter, ItemShowType } from "../../../../../utils/analytics/consts";
 import { getBrowseFeedObject } from "../../../../../utils/assetUtils";
-import { ConfigData } from "../BrowseFilters";
+import { Pivot } from "../../../../../utils/common";
 
 const { SORTBY_KEY, SHOWTYPE_KEY } = galleryFilter;
 
 export type DefaultValuesType = {
     orderBy: string;
     pivots: string;
+};
+export type ConfigData = {
+    Id: string;
+    Name: string;
+    Pivots: Pivot[];
+    MultiSelect?: boolean;
 };
 
 export const createInitialFilterState = (
