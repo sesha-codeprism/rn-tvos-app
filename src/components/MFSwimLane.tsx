@@ -39,6 +39,7 @@ interface MFSwimLaneProps {
     | ((event: SubscriberFeed) => void)
     | undefined;
   flatListStyle?: any;
+  autoFocusOnFirstCard?: boolean;
 }
 
 const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(

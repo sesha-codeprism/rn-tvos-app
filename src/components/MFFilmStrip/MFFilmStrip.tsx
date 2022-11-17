@@ -91,6 +91,7 @@ export interface MFFilmStripProps {
     | ((event: SubscriberFeed) => void)
     | undefined;
   flatListStyle?: any;
+  autoFocusOnFirstCard?: boolean;
 }
 /**
  * Component that renders horizontal-scrolling collection of items
@@ -167,6 +168,13 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                 <MFLibraryCard
                   // @ts-ignore
                   ref={index === 0 ? ref : null}
+                  autoFocusOnFirstCard={
+                    props.autoFocusOnFirstCard
+                      ? index === 0
+                        ? true
+                        : false
+                      : false
+                  }
                   key={`Index${index}`}
                   data={item}
                   style={props.style}

@@ -59,8 +59,8 @@ const MFContainedButton = React.forwardRef(
         hasTVPreferredFocus
         disabled={props.containedButtonStyle?.enabled}
         style={[
-          props.style,
           Styles.Contained,
+          props.style,
           focused
             ? StyleSheet.flatten([
                 Styles.focused,

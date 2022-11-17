@@ -55,6 +55,7 @@ export interface MFLibraryCardProps {
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
     | undefined;
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
+  autoFocusOnFirstCard?: boolean;
 }
 
 const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
@@ -183,6 +184,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
 
     return (
       <TouchableOpacity
+        hasTVPreferredFocus={props.autoFocusOnFirstCard}
         ref={ref}
         style={[
           styles.rootContainer,

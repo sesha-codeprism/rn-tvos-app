@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -7,7 +7,7 @@ import { Feed } from "../../../../@types/HubsResponse";
 import MFButton, {
   MFButtonVariant,
 } from "../../../../components/MFButton/MFButton";
-import { getDataForUDL } from "../../../../config/queries";
+import { getDataForUDL, resetSpecificQuery } from "../../../../config/queries";
 import MFGridView from "../../../../components/MFGridView";
 import { appUIDefinition } from "../../../../config/constants";
 import { HomeScreenStyles } from "../../Homescreen.styles";
@@ -17,65 +17,144 @@ import FastImage from "react-native-fast-image";
 import { AppImages } from "../../../../assets/images";
 import {
   getNetworkInfo,
+  massageSubscriberFeed,
   removeTrailingSlash,
 } from "../../../../utils/assetUtils";
 import { getResolvedMetadata } from "../../../../components/MFMetadata/MFMetadataUtils";
 import LinearGradient from "react-native-linear-gradient";
-import { getUIdef } from "../../../../utils/uidefinition";
+import { getUIdef, initUIDef } from "../../../../utils/uidefinition";
 import { UNSTABLE_usePreventRemove } from "@react-navigation/native";
-import { FilterValue } from "../../../../utils/common";
+import { FilterValue, SourceType } from "../../../../utils/common";
 import BrowseFilter from "./BrowseFilters";
 import { useQuery } from "react-query";
 import { getDataFromUDL } from "../../../../../backend";
-import { DefaultStore } from "../../../../utils/DiscoveryUtils";
+import {
+  DefaultStore,
+  massageDiscoveryFeed,
+} from "../../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../../utils/globals";
 import {
   getBrowseFeed,
   getBaseValues,
   createInitialFilterState,
 } from "./BrowseUtils/BrowseUtils";
+import { parseUdl } from "../../../../../backend/udl/provider";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
 }
 
 const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
+  const didMountRef = useRef(false);
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const [top, setTop] = useState(16);
   const [skip, setSkip] = useState(0);
   const [openMenu, setOpenMenu] = useState(false);
   const [openSubMenu, setOpenSubMenu] = useState(false);
   const [filterValue, setFilterValue] = useState<FilterValue>();
-  const [intialFilter, setInitialFilter] = useState<any>();
+  const [filterState, setFilterState] = useState<any>();
+  const [browsePivots, setBrowsePivots] = useState(
+    "ShowType|Movie,Price|Free,orderBy|Popularity"
+  );
 
   const browsePageConfig: any = getUIdef("BrowseGallery")?.config;
   const feed: Feed = props.route.params.feed;
   const baseValues = getBaseValues(feed, browsePageConfig);
   const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
-  const { data, isLoading, isError } = getDataForUDL(
-    `${browseFeed.Uri}?$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${browseFeed.pivots}`
-  );
   const pivotsParam = "pivots=true";
   const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (didMountRef.current) {
+      setBrowsePivots(browseFeed.pivots);
+    } else didMountRef.current = true;
+  });
 
   UNSTABLE_usePreventRemove(openMenu, (data) => {
-    openSubMenu ? setOpenSubMenu(false) : setOpenMenu(false);
+    // openSubMenu ? setOpenSubMenu(false) : setOpenMenu(false);
+    setOpenSubMenu(false);
+    setOpenMenu(false);
   });
 
   const toggleMenu = () => {
     setOpenMenu(true);
+    setOpenSubMenu(true);
+  };
+
+  //@ts-ignore
+  const fetchFeeds = async ({ queryKey }) => {
+    const [_, paramPivots] = queryKey;
+    console.log("paramPivots", paramPivots);
+    console.log("Running..");
+    const uri = `${browseFeed.Uri}?$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${browsePivots}`;
+    const udlID = parseUdl(uri);
+    const data = await getDataFromUDL(uri);
+    if (data) {
+      if (udlID!.id.split("/")[0] === "discovery") {
+        const hasDataItems = data.data.Items;
+        if (!hasDataItems) {
+          const dataSource = { Items: data.data };
+          const massagedData = massageDiscoveryFeed(dataSource, SourceType.VOD);
+          return massagedData;
+        } else {
+          const massagedData = massageDiscoveryFeed(data.data, SourceType.VOD);
+          return massagedData;
+        }
+      } else {
+        const massagedData = massageSubscriberFeed(
+          data.data,
+          "",
+          SourceType.VOD
+        );
+        return massagedData;
+      }
+    } else {
+      return undefined;
+    }
+  };
+
+  const refreshFeedsByPivots = () => {
+    const parsedFilterState = filterState;
+    let finalPivots = "";
+    const parsedPivots = Object.keys(parsedFilterState).reduce(
+      (prev: any, key: any) => {
+        if (parsedFilterState[key].selectedIds.length > 0) {
+          if (prev.length > 0) {
+            return prev + "," + parsedFilterState[key].selectedIds;
+          } else {
+            return prev + parsedFilterState[key].selectedIds;
+          }
+        } else {
+          return prev;
+        }
+      },
+      finalPivots
+    );
+    setBrowsePivots(parsedPivots);
+    resetSpecificQuery("browseFeed").then(() => {
+      feedQuery
+        .refetch({})
+        .then((value) => {
+          console.log("Refetching done with", browsePivots);
+        })
+        .catch((err) => console.log("some error happened", err));
+    });
   };
 
   const updateFeed = (focusedFeed: SubscriberFeed) => {
     setCurrentFeed(focusedFeed);
   };
 
+  const feedQuery = useQuery(`browseFeed-${browsePivots}`, fetchFeeds, {
+    cacheTime: appUIDefinition.config.queryCacheTime,
+    staleTime: appUIDefinition.config.queryStaleTime,
+  });
+
   const pivotQuery = useQuery(
     "pivots",
     async () => {
       const pivots = await getDataFromUDL(pivotURL);
       const firstFilter = createInitialFilterState(pivots.data, baseValues);
+      setFilterState(firstFilter);
       console.log("firstFilter", firstFilter);
       return pivots;
     },
@@ -83,6 +162,24 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       cacheTime: appUIDefinition.config.queryCacheTime,
     }
   );
+
+  const handleFilterChange = (value: {
+    key: string;
+    value: { Id: string; Name: string };
+  }) => {
+    let parseFilter = filterState;
+    console.log("Value", value, "parseFilter", parseFilter);
+    /** Check if the array already has the data.. if Yes, delete it */
+    if (parseFilter[value.key].selectedIds.includes(value.value.Id)) {
+      parseFilter[value.key].selectedIds = [];
+    } else {
+      /** array doesn't have data.. add and make the api call */
+      parseFilter[value.key].selectedIds = [value.value.Id];
+      console.log(parseFilter);
+    }
+    setFilterState(parseFilter);
+    refreshFeedsByPivots();
+  };
 
   const renderRatingValues = () => {
     //@ts-ignore
@@ -119,6 +216,8 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       </View>
     );
   };
+
+  console.log("Current data", feedQuery.data);
 
   return (
     <View style={styles.root}>
@@ -220,7 +319,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
           )}
         </View>
         <View style={styles.gridViewContainerStyles}>
-          {isLoading ? (
+          {feedQuery.isLoading ? (
             <MFLoader transparent={true} />
           ) : (
             <LinearGradient
@@ -239,11 +338,12 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
               }}
             >
               <MFGridView
-                dataSource={data}
+                dataSource={feedQuery.data}
                 style={HomeScreenStyles.portraitCardStyles}
                 imageStyle={HomeScreenStyles.portraitCardImageStyles}
                 focusedStyle={HomeScreenStyles.focusedStyle}
                 onFocus={updateFeed}
+                autoFocusOnFirstCard
               />
             </LinearGradient>
           )}
@@ -255,13 +355,15 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
         <BrowseFilter
           //@ts-ignore
           open={openMenu}
-          // filterData={pivotQuery.data.data}
+          filterData={pivotQuery.data.data}
           // handleFilterChange={(value) => {
           //   console.log("Value is", value);
           // }}
           // defaultPivots={baseValues}
           subMenuOpen={openSubMenu}
-          setOpenSubMenu={setOpenSubMenu}
+          filterState={filterState}
+          setOpenSubMenu={() => {}}
+          handleOnPress={handleFilterChange}
           // filterState={filterValue!}
           // onChange={function (filterState: FilterValue): void {
           //   console.log("filterState", filterState);

@@ -35,6 +35,7 @@ interface MFGridProps {
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
 
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
+  autoFocusOnFirstCard?: boolean;
 }
 
 const MFGridView: React.FunctionComponent<MFGridProps> = (props) => {

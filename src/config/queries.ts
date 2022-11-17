@@ -107,3 +107,11 @@ export const resetCaches = () => {
     /** Clear out the complete Query and Mutation caches */
     queryClient.clear()
 }
+
+
+export const resetSpecificQuery = async (key: string) => {
+    queryClient.invalidateQueries({ queryKey: [key] }).then(() => {
+        console.log('Invalidated', key, "query");
+    });
+
+}

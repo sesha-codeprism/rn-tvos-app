@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import Animated, {
@@ -16,12 +17,18 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { AppImages } from "../../../../assets/images";
-import { ScrollView } from "react-native-gesture-handler";
+import MFButton, {
+  MFButtonVariant,
+} from "../../../../components/MFButton/MFButton";
+import { appUIDefinition } from "../../../../config/constants";
 
 type BrowseFilterProps = {
   open: boolean;
+  filterData: any;
+  filterState: any;
   setOpenSubMenu: (open: boolean) => void;
   subMenuOpen: boolean;
+  handleOnPress?: (value: any) => void;
 };
 const filterData = [
   {
@@ -226,15 +233,16 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   const halfOpenOffset = Dimensions.get("screen").width * 0.25;
   const fullCloseOffset = Dimensions.get("screen").width * 0.5;
   const fullOpenOffset = 0;
-  const [menuList, setMenuList] = useState<Array<string>>([]);
+  const [menuList, setMenuList] = useState<Array<any>>();
   const [subMenuList, setSubMenuList] = useState<Array<any>>([]);
   const [focusedMenu, setFocusedMenu] = useState(0);
   const [focusedSubMenu, setFocusedSubMenu] = useState<any>(0);
+  const [selectedMenu, setSelectedMenu] = useState<any>();
   const [selectedSubMenu, setSelectedSubMenu] = useState("");
+  const [clearFocused, setClearFocused] = useState(false);
   const menuRef = filterData.map(() => useRef<PressableProps>(null));
   const subMenuFirstRef = useRef<PressableProps>(null);
   const [menuHasFocus, setMenuHasFocus] = useState(true);
-
   const offset = useSharedValue(fullCloseOffset);
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -250,9 +258,11 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   });
 
   useEffect(() => {
+    console.log(props.filterState);
     const menu = filterData.map((item, index) => {
-      return item.Name;
+      return { Id: item.Id, Name: item.Name };
     });
+    //@ts-ignore
     setMenuList(menu);
     console.log("props.open in useEffect", props.open);
     offset.value = props.open
@@ -264,11 +274,11 @@ const BrowseFilter = (props: BrowseFilterProps) => {
       props.setOpenSubMenu(false);
     }
   }, [props.open, props.subMenuOpen]);
-  const onFocusMenu = (name: string, index: number) => {
+  const onFocusMenu = (name: any, index: number) => {
     // @ts-ignore
     setFocusedMenu(index);
     const subMenu = filterData.find((item) => {
-      return item.Name === name;
+      return item.Name === name.Name;
     })?.Pivots;
     setSubMenuList(subMenu ? subMenu : []);
   };
@@ -292,7 +302,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
     <Animated.View style={[styles.container, animatedStyles]}>
       <View style={styles.innerContainer}>
         <>
-          {menuList.map((item, index) => {
+          {menuList?.map((item, index) => {
             return (
               <Pressable
                 // @ts-ignore
@@ -303,15 +313,17 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                   focusedMenu === index
                     ? [
                         styles.menuItem,
-                        { borderRadius: 6, backgroundColor: "#252629" },
+                        { borderRadius: 6, backgroundColor: "#063961" },
                       ]
                     : styles.menuItem
                 }
                 onFocus={() => {
+                  setSelectedMenu(item);
                   onFocusMenu(item, index);
                   // setFocusedSubMenu(null)
                 }}
                 onPress={() => {
+                  setSelectedMenu(item);
                   props.setOpenSubMenu(true);
                 }}
               >
@@ -322,7 +334,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                       : styles.MenuItemText
                   }
                 >
-                  {item}
+                  {item.Name}
                 </Text>
                 {focusedMenu === index && (
                   <Image
@@ -338,6 +350,56 @@ const BrowseFilter = (props: BrowseFilterProps) => {
             onFocus={onFocusBar}
           ></TouchableOpacity>
         </>
+        <Pressable
+          // @ts-ignore
+          hasTVPreferredFocus={false}
+          style={
+            clearFocused
+              ? [
+                  styles.menuItem,
+                  {
+                    borderRadius: 6,
+                    height: 62,
+                    backgroundColor: "#063961",
+                    alignContent: "center",
+                    justifyContent: "center",
+                  },
+                ]
+              : [
+                  styles.menuItem,
+                  {
+                    backgroundColor: "#3A3A3B",
+                    height: 62,
+                    alignContent: "center",
+                    justifyContent: "center",
+                  },
+                ]
+          }
+          onFocus={() => {
+            setClearFocused(true);
+            setFocusedMenu(-1);
+            // setFocusedSubMenu(null)
+          }}
+          onBlur={() => {
+            setClearFocused(false);
+          }}
+          onPress={() => {
+            //TODO: Write logic for clear function
+          }}
+        >
+          <Text
+            style={{
+              ...styles.MenuItemText,
+              color: "white",
+              textAlign: "center",
+              fontSize: 25,
+              fontWeight: "600",
+              alignSelf: "center",
+            }}
+          >
+            Clear Focused
+          </Text>
+        </Pressable>
       </View>
       <View style={styles.subMenuContainer}>
         <ScrollView>
@@ -363,11 +425,15 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                   setFocusedSubMenu(i);
                 }}
                 onPress={() => {
-                  setSelectedSubMenu(item.Name);
                   // props.setOpenSubMenu(!props.subMenuOpen);
+                  const values = { key: selectedMenu.Id, value: item };
+                  props.handleOnPress && props.handleOnPress(values);
+                  setSelectedSubMenu(item.Name);
                 }}
               >
-                {selectedSubMenu === item.Name ? (
+                {props.filterState[selectedMenu.Id]?.selectedIds?.includes(
+                  item.Id
+                ) ? (
                   <Image
                     source={AppImages.checked_circle}
                     style={styles.icCircle}
@@ -378,7 +444,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                     style={styles.icCircle}
                   />
                 )}
-                <Text style={styles.MenuItemText}> {item.Name}</Text>
+                <Text style={styles.MenuItemText}>{item.Name}</Text>
               </Pressable>
             );
           })}
@@ -403,6 +469,7 @@ const styles = StyleSheet.create({
     height: "100%",
     padding: 20,
     width: "46%",
+    flexDirection: "column",
   },
   menuItem: {
     height: 100,
@@ -411,7 +478,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-
     paddingLeft: 30,
     paddingRight: 35,
     // marginBottom: 10,
@@ -449,7 +515,6 @@ const styles = StyleSheet.create({
     height: "100%",
     width: 30,
     position: "absolute",
-    backgroundColor: "transparent",
     right: 0,
   },
 });
