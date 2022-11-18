@@ -16,7 +16,7 @@ export const DISCOVERY_URL =
 
 const versionString = "/v4/"
 
-// export const DISCOVERY_URL = 'https://ottapp-appgw-client-a.cim.mr.tv3cloud.com/S1/discovery';
+// export const DISCOVERY_URL = 'https://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/discovery';
 
 /** API call to get all Hubs data */
 export const getHubs = async (id: string, params: any) => {

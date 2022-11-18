@@ -129,7 +129,9 @@ const MFMenu = (props: MFMenuProps) => {
                   onBlur={() => {
                     setFocused("");
                   }}
-                  onPress={() => {}}
+                  onPress={() => {
+                    throw new Error("some error");
+                  }}
                 />
               </View>
             </View>

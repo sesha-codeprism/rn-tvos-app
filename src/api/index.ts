@@ -2,7 +2,7 @@ import axios from 'axios';
 import { GLOBALS } from '../utils/globals';
 
 export const DOMAIN: string =
-  'https://ottapp-appgw-client-a.cim.mr.tv3cloud.com';
+  'https://ottapp-appgw-client-a.dev.mr.tv3cloud.com';
 
 export const AxiosSecure = axios.create({
   withCredentials: true,
@@ -77,7 +77,7 @@ const errorResponseHandler = (error: any) => {
 };
 
 export const API = {
-  login: `${DOMAIN}/Green/sts//oauth/signin/LIVEID?tenant=default&deviceId=c-c6114a92-6a0d55ba-294f0cd5ba&response_type=token&redirect_uri=https%3A%2F%2Freachclient.cim.mr.tv3cloud.com%2F%3Foauth%3DLIVEID%26tenant%3Ddefault%239wxtmga2d8o&deviceTypeV2=Web&deviceType=WebChrome`,
+  login: `${DOMAIN}/Green/sts//oauth/signin/LIVEID?tenant=default&deviceId=c-c6114a92-6a0d55ba-294f0cd5ba&response_type=token&redirect_uri=https%3A%2F%2Freachclient.dev.mr.tv3cloud.com%2F%3Foauth%3DLIVEID%26tenant%3Ddefault%239wxtmga2d8o&deviceTypeV2=Web&deviceType=WebChrome`,
 
   getHubs: (groups: string, storeId: string, pivots: string, lang: string) =>
     AxiosSecure.get(`https://appgw-client-a.pprod.mr.tv3cloud.com/S120/discovery//v3/hubs?storeId=HubsAndFeeds-Tizen2&%24groups=1%2C4012526%2C4029018%2C4029510%2C2121342&pivots=Language%7Cen&%24lang=en-US
