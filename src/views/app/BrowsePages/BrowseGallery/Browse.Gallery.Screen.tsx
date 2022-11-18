@@ -1,59 +1,167 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import MFText from "../../components/MFText";
-import { Feed } from "../../@types/HubsResponse";
-import MFButton, { MFButtonVariant } from "../../components/MFButton/MFButton";
-import { getDataForUDL } from "../../config/queries";
-import MFGridView from "../../components/MFGridView";
-import { appUIDefinition, layout2x3 } from "../../config/constants";
-import { HomeScreenStyles } from "./Homescreen.styles";
-import { SubscriberFeed } from "../../@types/SubscriberFeed";
-import MFLoader from "../../components/MFLoader";
+import MFText from "../../../../components/MFText";
+import { Feed } from "../../../../@types/HubsResponse";
+import MFButton, {
+  MFButtonVariant,
+} from "../../../../components/MFButton/MFButton";
+import MFGridView from "../../../../components/MFGridView";
+import { appUIDefinition } from "../../../../config/constants";
+import { HomeScreenStyles } from "../../Homescreen.styles";
+import { SubscriberFeed } from "../../../../@types/SubscriberFeed";
+import MFLoader from "../../../../components/MFLoader";
 import FastImage from "react-native-fast-image";
-import { AppImages } from "../../assets/images";
+import { AppImages } from "../../../../assets/images";
 import {
-  durationInDaysHoursMinutes,
   getNetworkInfo,
-} from "../../utils/assetUtils";
-import { getResolvedMetadata } from "../../components/MFMetadata/MFMetadataUtils";
+  removeTrailingSlash,
+} from "../../../../utils/assetUtils";
+import { getResolvedMetadata } from "../../../../components/MFMetadata/MFMetadataUtils";
 import LinearGradient from "react-native-linear-gradient";
-import { galleryFilter } from "../../utils/analytics/consts";
-import { getUIdef } from "../../utils/uidefinition";
-
+import { getUIdef } from "../../../../utils/uidefinition";
+import { UNSTABLE_usePreventRemove } from "@react-navigation/native";
+import BrowseFilter from "./BrowseFilters";
+import { useQuery } from "react-query";
+import { getDataFromUDL, getMassagedData } from "../../../../../backend";
+import { DefaultStore } from "../../../../utils/DiscoveryUtils";
+import { GLOBALS } from "../../../../utils/globals";
+import {
+  getBrowseFeed,
+  getBaseValues,
+  createInitialFilterState,
+} from "./BrowseUtils/BrowseUtils";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
 }
 
 const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
-  const pivotConfig = getUIdef("LoginPage")?.config;
-  const { SORTBY_KEY, RESTRICTIONS_KEY } = galleryFilter;
-  const gradientView = getUIdef("BrowseGallery.GradientView")?.config;
-  const browsePageConfig: any = getUIdef("BrowseGallery")?.config;
-
-  console.log(
-    "pivotConfig",
-    pivotConfig,
-    "SORTBY_KEY",
-    SORTBY_KEY,
-    "RESTRICTIONS_KEY",
-    RESTRICTIONS_KEY,
-    "gradientView",
-    gradientView,
-    "browsePageConfig",
-    browsePageConfig
-  );
-
-  const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const feed: Feed = props.route.params.feed;
-  const { data, isLoading, isError } = getDataForUDL(feed.Uri);
-  console.log("Icon", AppImages["filter"]);
+  const didMountRef = useRef(false);
+  const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
+  const [top, setTop] = useState(16);
+  const [skip, setSkip] = useState(0);
+  const [openMenu, setOpenMenu] = useState(false);
+  const [openSubMenu, setOpenSubMenu] = useState(false);
+  const [feedData, setFeedData] = useState<Array<any>>();
+  const [filterState, setFilterState] = useState<any>();
+  const browsePageConfig: any = getUIdef("BrowseGallery")?.config;
+  const baseValues = getBaseValues(feed, browsePageConfig);
+  const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
+  const [browsePivots, setBrowsePivots] = useState(browseFeed.pivots);
+
+  const pivotsParam = "pivots=true";
+  const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
+  useEffect(() => {
+    if (didMountRef.current) {
+    } else didMountRef.current = true;
+  });
+
+  UNSTABLE_usePreventRemove(openMenu, (data) => {
+    // openSubMenu ? setOpenSubMenu(false) : setOpenMenu(false);
+    setOpenSubMenu(false);
+    setOpenMenu(false);
+  });
+
+  const toggleMenu = () => {
+    setOpenMenu(true);
+    setOpenSubMenu(true);
+  };
+
+  //@ts-ignore
+  const fetchFeeds = async (requestPivots: any) => {
+    const uri = `${browseFeed.Uri}?$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${requestPivots}`;
+    const data = await getDataFromUDL(uri);
+    if (data) {
+      /** we have data from backend, so use the data and setState */
+      const massagedData = getMassagedData(uri, data);
+      console.log("Setting feed data:", data, "for", uri);
+      // setFeedData(massagedData);
+      return massagedData;
+    } else {
+      console.log("No data currently for", uri);
+      /** No data from backend.. so just render placeholder data.. */
+      return undefined;
+    }
+  };
+
+  const makeFeedRequest = async () => {};
+
+  const refreshFeedsByPivots = () => {
+    const parsedFilterState = filterState;
+    let finalPivots = "";
+    const parsedPivots = Object.keys(parsedFilterState).reduce(
+      (prev: any, key: any) => {
+        if (parsedFilterState[key].selectedIds.length > 0) {
+          if (prev.length > 0) {
+            return prev + "," + parsedFilterState[key].selectedIds;
+          } else {
+            return prev + parsedFilterState[key].selectedIds;
+          }
+        } else {
+          return prev;
+        }
+      },
+      finalPivots
+    );
+    setBrowsePivots(parsedPivots);
+    // resetSpecificQuery("browseFeed").then(() => {
+    //   feedQuery
+    //     .refetch({})
+    //     .then((value) => {
+    //       console.log("Refetching done with", browsePivots);
+    //     })
+    //     .catch((err) => console.log("some error happened", err));
+    // });
+  };
 
   const updateFeed = (focusedFeed: SubscriberFeed) => {
     setCurrentFeed(focusedFeed);
   };
+
+  const { data, isLoading } = useQuery(
+    ["browseFeed", browsePivots],
+    () => fetchFeeds(browsePivots),
+    {
+      cacheTime: appUIDefinition.config.queryCacheTime,
+      staleTime: appUIDefinition.config.queryStaleTime,
+    }
+  );
+
+  const pivotQuery = useQuery(
+    "pivots",
+    async () => {
+      const pivots = await getDataFromUDL(pivotURL);
+      const firstFilter = createInitialFilterState(pivots.data, baseValues);
+      setFilterState(firstFilter);
+      console.log("firstFilter", firstFilter);
+      return pivots;
+    },
+    {
+      cacheTime: appUIDefinition.config.queryCacheTime,
+    }
+  );
+
+  const handleFilterChange = (value: {
+    key: string;
+    value: { Id: string; Name: string };
+  }) => {
+    let parseFilter = filterState;
+    console.log("Value", value, "parseFilter", parseFilter);
+    /** Check if the array already has the data.. if Yes, delete it */
+    if (parseFilter[value.key].selectedIds.includes(value.value.Id)) {
+      parseFilter[value.key].selectedIds = [];
+    } else {
+      /** array doesn't have data.. add and make the api call */
+      parseFilter[value.key].selectedIds = [value.value.Id];
+      console.log(parseFilter);
+    }
+    setFilterState(parseFilter);
+    refreshFeedsByPivots();
+  };
+
   const renderRatingValues = () => {
     //@ts-ignore
     const [first, second] = currentFeed!.ratingValues || [];
@@ -89,6 +197,9 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       </View>
     );
   };
+
+  console.log("Current data", data);
+
   return (
     <View style={styles.root}>
       <View style={styles.topRow}>
@@ -118,12 +229,18 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
             onFocus={() => {
               console.log("Filter focused");
             }}
-            onPress={() => {
-              console.log("Filter pressed");
-            }}
+            onPress={toggleMenu}
             iconButtonStyles={{
               shouldRenderImage: true,
               iconPlacement: "Left",
+            }}
+            containedButtonProps={{
+              containedButtonStyle: {
+                focusedBackgroundColor: appUIDefinition.theme.colors.blue,
+                enabled: true,
+                hoverColor: appUIDefinition.theme.colors.blue,
+                elevation: 5,
+              },
             }}
           />
         </View>
@@ -207,11 +324,33 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                 imageStyle={HomeScreenStyles.portraitCardImageStyles}
                 focusedStyle={HomeScreenStyles.focusedStyle}
                 onFocus={updateFeed}
+                autoFocusOnFirstCard
               />
             </LinearGradient>
           )}
         </View>
       </View>
+      {pivotQuery.isLoading ? (
+        <View />
+      ) : (
+        <BrowseFilter
+          //@ts-ignore
+          open={openMenu}
+          filterData={pivotQuery.data.data}
+          // handleFilterChange={(value) => {
+          //   console.log("Value is", value);
+          // }}
+          // defaultPivots={baseValues}
+          subMenuOpen={openSubMenu}
+          filterState={filterState}
+          setOpenSubMenu={() => {}}
+          handleOnPress={handleFilterChange}
+          // filterState={filterValue!}
+          // onChange={function (filterState: FilterValue): void {
+          //   console.log("filterState", filterState);
+          // }}
+        />
+      )}
     </View>
   );
 };
@@ -223,6 +362,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#00030E",
     flexDirection: "column",
     paddingBottom: 150,
+    position: "relative",
   },
   topRow: {
     width: SCREEN_WIDTH,
@@ -252,6 +392,7 @@ const styles = StyleSheet.create({
         scale: 1.1,
       },
     ],
+    backgroundColor: appUIDefinition.theme.colors.blue,
   },
   filterButtonContainerStyle: {
     flex: 0.2,

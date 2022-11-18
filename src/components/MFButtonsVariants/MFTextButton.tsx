@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { RefObject, useState } from "react";
+import { ContainedButtonStyle } from "../MFButton/MFButton";
 import {
   GestureResponderEvent,
   NativeSyntheticEvent,
   Pressable,
+  PressableProps,
   StyleProp,
   StyleSheet,
   TargetedEvent,
@@ -10,16 +12,15 @@ import {
   ViewStyle,
 } from "react-native";
 import Styles from "./MFButtonStyles";
-import FastImage, { Source, ImageStyle } from "react-native-fast-image";
-
-export interface MFImageButtonProps {
-  textStyle?: StyleProp<TextStyle>;
-  textLabel?: string;
-  buttonImage: Source | number;
+import MFText from "../MFText";
+export interface MFTextButtonProps {
+  containedButtonStyle?: ContainedButtonStyle;
   focused?: boolean;
   style?: StyleProp<ViewStyle>;
   focusedStyle?: StyleProp<ViewStyle>;
-  imageStyles?: StyleProp<ImageStyle>;
+  textStyle?: StyleProp<TextStyle>;
+  textLabel?: string;
+  enableRTL?: boolean;
   onFocus?:
     | null
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
@@ -30,12 +31,12 @@ export interface MFImageButtonProps {
     | undefined;
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
   hasTVPreferredFocus?: boolean;
-  disabled?: boolean;
   focusable?: boolean;
+  disabled?: boolean;
 }
 
-const MFImageButton: React.FunctionComponent<MFImageButtonProps> =
-  React.forwardRef(({ ...props }, ref: any) => {
+const MFTextButton = React.forwardRef(
+  ({ ...props }: MFTextButtonProps, ref: any) => {
     const [focused, setFocused] = useState(false);
 
     const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
@@ -54,22 +55,22 @@ const MFImageButton: React.FunctionComponent<MFImageButtonProps> =
       <Pressable
         ref={ref}
         focusable={props.focusable === false ? false : true}
-        style={[
-          focused
-            ? StyleSheet.flatten([props.style, props.focusedStyle])
-            : StyleSheet.flatten([props.style]),
-        ]}
+        style={props.style}
         onFocus={_onFocus}
         onBlur={_onBlur}
         onPress={_onPress}
-        testID={"Image_Button"}
+        disabled={props.disabled ? props.disabled : false}
         hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
       >
-        <FastImage source={props.buttonImage} style={[props.imageStyles]}>
-          {props.children}
-        </FastImage>
+        <MFText
+          textStyle={props.textStyle}
+          displayText={props.textLabel}
+          enableRTL={props.enableRTL}
+          shouldRenderText
+        />
       </Pressable>
     );
-  });
+  }
+);
 
-export default MFImageButton;
+export default MFTextButton;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { View, Alert, StyleSheet, Dimensions, Pressable } from "react-native";
@@ -21,6 +21,7 @@ interface ProfilePersonalizationScreen {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
   mode: "edit" | "create";
   item: any;
+  children?: ReactNode;
 }
 
 const ProfilePersonalizationScreen: React.FunctionComponent<

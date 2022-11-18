@@ -208,6 +208,93 @@ export const getFeedByID = async (id: string) => {
   return response;
 };
 
+export const getDiscoveryCategoryItems = async (id: string, params: any) => {
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v4/categories/${params.id}/items`;
+  const response = await GET({
+    url: url,
+    params: params,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+  })
+  return response;
+}
+
+export const getDiscoverCategoryItemPivots = async (id: string, params: any) => {
+  const url = (`${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v4/categories/${params.id}/subcategories`);
+  const response = await GET({
+    url: url,
+    params: params,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+  })
+  return response;
+}
+
+export const getDiscoveryLibraryItems = async (id: string, params: any) => {
+  const url =
+    `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v3/libraries/complete/items`
+  const response = await GET({
+    url: url,
+    params: params,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+  })
+  return response;
+}
+
+export const getDiscoveryLibrariesCompletePivots = async (id: string, params: any) => {
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v3/libraries/complete/pivots`;
+  const response = await GET({
+    url: url,
+    params: {},
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+  })
+  return response;
+}
+
+const getDiscoveryLibrariesPivotCategories = async (id: string, params: any) => {
+  const url = `${DISCOVERY_URL}/v3/libraries/complete/pivot-items`;
+  const response = await GET({
+    url: url,
+    params: params,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+  })
+  return response;
+}
+
+const getDiscoverLibraryItemPivots = async (id: string, params: any) => {
+  const url = `${DISCOVERY_URL}/v3/libraries/complete/pivots`;
+  const response = await GET({
+    url: url,
+    params: {},
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+  })
+  return response;
+}
+
+const getDiscoveryLibraryPackages = async (id: string, params: any) => {
+  const url = `${DISCOVERY_URL}/v3/libraries/Collections/items`;
+  const response = await GET({
+    url: url,
+    params: params,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+  })
+  return response;
+}
+
+
+
 export const registerDiscoveryUdls = () => {
   const BASE = "discovery";
 
@@ -223,6 +310,13 @@ export const registerDiscoveryUdls = () => {
       prefix: BASE + "/moviesandtvshows?orderBy=LicenseWindowStartUtc",
       getter: getmoviesandtvshowsByLicenseWindow,
     },
+    { prefix: BASE + '/categories/items', getter: getDiscoveryCategoryItems },
+    { prefix: BASE + '/categories/items/pivots=true', getter: getDiscoverCategoryItemPivots },
+    { prefix: BASE + "/librariespivotcategories/items/", getter: getDiscoveryLibrariesPivotCategories },
+    { prefix: BASE + '/libraryprograms/complete', getter: getDiscoveryLibraryItems },
+    { prefix: BASE + '/libraryprograms/complete/pivots=true', getter: getDiscoverLibraryItemPivots },
+    { prefix: BASE + 'libraryprograms/collections/packages', getDiscoveryLibraryPackages },
   ];
   return discoveryUdls;
+
 };

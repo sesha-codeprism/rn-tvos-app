@@ -26,7 +26,7 @@ import { GlobalContext } from "../../contexts/globalContext";
 import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
 import { GLOBALS } from "../../utils/globals";
-import { current } from "@reduxjs/toolkit";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface MFMenuProps {
   navigation: any;
@@ -36,21 +36,14 @@ interface MFMenuProps {
   onPress?: null | ((event: number) => void) | undefined;
   onFocus?: null | ((event: number) => void) | undefined;
   onPressSettings?: any;
+  setCardFocus?: any;
 }
 
-const MFMenu = (props: MFMenuProps, ref: Ref<any>) => {
+const MFMenu = (props: MFMenuProps) => {
   const [hubs1, setHubs1] = useState(Array<ButtonVariantProps>());
   const [isIdentityAssigned, setIdentityAssigned] = useState(false);
   const globalContext = useContext(GlobalContext);
   const [focused, setFocused] = useState("");
-
-  useImperativeHandle(ref, () => ({
-    logState,
-  }));
-
-  const logState = () => {
-    console.log("From MFMenu");
-  };
   const testing = false;
   const _onPress = (event: GestureResponderEvent, index: number) => {
     console.log("Some log");
@@ -74,7 +67,7 @@ const MFMenu = (props: MFMenuProps, ref: Ref<any>) => {
     } else {
       setHubs1(array1);
     }
-  }, [props.hubList, globalContext]);
+  }, [globalContext]);
 
   const getButtonVariantProps = (hubObject: FeedItem) => {
     const element: ButtonVariantProps = {
@@ -100,181 +93,170 @@ const MFMenu = (props: MFMenuProps, ref: Ref<any>) => {
     };
     return element;
   };
-  const updateFocus = (key?: string) => {
-    setTimeout(() => {
-      GLOBALS.hubGroupFocused = true;
-      if (key) {
-        setFocused(key);
-      }
-    }, 500);
-  };
 
   return (
     <GlobalContext.Consumer>
       {({ userProfile, setProfile }) => (
-        <View
-          style={StyleSheet.flatten([
-            MFMenuStyles.rootContainerStyles,
-            GLOBALS.enableRTL
-              ? { flexDirection: "row-reverse" }
-              : { flexDirection: "row" },
-          ])}
-        >
-          <View
-            style={StyleSheet.flatten([MFMenuStyles.searchContainerStyles1])}
-          >
-            <View
-              style={
-                focused === "search"
-                  ? MFMenuStyles.serchCircleStyle1
-                  : { ...MFMenuStyles, borderColor: "transparent" }
-              }
-            >
-              <MFButton
-                variant={MFButtonVariant.Icon}
-                iconSource={AppImages.search}
-                iconStyles={MFMenuStyles.iconStyles}
-                avatarSource={{}}
-                imageSource={{}}
-                iconButtonStyles={{ shouldRenderImage: true }}
-                onFocus={() => {
-                  updateFocus("search");
-                }}
-                onBlur={() => {
-                  GLOBALS.hubGroupFocused = false;
-                  setFocused("");
-                }}
-                onPress={() => {}}
-              />
-            </View>
-          </View>
-          <View style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles1])}>
-            <MFButtonGroup
-              onPress={(event, index) => _onPress(event, index)}
-              buttonsList={hubs1}
-              onHubChanged={() => {}}
-              containedButtonProps={{
-                containedButtonStyle: {
-                  enabled: true,
-                  focusedBackgroundColor: appUIDefinition.theme.colors.primary,
-                  elevation: 5,
-                  hoverColor: "red",
-                  unFocusedBackgroundColor:
-                    appUIDefinition.theme.colors.secondary,
-                },
-              }}
-              enableRTL={GLOBALS.enableRTL}
-              outlinedButtonProps={{
-                outlinedButtonStyle: {
-                  focusedBorderColor: appUIDefinition.theme.colors.primary,
-                  unFocusedBorderColor: appUIDefinition.theme.colors.secondary,
-                  focusedBorderWidth: 5,
-                  unFocusedBorderWidth: 2,
-                  isDisabled: true,
-                },
-              }}
-              onFocus={(event, index) => {
-                _onFocus(index);
-                updateFocus("");
-              }}
-              onBlur={(event, index) => {
-                GLOBALS.hubGroupFocused = false;
-                setFocused("");
-              }}
-            />
-          </View>
+        <>
           <View
             style={StyleSheet.flatten([
-              MFMenuStyles.profileViewStyles1,
+              MFMenuStyles.rootContainerStyles,
               GLOBALS.enableRTL
                 ? { flexDirection: "row-reverse" }
                 : { flexDirection: "row" },
             ])}
           >
-            {isIdentityAssigned && (
-              <View style={MFMenuStyles.profileContainerStyles}>
-                <View
-                  style={
-                    focused === "profile"
-                      ? MFMenuStyles.profileCircleStyle
-                      : {
-                          ...MFMenuStyles.profileCircleStyle,
-                          borderColor: "transparent",
-                        }
-                  }
-                >
-                  <MFButton
-                    variant={MFButtonVariant.Avatar}
-                    avatarSource={
-                      userProfile && userProfile.Image != null
-                        ? AppImages[userProfile.Image] || AppImages.avatar
-                        : AppImages.avatar
-                    }
-                    imageSource={{}}
-                    iconSource={{}}
-                    avatarStyles={MFMenuStyles.avatarStyles}
-                    onPress={() => {
-                      console.log("Profile pressed");
-                      props.navigation.navigate(Routes.Profile);
-                    }}
-                    onFocus={() => {
-                      updateFocus("profile");
-                    }}
-                    onBlur={() => {
-                      GLOBALS.hubGroupFocused = false;
-                      setFocused("");
-                    }}
-                  />
-                </View>
-              </View>
-            )}
-            <View style={MFMenuStyles.settingsContainerStyles}>
+            <View
+              style={StyleSheet.flatten([MFMenuStyles.searchContainerStyles1])}
+            >
               <View
                 style={
-                  focused === "settings" ? MFMenuStyles.serchCircleStyle1 : {}
+                  focused === "search"
+                    ? MFMenuStyles.serchCircleStyle1
+                    : { ...MFMenuStyles, borderColor: "transparent" }
                 }
               >
                 <MFButton
                   variant={MFButtonVariant.Icon}
+                  iconSource={AppImages.search}
+                  iconStyles={MFMenuStyles.iconStyles}
                   avatarSource={{}}
                   imageSource={{}}
-                  iconSource={AppImages.settings_grey}
-                  iconStyles={MFMenuStyles.iconStyles}
                   iconButtonStyles={{ shouldRenderImage: true }}
-                  onPress={() => {
-                    props.onPressSettings();
-                    console.log("setting pressed", props.navigation);
-                  }}
                   onFocus={() => {
-                    updateFocus("settings");
+                    setFocused("search");
                   }}
                   onBlur={() => {
-                    GLOBALS.hubGroupFocused = false;
                     setFocused("");
+                  }}
+                  onPress={() => {
+                    throw new Error("some error");
                   }}
                 />
               </View>
             </View>
             <View
-              style={{
-                flex: 3,
-                alignSelf: "flex-end",
-                height: 145,
-                alignContent: "flex-end",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+              style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles1])}
             >
-              <FastImage
-                source={AppImages.logo_white}
-                style={MFMenuStyles.logoStyles}
+              <MFButtonGroup
+                onPress={(event, index) => _onPress(event, index)}
+                buttonsList={hubs1}
+                onHubChanged={() => {}}
+                containedButtonProps={{
+                  containedButtonStyle: {
+                    enabled: true,
+                    focusedBackgroundColor:
+                      appUIDefinition.theme.colors.primary,
+                    elevation: 5,
+                    hoverColor: "red",
+                    unFocusedBackgroundColor:
+                      appUIDefinition.theme.colors.secondary,
+                  },
+                }}
+                enableRTL={GLOBALS.enableRTL}
+                outlinedButtonProps={{
+                  outlinedButtonStyle: {
+                    focusedBorderColor: appUIDefinition.theme.colors.primary,
+                    unFocusedBorderColor:
+                      appUIDefinition.theme.colors.secondary,
+                    focusedBorderWidth: 5,
+                    unFocusedBorderWidth: 2,
+                    isDisabled: true,
+                  },
+                }}
+                onFocus={(event, index) => {
+                  _onFocus(index);
+                  setFocused("");
+                }}
+                setCardFocus={props.setCardFocus}
               />
             </View>
+            <View
+              style={StyleSheet.flatten([
+                MFMenuStyles.profileViewStyles1,
+                GLOBALS.enableRTL
+                  ? { flexDirection: "row-reverse" }
+                  : { flexDirection: "row" },
+              ])}
+            >
+              {isIdentityAssigned && (
+                <View style={MFMenuStyles.profileContainerStyles}>
+                  <View
+                    style={
+                      focused === "profile"
+                        ? MFMenuStyles.profileCircleStyle
+                        : {
+                            ...MFMenuStyles.profileCircleStyle,
+                            borderColor: "transparent",
+                          }
+                    }
+                  >
+                    <MFButton
+                      variant={MFButtonVariant.Avatar}
+                      avatarSource={
+                        userProfile && userProfile.Image != null
+                          ? AppImages[userProfile.Image] || AppImages.avatar
+                          : AppImages.avatar
+                      }
+                      imageSource={{}}
+                      iconSource={{}}
+                      avatarStyles={MFMenuStyles.avatarStyles}
+                      onPress={() => {
+                        console.log("Profile pressed");
+                        props.navigation.navigate(Routes.Profile);
+                      }}
+                      onFocus={() => {
+                        setFocused("profile");
+                      }}
+                    />
+                  </View>
+                </View>
+              )}
+              <View style={MFMenuStyles.settingsContainerStyles}>
+                <View
+                  style={
+                    focused === "settings" ? MFMenuStyles.serchCircleStyle1 : {}
+                  }
+                >
+                  <MFButton
+                    variant={MFButtonVariant.Icon}
+                    avatarSource={{}}
+                    imageSource={{}}
+                    iconSource={AppImages.settings_grey}
+                    iconStyles={MFMenuStyles.iconStyles}
+                    iconButtonStyles={{ shouldRenderImage: true }}
+                    onPress={() => {
+                      // props.navigation.toggleDrawer();
+                      props.onPressSettings();
+                      console.log("setting pressed", props.navigation);
+                    }}
+                    onFocus={() => {
+                      setFocused("settings");
+                    }}
+                  />
+                </View>
+              </View>
+              <View
+                style={{
+                  flex: 3,
+                  alignSelf: "flex-end",
+                  height: 145,
+                  alignContent: "flex-end",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <FastImage
+                  source={AppImages.logo_white}
+                  style={MFMenuStyles.logoStyles}
+                />
+              </View>
+            </View>
           </View>
-        </View>
+        </>
       )}
     </GlobalContext.Consumer>
   );
 };
 
-export const Menu = forwardRef(MFMenu);
+export default MFMenu;

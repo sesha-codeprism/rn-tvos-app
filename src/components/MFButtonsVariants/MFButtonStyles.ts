@@ -36,11 +36,11 @@ const Styles = StyleSheet.create({
     borderBottomColor: appUIDefinition.theme.colors.primary,
   },
   focused: {
-    transform: [
-      {
-        scale: 1.1,
-      },
-    ],
+    // transform: [
+    //   {
+    //     scale: 1.1,
+    //   },
+    // ],
   },
   unFcoused: {
     transform: [

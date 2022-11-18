@@ -311,6 +311,8 @@ export const NavigationTarget = {
     CLIENT_DEFINED: "ClientDefined",
 };
 
+
+
 export const iso639LangaugeCodeMapping: { [key: string]: string } = {
     aar: "Afar",
     aa: "Afar",

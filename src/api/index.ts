@@ -15,8 +15,6 @@ export const AxiosSecure = axios.create({
 });
 
 const requestHandler = (request: any) => {
-  // request.headers['Authorization'] = `OAUTH2 access_token=\"${accessToken}\"`;
-  // request.headers['Cookie'] = `oauth=refresh_token=\"${refreshToken}\";access-token=\"${accessToken}\"`;
   request.headers[
     'Authorization'
   ] = `OAUTH2 access_token="AuthToken1lZHLbpwwFIafZtiBfMEGFixI5qomqpROR2p3HvvM4AxgaptMyNPX0CatqkZqJev89ndu0u9qUBo6CWXtfe8WtFqQdTgWmlF3515YPyZ9b41KWpv4JyobM6hEmjYURTvnBrB_tDrv3u-YSn9Vyhpa4ZLntnFG9Imx50CvLgSCEAsyB62g89qP4Sobodsp34kWSo4EzkWRx6LIREyx4HEaWDzDiQUULeFJS9ip_6nejz2UVd83sD_8hg7kDe6hE50PUxWcxND46AFE05Z3u8Nqt4wqKc0wpzvhhRWPiazFxYqjCXYuUtSC0uKiu9mWsGAe8dmB_ceONQg_WNhYM_ShhaAiLxD5u7mtltY4c_I_v-DV3nyyl79jrzUNlG44Omn1EWy0sWGPC4tQWJUtyA1HlNOgJEV4UkxoxibFPA2SkjlJUTE9oqppzBXUq2nuzbVq8LWx-kV4bbp74S4lzREpGM5xmMgJYTlOOeOE5xhlBeXR6rnXFtzHrsScEppnDLHo1gZDQP2AOMtJFuAHGDeDViVLGeCTkjE5pRCnRQax4FkRUyiwyEPgx1O0va9uP20rwnjprRu_-sc7uJ65edg3OaIXuq7X22_s5Sa9svrLvl5yvEn71YKq7w"`;

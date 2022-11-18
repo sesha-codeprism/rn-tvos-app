@@ -1,12 +1,10 @@
 import { useQueries, useQuery, useQueryClient } from "react-query";
-import { getDataFromUDL } from "../../backend";
+import { getDataFromUDL, getMassagedData } from "../../backend";
 import { getAllSubscriberProfiles } from "../../backend/subscriber/subscriber";
 import { parseUdl, UdlProviders } from "../../backend/udl/provider";
 import { FeedItem, HubsResponse } from "../@types/HubsResponse";
-import { SourceType } from "../utils/common";
-import { DefaultStore, massageDiscoveryFeed } from "../utils/DiscoveryUtils";
+import { DefaultStore } from "../utils/DiscoveryUtils";
 import { GLOBALS } from "../utils/globals";
-import { massageSubscriberFeed } from "../utils/Subscriber.utils";
 import { appUIDefinition, lang, pivots } from "./constants";
 
 const queryClient = useQueryClient()
@@ -38,31 +36,23 @@ export function getProfiles() {
     return useQuery(query, getAllUserProfiles, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime });
 }
 
-export function getDataForUDL(query: string, pageNo: number = 0, shouldMassageData: boolean = true) {
-    return useQuery(query, () => { return getUDLData(query, pageNo, shouldMassageData) }, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true });
+export function getDataForUDL(query: string, pageNo: number = 0, shouldMassageData: boolean = true, shouldSendParams: boolean = true) {
+    return useQuery(query, () => { return getUDLData(query, pageNo, shouldMassageData,) }, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true });
 }
 
 export function getAllHubs(): any {
     return useQuery('get-hubs', getHubs, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime });
 }
 
-const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: boolean = true) => {
+const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: boolean = true, shouldSendParams: boolean = true) => {
     try {
         const udlID = parseUdl(uri);
         if (udlID!.id in UdlProviders) {
             try {
-                const data = await getDataFromUDL(uri);
+                const data = await getDataFromUDL(uri, shouldSendParams);
                 if (data) {
                     if (shouldMassageData) {
-                        if (udlID!.id.split("/")[0] === 'discovery') {
-                            const massagedData = massageDiscoveryFeed(data.data, SourceType.VOD);
-                            console.log("massageDiscoveryFeed for", uri, "is", massagedData);
-                            return massagedData;
-                        } else {
-                            const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
-                            console.log("massageSubscriberFeed for", uri, "is", massagedData);
-                            return massagedData;
-                        }
+                        return getMassagedData(uri, data);
                     } else {
                         return data;
                     }
@@ -101,4 +91,11 @@ export const resetCaches = () => {
     queryClient.invalidateQueries();
     /** Clear out the complete Query and Mutation caches */
     queryClient.clear()
+}
+
+
+export const resetSpecificQuery = async (key: string) => {
+    queryClient.invalidateQueries({ queryKey: key }).then(() => {
+        console.log('Invalidated', key, "query");
+    });
 }

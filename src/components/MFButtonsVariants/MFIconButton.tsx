@@ -43,103 +43,106 @@ export interface MFIconButtonProps {
   /** Style of the Placeholder view to be rendered when icon is not. */
   placeholderStyles?: StyleProp<ViewStyle>;
   hasTVPreferredFocus?: boolean;
-  focusable?:boolean;
+  focusable?: boolean;
 }
 
-const MFIconButton: React.FunctionComponent<MFIconButtonProps> = (props) => {
-  const [focused, setFocused] = useState(false);
+const MFIconButton: React.FunctionComponent<MFIconButtonProps> =
+  React.forwardRef(({ ...props }, ref: any) => {
+    const [focused, setFocused] = useState(false);
 
-  const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(true);
-    props.onFocus && props.onFocus(event);
-  };
-  const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(false);
-    props.onBlur && props.onBlur(event);
-  };
-  const _onPress = (event: GestureResponderEvent) => {
-    props.onPress && props.onPress(event);
-  };
+    const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(true);
+      props.onFocus && props.onFocus(event);
+    };
+    const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(false);
+      props.onBlur && props.onBlur(event);
+    };
+    const _onPress = (event: GestureResponderEvent) => {
+      props.onPress && props.onPress(event);
+    };
 
-  return props.iconPlacement === "Left" ? (
-    <Pressable
-      style={[
-        Styles.iconButtonStyles,
-        focused
-          ? StyleSheet.flatten([
-              Styles.focused,
-              props.style,
-              props.focusedStyle,
-            ])
-          : StyleSheet.flatten([Styles.unFcoused, props.style]),
-      ]}
-      onFocus={_onFocus}
-      onBlur={_onBlur}
-      onPress={_onPress}
-      hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
-      focusable={props.focusable === false ? false : true}
-    >
-      {props.shouldRenderImage ? (
-        <FastImage source={props.imageSrc} style={props.imageStyle} />
-      ) : (
-        <View style={props.placeholderStyles} />
-      )}
-      <View style={{ flexDirection: "column" }}>
-        <MFText
-          textStyle={props.textStyle}
-          displayText={props.textLabel}
-          enableRTL={props.enableRTL}
-          shouldRenderText
-        />
-        {props.subTextLabel ? (
+    return props.iconPlacement === "Left" ? (
+      <Pressable
+        ref={ref}
+        style={[
+          Styles.iconButtonStyles,
+          focused
+            ? StyleSheet.flatten([
+                Styles.focused,
+                props.style,
+                props.focusedStyle,
+              ])
+            : StyleSheet.flatten([Styles.unFcoused, props.style]),
+        ]}
+        onFocus={_onFocus}
+        onBlur={_onBlur}
+        onPress={_onPress}
+        hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
+        focusable={props.focusable === false ? false : true}
+      >
+        {props.shouldRenderImage ? (
+          <FastImage source={props.imageSrc} style={props.imageStyle} />
+        ) : (
+          <View style={props.placeholderStyles} />
+        )}
+        <View style={{ flexDirection: "column" }}>
           <MFText
-            textStyle={props.subTextStyle}
-            displayText={props.subTextLabel}
+            textStyle={props.textStyle}
+            displayText={props.textLabel}
             enableRTL={props.enableRTL}
             shouldRenderText
           />
-        ) : (
-          <View />
-        )}
-      </View>
-    </Pressable>
-  ) : (
-    <Pressable
-      style={[
-        Styles.iconButtonStyles,
-        focused
-          ? StyleSheet.flatten([Styles.focused])
-          : StyleSheet.flatten([Styles.unFcoused]),
-      ]}
-      onFocus={_onFocus}
-      onBlur={_onBlur}
-      onPress={_onPress}
-    >
-      <View style={{ flexDirection: "column" }}>
-        <MFText
-          textStyle={props.textStyle}
-          displayText={props.textLabel}
-          enableRTL={props.enableRTL}
-          shouldRenderText
-        />
-        {props.subTextLabel ? (
+          {props.subTextLabel ? (
+            <MFText
+              textStyle={props.subTextStyle}
+              displayText={props.subTextLabel}
+              enableRTL={props.enableRTL}
+              shouldRenderText
+            />
+          ) : (
+            <View />
+          )}
+        </View>
+      </Pressable>
+    ) : (
+      <Pressable
+        ref={ref}
+        style={[
+          Styles.iconButtonStyles,
+          focused
+            ? StyleSheet.flatten([Styles.focused])
+            : StyleSheet.flatten([Styles.unFcoused]),
+        ]}
+        onFocus={_onFocus}
+        onBlur={_onBlur}
+        onPress={_onPress}
+      >
+        <View style={{ flexDirection: "column" }}>
           <MFText
-            textStyle={props.subTextStyle}
-            displayText={props.subTextLabel}
+            textStyle={props.textStyle}
+            displayText={props.textLabel}
             enableRTL={props.enableRTL}
             shouldRenderText
           />
+          {props.subTextLabel ? (
+            <MFText
+              textStyle={props.subTextStyle}
+              displayText={props.subTextLabel}
+              enableRTL={props.enableRTL}
+              shouldRenderText
+            />
+          ) : (
+            <View />
+          )}
+        </View>
+        {props.shouldRenderImage ? (
+          <FastImage source={props.imageSrc} style={props.imageStyle} />
         ) : (
-          <View />
+          <View style={props.placeholderStyles} />
         )}
-      </View>
-      {props.shouldRenderImage ? (
-        <FastImage source={props.imageSrc} style={props.imageStyle} />
-      ) : (
-        <View style={props.placeholderStyles} />
-      )}
-    </Pressable>
-  );
-};
+      </Pressable>
+    );
+  });
 
 export default MFIconButton;

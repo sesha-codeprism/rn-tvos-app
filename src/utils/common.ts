@@ -570,3 +570,31 @@ export interface ILibraryItem extends IResult {
    */
   ServiceCollectionId?: string;
 }
+
+export type FilterValue = {
+  [key: string]: {
+    selectedIds: string[];
+  };
+};
+
+export type Pivot = {
+  Id: string;
+  Name?: string;
+  Language?: string;
+  selectAll?: boolean;
+};
+
+export type ConfigData = {
+  Id: string;
+  Name: string;
+  Pivots: Pivot[];
+  MultiSelect?: boolean;
+};
+
+export interface BrowseGallery {
+  page: number;
+  lastPageReached: boolean;
+  itemFeed: any[];
+  filterData: FilterValue;
+}
+

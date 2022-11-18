@@ -28,38 +28,37 @@ export interface MFViewAllButtonProps {
   feed?: any;
 }
 
-const MFViewAllButton: React.FunctionComponent<MFViewAllButtonProps> = (
-  props
-) => {
-  const [focused, setFocused] = useState(false);
+const MFViewAllButton: React.FunctionComponent<MFViewAllButtonProps> =
+  React.forwardRef(({ ...props }, ref: any) => {
+    const [focused, setFocused] = useState(false);
 
-  const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(true);
-    props.onFocus && props.onFocus(event);
-  };
-
-  const _onPressed = (event: any) => {
-    props.onPress && props.feed && props.onPress(props.feed);
-  };
-  return (
-    <MFCard
-      title={props.displayText}
-      data={undefined}
-      style={props.style}
-      focusedStyle={props.focusedStyle}
-      imageStyle={props.imageStyle}
-      layoutType={"LandScape"}
-      shouldRenderText={true}
-      titlePlacement={TitlePlacement.overlayCenter}
-      onFocus={(event) => {
-        console.log("MFViewAll focused", props.onFocus, props.onPress);
-        props.onFocus && props.onFocus(event);
-      }}
-      onPress={(event) => {
-        _onPressed(event);
-      }}
-    />
-  );
-};
-
+    const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(true);
+      props.onFocus && props.onFocus(event);
+    };
+    const _onPressed = (event: any) => {
+      props.onPress && props.feed && props.onPress(props.feed);
+    };
+    return (
+      <MFCard
+      // @ts-ignore
+        ref={ref}
+        title={props.displayText}
+        data={undefined}
+        style={props.style}
+        focusedStyle={props.focusedStyle}
+        imageStyle={props.imageStyle}
+        layoutType={"LandScape"}
+        shouldRenderText={true}
+        titlePlacement={TitlePlacement.overlayCenter}
+        onFocus={(event) => {
+          console.log("MFViewAll focused", props.onFocus);
+          props.onFocus && props.onFocus(event);
+        }}
+        onPress={(event) => {
+          _onPressed(event);
+        }}
+      />
+    );
+  });
 export default MFViewAllButton;

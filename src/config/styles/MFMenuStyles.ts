@@ -70,8 +70,9 @@ const MFMenuStyles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 10,
-    // backgroundColor: __DEV__ ? 'blue' : 'transparent'
+    // paddingTop: 10,
+    paddingBottom: 10
+    // backgroundColor: __DEV__ ? 'blue' : 'transparent',
   },
   hubsContainerStyles1: {
     flex: 2.8,

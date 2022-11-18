@@ -41,8 +41,8 @@ export interface MFAvatarButtonProps {
 
 }
 
-const MFAvatarButton: React.FunctionComponent<MFAvatarButtonProps> = (
-  props
+const MFAvatarButton: React.FunctionComponent<MFAvatarButtonProps> =React.forwardRef( (
+  {...props}, ref: any
 ) => {
   const [focused, setFocused] = useState(false);
 
@@ -60,6 +60,7 @@ const MFAvatarButton: React.FunctionComponent<MFAvatarButtonProps> = (
 
   return (
     <Pressable
+    ref={ref}
       style={[
         Styles.avatarButtonStyles,
         focused
@@ -83,6 +84,6 @@ const MFAvatarButton: React.FunctionComponent<MFAvatarButtonProps> = (
       ></FastImage>
     </Pressable>
   );
-};
+});
 
 export default MFAvatarButton;

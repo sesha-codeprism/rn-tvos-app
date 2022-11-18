@@ -7,7 +7,6 @@ import { UserProfile } from "../@types/UserProfile";
 import { GLOBALS } from "../utils/globals";
 import "react-native-gesture-handler";
 import { initializeAnalyticsService } from "../utils/analytics/analytics";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 
 interface AppProps {}
 

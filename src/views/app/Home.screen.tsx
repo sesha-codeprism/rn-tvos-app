@@ -1,11 +1,18 @@
-import React, { useState, useRef } from "react";
-import { View, ImageBackground, Dimensions } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  View,
+  ImageBackground,
+  Dimensions,
+  TouchableOpacity,
+  BackHandler,
+  TVMenuControl,
+} from "react-native";
 import { appUIDefinition, debounceTime } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
 import { FeedItem } from "../../@types/HubsResponse";
-import { Menu } from "../../components/MFMenu/MFMenu";
+import MFMenu from "../../components/MFMenu/MFMenu";
 import MFLoader from "../../components/MFLoader";
 import { AppStrings } from "../../config/strings";
 import { getAllHubs } from "../../config/queries";
@@ -23,22 +30,22 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { getUIdef } from "../../utils/uidefinition";
-import { UdlProviders } from "../../../backend/udl/provider";
+import { config } from "../../config/config";
 
-interface Props {
+interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
 
 const { width, height } = Dimensions.get("window");
-const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
+const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
+  props: HomeScreenProps
+) => {
   const [feeds, setFeeds] = useState<FeedItem>();
   const [hubs, setHubs] = useState(Array<FeedItem>());
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const drawerRef: React.MutableRefObject<any> = useRef();
-  const menuRef: React.MutableRefObject<any> = useRef();
   const [open, setOpen] = useState(false);
-  const insets = useSafeAreaInsets();
+  const firstCardRef = useRef<TouchableOpacity>(null);
 
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;
@@ -114,6 +121,7 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
     }
   };
 
+  console.log(config.guide.epgConfig.filters);
   const onTapViewAll = (feed: any) => {
     const payload: any = {
       feed,
@@ -214,7 +222,20 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
       // Open !true. So something is happening. Removed some console.log
     }
   };
+
+  useEffect(() => {
+    if (!open) {
+      console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
+      TVMenuControl.enableTVMenuKey();
+      BackHandler.addEventListener("hardwareBackPress", backAction);
+    }
+  }, []);
   setHubsData();
+  const setCardFocus = () => {
+    // console.log("firstCardRef.current", firstCardRef.current);
+    // Alert.alert("Set hub data called");
+    firstCardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+  };
   return (
     <View style={HomeScreenStyles.container}>
       <ImageBackground
@@ -229,66 +250,72 @@ const HomeScreen: React.FunctionComponent<Props> = (props: Props) => {
             source={AppImages.topGradient}
             style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
           >
-            <SafeAreaView style={{ flex: 1, paddingTop: -30 }}>
-              <Menu
-                ref={menuRef}
-                navigation={props.navigation}
-                enableRTL={GLOBALS.enableRTL}
-                hubList={hubs}
-                onPress={(event) => {}}
-                onFocus={(event) => {
-                  if (hubTimeOut) {
-                    clearInterval(hubTimeOut);
-                  }
-                  hubTimeOut = setTimeout(() => {
-                    setFeeds(hubs[event]);
-                  }, debounceTime);
-                }}
-                onPressSettings={() => {
-                  setOpen(open);
-                  drawerRef.current.open();
-                  if (currentFeed) {
-                    service?.addNavEventOnCurPageOpenOrClose(
-                      {
-                        navigation: {
-                          params: {
-                            feed: currentFeed,
+            {!isLoading && (
+              <SafeAreaView style={{ flex: 1, paddingTop: -30 }}>
+                <MFMenu
+                  navigation={props.navigation}
+                  enableRTL={GLOBALS.enableRTL}
+                  hubList={hubs}
+                  onPress={(event) => {}}
+                  onFocus={(event) => {
+                    if (hubTimeOut) {
+                      clearInterval(hubTimeOut);
+                    }
+                    hubTimeOut = setTimeout(() => {
+                      setFeeds(hubs[event]);
+                    }, debounceTime);
+                  }}
+                  setCardFocus={setCardFocus}
+                  onPressSettings={() => {
+                    setOpen(open);
+                    drawerRef.current.open();
+                    if (currentFeed) {
+                      service?.addNavEventOnCurPageOpenOrClose(
+                        {
+                          navigation: {
+                            params: {
+                              feed: currentFeed,
+                            },
                           },
                         },
-                      },
-                      Routes.Settings,
-                      navigationAction.pageOpen
-                    );
-                  }
-                }}
-              />
-              <View style={HomeScreenStyles.posterViewContainerStyles}>
-                {currentFeed && appUIDefinition.config.enableMarquee && (
-                  <MFMarquee
-                    currentFeed={currentFeed}
-                    rootContainerStyles={{
-                      flexDirection: GLOBALS.enableRTL ? "row-reverse" : "row",
-                      alignContent: "space-around",
-                    }}
-                  />
-                )}
-              </View>
-              <View style={HomeScreenStyles.contentContainer}>
-                {!isLoading && (
-                  <MFSwim
-                    feeds={feeds}
-                    onFocus={onFeedFocus}
-                    onListEmptyElementFocus={clearCurrentHub}
-                    onListFooterElementFocus={clearCurrentHub}
-                    limitSwimlaneItemsTo={
-                      appUIDefinition.config.limitSwimlaneItemsTo
+                        Routes.Settings,
+                        navigationAction.pageOpen
+                      );
                     }
-                    onViewAllPressed={onTapViewAll}
-                  />
-                )}
-              </View>
-              {isLoading && <MFLoader transparent={true} />}
-            </SafeAreaView>
+                  }}
+                />
+                <View style={HomeScreenStyles.posterViewContainerStyles}>
+                  {currentFeed && appUIDefinition.config.enableMarquee && (
+                    <MFMarquee
+                      currentFeed={currentFeed}
+                      rootContainerStyles={{
+                        flexDirection: GLOBALS.enableRTL
+                          ? "row-reverse"
+                          : "row",
+                        alignContent: "space-around",
+                      }}
+                    />
+                  )}
+                </View>
+                <View style={HomeScreenStyles.contentContainer}>
+                  {!isLoading && (
+                    <MFSwim
+                      // @ts-ignore
+                      ref={firstCardRef}
+                      feeds={feeds}
+                      onFocus={onFeedFocus}
+                      onListEmptyElementFocus={clearCurrentHub}
+                      onListFooterElementFocus={clearCurrentHub}
+                      limitSwimlaneItemsTo={
+                        appUIDefinition.config.limitSwimlaneItemsTo
+                      }
+                      onViewAllPressed={onTapViewAll}
+                    />
+                  )}
+                </View>
+                {isLoading && <MFLoader transparent={true} />}
+              </SafeAreaView>
+            )}
           </ImageBackground>
         </ImageBackground>
       </ImageBackground>
