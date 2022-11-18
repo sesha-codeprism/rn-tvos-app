@@ -184,6 +184,7 @@ const MFButton = React.forwardRef(({ ...props }: MFButtonProps, ref) => {
   return props.variant === MFButtonVariant.Text ? (
     <MFTextButton
       ref={ref}
+      textLabel={props.textLabel}
       focusable={props.focusable === false ? false : true}
       style={[
         focused
@@ -202,7 +203,7 @@ const MFButton = React.forwardRef(({ ...props }: MFButtonProps, ref) => {
     />
   ) : props.variant === MFButtonVariant.Image ? (
     <MFImageButton
-    // @ts-ignore
+      // @ts-ignore
       ref={ref}
       focusable={props.focusable === false ? false : true}
       hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
