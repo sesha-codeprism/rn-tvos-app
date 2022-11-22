@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  Modal,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import Animated, {
@@ -21,6 +22,7 @@ import MFButton, {
   MFButtonVariant,
 } from "../../../../components/MFButton/MFButton";
 import { appUIDefinition } from "../../../../config/constants";
+import { GLOBALS } from "../../../../utils/globals";
 
 type BrowseFilterProps = {
   open: boolean;
@@ -228,6 +230,7 @@ const filterData = [
     ],
   },
 ];
+const SCREEN_WIDTH = Dimensions.get("window").width;
 const { width, height } = Dimensions.get("screen");
 const BrowseFilter = (props: BrowseFilterProps) => {
   const halfOpenOffset = Dimensions.get("screen").width * 0.25;
@@ -299,6 +302,21 @@ const BrowseFilter = (props: BrowseFilterProps) => {
     }
   };
   return (
+    <Modal
+        animationType="none"
+        transparent={true}
+        visible={props.open}
+        onRequestClose={() => {
+          // setExpanded(false);
+          // closeDrawer();
+          console.log("Modal has been closed.", props.open);
+        }}
+        style={[styles.main, GLOBALS.enableRTL ? { left: 0 } : { right: 0 }]}
+        onDismiss={() => {
+          console.log("Modal dismissed", props.open);
+        }}
+        presentationStyle={"overFullScreen"}
+      >
     <Animated.View style={[styles.container, animatedStyles]}>
       <View style={styles.innerContainer}>
         <>
@@ -451,12 +469,20 @@ const BrowseFilter = (props: BrowseFilterProps) => {
         </ScrollView>
       </View>
     </Animated.View>
+    </Modal>
   );
 };
 
 export default BrowseFilter;
 
 const styles = StyleSheet.create({
+  main: {
+    position: "absolute",
+    // right: 0,
+    top: 0,
+    width: SCREEN_WIDTH,
+    backgroundColor: "green",
+  },
   container: {
     backgroundColor: "#191b1f",
     width: "46%",
