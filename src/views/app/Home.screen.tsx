@@ -44,10 +44,8 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const [hubs, setHubs] = useState(Array<FeedItem>());
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const drawerRef: React.MutableRefObject<any> = useRef();
-  const menuRef: React.MutableRefObject<any> = useRef();
   const [open, setOpen] = useState(false);
   const firstCardRef = useRef<TouchableOpacity>(null);
-  const insets = useSafeAreaInsets();
 
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;

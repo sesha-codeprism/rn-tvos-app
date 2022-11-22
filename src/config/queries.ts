@@ -1,12 +1,10 @@
 import { useQueries, useQuery, useQueryClient } from "react-query";
-import { getDataFromUDL } from "../../backend";
+import { getDataFromUDL, getMassagedData } from "../../backend";
 import { getAllSubscriberProfiles } from "../../backend/subscriber/subscriber";
 import { parseUdl, UdlProviders } from "../../backend/udl/provider";
 import { FeedItem, HubsResponse } from "../@types/HubsResponse";
-import { SourceType } from "../utils/common";
-import { DefaultStore, massageDiscoveryFeed } from "../utils/DiscoveryUtils";
+import { DefaultStore } from "../utils/DiscoveryUtils";
 import { GLOBALS } from "../utils/globals";
-import { massageSubscriberFeed } from "../utils/Subscriber.utils";
 import { appUIDefinition, lang, pivots } from "./constants";
 
 const queryClient = useQueryClient()
@@ -54,20 +52,7 @@ const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: bo
                 const data = await getDataFromUDL(uri, shouldSendParams);
                 if (data) {
                     if (shouldMassageData) {
-                        if (udlID!.id.split("/")[0] === 'discovery') {
-                            const hasDataItems = data.data.Items;
-                            if (!hasDataItems) {
-                                const dataSource = { Items: data.data }
-                                const massagedData = massageDiscoveryFeed(dataSource, SourceType.VOD);
-                                return massagedData;
-                            } else {
-                                const massagedData = massageDiscoveryFeed(data.data, SourceType.VOD);
-                                return massagedData;
-                            }
-                        } else {
-                            const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
-                            return massagedData;
-                        }
+                        return getMassagedData(uri, data);
                     } else {
                         return data;
                     }
@@ -110,8 +95,7 @@ export const resetCaches = () => {
 
 
 export const resetSpecificQuery = async (key: string) => {
-    queryClient.invalidateQueries({ queryKey: [key] }).then(() => {
+    queryClient.invalidateQueries({ queryKey: key }).then(() => {
         console.log('Invalidated', key, "query");
     });
-
 }
