@@ -130,7 +130,8 @@ const MFMenu = (props: MFMenuProps) => {
                     setFocused("");
                   }}
                   onPress={() => {
-                    throw new Error("some error");
+                    // throw new Error("some error");
+                    props.navigation.navigate("guide");
                   }}
                 />
               </View>

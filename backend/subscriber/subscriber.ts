@@ -62,6 +62,7 @@ const getBookmarks = async (uri: string, params: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -84,6 +85,7 @@ const getSubscriberPins = async (params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -106,6 +108,7 @@ const getReminders = async (params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -127,6 +130,7 @@ const getSubscriberSubscriptions = async (params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -170,6 +174,7 @@ const getYouMightLikeBySpecificTaste = async (params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -191,6 +196,7 @@ const getLibrary = async (params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
   return response;

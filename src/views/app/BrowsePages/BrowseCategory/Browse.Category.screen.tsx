@@ -3,21 +3,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ImageBackground, StyleSheet, View } from "react-native";
 import MFText from "../../../../components/MFText";
 import { browseType, ItemShowType } from "../../../../utils/analytics/consts";
-import {
-  getScaledValue,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-} from "../../../../utils/dimensions";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { getIdFromURI } from "../../../../utils/helpers";
 import { getUIdef } from "../../../../utils/uidefinition";
-import {
-  getBaseURI,
-  removeIdFromUri,
-} from "../../../../../backend/utils/url/urlUtil";
-import { UdlProviders } from "../../../../../backend/udl/provider";
-import { removeTrailingSlash } from "../../../../utils/assetUtils";
-import { Feed } from "../../../../@types/HubsResponse";
-import { feedActionsByURI } from "../../../../utils/feedUtils";
 import BrowseCategoryCarousel from "./CategoryCarousel";
 import LinearGradient from "react-native-linear-gradient";
 import { AppImages } from "../../../../assets/images";
@@ -38,13 +26,7 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
   const [skip, setSkip] = useState(0);
 
   const browsePageConfig: any = getUIdef("BrowseCategory")?.config;
-  const scaledSnapToInterval = getScaledValue(browsePageConfig.snapToInterval);
-  const extraPadding = {
-    paddingBottom: scaledSnapToInterval,
-  };
   let requestedTime: Date | undefined;
-
-  const fetchFeeds = async (feed: Feed) => {};
 
   const browseFeedParams = (props: any): any => {
     const { feed } = props.route?.params;
