@@ -38,7 +38,7 @@ const MFOverlay: React.FunctionComponent<MFOverlayProps> = (props) => {
           ])}
         />
       )}
-      {props.displayTitle && (
+      {props.displayTitle!.length > 0 && (
         <MFText
           displayText={props.displayTitle}
           shouldRenderText
@@ -76,7 +76,7 @@ const MFOverlay: React.FunctionComponent<MFOverlayProps> = (props) => {
           <Text style={styles.bottomText}>REC</Text>
         </View>
       )}
-      {props.bottomText && (
+      {props.bottomText!.length > 0 && (
         <View
           style={[
             styles.bottomTextContainer,
