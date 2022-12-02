@@ -418,7 +418,7 @@ export const massageSubscriberFeed = (
       (item.CatalogInfo && durationInHoursMinutes(item.CatalogInfo)) || "";
     item["Rating"] = chooseRating(item.Ratings || item.CatalogInfo?.Ratings);
     item?.CatalogInfo?.RuntimeSeconds
-      ? (item["runtime"] = ` • ${fromSecondsToHHMMSS(
+      ? (item["runtime"] = `${fromSecondsToHHMMSS(
         item.CatalogInfo.RuntimeSeconds
       )}`)
       : (item["runtime"] = "");

@@ -131,7 +131,7 @@ const MFMenu = (props: MFMenuProps) => {
                   }}
                   onPress={() => {
                     // throw new Error("some error");
-                    props.navigation.navigate("guide");
+                    props.navigation.navigate("search");
                   }}
                 />
               </View>

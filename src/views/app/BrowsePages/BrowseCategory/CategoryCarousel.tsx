@@ -6,6 +6,8 @@ import { getDataFromUDL } from "../../../../../backend";
 import { parseUdl } from "../../../../../backend/udl/provider";
 import MFLoader from "../../../../components/MFLoader";
 import MFSwimLane from "../../../../components/MFSwimLane";
+import { MFTabBarStyles } from "../../../../components/MFTabBar/MFTabBarStyles";
+import MFText from "../../../../components/MFText";
 import { appUIDefinition } from "../../../../config/constants";
 import { massageSubscriberFeed } from "../../../../utils/assetUtils";
 import { ILibrarySet, SourceType } from "../../../../utils/common";
@@ -31,12 +33,16 @@ const BrowseCategoryCarousel: React.FunctionComponent<
   };
 
   const getFeedsList = async () => {
-    const data = await getDataFromUDL(props.feedDispatch);
-    console.log(data);
-    if (data) {
-      return filterData(data.data);
+    if (props.feedDispatch) {
+      const data = await getDataFromUDL(props.feedDispatch);
+      console.log(data);
+      if (data) {
+        return filterData(data.data);
+      } else {
+        Alert.alert("Something went wrong.. ");
+        return null;
+      }
     } else {
-      Alert.alert("Something went wrong.. ");
       return null;
     }
   };
@@ -84,31 +90,42 @@ const BrowseCategoryCarousel: React.FunctionComponent<
     <MFLoader />
   ) : (
     <SafeAreaView style={{ paddingBottom: 50 }}>
-      <FlatList
-        data={data}
-        keyExtractor={(x, i) => i.toString()}
-        ItemSeparatorComponent={(x, i) => (
-          <View
-            style={{
-              backgroundColor: "transparent",
-              height: 5,
-              width: SCREEN_WIDTH,
-            }}
-          />
-        )}
-        renderItem={({ item, index }) => {
-          return (
-            <MFSwimLane
-              key={index}
-              feed={item}
-              data={item.Items}
-              limitSwimlaneItemsTo={16}
-              swimLaneKey={swimLaneKey}
-              updateSwimLaneKey={updateSwimLaneKey}
+      {data !== undefined ? (
+        <FlatList
+          data={data}
+          keyExtractor={(x, i) => i.toString()}
+          ItemSeparatorComponent={(x, i) => (
+            <View
+              style={{
+                backgroundColor: "transparent",
+                height: 5,
+                width: SCREEN_WIDTH,
+              }}
             />
-          );
-        }}
-      />
+          )}
+          renderItem={({ item, index }) => {
+            return (
+              <MFSwimLane
+                key={index}
+                feed={item}
+                data={item.Items}
+                limitSwimlaneItemsTo={16}
+                swimLaneKey={swimLaneKey}
+                updateSwimLaneKey={updateSwimLaneKey}
+              />
+            );
+          }}
+        />
+      ) : (
+        <MFText
+          shouldRenderText
+          displayText={`No data found for ${props.feedDispatch}`}
+          textStyle={[
+            MFTabBarStyles.tabBarItemText,
+            { alignSelf: "center", color: "white", marginTop: 5 },
+          ]}
+        />
+      )}
     </SafeAreaView>
   );
 };

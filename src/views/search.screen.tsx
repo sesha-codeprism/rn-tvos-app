@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Dimensions, StyleSheet, ImageBackground } from "react-native";
 import MFSearch from "../components/MFSearch";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/dimensions";
 
 // const Search = requireNativeComponent('NKSearchComponent');
 
@@ -15,7 +16,8 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const onChangeText = (event: {
     nativeEvent: { text: React.SetStateAction<string> };
   }) => {
-    setSearchString(event.nativeEvent.text);
+    console.log(event.nativeEvent.text);
+    // setSearchString(event.nativeEvent.text);
   };
 
   return (
@@ -23,7 +25,11 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
       <View style={styles.search}>
         <MFSearch
           onChangeText={onChangeText}
-          style={{ height: 50, width: 50, backgroundColor: "grey" }}
+          style={{
+            height: SCREEN_HEIGHT * 0.35,
+            width: SCREEN_WIDTH,
+            backgroundColor: "black",
+          }}
         />
       </View>
       <View style={styles.secondComponent}>

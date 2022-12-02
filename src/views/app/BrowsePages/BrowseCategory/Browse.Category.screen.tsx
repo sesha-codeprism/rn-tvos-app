@@ -11,6 +11,8 @@ import LinearGradient from "react-native-linear-gradient";
 import { AppImages } from "../../../../assets/images";
 import { DefaultStore } from "../../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../../utils/globals";
+import { MFTabBarStyles } from "../../../../components/MFTabBar/MFTabBarStyles";
+import MFLoader from "../../../../components/MFLoader";
 
 interface BrowseCategoryProps {
   navigation: NativeStackNavigationProp<any>;
@@ -20,7 +22,8 @@ interface BrowseCategoryProps {
 const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
   props
 ) => {
-  const [feedDispatch, setFeedDispatch] = useState("");
+  const [feedDispatch, setFeedDispatch] = useState<any>();
+  const [isFeedDispatchSet, updateIsFeedDispatchSet] = useState(false);
   const { feed } = props.route.params;
   const [top, setTop] = useState(16);
   const [skip, setSkip] = useState(0);
@@ -33,40 +36,48 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
     const browseFeed = { ...feed };
     let browseFeedObject;
     const navigationTargetUri = feed.NavigationTargetUri?.split("?")[0];
+    console.log("navigationTargetUri", navigationTargetUri);
     if (feed?.ItemType === ItemShowType.SvodPackage) {
       browseFeedObject = browsePageConfig[ItemShowType.browseSvodPackage];
     } else {
       browseFeedObject = browsePageConfig[navigationTargetUri];
     }
-    let pivots = feed.NavigationTargetUri?.split("?")[1] || undefined;
-    if (pivots) {
-      pivots = pivots?.replace("=", "|");
-    }
-    if (browseFeedObject.params?.baseFilters) {
-      pivots = pivots
-        ? pivots?.concat(",", browseFeedObject.params?.baseFilters)
-        : browseFeedObject.params?.baseFilters;
-    }
-    if (navigationTargetUri === browseType.restartTv) {
-      browseFeed["Uri"] = `${browseFeedObject.uri}${getIdFromURI(feed?.Uri)}`;
-    } else {
-      browseFeed["Uri"] = browseFeedObject.uri;
-    }
+    if (browseFeedObject) {
+      let pivots = feed.NavigationTargetUri?.split("?")[1] || undefined;
+      if (pivots) {
+        pivots = pivots?.replace("=", "|");
+      }
+      if (browseFeedObject.params && browseFeedObject.params?.baseFilters) {
+        pivots = pivots
+          ? pivots?.concat(",", browseFeedObject.params?.baseFilters)
+          : browseFeedObject.params?.baseFilters;
+      }
+      if (navigationTargetUri === browseType.restartTv) {
+        browseFeed["Uri"] = `${browseFeedObject.uri}${getIdFromURI(feed?.Uri)}`;
+      } else {
+        browseFeed["Uri"] = browseFeedObject.uri;
+      }
 
-    browseFeed["requestedTime"] = requestedTime;
-    browseFeed["libraryId"] = browseFeedObject.params.libraryId;
-    browseFeed["pivotGroup"] = browseFeedObject.params.pivotGroup;
-    browseFeed["pivots"] = pivots && pivots;
-    browseFeed["$top"] = browseFeedObject.params.$top;
-    browseFeed["$itemsPerRow"] = browseFeedObject.params.$itemsPerRow;
-    browseFeed["$skip"] = browseFeedObject.params.$skip;
-    browseFeed["client"] = browseFeedObject.params.client;
-    return browseFeed;
+      browseFeed["requestedTime"] = requestedTime;
+      browseFeed["libraryId"] = browseFeedObject.params.libraryId;
+      browseFeed["pivotGroup"] = browseFeedObject.params.pivotGroup;
+      browseFeed["pivots"] = pivots && pivots;
+      browseFeed["$top"] = browseFeedObject.params.$top;
+      browseFeed["$itemsPerRow"] = browseFeedObject.params.$itemsPerRow;
+      browseFeed["$skip"] = browseFeedObject.params.$skip;
+      browseFeed["client"] = browseFeedObject.params.client;
+      return browseFeed;
+    } else {
+      return undefined;
+    }
   };
   useEffect(() => {
     const browseFeed = browseFeedParams(props);
+    updateIsFeedDispatchSet(true);
     console.log("BrowsePageConfig", browseFeed);
-    const feedDispatch = `${browseFeed.Uri}/?id=${browseFeed.Id}&$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${browseFeed.pivots}`;
+    const feedDispatch = browseFeed
+      ? `${browseFeed.Uri}/?id=${browseFeed.Id}&$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${browseFeed.pivots}`
+      : null;
     setFeedDispatch(feedDispatch);
   }, []);
   return (
@@ -97,8 +108,21 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
             </View>
           </View>
           <View style={styles.contentContainerStyles}>
-            {feedDispatch.length > 0 && (
+            {feedDispatch !== null &&
+            feedDispatch !== undefined &&
+            feedDispatch.length > 0 ? (
               <BrowseCategoryCarousel feedDispatch={feedDispatch} />
+            ) : isFeedDispatchSet ? (
+              <MFText
+                shouldRenderText
+                displayText="Couldn't fetch feeds from provided feed information"
+                textStyle={[
+                  MFTabBarStyles.tabBarItemText,
+                  { alignSelf: "center", color: "white", marginTop: 5 },
+                ]}
+              />
+            ) : (
+              <MFLoader />
             )}
           </View>
         </LinearGradient>

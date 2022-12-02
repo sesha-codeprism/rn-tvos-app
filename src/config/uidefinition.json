@@ -784,7 +784,8 @@
     "queryStaleTime": 3600000,
     "enableMarquee": false,
     "metadataTemplate": "{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}",
-    "limitSwimlaneItemsTo": 8
+    "limitSwimlaneItemsTo": 8,
+    "maxProfileNameLength": 20
   },
   "onscreenLanguage": [
     {
