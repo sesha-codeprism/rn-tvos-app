@@ -3,8 +3,15 @@ import { GLOBALS } from "../../src/utils/globals";
 import { DELETE, GET, POST, PUT } from "../utils/common/cloud";
 import { lang } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
+import axios from "axios";
 export type PinType = "adult" | "parentalcontrol" | "purchase";
-
+export interface SearchParam {
+  searchString: string;
+  $skip: number;
+  $top: number;
+  searchLive: boolean;
+  mediaTypes?: string;
+}
 const getProgramPlayActions = async (id: string, params: Object) => {
   const res = {
     name: "subscriber/getProgramPlayActions",
@@ -40,6 +47,24 @@ const getYouMightLike = async (params: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+  });
+  return response;
+};
+export const searchItems = async (params: SearchParam) => {
+  const url: string =
+    parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.search || "") +
+    "/v4/search/items";
+  const response = await GET({
+    url: `${url}?partialName=${params.searchString}&storeId=${
+      DefaultStore.Id
+    }&$skip=${params.$skip}&$top=${params.$top}&searchLive=${
+      params.searchLive
+    }&$groups=${GLOBALS.bootstrapSelectors?.RightsGroupIds}&$lang=${
+      lang || "en-US"
+    }`,
+    headers: {
+      authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
     },
   });
   return response;

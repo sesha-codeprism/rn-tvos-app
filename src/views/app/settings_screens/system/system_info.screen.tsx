@@ -15,7 +15,7 @@ const SystemInformationScreen: React.FunctionComponent<Props> = (
   const [list, setList] = useState<any[]>([]);
   const formatList = async () => {
     const ipAddress = await DeviceInfo.getIpAddress();
-    console.log('ipAddress', ipAddress);
+    console.log("ipAddress", ipAddress);
     const bootstrap = GLOBALS.bootstrapSelectors;
     const listItem = [
       {
@@ -28,15 +28,19 @@ const SystemInformationScreen: React.FunctionComponent<Props> = (
       },
       {
         title: "Device ID",
-        description: bootstrap?.DeviceId.toString(),
+        description: bootstrap?.DeviceId ? bootstrap?.DeviceId.toString() : "NA",
       },
       {
         title: "Experience Group",
-        description: bootstrap?.ExperienceGroup.toString(),
+        description: bootstrap?.ExperienceGroup
+          ? bootstrap?.ExperienceGroup.toString()
+          : "NA",
       },
       {
         title: "Channel Map",
-        description: bootstrap?.ChannelMapGroupName.toString(),
+        description: bootstrap?.ChannelMapGroupName
+          ? bootstrap?.ChannelMapGroupName.toString()
+          : "NA",
       },
       {
         title: "Player Version",
@@ -72,9 +76,9 @@ const SystemInformationScreen: React.FunctionComponent<Props> = (
         renderItem={({ item, index }) => {
           return (
             <Pressable
-            //   isTVSelectable={
-            //     index === 0 && index === list.length - 1 ? true : false
-            //   }
+              //   isTVSelectable={
+              //     index === 0 && index === list.length - 1 ? true : false
+              //   }
               hasTVPreferredFocus={index === 0 ? true : false}
               style={styles.listItemContainer}
             >

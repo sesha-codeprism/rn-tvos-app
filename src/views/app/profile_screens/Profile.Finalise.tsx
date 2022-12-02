@@ -1,12 +1,14 @@
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   Dimensions,
   Pressable,
+  PressableProps,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from "react-native";
 import FastImage from "react-native-fast-image";
@@ -45,11 +47,17 @@ const ProfileFinalisationScreen: React.FunctionComponent<
   const [additionalFields, setAdditionalFields] = useState({
     optOutPersonalDataUse: "",
   });
-  const [focused, setFocused] = useState<any>("");
+  const [focused, setFocused] = useState<any>(0);
+  const [listFocused, setListFocused] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
   const [loading, setLoading] = useState(false);
   const currentContext = useContext(GlobalContext);
-
+  const listItemRefs: any = Array(3)
+    .fill(0)
+    .map(() => {
+     return useRef<PressableProps>(null);
+    });
+  const doneButtonRef = useRef<PressableProps>(null);
   console.log("props coming", props.route.params);
 
   useEffect(() => {
@@ -82,6 +90,22 @@ const ProfileFinalisationScreen: React.FunctionComponent<
   ]);
   const onFocus = (index: number) => {
     setFocused(index);
+  };
+  const onFocusBar = () => {
+    console.log("bar focussed", focused, listFocused, listItemRefs);
+    if (!listFocused) {
+      // @ts-ignore
+      listItemRefs[focused].current?.setNativeProps({
+        hasTVPreferredFocus: true,
+      });
+      setListFocused(true);
+    } else {
+      // @ts-ignore
+      doneButtonRef.current?.setNativeProps({
+        hasTVPreferredFocus: true,
+      });
+      setListFocused(false);
+    }
   };
   const saveProfile = async () => {
     try {
@@ -167,9 +191,10 @@ const ProfileFinalisationScreen: React.FunctionComponent<
         <View style={MFProfileStyle.finalise_inputContainer}>
           <View style={{ marginTop: 50 }}>
             <Pressable
+              ref={listItemRefs[0]}
               style={MFProfileStyle.finalise_profileStyles}
               onFocus={() => {
-                onFocus(1);
+                onFocus(0);
               }}
               onPress={() => {
                 props.route.params.mode === "edit"
@@ -185,38 +210,41 @@ const ProfileFinalisationScreen: React.FunctionComponent<
                 source={AppImages[image]}
                 style={MFProfileStyle.finalise_profileStyles}
               />
-              {focused === 1 && props.route.params.mode === "edit" && (
-                <View
-                  style={{
-                    height: 150,
-                    width: 150,
-                    borderRadius: 150 / 2,
-                    marginLeft: 50,
-                    backgroundColor: "black",
-                    position: "absolute",
-                    justifyContent: "center",
-                    alignContent: "center",
-                    alignItems: "center",
-                    opacity: 0.6,
-                    borderWidth: 5,
-                    borderColor: "#053C69",
-                  }}
-                >
-                  <MFButton
-                    variant={MFButtonVariant.Icon}
-                    iconSource={AppImages.edit}
-                    iconStyles={MFProfileStyle.finalise_editIconStyles}
-                    avatarSource={{}}
-                    imageSource={{}}
-                    iconButtonStyles={{ shouldRenderImage: true }}
-                  />
-                </View>
-              )}
+              {focused === 0 &&
+                props.route.params.mode === "edit" &&
+                listFocused && (
+                  <View
+                    style={{
+                      height: 150,
+                      width: 150,
+                      borderRadius: 150 / 2,
+                      marginLeft: 50,
+                      backgroundColor: "black",
+                      position: "absolute",
+                      justifyContent: "center",
+                      alignContent: "center",
+                      alignItems: "center",
+                      opacity: 0.6,
+                      borderWidth: 5,
+                      borderColor: "#053C69",
+                    }}
+                  >
+                    <MFButton
+                      variant={MFButtonVariant.Icon}
+                      iconSource={AppImages.edit}
+                      iconStyles={MFProfileStyle.finalise_editIconStyles}
+                      avatarSource={{}}
+                      imageSource={{}}
+                      iconButtonStyles={{ shouldRenderImage: true }}
+                    />
+                  </View>
+                )}
             </Pressable>
             <Pressable
+              ref={listItemRefs[1]}
               style={MFProfileStyle.finalise_profileStyles}
               onFocus={() => {
-                onFocus(2);
+                onFocus(1);
               }}
               onPress={() => {
                 props.route.params.mode === "edit"
@@ -230,7 +258,9 @@ const ProfileFinalisationScreen: React.FunctionComponent<
             >
               <View
                 style={
-                  focused === 2 && props.route.params.mode === "edit"
+                  focused === 1 &&
+                  props.route.params.mode === "edit" &&
+                  listFocused
                     ? MFProfileStyle.finalise_activeBox
                     : MFProfileStyle.finalise_inActiveBox
                 }
@@ -250,28 +280,31 @@ const ProfileFinalisationScreen: React.FunctionComponent<
                     displayText={name}
                     textStyle={{
                       lineHeight: 50,
-                      color: focused === 2 ? "#EEEEEE" : "#828282",
+                      color: focused === 1 ? "#EEEEEE" : "#828282",
                       fontSize: 31,
                       fontWeight: "600",
                     }}
                   />
                 </View>
-                {focused === 2 && props.route.params.mode === "edit" && (
-                  <MFButton
-                    variant={MFButtonVariant.Icon}
-                    iconSource={AppImages.edit}
-                    iconStyles={MFProfileStyle.finalise_editIconStyles}
-                    avatarSource={{}}
-                    imageSource={{}}
-                    iconButtonStyles={{ shouldRenderImage: true }}
-                  />
-                )}
+                {focused === 1 &&
+                  props.route.params.mode === "edit" &&
+                  listFocused && (
+                    <MFButton
+                      variant={MFButtonVariant.Icon}
+                      iconSource={AppImages.edit}
+                      iconStyles={MFProfileStyle.finalise_editIconStyles}
+                      avatarSource={{}}
+                      imageSource={{}}
+                      iconButtonStyles={{ shouldRenderImage: true }}
+                    />
+                  )}
               </View>
             </Pressable>
             <Pressable
+              ref={listItemRefs[2]}
               style={MFProfileStyle.finalise_profileStyles}
               onFocus={() => {
-                onFocus(3);
+                onFocus(2);
               }}
               onPress={() => {
                 props.route.params.mode === "edit"
@@ -285,7 +318,9 @@ const ProfileFinalisationScreen: React.FunctionComponent<
             >
               <View
                 style={
-                  focused === 3 && props.route.params.mode === "edit"
+                  focused === 2 &&
+                  props.route.params.mode === "edit" &&
+                  listFocused
                     ? MFProfileStyle.finalise_activeBox
                     : MFProfileStyle.finalise_inActiveBox
                 }
@@ -297,7 +332,7 @@ const ProfileFinalisationScreen: React.FunctionComponent<
                     textStyle={{
                       fontSize: 23,
                       lineHeight: 38,
-                      color: focused === 3 ? "#EEEEEE" : "#828282",
+                      color: focused === 2 ? "#EEEEEE" : "#828282",
                     }}
                   />
                   <MFText
@@ -305,25 +340,38 @@ const ProfileFinalisationScreen: React.FunctionComponent<
                     displayText={optOutPersonalDataUse ? "Disabled" : "Enabled"}
                     textStyle={{
                       lineHeight: 50,
-                      color: focused === 3 ? "#EEEEEE" : "#828282",
+                      color: focused === 2 ? "#EEEEEE" : "#828282",
                       fontSize: 31,
                       fontWeight: "600",
                     }}
                   />
                 </View>
-                {focused === 3 && props.route.params.mode === "edit" && (
-                  <MFButton
-                    variant={MFButtonVariant.Icon}
-                    iconSource={AppImages.edit}
-                    iconStyles={MFProfileStyle.finalise_editIconStyles}
-                    avatarSource={{}}
-                    imageSource={{}}
-                    iconButtonStyles={{ shouldRenderImage: true }}
-                  />
-                )}
+                {focused === 2 &&
+                  props.route.params.mode === "edit" &&
+                  listFocused && (
+                    <MFButton
+                      variant={MFButtonVariant.Icon}
+                      iconSource={AppImages.edit}
+                      iconStyles={MFProfileStyle.finalise_editIconStyles}
+                      avatarSource={{}}
+                      imageSource={{}}
+                      iconButtonStyles={{ shouldRenderImage: true }}
+                    />
+                  )}
               </View>
             </Pressable>
           </View>
+          <TouchableOpacity
+            style={{
+              height: "100%",
+              width: 10,
+              position: "absolute",
+              backgroundColor: "transparent",
+              right: 0,
+              top: 0,
+            }}
+            onFocus={onFocusBar}
+          />
         </View>
         <View
           style={{
@@ -336,6 +384,7 @@ const ProfileFinalisationScreen: React.FunctionComponent<
           }}
         >
           <MFButton
+            ref={doneButtonRef}
             variant={MFButtonVariant.Contained}
             textLabel={props.route.params.mode === "edit" ? "Done" : "Save"}
             iconSource={0}
@@ -365,7 +414,7 @@ const ProfileFinalisationScreen: React.FunctionComponent<
                 hoverColor: appUIDefinition.theme.colors.secondary,
               },
             }}
-            hasTVPreferredFocus={true}
+            // hasTVPreferredFocus={true}
           />
           <MFButton
             variant={MFButtonVariant.Contained}

@@ -24,6 +24,7 @@ import { duplex } from "../../modules/duplex";
 import { generateGUID } from "../../utils/guid";
 import { DefaultStore, setDefaultStore } from "../../utils/DiscoveryUtils";
 import { connectDuplex, setGlobalData } from "../../utils/splash/splash_utils";
+import { getMovies, getTVShows } from "../../../backend/discovery/discovery";
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
@@ -94,6 +95,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     setDeviceInfo()
       .then((_) => {
         checkStore();
+        getMoviesAndTvShow();
         // Alert.alert("Animation done");
       })
       .catch((e) => {
@@ -116,6 +118,21 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     }
   };
   const showAnimation = appUIDefinition.config.useLottieAnimationOnSplash;
+  const getMoviesAndTvShow = async () => {
+    console.log("getMoviesAndTvShow");
+    const movies = await getMovies("", {
+      pivots: "LicenseWindow",
+    });
+    const TVShow = await getTVShows("", {
+      pivots: "LicenseWindow",
+    });
+    GLOBALS.moviesAndTvShows = [
+      { TVShow: TVShow.data.Items },
+      { Movie: movies.data.Items },
+    ];
+    console.log("movies", movies);
+    console.log("TVShow", TVShow);
+  };
   return (
     <View style={styles.container}>
       {showAnimation ? (

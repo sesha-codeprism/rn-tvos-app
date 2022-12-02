@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { PressableProps, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFText from "../../../../components/MFText";
@@ -51,9 +51,13 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const baseValues = getBaseValues(feed, browsePageConfig);
   const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
   const [browsePivots, setBrowsePivots] = useState(browseFeed.pivots);
-
+  // const menuRef = filterData.map(() => useRef<PressableProps>(null));
+  // const subMenuFirstRef = useRef<PressableProps>(null);
   const pivotsParam = "pivots=true";
   const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
+ 
+  const filterRef = 
+
   useEffect(() => {
     if (didMountRef.current) {
     } else didMountRef.current = true;
@@ -245,7 +249,18 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
           />
         </View>
       </View>
+      
       <View style={styles.contentContainerStyles}>
+      {/* <TouchableOpacity
+        style={{
+          width: "100%",
+          height: 30,
+          backgroundColor: "red",
+          // position: "absolute",
+        
+        }}
+        onFocus={()=>{}}
+      /> */}
         <View style={styles.currentFeedContainerStyles}>
           {currentFeed && (
             <>
@@ -271,16 +286,17 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                 </FastImage>
               </View>
               <View style={styles.metadataContainerStyles}>
-                {currentFeed?.CatalogInfo && currentFeed.CatalogInfo.Network && (
-                  <View style={styles.networkLogoContainerStyle}>
-                    <FastImage
-                      source={{
-                        uri: getNetworkInfo(currentFeed).tenFootLargeURL.uri,
-                      }}
-                      style={styles.networkLogoStyles}
-                    />
-                  </View>
-                )}
+                {currentFeed?.CatalogInfo &&
+                  currentFeed.CatalogInfo.Network && (
+                    <View style={styles.networkLogoContainerStyle}>
+                      <FastImage
+                        source={{
+                          uri: getNetworkInfo(currentFeed).tenFootLargeURL.uri,
+                        }}
+                        style={styles.networkLogoStyles}
+                      />
+                    </View>
+                  )}
                 <MFText
                   shouldRenderText
                   displayText={currentFeed!.title}
