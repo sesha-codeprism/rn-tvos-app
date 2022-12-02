@@ -254,7 +254,9 @@ export const MFProfileStyle = StyleSheet.create({
     width: 837,
     borderRadius: 4,
     marginTop: 50,
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center'
   },
   create_keyboardButton: {
     width: 46,

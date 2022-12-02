@@ -31,9 +31,7 @@
   NSLog(@"width: %@",self.width);
   NSLog(@"height: %@",self.height);
   
-
-  
-    UIViewController *parentVC = self.reactViewController;
+  UIViewController *parentVC = self.reactViewController;
     
     if(parentVC == nil) {
         return;
@@ -43,13 +41,11 @@
   uiSearchController.view.frame = CGRectMake(0, 0, [self.width doubleValue], [self.height doubleValue]);
   uiSearchContainerController = [[UISearchContainerViewController alloc] initWithSearchController:uiSearchController];
   uiSearchController.view.backgroundColor = self.backgroundColor;
-//  uiSearchController.view.frame.size.width = self.width;
-//  uiSearchController.view.bounds.size.height = self.height;
-  uiSearchController.searchResultsUpdater = self;
   uiSearchController.searchBar.searchBarStyle = UISearchBarStyleProminent;
   [uiSearchController setObscuresBackgroundDuringPresentation:true];
   uiSearchController.hidesNavigationBarDuringPresentation = false;
   uiSearchController.obscuresBackgroundDuringPresentation = false;
+  
 //  [uiViewController setView:parentVC.view];
 
 

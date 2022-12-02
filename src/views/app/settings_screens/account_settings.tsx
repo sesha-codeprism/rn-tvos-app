@@ -1,4 +1,4 @@
-import { BackHandler, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFPopup from "../../../components/MFPopup";
@@ -7,7 +7,6 @@ import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
 import { updateStore } from "../../../utils/helpers";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import { resetCaches } from "../../../config/queries";
-import { useNavigation } from "@react-navigation/native";
 import { AppStrings } from "../../../config/strings";
 import { deleteDevice } from "../../../../backend/subscriber/subscriber";
 

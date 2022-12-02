@@ -17,6 +17,7 @@ const SystemInformationScreen: React.FunctionComponent<Props> = (
     const ipAddress = await DeviceInfo.getIpAddress();
     console.log("ipAddress", ipAddress);
     const bootstrap = GLOBALS.bootstrapSelectors;
+    console.log("bootstrap", bootstrap);
     const listItem = [
       {
         title: "Network Info",
@@ -32,9 +33,9 @@ const SystemInformationScreen: React.FunctionComponent<Props> = (
       },
       {
         title: "Experience Group",
-        description: bootstrap?.ExperienceGroup
-          ? bootstrap?.ExperienceGroup.toString()
-          : "NA",
+        description:
+          bootstrap?.ExperienceGroup?.toString() ||
+          "No experience group details found",
       },
       {
         title: "Channel Map",
@@ -62,7 +63,13 @@ const SystemInformationScreen: React.FunctionComponent<Props> = (
       console.log("focussed fired in display screen");
       // The screen is focused
       // Call for action
-      formatList();
+      formatList()
+        .then(() => {
+          console.log("FormatList done");
+        })
+        .catch((err) => {
+          console.log("Encountered some error during formatList", err);
+        });
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;

@@ -259,6 +259,7 @@ interface Config {
   enableMarquee: boolean;
   metadataTemplate: string;
   limitSwimlaneItemsTo: number;
+  maxProfileNameLength: number;
 }
 
 interface CurrentLocale {

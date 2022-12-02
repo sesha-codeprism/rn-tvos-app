@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Alert,
   Dimensions,
   FlatList,
   Pressable,
-  StyleSheet,
+  Text,
   View,
 } from "react-native";
 import MFButton from "../../../components/MFButton/MFButton";
@@ -17,10 +17,11 @@ import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import { GLOBALS } from "../../../utils/globals";
-import { updateUserProfile } from "../../../../backend/subscriber/subscriber";
 import { MFProfileStyle } from "../../../config/styles/MFProfileStyles";
 import FastImage from "react-native-fast-image";
-const { width, height } = Dimensions.get("window");
+import { FakeCaret } from "../../../components/FakeCaret";
+import { getAllSubscriberProfiles } from "../../../../backend/subscriber/subscriber";
+import { UserProfile } from "../../../@types/UserProfile";
 
 const keyboard: FormKeyBoard = require("../../../config/keyboards/FormKeyboard.json");
 
@@ -33,7 +34,23 @@ interface CreateProfileProps {
 const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
   props: any
 ) => {
+  const maxProfileNameLength = appUIDefinition.config.maxProfileNameLength;
   console.log("props coming to create profile", props);
+  const CaretComponent = () => {
+    return (
+      <Text
+        style={{
+          fontWeight: "bold",
+          fontSize: 40,
+          marginBottom: 5,
+          color: "#c5c5c6",
+        }}
+      >
+        {"|"}
+      </Text>
+    );
+  };
+  const refCaret = useRef();
   const [titleString, setTitleString] = useState(
     props.route.params &&
       props.route.params.item &&
@@ -42,6 +59,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
       : ""
   );
   const [focus, setFocus] = useState("");
+
   const onPressSave = async () => {
     if (props.route.params.item.Name === titleString) {
       Alert.alert(
@@ -55,22 +73,45 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
         ]
       );
     } else {
-      GLOBALS.editUserProfile.Name = titleString;
-      props.navigation.navigate(Routes.ProfileFinalise, {
-        item: GLOBALS.editUserProfile,
-        mode: "edit",
-      });
+      //TODO: Fill this section up
+      continueProfileCreation();
     }
-    // else {
-    //   try {
-    //     const payload = { Id: props.route.params.item.id, Name: titleString, UserCreated: true };
-    //     const result = await updateUserProfile(payload);
-    //     console.log("update user result", result);
-    //   } catch (error) {
-    //     console.log("error updating user", error);
-    //   }
-    // }
   };
+
+  const continueProfileCreation = () => {
+    GLOBALS.editUserProfile.Name = titleString;
+    props.navigation.navigate(Routes.ProfileFinalise, {
+      item: GLOBALS.editUserProfile,
+      mode: "edit",
+    });
+  };
+
+  const createProfile = async () => {
+    try {
+      const profileResponse = await getAllSubscriberProfiles();
+      const profilesArray: Array<UserProfile> = profileResponse.data;
+      const isNameAlreadyTaken = profilesArray.some(
+        (profile) => profile.Name === titleString
+      );
+      console.log("isNameAlreadyTaken", isNameAlreadyTaken);
+      if (isNameAlreadyTaken) {
+        Alert.alert(
+          `Name already taken`,
+          `Profile name "${titleString}" is already taken. Please enter some other name`
+        );
+      } else {
+        (GLOBALS.createUserProfile.name = titleString),
+          props.navigation.navigate(Routes.ChooseProfile, {
+            mode: "create",
+            item: null,
+          });
+      }
+    } catch (e) {
+      console.log("Something went wrong", e);
+      Alert.alert("Something went wrong.. Please contact support");
+    }
+  };
+
   return (
     <View style={MFProfileStyle.create_container}>
       <View style={MFProfileStyle.create_profileTitleContainer}>
@@ -97,6 +138,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
               displayText={titleString}
               textStyle={MFProfileStyle.create_titleTextStyle}
             />
+            <FakeCaret ref={refCaret} CaretComponent={CaretComponent} />
           </View>
           <View style={{ marginTop: 50 }}>
             <FlatList
@@ -117,7 +159,15 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                         textLabel={item.content?.toString()}
                         textStyle={MFProfileStyle.create_keyboardButtonText}
                         onPress={() => {
-                          setTitleString(titleString + item.content);
+                          if (titleString.length < maxProfileNameLength) {
+                            setTitleString(titleString + item.content);
+                          } else {
+                            if (__DEV__) {
+                              console.log(
+                                "Max length reached.. Stop hurting the keyboard.."
+                              );
+                            }
+                          }
                         }}
                         onFocus={() => {
                           setFocus("");
@@ -155,7 +205,9 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                       }}
                       onPress={() => {
                         if (item.image === "space") {
-                          setTitleString(titleString + " ");
+                          if (titleString.length < maxProfileNameLength) {
+                            setTitleString(titleString + " ");
+                          }
                         } else {
                           setTitleString(titleString.slice(0, -1));
                         }
@@ -174,39 +226,6 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                             : MFProfileStyle.create_keyboardDelete
                         }
                       />
-                      {/* <MFButton
-                        variant={MFButtonVariant.Image}
-                        iconSource={0}
-                        onPress={() => {
-                          if (item.image === "space") {
-                            setTitleString(titleString + " ");
-                          } else {
-                            setTitleString(titleString.slice(0, -1));
-                          }
-                        }}
-                        onFocus={() => {}}
-                        imageSource={
-                          item.image === "space"
-                            ? AppImages.space_png
-                            : AppImages.delete_png
-                        }
-                        imageStyles={
-                          item.image === "space"
-                            ? MFProfileStyle.create_keyboardSpace
-                            : MFProfileStyle.create_keyboardDelete
-                        }
-                        avatarSource={0}
-                        containedButtonProps={{
-                          containedButtonStyle: {
-                            enabled: true,
-                            focusedBackgroundColor: "#053C69",
-                            unFocusedBackgroundColor: "transparent",
-                            elevation: 5,
-                            unFocusedTextColor: "grey",
-                            hoverColor: "transparent",
-                          },
-                        }}
-                      /> */}
                     </Pressable>
                   )}
                 </View>
@@ -228,7 +247,15 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                       textLabel={item.content?.toString()}
                       textStyle={MFProfileStyle.create_keyboardButtonText}
                       onPress={() => {
-                        setTitleString(titleString + item.content);
+                        if (titleString.length < maxProfileNameLength) {
+                          setTitleString(titleString + item.content);
+                        } else {
+                          if (__DEV__) {
+                            console.log(
+                              "Max name length reached.. Stop typing"
+                            );
+                          }
+                        }
                       }}
                       onFocus={() => {
                         setFocus("");
@@ -266,7 +293,13 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                       textLabel={item.content?.toString()}
                       textStyle={MFProfileStyle.create_keyboardButtonText}
                       onPress={() => {
-                        setTitleString(titleString + item.content);
+                        if (titleString.length < maxProfileNameLength) {
+                          setTitleString(titleString + item.content);
+                        } else {
+                          if (__DEV__) {
+                            console.log("Stop typing, hotshot..");
+                          }
+                        }
                       }}
                       onFocus={() => {
                         setFocus("");
@@ -310,18 +343,16 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
               iconSource={0}
               imageSource={0}
               avatarSource={0}
-              onFocus={()=>{setFocus('')}}
+              onFocus={() => {
+                setFocus("");
+              }}
               onPress={() => {
                 if (titleString == "") {
                   Alert.alert("Please enter some name");
                 } else {
                   props.route.params.mode === "edit"
                     ? onPressSave()
-                    : ((GLOBALS.createUserProfile.name = titleString),
-                      props.navigation.navigate(Routes.ChooseProfile, {
-                        mode: "create",
-                        item: null,
-                      }));
+                    : createProfile();
                 }
               }}
               style={{ width: 274, height: 62, margin: 20 }}

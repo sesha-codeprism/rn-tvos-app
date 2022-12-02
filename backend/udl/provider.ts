@@ -2,6 +2,7 @@ import { registerDiscoveryUdls } from "../discovery/discovery";
 import { registerSubscriberUdls } from "../subscriber/subscriber";
 import { getUrlParts, getQueryParams, parseUri } from "../utils/url/urlUtil";
 import { registerLiveUdls } from "../live/live";
+import { registerDVRProxyUdls } from "../dvrproxy/dvrproxy";
 
 export const UdlProviders: any = {};
 export const udlList: any = {}
@@ -20,7 +21,8 @@ export const registerUdls = () => {
   accumulateUdls(
     ...registerDiscoveryUdls(),
     ...registerSubscriberUdls(),
-    ...registerLiveUdls()
+    ...registerLiveUdls(),
+    ...registerDVRProxyUdls(),
   );
 };
 

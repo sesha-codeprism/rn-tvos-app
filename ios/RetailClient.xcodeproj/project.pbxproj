@@ -107,6 +107,9 @@
 		59A99ABB2853229B00560F39 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A992853229A00560F39 /* Inter-Medium.ttf */; };
 		59A99ABC2853229B00560F39 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A992853229A00560F39 /* Inter-Medium.ttf */; };
 		59A99ABD2853229B00560F39 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A992853229A00560F39 /* Inter-Medium.ttf */; };
+		59B80DA22936A2F2001D82A8 /* SearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 59B80DA12936A2F2001D82A8 /* SearchComponent.m */; };
+		59B80DA32936A2F2001D82A8 /* SearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 59B80DA12936A2F2001D82A8 /* SearchComponent.m */; };
+		59B80DA42936A2F2001D82A8 /* SearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 59B80DA12936A2F2001D82A8 /* SearchComponent.m */; };
 		813F8FE0273CF985005EB165 /* NKSearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 813F8FDA273CF985005EB165 /* NKSearchComponent.m */; };
 		813F8FE1273CF985005EB165 /* NKSearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 813F8FDA273CF985005EB165 /* NKSearchComponent.m */; };
 		813F8FE2273CF985005EB165 /* NKSearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 813F8FDA273CF985005EB165 /* NKSearchComponent.m */; };
@@ -213,6 +216,8 @@
 		59A99A972853229A00560F39 /* Inter-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Black.ttf"; path = "../src/assets/fonts/Inter-Black.ttf"; sourceTree = "<group>"; };
 		59A99A982853229A00560F39 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Bold.ttf"; path = "../src/assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
 		59A99A992853229A00560F39 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Medium.ttf"; path = "../src/assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
+		59B80DA02936A2F1001D82A8 /* SearchComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchComponent.h; sourceTree = "<group>"; };
+		59B80DA12936A2F2001D82A8 /* SearchComponent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchComponent.m; sourceTree = "<group>"; };
 		813F8FDA273CF985005EB165 /* NKSearchComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NKSearchComponent.m; sourceTree = "<group>"; };
 		813F8FDB273CF985005EB165 /* NKSearchComponentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NKSearchComponentManager.h; sourceTree = "<group>"; };
 		813F8FDC273CF985005EB165 /* NKSearchComponentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NKSearchComponentManager.m; sourceTree = "<group>"; };
@@ -420,6 +425,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				59B80DA02936A2F1001D82A8 /* SearchComponent.h */,
+				59B80DA12936A2F2001D82A8 /* SearchComponent.m */,
 				13B07FAE1A68108700A75B9A /* RetailClient */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RetailClientTests */,
@@ -935,6 +942,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				009FA73F2738F53600417869 /* ContentView.swift in Sources */,
 				0035244C276BBF4200360F43 /* BaseCollectionViewCell.swift in Sources */,
+				59B80DA22936A2F2001D82A8 /* SearchComponent.m in Sources */,
 				0035DCA4276BB1A600360F43 /* SampleViewController.swift in Sources */,
 				813F8FE4273CF985005EB165 /* NKSearchComponentManager.m in Sources */,
 				8168723B273073D300960AFF /* MKGuide.swift in Sources */,
@@ -980,6 +988,7 @@
 				813F8FEA273CF985005EB165 /* NKSearchResultsViewController.m in Sources */,
 				0097B10527AC556200742D4C /* EPGBackup.swift in Sources */,
 				8168724327307B9F00960AFF /* MKGuideManager.swift in Sources */,
+				59B80DA32936A2F2001D82A8 /* SearchComponent.m in Sources */,
 				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
 				0035244D276BBF4200360F43 /* BaseCollectionViewCell.swift in Sources */,
 				0F6088C02720633E0052254E /* MKGuide.m in Sources */,
@@ -998,6 +1007,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				813F8FEB273CF985005EB165 /* NKSearchResultsViewController.m in Sources */,
+				59B80DA42936A2F2001D82A8 /* SearchComponent.m in Sources */,
 				813F8FE3273CF985005EB165 /* NKSearchComponent.m in Sources */,
 				0F6088C22722B9060052254E /* MKGuide.m in Sources */,
 				2DCD954D1E0B4F2C00145EB5 /* RetailClientTests.m in Sources */,
@@ -1141,7 +1151,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = Y6TVXWHZRK;
 				ENABLE_BITCODE = NO;
@@ -1151,7 +1161,7 @@
 				INFOPLIST_FILE = "RetailClient-tvOS/Info.plist";
 				"LD_DYLIB_ALLOWABLE_CLIENTS[sdk=appletvos*]" = "";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.12;
+				MARKETING_VERSION = 1.13;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1185,7 +1195,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = Y6TVXWHZRK;
 				ENABLE_BITCODE = NO;
@@ -1194,7 +1204,7 @@
 				INFOPLIST_FILE = "RetailClient-tvOS/Info.plist";
 				"LD_DYLIB_ALLOWABLE_CLIENTS[sdk=appletvos*]" = "";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.12;
+				MARKETING_VERSION = 1.13;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
