@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import FastImage from "react-native-fast-image";
 import { AppImages } from "../assets/images";
-import MFText from "./MFText";
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Routes } from "../config/navigation/RouterOutlet";
@@ -97,12 +96,6 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
         }
         style={[
           styles.rootContainer,
-          // focused
-          //   ? StyleSheet.flatten([
-          //       styles.focusedStyle,
-          //       styles.rootContainer,
-          //       props.focusedStyle,
-          //     ])
           StyleSheet.flatten(
             (styles.unfocusedStyle, styles.rootContainer, props.focusedStyle)
           ),
@@ -150,7 +143,9 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
                   }
             }
           />
-          {props.userProfile && focused && props.checkedOnFocus ? (
+          {props.userProfile &&
+          props.userProfile.Id === GLOBALS.userProfile?.Id &&
+          props.checkedOnFocus ? (
             <View style={styles.activeProfileIndicator}>
               <FastImage
                 source={AppImages.tick_active}

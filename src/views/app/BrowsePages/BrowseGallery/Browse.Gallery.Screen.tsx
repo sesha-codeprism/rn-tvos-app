@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  PressableProps,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFText from "../../../../components/MFText";
@@ -32,6 +38,7 @@ import {
   getBaseValues,
   createInitialFilterState,
 } from "./BrowseUtils/BrowseUtils";
+import { MFTabBarStyles } from "../../../../components/MFTabBar/MFTabBarStyles";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -51,10 +58,12 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const baseValues = getBaseValues(feed, browsePageConfig);
   const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
   const [browsePivots, setBrowsePivots] = useState(browseFeed.pivots);
-
+  // const menuRef = filterData.map(() => useRef<PressableProps>(null));
+  // const subMenuFirstRef = useRef<PressableProps>(null);
   const pivotsParam = "pivots=true";
   const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
-  useEffect(() => {
+
+  const filterRef = useEffect(() => {
     if (didMountRef.current) {
     } else didMountRef.current = true;
   });
@@ -72,22 +81,25 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
 
   //@ts-ignore
   const fetchFeeds = async (requestPivots: any) => {
-    const uri = `${browseFeed.Uri}?$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${requestPivots}`;
-    const data = await getDataFromUDL(uri);
-    if (data) {
-      /** we have data from backend, so use the data and setState */
-      const massagedData = getMassagedData(uri, data);
-      console.log("Setting feed data:", data, "for", uri);
-      // setFeedData(massagedData);
-      return massagedData;
-    } else {
-      console.log("No data currently for", uri);
-      /** No data from backend.. so just render placeholder data.. */
+    try {
+      const uri = `${browseFeed.Uri}?$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${requestPivots}`;
+      const data = await getDataFromUDL(uri);
+      if (data) {
+        /** we have data from backend, so use the data and setState */
+        const massagedData = getMassagedData(uri, data);
+        console.log("Setting feed data:", data, "for", uri);
+        // setFeedData(massagedData);
+        return massagedData;
+      } else {
+        console.log("No data currently for", uri);
+        /** No data from backend.. so just render placeholder data.. */
+        return undefined;
+      }
+    } catch (e) {
+      console.log("Issue in getting feeds,actually..", e);
       return undefined;
     }
   };
-
-  const makeFeedRequest = async () => {};
 
   const refreshFeedsByPivots = () => {
     const parsedFilterState = filterState;
@@ -133,11 +145,16 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const pivotQuery = useQuery(
     "pivots",
     async () => {
-      const pivots = await getDataFromUDL(pivotURL);
-      const firstFilter = createInitialFilterState(pivots.data, baseValues);
-      setFilterState(firstFilter);
-      console.log("firstFilter", firstFilter);
-      return pivots;
+      try {
+        const pivots = await getDataFromUDL(pivotURL);
+        const firstFilter = createInitialFilterState(pivots.data, baseValues);
+        setFilterState(firstFilter);
+        console.log("firstFilter", firstFilter);
+        return pivots;
+      } catch (e) {
+        console.log("Some error in getting pivots", e);
+        return undefined;
+      }
     },
     {
       cacheTime: appUIDefinition.config.queryCacheTime,
@@ -245,98 +262,123 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
           />
         </View>
       </View>
-      <View style={styles.contentContainerStyles}>
-        <View style={styles.currentFeedContainerStyles}>
-          {currentFeed && (
+      {isLoading ? (
+        <MFLoader />
+      ) : (
+        <View style={styles.contentContainerStyles}>
+          {data ? (
             <>
-              <View style={styles.posterImageContainerStyles}>
-                <FastImage
-                  style={styles.posterImageStyle}
-                  source={{
-                    uri:
-                      currentFeed?.image16x9PosterURL != undefined
-                        ? currentFeed!.image16x9PosterURL.uri
-                        : AppImages.tvshowPlaceholder,
-                    priority: FastImage.priority.normal,
+              <View style={styles.currentFeedContainerStyles}>
+                {currentFeed && (
+                  <>
+                    <View style={styles.posterImageContainerStyles}>
+                      <FastImage
+                        style={styles.posterImageStyle}
+                        source={{
+                          uri:
+                            currentFeed?.image16x9PosterURL != undefined
+                              ? currentFeed!.image16x9PosterURL.uri
+                              : AppImages.tvshowPlaceholder,
+                          priority: FastImage.priority.normal,
+                        }}
+                      >
+                        <LinearGradient
+                          colors={["transparent", "#00030E", "#00030E"]}
+                          start={{ x: 0, y: 0.8 }}
+                          end={{ x: 0, y: 1 }}
+                          style={{
+                            flex: 1,
+                          }}
+                        />
+                      </FastImage>
+                    </View>
+                    <View style={styles.metadataContainerStyles}>
+                      {currentFeed?.CatalogInfo &&
+                        currentFeed.CatalogInfo.Network && (
+                          <View style={styles.networkLogoContainerStyle}>
+                            <FastImage
+                              source={{
+                                uri: getNetworkInfo(currentFeed).tenFootLargeURL
+                                  .uri,
+                              }}
+                              style={styles.networkLogoStyles}
+                            />
+                          </View>
+                        )}
+                      <MFText
+                        shouldRenderText
+                        displayText={currentFeed!.title}
+                        textStyle={styles.titleTextStyle}
+                      />
+                      <MFText
+                        shouldRenderText
+                        displayText={getResolvedMetadata(
+                          appUIDefinition.metadataByItemType.RECOMM.metadata2,
+                          currentFeed
+                        )}
+                        textStyle={styles.metadataLine2Styles}
+                      />
+                      {renderRatingValues()}
+                    </View>
+                  </>
+                )}
+              </View>
+              <View style={styles.gridViewContainerStyles}>
+                <LinearGradient
+                  colors={[
+                    "transparent",
+                    "#00030E",
+                    "#00030E",
+                    "#00030E",
+                    "#00030E",
+                    "#00030E",
+                  ]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0.1, y: 0 }}
+                  style={{
+                    flex: 1,
                   }}
                 >
-                  <LinearGradient
-                    colors={["transparent", "#00030E", "#00030E"]}
-                    start={{ x: 0, y: 0.8 }}
-                    end={{ x: 0, y: 1 }}
-                    style={{
-                      flex: 1,
-                    }}
+                  <MFGridView
+                    dataSource={data}
+                    style={HomeScreenStyles.portraitCardStyles}
+                    imageStyle={HomeScreenStyles.portraitCardImageStyles}
+                    focusedStyle={HomeScreenStyles.focusedStyle}
+                    onFocus={updateFeed}
+                    autoFocusOnFirstCard
                   />
-                </FastImage>
-              </View>
-              <View style={styles.metadataContainerStyles}>
-                {currentFeed?.CatalogInfo && currentFeed.CatalogInfo.Network && (
-                  <View style={styles.networkLogoContainerStyle}>
-                    <FastImage
-                      source={{
-                        uri: getNetworkInfo(currentFeed).tenFootLargeURL.uri,
-                      }}
-                      style={styles.networkLogoStyles}
-                    />
-                  </View>
-                )}
-                <MFText
-                  shouldRenderText
-                  displayText={currentFeed!.title}
-                  textStyle={styles.titleTextStyle}
-                />
-                <MFText
-                  shouldRenderText
-                  displayText={getResolvedMetadata(
-                    appUIDefinition.metadataByItemType.RECOMM.metadata2,
-                    currentFeed
-                  )}
-                  textStyle={styles.metadataLine2Styles}
-                />
-                {renderRatingValues()}
+                </LinearGradient>
               </View>
             </>
-          )}
-        </View>
-        <View style={styles.gridViewContainerStyles}>
-          {isLoading ? (
-            <MFLoader transparent={true} />
           ) : (
-            <LinearGradient
-              colors={[
-                "transparent",
-                "#00030E",
-                "#00030E",
-                "#00030E",
-                "#00030E",
-                "#00030E",
-              ]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0.1, y: 0 }}
+            <View
               style={{
-                flex: 1,
+                height: "100%",
+                width: "100%",
+                alignContent: "center",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <MFGridView
-                dataSource={data}
-                style={HomeScreenStyles.portraitCardStyles}
-                imageStyle={HomeScreenStyles.portraitCardImageStyles}
-                focusedStyle={HomeScreenStyles.focusedStyle}
-                onFocus={updateFeed}
-                autoFocusOnFirstCard
+              <MFText
+                shouldRenderText
+                displayText={`Couldn't fetch data for ${browseFeed.Uri}`}
+                textStyle={[
+                  MFTabBarStyles.tabBarItemText,
+                  { color: "white", marginTop: 5 },
+                ]}
               />
-            </LinearGradient>
+            </View>
           )}
         </View>
-      </View>
+      )}
       {pivotQuery.isLoading ? (
         <View />
       ) : (
         <BrowseFilter
           //@ts-ignore
           open={openMenu}
-          filterData={pivotQuery.data.data}
+          filterData={pivotQuery?.data?.data}
           // handleFilterChange={(value) => {
           //   console.log("Value is", value);
           // }}

@@ -1,7 +1,14 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { View, Alert, StyleSheet, Dimensions, Pressable } from "react-native";
+import {
+  View,
+  Alert,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+  Text,
+} from "react-native";
 import MFButton, {
   MFButtonVariant,
 } from "../../../components/MFButton/MFButton";
@@ -102,9 +109,6 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                 }}
                 onPress={() => {
                   toggleShouldRenderImage(!shouldRenderImage);
-                  !shouldRenderImage
-                    ? setShowPersonalizationPopup(true)
-                    : false;
                 }}
                 style={{ height: "100%" }}
               >
@@ -130,13 +134,15 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                   shouldRenderText={true}
                   displayText={"Allow Profile Personalization"}
                 />
-
+                {/* <Text style={MFProfileStyle.personalize_subTitleStyles}>Enabling Profile Personalization will allow the system to to improve the viewing experience for ndividual profiles. It is highly recommended that you enable this feature for the best viewing experience.</Text> */}
                 <MFText
                   textStyle={MFProfileStyle.personalize_subTitleStyles}
                   shouldRenderText={true}
                   displayText={
                     "Enabling Profile Personalization will allow the system to to improve the viewing experience for ndividual profiles. It is highly recommended that you enable this feature for the best viewing experience."
                   }
+                  adjustsFontSizeToFit={false}
+                  numberOfLines={3}
                 />
               </View>
             </View>
@@ -266,7 +272,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
           />
         </View>
       </View>
-      {!shouldRenderImage && showPersonalizationPopup && (
+      {!shouldRenderImage && (
         <MFPopup
           buttons={[
             {

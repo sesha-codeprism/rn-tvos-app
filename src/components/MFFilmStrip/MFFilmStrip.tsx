@@ -79,7 +79,7 @@ export interface MFFilmStripProps {
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
-  libraryItems?: Array<SubscriberFeed>;
+  libraryItems?: Array<SubscriberFeed> | any;
   updateSwimLaneKey?: null | ((event: string) => void) | undefined;
   swimLaneKey?: string;
   onListFooterElementFocus?:
@@ -115,17 +115,33 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
       }
       props.updateSwimLaneKey && props.updateSwimLaneKey(props.title!);
     };
-    const dataArray: Array<SubscriberFeed> | undefined =
-      props.libraryItems?.slice(0, props.limitSwimlaneItemsTo);
+    // console.log("props.libraryItems", props.libraryItems);
+    const dataArray: Array<SubscriberFeed> | undefined = Array.isArray(
+      props.libraryItems
+    )
+      ? props.libraryItems?.slice(0, props.limitSwimlaneItemsTo)
+      : props.libraryItems !== undefined
+      ? props.libraryItems[Object.keys(props.libraryItems)[0]].slice(
+          0,
+          props.limitSwimlaneItemsTo
+        )
+      : [];
     const cardWidth = parseInt(props.style?.width?.toString() || "300");
     return (
       <View style={[Styles.railContainer, props.railContainerStyles]}>
+       { // props.libraryItems[Object.keys(props.libraryItems)[0]]
         <MFText
           textStyle={[Styles.railTitle, props.railTitleStyles]}
-          displayText={props.title}
+          displayText={
+            Array.isArray(props.libraryItems)
+              ? props.title
+              : props.libraryItems !== undefined
+              ? Object.keys(props.libraryItems)[0]
+              : ""
+          }
           enableRTL={props.enableRTL}
           shouldRenderText
-        />
+        />}
         {
           /** Checking if UDL data is not undefined an list length > 0 */
           props.libraryItems !== undefined ? (
@@ -186,18 +202,18 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                   }
                   showTitleOnlyOnFocus={false}
                   titlePlacement={props.titlePlacement}
-                  overlayComponent={
-                    <MFOverlay
-                      //@ts-ignore
-                      renderGradiant={true}
-                      showProgress={true}
-                      progress={20}
-                      // displayTitle={item.title}
-                      bottomText={item.runtime}
-                      // showRec={true}
-                      // recType={"series"}
-                    />
-                  }
+                  // overlayComponent={
+                  //   <MFOverlay
+                  //     //@ts-ignore
+                  //     renderGradiant={true}
+                  //     showProgress={true}
+                  //     progress={20}
+                  //     // displayTitle={item.title}
+                  //     bottomText={item.runtime}
+                  //     // showRec={true}
+                  //     // recType={"series"}
+                  //   />
+                  // }
                   progressComponent={props.progressElement}
                   showProgress={props.shouldRenderProgress}
                   shouldRenderText
@@ -233,7 +249,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
             </View>
           )
         }
-        <View
+        {/* <View
           style={{
             width: 500,
             height: 141,
@@ -244,7 +260,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
             props.swimLaneKey === props.title && (
               <MFMetaData currentFeed={currentFeed} />
             )}
-        </View>
+        </View> */}
       </View>
     );
   }

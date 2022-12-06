@@ -204,7 +204,7 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
-  - react-native-webview (11.22.2):
+  - react-native-webview (11.25.0):
     - React-Core
   - React-perflogger (0.64.2-2)
   - React-RCTAnimation (0.64.2-2):
@@ -264,11 +264,11 @@ PODS:
     - React-perflogger (= 0.64.2-2)
   - RNDeviceInfo (8.7.1):
     - React-Core
-  - RNFastImage (8.6.1):
+  - RNFastImage (8.6.3):
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNGestureHandler (2.4.2):
+  - RNGestureHandler (2.8.0):
     - React-Core
   - RNI18n (2.0.15):
     - React
@@ -298,7 +298,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.13.1):
+  - RNScreens (3.18.2):
     - React-Core
     - React-RCTImage
   - SDWebImage (5.11.1):
@@ -455,7 +455,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 74dd9b564b4f87f7835ebe729f23bb97d281bee1
   React-jsinspector: f49fa9d09ea327d0f0bdd268fd0925db58d19951
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
-  react-native-webview: 159034a856a6e95995f5bf2eed40d70b103d6572
+  react-native-webview: a71da846ed2e9085440e1d6659c04e285528834b
   React-perflogger: 2f5ca2592cb8c2dce248f171c9193abad44ad08d
   React-RCTAnimation: fcecb04903a27253a40c5df81b142f2a82c37380
   React-RCTBlob: 2af9d951f742821632f53964c77a8d98f0a2be37
@@ -467,11 +467,11 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: c609425af7a4fd1da7d549e81614487f702e5025
   ReactCommon: fe50c49bc90e5d242845cb534f88164868cba242
   RNDeviceInfo: aad3c663b25752a52bf8fce93f2354001dd185aa
-  RNFastImage: 3207b9eb17c2425d574ca40db35185db6e324f4e
-  RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
+  RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
+  RNGestureHandler: 62232ba8f562f7dea5ba1b3383494eb5bf97a4d3
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
   RNReanimated: 0ba751c94b4dcb662e08feb827c76593b655ab0c
-  RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
+  RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   Yoga: e6fb09105c0264e3ad22605d6b6fa2776e169518

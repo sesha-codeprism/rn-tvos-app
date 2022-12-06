@@ -22,14 +22,10 @@ import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import MFMarquee from "../../components/MFMarquee";
 import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
 import MFSwim from "../../components/MFSwim";
-import { service } from "../../utils/analytics/analytics";
 import { Routes } from "../../config/navigation/RouterOutlet";
-import { Layout, navigationAction } from "../../utils/analytics/consts";
+import { Layout } from "../../utils/analytics/consts";
 import { ItemShowType } from "../../utils/common";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { config } from "../../config/config";
 
 interface HomeScreenProps {
@@ -270,17 +266,17 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                     setOpen(open);
                     drawerRef.current.open();
                     if (currentFeed) {
-                      service?.addNavEventOnCurPageOpenOrClose(
-                        {
-                          navigation: {
-                            params: {
-                              feed: currentFeed,
-                            },
-                          },
-                        },
-                        Routes.Settings,
-                        navigationAction.pageOpen
-                      );
+                      // service?.addNavEventOnCurPageOpenOrClose(
+                      //   {
+                      //     navigation: {
+                      //       params: {
+                      //         feed: currentFeed,
+                      //       },
+                      //     },
+                      //   },
+                      //   Routes.Settings,
+                      //   navigationAction.pageOpen
+                      // );
                     }
                   }}
                 />

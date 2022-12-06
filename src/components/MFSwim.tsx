@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { FlatList, View } from "react-native";
+import React, { useState } from "react";
+import { FlatList } from "react-native";
 import { FeedItem } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { getAllFeedDataForFeed } from "../config/queries";
-import { SCREEN_WIDTH } from "../utils/dimensions";
 import MFSwimLane from "./MFSwimLane";
 
 interface MFSwimProps {

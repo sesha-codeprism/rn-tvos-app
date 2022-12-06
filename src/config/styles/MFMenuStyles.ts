@@ -64,18 +64,19 @@ const MFMenuStyles = StyleSheet.create({
     width: 240,
     alignSelf: "center",
   },
-  searchContainerStyles1: {
-    width: SCREEN_WIDTH * 0.05,
+  searchContainerStyles: {
+    width: SCREEN_WIDTH * 0.1,
     height: 147,
     alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
     // paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
+    flexDirection: 'row',
     // backgroundColor: __DEV__ ? 'blue' : 'transparent',
   },
-  hubsContainerStyles1: {
-    flex: 2.8,
+  hubsContainerStyles: {
+    flex: 2.6,
     paddingBottom: 10,
     paddingRight: 20,
     overflow: "visible",
@@ -85,7 +86,7 @@ const MFMenuStyles = StyleSheet.create({
     justifyContent: "center",
     // backgroundColor: __DEV__ ? 'green' : 'transparent'
   },
-  profileViewStyles1: {
+  profileViewStyles: {
     flex: 0.9,
     flexDirection: "row",
     paddingLeft: 20,
@@ -94,9 +95,9 @@ const MFMenuStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     // marginLeft: 50
-    // backgroundColor: __DEV__ ? 'blue' : 'transparent'
+    // backgroundColor: __DEV__ ? 'yellow' : 'transparent'
   },
-  tabBarItem1: {
+  tabBarItem: {
     display: "flex",
     borderRadius: 5,
     padding: 30,

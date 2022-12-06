@@ -58,7 +58,7 @@ interface GLOBALSType {
   /** Should the UI be RTL */
   enableRTL: boolean;
   browseGalleryData?: BrowseGallery;
-
+  moviesAndTvShows?: any[];
   /** Async store data */
   store: {
     accessToken: string | null;
@@ -116,6 +116,7 @@ export const GLOBALS: GLOBALSType = {
     itemFeed: [],
     filterData: {},
   },
+  moviesAndTvShows:[],
   store: {
     accessToken: null,
     refreshToken: null,

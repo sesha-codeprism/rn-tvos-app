@@ -85,9 +85,9 @@ const MFMenu = (props: MFMenuProps) => {
         focusedStyle: StyleSheet.flatten([MFMenuStyles.focusedTextStyle]),
         unfocusedStyle: StyleSheet.flatten([MFMenuStyles.textStyle]),
       },
-      style: StyleSheet.flatten([MFMenuStyles.tabBarItem1]),
+      style: StyleSheet.flatten([MFMenuStyles.tabBarItem]),
       focusedStyle: StyleSheet.flatten([
-        MFMenuStyles.tabBarItem1,
+        MFMenuStyles.tabBarItem,
         MFMenuStyles.tabBarItemFocused1,
       ]),
     };
@@ -107,7 +107,7 @@ const MFMenu = (props: MFMenuProps) => {
             ])}
           >
             <View
-              style={StyleSheet.flatten([MFMenuStyles.searchContainerStyles1])}
+              style={StyleSheet.flatten([MFMenuStyles.searchContainerStyles])}
             >
               <View
                 style={
@@ -124,19 +124,60 @@ const MFMenu = (props: MFMenuProps) => {
                   imageSource={{}}
                   iconButtonStyles={{ shouldRenderImage: true }}
                   onFocus={() => {
-                    setFocused("search");
+                    setTimeout(() => {
+                      setFocused("search");
+                    }, 200);
                   }}
                   onBlur={() => {
                     setFocused("");
                   }}
                   onPress={() => {
-                    throw new Error("some error");
+                    props.navigation.navigate(Routes.Search)
                   }}
                 />
               </View>
+              <MFButton
+                variant={MFButtonVariant.Outlined}
+                iconSource={{}}
+                iconStyles={{}}
+                avatarSource={{}}
+                imageSource={{}}
+                textLabel="Guide"
+                enableRTL={GLOBALS.enableRTL}
+                textStyle={StyleSheet.flatten([
+                  MFMenuStyles.textStyle,
+                  focused === "guide"
+                    ? MFMenuStyles.focusedTextStyle
+                    : MFMenuStyles.textStyle,
+                ])}
+                focusedStyle={StyleSheet.flatten([
+                  MFMenuStyles.tabBarItem,
+                  MFMenuStyles.tabBarItemFocused1,
+                ])}
+                onFocus={() => {
+                  setTimeout(() => {
+                    setFocused("guide");
+                  }, 200);
+                }}
+                style={StyleSheet.flatten([MFMenuStyles.tabBarItem])}
+                onBlur={() => {}}
+                onPress={() => {
+                  props.navigation.navigate("guide");
+                }}
+                outlinedButtonProps={{
+                  outlinedButtonStyle: {
+                    focusedBorderColor: appUIDefinition.theme.colors.primary,
+                    unFocusedBorderColor:
+                      appUIDefinition.theme.colors.secondary,
+                    focusedBorderWidth: 5,
+                    unFocusedBorderWidth: 2,
+                    isDisabled: true,
+                  },
+                }}
+              />
             </View>
             <View
-              style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles1])}
+              style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles])}
             >
               <MFButtonGroup
                 onPress={(event, index) => _onPress(event, index)}
@@ -173,7 +214,7 @@ const MFMenu = (props: MFMenuProps) => {
             </View>
             <View
               style={StyleSheet.flatten([
-                MFMenuStyles.profileViewStyles1,
+                MFMenuStyles.profileViewStyles,
                 GLOBALS.enableRTL
                   ? { flexDirection: "row-reverse" }
                   : { flexDirection: "row" },
