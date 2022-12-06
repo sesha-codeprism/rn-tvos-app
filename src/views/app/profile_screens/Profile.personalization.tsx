@@ -137,6 +137,8 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                   displayText={
                     "Enabling Profile Personalization will allow the system to to improve the viewing experience for ndividual profiles. It is highly recommended that you enable this feature for the best viewing experience."
                   }
+                  adjustsFontSizeToFit={false}
+                  numberOfLines={3}
                 />
               </View>
             </View>

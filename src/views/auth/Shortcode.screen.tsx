@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 import FastImage from "react-native-fast-image";
 import MFText from "../../components/MFText";
 import { MFThemeObject } from "../../@types/MFTheme";
@@ -20,9 +20,7 @@ import { GLOBALS } from "../../utils/globals";
 import { initUdls } from "../../../backend";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { appUIDefinition } from "../../config/constants";
-import { duplex } from "../../modules/duplex";
-import { setDefaultStore, DefaultStore } from "../../utils/DiscoveryUtils";
-import { generateGUID } from "../../utils/guid";
+import { setDefaultStore } from "../../utils/DiscoveryUtils";
 import {
   connectDuplex,
   setGlobalData,
@@ -142,12 +140,15 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
           displayText={AppStrings.pair_device}
           shouldRenderText
           textStyle={ShortCodeStyles.titleTextStyle}
+          adjustsFontSizeToFit={false}
         />
         <View style={ShortCodeStyles.textViewStyle}>
           <MFText
             displayText={AppStrings.pair_directions_1}
             shouldRenderText
             textStyle={ShortCodeStyles.subtitleText}
+            adjustsFontSizeToFit={false}
+            numberOfLines={2}
           />
         </View>
         <View style={ShortCodeStyles.textViewStyle}>
@@ -155,6 +156,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
             displayText={AppStrings.or_string}
             shouldRenderText
             textStyle={ShortCodeStyles.subtitleText}
+            adjustsFontSizeToFit={false}
           />
         </View>
         <View style={ShortCodeStyles.textViewStyle}>
@@ -169,6 +171,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
             displayText={AppStrings.url_link}
             shouldRenderText
             textStyle={ShortCodeStyles.urlStyles}
+            adjustsFontSizeToFit={false}
           />
         </View>
         <View style={ShortCodeStyles.textViewStyle}>
@@ -176,6 +179,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
             displayText={AppStrings.pair_directions_3}
             shouldRenderText
             textStyle={ShortCodeStyles.subtitleText}
+            adjustsFontSizeToFit={false}
           />
         </View>
         <View style={{ flexDirection: "row" }}>

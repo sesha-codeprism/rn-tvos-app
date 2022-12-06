@@ -18,14 +18,19 @@ const MFText: React.FunctionComponent<MFTextProps> = (props) => {
         props.textStyle,
         { writingDirection: props.enableRTL ? "rtl" : "ltr" },
       ]}
-      adjustsFontSizeToFit={props.adjustsFontSizeToFit || true}
-      numberOfLines={props.numberOfLines || 1}
+      adjustsFontSizeToFit={props.adjustsFontSizeToFit}
+      numberOfLines={props.numberOfLines}
       textBreakStrategy="balanced"
       ellipsizeMode="tail"
     >
       {props.shouldRenderText ? props.displayText : ""}
     </Text>
   );
+};
+
+MFText.defaultProps = {
+  adjustsFontSizeToFit: true,
+  numberOfLines: 1,
 };
 
 const textStyleSheet = StyleSheet.create({

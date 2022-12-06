@@ -63,12 +63,7 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
   ) => {
     setFocused(index);
   };
-  // const onBlur = (
-  //   event: NativeSyntheticEvent<TargetedEvent>,
-  //   index: number
-  // ) => {
-  //   if (userProfiles.length - 1 === index) setFocused("");
-  // };
+
   const _onFocusEdit = () => {
     setEditFocused(true);
   };
@@ -93,13 +88,13 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
   });
   return (
     <View style={MFProfileStyle.container}>
-        <View style={MFProfileStyle.profileTitleContainer}>
-          <MFText
-            shouldRenderText
-            displayText={"Choose Your Profile"}
-            textStyle={MFProfileStyle.titleTextStyle}
-          />
-        </View>
+      <View style={MFProfileStyle.profileTitleContainer}>
+        <MFText
+          shouldRenderText
+          displayText={"Choose Your Profile"}
+          textStyle={MFProfileStyle.titleTextStyle}
+        />
+      </View>
       <View
         style={{
           flex: 7,
@@ -141,7 +136,6 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
                       MFProfileStyle.editIconContainerStyles,
                       editFocused
                         ? StyleSheet.flatten([
-                            // MFProfileStyle.focusedStyle,
                             {
                               ...MFProfileStyle.editIconContainerStyles,
                               borderWidth: 5,
@@ -162,9 +156,7 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
                       iconSource={AppImages.edit}
                       iconStyles={[
                         MFProfileStyle.editIconStyles,
-                        // editFocused
-                        //   ? StyleSheet.flatten([MFProfileStyle.focusedStyle])
-                           StyleSheet.flatten(MFProfileStyle.unfocusedStyle),
+                        StyleSheet.flatten(MFProfileStyle.unfocusedStyle),
                       ]}
                       avatarSource={{}}
                       imageSource={{}}
