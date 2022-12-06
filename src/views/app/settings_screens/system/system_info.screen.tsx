@@ -29,7 +29,7 @@ const SystemInformationScreen: React.FunctionComponent<Props> = (
       },
       {
         title: "Device ID",
-        description: bootstrap?.DeviceId.toString(),
+        description: bootstrap?.DeviceId ? bootstrap?.DeviceId.toString() : "NA",
       },
       {
         title: "Experience Group",
@@ -39,7 +39,9 @@ const SystemInformationScreen: React.FunctionComponent<Props> = (
       },
       {
         title: "Channel Map",
-        description: bootstrap?.ChannelMapGroupName.toString(),
+        description: bootstrap?.ChannelMapGroupName
+          ? bootstrap?.ChannelMapGroupName.toString()
+          : "NA",
       },
       {
         title: "Player Version",

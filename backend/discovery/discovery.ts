@@ -6,22 +6,22 @@ import { GLOBALS } from "../../src/utils/globals";
 import { lang, pivots } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 
-
 /** Note: Discovery calls don't require AUTH token */
-
 
 /** URL Endpoint for all Discovery calls */
 export const DISCOVERY_URL =
   GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery;
 
-const versionString = "/v4/"
+const versionString = "/v4/";
 
 // export const DISCOVERY_URL = 'https://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/discovery';
 
 /** API call to get all Hubs data */
 export const getHubs = async (id: string, params: any) => {
   const { rightIds, storeId, pivots, lang } = params;
-  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + "/v3/hubs";
+  const url: string =
+    parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || "") +
+    "/v3/hubs";
   const response = await GET({
     url: url,
     params: {
@@ -33,13 +33,15 @@ export const getHubs = async (id: string, params: any) => {
   });
   return response;
 };
-const getMovies = async (id: string, params: any) => {
-  console.log("UDL: getMovies", id, params);
+export const getMovies = async (id?: string, params?: any) => {
   const { parentalrating, pivots, rating } = params;
 
   const url: string =
-    parseUri(DISCOVERY_URL || "") +
-    "/v4/feeds/movies/items";
+    parseUri(
+      GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
+        "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
+    ) + "/v4/feeds/movies/items";
+  console.log("UDL: getMovies", id, params, url);
   const response = await GET({
     url: url,
     params: {
@@ -50,8 +52,8 @@ const getMovies = async (id: string, params: any) => {
       $top: 16,
       $skip: 0,
       parentalrating: parentalrating,
-      rating: rating
-    }
+      rating: rating,
+    },
   });
   return response;
 
@@ -62,12 +64,17 @@ const getMovies = async (id: string, params: any) => {
   //   };
   //   return res;
 };
-const getTVShows = async (id: string, params: any) => {
-  console.log("UDL: getTVShows", id, params);
-  const { OfferType } = params;
+export const getTVShows = async (id?: string, params?: any) => {
+  const { OfferType, pivots } = params;
 
   const url: string =
-    parseUri(DISCOVERY_URL || "") + versionString + "feeds/tvshows/items"
+    parseUri(
+      GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
+        "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
+    ) +
+    versionString +
+    "feeds/tvshows/items";
+  console.log("UDL: getTVShows", id, params, url);
   const response = await GET({
     url: url,
     params: {
@@ -77,8 +84,8 @@ const getTVShows = async (id: string, params: any) => {
       pivots: pivots,
       $top: 16,
       $skip: 0,
-      OfferType: OfferType
-    }
+      OfferType: OfferType,
+    },
   });
   return response;
 };
@@ -94,8 +101,8 @@ const getPackages = async (id: string, params: Object) => {
       lang: lang,
       pivots: pivots,
       $top: 16,
-      $skip: 0
-    }
+      $skip: 0,
+    },
   });
   return response;
 };
@@ -105,7 +112,7 @@ const getmoviesandtvshowsByLicenseWindow = async (
 ) => {
   console.log("UDL: getMoviesAndTvshowsByLicenseWindows", id, params);
   const url: string =
-    parseUri(DISCOVERY_URL || "") + versionString + "moviesandtvshows/items"
+    parseUri(DISCOVERY_URL || "") + versionString + "moviesandtvshows/items";
   const response = await GET({
     url: url,
     params: {
@@ -114,8 +121,8 @@ const getmoviesandtvshowsByLicenseWindow = async (
       lang: lang,
       pivots: pivots,
       $top: 16,
-      $skip: 0
-    }
+      $skip: 0,
+    },
   });
   return response;
 };
@@ -124,7 +131,9 @@ const getMoviesAndTV = async (id: string, params: any) => {
   console.log("UDL: getMovisAndTV", id, params);
   const { orderBy } = params;
   const url: string =
-    parseUri(DISCOVERY_URL || "") + versionString + "feeds/moviesandtvshows/items";
+    parseUri(DISCOVERY_URL || "") +
+    versionString +
+    "feeds/moviesandtvshows/items";
   const response = await GET({
     url: url,
     params: {
@@ -135,13 +144,18 @@ const getMoviesAndTV = async (id: string, params: any) => {
       $top: 16,
       $skip: 0,
       orderBy: orderBy,
-    }
+    },
   });
   return response;
 };
 
 /** API call to get all subscriptions */
-const discoverSubscriptions = async (id: string, params: any, $skip: number = 0, $top: number = 10) => {
+const discoverSubscriptions = async (
+  id: string,
+  params: any,
+  $skip: number = 0,
+  $top: number = 10
+) => {
   console.log("UDL: getTVShows", id, params);
   const url: string =
     parseUri(DISCOVERY_URL || "") + versionString + "feeds/subscriptions/items";
@@ -153,9 +167,8 @@ const discoverSubscriptions = async (id: string, params: any, $skip: number = 0,
       lang: lang,
       pivots: pivots,
       $top: 16,
-      $skip: 0
+      $skip: 0,
     },
-
   });
   return response;
 };
@@ -171,8 +184,8 @@ const getPayPerView = async () => {
       lang: lang,
       pivots: pivots,
       $top: 16,
-      $skip: 0
-    }
+      $skip: 0,
+    },
   });
   return response;
 };
@@ -181,19 +194,21 @@ export const getStoresList = async () => {
   const rightIds = GLOBALS.store.rightsGroupIds;
   const STORE_TYPE = "HubsAndFeeds";
   const defaultMainStore = "HubsAndFeeds-Main";
-  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL || '') + '/v3/stores';
+  const url: string =
+    parseUri(
+      GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL || ""
+    ) + "/v3/stores";
   const response = await GET({
     url: url,
     params: {
       pivots: pivots,
       $groups: rightIds,
       $lang: lang,
-      storeId: DefaultStore.Id
-
-    }
+      storeId: DefaultStore.Id,
+    },
   });
   return response.data;
-}
+};
 
 export const getFeedByID = async (id: string) => {
   const uri: string = parseUri(DISCOVERY_URL || "") + `/v3/programs/${id}`;
@@ -203,7 +218,6 @@ export const getFeedByID = async (id: string) => {
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
     },
-
   });
   return response;
 };
@@ -216,36 +230,41 @@ export const getDiscoveryCategoryItems = async (id: string, params: any) => {
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
     },
-  })
+  });
   return response;
-}
+};
 
-export const getDiscoverCategoryItemPivots = async (id: string, params: any) => {
-  const url = (`${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v4/categories/${params.id}/subcategories`);
+export const getDiscoverCategoryItemPivots = async (
+  id: string,
+  params: any
+) => {
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v4/categories/${params.id}/subcategories`;
   const response = await GET({
     url: url,
     params: params,
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
     },
-  })
+  });
   return response;
-}
+};
 
 export const getDiscoveryLibraryItems = async (id: string, params: any) => {
-  const url =
-    `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v3/libraries/complete/items`
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v3/libraries/complete/items`;
   const response = await GET({
     url: url,
     params: params,
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
     },
-  })
+  });
   return response;
-}
+};
 
-export const getDiscoveryLibrariesCompletePivots = async (id: string, params: any) => {
+export const getDiscoveryLibrariesCompletePivots = async (
+  id: string,
+  params: any
+) => {
   const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v3/libraries/complete/pivots`;
   const response = await GET({
     url: url,
@@ -253,11 +272,14 @@ export const getDiscoveryLibrariesCompletePivots = async (id: string, params: an
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
     },
-  })
+  });
   return response;
-}
+};
 
-const getDiscoveryLibrariesPivotCategories = async (id: string, params: any) => {
+const getDiscoveryLibrariesPivotCategories = async (
+  id: string,
+  params: any
+) => {
   const url = `${DISCOVERY_URL}/v3/libraries/complete/pivot-items`;
   const response = await GET({
     url: url,
@@ -265,9 +287,9 @@ const getDiscoveryLibrariesPivotCategories = async (id: string, params: any) => 
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
     },
-  })
+  });
   return response;
-}
+};
 
 const getDiscoverLibraryItemPivots = async (id: string, params: any) => {
   const url = `${DISCOVERY_URL}/v3/libraries/complete/pivots`;
@@ -277,9 +299,9 @@ const getDiscoverLibraryItemPivots = async (id: string, params: any) => {
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
     },
-  })
+  });
   return response;
-}
+};
 
 const getDiscoveryLibraryPackages = async (id: string, params: any) => {
   const url = `${DISCOVERY_URL}/v3/libraries/Collections/items`;
@@ -289,11 +311,9 @@ const getDiscoveryLibraryPackages = async (id: string, params: any) => {
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
     },
-  })
+  });
   return response;
-}
-
-
+};
 
 export const registerDiscoveryUdls = () => {
   const BASE = "discovery";
@@ -310,13 +330,27 @@ export const registerDiscoveryUdls = () => {
       prefix: BASE + "/moviesandtvshows?orderBy=LicenseWindowStartUtc",
       getter: getmoviesandtvshowsByLicenseWindow,
     },
-    { prefix: BASE + '/categories/items', getter: getDiscoveryCategoryItems },
-    { prefix: BASE + '/categories/items/pivots=true', getter: getDiscoverCategoryItemPivots },
-    { prefix: BASE + "/librariespivotcategories/items/", getter: getDiscoveryLibrariesPivotCategories },
-    { prefix: BASE + '/libraryprograms/complete', getter: getDiscoveryLibraryItems },
-    { prefix: BASE + '/libraryprograms/complete/pivots=true', getter: getDiscoverLibraryItemPivots },
-    { prefix: BASE + 'libraryprograms/collections/packages', getDiscoveryLibraryPackages },
+    { prefix: BASE + "/categories/items", getter: getDiscoveryCategoryItems },
+    {
+      prefix: BASE + "/categories/items/pivots=true",
+      getter: getDiscoverCategoryItemPivots,
+    },
+    {
+      prefix: BASE + "/librariespivotcategories/items/",
+      getter: getDiscoveryLibrariesPivotCategories,
+    },
+    {
+      prefix: BASE + "/libraryprograms/complete",
+      getter: getDiscoveryLibraryItems,
+    },
+    {
+      prefix: BASE + "/libraryprograms/complete/pivots=true",
+      getter: getDiscoverLibraryItemPivots,
+    },
+    {
+      prefix: BASE + "libraryprograms/collections/packages",
+      getDiscoveryLibraryPackages,
+    },
   ];
   return discoveryUdls;
-
 };

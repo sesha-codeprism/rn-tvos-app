@@ -132,8 +132,7 @@ const MFMenu = (props: MFMenuProps) => {
                     setFocused("");
                   }}
                   onPress={() => {
-                    // throw new Error("some error");
-                    props.navigation.navigate("search");
+                    props.navigation.navigate(Routes.Search)
                   }}
                 />
               </View>

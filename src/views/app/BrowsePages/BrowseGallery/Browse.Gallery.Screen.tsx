@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  PressableProps,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFText from "../../../../components/MFText";
@@ -52,10 +58,12 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const baseValues = getBaseValues(feed, browsePageConfig);
   const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
   const [browsePivots, setBrowsePivots] = useState(browseFeed.pivots);
-
+  // const menuRef = filterData.map(() => useRef<PressableProps>(null));
+  // const subMenuFirstRef = useRef<PressableProps>(null);
   const pivotsParam = "pivots=true";
   const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
-  useEffect(() => {
+
+  const filterRef = useEffect(() => {
     if (didMountRef.current) {
     } else didMountRef.current = true;
   });
@@ -339,7 +347,6 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                     onFocus={updateFeed}
                     autoFocusOnFirstCard
                   />
-                  )
                 </LinearGradient>
               </View>
             </>

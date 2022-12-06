@@ -66,7 +66,6 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
     const _onPress = (event: GestureResponderEvent) => {
       props.onPress && props.onPress(props.data);
     };
-
     const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
       setFocused(true);
       Animated.timing(fadeAnim, {
