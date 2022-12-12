@@ -42,11 +42,11 @@ const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
       action: "system_settings",
       icon: "",
     },
-    // {
-    //   title: "Developers",
-    //   action: "shortCode",
-    //   icon: "",
-    // },
+    {
+      title: "Developers",
+      action: "developer_settings",
+      icon: "",
+    },
   ];
 
   useEffect(() => {}, [AppStrings]);

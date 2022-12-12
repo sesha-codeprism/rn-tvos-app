@@ -21,6 +21,7 @@ import AudioLanguageScreen from "../../views/app/settings_screens/audio/audio_la
 import DescriptiveAudioScreen from "../../views/app/settings_screens/audio/descriptive_audio.screen";
 import SystemSettingsScreen from "../../views/app/settings_screens/system/system.screen";
 import SystemInformationScreen from "../../views/app/settings_screens/system/system_info.screen";
+import DeveloperScreen from "../../views/app/settings_screens/developer/developer.screen";
 import DvrSettingsScreen from "../../views/app/settings_screens/dvr/dvr.screen";
 import StopRecordingScreen from "../../views/app/settings_screens/dvr/stop_recording.screen";
 import { GLOBALS } from "../../utils/globals";
@@ -77,6 +78,7 @@ export const Routes = {
   AudioLanguage: "audio_language",
   DescriptiveAudio: "descriptive_audio",
   SystemSettings: "system_settings",
+  DeveloperSettings: "developer_settings",
   SystemInformation: "system_info",
   DVRSettings: "dvr_settings",
   StopRecording: "stop_recording",
@@ -157,6 +159,10 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           component={SystemSettingsScreen}
         />
         <Stack.Screen
+          name={Routes.DeveloperSettings}
+          component={DeveloperScreen}
+        />
+        <Stack.Screen
           name={Routes.SystemInformation}
           component={SystemInformationScreen}
         />
@@ -182,7 +188,7 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
       console.log("Some error", e);
     }
     if (store) {
-      GLOBALS.store = JSON.parse(store);
+      GLOBALS.store = store;
       console.log("Settings store successful", GLOBALS.store);
       const isLoggedIn =
         GLOBALS.store.accessToken !== null &&

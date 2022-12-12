@@ -14,7 +14,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   const queryClient = new QueryClient();
   const [userProfile, setUserProfile] = useState({});
   const [onScreenLanguage, setOnScreenLanguage] = useState(
-    GLOBALS.store.settings.display.onScreenLanguage
+    GLOBALS.store?.settings?.display?.onScreenLanguage
   );
   const [enableRTL, shouldEnableRTL] = useState(GLOBALS.enableRTL);
   async function getLandingData() {
@@ -54,8 +54,8 @@ const App: React.FunctionComponent<AppProps> = (props) => {
       <GlobalContext.Provider value={appSettings}>
         <RouterOutlet
           isAuthorized={
-            GLOBALS.store.accessToken !== null &&
-            GLOBALS.store.refreshToken !== null
+            GLOBALS.store?.accessToken !== null &&
+            GLOBALS.store?.refreshToken !== null
           }
         />
       </GlobalContext.Provider>

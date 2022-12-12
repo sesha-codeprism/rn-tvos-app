@@ -4,23 +4,29 @@ import { BootStrapResponse } from '../../@types/BootStrapResponse';
 import { config } from '../../config/config';
 import { setOnScreenLanguage } from '../../config/strings';
 import { duplex } from '../../modules/duplex';
-import { deleteUserSettings, GLOBALS } from '../globals';
+import { deleteUserSettings, GLOBALS, landingInfo } from '../globals';
 import { generateGUID } from '../guid';
 import { updateStore } from '../helpers';
 import { addPrefixToUrl } from '../strings';
+import { MFGlobalsConfig } from "../../../backend/configs/globals";
 
 
 export const setGlobalData = (bootStrapResponse: BootStrapResponse) => {
-    GLOBALS.bootstrapSelectors = bootStrapResponse;
-    GLOBALS.store.rightsGroupIds = bootStrapResponse.RightsGroupIds;
-    GLOBALS.store.accountID = GLOBALS.bootstrapSelectors.AccountId;
-    console.log(bootStrapResponse);
-    GLOBALS.enableRTL =
-        GLOBALS.store.settings.display.onScreenLanguage.enableRTL;
-    setOnScreenLanguage(GLOBALS.store.settings.display.onScreenLanguage.languageCode)
-    console.log("GLOBALS", GLOBALS);
-    updateStore(JSON.stringify(GLOBALS.store));
-
+    if(bootStrapResponse){
+        const data = bootStrapResponse;
+        GLOBALS.bootstrapSelectors = data;
+        GLOBALS.store.rightsGroupIds = data?.RightsGroupIds;
+        GLOBALS.store.accountID = GLOBALS.bootstrapSelectors?.AccountId;
+        console.log(bootStrapResponse);
+        GLOBALS.enableRTL =
+            GLOBALS.store.settings.display.onScreenLanguage.enableRTL;
+        setOnScreenLanguage(GLOBALS.store.settings.display.onScreenLanguage.languageCode)
+        GLOBALS.store.landingInfo = landingInfo;
+        GLOBALS.store.MFGlobalsConfig = MFGlobalsConfig;
+    
+        console.log("GLOBALS", GLOBALS);
+        updateStore(JSON.stringify(GLOBALS.store));
+    }
 }
 
 

@@ -94,7 +94,7 @@ export const resetCaches = () => {
 }
 
 
-export const resetSpecificQuery = async (key: string) => {
+export const resetSpecificQuery = async (key: any) => {
     queryClient.invalidateQueries({ queryKey: key }).then(() => {
         console.log('Invalidated', key, "query");
     });

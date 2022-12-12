@@ -1,8 +1,9 @@
-import { GLOBALS } from "./globals";
+import { GLOBALS, landingInfo } from "./globals";
 import { logger, consoleTransport } from "react-native-logs";
 import DeviceInfo from "react-native-device-info";
 import { Settings } from "react-native";
 import SHA256 from "crypto-js/sha256";
+import { MFGlobalsConfig } from "../../backend/configs/globals";
 
 
 export const Log =
@@ -17,7 +18,55 @@ export const updateStore = (MFStore: string) =>
   // }
   Settings.set({ store: MFStore });
 
-export const getStore = () => Settings.get("store");
+
+export const getStore = () => {
+  let serializedStore = Settings.get("store");;
+  if(serializedStore){
+    serializedStore = JSON.parse(serializedStore);
+    serializedStore.landingInfo = landingInfo.reviveLandingInfo?.(serializedStore.landingInfo);
+    serializedStore.MFGlobalsConfig = MFGlobalsConfig?.setters?.reviceMFGlobalConfig( serializedStore.MFGlobalsConfig);
+    return serializedStore;
+  }else {
+    return {
+      accessToken: null,
+      refreshToken: null,
+      userProfile: undefined,
+      rightsGroupIds: null,
+      accountID: '',
+      settings: {
+        parentalControll: {
+          contentLock: {},
+          adultLock: {},
+          purchaseLock: {},
+        },
+        display: {
+          subtitleConfig: {
+            primary: "en",
+            secondary: "fr",
+            tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
+          },
+          bitrates10ft: {},
+          onScreenLanguage: {
+            title: "English (US)",
+            languageCode: "en-US",
+            enableRTL: false
+  
+          },
+          closedCaption: "",
+        },
+        audio: {
+          audioLanguages: {
+            primary: "en",
+            secondary: "fr",
+            tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
+          },
+          descriptiveAudio: "",
+        },
+      },
+    };
+  }
+}
+
 // AsyncStorage.getItem("MFStore");
 
 

@@ -4,9 +4,6 @@ export interface MFEnvironmentGlobals {
 }
 export interface MFGlobals {
   environment: MFEnvironmentGlobals;
-  serviceURL: {
-    discovery: string;
-  };
 }
 
 export interface MFRequest {
@@ -18,6 +15,11 @@ export interface MFRequest {
 export interface MFbootstrapLandingInfo {
   oauth?: string;
   tenantId?: string;
+  version?: string;
+  setTenant?: (string) => void;
+  setOauth?: (string) => void;
+  setVersion?: (string) => void;
+  reviveLandingInfo?: (any) => MFbootstrapLandingInfo;
 }
 
 export interface MFDeviceInfo {

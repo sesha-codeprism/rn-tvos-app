@@ -6,10 +6,41 @@ import { BootStrapResponse } from "../@types/BootStrapResponse";
 import { UserProfile } from "../@types/UserProfile";
 import { BrowseGallery } from "./common";
 
-export const landingInfo: MFbootstrapLandingInfo = {
-  oauth: "liveid",
-  tenantId: "default",
-};
+export const landingInfo = (function(): MFbootstrapLandingInfo{
+  this.oauth = "liveid";
+  this.tenantId = "default";
+  this.version = "";
+
+  const setOauth = (auth: string) => {
+    this.oauth = auth;
+  }
+
+  const setTenant = (tenant: string) => {
+    this.tenantId = tenant;
+  }
+
+  const setVersion = (v: string) => {
+    this.version = v;
+  }
+
+  const reviveLandingInfo = (serializedInstance: any) => {
+    if(serializedInstance){
+      this.oauth = serializedInstance?.oauth;
+      this.tenantId = serializedInstance?.tenantId;
+      this.version = serializedInstance?.setVersion;
+    }
+    return this;
+  }
+  return {
+    reviveLandingInfo,
+    setOauth,
+    setTenant,
+    setVersion,
+    oauth: this.oauth,
+    tenantId: this.tenantId,
+    version: this.version
+  }
+})();
 export interface CreateUserProfileObject {
   name: string;
   image: string;
@@ -87,7 +118,7 @@ interface GLOBALSType {
         descriptiveAudio: string;
       };
     };
-  };
+  } | null;
   [key: string]: any;
 }
 /** GLOBAL config where all runtime constants are stored */
@@ -117,43 +148,7 @@ export const GLOBALS: GLOBALSType = {
     filterData: {},
   },
   moviesAndTvShows: [],
-  store: {
-    accessToken: null,
-    refreshToken: null,
-    userProfile: undefined,
-    rightsGroupIds: null,
-    accountID: '',
-    settings: {
-      parentalControll: {
-        contentLock: {},
-        adultLock: {},
-        purchaseLock: {},
-      },
-      display: {
-        subtitleConfig: {
-          primary: "en",
-          secondary: "fr",
-          tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
-        },
-        bitrates10ft: {},
-        onScreenLanguage: {
-          title: "English (US)",
-          languageCode: "en-US",
-          enableRTL: false
-
-        },
-        closedCaption: "",
-      },
-      audio: {
-        audioLanguages: {
-          primary: "en",
-          secondary: "fr",
-          tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
-        },
-        descriptiveAudio: "",
-      },
-    },
-  },
+  store: null,
   storeID: undefined,
 };
 

@@ -1,11 +1,34 @@
-const MFGlobalsConfig = {
-	environment: {
-		url: 'https://reachclient.dev.mr.tv3cloud.com/',
-		stsUrl: 'https://ottapp-appgw-client-A.dev.mr.tv3cloud.com/Green/sts/',
-	},
-	serviceURL: {
-		discovery: 'https://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/discovery/',
-	},
-};
+const MFGlobalsConfig = (function(){
+	this.url = 'https://reachclient.dev.mr.tv3cloud.com/';
+	this.stsUrl = 'https://ottapp-appgw-client-A.dev.mr.tv3cloud.com/Green/sts/';
+
+	const switchEnvironment = () => {
+		
+	}
+
+	const setStsUrl = (url: string) => {
+		this.stsUrl = url;
+	}
+
+	const reviceMFGlobalConfig = (serializedInstance: any) => {
+		if(serializedInstance){
+			this.url = serializedInstance?.url;
+			this.stsUrl = serializedInstance?.stsUrl;
+		}
+		return this;
+	}
+
+	return {
+		setters: {
+			reviceMFGlobalConfig,
+			switchEnvironment,
+			setStsUrl,
+		},
+		environment: {
+			url: this.url,
+			stsUrl: this.stsUrl,
+		}
+	}
+})();
 
 export { MFGlobalsConfig };

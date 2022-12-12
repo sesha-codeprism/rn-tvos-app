@@ -10,7 +10,7 @@ import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 
 /** URL Endpoint for all Discovery calls */
 export const DISCOVERY_URL =
-  GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery;
+  GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery;
 
 const versionString = "/v4/";
 
