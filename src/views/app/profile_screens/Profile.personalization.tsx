@@ -150,11 +150,15 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                   viewing experience.
                 </Text>
                 {/* <MFText
+                {/* <Text style={MFProfileStyle.personalize_subTitleStyles}>Enabling Profile Personalization will allow the system to to improve the viewing experience for ndividual profiles. It is highly recommended that you enable this feature for the best viewing experience.</Text> */}
+                {/* <MFText
                   textStyle={MFProfileStyle.personalize_subTitleStyles}
                   shouldRenderText={true}
                   displayText={
                     "Enabling Profile Personalization will allow the system to to improve the viewing experience for ndividual profiles. It is highly recommended that you enable this feature for the best viewing experience."
                   }
+                  adjustsFontSizeToFit={false}
+                  numberOfLines={3}
                 /> */}
               </View>
             </View>

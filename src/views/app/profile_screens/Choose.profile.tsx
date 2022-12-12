@@ -91,17 +91,7 @@ const ChooseProfileScreen: React.FunctionComponent<ChooseProfileProps> = (
               numColumns={4}
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
-                <View
-                // style={[
-                // MFProfileStyle.imageContainer,
-                // {
-                //  // borderColor: focused ? "#053C69" : "transparent",
-                //   borderWidth: 5,
-                //   padding: 5,
-                //   borderRadius: 200 / 2,
-                // },
-                // ]}
-                >
+                <View>
                   <MFButton
                     variant={MFButtonVariant.Avatar}
                     avatarSource={item.image}
@@ -163,11 +153,6 @@ const ChooseProfileScreen: React.FunctionComponent<ChooseProfileProps> = (
                       item: null,
                     });
               }
-              // if (GLOBALS.createUserProfile.image) {
-              //   props.navigation.navigate(Routes.PersonlizeProfile);
-              // } else {
-              //   Alert.alert("Please choose a profile image");
-              // }
             }}
             style={{ width: 274, height: 62, margin: 20 }}
             focusedStyle={{ width: 274, height: 62 }}

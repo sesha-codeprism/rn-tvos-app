@@ -91,35 +91,48 @@ const BrowseCategoryCarousel: React.FunctionComponent<
   ) : (
     <SafeAreaView style={{ paddingBottom: 50 }}>
       {data !== undefined ? (
-        <FlatList
-          data={data}
-          keyExtractor={(x, i) => i.toString()}
-          ItemSeparatorComponent={(x, i) => (
-            <View
-              style={{
-                backgroundColor: "transparent",
-                height: 5,
-                width: SCREEN_WIDTH,
-              }}
-            />
-          )}
-          renderItem={({ item, index }) => {
-            return (
-              <MFSwimLane
-                key={index}
-                feed={item}
-                data={item.Items}
-                limitSwimlaneItemsTo={16}
-                swimLaneKey={swimLaneKey}
-                updateSwimLaneKey={updateSwimLaneKey}
+        data.length > 0 ? (
+          <FlatList
+            data={data}
+            keyExtractor={(x, i) => i.toString()}
+            ItemSeparatorComponent={(x, i) => (
+              <View
+                style={{
+                  backgroundColor: "transparent",
+                  height: 5,
+                  width: SCREEN_WIDTH,
+                }}
               />
-            );
-          }}
-        />
+            )}
+            renderItem={({ item, index }) => {
+              return (
+                <MFSwimLane
+                  key={index}
+                  feed={item}
+                  data={item.Items}
+                  limitSwimlaneItemsTo={16}
+                  swimLaneKey={swimLaneKey}
+                  updateSwimLaneKey={updateSwimLaneKey}
+                />
+              );
+            }}
+          />
+        ) : (
+          <MFText
+            shouldRenderText
+            displayText={`No items returned ${
+              props.feedDispatch.split("?")[0]
+            }`}
+            textStyle={[
+              MFTabBarStyles.tabBarItemText,
+              { alignSelf: "center", color: "white", marginTop: 5 },
+            ]}
+          />
+        )
       ) : (
         <MFText
           shouldRenderText
-          displayText={`No data found for ${props.feedDispatch}`}
+          displayText={`No data found for ${props.feedDispatch.split("?")[0]}`}
           textStyle={[
             MFTabBarStyles.tabBarItemText,
             { alignSelf: "center", color: "white", marginTop: 5 },
