@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -9,9 +10,12 @@ import {
   SafeAreaView,
   FlatList,
 } from "react-native";
+import FastImage from "react-native-fast-image";
 import { searchItems } from "../../backend/subscriber/subscriber";
+import { AppImages } from "../assets/images";
 import MFSearch from "../components/MFSearch";
 import MFSwimLane from "../components/MFSwimLane";
+import MFText from "../components/MFText";
 import { SCREEN_WIDTH } from "../utils/dimensions";
 import { GLOBALS } from "../utils/globals";
 
@@ -31,7 +35,7 @@ export interface SearchParam {
 }
 const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const [searchString, setSearchString] = useState("");
-  const [searchResult, setSearchResult] = useState<any[]>([]);
+  const [searchResult, setSearchResult] = useState<any[] | undefined>(GLOBALS.moviesAndTvShows);
   const [swimLaneKey, setSwimLaneKey] = useState("");
   const updateSwimLaneKey = (key: string) => {
     setSwimLaneKey(key);
@@ -40,16 +44,31 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const onChangeText = (event: {
     nativeEvent: { text: React.SetStateAction<string> };
   }) => {
+    console.log('event.nativeEvent.text', event.nativeEvent.text);
     setSearchString(event.nativeEvent.text);
     clearTimeout(timer);
     timer = setTimeout(() => {
       onSearch(searchString);
     }, 1000);
   };
-  useEffect(()=>{
-    console.log('GLOBALS.moviesAndTvShows', GLOBALS.moviesAndTvShows)
-    GLOBALS.moviesAndTvShows ?  setSearchResult(GLOBALS.moviesAndTvShows) : null
-  })
+  // useEffect(() => {
+  //   console.log("GLOBALS.moviesAndTvShows", GLOBALS.moviesAndTvShows);
+  //   GLOBALS.moviesAndTvShows ? setSearchResult(GLOBALS.moviesAndTvShows) : null;
+  // }, []);
+
+  const formatSearchRsult = (result: any[]) => {
+    const formattedData: any[] = [];
+    result.forEach((item, index) => {
+      for (const key in item) {
+        if (item[key].length > 0) {
+          formattedData.push(item);
+        }
+      }
+    });
+    console.log("data came", result);
+    console.log("formattedData", formattedData);
+    return formattedData;
+  };
   const onSearch = async (text: any) => {
     console.log("text", text);
     if (searchString && searchString.length >= 3) {
@@ -62,7 +81,8 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
       const result = await searchItems(params);
       console.log("search result", result);
       if (result.status === 200) {
-        setSearchResult(result.data);
+        const data = formatSearchRsult(result.data);
+        setSearchResult(_.isEmpty(data) ? [] : result.data);
       }
     }
   };
@@ -82,33 +102,74 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
           }}
           style={styles.imageComponent}
         >
-          <SafeAreaView style={{ paddingBottom: 50 }}>
-      <FlatList
-        data={searchResult}
-        keyExtractor={(x, i) => i.toString()}
-        ItemSeparatorComponent={(x, i) => (
-          <View
-            style={{
-              backgroundColor: "transparent",
-              height: 5,
-              width: SCREEN_WIDTH,
-            }}
-          />
-        )}
-        renderItem={({ item, index }) => {
-          return (
-            <MFSwimLane
-              key={index}
-              feed={item}
-              data={item}
-              limitSwimlaneItemsTo={10}
-              swimLaneKey={swimLaneKey}
-              updateSwimLaneKey={updateSwimLaneKey}
-            />
-          );
-        }}
-      />
-    </SafeAreaView>
+          <SafeAreaView style={{ paddingBottom: 100 }}>
+            { searchResult && searchResult.length > 0 ? (
+              <FlatList
+                data={searchResult}
+                keyExtractor={(x, i) => i.toString()}
+                ItemSeparatorComponent={(x, i) => (
+                  <View
+                    style={{
+                      backgroundColor: "transparent",
+                      height: 5,
+                      width: SCREEN_WIDTH,
+                    }}
+                  />
+                )}
+                renderItem={({ item, index }) => {
+                  return (
+                    <MFSwimLane
+                      key={index}
+                      feed={item}
+                      data={item}
+                      limitSwimlaneItemsTo={10}
+                      swimLaneKey={swimLaneKey}
+                      updateSwimLaneKey={updateSwimLaneKey}
+                    />
+                  );
+                }}
+              />
+            ) : (
+              <View
+                style={{
+                  alignContent: "center",
+                  alignItems: "center",
+                  alignSelf: "center",
+                  marginTop: 100
+                }}
+              >
+                <FastImage
+                  style={{ height: 260, width: 250 }}
+                  source={AppImages.noSearchResult}
+                />
+                <MFText
+                  textStyle={{
+                    fontSize: 38,
+                    fontWeight: "600",
+                    letterSpacing: 0,
+                    lineHeight: 55,
+                    color: "#EEEEEE",
+                    textAlign: "center",
+                    marginTop: 20,
+                  }}
+                  displayText="No Results Found"
+                  shouldRenderText={true}
+                />
+                <MFText
+                  textStyle={{
+                    fontSize: 25,
+                    letterSpacing: 0,
+                    lineHeight: 38,
+                    color: "#A7A7A7",
+                    textAlign: "center",
+                    marginTop: 10,
+                  }}
+                  displayText={`Sorry, we couldn't find any content for ${searchString}`}
+                  shouldRenderText={true}
+                />
+              </View>
+            )}
+          </SafeAreaView>
           {/* <Text style={{ color: "white", fontSize: 30, fontWeight: "600" }}>
             {searchString}
           </Text> */}

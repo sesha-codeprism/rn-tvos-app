@@ -45,8 +45,9 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
     if (actionType !== PinActionTypes["UPDATE"]) {
       getPassword(props.route.params.pinType)
         .then((res: any) => {
-          console.log("res inside useEffect", res);
+          console.log("res inside getPassword", res);
           if (res.length === 0) {
+            console.log("No password found creating new password");
             Alert.alert(
               AppStrings.str_pcon_locks_are_unset_title,
               AppStrings.str_pcon_locks_are_unset_description
@@ -54,6 +55,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
             setLabel("Enter the new PIN");
             setActionType(PinActionTypes["CREATE"]);
           } else {
+            setActionType(PinActionTypes["VERIFY"]);
             const password = res.find((item: any) => {
               console.log(
                 "item",
@@ -64,7 +66,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
                 item.PasscodeType.toLowerCase() == props.route.params.pinType
               );
             });
-            console.log("password", password);
+            console.log("password found", password);
             if (password) {
               setPasswordRes(password.Passcode);
             }
@@ -140,7 +142,6 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
 
   const checkPasscode = async (passcode: string, type: PinType) => {
     try {
-      console.log("inside check password", passcode);
       const pinInput = pin.join();
       const hashedPin = getPasscodeHash(
         pinInput,
@@ -148,6 +149,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
           ? GLOBALS.bootstrapSelectors?.AccountId
           : ""
       );
+      console.log("inside check password", passcode, "hashedPin", hashedPin);
       // const data = await getPassword(type);
       if (passcode === hashedPin) {
         console.log("password matching", props.route.params.screenTarget);
@@ -156,6 +158,10 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
       } else {
         console.log("incorrect password");
         setErrMessage("Incorrect Password");
+        setTimeout(() => {
+          setErrMessage("");
+          setPin(["", "", "", ""]);
+        }, 2000);
         return false;
       }
     } catch (error) {

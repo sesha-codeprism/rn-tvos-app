@@ -254,9 +254,9 @@ export const MFProfileStyle = StyleSheet.create({
     width: 837,
     borderRadius: 4,
     marginTop: 50,
-    flexDirection: 'row',
-    alignContent: 'center',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignContent: "center",
+    alignItems: "center",
   },
   create_keyboardButton: {
     width: 46,
@@ -474,11 +474,11 @@ export const MFProfileStyle = StyleSheet.create({
   personalize_inputContainer: {
     width: "70%",
     height: "100%",
-    paddingLeft: width * 0.15,
+    paddingLeft: width * 0.1,
     paddingTop: height * 0.15,
     borderRightColor: "#424242",
     borderWidth: StyleSheet.hairlineWidth,
-    marginTop: 50
+    marginTop: 50,
   },
   personalize_profileTitleContainer: {
     flex: 0.6,
@@ -500,6 +500,12 @@ export const MFProfileStyle = StyleSheet.create({
     lineHeight: 50,
     fontWeight: "600",
     color: appUIDefinition.theme.backgroundColors.white,
+  },
+  personalize_allow_container: {
+    marginTop: 80,
+    padding: 30,
+    borderRadius: 6,
+    width: "90%",
   },
   personalize_addProfile: {
     width: 200,

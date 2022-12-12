@@ -1,7 +1,14 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { View, Alert, StyleSheet, Dimensions, Pressable, Text } from "react-native";
+import {
+  View,
+  Alert,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+  Text,
+} from "react-native";
 import MFButton, {
   MFButtonVariant,
 } from "../../../components/MFButton/MFButton";
@@ -90,7 +97,16 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
             displayText="Profile personalization"
             textStyle={MFProfileStyle.personalize_profileTitleStyle}
           />
-          <View style={{ marginTop: 80 }}>
+          <View
+            style={
+              focused
+                ? {
+                    ...MFProfileStyle.personalize_allow_container,
+                    backgroundColor: "#053C69",
+                  }
+                : MFProfileStyle.personalize_allow_container
+            }
+          >
             <View style={{ flexDirection: "row" }}>
               <Pressable
                 hasTVPreferredFocus
@@ -127,7 +143,12 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                   shouldRenderText={true}
                   displayText={"Allow Profile Personalization"}
                 />
-                <Text style={MFProfileStyle.personalize_subTitleStyles}>Enabling Profile Personalization will allow the system to to improve the viewing experience for ndividual profiles. It is highly recommended that you enable this feature for the best viewing experience.</Text>
+                <Text style={MFProfileStyle.personalize_subTitleStyles}>
+                  Enabling Profile Personalization will allow the system to to
+                  improve the viewing experience for ndividual profiles. It is
+                  highly recommended that you enable this feature for the best
+                  viewing experience.
+                </Text>
                 {/* <MFText
                   textStyle={MFProfileStyle.personalize_subTitleStyles}
                   shouldRenderText={true}

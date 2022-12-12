@@ -115,7 +115,6 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
       }
       props.updateSwimLaneKey && props.updateSwimLaneKey(props.title!);
     };
-    // console.log("props.libraryItems", props.libraryItems);
     const dataArray: Array<SubscriberFeed> | undefined = Array.isArray(
       props.libraryItems
     )
@@ -129,19 +128,21 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
     const cardWidth = parseInt(props.style?.width?.toString() || "300");
     return (
       <View style={[Styles.railContainer, props.railContainerStyles]}>
-       { // props.libraryItems[Object.keys(props.libraryItems)[0]]
-        <MFText
-          textStyle={[Styles.railTitle, props.railTitleStyles]}
-          displayText={
-            Array.isArray(props.libraryItems)
-              ? props.title
+        {
+          <MFText
+            textStyle={[Styles.railTitle, props.railTitleStyles]}
+            displayText={
+              Array.isArray(props.libraryItems)
+                ?
+              props.title
               : props.libraryItems !== undefined
               ? Object.keys(props.libraryItems)[0]
-              : ""
-          }
-          enableRTL={props.enableRTL}
-          shouldRenderText
-        />}
+              : props.title
+            }
+            enableRTL={props.enableRTL}
+            shouldRenderText
+          />
+        }
         {
           /** Checking if UDL data is not undefined an list length > 0 */
           props.libraryItems !== undefined ? (
@@ -202,18 +203,18 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                   }
                   showTitleOnlyOnFocus={false}
                   titlePlacement={props.titlePlacement}
-                  // overlayComponent={
-                  //   <MFOverlay
-                  //     //@ts-ignore
-                  //     renderGradiant={true}
-                  //     showProgress={true}
-                  //     progress={20}
-                  //     // displayTitle={item.title}
-                  //     bottomText={item.runtime}
-                  //     // showRec={true}
-                  //     // recType={"series"}
-                  //   />
-                  // }
+                  overlayComponent={
+                    <MFOverlay
+                      //@ts-ignore
+                      renderGradiant={true}
+                      showProgress={true}
+                      progress={20}
+                      // displayTitle={item.title}
+                      bottomText={item.runtime}
+                      // showRec={true}
+                      // recType={"series"}
+                    />
+                  }
                   progressComponent={props.progressElement}
                   showProgress={props.shouldRenderProgress}
                   shouldRenderText
@@ -249,7 +250,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
             </View>
           )
         }
-        {/* <View
+        <View
           style={{
             width: 500,
             height: 141,
@@ -260,7 +261,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
             props.swimLaneKey === props.title && (
               <MFMetaData currentFeed={currentFeed} />
             )}
-        </View> */}
+        </View>
       </View>
     );
   }

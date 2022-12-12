@@ -36,6 +36,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
 ) => {
   const maxProfileNameLength = appUIDefinition.config.maxProfileNameLength;
   console.log("props coming to create profile", props);
+  const keys = keyboard
   const CaretComponent = () => {
     return (
       <Text
@@ -142,8 +143,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
           </View>
           <View style={{ marginTop: 50 }}>
             <FlatList
-              hasTVPreferredFocus
-              data={keyboard.row1}
+              data={keys.row1}
               horizontal
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
@@ -232,7 +232,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
               )}
             />
             <FlatList
-              data={keyboard.row2}
+              data={keys.row2}
               horizontal
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
@@ -278,7 +278,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
               )}
             />
             <FlatList
-              data={keyboard.row3}
+              data={keys.row3}
               horizontal
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
@@ -347,7 +347,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                 setFocus("");
               }}
               onPress={() => {
-                if (titleString == "") {
+                if (titleString.trim() === "") {
                   Alert.alert("Please enter some name");
                 } else {
                   props.route.params.mode === "edit"

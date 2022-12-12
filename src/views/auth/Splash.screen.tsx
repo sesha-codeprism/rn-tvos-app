@@ -25,6 +25,9 @@ import { generateGUID } from "../../utils/guid";
 import { DefaultStore, setDefaultStore } from "../../utils/DiscoveryUtils";
 import { connectDuplex, setGlobalData } from "../../utils/splash/splash_utils";
 import { getMovies, getTVShows } from "../../../backend/discovery/discovery";
+import { useQuery } from "react-query";
+import { massageSubscriberFeed } from "../../utils/Subscriber.utils";
+import { SourceType } from "../../utils/common";
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
@@ -126,13 +129,37 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     const TVShow = await getTVShows("", {
       pivots: "LicenseWindow",
     });
+    // GLOBALS.moviesAndTvShows =
+    // console.log("movies", movies);
+    // console.log("TVShow", TVShow);
+    const massagedTVData = massageSubscriberFeed(
+      {LibraryItems:TVShow.data.Items},
+      "",
+      SourceType.VOD
+    );
+    const massagedMovieData = massageSubscriberFeed(
+      {LibraryItems:movies.data.Items},
+      "",
+      SourceType.VOD
+    );
+    console.log("movies", movies, "massagedMovieData", massagedMovieData);
+    console.log("TVShow", TVShow, "massagedTVData", massagedTVData);
     GLOBALS.moviesAndTvShows = [
-      { TVShow: TVShow.data.Items },
-      { Movie: movies.data.Items },
+      { TVShow: massagedTVData },
+      { Movie:  massagedMovieData },
     ];
-    console.log("movies", movies);
-    console.log("TVShow", TVShow);
   };
+  // const { data, isLoading } = useQuery(
+  //   "getMoviesAndTvShow",
+  //   getMoviesAndTvShow,
+  //   {
+  //     cacheTime: appUIDefinition.config.queryCacheTime,
+  //     staleTime: appUIDefinition.config.queryStaleTime,
+  //   }
+  // );
+  // const setMoviesAndTvShow = () => {
+  //   GLOBALS.moviesAndTvShows = data;
+  // };
   return (
     <View style={styles.container}>
       {showAnimation ? (
