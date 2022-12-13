@@ -36,7 +36,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
 ) => {
   const maxProfileNameLength = appUIDefinition.config.maxProfileNameLength;
   console.log("props coming to create profile", props);
-  const keys = keyboard
+  const keys = keyboard;
   const CaretComponent = () => {
     return (
       <Text
@@ -145,6 +145,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
             <FlatList
               data={keys.row1}
               horizontal
+              initialNumToRender={10}
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
                 <View style={{ flexDirection: "row" }}>
@@ -234,6 +235,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
             <FlatList
               data={keys.row2}
               horizontal
+              initialNumToRender={10}
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
                 <View style={MFProfileStyle.create_keyboardButton}>
@@ -280,6 +282,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
             <FlatList
               data={keys.row3}
               horizontal
+              initialNumToRender={10}
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
                 <View style={MFProfileStyle.create_keyboardButton}>

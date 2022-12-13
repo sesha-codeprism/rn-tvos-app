@@ -133,11 +133,10 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
             textStyle={[Styles.railTitle, props.railTitleStyles]}
             displayText={
               Array.isArray(props.libraryItems)
-                ?
-              props.title
-              : props.libraryItems !== undefined
-              ? Object.keys(props.libraryItems)[0]
-              : props.title
+                ? props.title
+                : props.libraryItems !== undefined
+                ? Object.keys(props.libraryItems)[0]
+                : props.title
             }
             enableRTL={props.enableRTL}
             shouldRenderText
@@ -150,6 +149,8 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
               ref={flatListRef}
               style={StyleSheet.flatten([props.flatListStyle])}
               scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
               horizontal
               windowSize={4}
               disableIntervalMomentum
