@@ -16,10 +16,6 @@ export interface MFbootstrapLandingInfo {
   oauth?: string;
   tenantId?: string;
   version?: string;
-  setTenant?: (string) => void;
-  setOauth?: (string) => void;
-  setVersion?: (string) => void;
-  reviveLandingInfo?: (any) => MFbootstrapLandingInfo;
 }
 
 export interface MFDeviceInfo {

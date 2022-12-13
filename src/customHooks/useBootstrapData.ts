@@ -6,7 +6,7 @@ import { parseUri } from "../../backend/utils/url/urlUtil";
 import { GLOBALS, landingInfo } from "../utils/globals";
 import useLanding from "./useLandingData";
 
-const useBootstrap = () => {
+const useBootstrap = (accessToken: string | null = null) => {
     const landingData = useLanding();
     const [bootstrapUrl, setBootstrapUrl] = useState("");
     const [boothStrapDataLoadStatus, setboothStrapDataLoadStatus] = useState<string | null>(null);
@@ -30,7 +30,12 @@ const useBootstrap = () => {
                         !bootstrapUrl && setBootstrapUrl(url);
                         if (bootstrapUrl && bootstrapResults.isSuccess) {
                             setboothStrapDataLoadStatus("NAVIGATEINNTOAPP");
-                        } else {
+                        } else if(bootstrapUrl && bootstrapResults.isError) {
+                            const { error : {response : {data, status} = {}} = {} } = bootstrapResults;
+                            if(data === "Device not provisioned." && status === 401){
+                                setboothStrapDataLoadStatus("NAVIGATETOSHORTCODE");
+                            }
+                        }else {
                             setboothStrapDataLoadStatus("WAIT");
                         }
                     } else {
@@ -49,7 +54,14 @@ const useBootstrap = () => {
                 setboothStrapDataLoadStatus("NOSTORE");
             }
         }
-    }, [GLOBALS.store, landingData?.isSuccess, bootstrapUrl, token, bootstrapResults.isSuccess, GLOBALS?.store?.accessToken])
+    }, [GLOBALS.store, landingData?.isSuccess, bootstrapUrl, token, bootstrapResults.isSuccess, bootstrapResults.isError, GLOBALS?.store?.accessToken])
+
+    useEffect(() => {
+        if(!token || (accessToken && token !== accessToken)){
+            setToken(accessToken);
+        }
+    }, [accessToken]);
+
 
     return [boothStrapDataLoadStatus, bootstrapUrl, token,  bootstrapResults]
 };

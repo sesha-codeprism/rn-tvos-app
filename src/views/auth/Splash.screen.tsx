@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 import DeviceInfo from "react-native-device-info";
-import { GLOBALS, resetAuthData } from "../../utils/globals";
+import { GLOBALS, landingInfo, resetAuthData } from "../../utils/globals";
 import {
   processBootStrap,
 } from "../../../backend/authentication/authentication";
@@ -22,6 +22,9 @@ import { getMovies, getTVShows } from "../../../backend/discovery/discovery";
 import useBootstrap from "../../customHooks/useBootstrapData";
 import { massageSubscriberFeed } from "../../utils/Subscriber.utils";
 import { SourceType } from "../../utils/common";
+import { updateStore } from "../../utils/helpers";
+import { MFGlobalsConfig } from "../../../backend/configs/globals";
+
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
@@ -46,13 +49,14 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     if(isError){
       const isTokenInvalidError: boolean = error.toString().includes("401");
       if (isTokenInvalidError) {
-        resetAuthData();
+        let resetStore = resetAuthData();
+        updateStore(resetStore);
         console.log("Token is invalid. Taking user to login again");
         props.navigation.replace(Routes.ShortCode);
       }
       setLoading(false);
     }
-    if(isSuccess && data?.data && navigateTo === "NAVIGATEINNTOAPP" && bootstrapUrl && acessToken && deviceInfo){
+    if(isSuccess && data?.data && navigateTo === "NAVIGATEINNTOAPP" && bootstrapUrl && acessToken){
       processBootStrap(data?.data, "10ft").then(() => {
         setGlobalData(data?.data);
         setLoading(false);

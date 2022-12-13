@@ -52,7 +52,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
   const onPress = (item: string) => {
     setSelectedItem(item);
     //   GLOBALS.store.settings.display.onScrreenLanguage = item;
-    //   updateStore(JSON.stringify(GLOBALS.store));
+    //   updateStore(GLOBALS.store);
   };
   const getValues = () => {
     setSelectedItem(GLOBALS.store.settings.display.onScreenLanguage);

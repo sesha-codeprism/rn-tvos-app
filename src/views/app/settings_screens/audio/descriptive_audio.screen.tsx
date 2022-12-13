@@ -32,7 +32,7 @@ import {
     const onPress = (item: string) => {
       setDescriptiveAudio(item);
       GLOBALS.store.settings.audio.descriptiveAudio = item;
-      updateStore(JSON.stringify(GLOBALS.store));
+      updateStore(GLOBALS.store);
     };
     const getValues = () => {
       setDescriptiveAudio(GLOBALS.store.settings.audio.descriptiveAudio);

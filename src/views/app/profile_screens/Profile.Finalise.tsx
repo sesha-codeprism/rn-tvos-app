@@ -120,7 +120,7 @@ const ProfileFinalisationScreen: React.FunctionComponent<
         console.log("create profile success rsponse", response.data);
         GLOBALS.userProfile = response.data;
         GLOBALS.store.userProfile = GLOBALS.userProfile;
-        updateStore(JSON.stringify(GLOBALS.store));
+        updateStore(GLOBALS.store);
         currentContext.setUserProfile(GLOBALS.userProfile);
       }
       setLoading(false);

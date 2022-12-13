@@ -4,6 +4,7 @@ import { DELETE, GET, POST, PUT } from "../utils/common/cloud";
 import { lang } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import axios from "axios";
+import { MFGlobalsConfig } from "../configs/globals";
 export type PinType = "adult" | "parentalcontrol" | "purchase";
 export interface SearchParam {
   searchString: string;
@@ -370,8 +371,9 @@ export const changePasscodes = async (PasscodeType: PinType, pin: string) => {
 export const deleteDevice = async () => {
   const { accessToken } = GLOBALS.store;
   const url: string = parseUri(
-    `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber}devices-byid/${GLOBALS.deviceInfo.deviceId}`
+    `${MFGlobalsConfig.environment.stsUrl}/oauth/signout/liveid`
   );
+  
   const response = await DELETE({
     url: url,
     headers: {

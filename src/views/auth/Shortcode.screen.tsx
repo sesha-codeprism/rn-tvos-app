@@ -41,11 +41,14 @@ export interface ShortCodeScreenProps {
 const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
   props
 ) => {
+  const [verificationCode, setVerficationCode] = useState(Array());
+  const [latestToken, setLatestToken ] = useState(null);
+
   const landingResponse = useLanding();
   const shortCodeData = useShortCode();
-  const bootstrapData = useBootstrap();
+  const bootstrapData = useBootstrap(latestToken);
   
-  const [verificationCode, setVerficationCode] = useState(Array());
+ 
   const [navigateTo, bootstrapUrl, acessToken, response] = bootstrapData || {};
 
 
@@ -60,10 +63,13 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
   }, [shortCodeData?.data?.RegistrationCode]);
 
   useEffect(() => {
-    if(GLOBALS.store){
+    if(GLOBALS.store && shortCodeData?.data?.AccessToken &&  shortCodeData?.data?.RefreshToken){
+      console.log('>>>>>>>>>.. Store', GLOBALS.store);
       GLOBALS.store.accessToken = shortCodeData?.data?.AccessToken;
       GLOBALS.store.refreshToken = shortCodeData?.data?.RefreshToken;
-      updateStore(JSON.stringify(GLOBALS.store));
+      console.log('>>>>>>>>>.. Store', GLOBALS.store);
+      setLatestToken(shortCodeData?.data?.AccessToken);
+      updateStore(GLOBALS.store);
     }
   }, [shortCodeData?.data?.AccessToken]);
 
@@ -80,7 +86,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
         props.navigation.replace(Routes.WhoIsWatching);
       });
     }
-  }, [response?.data, navigateTo, bootstrapUrl, acessToken])
+  }, [response?.data, navigateTo, bootstrapUrl, acessToken, shortCodeData?.data?.AccessToken])
 
   return (
     <View style={ShortCodeStyles.root} testID="root">

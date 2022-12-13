@@ -10,7 +10,7 @@ const MFGlobalsConfig = (function(){
 		this.stsUrl = url;
 	}
 
-	const reviceMFGlobalConfig = (serializedInstance: any) => {
+	const reviveMFGlobalConfig = (serializedInstance: any) => {
 		if(serializedInstance){
 			this.url = serializedInstance?.url;
 			this.stsUrl = serializedInstance?.stsUrl;
@@ -20,7 +20,7 @@ const MFGlobalsConfig = (function(){
 
 	return {
 		setters: {
-			reviceMFGlobalConfig,
+			reviveMFGlobalConfig,
 			switchEnvironment,
 			setStsUrl,
 		},

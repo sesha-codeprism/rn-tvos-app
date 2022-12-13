@@ -11,12 +11,11 @@ export const Log =
     ? console.log.bind(global.console)
     : () => { };
 
-export const updateStore = (MFStore: string) =>
-  /** Removing Async Store code. Switching to React Native default Settings API */
-  // AsyncStorage.setItem("MFStore", MFStore).then(() => {
-  //   Log("Update Store: ", GLOBALS.store);
-  // }
-  Settings.set({ store: MFStore });
+export const updateStore = (MFStore: any) => {
+  const sanitizedStore = {...MFStore, landingInfo: {...landingInfo}, MFGlobalsConfig: {...MFGlobalsConfig}};
+  Settings.set({ store: JSON.stringify(sanitizedStore) });
+  GLOBALS.store = getStore();
+}
 
 
 export const getStore = () => {
@@ -24,10 +23,19 @@ export const getStore = () => {
   if(serializedStore){
     serializedStore = JSON.parse(serializedStore);
     serializedStore.landingInfo = landingInfo.reviveLandingInfo?.(serializedStore.landingInfo);
-    serializedStore.MFGlobalsConfig = MFGlobalsConfig?.setters?.reviceMFGlobalConfig( serializedStore.MFGlobalsConfig);
+    serializedStore.MFGlobalsConfig = MFGlobalsConfig?.setters?.reviveMFGlobalConfig( serializedStore.MFGlobalsConfig);
     return serializedStore;
   }else {
     return {
+      MFGlobalsConfig: {
+        url: null,
+        stsUrl: null
+      },
+      landingInfo: {
+        oauth: null,
+        tenantId: null,
+        version: null
+      },
       accessToken: null,
       refreshToken: null,
       userProfile: undefined,

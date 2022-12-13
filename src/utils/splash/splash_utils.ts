@@ -21,11 +21,9 @@ export const setGlobalData = (bootStrapResponse: BootStrapResponse) => {
         GLOBALS.enableRTL =
             GLOBALS.store.settings.display.onScreenLanguage.enableRTL;
         setOnScreenLanguage(GLOBALS.store.settings.display.onScreenLanguage.languageCode)
-        GLOBALS.store.landingInfo = landingInfo;
-        GLOBALS.store.MFGlobalsConfig = MFGlobalsConfig;
     
         console.log("GLOBALS", GLOBALS);
-        updateStore(JSON.stringify(GLOBALS.store));
+        updateStore(GLOBALS.store);
     }
 }
 
@@ -55,7 +53,7 @@ export const verifyAccountAndLogin = async () => {
             GLOBALS.store = deleteUserSettings();
             //@ts-ignore
             GLOBALS.store.accountID = GLOBALS.bootstrapSelectors?.AccountId;
-            updateStore(JSON.stringify(GLOBALS.store))
+            updateStore(GLOBALS.store)
             return false
         }
     } else {
