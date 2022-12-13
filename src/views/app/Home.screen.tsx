@@ -116,8 +116,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       props.navigation.navigate(Routes.FallBack, params);
     }
   };
-
-  console.log(config.guide.epgConfig.filters);
   const onTapViewAll = (feed: any) => {
     const payload: any = {
       feed,
@@ -300,6 +298,11 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                       ref={firstCardRef}
                       feeds={feeds}
                       onFocus={onFeedFocus}
+                      onPress={(event) => {
+                        props.navigation.navigate(Routes.Details, {
+                          feed: event,
+                        });
+                      }}
                       onListEmptyElementFocus={clearCurrentHub}
                       onListFooterElementFocus={clearCurrentHub}
                       limitSwimlaneItemsTo={

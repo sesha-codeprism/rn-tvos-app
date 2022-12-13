@@ -81,6 +81,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           updateSwimLaneKey={props.updateSwimLaneKey}
           railContainerStyles={{}}
           libraryItems={props.data}
+          onPress={props.onPress}
           onBlur={(event) => {
             _onBlur();
           }}
