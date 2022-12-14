@@ -26,6 +26,7 @@ export class DuplexConnection {
   private static RETRY_JITTER = 25; // percentage
   private static MAX_ALLOWED_ATTEMPTS: number = 5;
   private _duplexEndpoint: string;
+  private onDuplexMessage: ((message: any) => void) | null = null;
 
   public IsConnected(): boolean {
     if (this._isConnected) {
@@ -123,6 +124,9 @@ export class DuplexConnection {
     console.log(`sent message ${message} to webSocket`);
   }
 
+  public setOnMessageHandler(onDuplexMessage?: any) : void {
+    this.onDuplexMessage = onDuplexMessage;
+  }
   private getHeartbeatInterval(): number {
     return DuplexConnection.HEARTBEAT_DEFAULT_INTERVAL_MILLISECONDS;
   }
@@ -188,6 +192,7 @@ export class DuplexConnection {
 
   private onWebSocketMessage(ev: WebSocketMessageEvent): void {
     console.log(`received message - ${ev.data}`);
+   
 
     this.restartHeartbeat();
 
@@ -205,6 +210,7 @@ export class DuplexConnection {
     if (parsedMessage) {
       message = parsedMessage;
       this._onMessageCallback(message);
+      this.onDuplexMessage?.(message);
     } else {
       console.warn(`onWebSocketMessage() invalid message received ${ev.data}`);
       return;

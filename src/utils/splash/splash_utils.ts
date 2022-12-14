@@ -27,11 +27,14 @@ export const setGlobalData = (bootStrapResponse: BootStrapResponse) => {
     }
 }
 
-
-export const connectDuplex = () => {
+///  
+/// To be called from application side to conect to duplex, only once
+/// @param : onDuplexMessage, Applicationn side root new duplex message dispatcher/handler.
+///
+export const connectDuplex = (onDuplexMessage: (any) => void) => {
     const GUID = generateGUID();
     const duplexEndpoint = `${addPrefixToUrl(GLOBALS.bootstrapSelectors?.ServiceMap.Services.duplex, GLOBALS.bootstrapSelectors?.ServiceMap.Prefixes[config.prefixType])}?sessionId=${GUID}`;
-    duplex.initialize(duplexEndpoint);
+    duplex.initialize(duplexEndpoint, null, onDuplexMessage);
 
 }
 /** 

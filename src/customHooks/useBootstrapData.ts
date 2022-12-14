@@ -15,6 +15,7 @@ const useBootstrap = (accessToken: string | null = null) => {
     const bootstrapResults = useQuery(['bootstrap', bootstrapUrl, token], getBootStrap, {
         cacheTime: Infinity,
         staleTime: Infinity,
+        retry: false
     });
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
 import AnimatedLottieView from "lottie-react-native";
@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 import DeviceInfo from "react-native-device-info";
-import { GLOBALS, landingInfo, resetAuthData } from "../../utils/globals";
+import { GLOBALS, resetAuthData } from "../../utils/globals";
 import {
   processBootStrap,
 } from "../../../backend/authentication/authentication";
@@ -23,7 +23,8 @@ import useBootstrap from "../../customHooks/useBootstrapData";
 import { massageSubscriberFeed } from "../../utils/Subscriber.utils";
 import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
-import { MFGlobalsConfig } from "../../../backend/configs/globals";
+import { GlobalContext } from "../../contexts/globalContext";
+import { resetCaches } from "../../config/queries";
 
 
 interface Props {
@@ -35,10 +36,24 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [navigateTo, bootstrapUrl, acessToken, response] = bootstrapData || {};
   const [loading, setLoading] = useState(false);
   const [deviceInfo, setDevice ] = useState("");
+  const currentContext = useContext(GlobalContext);
 
 
   useEffect(() => {
     setDeviceInfo();
+    const onDuplexMessage = (message: any) => {
+      if(message?.type === "DeviceDeleted"){
+        const { payload : {deviceId = ""}  = {} } = message;
+        if(deviceId === GLOBALS.deviceInfo.deviceId){
+          // logout
+          const resetStore = resetAuthData();
+          updateStore(resetStore);
+          resetCaches();
+          GLOBALS.rootNavigation.replace(Routes.ShortCode);
+        }
+      }
+    }
+    currentContext.addOnDuplexMessageHandlers([...currentContext.onDuplexMessageHandlers, onDuplexMessage]);
   }, []);
 
   useEffect(() => {
@@ -62,7 +77,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         setLoading(false);
         initUdls();
         setDefaultStore();
-        connectDuplex();
+        connectDuplex(currentContext.duplexMessage);
         props.navigation.replace(Routes.WhoIsWatching);
       });
     }

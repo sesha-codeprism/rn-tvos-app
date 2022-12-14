@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View } from "react-native";
 import FastImage from "react-native-fast-image";
 import MFText from "../../components/MFText";
@@ -13,7 +13,7 @@ import {
   processBootStrap,
 } from "../../../backend/authentication/authentication";
 import { infoLog, updateStore } from "../../utils/helpers";
-import { GLOBALS } from "../../utils/globals";
+import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { initUdls } from "../../../backend";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { appUIDefinition } from "../../config/constants";
@@ -26,7 +26,8 @@ import {
 import useLanding from "../../customHooks/useLandingData";
 import useBootstrap from "../../customHooks/useBootstrapData";
 import useShortCode from "../../customHooks/useShortCode";
-import { resetSpecificQuery } from "../../config/queries";
+import { resetCaches, resetSpecificQuery } from "../../config/queries";
+import { GlobalContext } from "../../contexts/globalContext";
 
 const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
 
@@ -47,6 +48,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
   const landingResponse = useLanding();
   const shortCodeData = useShortCode();
   const bootstrapData = useBootstrap(latestToken);
+  const currentContext = useContext(GlobalContext);
   
  
   const [navigateTo, bootstrapUrl, acessToken, response] = bootstrapData || {};
@@ -55,6 +57,22 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
   const onRefresh = async () => {
     resetSpecificQuery(['shotcode',landingResponse, GLOBALS.deviceInfo])
   };
+
+  useEffect(() => {
+    const onDuplexMessage = (message: any) => {
+      if(message?.type === "DeviceDeleted"){
+        const { payload : {deviceId = ""}  = {} } = message;
+        if(deviceId === GLOBALS.deviceInfo.deviceId){
+          // logout
+          const resetStore = resetAuthData();
+          updateStore(resetStore);
+          resetCaches();
+          GLOBALS.rootNavigation.replace(Routes.ShortCode);
+        }
+      }
+    }
+    currentContext.addOnDuplexMessageHandlers([...currentContext.onDuplexMessageHandlers, onDuplexMessage]);
+  }, []);
 
   useEffect(() => {
     if(shortCodeData?.data?.RegistrationCode){
@@ -82,7 +100,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
         setDefaultStore();
         var value = verifyAccountAndLogin();
         console.log("verifyAccountAndLogin", value);
-        connectDuplex();
+        connectDuplex(currentContext.duplexMessagee);
         props.navigation.replace(Routes.WhoIsWatching);
       });
     }
