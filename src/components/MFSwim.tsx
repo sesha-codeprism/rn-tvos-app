@@ -41,6 +41,9 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
       <FlatList
         data={props.feeds?.Feeds}
         keyExtractor={(x, i) => i.toString()}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        decelerationRate="fast"
         renderItem={({ item, index }) => {
           return (
             <MFSwimLane

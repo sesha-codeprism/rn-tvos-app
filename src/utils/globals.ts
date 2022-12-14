@@ -116,7 +116,7 @@ export const GLOBALS: GLOBALSType = {
     itemFeed: [],
     filterData: {},
   },
-  moviesAndTvShows:[],
+  moviesAndTvShows: [],
   store: {
     accessToken: null,
     refreshToken: null,
@@ -162,6 +162,7 @@ export const resetAuthData = () => {
     ...GLOBALS.store,
     accessToken: null,
     refreshToken: null,
+    userProfile: undefined
 
   }
 };
