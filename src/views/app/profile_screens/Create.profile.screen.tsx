@@ -381,7 +381,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
               onPress={() => {
                 props.route.params.mode === "edit"
                   ? props.navigation.goBack()
-                  : props.navigation.pop(2);
+                  : props.navigation.pop();
               }}
               textLabel="Cancel"
               imageSource={0}

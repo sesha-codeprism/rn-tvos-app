@@ -185,7 +185,7 @@ const ChooseProfileScreen: React.FunctionComponent<ChooseProfileProps> = (
               fontWeight: "600",
             }}
             onPress={() => {
-              props.navigation.goBack();
+              props.route.params.mode === "edit" ? props.navigation.pop() :   props.navigation.pop(2);
             }}
             textLabel="Cancel"
             imageSource={0}

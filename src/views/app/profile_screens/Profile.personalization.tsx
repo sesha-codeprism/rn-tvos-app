@@ -267,7 +267,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
             }}
             onPress={() => {
               props.route.params.mode === "create"
-                ? props.navigation.goBack()
+                ? props.navigation.pop(3)
                 : setShowClearHistory(true);
             }}
             textLabel={
