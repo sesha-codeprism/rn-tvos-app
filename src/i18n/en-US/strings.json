@@ -2107,5 +2107,12 @@
   "str_galleryview_filter_label": "Filter",
   "str_filter_clear_label": "Clear Filter",
   "str_vsa_device_deleted_error_title": "Current Device is deleted",
-  "str_vsa_device_deleted_error_message": "Please relogin again"
+  "str_vsa_device_deleted_error_message": "Please relogin again",
+  "str_settings_locales": {
+    "en-US": "English (US)",
+    "fr-CA": "Français (Canada)",
+    "en-CA": "English (Canada)",
+    "es-CL": "Spanish (Chile)",
+    "hu-HU": "Hungarian (Hungary)"
+  }
 }

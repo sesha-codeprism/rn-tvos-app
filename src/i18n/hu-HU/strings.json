@@ -539,5 +539,62 @@
         "tomorrow": "TOMORROW",
         "view_all": "VIEW ALL",
         "yesterday": "YESTERDAY"
-    }
+    },
+    "str_selectServices": [
+        {
+          "name": "DevTest",
+          "value": "MR.dev",
+          "path": "http://reachclient.dev.mr.tv3cloud.com"
+        },
+        {
+          "name": "OSim",
+          "value": "MR.osim",
+          "path": "http://reachclient.osim.mr.tv3cloud.com"
+        },
+        {
+          "name": "Demo",
+          "value": "MR.demo",
+          "path": "http://reachclient.demo.mr.tv3cloud.com"
+        },
+        {
+          "name": "Cip",
+          "value": "MR.cip",
+          "path": "http://reachclient.cip.mr.tv3cloud.com"
+        },
+        {
+          "name": "Integration",
+          "value": "MR.oint",
+          "path": "http://reachclient.oint.mr.tv3cloud.com"
+        },
+        {
+          "name": "OFunk",
+          "value": "MR.ofunk",
+          "path": "http://reachclient.ofunk.mr.tv3cloud.com"
+        },
+        {
+          "name": "PreProd",
+          "value": "MR.pprod",
+          "path": "http://reachclient.pprod.mr.tv3cloud.com"
+        },
+        {
+          "name": "MFNA",
+          "value": "mfn.proda",
+          "path": "http://reachclient.proda.mfn.tv3cloud.com"
+        },
+        {
+          "name": "ProdC (Telus)",
+          "value": "TELUS.prodc",
+          "path": "http://reachclient.prodc.tls.tv3cloud.com"
+        },
+        {
+          "name": "CIM",
+          "value": "MR.CIM",
+          "path": "https://reachclient.cim.mr.tv3cloud.com"
+        },
+        {
+          "name": "TMO",
+          "value": "TMO.proda",
+          "path": "http://reachclient.proda.tmo.tv3cloud.com"
+        }
+      ]
 }

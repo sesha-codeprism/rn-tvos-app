@@ -82,10 +82,8 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
 
   useEffect(() => {
     if(GLOBALS.store && shortCodeData?.data?.AccessToken &&  shortCodeData?.data?.RefreshToken){
-      console.log('>>>>>>>>>.. Store', GLOBALS.store);
       GLOBALS.store.accessToken = shortCodeData?.data?.AccessToken;
       GLOBALS.store.refreshToken = shortCodeData?.data?.RefreshToken;
-      console.log('>>>>>>>>>.. Store', GLOBALS.store);
       setLatestToken(shortCodeData?.data?.AccessToken);
       updateStore(GLOBALS.store);
     }

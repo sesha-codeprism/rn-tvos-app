@@ -19,7 +19,7 @@ export interface QueryResponse {
 
 export const getHubs = async () => {
     const data = await getDataFromUDL(
-        `udl://discovery/hubs?rightIds=${GLOBALS.store.rightsGroupIds}&storeId=${DefaultStore.Id}&pivots=${pivots}&lang=${lang}`
+        `udl://discovery/hubs?rightIds=${GLOBALS.store?.rightsGroupIds}&storeId=${DefaultStore.Id}&pivots=${pivots}&lang=${GLOBALS.store?.onScreenLanguage?.languageCode || lang}`
     );
     const response: HubsResponse = data;
     return response;

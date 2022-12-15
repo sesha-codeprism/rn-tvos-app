@@ -1,4 +1,5 @@
 import { ImageSourcePropType } from "react-native";
+import { getStoresOfZones } from "../../backend/discovery/discovery";
 import { FeedItem } from "../@types/HubsResponse";
 import { AppStrings } from "../config/strings";
 import { SourceType, ItemShowType, RatingValue } from "./common";
@@ -205,22 +206,62 @@ export const getDefaultStore = (): string | undefined => {
     }
 
 }
+export const setDefaultStore = async (storeresponse: any, bootstrapSelectors: any) => {
+    if (bootstrapSelectors) {
+        console.log(storeresponse);
+        const stores = storeresponse?.data;
+        const STORE_TYPE = "HubsAndFeeds";
+        const defaultMainStore = "HubsAndFeeds-Main";
 
-export function setDefaultStore(): void {
-    DefaultStore.Id = getDefaultStore() || DefaultStore.Id;
+        if (!bootstrapSelectors || !bootstrapSelectors.VersionSet) {
+            // When user does not have any experience group, search for defaultMainStore
+            // if  defaultMainStore exists return
+            // else search for non adult, default and 'HubsAndFeeds' store and return
+            if (!stores) {
+                DefaultStore.Id = defaultMainStore;
+                return;
+            }
 
-    // const defaultStore = getDefaultStore();
-    // if (defaultStore) {
-    //     DefaultStore.Id = defaultStore;
-    // } else {
-    //     DefaultStore.Id = storeId || DefaultStore.Id;
-    // }
+            const store = stores.filter((s: any) => defaultMainStore === s.Id);
+            if (store && store.length > 0) {
+                console.log("returning default main storeId:", store[0].Id);
+                DefaultStore.Id = store[0].Id;
+                return;
+            }
+
+            for (const store of stores) {
+                if (
+                    store.IsDefault &&
+                    !store.IsAdult &&
+                    store.StoreType === STORE_TYPE
+                ) {
+                    console.log("returning stores storeId:", store.Id);
+                    DefaultStore.Id = store.Id;
+                    return;
+                }
+            }
+        } else {
+            for (const version of bootstrapSelectors.VersionSet.Versions) {
+                if (version.IsDefaultStore) {
+                    console.log(
+                        "returning versionSet storeId: ",
+                        version.StoreId
+                    );
+                    DefaultStore.Id = version.StoreId;
+                    return;
+                }
+            }
+        }
+
+        DefaultStore.Id = defaultMainStore?.Id;
+        return;
+    }
 }
 
 
 
 export const DefaultStore: IStore = {
-    Id: HUBS_AND_FEEDS + "-Main",
+    Id: "?",
     Name: "",
     Locale: "",
     IsAdult: false,

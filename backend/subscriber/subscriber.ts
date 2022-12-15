@@ -43,7 +43,7 @@ const getYouMightLike = async (params: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
@@ -62,7 +62,7 @@ export const searchItems = async (params: SearchParam) => {
     }&$skip=${params.$skip}&$top=${params.$top}&searchLive=${
       params.searchLive
     }&$groups=${GLOBALS.bootstrapSelectors?.RightsGroupIds}&$lang=${
-      lang || "en-US"
+      GLOBALS.store?.onScreenLanguage?.languageCode || lang || "en-US"
     }`,
     headers: {
       authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
@@ -83,7 +83,7 @@ const getBookmarks = async (uri: string, params: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
@@ -106,7 +106,7 @@ const getSubscriberPins = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
@@ -129,7 +129,7 @@ const getReminders = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
@@ -151,7 +151,7 @@ const getSubscriberSubscriptions = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
@@ -174,7 +174,7 @@ const getYouMightLikeByTaste = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
@@ -195,7 +195,7 @@ const getYouMightLikeBySpecificTaste = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
@@ -217,7 +217,7 @@ const getLibrary = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
@@ -239,7 +239,7 @@ const getLiveTrendingPrograms = async () => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {

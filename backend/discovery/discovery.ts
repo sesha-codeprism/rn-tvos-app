@@ -18,7 +18,7 @@ const versionString = "/v4/";
 
 /** API call to get all Hubs data */
 export const getHubs = async (id: string, params: any) => {
-  const { rightIds, storeId, pivots, lang } = params;
+  const { rightIds, storeId, pivots, lang = GLOBALS.store?.onScreenLanguage?.languageCode } = params;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || "") +
     "/v3/hubs";
@@ -33,6 +33,28 @@ export const getHubs = async (id: string, params: any) => {
   });
   return response;
 };
+
+
+export const getStoresOfZones = async (response: any) => {
+    const url: string =
+    parseUri(
+      response?.ServiceMap.Services.discovery || ""
+    ) +
+    "/v3/" +
+    "stores";
+
+  const results =  await GET({
+    url: url,
+    params: {
+      $groups: GLOBALS.store.rightsGroupIds,
+      storeId: DefaultStore.Id,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+    },
+  });
+  return results;
+}
+
+
 export const getMovies = async (id?: string, params?: any) => {
   const { parentalrating, pivots, rating } = params;
 
@@ -47,7 +69,7 @@ export const getMovies = async (id?: string, params?: any) => {
     params: {
       $groups: GLOBALS.store.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -80,7 +102,7 @@ export const getTVShows = async (id?: string, params?: any) => {
     params: {
       $groups: GLOBALS.store.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -98,7 +120,7 @@ const getPackages = async (id: string, params: Object) => {
     params: {
       $groups: GLOBALS.store.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -118,7 +140,7 @@ const getmoviesandtvshowsByLicenseWindow = async (
     params: {
       $groups: GLOBALS.store.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -139,7 +161,7 @@ const getMoviesAndTV = async (id: string, params: any) => {
     params: {
       $groups: GLOBALS.store.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -164,7 +186,7 @@ const discoverSubscriptions = async (
     params: {
       $groups: GLOBALS.store.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -181,7 +203,7 @@ const getPayPerView = async () => {
     params: {
       $groups: GLOBALS.store.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -203,7 +225,7 @@ export const getStoresList = async () => {
     params: {
       pivots: pivots,
       $groups: rightIds,
-      $lang: lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
   });

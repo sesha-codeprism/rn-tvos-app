@@ -184,7 +184,6 @@ export const deleteUserSettings = () => {
           title: "English (US)",
           languageCode: "en-US",
           enableRTL: false
-
         },
         closedCaption: "",
       },

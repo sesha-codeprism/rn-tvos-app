@@ -18,13 +18,15 @@ import { Routes } from "../../config/navigation/RouterOutlet";
 import { appUIDefinition } from "../../config/constants";
 import { setDefaultStore } from "../../utils/DiscoveryUtils";
 import { connectDuplex, setGlobalData } from "../../utils/splash/splash_utils";
-import { getMovies, getTVShows } from "../../../backend/discovery/discovery";
+import { getMovies, getStoresOfZones, getTVShows } from "../../../backend/discovery/discovery";
 import useBootstrap from "../../customHooks/useBootstrapData";
 import { massageSubscriberFeed } from "../../utils/Subscriber.utils";
 import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
 import { GlobalContext } from "../../contexts/globalContext";
 import { resetCaches } from "../../config/queries";
+import useStoresOfZones from "../../customHooks/useStoreOfZones";
+import { useQuery } from "react-query";
 
 
 interface Props {
@@ -34,6 +36,7 @@ const { width, height } = Dimensions.get("window");
 const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const bootstrapData = useBootstrap();
   const [navigateTo, bootstrapUrl, acessToken, response] = bootstrapData || {};
+
   const [loading, setLoading] = useState(false);
   const [deviceInfo, setDevice ] = useState("");
   const currentContext = useContext(GlobalContext);
@@ -53,8 +56,10 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         }
       }
     }
+    // proper way of adding handler
     currentContext.addOnDuplexMessageHandlers([...currentContext.onDuplexMessageHandlers, onDuplexMessage]);
   }, []);
+
 
   useEffect(() => {
     const {data, isSuccess, isError, error } = response || {};
@@ -73,12 +78,14 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     }
     if(isSuccess && data?.data && navigateTo === "NAVIGATEINNTOAPP" && bootstrapUrl && acessToken){
       processBootStrap(data?.data, "10ft").then(() => {
-        setGlobalData(data?.data);
-        setLoading(false);
         initUdls();
-        setDefaultStore();
-        connectDuplex(currentContext.duplexMessage);
-        props.navigation.replace(Routes.WhoIsWatching);
+        getStoresOfZones(data?.data).then((storeresponse: any) => {
+          setDefaultStore(storeresponse, data?.data);
+          setGlobalData(data?.data);
+          connectDuplex(currentContext.duplexMessage);
+          setLoading(false);
+          props.navigation.replace(Routes.WhoIsWatching);
+        });        
       });
     }
   }, [response?.data, navigateTo, bootstrapUrl, acessToken])
