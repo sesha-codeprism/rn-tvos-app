@@ -35,15 +35,16 @@ export const getHubs = async (id: string, params: any) => {
 };
 
 
-export const getStoresOfZones = async (response: any) => {
+export const getStoresOfZones = async ({ queryKey } : any) => {
+  const [, discoveryUrl] = queryKey;
     const url: string =
     parseUri(
-      response?.ServiceMap.Services.discovery || ""
+      discoveryUrl
     ) +
     "/v3/" +
     "stores";
 
-  const results =  await GET({
+  return await GET({
     url: url,
     params: {
       $groups: GLOBALS.store.rightsGroupIds,
@@ -51,8 +52,7 @@ export const getStoresOfZones = async (response: any) => {
       lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
     },
   });
-  return results;
-}
+};
 
 
 export const getMovies = async (id?: string, params?: any) => {

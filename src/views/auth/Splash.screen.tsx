@@ -25,7 +25,6 @@ import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
 import { GlobalContext } from "../../contexts/globalContext";
 import { resetCaches } from "../../config/queries";
-import useStoresOfZones from "../../customHooks/useStoreOfZones";
 import { useQuery } from "react-query";
 
 
@@ -38,16 +37,22 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const [navigateTo, bootstrapUrl, acessToken, response] = bootstrapData || {};
 
   const [loading, setLoading] = useState(false);
-  const [deviceInfo, setDevice ] = useState("");
+  const [deviceInfo, setDevice] = useState("");
   const currentContext = useContext(GlobalContext);
 
+
+  const storeResults = useQuery(['stores', response?.data?.data?.ServiceMap?.Services?.discovery], getStoresOfZones, {
+    cacheTime: Infinity,
+    staleTime: Infinity,
+    enabled: !!response?.data?.data?.ServiceMap?.Services?.discovery
+  });
 
   useEffect(() => {
     setDeviceInfo();
     const onDuplexMessage = (message: any) => {
-      if(message?.type === "DeviceDeleted"){
-        const { payload : {deviceId = ""}  = {} } = message;
-        if(deviceId === GLOBALS.deviceInfo.deviceId){
+      if (message?.type === "DeviceDeleted") {
+        const { payload: { deviceId = "" } = {} } = message;
+        if (deviceId === GLOBALS.deviceInfo.deviceId) {
           // logout
           const resetStore = resetAuthData();
           updateStore(resetStore);
@@ -62,11 +67,11 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
 
 
   useEffect(() => {
-    const {data, isSuccess, isError, error } = response || {};
-    if(navigateTo === "NOTOKEN"){
-     props.navigation.replace(Routes.ShortCode);
+    const { data, isSuccess, isError, error } = response || {};
+    if (navigateTo === "NOTOKEN") {
+      props.navigation.replace(Routes.ShortCode);
     }
-    if(isError){
+    if (isError) {
       const isTokenInvalidError: boolean = error.toString().includes("401");
       if (isTokenInvalidError) {
         let resetStore = resetAuthData();
@@ -76,22 +81,20 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       }
       setLoading(false);
     }
-    if(isSuccess && data?.data && navigateTo === "NAVIGATEINNTOAPP" && bootstrapUrl && acessToken){
-      processBootStrap(data?.data, "10ft").then(() => {
-        initUdls();
-        getStoresOfZones(data?.data).then((storeresponse: any) => {
-          setDefaultStore(storeresponse, data?.data);
-          setGlobalData(data?.data);
-          connectDuplex(currentContext.duplexMessage);
-          setLoading(false);
-          props.navigation.replace(Routes.WhoIsWatching);
-        });        
-      });
-    }
-  }, [response?.data, navigateTo, bootstrapUrl, acessToken])
+    if (isSuccess && data?.data && navigateTo === "NAVIGATEINNTOAPP" && bootstrapUrl && acessToken && storeResults?.data?.data) {
+    processBootStrap(data?.data, "10ft").then(() => {
+      initUdls();
+      setDefaultStore(storeResults?.data?.data, data?.data);
+      setGlobalData(data?.data);
+      connectDuplex(currentContext.duplexMessage);
+      setLoading(false);
+      props.navigation.replace(Routes.WhoIsWatching);
+    });
+  }
+}, [response?.data, navigateTo, bootstrapUrl, acessToken, storeResults?.data?.data])
 
-  const _onAnimationFinish = () => {
-  };
+const _onAnimationFinish = () => {
+};
 
   const setDeviceInfo = async () => {
     const isEmulator: boolean = await DeviceInfo.isEmulator();
@@ -119,9 +122,6 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     const TVShow = await getTVShows("", {
       pivots: "LicenseWindow",
     });
-    // GLOBALS.moviesAndTvShows =
-    // console.log("movies", movies);
-    // console.log("TVShow", TVShow);
     const massagedTVData = massageSubscriberFeed(
       {LibraryItems:TVShow.data.Items},
       "",
@@ -132,24 +132,11 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       "",
       SourceType.VOD
     );
-    console.log("movies", movies, "massagedMovieData", massagedMovieData);
-    console.log("TVShow", TVShow, "massagedTVData", massagedTVData);
     GLOBALS.moviesAndTvShows = [
       { TVShow: massagedTVData },
-      { Movie:  massagedMovieData },
+      { Movie: massagedMovieData },
     ];
   };
-  // const { data, isLoading } = useQuery(
-  //   "getMoviesAndTvShow",
-  //   getMoviesAndTvShow,
-  //   {
-  //     cacheTime: appUIDefinition.config.queryCacheTime,
-  //     staleTime: appUIDefinition.config.queryStaleTime,
-  //   }
-  // );
-  // const setMoviesAndTvShow = () => {
-  //   GLOBALS.moviesAndTvShows = data;
-  // };
   return (
     <View style={styles.container}>
       {showAnimation ? (
