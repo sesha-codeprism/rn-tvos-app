@@ -13,3 +13,8 @@ export const fossLicense = require("../config/fosslicense.json")
 export const layout2x3 = "TwoByThree";
 export const layoutMixed = "Mixed";
 export const layout16x9 = "SixteenByNine";
+
+export const defaultQueryOptions = {
+  cacheTime: appUIDefinition.config.queryCacheTime,
+  staleTime: appUIDefinition.config.queryStaleTime,
+}

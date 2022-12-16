@@ -12,6 +12,14 @@ export interface SearchParam {
   searchLive: boolean;
   mediaTypes?: string;
 }
+
+export const assetObject = {
+  0: "programs",
+  1: "season",
+  2: "series",
+  3: "series"
+};
+
 const getProgramPlayActions = async (id: string, params: Object) => {
   const res = {
     name: "subscriber/getProgramPlayActions",
@@ -21,14 +29,29 @@ const getProgramPlayActions = async (id: string, params: Object) => {
   return res;
 };
 
-const getSimilarPrograms = async (id: string, params: Object) => {
-  const res = {
-    name: "subscriber/getSimilarPrograms",
-    count: 20,
-    response: [1, 2, 3],
-  };
-  return res;
-};
+const getSimilarPrograms = async (itemId: string, params: any) => {
+  console.log(params)
+  const { itemType, id } = params;
+  //   const res = {
+  //     name: "subscriber/getSimilarPrograms",
+  //     count: 20,
+  //     response: [1, 2, 3],
+  //   };
+  //   return res;
+  // };
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v4/${(assetObject as any)[itemType || 0]
+    }/${id}/similar-items/`;
+  const response = await GET({
+    url: url,
+    params: params,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+  });
+  return response;
+}
+
+
 
 const getYouMightLike = async (params: any) => {
   const url: string =
@@ -56,13 +79,10 @@ export const searchItems = async (params: SearchParam) => {
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.search || "") +
     "/v4/search/items";
   const response = await GET({
-    url: `${url}?partialName=${params.searchString}&storeId=${
-      DefaultStore.Id
-    }&$skip=${params.$skip}&$top=${params.$top}&searchLive=${
-      params.searchLive
-    }&$groups=${GLOBALS.bootstrapSelectors?.RightsGroupIds}&$lang=${
-      lang || "en-US"
-    }`,
+    url: `${url}?partialName=${params.searchString}&storeId=${DefaultStore.Id
+      }&$skip=${params.$skip}&$top=${params.$top}&searchLive=${params.searchLive
+      }&$groups=${GLOBALS.bootstrapSelectors?.RightsGroupIds}&$lang=${lang || "en-US"
+      }`,
     headers: {
       authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
     },

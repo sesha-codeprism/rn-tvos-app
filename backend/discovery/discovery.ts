@@ -39,7 +39,7 @@ export const getMovies = async (id?: string, params?: any) => {
   const url: string =
     parseUri(
       GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
-        "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
+      "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
     ) + "/v4/feeds/movies/items";
   console.log("UDL: getMovies", id, params, url);
   const response = await GET({
@@ -70,7 +70,7 @@ export const getTVShows = async (id?: string, params?: any) => {
   const url: string =
     parseUri(
       GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
-        "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
+      "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
     ) +
     versionString +
     "feeds/tvshows/items";
@@ -315,6 +315,16 @@ const getDiscoveryLibraryPackages = async (id: string, params: any) => {
   return response;
 };
 
+const getDiscoveryProgramDetailsById = async (itemID: string, params: any) => {
+  const { id } = params;
+  const url = `${DISCOVERY_URL}/v3/programs/${id}`;
+  const response = await GET({
+    url: url,
+    params: params
+  });
+  return response;
+}
+
 export const registerDiscoveryUdls = () => {
   const BASE = "discovery";
 
@@ -351,6 +361,10 @@ export const registerDiscoveryUdls = () => {
       prefix: BASE + "libraryprograms/collections/packages",
       getDiscoveryLibraryPackages,
     },
+    {
+      prefix: BASE + 'programs/',
+      getter: getDiscoveryProgramDetailsById
+    }
   ];
   return discoveryUdls;
 };
