@@ -1,5 +1,5 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ImageBackground,
   ScrollView,
@@ -11,7 +11,14 @@ import FastImage from "react-native-fast-image";
 import { Feed } from "../../../@types/HubsResponse";
 import { AppImages } from "../../../assets/images";
 import MFText from "../../../components/MFText";
-import { getMetadataLine2 } from "../../../utils/assetUtils";
+import {
+  DateToAMPM,
+  getMetadataLine2,
+  isExpiringSoon,
+  massageDiscoveryFeedAsset,
+  massagePreviousDate,
+  massageProgramDataForUDP,
+} from "../../../utils/assetUtils";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../utils/dimensions";
 import {
   getImageUri,
@@ -24,16 +31,21 @@ import { getItemId } from "../../../utils/dataUtils";
 import { getFontIcon } from "../../../config/strings";
 import {
   assetTypeObject,
+  BookmarkType,
   ContentType,
   fontIconsObject,
   languageKey,
+  placeholder2x3Image,
+  sourceTypeString,
 } from "../../../utils/analytics/consts";
 import { Genre } from "../../../utils/common";
 import { useQuery } from "react-query";
 import { defaultQueryOptions } from "../../../config/constants";
-import { DefaultStore } from "../../../utils/DiscoveryUtils";
+import { DefaultStore, getEpisodeInfo } from "../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../utils/globals";
 import { getDataFromUDL } from "../../../../backend";
+import ProgressBar from "../../../components/MFProgress";
+import MFLoader from "../../../components/MFLoader";
 
 interface AssetData {
   id: string;
@@ -55,6 +67,14 @@ interface DetailsScreenProps {
 
 const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const feed: Feed = props.route.params.feed;
+  const [similarData, setSimilarData] = useState<any>(undefined);
+  const [discoveryProgramData, setdiscoveryProgramData] =
+    useState<any>(undefined);
+  const [discoverySchedulesData, setdiscoverySchedulesData] =
+    useState<any>(undefined);
+  const [playActionsData, setplayActionsData] = useState<any>(undefined);
+  const [subscriberData, setsubscriberData] = useState<any>(undefined);
+  const [udpDataAsset, setUDPDataAsset] = useState<any>();
 
   let scrollViewRef: any = React.createRef<ScrollView>();
 
@@ -96,7 +116,20 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     const params = `?$top=${assetData.$top}&$skip=${assetData.$skip}&storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${assetData.pivots}&id=${id}&itemType=${assetData.contentTypeEnum}`;
     const udlParam = "udl://subscriber/similarprograms/" + params;
     const data = await getDataFromUDL(udlParam);
-    console.log(data);
+    setSimilarData(data.data);
+    return data;
+  };
+
+  const getDiscoverySchedules = async (assetData: AssetData) => {
+    if (!assetData) {
+      console.log("No asset data to make api call..");
+      return undefined;
+    }
+    const id = getItemId(feed);
+    const params = `?$top=${assetData.$top}&$skip=${assetData.$skip}&storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${assetData.pivots}&id=${id}&itemType=${assetData.contentTypeEnum}&lang="en-US"`;
+    const udlParam = "udl://discovery/programSchedules/" + params;
+    const data = await getDataFromUDL(udlParam);
+    setdiscoverySchedulesData(data.data);
     return data;
   };
 
@@ -109,8 +142,83 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     const params = `?storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${assetData.pivots}&id=${id}`;
     const udlParam = "udl://discovery/programs/" + params;
     const data = await getDataFromUDL(udlParam);
-    console.log(data);
+    const massagedData = massageDiscoveryFeedAsset(
+      data.data,
+      assetTypeObject[assetData.contentTypeEnum]
+    );
+    setdiscoveryProgramData(massagedData);
+    return massagedData;
+  };
+
+  const getPlayActions = async (assetData: AssetData) => {
+    if (!assetData) {
+      console.log("No asset data to make api call..");
+      return undefined;
+    }
+    const id = getItemId(feed);
+    const params = `?catchup=false&storeId=${DefaultStore.Id}&groups=${GLOBALS.store.rightsGroupIds}&id=${id}`;
+    const udlParam = "udl://subscriber/programplayactions/" + params;
+    const data = await getDataFromUDL(udlParam);
+    setplayActionsData(data.data);
     return data;
+  };
+
+  const getProgramSubscriberData = async (assetData: AssetData) => {
+    if (!assetData) {
+      console.log("No asset data to make api call..");
+      return undefined;
+    }
+    const id = getItemId(feed);
+    const params = `?storeId=${DefaultStore.Id}&id=${id}`;
+    const udlParam = "udl://subscriber/getProgramSubscriberData/" + params;
+    const data = await getDataFromUDL(udlParam);
+    setsubscriberData(data.data);
+    return data;
+  };
+
+  const getUDPData = async () => {
+    if (
+      !similarDataQuery.data &&
+      !discoveryProgramDataQuery.data &&
+      !discoverySchedulesQuery.data &&
+      !playActionsQuery.data &&
+      !subscriberDataQuery.data
+    ) {
+      console.warn("Data has not been initialised");
+      return undefined;
+    }
+    const assetType =
+      //@ts-ignore
+      assetTypeObject[feed?.assetType?.contentType] ||
+      assetTypeObject[ContentType.PROGRAM];
+
+    const udpData = massageProgramDataForUDP(
+      playActionsData,
+      subscriberData,
+      discoveryProgramData,
+      undefined,
+      discoverySchedulesData,
+      undefined,
+      undefined,
+      undefined,
+      subscriberData,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined
+    );
+    console.log("UDP data", udpData);
+    setUDPDataAsset(udpData);
+    return udpData;
   };
 
   const getGenreText = (genres?: Genre[]) =>
@@ -126,12 +234,444 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     defaultQueryOptions
   );
 
-  const programDataQuery = useQuery(
+  const discoveryProgramDataQuery = useQuery(
     ["get-program-data", assetData?.id],
     () => getDiscoveryProgramData(assetData),
     defaultQueryOptions
   );
-  useEffect(() => {}, []);
+
+  const discoverySchedulesQuery = useQuery(
+    ["get-discoveryschedules", assetData?.id],
+    () => getDiscoverySchedules(assetData),
+    defaultQueryOptions
+  );
+
+  const playActionsQuery = useQuery(
+    ["get-playActiosn", assetData?.id],
+    () => getPlayActions(assetData),
+    defaultQueryOptions
+  );
+
+  const subscriberDataQuery = useQuery(
+    ["get-subscriber-data", assetData?.id],
+    () => getProgramSubscriberData(assetData),
+    defaultQueryOptions
+  );
+
+  const udpDataQuery = useQuery(
+    ["get-UDP-data", assetData?.id],
+    () => getUDPData(),
+    {
+      enabled:
+        !!similarData &&
+        !!discoveryProgramData &&
+        !!discoverySchedulesData &&
+        !!discoverySchedulesQuery.data &&
+        !!playActionsData &&
+        !!subscriberData,
+    }
+  );
+
+  const renderShowcard = () => {
+    const { image2x3PosterURL = undefined, image2x3KeyArtURL = undefined } =
+      udpDataAsset || {};
+    const imageSource =
+      image2x3KeyArtURL || image2x3PosterURL || AppImages.placeholder;
+    return (
+      <View style={styles.firstColumn}>
+        <View style={styles.imageContainer}>
+          <ImageBackground source={imageSource} style={styles.showcardImage} />
+        </View>
+        <View style={styles.favoriteBlock}></View>
+      </View>
+    );
+  };
+  const renderMetadata = () => {
+    const {
+      durationMinutesString = undefined,
+      seasonsCount = undefined,
+      genre = undefined,
+      ReleaseYear = undefined,
+      Rating = undefined,
+    } = udpDataAsset || {};
+    const genereText = getGenreText(genre)?.join("");
+    const metadataArray = [
+      durationMinutesString,
+      seasonsCount,
+      genereText,
+      ReleaseYear,
+      Rating,
+    ];
+    const metadataLine = metadataArray.filter(Boolean).join(metadataSeparator);
+
+    return (
+      <View style={styles.metadataContainer}>
+        <Text style={styles.metadataLine1}>{metadataLine}</Text>
+      </View>
+    );
+  };
+
+  const renderEpisodeDetails = () => {
+    const {
+      ChannelInfo: { Schedule = undefined } = {},
+      playDvr = undefined,
+      Bookmark = undefined,
+      assetType: { sourceType = undefined } = {},
+      subscriptionItemForProgram: { ProgramDetails = undefined } = {},
+      currentCatchupSchedule = undefined,
+      ppvInfo = undefined,
+      SourceIndicators = undefined,
+    } = udpDataAsset || {};
+
+    const isLiveAsset = SourceIndicators
+      ? Object.keys(SourceIndicators).includes("IsLive")
+      : false;
+
+    const {
+      hasPPV = false,
+      isPPVWatchable = false,
+      currentSelectedSchedule = undefined,
+    } = ppvInfo || {};
+
+    if (
+      !hasPPV &&
+      ((!currentCatchupSchedule &&
+        !Schedule &&
+        !playDvr &&
+        !props.seriesSubscriberData?.PriorityEpisodeTitle) ||
+        (Bookmark && Schedule?.playSource !== sourceTypeString.UPCOMING))
+    ) {
+      return;
+    }
+
+    let episodeNumber;
+    let seasonNumber;
+    let episodeName;
+    let name;
+    let startUtc;
+    let endUtc;
+    let CatchupStartUtc;
+    let CatchupEndUtc;
+    let parsedStartTime;
+    let parsedEndTime;
+    let startEpoc;
+    let endEpoc;
+    let progressDataSource = {
+      RuntimeSeconds: 0,
+      TimeSeconds: 0,
+      BookmarkType: "",
+      Id: "",
+      ProgramId: "",
+    };
+    let isLive = false;
+    let showLiveBadge = true;
+    let programId;
+
+    const {
+      Schedule: dataSchedule = undefined,
+      assetType = undefined,
+      Bookmark: dataBookmark = props.subscriberPlayOptionsData?.Bookmark ||
+        undefined,
+      CatalogInfo = undefined,
+      isFromEPG = undefined,
+      ItemType = "",
+    } = props.navigation.params.data || {};
+
+    if (Schedule || dataSchedule || currentCatchupSchedule) {
+      if (isFromEPG && assetType?.sourceType === sourceTypeString.CATCHUP) {
+        ({
+          EpisodeNumber: episodeNumber,
+          SeasonNumber: seasonNumber,
+          EpisodeName: episodeName,
+          Name: name,
+          StartUtc: startUtc,
+          EndUtc: endUtc,
+          ProgramId: programId,
+          CatchupStartUtc: CatchupStartUtc,
+          CatchupEndUtc: CatchupEndUtc,
+        } = currentCatchupSchedule?.Schedule || currentCatchupSchedule || {});
+      } else if (assetType?.sourceType === sourceTypeString.UPCOMING) {
+        ({
+          episode: episodeNumber,
+          season: seasonNumber,
+          episodeTitle: episodeName,
+          title: name,
+          StartUtc: startUtc,
+          EndUtc: endUtc,
+          ProgramId: programId,
+          CatchupStartUtc: CatchupStartUtc,
+          CatchupEndUtc: CatchupEndUtc,
+        } = Schedule || dataSchedule || currentCatchupSchedule || {});
+      } else {
+        ({
+          EpisodeNumber: episodeNumber,
+          SeasonNumber: seasonNumber,
+          EpisodeName: episodeName,
+          Name: name,
+          StartUtc: startUtc,
+          EndUtc: endUtc,
+          ProgramId: programId,
+          CatchupStartUtc: CatchupStartUtc,
+          CatchupEndUtc: CatchupEndUtc,
+        } = Schedule || dataSchedule || currentCatchupSchedule || {});
+      }
+
+      let convertedStartDate =
+        (startUtc && new Date(startUtc)) ||
+        (CatchupStartUtc && new Date(CatchupStartUtc));
+      let convertedEndDate =
+        (endUtc && new Date(endUtc)) ||
+        (CatchupEndUtc && new Date(CatchupEndUtc));
+      startEpoc = Date.parse(startUtc || CatchupStartUtc);
+      endEpoc = Date.parse(endUtc || CatchupEndUtc);
+
+      parsedStartTime = convertedStartDate && DateToAMPM(convertedStartDate);
+      parsedEndTime = convertedEndDate && DateToAMPM(convertedEndDate);
+
+      progressDataSource.BookmarkType = sourceTypeString.LIVE as BookmarkType;
+      if (startEpoc && endEpoc) {
+        progressDataSource.RuntimeSeconds = endEpoc - startEpoc;
+
+        if (sourceType !== sourceTypeString.CATCHUP) {
+          progressDataSource.TimeSeconds = new Date().getTime() - startEpoc;
+        }
+      }
+      isLive = true;
+      const now = new Date();
+      if (sourceType === sourceTypeString.DVR) {
+        if (convertedEndDate < now || convertedStartDate > now) {
+          showLiveBadge = false;
+        }
+      } else if (
+        sourceType === sourceTypeString.CATCHUP &&
+        props.subscriberPlayOptionsData?.Bookmark
+      ) {
+        if (convertedEndDate < now || convertedStartDate > now) {
+          showLiveBadge = false;
+        }
+        progressDataSource = props.subscriberPlayOptionsData?.Bookmark;
+      } else {
+        showLiveBadge = sourceType === sourceTypeString.LIVE || isLiveAsset;
+      }
+    } else if (props.seriesSubscriberData) {
+      if (assetType?.contentType === ContentType.EPISODE) {
+        if (CatalogInfo) {
+          ({
+            EpisodeNumber: episodeNumber,
+            SeasonNumber: seasonNumber,
+            EpisodeName: episodeName,
+            Name: name,
+            StartUtc: startUtc,
+            EndUtc: endUtc,
+            ProgramId: programId,
+          } = CatalogInfo);
+        }
+
+        progressDataSource.BookmarkType = sourceTypeString.VOD as BookmarkType;
+        if (dataBookmark) {
+          const { RuntimeSeconds, TimeSeconds } = dataBookmark;
+          progressDataSource.RuntimeSeconds = RuntimeSeconds || 0;
+          progressDataSource.TimeSeconds = TimeSeconds || 0;
+        }
+      } else {
+        const { PriorityEpisodeTitle } = props.seriesSubscriberData;
+
+        if (PriorityEpisodeTitle) {
+          const { CatalogInfo = {} } = PriorityEpisodeTitle || {};
+          ({
+            EpisodeNumber: episodeNumber = undefined,
+            SeasonNumber: seasonNumber = undefined,
+            EpisodeName: episodeName = undefined,
+            Name: name = undefined,
+            StartUtc: startUtc = undefined,
+            EndUtc: endUtc = undefined,
+            ProgramId: programId = undefined,
+          } = CatalogInfo || {});
+
+          if (PriorityEpisodeTitle?.Bookmark) {
+            progressDataSource = PriorityEpisodeTitle?.Bookmark;
+          } else {
+            progressDataSource.BookmarkType =
+              sourceTypeString.VOD as BookmarkType;
+            progressDataSource.RuntimeSeconds = CatalogInfo.RuntimeSeconds || 0;
+            progressDataSource.TimeSeconds =
+              props.episodeBookmarkData?.TimeSeconds || 0;
+          }
+        }
+      }
+    }
+
+    contextualSchedule = programId;
+
+    // DVR Details
+    if (playDvr && ProgramDetails) {
+      seasonNumber = ProgramDetails?.SeasonNumber;
+      episodeNumber = ProgramDetails?.EpisodeNumber;
+      episodeName = ProgramDetails?.EpisodeTitle;
+    }
+
+    const metadata = [];
+    if (seasonNumber || episodeNumber) {
+      metadata.push(
+        getEpisodeInfo({
+          SeasonNumber: seasonNumber,
+          EpisodeNumber: episodeNumber,
+        })
+      );
+    }
+    if (episodeName || name) {
+      metadata.push(episodeName || name);
+    }
+
+    // PPV
+
+    if (hasPPV) {
+      //TODO: Fix this mess.. Understand what's going on..
+      // const isFromLibrary =
+      //   props.navigation?.params?.data?.libraryId === "Library";
+      const isFromLibrary = false;
+      const { StartUtc, EndUtc, ChannelNumber } = currentSelectedSchedule;
+      isLive = isPPVWatchable;
+      metadata.push(`Airs on ${ChannelNumber}`);
+      if (!isFromLibrary) {
+        startUtc = StartUtc;
+        endUtc = EndUtc;
+        let convertedStartDate = startUtc && new Date(startUtc);
+        let convertedEndDate = endUtc && new Date(endUtc);
+        parsedStartTime = convertedStartDate && DateToAMPM(convertedStartDate);
+        parsedEndTime = convertedEndDate && DateToAMPM(convertedEndDate);
+      }
+      showLiveBadge = isLive;
+    }
+    // PPV
+
+    return (
+      <View style={styles.episodeBlockContainer}>
+        <View style={styles.flexRow}>
+          <Text style={styles.episodeBlockTitle}>
+            {metadata.join(metadataSeparator)}
+          </Text>
+        </View>
+        {(!!isLive || !!hasPPV) && !!parsedStartTime && (
+          <View style={styles.flexRow}>
+            <Text style={styles.episodeMetadata}>
+              {startUtc && massagePreviousDate(startUtc, hasPPV)}
+              {metadataSeparator}
+              {parsedStartTime} - {parsedEndTime}
+            </Text>
+
+            {!!showLiveBadge && (
+              <View>
+                <Text style={styles.badgeStyle}>{liveIcon}</Text>
+              </View>
+            )}
+          </View>
+        )}
+        {!!progressDataSource && (
+          <ProgressBar
+            styles={{
+              progressBarContainer: [
+                styles.progressBarContainer,
+                { marginTop: 0 },
+              ],
+            }}
+            dataSource={progressDataSource}
+            progressInfo={""}
+          />
+        )}
+      </View>
+    );
+  };
+
+  const renderIndicators = () => {
+    let {
+      locale,
+      statusText,
+      combinedQualityLevels,
+      combinedAudioIndicator,
+      combinedAudioTags,
+    } = udpDataAsset;
+    const langaugeIndicator = locale?.split("-")[0];
+    const qualityLevel = combinedQualityLevels && combinedQualityLevels[0];
+    const audioTags =
+      (combinedAudioIndicator?.length && combinedAudioIndicator) ||
+      (combinedAudioTags?.length && combinedAudioTags) ||
+      [];
+    const statusTextItem = (statusText?.length && statusText[0]) || "";
+
+    // Schedules
+    return (
+      <View>
+        <View style={styles.flexRow}>
+          {/* Quality Indicators */}
+          {!!qualityLevel && (
+            <Text style={styles.fontIconStyle}>
+              {getFontIcon((fontIconsObject as any)[qualityLevel])}
+            </Text>
+          )}
+
+          {/* Language Indicators */}
+          {!!langaugeIndicator && (
+            <Text style={styles.fontIconStyle}>
+              {getFontIcon((fontIconsObject as any)[langaugeIndicator])}
+            </Text>
+          )}
+
+          {/* Audio Indicator */}
+
+          {audioTags?.map((audioIndicator: any) => {
+            return (
+              <Text style={styles.fontIconStyle} key={audioIndicator}>
+                {getFontIcon((fontIconsObject as any)[audioIndicator])}
+              </Text>
+            );
+          })}
+        </View>
+        <Text style={styles.statusTextStyle}>{statusTextItem}</Text>
+      </View>
+    );
+  };
+
+  const renderAssetInfo = () => {
+    const { title, description, ratingValues, subscriptionItemForProgram } =
+      udpDataAsset;
+    const shouldShowExpiringIcon: boolean = isExpiringSoon(
+      subscriptionItemForProgram
+    );
+    return (
+      <View style={styles.secondColumn}>
+        <View style={{ flexDirection: "row" }}>
+          {/* Title */}
+          <Text style={styles.title}>{title}</Text>
+          {shouldShowExpiringIcon ? (
+            <FastImage
+              source={AppImages.placeholder}
+              style={styles.hourGlass}
+            ></FastImage>
+          ) : null}
+        </View>
+
+        {/* Metadata */}
+        {renderMetadata()}
+
+        {/* Quality, Language, Audio, Dolby Indicator */}
+        {renderIndicators()}
+        {description ? (
+          <MFText
+            shouldRenderText
+            displayText={description}
+            textStyle={styles.descriptionText}
+            adjustsFontSizeToFit={false}
+            numberOfLines={5}
+          />
+        ) : null}
+        {/* Content Ratings */}
+        {ratingValues && ratingValues?.length > 0 && renderRatingValues()}
+        {/* Progress bar */}
+        {renderEpisodeDetails()}
+      </View>
+    );
+  };
 
   const renderRatingValues = () => {
     //@ts-ignore
@@ -177,11 +717,32 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       >
         <View style={styles.containerOpacity}>
           <ScrollView key={`detailspagekey`} ref={onGetScrollView}>
-            <View style={styles.detailsBlock}>
-              <Text style={{ color: "white", fontSize: 50 }}>
-                {getFontIcon((fontIconsObject as any)["quality_4k"])}
-              </Text>
-            </View>
+            {udpDataQuery.data ? (
+              <View style={styles.detailsBlock}>
+                {renderShowcard()}
+
+                <View style={styles.secondBlock}>
+                  <View style={styles.flexRow}>
+                    {/* Metadata and CTA */}
+                    {renderAssetInfo()}
+
+                    {/* Network Logo */}
+                  </View>
+
+                  <View style={styles.ctaButtonGroupBlock}>{/* CTA */}</View>
+                </View>
+              </View>
+            ) : (
+              <View
+                style={{
+                  alignContent: "center",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <MFLoader />
+              </View>
+            )}
           </ScrollView>
         </View>
       </ImageBackground>
@@ -402,6 +963,13 @@ const styles = StyleSheet.create(
       },
       marginTop: {
         marginTop: 8,
+      },
+      descriptionText: {
+        fontSize: g.fontSizes.body2,
+        fontFamily: g.fontFamily.regular,
+        color: g.fontColors.lightGrey,
+        lineHeight: g.lineHeights.body2,
+        marginBottom: 25,
       },
     })
 );

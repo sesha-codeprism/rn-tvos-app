@@ -985,6 +985,13 @@
               "height": 22,
               "marginTop": 26,
               "marginLeft": 15
+            },
+            "descriptionText": {
+              "fontSize": 25,
+              "fontFamily": "Inter-Regular",
+              "color": "#A7A7A7",
+              "lineHeight": 38,
+              "marginBottom": 25
             }
           }
         },
