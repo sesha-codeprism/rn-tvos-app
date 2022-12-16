@@ -125,6 +125,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     () => getSimilarItemsForFeed(assetData),
     defaultQueryOptions
   );
+
+  const programDataQuery = useQuery(
+    ["get-program-data", assetData?.id],
+    () => getDiscoveryProgramData(assetData),
+    defaultQueryOptions
+  );
   useEffect(() => {}, []);
 
   const renderRatingValues = () => {

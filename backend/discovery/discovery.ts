@@ -362,7 +362,7 @@ export const registerDiscoveryUdls = () => {
       getDiscoveryLibraryPackages,
     },
     {
-      prefix: BASE + 'programs/',
+      prefix: BASE + '/programs/',
       getter: getDiscoveryProgramDetailsById
     }
   ];
