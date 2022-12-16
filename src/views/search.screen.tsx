@@ -13,7 +13,7 @@ import {
 import FastImage from "react-native-fast-image";
 import { searchItems } from "../../backend/subscriber/subscriber";
 import { AppImages } from "../assets/images";
-import MFSearch from "../components/MFSearch";
+import Search from "../components/MFSearch";
 import MFSwimLane from "../components/MFSwimLane";
 import MFText from "../components/MFText";
 import { SCREEN_WIDTH } from "../utils/dimensions";
@@ -33,6 +33,7 @@ export interface SearchParam {
   searchLive: boolean;
   mediaTypes?: string;
 }
+const searchHeight = height * 0.3;
 const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const [searchString, setSearchString] = useState("");
   const [searchResult, setSearchResult] = useState<any[] | undefined>(
@@ -90,11 +91,6 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   };
   return (
     <View style={styles.root}>
-      <View style={styles.search}>
-        <MFSearch
-          style={{ backgroundColor: "grey", with: "100%", height: "100%" }}
-        />
-      </View>
       <View style={styles.secondComponent}>
         <ImageBackground
           source={require("../assets/images/onboarding_1280x752_landscape.jpg")}
@@ -171,32 +167,13 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
               </View>
             )}
           </SafeAreaView>
-          {/* <Text style={{ color: "white", fontSize: 30, fontWeight: "600" }}>
-            {searchString}
-          </Text> */}
-          {/* <MFFilmStrip
-            mfCardArray={cardArray}
-            limitItemsTo={5}
-            enableCircularLayout
-            title={'Search Results'}
-            isCircular={false}
-            enableRTL={enableRTL}
-            appendViewAll
-            dataSource={dataSource}
-            renderMFCard={(item, index) => (
-            )}
-            viewAll={
-              <MFViewAllButton
-                displayStyles={{
-                  color: 'white',
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
-                }}
-                displayText={'View All'}></MFViewAllButton>
-            }></MFFilmStrip> */}
         </ImageBackground>
       </View>
+      <View style={styles.search}>
+        <Search style={{ width: Dimensions.get('screen').width, height: searchHeight, backgroundColor: 'grey' }} />
+      </View>
     </View>
+
   );
 };
 
@@ -206,12 +183,16 @@ const styles = StyleSheet.create({
     // width: width,
   },
   search: {
-    flex: 1,
-    height: 200,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: Dimensions.get('screen').width,
+    height: searchHeight,
+    overflow: 'hidden',
   },
   secondComponent: {
-    height: 800,
-    marginTop: 200,
+    height: height - searchHeight,
+    marginTop: searchHeight - 150,
   },
   imageComponent: {
     height: 800,
