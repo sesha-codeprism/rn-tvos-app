@@ -1,7 +1,9 @@
 import React from "react";
 import { requireNativeComponent, StyleProp, ViewStyle } from "react-native";
 
-const Search = requireNativeComponent("RNSearchControllerView");
+const Search = requireNativeComponent(
+  "SearchViewTVOS"
+) as React.ComponentType<any>;
 // var Search = requireNativeComponent('NKSearchComponent');
 interface MFSearchProps {
   onChangeText?: null | ((event: any) => void) | undefined;
@@ -17,4 +19,4 @@ const MFSearch: React.FunctionComponent<MFSearchProps> = (props) => {
   return <Search onChangeText={onChangeText} style={props.style} />;
 };
 
-export default MFSearch;
+export default Search;

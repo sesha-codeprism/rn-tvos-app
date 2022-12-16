@@ -35,7 +35,9 @@ export interface SearchParam {
 }
 const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const [searchString, setSearchString] = useState("");
-  const [searchResult, setSearchResult] = useState<any[] | undefined>(GLOBALS.moviesAndTvShows);
+  const [searchResult, setSearchResult] = useState<any[] | undefined>(
+    GLOBALS.moviesAndTvShows
+  );
   const [swimLaneKey, setSwimLaneKey] = useState("");
   const updateSwimLaneKey = (key: string) => {
     setSwimLaneKey(key);
@@ -44,7 +46,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const onChangeText = (event: {
     nativeEvent: { text: React.SetStateAction<string> };
   }) => {
-    console.log('event.nativeEvent.text', event.nativeEvent.text);
+    console.log("event.nativeEvent.text", event.nativeEvent.text);
     setSearchString(event.nativeEvent.text);
     clearTimeout(timer);
     timer = setTimeout(() => {
@@ -90,8 +92,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
     <View style={styles.root}>
       <View style={styles.search}>
         <MFSearch
-          onChangeText={onChangeText}
-          style={{ height: 50, width: 50, backgroundColor: "#00030E" }}
+          style={{ backgroundColor: "grey", with: "100%", height: "100%" }}
         />
       </View>
       <View style={styles.secondComponent}>
@@ -103,7 +104,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
           style={styles.imageComponent}
         >
           <SafeAreaView style={{ paddingBottom: 100 }}>
-            { searchResult && searchResult.length > 0 ? (
+            {searchResult && searchResult.length > 0 ? (
               <FlatList
                 data={searchResult}
                 keyExtractor={(x, i) => i.toString()}
@@ -135,7 +136,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
                   alignContent: "center",
                   alignItems: "center",
                   alignSelf: "center",
-                  marginTop: 100
+                  marginTop: 100,
                 }}
               >
                 <FastImage
