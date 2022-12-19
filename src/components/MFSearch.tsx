@@ -19,4 +19,4 @@ const MFSearch: React.FunctionComponent<MFSearchProps> = (props) => {
   return <Search onChangeText={onChangeText} style={props.style} />;
 };
 
-export default Search;
+export default MFSearch;

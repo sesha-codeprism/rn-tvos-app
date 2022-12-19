@@ -13,9 +13,11 @@ import {
 import FastImage from "react-native-fast-image";
 import { searchItems } from "../../backend/subscriber/subscriber";
 import { AppImages } from "../assets/images";
-import Search from "../components/MFSearch";
+import MFSearch from "../components/MFSearch";
 import MFSwimLane from "../components/MFSwimLane";
 import MFText from "../components/MFText";
+import { massageDiscoveryFeed } from "../utils/assetUtils";
+import { SourceType } from "../utils/common";
 import { SCREEN_WIDTH } from "../utils/dimensions";
 import { GLOBALS } from "../utils/globals";
 
@@ -70,7 +72,11 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
     });
     console.log("data came", result);
     console.log("formattedData", formattedData);
-    return formattedData;
+    const massagedData = massageDiscoveryFeed(
+      {Items:formattedData},
+      SourceType.VOD
+    );
+    return massagedData;
   };
   const onSearch = async (text: any) => {
     console.log("text", text);
@@ -94,9 +100,9 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
       <View style={styles.secondComponent}>
         <ImageBackground
           source={require("../assets/images/onboarding_1280x752_landscape.jpg")}
-          imageStyle={{
-            opacity: 0.5,
-          }}
+          // imageStyle={{
+          //   opacity: 0.5,
+          // }}
           style={styles.imageComponent}
         >
           <SafeAreaView style={{ paddingBottom: 100 }}>
@@ -170,7 +176,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
         </ImageBackground>
       </View>
       <View style={styles.search}>
-        <Search style={{ width: Dimensions.get('screen').width, height: searchHeight, backgroundColor: 'grey' }} />
+        <MFSearch onChangeText={onChangeText} style={{ width: Dimensions.get('screen').width, height: searchHeight, backgroundColor: "#00030E" }} />
       </View>
     </View>
 

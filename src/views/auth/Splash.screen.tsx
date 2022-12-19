@@ -28,6 +28,7 @@ import { getMovies, getTVShows } from "../../../backend/discovery/discovery";
 import { useQuery } from "react-query";
 import { massageSubscriberFeed } from "../../utils/Subscriber.utils";
 import { SourceType } from "../../utils/common";
+import { massageDiscoveryFeed } from "../../utils/assetUtils";
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
@@ -132,18 +133,16 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     // GLOBALS.moviesAndTvShows =
     // console.log("movies", movies);
     // console.log("TVShow", TVShow);
-    const massagedTVData = massageSubscriberFeed(
-      {LibraryItems:TVShow.data.Items},
-      "",
+    const massagedTVData = massageDiscoveryFeed(
+      {Items:TVShow.data.Items},
       SourceType.VOD
     );
-    const massagedMovieData = massageSubscriberFeed(
-      {LibraryItems:movies.data.Items},
-      "",
+    const massagedMovieData = massageDiscoveryFeed(
+      {Items:movies.data.Items},
       SourceType.VOD
     );
-    console.log("movies", movies, "massagedMovieData", massagedMovieData);
-    console.log("TVShow", TVShow, "massagedTVData", massagedTVData);
+    // console.log("movies", movies, "massagedMovieData", massagedMovieData);
+    // console.log("TVShow", TVShow, "massagedTVData", massagedTVData);
     GLOBALS.moviesAndTvShows = [
       { TVShow: massagedTVData },
       { Movie:  massagedMovieData },
