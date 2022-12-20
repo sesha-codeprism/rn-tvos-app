@@ -1,11 +1,21 @@
-import React from 'react'
-import { Dimensions } from 'react-native'
-import Search from '../../components/MFSearch'
+import React from "react";
+import { Dimensions } from "react-native";
+import MFSearch from "../../components/MFSearch";
+import Search from "../../components/MFSearch";
 
-type Props = {}
+type Props = {};
 
 export default function TestScreen({}: Props) {
   return (
-    <Search style={{width: Dimensions.get('screen').width, height: Dimensions.get('screen').height, backgroundColor: 'red'}}/>
-  )
+    <MFSearch
+      style={{
+        width: Dimensions.get("screen").width,
+        height: Dimensions.get("screen").height,
+        backgroundColor: "red",
+      }}
+      onChangeText={(text) => {
+        console.log("Got some text");
+      }}
+    />
+  );
 }

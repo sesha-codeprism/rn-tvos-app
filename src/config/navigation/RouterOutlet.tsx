@@ -41,6 +41,8 @@ import FossLicenseScreen from "../../views/app/settings_screens/system/foss_lice
 import GalleryScreen from "../../views/app/BrowsePages/BrowseGallery/Browse.Gallery.Screen";
 import RouteFallBackScreen from "../../views/app/Route.Fallback.screen";
 import BrowseCategoryScreen from "../../views/app/BrowsePages/BrowseCategory/Browse.Category.screen";
+import TestScreen from "../../views/app/test.screen";
+
 interface RouterOutletProps {}
 
 export const Routes = {
@@ -232,13 +234,19 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
         name={Routes.ProfileFinalise}
         component={ProfileFinalisationScreen}
       />
-      <Stack.Screen name={Routes.BrowseGallery} component={GalleryScreen} options={{
-          animation:"none"
-        }}/>
+      <Stack.Screen
+        name={Routes.BrowseGallery}
+        component={GalleryScreen}
+        options={{
+          animation: "none",
+        }}
+      />
       <Stack.Screen
         name={Routes.BrowseCategory}
         component={BrowseCategoryScreen}
       />
+      <Stack.Screen name={Routes.Test} component={TestScreen} />
+
       <Stack.Screen name={Routes.FallBack} component={RouteFallBackScreen} />
     </Stack.Navigator>
   );

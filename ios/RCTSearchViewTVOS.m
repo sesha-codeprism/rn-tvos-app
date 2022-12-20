@@ -83,6 +83,7 @@
 
 - (void)updateSearchResultsForSearchController:(nonnull UISearchController *)searchController
 {
+    NSLog(@"Test firing log..", searchController.searchBar.text);
   if (self.onChangeText) {
     self.onChangeText(@{@"text": searchController.searchBar.text});
   }

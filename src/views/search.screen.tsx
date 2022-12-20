@@ -13,6 +13,7 @@ import {
 import FastImage from "react-native-fast-image";
 import { searchItems } from "../../backend/subscriber/subscriber";
 import { AppImages } from "../assets/images";
+import Search from "../components/MFSearch";
 import MFSearch from "../components/MFSearch";
 import MFSwimLane from "../components/MFSwimLane";
 import MFText from "../components/MFText";
@@ -73,7 +74,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
     console.log("data came", result);
     console.log("formattedData", formattedData);
     const massagedData = massageDiscoveryFeed(
-      {Items:formattedData},
+      { Items: formattedData },
       SourceType.VOD
     );
     return massagedData;
@@ -176,10 +177,16 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
         </ImageBackground>
       </View>
       <View style={styles.search}>
-        <MFSearch onChangeText={onChangeText} style={{ width: Dimensions.get('screen').width, height: searchHeight, backgroundColor: "#00030E" }} />
+        <Search
+          onChangeText={onChangeText}
+          style={{
+            width: Dimensions.get("screen").width,
+            height: searchHeight,
+            backgroundColor: "#00030E",
+          }}
+        />
       </View>
     </View>
-
   );
 };
 
@@ -189,12 +196,12 @@ const styles = StyleSheet.create({
     // width: width,
   },
   search: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
-    width: Dimensions.get('screen').width,
+    width: Dimensions.get("screen").width,
     height: searchHeight,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   secondComponent: {
     height: height - searchHeight,

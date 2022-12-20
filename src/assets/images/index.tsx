@@ -30,7 +30,7 @@ const AppImages: { [key: string]: Source | any } = {
   edit: require(`${imagesDirectory}/edit.png`),
   arrow_right: require(`${imagesDirectory}/arrow_right.png`),
   tvshowPlaceholder:
-    "https://ottapp-appgw-client-a.dev.mr.tv3cloud.com/htmlapp/20220525-6bd4d23-6-master-mr-int/images/Genre/tvshow_placeholder_94x141.jpg",
+    "https://ottapp-appgw-client-a.cim.mr.tv3cloud.com/htmlapp/20220525-6bd4d23-6-master-mr-int/images/Genre/tvshow_placeholder_94x141.jpg",
   placeholder: require(`${imagesDirectory}/placeholder.png`),
   checked_circle: require(`${imagesDirectory}/checked_circle.png`),
   unchecked_circle: require(`${imagesDirectory}/unchecked_circle.png`),

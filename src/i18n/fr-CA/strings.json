@@ -1400,7 +1400,7 @@
     {
       "name": "DevTest",
       "value": "MR.dev",
-      "path": "http://reachclient.dev.mr.tv3cloud.com"
+      "path": "http://reachclient.cim.mr.tv3cloud.com"
     },
     {
       "name": "OSim",
