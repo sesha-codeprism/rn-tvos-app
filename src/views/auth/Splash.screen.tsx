@@ -88,6 +88,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       setGlobalData(data?.data);
       connectDuplex(currentContext.duplexMessage);
       setLoading(false);
+      getMoviesAndTvShow();
       props.navigation.replace(Routes.WhoIsWatching);
     });
   }
@@ -96,86 +97,86 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
 const _onAnimationFinish = () => {
 };
 
-  const setDeviceInfo = async () => {
-    const isEmulator: boolean = await DeviceInfo.isEmulator();
-    if (isEmulator) {
-      const deviceID = await DeviceInfo.getDeviceName();
-      // GLOBALS.deviceInfo.deviceId = deviceID;
-      // setDevice(GLOBALS.deviceInfo.deviceId);
-      //If device is running on Emulator
-      // Device info details on emulator are useless.. no need of setting values;
-      return true;
-    } else {
-      // If device is running on real device
-      const deviceID = DeviceInfo.getUniqueId();
-      GLOBALS.deviceInfo.deviceId = deviceID;
-      setDevice(GLOBALS.deviceInfo.deviceId);
-      return true;
-    }
-  };
-  const showAnimation = appUIDefinition.config.useLottieAnimationOnSplash;
-  const getMoviesAndTvShow = async () => {
-    console.log("getMoviesAndTvShow");
-    const movies = await getMovies("", {
-      pivots: "LicenseWindow",
-    });
-    const TVShow = await getTVShows("", {
-      pivots: "LicenseWindow",
-    });
-    const massagedTVData = massageSubscriberFeed(
-      {LibraryItems:TVShow.data.Items},
-      "",
-      SourceType.VOD
-    );
-    const massagedMovieData = massageSubscriberFeed(
-      {LibraryItems:movies.data.Items},
-      "",
-      SourceType.VOD
-    );
-    GLOBALS.moviesAndTvShows = [
-      { TVShow: massagedTVData },
-      { Movie: massagedMovieData },
-    ];
-  };
-  return (
-    <View style={styles.container}>
-      {showAnimation ? (
+const setDeviceInfo = async () => {
+  const isEmulator: boolean = await DeviceInfo.isEmulator();
+  if (isEmulator) {
+    const deviceID = await DeviceInfo.getMacAddress();
+    GLOBALS.deviceInfo.deviceId = deviceID;
+    setDevice(GLOBALS.deviceInfo.deviceId);
+    return true;
+  } else {
+    // If device is running on real device
+    const deviceID = DeviceInfo.getUniqueId();
+    GLOBALS.deviceInfo.deviceId = deviceID;
+    setDevice(GLOBALS.deviceInfo.deviceId);
+    return true;
+  }
+};
+const showAnimation = appUIDefinition.config.useLottieAnimationOnSplash;
+const getMoviesAndTvShow = async () => {
+  console.log("getMoviesAndTvShow");
+  const movies = await getMovies("", {
+    pivots: "LicenseWindow",
+  });
+  const TVShow = await getTVShows("", {
+    pivots: "LicenseWindow",
+  });
+  const massagedTVData = massageSubscriberFeed(
+    {LibraryItems:TVShow.data.Items},
+    "",
+    SourceType.VOD
+  );
+  const massagedMovieData = massageSubscriberFeed(
+    {LibraryItems:movies.data.Items},
+    "",
+    SourceType.VOD
+  );
+  GLOBALS.moviesAndTvShows = [
+    { TVShow: massagedTVData },
+    { Movie: massagedMovieData },
+  ];
+  console.log("movies", movies);
+  console.log("TVShow", TVShow);
+};
+return (
+  <View style={styles.container}>
+    {showAnimation ? (
+      <AnimatedLottieView
+        autoPlay
+        loop={false}
+        source={require(`../../assets/animations/splash.json`)} //${splashAnimation}
+        style={{ width: 500, height: 500 }}
+        onAnimationFinish={_onAnimationFinish}
+      />
+    ) : (
+      <Image
+        style={{ width: width * 0.6, height: height * 0.2 }}
+        resizeMode={"contain"}
+        source={require(`../../assets/images/logo_white.png`)} //${splashImage}
+        onLoadStart={() => {
+          setLoading(true);
+        }}
+        onLoadEnd={() => {
+          setTimeout(() => {
+            _onAnimationFinish();
+          }, 3000);
+        }}
+      />
+    )}
+    {
+      loading && (
         <AnimatedLottieView
           autoPlay
-          loop={false}
-          source={require(`../../assets/animations/splash.json`)} //${splashAnimation}
-          style={{ width: 500, height: 500 }}
-          onAnimationFinish={_onAnimationFinish}
+          loop={true}
+          source={require(`../../assets/animations/9379-loader.json`)} //${splashAnimation}
+          style={{ width: 500, height: 300 }}
+        // onAnimationFinish={_onAnimationFinish}
         />
-      ) : (
-        <Image
-          style={{ width: width * 0.6, height: height * 0.2 }}
-          resizeMode={"contain"}
-          source={require(`../../assets/images/logo_white.png`)} //${splashImage}
-          onLoadStart={() => {
-            setLoading(true);
-          }}
-          onLoadEnd={() => {
-            setTimeout(() => {
-              _onAnimationFinish();
-            }, 3000);
-          }}
-        />
-      )}
-      {
-        loading && (
-          <AnimatedLottieView
-            autoPlay
-            loop={true}
-            source={require(`../../assets/animations/9379-loader.json`)} //${splashAnimation}
-            style={{ width: 500, height: 300 }}
-            // onAnimationFinish={_onAnimationFinish}
-          />
-        )
-        // <ActivityIndicator style={{ marginTop: 50 }} />
-      }
-    </View>
-  );
+      )
+      // <ActivityIndicator style={{ marginTop: 50 }} />
+    }
+  </View>
+);
 };
 
 const styles = StyleSheet.create({

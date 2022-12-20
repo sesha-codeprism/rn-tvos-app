@@ -371,7 +371,7 @@ export const changePasscodes = async (PasscodeType: PinType, pin: string) => {
 export const deleteDevice = async () => {
   const { accessToken } = GLOBALS.store;
   const url: string = parseUri(
-    `${MFGlobalsConfig.environment.stsUrl}/oauth/signout/liveid`
+    `${MFGlobalsConfig?.stsUrl}/oauth/signout/liveid`
   );
   
   const response = await DELETE({

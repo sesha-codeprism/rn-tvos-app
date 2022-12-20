@@ -6,16 +6,6 @@ import { parseUri } from "../utils/url/urlUtil";
 import { GLOBALS } from "../../src/utils/globals"
 import { Routes } from "../../src/config/navigation/RouterOutlet";
 
-// export const getShortCodeAuthenticate = async (deviceInfo: MFDeviceInfo) => {
-//   const globalConfig: MFGlobals = MFGlobalsConfig;
-//   const url: string =
-//     parseUri(globalConfig.environment.stsUrl) + "/request-token";
-//   const response = await POST({
-//     url: url,
-//     params: deviceInfo,
-//   });
-//   return response;
-// };
 
 export const getShortCodeAuthenticate = async ({ queryKey } : any) => {
   const [, landingResponse, deviceInfo] = queryKey;
@@ -35,11 +25,15 @@ export const getShortCodeAuthenticate = async ({ queryKey } : any) => {
 
 export const getLanding = async ({ queryKey } : { queryKey : string[] } ) => {
   const [_, url] = queryKey;
-  const envUrl: string = parseUri(url) + "/landing.json";
-  const response = await GET({
-    url: envUrl
-  });
-  return response;
+  if(url){
+    const envUrl: string = parseUri(url) + "/landing.json";
+    const response = await GET({
+      url: envUrl
+    });
+    return response;
+  }else {
+    return null;
+  }
 }
 
 export const getBootStrap = async ({ queryKey } : any) => {

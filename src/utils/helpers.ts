@@ -22,8 +22,12 @@ export const getStore = () => {
   let serializedStore = Settings.get("store");;
   if(serializedStore){
     serializedStore = JSON.parse(serializedStore);
-    serializedStore.landingInfo = landingInfo.reviveLandingInfo?.(serializedStore.landingInfo);
-    serializedStore.MFGlobalsConfig = MFGlobalsConfig?.setters?.reviveMFGlobalConfig( serializedStore.MFGlobalsConfig);
+    serializedStore.landingInfo = landingInfo?.reviveLandingInfo?.(serializedStore.landingInfo);
+    if(serializedStore.MFGlobalsConfig && serializedStore.MFGlobalsConfig.url){
+      MFGlobalsConfig.stsUrl = serializedStore.MFGlobalsConfig.stsUrl;
+      MFGlobalsConfig.url = serializedStore.MFGlobalsConfig.url;
+    }
+    serializedStore.MFGlobalsConfig = MFGlobalsConfig;
     return serializedStore;
   }else {
     return {

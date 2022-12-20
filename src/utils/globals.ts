@@ -13,14 +13,17 @@ export const landingInfo = (function(): MFbootstrapLandingInfo{
 
   const setOauth = (auth: string) => {
     this.oauth = auth;
+    return this;
   }
 
   const setTenant = (tenant: string) => {
     this.tenantId = tenant;
+    return this;
   }
 
   const setVersion = (v: string) => {
     this.version = v;
+    return this;
   }
 
   const reviveLandingInfo = (serializedInstance: any) => {
@@ -128,6 +131,7 @@ export const GLOBALS: GLOBALSType = {
     deviceId: "c-a34d8e5a-a0558797-22855546b4",
     deviceType: "AppleTV",
     tenantId: landingInfo.tenantId,
+    regCode: null
   },
   createUserProfile: { image: "", name: "", optOutPersonalDataUse: false },
   editUserProfile: {

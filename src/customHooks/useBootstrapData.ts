@@ -7,7 +7,7 @@ import { GLOBALS, landingInfo } from "../utils/globals";
 import useLanding from "./useLandingData";
 
 const useBootstrap = (accessToken: string | null = null) => {
-    const landingData = useLanding();
+    const landingData = useLanding(GLOBALS.store?.MFGlobalsConfig.url);
     const [bootstrapUrl, setBootstrapUrl] = useState("");
     const [boothStrapDataLoadStatus, setboothStrapDataLoadStatus] = useState<string | null>(null);
     const [token, setToken] = useState<string | null>(null);
@@ -24,8 +24,8 @@ const useBootstrap = (accessToken: string | null = null) => {
             if (GLOBALS.store.accessToken && GLOBALS.store.refreshToken) {
                 !token && setToken(GLOBALS.store.accessToken);
                 if (landingData?.isSuccess) {
-                    const { sts = MFGlobalsConfig.environment.stsUrl} = landingData.data?.data || {};
-                    MFGlobalsConfig.setters.setStsUrl(sts);
+                    const { sts = MFGlobalsConfig.stsUrl} = landingData.data?.data || {};
+                    MFGlobalsConfig.stsUrl = sts;
                     if (sts) {
                         const url: string = parseUri(sts) + "/bootstrap";
                         !bootstrapUrl && setBootstrapUrl(url);

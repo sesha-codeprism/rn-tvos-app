@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query"
 import { getLanding } from '../../backend/authentication/authentication';
 import { MFGlobalsConfig } from "../../backend/configs/globals";
@@ -6,15 +6,29 @@ import { AppStrings } from "../config/strings";
 import { GLOBALS, landingInfo } from "../utils/globals";
 import { getBestSupportedLocaleID } from "../utils/splash/splash_utils";
 
-const useLanding = () => {
-  const landingResponse = useQuery(['landing', MFGlobalsConfig.environment.url], getLanding, {
+const useLanding = (url: string) => {
+  const [landingUrl, setLandingUrl ] = useState(GLOBALS.store?.MFGlobalsConfig.url);
+  console.log(GLOBALS.store);
+  console.log(!!GLOBALS.store);
+  const landingResponse = useQuery(['landing', landingUrl], getLanding, {
     cacheTime: Infinity,
     staleTime: Infinity,
+    retry: false,
+    onError: (error: any) => {
+      MFGlobalsConfig.url = 'https://reachclient.dev.mr.tv3cloud.com/';
+      MFGlobalsConfig.stsUrl = '';
+      setLandingUrl('https://reachclient.dev.mr.tv3cloud.com/');
+    },
+    enabled: !!GLOBALS.store
   });
 
   useEffect(() => {
+    setLandingUrl(url);
+  }, [url]);
+
+  useEffect(() => {
     if (landingResponse.isSuccess && landingResponse.data?.data) {
-      const { tenant, version, sts = MFGlobalsConfig.environment.stsUrl, oauth, acceptLanguage } = landingResponse.data?.data || {};
+      const { tenant, version, sts = MFGlobalsConfig.stsUrl, oauth, acceptLanguage } = landingResponse.data?.data || {};
       if (acceptLanguage) {
         const supportedLocale = getBestSupportedLocaleID(acceptLanguage);
         const firstLanguage = supportedLocale?.split("-")[0] || acceptLanguage.split(";")[0];
@@ -32,7 +46,7 @@ const useLanding = () => {
           GLOBALS.store.onScreenLanguage = local;
         }
       }
-      MFGlobalsConfig.setters.setStsUrl(sts);
+      MFGlobalsConfig.stsUrl  = sts;
       landingInfo.setOauth?.(oauth);
       landingInfo.setTenant?.(tenant);
       landingInfo.setVersion?.(version);

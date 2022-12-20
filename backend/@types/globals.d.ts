@@ -22,6 +22,7 @@ export interface MFDeviceInfo {
   deviceId?: string;
   deviceType?: string;
   tenantId?: string;
+  regCode?: string| null;
 }
 
 export interface MFRequestToken {

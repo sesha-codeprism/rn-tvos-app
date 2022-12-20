@@ -6,7 +6,11 @@ import { GLOBALS } from "../../../../utils/globals";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { AppImages } from "../../../../assets/images";
 import { DefaultStore } from "../../../../utils/DiscoveryUtils";
+import { AppStrings } from "../../../../config/strings";
+import { parseUri } from "../../../../../backend/utils/url/urlUtil";
 
+const serviceList = AppStrings?.str_selectServices;
+const loggingLevelList = AppStrings?.str_selectLogginLevel;
 
 interface Props {
     navigation: NativeStackNavigationProp<any>;
@@ -24,24 +28,24 @@ const DeveloperScreen: React.FunctionComponent<Props> = (
         const bootstrap = GLOBALS.bootstrapSelectors;
         const listItem = [
             {
-                title: "User Info",
-                description: bootstrap?.AccountId,
+                title: AppStrings?.developer_settings_user_info,
+                subTitle: bootstrap?.AccountId,
+                action: "developer_user_info_settings"
             },
             {
-                title: "Logging Level",
-                description: "None",
+                title: AppStrings?.developer_settings_logging_level,
+                subTitle: (loggingLevelList.find((level: any) => level.value === GLOBALS.store?.loggingLevel))?.name || App,
+                action: "developer_logging_level"
             },
             {
-                title: "Select Services",
-                description: "MR.Dev",
+                title: AppStrings?.developer_settings_select_service,
+                subTitle: (serviceList.find((env: any) => parseUri(env.path) === parseUri(GLOBALS.store?.MFGlobalsConfig?.url)))?.name || "MR.dev",
+                action: "developer_select_service_settings"
             },
             {
-                title: "Current Store Version",
-                description: DefaultStore.Id,
-            },
-            {
-                title: "Refresh",
-                description: ""
+                title: AppStrings?.developer_settings_current_store,
+                subTitle: DefaultStore.Id,
+                action: "developer_current_store_settings"
             }
         ];
         return setList([...listItem]);
@@ -63,7 +67,7 @@ const DeveloperScreen: React.FunctionComponent<Props> = (
         return unsubscribe;
     }, []);
     return (
-        <SideMenuLayout title="Settings" subTitle="Developers">
+        <SideMenuLayout title={AppStrings?.str_settings_home_heading} subTitle={AppStrings?.developer_settings}>
             <FlatList
                 style={styles.container}
                 data={list}
@@ -85,8 +89,7 @@ const DeveloperScreen: React.FunctionComponent<Props> = (
                             }}
                             onPress={() => {
                                 if (item.action !== "") {
-                                    //props.navigation.navigate(item.action);
-                                    console.log('Pressed ', item.action)
+                                    props.navigation.navigate(item.action);
                                 } else {
                                     null;
                                 }

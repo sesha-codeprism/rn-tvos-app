@@ -28,6 +28,8 @@ import useBootstrap from "../../customHooks/useBootstrapData";
 import useShortCode from "../../customHooks/useShortCode";
 import { resetCaches, resetSpecificQuery } from "../../config/queries";
 import { GlobalContext } from "../../contexts/globalContext";
+import { useQuery } from "react-query";
+import { getStoresOfZones } from "../../../backend/discovery/discovery";
 
 const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
 
@@ -45,13 +47,19 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
   const [verificationCode, setVerficationCode] = useState(Array());
   const [latestToken, setLatestToken ] = useState(null);
 
-  const landingResponse = useLanding();
-  const shortCodeData = useShortCode();
+  const landingResponse = useLanding(GLOBALS.store?.MFGlobalsConfig?.url);
+  const shortCodeData = useShortCode(GLOBALS.store?.MFGlobalsConfig?.url);
   const bootstrapData = useBootstrap(latestToken);
   const currentContext = useContext(GlobalContext);
   
  
   const [navigateTo, bootstrapUrl, acessToken, response] = bootstrapData || {};
+
+  const storeResults = useQuery(['stores', response?.data?.data?.ServiceMap?.Services?.discovery], getStoresOfZones, {
+    cacheTime: Infinity,
+    staleTime: Infinity,
+    enabled: !!response?.data?.data?.ServiceMap?.Services?.discovery,
+  });
 
 
   const onRefresh = async () => {
@@ -77,6 +85,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
   useEffect(() => {
     if(shortCodeData?.data?.RegistrationCode){
       setVerficationCode(shortCodeData?.data?.RegistrationCode?.split(''));
+      GLOBALS.deviceInfo.regCode = shortCodeData?.data?.RegistrationCode;
     }
   }, [shortCodeData?.data?.RegistrationCode]);
 
@@ -91,18 +100,18 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
 
   useEffect(() => {
     const {data, isSuccess, isError, error } = response || {};
-    if(isSuccess && data?.data && navigateTo === "NAVIGATEINNTOAPP" && bootstrapUrl && acessToken && GLOBALS.deviceInfo){
+    if(isSuccess && data?.data && navigateTo === "NAVIGATEINNTOAPP" && bootstrapUrl && acessToken && GLOBALS.deviceInfo && storeResults?.data?.data){
       processBootStrap(data?.data, "10ft").then(() => {
-        setGlobalData(data?.data);
         initUdls();
-        setDefaultStore();
+        setDefaultStore(storeResults?.data?.data, data?.data);
+        setGlobalData(data?.data);
         var value = verifyAccountAndLogin();
         console.log("verifyAccountAndLogin", value);
         connectDuplex(currentContext.duplexMessagee);
         props.navigation.replace(Routes.WhoIsWatching);
       });
     }
-  }, [response?.data, navigateTo, bootstrapUrl, acessToken, shortCodeData?.data?.AccessToken])
+  }, [response?.data, navigateTo, bootstrapUrl, acessToken, shortCodeData?.data?.AccessToken, storeResults?.data?.data])
 
   return (
     <View style={ShortCodeStyles.root} testID="root">

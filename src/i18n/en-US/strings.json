@@ -1921,59 +1921,92 @@
     {
       "name": "DevTest",
       "value": "MR.dev",
-      "path": "http://reachclient.dev.mr.tv3cloud.com"
+      "path": "https://reachclient.dev.mr.tv3cloud.com"
     },
     {
       "name": "OSim",
       "value": "MR.osim",
-      "path": "http://reachclient.osim.mr.tv3cloud.com"
+      "path": "https://reachclient.osim.mr.tv3cloud.com"
     },
     {
       "name": "Demo",
       "value": "MR.demo",
-      "path": "http://reachclient.demo.mr.tv3cloud.com"
+      "path": "https://reachclient.demo.mr.tv3cloud.com"
     },
     {
       "name": "Cip",
       "value": "MR.cip",
-      "path": "http://reachclient.cip.mr.tv3cloud.com"
+      "path": "https://reachclient.cip.mr.tv3cloud.com"
     },
     {
       "name": "Integration",
       "value": "MR.oint",
-      "path": "http://reachclient.oint.mr.tv3cloud.com"
+      "path": "https://reachclient.oint.mr.tv3cloud.com"
     },
     {
       "name": "OFunk",
       "value": "MR.ofunk",
-      "path": "http://reachclient.ofunk.mr.tv3cloud.com"
+      "path": "https://reachclient.ofunk.mr.tv3cloud.com"
     },
     {
       "name": "PreProd",
       "value": "MR.pprod",
-      "path": "http://reachclient.pprod.mr.tv3cloud.com"
+      "path": "https://reachclient.pprod.mr.tv3cloud.com"
     },
     {
       "name": "MFNA",
       "value": "mfn.proda",
-      "path": "http://reachclient.proda.mfn.tv3cloud.com"
+      "path": "https://reachclient.proda.mfn.tv3cloud.com"
     },
     {
       "name": "ProdC (Telus)",
       "value": "TELUS.prodc",
-      "path": "http://reachclient.prodc.tls.tv3cloud.com"
+      "path": "https://reachclient.prodc.tls.tv3cloud.com"
     },
     {
       "name": "CIM",
       "value": "MR.CIM",
-      "path": "https://reachclient.dev.mr.tv3cloud.com"
+      "path": "https://reachclient.cim.mr.tv3cloud.com"
     },
     {
       "name": "TMO",
       "value": "TMO.proda",
-      "path": "http://reachclient.proda.tmo.tv3cloud.com"
+      "path": "https://reachclient.proda.tmo.tv3cloud.com"
     }
   ],
+  "str_selectLogginLevel": [
+    {
+        "name": "None",
+        "value": "none"
+    },
+    {
+        "name": "Error",
+        "value": "error"
+    },
+    {
+        "name": "Warning",
+        "value": "warn"
+    },
+    {
+        "name": "Debug",
+        "value": "debug"
+    },
+    {
+        "name": "Info",
+        "value": "info"
+    }
+  ],
+  "developer_settings": "Developer",
+  "developer_settings_user_info": "User Info",
+  "developer_settings_logging_level": "Logging Level",
+  "developer_settings_select_service": "Select Services",
+  "developer_settings_current_store": "Current Store Version",
+  "developer_settings_store_version": "Store Version",
+  "developer_settings_user_info_account": "Account ID: ",
+  "developer_settings_user_info_userid": "User ID: ",
+  "developer_settings_user_info_subscriber_group": "Subscriber Group: ",
+  "developer_settings_user_info_subscriber_local": "Local ID: ",
+  "developer_settings_user_info_subscriber_acceptLaguage": "Accept Language: ",
   "str_selectUIDefinitions": [
     { "name": "Web & Tablets (2ft)", "value": "UIDefinition.json" },
     { "name": "TV (10 ft)", "value": "UIDefinition_10ft.json" },

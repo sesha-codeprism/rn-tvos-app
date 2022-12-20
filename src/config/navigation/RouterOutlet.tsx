@@ -22,6 +22,10 @@ import DescriptiveAudioScreen from "../../views/app/settings_screens/audio/descr
 import SystemSettingsScreen from "../../views/app/settings_screens/system/system.screen";
 import SystemInformationScreen from "../../views/app/settings_screens/system/system_info.screen";
 import DeveloperScreen from "../../views/app/settings_screens/developer/developer.screen";
+import SelectServiceScreen from "../../views/app/settings_screens/developer/developer.selectservice";
+import DeveloperUserInfoSettingsScreen from "../../views/app/settings_screens/developer/developer.userinfo";
+import DeveloperCurrentStoreSettingsScreen from "../../views/app/settings_screens/developer/developer.currentstore";
+import DeveloperLoggingLevelScreen from "../../views/app/settings_screens/developer/developer.logginglevel";
 import DvrSettingsScreen from "../../views/app/settings_screens/dvr/dvr.screen";
 import StopRecordingScreen from "../../views/app/settings_screens/dvr/stop_recording.screen";
 import { GLOBALS } from "../../utils/globals";
@@ -79,6 +83,10 @@ export const Routes = {
   DescriptiveAudio: "descriptive_audio",
   SystemSettings: "system_settings",
   DeveloperSettings: "developer_settings",
+  SelectServiceSettings: "developer_select_service_settings",
+  DeveloperUserInfoSettingsScreen: "developer_user_info_settings",
+  DeveloperCurrentStoreSettingsScreen: "developer_current_store_settings",
+  DeveloperLoggingLevelScreen:  "developer_logging_level",
   SystemInformation: "system_info",
   DVRSettings: "dvr_settings",
   StopRecording: "stop_recording",
@@ -163,6 +171,22 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           component={DeveloperScreen}
         />
         <Stack.Screen
+          name={Routes.SelectServiceSettings}
+          component={SelectServiceScreen}
+        />
+         <Stack.Screen
+          name={Routes.DeveloperUserInfoSettingsScreen}
+          component={DeveloperUserInfoSettingsScreen}
+        />
+        <Stack.Screen
+          name={Routes.DeveloperCurrentStoreSettingsScreen}
+          component={DeveloperCurrentStoreSettingsScreen}
+        />
+        <Stack.Screen
+          name={Routes.DeveloperLoggingLevelScreen}
+          component={DeveloperLoggingLevelScreen}
+        />
+        <Stack.Screen
           name={Routes.SystemInformation}
           component={SystemInformationScreen}
         />
@@ -184,6 +208,10 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
       // Attempt to load local store
       var store = getStore();
       console.log("Store", store);
+      if(false){
+        store.MFGlobalsConfig.url = 'https://reachclient.dev.mr.tv3cloud.com/';
+        store.MFGlobalsConfig.stsUrl = 'https://ottapp-appgw-client-A.dev.mr.tv3cloud.com/Green/sts/';
+      }
     } catch (e) {
       console.log("Some error", e);
     }
