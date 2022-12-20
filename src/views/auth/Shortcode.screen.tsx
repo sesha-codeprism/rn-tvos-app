@@ -137,14 +137,21 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
       </View>
       <View style={ShortCodeStyles.codeView}>
         <MFText
-          displayText={AppStrings.pair_device}
+          displayText={AppStrings.str_login_pair_device_title}
           shouldRenderText
           textStyle={ShortCodeStyles.titleTextStyle}
           adjustsFontSizeToFit={false}
         />
         <View style={ShortCodeStyles.textViewStyle}>
           <MFText
-            displayText={AppStrings.pair_directions_1}
+            displayText={AppStrings.str_login_pair_device_instruction_line2}
+            shouldRenderText
+            textStyle={ShortCodeStyles.subtitleText}
+            adjustsFontSizeToFit={false}
+            numberOfLines={2}
+          />
+          <MFText
+            displayText={AppStrings.str_login_pair_device_instruction_line3}
             shouldRenderText
             textStyle={ShortCodeStyles.subtitleText}
             adjustsFontSizeToFit={false}
@@ -153,7 +160,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
         </View>
         <View style={ShortCodeStyles.textViewStyle}>
           <MFText
-            displayText={AppStrings.or_string}
+            displayText={AppStrings.str_login_pair_device_instruction_line4}
             shouldRenderText
             textStyle={ShortCodeStyles.subtitleText}
             adjustsFontSizeToFit={false}
@@ -161,14 +168,14 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
         </View>
         <View style={ShortCodeStyles.textViewStyle}>
           <MFText
-            displayText={AppStrings.pair_directions_2}
+            displayText={AppStrings.str_login_pair_device_instruction_line5}
             shouldRenderText
             textStyle={ShortCodeStyles.subtitleText}
           />
         </View>
         <View style={ShortCodeStyles.textViewStyle}>
           <MFText
-            displayText={AppStrings.url_link}
+            displayText={AppStrings.str_login_pair_device_instruction_line6}
             shouldRenderText
             textStyle={ShortCodeStyles.urlStyles}
             adjustsFontSizeToFit={false}
@@ -176,7 +183,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
         </View>
         <View style={ShortCodeStyles.textViewStyle}>
           <MFText
-            displayText={AppStrings.pair_directions_3}
+            displayText={AppStrings.str_login_pair_device_instruction_line7}
             shouldRenderText
             textStyle={ShortCodeStyles.subtitleText}
             adjustsFontSizeToFit={false}
@@ -216,7 +223,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
                 unFocusedBackgroundColor: appUIDefinition.theme.colors.primary,
               },
             }}
-            textLabel={AppStrings.refresh_code}
+            textLabel={AppStrings.str_login_refresh_code}
             onPress={onRefresh}
           />
         </View>

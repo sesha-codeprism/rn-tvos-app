@@ -33,30 +33,30 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
       const values = GLOBALS.store.settings.parentalControll;
       const listItem = [
         {
-          title: AppStrings.str_settings_pcon_contentlock,
+          title: AppStrings.str_settings_content_locks,
           subTitle: _.isEmpty(values.contentLock)
-            ? AppStrings.str_rating_unrestricted
-            : AppStrings.str_pcon_challenge_pinLockedState,
+            ? AppStrings.str_settings_unrestricted
+            : AppStrings.str_settings_locked,
           action: "pin_lock",
           screenTarget: Routes.ContentLock,
           icon: "",
         },
         {
-          title: AppStrings.str_settings_pcon_adultlock_description,
+          title: AppStrings.str_settings_adult_locks,
           subTitle:
             values.adultLock["adultContentMasking"] ||
             values.adultLock["allowAdultLocks"]
-              ? AppStrings.str_pcon_challenge_pinLockedState
-              : AppStrings.str_rating_unrestricted,
+              ? AppStrings.str_settings_locked
+              : AppStrings.str_settings_unrestricted,
           action: "pin_lock",
           screenTarget: Routes.AdultLock,
           icon: "",
         },
         {
-          title: AppStrings.str_settings_pcon_purchaselock,
+          title: AppStrings.str_settings_content_purchase_locks,
           subTitle: values.purchaseLock["locked"]
-            ? AppStrings.str_pcon_challenge_pinLockedState
-            : AppStrings.str_rating_unrestricted,
+            ? AppStrings.str_settings_locked
+            : AppStrings.str_settings_unrestricted,
           action: "pin_lock",
           screenTarget: Routes.PurchaseLock,
           icon: "",
@@ -83,7 +83,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
 
   return (
     <SideMenuLayout
-      title={AppStrings.str_navigation_settings}
+      title={AppStrings.str_settings_parental_controls}
       subTitle={AppStrings.str_settings_pcon_label}
     >
       <FlatList

@@ -44,7 +44,7 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
       {
         title: AppStrings.str_settings_subtitle_primary_label,
         //@ts-ignore
-        subTitle: AppStrings.ISO[subtitleConfig.primary],
+        subTitle: AppStrings.str_settings_languages[subtitleConfig.primary],
         action: "subtitle_language",
         type: "primary",
         icon: "",
@@ -54,7 +54,7 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
         subTitle:
           subtitleConfig.secondary !== "None"
             ? //@ts-ignore
-              AppStrings.ISO[subtitleConfig.secondary]
+              AppStrings.str_settings_languages[subtitleConfig.secondary]
             : subtitleConfig.secondary,
         action: "subtitle_language",
         type: "secondary",

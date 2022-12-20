@@ -78,7 +78,7 @@ export const ShortCodeStyles = StyleSheet.create({
     flexShrink: 1,
   },
   textViewStyle: {
-    width: "60%",
+    width: "80%",
     paddingVertical: 10,
     flexWrap: "wrap",
     flexDirection: "row",

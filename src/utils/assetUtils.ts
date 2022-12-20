@@ -3464,6 +3464,7 @@ export const getCTAButtons = (
     StationIdFromEPG?: any,
     hasFeatureIosCarrierBilling?: boolean
 ): any => {
+    console.log("Reading AppStrings", AppStrings?.str_details_cta_more_info);
     const { episodes, assetType } = seriesUDPData || {};
     const isLive = isFromSeries
         ? seriesData?.assetType?.sourceType === sourceTypeString.LIVE
@@ -4119,8 +4120,8 @@ export const getCTAButtons = (
 
     ctaButtonGroup.push({
         buttonType: "TextIcon",
-        buttonText: AppStrings?.str_details_cta_more_info,
-        buttonAction: AppStrings?.str_details_cta_more_info,
+        buttonText: AppStrings?.str_details_cta_more_info || "ABC",
+        buttonAction: AppStrings?.str_details_cta_more_info || "ABNC",
         iconSource: moreInfoIcon,
     });
 

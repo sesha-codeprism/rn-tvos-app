@@ -13,32 +13,32 @@ const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focused, setFocused] = useState<any>(0);
   const menu = [
     {
-      title: AppStrings.str_settings_account_label,
+      title: AppStrings.str_settings_home_account_settings,
       action: "accounts_screen",
       icon: "",
     },
     {
-      title: AppStrings.str_settings_pcon_label,
+      title: AppStrings.str_settings_home_parental_controls,
       action: "parental_controll",
       icon: "",
     },
     {
-      title: AppStrings.str_settings_display_label,
+      title: AppStrings.str_settings_home_display,
       action: "display",
       icon: "",
     },
     {
-      title: AppStrings.str_playback_audio_title,
+      title: AppStrings.str_settings_home_audio,
       action: "audio",
       icon: "",
     },
     {
-      title: AppStrings.str_menu_dvr,
+      title: AppStrings.str_settings_home_dvr,
       action: "dvr_settings",
       icon: "",
     },
     {
-      title: AppStrings.str_settings_system_tab_label,
+      title: AppStrings.str_settings_home_system,
       action: "system_settings",
       icon: "",
     },
@@ -51,7 +51,7 @@ const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
 
   useEffect(() => {}, [AppStrings]);
   return (
-    <SideMenuLayout subTitle={AppStrings.str_navigation_settings}>
+    <SideMenuLayout subTitle={AppStrings.str_settings_home_heading}>
       <FlatList
         data={menu}
         keyExtractor={(item) => item.title}
