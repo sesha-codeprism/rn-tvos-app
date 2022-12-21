@@ -4,7 +4,7 @@ import { appUIDefinition } from "../config/constants";
 
 export function useRetringQuery(queryKey: any, queryFn: any, options: any) {
 
-    const [count, setCount ] = useState(0);
+    const [count, setCount] = useState(0);
     return useQuery(
         queryKey,
         queryFn,
@@ -12,8 +12,8 @@ export function useRetringQuery(queryKey: any, queryFn: any, options: any) {
             refetchInterval(data, query) {
                 const { NextCheckInterval, AccessToken, MaxRetryTime } = data || {};
                 if (!AccessToken && count < MaxRetryTime) {
-                    return NextCheckInterval * 1000;
                     setCount(count + 1);
+                    return NextCheckInterval * 1000;
                 } else {
                     // no refetch required
                     return Infinity;
