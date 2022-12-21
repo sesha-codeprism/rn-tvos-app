@@ -44,7 +44,9 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       cacheTime: Infinity,
       staleTime: Infinity,
       //@ts-ignore
-      enabled: !!response?.data?.data?.ServiceMap?.Services?.discovery,
+      enabled:
+        !!response?.data?.data?.ServiceMap?.Services?.discovery &&
+        !!GLOBALS.store?.rightsGroupIds,
     }
   );
 
@@ -68,6 +70,13 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       onDuplexMessage,
     ]);
   }, []);
+
+  useEffect(() => {
+    if (response?.data?.data) {
+      setDefaultStore(storeResults?.data?.data, response?.data!.data);
+      setGlobalData(response?.data.data);
+    }
+  }, [response?.data, response?.isSuccess]);
 
   useEffect(() => {
     //@ts-ignore

@@ -7,44 +7,45 @@ import { GLOBALS } from "../../src/utils/globals"
 import { Routes } from "../../src/config/navigation/RouterOutlet";
 
 
-export const getShortCodeAuthenticate = async ({ queryKey } : any) => {
+export const getShortCodeAuthenticate = async ({ queryKey }: any) => {
   const [, landingResponse, deviceInfo] = queryKey;
-  
-  if(landingResponse && landingResponse?.data && landingResponse.data?.data?.sts && deviceInfo){
-    const url: string = parseUri(landingResponse.data?.data?.sts ) + "/request-token";
+
+  if (landingResponse && landingResponse?.data && landingResponse.data?.data?.sts && deviceInfo) {
+    const url: string = parseUri(landingResponse.data?.data?.sts) + "/request-token";
     const response = await POST({
       url: url,
       params: deviceInfo,
     });
     return response?.data;
-  }else {
+  } else {
+    console.log("Log from here");
     return null;
   }
 };
 
 
-export const getLanding = async ({ queryKey } : { queryKey : string[] } ) => {
+export const getLanding = async ({ queryKey }: { queryKey: string[] }) => {
   const [_, url] = queryKey;
-  if(url){
+  if (url) {
     const envUrl: string = parseUri(url) + "/landing.json";
     const response = await GET({
       url: envUrl
     });
     return response;
-  }else {
+  } else {
     return null;
   }
 }
 
-export const getBootStrap = async ({ queryKey } : any) => {
+export const getBootStrap = async ({ queryKey }: any) => {
   const [, bootstrapUrl, token] = queryKey;
-  if(bootstrapUrl && token){
+  if (bootstrapUrl && token) {
     const response = await GET({
       url: bootstrapUrl,
       headers: addAuthToken(token)
     });
     return response;
-  }else {
+  } else {
     return null;
   }
 };
