@@ -134,18 +134,18 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     // console.log("movies", movies);
     // console.log("TVShow", TVShow);
     const massagedTVData = massageDiscoveryFeed(
-      {Items:TVShow.data.Items},
+      { Items: TVShow.data.Items },
       SourceType.VOD
     );
     const massagedMovieData = massageDiscoveryFeed(
-      {Items:movies.data.Items},
+      { Items: movies.data.Items },
       SourceType.VOD
     );
     // console.log("movies", movies, "massagedMovieData", massagedMovieData);
     // console.log("TVShow", TVShow, "massagedTVData", massagedTVData);
     GLOBALS.moviesAndTvShows = [
       { TVShow: massagedTVData },
-      { Movie:  massagedMovieData },
+      { Movie: massagedMovieData },
     ];
   };
   // const { data, isLoading } = useQuery(

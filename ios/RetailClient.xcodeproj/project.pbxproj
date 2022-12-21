@@ -71,18 +71,6 @@
 		41BF5F3596F87FEE707DDD11 /* libPods-RetailClient-RetailClientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F21F13455730034D850CD1C /* libPods-RetailClient-RetailClientTests.a */; };
 		47EB63F3390701B2260096C6 /* libPods-RetailClient-tvOS-RetailClient-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0216F1136BF7C90703C880F /* libPods-RetailClient-tvOS-RetailClient-tvOSTests.a */; };
 		593AF51228AE700E002740B8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 593AF51128AE700E002740B8 /* CoreData.framework */; };
-		599574242951C88B00676518 /* NKSearchComponentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5995741F2951C88900676518 /* NKSearchComponentManager.m */; };
-		599574252951C88B00676518 /* NKSearchComponentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5995741F2951C88900676518 /* NKSearchComponentManager.m */; };
-		599574262951C88B00676518 /* NKSearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 599574212951C88A00676518 /* NKSearchComponent.m */; };
-		599574272951C88B00676518 /* NKSearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 599574212951C88A00676518 /* NKSearchComponent.m */; };
-		599574282951C88B00676518 /* NKSearchResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 599574222951C88A00676518 /* NKSearchResultsViewController.m */; };
-		599574292951C88B00676518 /* NKSearchResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 599574222951C88A00676518 /* NKSearchResultsViewController.m */; };
-		599574302951C8D000676518 /* SearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 5995742A2951C8CD00676518 /* SearchComponent.m */; };
-		599574312951C8D000676518 /* SearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 5995742A2951C8CD00676518 /* SearchComponent.m */; };
-		599574322951C8D000676518 /* SearchControllerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5995742D2951C8CF00676518 /* SearchControllerView.m */; };
-		599574332951C8D000676518 /* SearchControllerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5995742D2951C8CF00676518 /* SearchControllerView.m */; };
-		599574342951C8D000676518 /* RNSearchControllerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5995742E2951C8CF00676518 /* RNSearchControllerViewManager.m */; };
-		599574352951C8D000676518 /* RNSearchControllerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5995742E2951C8CF00676518 /* RNSearchControllerViewManager.m */; };
 		59A99A9A2853229A00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
 		59A99A9B2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
 		59A99A9C2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
@@ -208,18 +196,6 @@
 		3BDF8C4CCF278F944E8C6CBF /* Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS-RetailClient-tvOSTests/Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		4F21F13455730034D850CD1C /* libPods-RetailClient-RetailClientTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RetailClient-RetailClientTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		593AF51128AE700E002740B8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS15.4.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
-		5995741E2951C88800676518 /* NKSearchComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NKSearchComponent.h; sourceTree = "<group>"; };
-		5995741F2951C88900676518 /* NKSearchComponentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NKSearchComponentManager.m; sourceTree = "<group>"; };
-		599574202951C88A00676518 /* NKSearchComponentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NKSearchComponentManager.h; sourceTree = "<group>"; };
-		599574212951C88A00676518 /* NKSearchComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NKSearchComponent.m; sourceTree = "<group>"; };
-		599574222951C88A00676518 /* NKSearchResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NKSearchResultsViewController.m; sourceTree = "<group>"; };
-		599574232951C88B00676518 /* NKSearchResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NKSearchResultsViewController.h; sourceTree = "<group>"; };
-		5995742A2951C8CD00676518 /* SearchComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchComponent.m; sourceTree = "<group>"; };
-		5995742B2951C8CE00676518 /* SearchControllerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchControllerView.h; sourceTree = "<group>"; };
-		5995742C2951C8CE00676518 /* RNSearchControllerViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSearchControllerViewManager.h; sourceTree = "<group>"; };
-		5995742D2951C8CF00676518 /* SearchControllerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchControllerView.m; sourceTree = "<group>"; };
-		5995742E2951C8CF00676518 /* RNSearchControllerViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSearchControllerViewManager.m; sourceTree = "<group>"; };
-		5995742F2951C8D000676518 /* SearchComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchComponent.h; sourceTree = "<group>"; };
 		59A99A912853229900560F39 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraBold.ttf"; path = "../src/assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		59A99A922853229900560F39 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		59A99A932853229900560F39 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
@@ -426,18 +402,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				5995742C2951C8CE00676518 /* RNSearchControllerViewManager.h */,
-				5995742E2951C8CF00676518 /* RNSearchControllerViewManager.m */,
-				5995742F2951C8D000676518 /* SearchComponent.h */,
-				5995742A2951C8CD00676518 /* SearchComponent.m */,
-				5995742B2951C8CE00676518 /* SearchControllerView.h */,
-				5995742D2951C8CF00676518 /* SearchControllerView.m */,
-				5995741E2951C88800676518 /* NKSearchComponent.h */,
-				599574212951C88A00676518 /* NKSearchComponent.m */,
-				599574202951C88A00676518 /* NKSearchComponentManager.h */,
-				5995741F2951C88900676518 /* NKSearchComponentManager.m */,
-				599574232951C88B00676518 /* NKSearchResultsViewController.h */,
-				599574222951C88A00676518 /* NKSearchResultsViewController.m */,
 				13B07FAE1A68108700A75B9A /* RetailClient */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RetailClientTests */,
@@ -945,17 +909,12 @@
 				004DE6DF27ABA5B6003439C1 /* LogoViewController.swift in Sources */,
 				8168724227307A1500960AFF /* MKGuideManager.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				599574262951C88B00676518 /* NKSearchComponent.m in Sources */,
-				599574322951C8D000676518 /* SearchControllerView.m in Sources */,
 				59C74694294A45BB009D2E1D /* RCTSearchViewTVOS.m in Sources */,
 				009FA73F2738F53600417869 /* ContentView.swift in Sources */,
 				0035244C276BBF4200360F43 /* BaseCollectionViewCell.swift in Sources */,
 				0035DCA4276BB1A600360F43 /* SampleViewController.swift in Sources */,
-				599574342951C8D000676518 /* RNSearchControllerViewManager.m in Sources */,
 				8168723B273073D300960AFF /* MKGuide.swift in Sources */,
 				00352442276BBF4200360F43 /* Focusable.swift in Sources */,
-				599574302951C8D000676518 /* SearchComponent.m in Sources */,
-				599574282951C88B00676518 /* NKSearchResultsViewController.m in Sources */,
 				59C7468C294A45BB009D2E1D /* RCTSearchViewTVOSManager.m in Sources */,
 				0F6088BF2720633E0052254E /* MKGuide.m in Sources */,
 				00352454276BBF4200360F43 /* OnNowNoDataTableViewCell.swift in Sources */,
@@ -971,7 +930,6 @@
 				00352446276BBF4200360F43 /* EPGChannelCell.swift in Sources */,
 				8147B2FA273DF77B00A45F38 /* NativeText.m in Sources */,
 				0035244A276BBF4200360F43 /* EPGProgramsCell.swift in Sources */,
-				599574242951C88B00676518 /* NKSearchComponentManager.m in Sources */,
 				004DE6E227ABA5CB003439C1 /* BaseScreenViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -982,15 +940,12 @@
 			files = (
 				00352447276BBF4200360F43 /* EPGChannelCell.swift in Sources */,
 				00352453276BBF4200360F43 /* DiscoveryModels.swift in Sources */,
-				599574352951C8D000676518 /* RNSearchControllerViewManager.m in Sources */,
 				004DE6E327ABA5CB003439C1 /* BaseScreenViewController.swift in Sources */,
 				0035244B276BBF4200360F43 /* EPGProgramsCell.swift in Sources */,
 				59C74696294A45BB009D2E1D /* RCTSearchViewTVOS.m in Sources */,
 				004DE6E027ABA5B6003439C1 /* LogoViewController.swift in Sources */,
 				00352449276BBF4200360F43 /* Designable.swift in Sources */,
 				00352443276BBF4200360F43 /* Focusable.swift in Sources */,
-				599574292951C88B00676518 /* NKSearchResultsViewController.m in Sources */,
-				599574272951C88B00676518 /* NKSearchComponent.m in Sources */,
 				8168724427307BAC00960AFF /* MKGuide.h in Sources */,
 				004DE6DD27ABA5A2003439C1 /* BaseBackgroundController.swift in Sources */,
 				8168724527307BAC00960AFF /* MKGuide.swift in Sources */,
@@ -1001,8 +956,6 @@
 				59C7468E294A45BB009D2E1D /* RCTSearchViewTVOSManager.m in Sources */,
 				59C74692294A45BB009D2E1D /* SearchRestultsViewTVOSController.m in Sources */,
 				8168724327307B9F00960AFF /* MKGuideManager.swift in Sources */,
-				599574252951C88B00676518 /* NKSearchComponentManager.m in Sources */,
-				599574312951C8D000676518 /* SearchComponent.m in Sources */,
 				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
 				0035244D276BBF4200360F43 /* BaseCollectionViewCell.swift in Sources */,
 				0F6088C02720633E0052254E /* MKGuide.m in Sources */,
@@ -1013,7 +966,6 @@
 				0035243D276BBF4200360F43 /* UILabelFontable.swift in Sources */,
 				00352451276BBF4200360F43 /* LiveChannelMap.swift in Sources */,
 				8147B2FC273DF77B00A45F38 /* NativeText.m in Sources */,
-				599574332951C8D000676518 /* SearchControllerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

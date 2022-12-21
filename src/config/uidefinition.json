@@ -774,7 +774,7 @@
     "enableRTL": false,
     "debounceTime": 500,
     "protocol": "https",
-    "hostname": "reachclient.cim.mr.tv3cloud.com",
+    "hostname": "reachclient.dev.mr.tv3cloud.com",
     "currentLocale": { "full": "en-US", "short": "fr" },
     "useLottieAnimationOnSplash": false,
     "height16x9": 253,

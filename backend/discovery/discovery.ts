@@ -14,7 +14,7 @@ export const DISCOVERY_URL =
 
 const versionString = "/v4/";
 
-// export const DISCOVERY_URL = 'https://ottapp-appgw-client-a.cim.mr.tv3cloud.com/S1/discovery';
+// export const DISCOVERY_URL = 'https://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/discovery';
 
 /** API call to get all Hubs data */
 export const getHubs = async (id: string, params: any) => {
@@ -39,7 +39,7 @@ export const getMovies = async (id?: string, params?: any) => {
   const url: string =
     parseUri(
       GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
-      "https://appgw-client-a.cim.mr.tv3cloud.com/S1/discovery"
+      "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
     ) + "/v4/feeds/movies/items";
   console.log("UDL: getMovies", id, params, url);
   const response = await GET({
@@ -70,7 +70,7 @@ export const getTVShows = async (id?: string, params?: any) => {
   const url: string =
     parseUri(
       GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
-      "https://appgw-client-a.cim.mr.tv3cloud.com/S1/discovery"
+      "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
     ) +
     versionString +
     "feeds/tvshows/items";

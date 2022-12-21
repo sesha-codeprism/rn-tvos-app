@@ -7,11 +7,12 @@
 
 #import <UIKit/UIKit.h>
 #import <React/RCTComponent.h>
+#import <React/RCTView.h>
 
 @interface RCTSearchViewTVOS : UIView
 
 @property UISearchContainerViewController *containerVC;
 
-@property (nonatomic, copy) RCTBubblingEventBlock onChangeText;
+@property(nonatomic, copy) RCTBubblingEventBlock onChangeText;
 
 @end

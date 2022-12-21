@@ -50,7 +50,8 @@
   [uiSearchController setObscuresBackgroundDuringPresentation:true];
   uiSearchController.hidesNavigationBarDuringPresentation = false;
   uiSearchController.obscuresBackgroundDuringPresentation = false;
-
+  uiSearchController.searchResultsUpdater =self;
+  
 
     
     [parentVC addChildViewController:uiSearchContainerController];
