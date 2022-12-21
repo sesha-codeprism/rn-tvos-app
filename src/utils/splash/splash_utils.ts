@@ -17,7 +17,6 @@ export const setGlobalData = (bootStrapResponse: BootStrapResponse) => {
         GLOBALS.bootstrapSelectors = data;
         GLOBALS.store.rightsGroupIds = data?.RightsGroupIds;
         GLOBALS.store.accountID = GLOBALS.bootstrapSelectors?.AccountId;
-        console.log(bootStrapResponse);
         GLOBALS.enableRTL =
             GLOBALS.store.settings.display.onScreenLanguage.enableRTL;
         setOnScreenLanguage(GLOBALS.store.settings.display.onScreenLanguage.languageCode)

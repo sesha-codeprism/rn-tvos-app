@@ -8,8 +8,6 @@ import { getBestSupportedLocaleID } from "../utils/splash/splash_utils";
 
 const useLanding = (url: string) => {
   const [landingUrl, setLandingUrl ] = useState(GLOBALS.store?.MFGlobalsConfig.url);
-  console.log(GLOBALS.store);
-  console.log(!!GLOBALS.store);
   const landingResponse = useQuery(['landing', landingUrl], getLanding, {
     cacheTime: Infinity,
     staleTime: Infinity,

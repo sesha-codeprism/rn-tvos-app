@@ -207,7 +207,6 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
     try {
       // Attempt to load local store
       var store = getStore();
-      console.log("Store", store);
       if(false){
         store.MFGlobalsConfig.url = 'https://reachclient.dev.mr.tv3cloud.com/';
         store.MFGlobalsConfig.stsUrl = 'https://ottapp-appgw-client-A.dev.mr.tv3cloud.com/Green/sts/';
