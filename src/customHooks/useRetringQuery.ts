@@ -14,9 +14,12 @@ export function useRetringQuery(queryKey: any, queryFn: any, options: any) {
                 if (!AccessToken && count < MaxRetryTime) {
                     setCount(count + 1);
                     return NextCheckInterval * 1000;
-                } else {
+                } else if(data && AccessToken){
                     // no refetch required
                     return Infinity;
+                } else {
+                    setCount(count + 1);
+                    return 4 * 1000;
                 }
             },
             ...options,

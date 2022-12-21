@@ -45,14 +45,17 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
 ) => {
   const [verificationCode, setVerficationCode] = useState(Array());
   const [latestToken, setLatestToken] = useState(null);
+  const [latestRefreshToken, setLatestRefreshToken] = useState(null);
   //@ts-ignore
   const landingResponse = useLanding(GLOBALS.store?.MFGlobalsConfig?.url);
   //@ts-ignore
   const shortCodeData = useShortCode(GLOBALS.store?.MFGlobalsConfig?.url);
-  const bootstrapData = useBootstrap(latestToken);
+  const bootstrapData = useBootstrap(latestToken, latestRefreshToken);
   const currentContext = useContext(GlobalContext);
 
   const [navigateTo, bootstrapUrl, acessToken, response] = bootstrapData || {};
+  const rightsGroupIds = GLOBALS.store?.rightsGroupIds;
+
   const storeResults = useQuery(
     //@ts-ignore
     ["stores", response?.data?.data?.ServiceMap?.Services?.discovery],
@@ -61,13 +64,20 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
       cacheTime: Infinity,
       staleTime: Infinity,
       //@ts-ignore
-      enabled: !!response?.data?.data?.ServiceMap?.Services?.discovery,
+      enabled: !!(response?.data?.data?.ServiceMap?.Services?.discovery && rightsGroupIds),
     }
   );
 
   const onRefresh = async () => {
     resetSpecificQuery(["shotcode", landingResponse, GLOBALS.deviceInfo]);
   };
+
+  useEffect(() => {
+    // bootstrap response arrived
+    if(response?.data?.data){
+      setGlobalData(response?.data?.data);
+    }
+  }, [response?.data, response?.isSuccess]);
 
   useEffect(() => {
     const onDuplexMessage = (message: any) => {
@@ -108,6 +118,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
       GLOBALS.store.accessToken = shortCodeData?.data?.AccessToken;
       GLOBALS.store.refreshToken = shortCodeData?.data?.RefreshToken;
       setLatestToken(shortCodeData?.data?.AccessToken);
+      setLatestRefreshToken(shortCodeData?.data?.RefreshToken)
       updateStore(GLOBALS.store);
     }
   }, [shortCodeData?.data?.AccessToken]);

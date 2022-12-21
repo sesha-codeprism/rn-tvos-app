@@ -6,7 +6,7 @@ import { parseUri } from "../../backend/utils/url/urlUtil";
 import { GLOBALS, landingInfo } from "../utils/globals";
 import useLanding from "./useLandingData";
 
-const useBootstrap = (accessToken: string | null = null) => {
+const useBootstrap = (accessToken: string | null = null, refreshToken: string | null = null) => {
     const landingData = useLanding(GLOBALS.store?.MFGlobalsConfig.url);
     const [bootstrapUrl, setBootstrapUrl] = useState("");
     const [bootStrapDataLoadStatus, setbootStrapDataLoadStatus] = useState<string | null>(null);
@@ -21,8 +21,8 @@ const useBootstrap = (accessToken: string | null = null) => {
     useEffect(() => {
         if (GLOBALS.store) {
             /** If localstore has some data.. parse and proceed to home; */
-            if (GLOBALS.store.accessToken && GLOBALS.store.refreshToken) {
-                !token && setToken(GLOBALS.store.accessToken);
+            if ((GLOBALS.store.accessToken || accessToken) && (GLOBALS.store.refreshToken || refreshToken)) {
+                !token && setToken(GLOBALS.store.accessToken || accessToken);
                 if (landingData?.isSuccess) {
                     const { sts = MFGlobalsConfig.stsUrl } = landingData.data?.data || {};
                     MFGlobalsConfig.stsUrl = sts;
