@@ -120,6 +120,7 @@ export class DuplexManager {
   }
 
   private async onConnectionMessage(message: DuplexMessage): Promise<void> {
+
     switch (message.type) {
       case DuplexManager.CANARY_REQUEST:
         // Only send canary messages on reliable connections
@@ -238,7 +239,8 @@ export class DuplexManager {
   /**
    * Connects to the Duplex service.
    */
-  public connect(duplexUrl: string): void {
+  public connect(duplexUrl: string, onDuplexMessage?: (message: any) => void): void {
+    this.connection.setOnMessageHandler(onDuplexMessage);
     this.connection.open(duplexUrl, this.continuationTokenFromClient);
   }
 

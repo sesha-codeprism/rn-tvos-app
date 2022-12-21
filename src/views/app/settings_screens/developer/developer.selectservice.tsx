@@ -11,61 +11,52 @@ import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
-import { GLOBALS } from "../../../../utils/globals";
+import { AppStrings } from "../../../../config/strings";
+import { GLOBALS, resetAuthData } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
+import { getUrlParts, parseUri } from "../../../../../backend/utils/url/urlUtil";
+import { resetCaches } from "../../../../config/queries";
+import { Routes } from "../../../../config/navigation/RouterOutlet";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const list = [
-  {
-    title: "At scheduled end time",
-    action: "",
-  },
-  {
-    title: "5 min after",
-    action: "",
-  },
-  {
-    title: "15 min after",
-    action: "",
-  },
-  {
-    title: "30 min after",
-    action: "",
-  },
-  {
-    title: "1 hr after",
-    action: "",
-  },
-  {
-    title: "2 hrs after",
-    action: "",
-  },
-  {
-    title: "3 hrs after",
-    action: "",
-  },
-];
-const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
+const list = AppStrings?.str_selectServices;
+
+const SelectServiceScreen: React.FunctionComponent<Props> = (props: any) => {
+
   const [focussed, setFocussed] = useState<any>("");
-  const [selectedItem, setSelectedItem] = useState<any>("");
-  const onPress = (item: string) => {
-    setSelectedItem(item);
-    //   GLOBALS.store.settings.display.onScrreenLanguage = item;
-    //   updateStore(GLOBALS.store);
+
+  const [selectedService, setSelectedService] = useState<any>({});
+
+  const onPress = (item: any) => {
+    setSelectedService(item);
+    GLOBALS.store.MFGlobalsConfig.url = parseUri(item.path);
+    GLOBALS.store.MFGlobalsConfig.stsUrl = "";
+    updateStore(GLOBALS.store);
+    // Refresh
+    const resetStore = resetAuthData();
+    /** Update the current Async NSUserDefaults store with resetStore */
+    updateStore(resetStore);
+    /** Reset the Query cache to make sure no cached API data is returned by React-Query */
+    resetCaches();
+    GLOBALS.rootNavigation.replace(Routes.ShortCode);
   };
-  const getValues = () => {
-    setSelectedItem(GLOBALS.store.settings.display.onScreenLanguage);
+
+  const getCurrentEnv = () => {
+    setSelectedService({ path: parseUri(GLOBALS.store?.MFGlobalsConfig?.url) });
   };
+
   useEffect(() => {
-    getValues();
+    if (GLOBALS) {
+      getCurrentEnv();
+    }
   }, []);
 
   return (
-    <SideMenuLayout title="Diaplay" subTitle="On Screen Language">
+    <SideMenuLayout title={AppStrings?.developer_settings} subTitle={AppStrings?.developer_settings_select_service}>
       <FlatList
         data={list}
-        keyExtractor={(item) => item.title}
+        keyExtractor={(item) => item.path}
         renderItem={({ item, index }) => {
           return (
             <Pressable
@@ -73,7 +64,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
                 setFocussed(index);
               }}
               onPress={() => {
-                onPress(item.title);
+                onPress(item);
               }}
               style={
                 index === focussed
@@ -83,7 +74,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
               key={index}
             >
               <View style={styles.icContainer}>
-                {selectedItem === item.title ? (
+                {selectedService.path && getUrlParts(item.path)?.host == getUrlParts(selectedService.path)?.host ? (
                   <Image
                     source={AppImages.checked_circle}
                     style={styles.icCircle}
@@ -102,7 +93,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
                     { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
                   ]}
                 >
-                  {item.title}
+                  {item.name}
                 </Text>
               </View>
             </Pressable>
@@ -113,7 +104,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
   );
 };
 
-export default StopRecordingScreen;
+export default SelectServiceScreen;
 
 const styles = StyleSheet.create({
   contentTitleContainer: {

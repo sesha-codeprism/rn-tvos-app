@@ -89,7 +89,7 @@ const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
             ...GLOBALS.store.settings.parentalControll.contentLock,
             [props.route.params.action]: [...unselected],
           });
-      updateStore(JSON.stringify(GLOBALS.store));
+      updateStore(GLOBALS.store);
     } else {
       setSelectedItems([...selectedList]);
       GLOBALS.store.settings.parentalControll.contentLock &&
@@ -103,7 +103,7 @@ const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
             ...GLOBALS.store.settings.parentalControll.contentLock,
             [props.route.params.action]: [...selectedList],
           });
-      updateStore(JSON.stringify(GLOBALS.store));
+      updateStore(GLOBALS.store);
     }
   };
   return (

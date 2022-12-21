@@ -14,11 +14,19 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   const queryClient = new QueryClient();
   const [userProfile, setUserProfile] = useState({});
   const [onScreenLanguage, setOnScreenLanguage] = useState(
-    GLOBALS.store.settings.display.onScreenLanguage
+    GLOBALS.store?.settings?.display?.onScreenLanguage
   );
   const [enableRTL, shouldEnableRTL] = useState(GLOBALS.enableRTL);
+  const [onDuplexMessageHandlers, addOnDuplexMessageHandlers] = useState([]);
+
   async function getLandingData() {
     initUIDef();
+  }
+
+  const duplexMessage = (message: any) => {
+    onDuplexMessageHandlers?.forEach((fn: any) => {
+      fn?.(message);
+    })
   }
 
   useEffect(() => {
@@ -47,6 +55,9 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     setOnScreenLanguage,
     enableRTL,
     shouldEnableRTL,
+    onDuplexMessageHandlers, // the current list of message handlers from various components thoguhout the application
+    addOnDuplexMessageHandlers, // Add Duplex message handler function from any component
+    duplexMessage // root application duplex message handler which dispatches the message to individual component specific message handlers.
   };
 
   return (
@@ -54,8 +65,8 @@ const App: React.FunctionComponent<AppProps> = (props) => {
       <GlobalContext.Provider value={appSettings}>
         <RouterOutlet
           isAuthorized={
-            GLOBALS.store.accessToken !== null &&
-            GLOBALS.store.refreshToken !== null
+            GLOBALS.store?.accessToken !== null &&
+            GLOBALS.store?.refreshToken !== null
           }
         />
       </GlobalContext.Provider>

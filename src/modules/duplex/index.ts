@@ -1,11 +1,11 @@
 import { DuplexManager } from "./DuplexManager";
 
-export function initialize(duplexUrl: string, continuationTokenFromClient?: string) {
+export function initialize(duplexUrl: string, continuationTokenFromClient?: string, onDuplexMessage?: (message: any) => void) {
     let duplexManager: DuplexManager = DuplexManager.getInstance();
     if( continuationTokenFromClient ) {
         duplexManager.setContinuationTokenFromClient(continuationTokenFromClient);
     }
-    !duplexManager.isDuplexConnect() && duplexManager.connect(duplexUrl);
+    !duplexManager.isDuplexConnect() && duplexManager.connect(duplexUrl, onDuplexMessage);
 }
 
 export function appResumed(): void {
@@ -29,7 +29,7 @@ export function networkOnline(): void {
 }
 
 export const duplex = {
-    initialize: (duplexUrl: string, continuationTokenFromClient?: string) => initialize(duplexUrl, continuationTokenFromClient),
+    initialize: (duplexUrl: string, continuationTokenFromClient?: string, onDuplexMessage?: (message: any) => void) => initialize(duplexUrl, continuationTokenFromClient, onDuplexMessage),
     appResumed,
     appSuspended,
     networkOnline,

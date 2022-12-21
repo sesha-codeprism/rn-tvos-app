@@ -50,10 +50,12 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
     GLOBALS.editUserProfile.AdditionalFields = {
       optOutPersonalDataUse: "true",
     };
-    props.navigation.navigate(Routes.ProfileFinalise, {
-      item: GLOBALS.editUserProfile,
-      mode: "edit",
-    });
+    // props.navigation.navigate(Routes.ProfileFinalise, {
+    //   item: GLOBALS.editUserProfile,
+    //   mode: "edit",
+    // });
+    toggleShouldRenderImage(false);
+    setShowPersonalizationPopup(false);
   };
   const clearHistory = async () => {
     try {
@@ -118,6 +120,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                 }}
                 onPress={() => {
                   toggleShouldRenderImage(!shouldRenderImage);
+                  shouldRenderImage ? setShowPersonalizationPopup(true) : null;
                 }}
                 style={{ height: "100%" }}
               >
@@ -199,11 +202,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
           <MFButton
             variant={MFButtonVariant.Contained}
             textLabel={
-              props.route.params.mode === "create"
-                ? "Continue"
-                : shouldRenderImage
-                ? "Done"
-                : "Cancel"
+              props.route.params.mode === "create" ? "Continue" : "Done"
             }
             iconSource={0}
             imageSource={0}
@@ -267,7 +266,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
             }}
             onPress={() => {
               props.route.params.mode === "create"
-                ? props.navigation.goBack()
+                ? props.navigation.pop(3)
                 : setShowClearHistory(true);
             }}
             textLabel={
@@ -288,7 +287,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
           />
         </View>
       </View>
-      {!shouldRenderImage && (
+      {showPersonalizationPopup && (
         <MFPopup
           buttons={[
             {
@@ -298,7 +297,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
             {
               title: "Cancel",
               onPress: () => {
-                toggleShouldRenderImage(true);
+                setShowPersonalizationPopup(false);
               },
             },
           ]}

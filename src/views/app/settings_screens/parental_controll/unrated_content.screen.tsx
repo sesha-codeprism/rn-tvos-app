@@ -42,7 +42,7 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
             ...GLOBALS.store.settings.parentalControll.contentLock,
             ["lockUnratedContent"]: value === 0 ? true : false,
           });
-      updateStore(JSON.stringify(GLOBALS.store));
+      updateStore(GLOBALS.store);
     } catch (error) {
       console.log("Error", error);
     }

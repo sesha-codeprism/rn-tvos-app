@@ -19,7 +19,7 @@ export interface QueryResponse {
 
 export const getHubs = async () => {
     const data = await getDataFromUDL(
-        `udl://discovery/hubs?rightIds=${GLOBALS.store.rightsGroupIds}&storeId=${DefaultStore.Id}&pivots=${pivots}&lang=${lang}`
+        `udl://discovery/hubs?rightIds=${GLOBALS.store?.rightsGroupIds}&storeId=${DefaultStore.Id}&pivots=${pivots}&lang=${GLOBALS.store?.onScreenLanguage?.languageCode || lang}`
     );
     const response: HubsResponse = data;
     return response;
@@ -94,7 +94,7 @@ export const resetCaches = () => {
 }
 
 
-export const resetSpecificQuery = async (key: string) => {
+export const resetSpecificQuery = async (key: any) => {
     queryClient.invalidateQueries({ queryKey: key }).then(() => {
         console.log('Invalidated', key, "query");
     });

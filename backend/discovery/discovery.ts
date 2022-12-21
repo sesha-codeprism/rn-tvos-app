@@ -10,7 +10,7 @@ import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 
 /** URL Endpoint for all Discovery calls */
 export const DISCOVERY_URL =
-  GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery;
+  GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery;
 
 const versionString = "/v4/";
 
@@ -18,7 +18,7 @@ const versionString = "/v4/";
 
 /** API call to get all Hubs data */
 export const getHubs = async (id: string, params: any) => {
-  const { rightIds, storeId, pivots, lang } = params;
+  const { rightIds, storeId, pivots, lang = GLOBALS.store?.onScreenLanguage?.languageCode } = params;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || "") +
     "/v3/hubs";
@@ -33,6 +33,29 @@ export const getHubs = async (id: string, params: any) => {
   });
   return response;
 };
+
+
+export const getStoresOfZones = async ({ queryKey }: any) => {
+  const [, discoveryUrl] = queryKey;
+  const url: string =
+    parseUri(
+      discoveryUrl
+    ) +
+    "/v3/" +
+    "stores";
+
+  return await GET({
+    url: url,
+    params: {
+      $groups: GLOBALS.store?.rightsGroupIds!,
+      storeId: DefaultStore.Id,
+      //@ts-ignore
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+    },
+  });
+};
+
+
 export const getMovies = async (id?: string, params?: any) => {
   const { parentalrating, pivots, rating } = params;
 
@@ -45,9 +68,9 @@ export const getMovies = async (id?: string, params?: any) => {
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -78,9 +101,9 @@ export const getTVShows = async (id?: string, params?: any) => {
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -96,9 +119,9 @@ const getPackages = async (id: string, params: Object) => {
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -116,9 +139,9 @@ const getmoviesandtvshowsByLicenseWindow = async (
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -137,9 +160,9 @@ const getMoviesAndTV = async (id: string, params: any) => {
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -162,9 +185,9 @@ const discoverSubscriptions = async (
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -179,9 +202,9 @@ const getPayPerView = async () => {
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: lang,
+      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -191,7 +214,7 @@ const getPayPerView = async () => {
 };
 
 export const getStoresList = async () => {
-  const rightIds = GLOBALS.store.rightsGroupIds;
+  const rightIds = GLOBALS.store?.rightsGroupIds;
   const STORE_TYPE = "HubsAndFeeds";
   const defaultMainStore = "HubsAndFeeds-Main";
   const url: string =
@@ -203,7 +226,7 @@ export const getStoresList = async () => {
     params: {
       pivots: pivots,
       $groups: rightIds,
-      $lang: lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
   });
@@ -216,7 +239,7 @@ export const getFeedByID = async (id: string) => {
     url: uri,
 
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -228,7 +251,7 @@ export const getDiscoveryCategoryItems = async (id: string, params: any) => {
     url: url,
     params: params,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -243,7 +266,7 @@ export const getDiscoverCategoryItemPivots = async (
     url: url,
     params: params,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -255,7 +278,7 @@ export const getDiscoveryLibraryItems = async (id: string, params: any) => {
     url: url,
     params: params,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -270,7 +293,7 @@ export const getDiscoveryLibrariesCompletePivots = async (
     url: url,
     params: {},
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -285,7 +308,7 @@ const getDiscoveryLibrariesPivotCategories = async (
     url: url,
     params: params,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -297,7 +320,7 @@ const getDiscoverLibraryItemPivots = async (id: string, params: any) => {
     url: url,
     params: {},
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -309,7 +332,7 @@ const getDiscoveryLibraryPackages = async (id: string, params: any) => {
     url: url,
     params: params,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;

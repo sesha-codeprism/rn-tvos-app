@@ -89,7 +89,7 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
             currentContext.setUserProfile(profiles[0]);
             GLOBALS.userProfile = profiles[0];
             GLOBALS.store.userProfile = GLOBALS.userProfile;
-            updateStore(JSON.stringify(GLOBALS.store));
+            updateStore(GLOBALS.store);
             setLoading(false);
             props.navigation.replace(Routes.Home);
           }

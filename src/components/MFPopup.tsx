@@ -49,7 +49,6 @@ const MFPopup = (props: MFPopupProps) => {
                     }}
                     key={index}
                     isTVSelectable={true}
-                    nextFocusDown={1}
                     hasTVPreferredFocus={index === 0 ? true: false}
                     style={
                       focused === index

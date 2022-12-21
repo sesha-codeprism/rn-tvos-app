@@ -145,7 +145,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
             <FlatList
               data={keys.row1}
               horizontal
-              initialNumToRender={10}
+              initialNumToRender={keys.row1.length}
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
                 <View style={{ flexDirection: "row" }}>
@@ -235,8 +235,8 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
             <FlatList
               data={keys.row2}
               horizontal
-              initialNumToRender={10}
               keyExtractor={(x, i) => i.toString()}
+              initialNumToRender={keys.row2.length}
               renderItem={({ item, index }) => (
                 <View style={MFProfileStyle.create_keyboardButton}>
                   {item.type === "number" || item.type === "text" ? (
@@ -282,7 +282,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
             <FlatList
               data={keys.row3}
               horizontal
-              initialNumToRender={10}
+              initialNumToRender={keys.row3.length}
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
                 <View style={MFProfileStyle.create_keyboardButton}>
@@ -381,7 +381,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
               onPress={() => {
                 props.route.params.mode === "edit"
                   ? props.navigation.goBack()
-                  : props.navigation.pop(2);
+                  : props.navigation.pop();
               }}
               textLabel="Cancel"
               imageSource={0}
