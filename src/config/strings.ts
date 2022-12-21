@@ -19,7 +19,9 @@ export const stringLocales = {
 
 }
 
-let AppStrings: StringsObject = enUS
+console.log('en-US ', enUS);
+let AppStrings: StringsObject = enUS;
+console.log('AppStringsS ', AppStrings);
 
 export const setOnScreenLanguage = (onScreenLanguage: any) => {
     //@ts=ignore

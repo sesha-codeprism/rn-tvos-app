@@ -30,7 +30,7 @@ const AudioLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
       } else {
         GLOBALS.store.settings.audio.audioLanguages.secondary = item;
       }
-      updateStore(JSON.stringify(GLOBALS.store));
+      updateStore(GLOBALS.store);
     } catch (error) {
       console.log("error", error);
     }

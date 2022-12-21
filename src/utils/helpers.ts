@@ -1,8 +1,9 @@
-import { GLOBALS } from "./globals";
+import { GLOBALS, landingInfo } from "./globals";
 import { logger, consoleTransport } from "react-native-logs";
 import DeviceInfo from "react-native-device-info";
 import { Settings } from "react-native";
 import SHA256 from "crypto-js/sha256";
+import { MFGlobalsConfig } from "../../backend/configs/globals";
 
 
 export const Log =
@@ -10,14 +11,74 @@ export const Log =
     ? console.log.bind(global.console)
     : () => { };
 
-export const updateStore = (MFStore: string) =>
-  /** Removing Async Store code. Switching to React Native default Settings API */
-  // AsyncStorage.setItem("MFStore", MFStore).then(() => {
-  //   Log("Update Store: ", GLOBALS.store);
-  // }
-  Settings.set({ store: MFStore });
+export const updateStore = (MFStore: any) => {
+  const sanitizedStore = {...MFStore, landingInfo: {...landingInfo}, MFGlobalsConfig: {...MFGlobalsConfig}};
+  Settings.set({ store: JSON.stringify(sanitizedStore) });
+  GLOBALS.store = getStore();
+}
 
-export const getStore = () => Settings.get("store");
+
+export const getStore = () => {
+  let serializedStore = Settings.get("store");;
+  if(serializedStore){
+    serializedStore = JSON.parse(serializedStore);
+    serializedStore.landingInfo = landingInfo?.reviveLandingInfo?.(serializedStore.landingInfo);
+    if(serializedStore.MFGlobalsConfig && serializedStore.MFGlobalsConfig.url){
+      MFGlobalsConfig.stsUrl = serializedStore.MFGlobalsConfig.stsUrl;
+      MFGlobalsConfig.url = serializedStore.MFGlobalsConfig.url;
+    }
+    serializedStore.MFGlobalsConfig = MFGlobalsConfig;
+    return serializedStore;
+  }else {
+    return {
+      MFGlobalsConfig: {
+        url: null,
+        stsUrl: null
+      },
+      landingInfo: {
+        oauth: null,
+        tenantId: null,
+        version: null
+      },
+      accessToken: null,
+      refreshToken: null,
+      userProfile: undefined,
+      rightsGroupIds: null,
+      accountID: '',
+      settings: {
+        parentalControll: {
+          contentLock: {},
+          adultLock: {},
+          purchaseLock: {},
+        },
+        display: {
+          subtitleConfig: {
+            primary: "en",
+            secondary: "fr",
+            tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
+          },
+          bitrates10ft: {},
+          onScreenLanguage: {
+            title: "English (US)",
+            languageCode: "en-US",
+            enableRTL: false
+  
+          },
+          closedCaption: "",
+        },
+        audio: {
+          audioLanguages: {
+            primary: "en",
+            secondary: "fr",
+            tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
+          },
+          descriptiveAudio: "",
+        },
+      },
+    };
+  }
+}
+
 // AsyncStorage.getItem("MFStore");
 
 
