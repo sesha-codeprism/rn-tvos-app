@@ -28,7 +28,7 @@ import { getUIdef, scaleAttributes } from "../../../utils/uidefinition";
 import { globalStyles as g } from "../../../config/styles/GlobalStyles";
 import { PageContainer } from "../../../components/PageContainer";
 import { getItemId } from "../../../utils/dataUtils";
-import { getFontIcon } from "../../../config/strings";
+import { AppStrings, getFontIcon } from "../../../config/strings";
 import {
   assetTypeObject,
   BookmarkType,
@@ -46,6 +46,9 @@ import { GLOBALS } from "../../../utils/globals";
 import { getDataFromUDL } from "../../../../backend";
 import ProgressBar from "../../../components/MFProgress";
 import MFLoader from "../../../components/MFLoader";
+import MFButton, {
+  MFButtonVariant,
+} from "../../../components/MFButton/MFButton";
 
 interface AssetData {
   id: string;
@@ -65,6 +68,11 @@ interface DetailsScreenProps {
   route: any;
 }
 
+interface SideMenuState {
+  visible: boolean;
+  panelName: string;
+}
+
 const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const feed: Feed = props.route.params.feed;
   const [similarData, setSimilarData] = useState<any>(undefined);
@@ -75,7 +83,10 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [playActionsData, setplayActionsData] = useState<any>(undefined);
   const [subscriberData, setsubscriberData] = useState<any>(undefined);
   const [udpDataAsset, setUDPDataAsset] = useState<any>();
-
+  const [sidePanelState, setSidePanelState] = useState<SideMenuState>({
+    panelName: "",
+    visible: false,
+  });
   let scrollViewRef: any = React.createRef<ScrollView>();
 
   const onGetScrollView = (scrolViewRef: ScrollView | null): void => {
@@ -99,13 +110,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     };
   };
   let assetData: AssetData = updateAssetData();
-  console.log(
-    "feed info",
-    feed,
-    getImageUri(feed, "3x4/Poster"),
-    getItemId(feed),
-    assetData
-  );
 
   const getSimilarItemsForFeed = async (assetData: AssetData) => {
     if (!assetData) {
@@ -118,6 +122,26 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     const data = await getDataFromUDL(udlParam);
     setSimilarData(data.data);
     return data;
+  };
+
+  const renderFavoriteButton = () => {
+    return (
+      <View style={[styles.buttonContainerStyle, { backgroundColor: "red" }]}>
+        <MFButton
+          textLabel="Favorite button"
+          variant={MFButtonVariant.Icon}
+          iconSource={AppImages.placeholder}
+          iconStyles={{ height: 70, width: 70 }}
+          style={[styles.buttonIconContainer, styles.solidBackground]}
+          focusedStyle={styles.focusedBackground}
+          imageSource={0}
+          avatarSource={undefined}
+          iconButtonStyles={{
+            shouldRenderImage: true,
+          }}
+        />
+      </View>
+    );
   };
 
   const getDiscoverySchedules = async (assetData: AssetData) => {
@@ -272,6 +296,48 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }
   );
 
+  const renderCTAButtonGroup = () => {
+    const { visible, panelName } = sidePanelState;
+    const focusable = !(visible && panelName);
+    console.log("rendering CTA");
+    return (
+      <View style={[styles.buttonContainer]}>
+        <ScrollView horizontal>
+          {udpDataAsset.ctaButtons?.length &&
+            udpDataAsset.ctaButtons?.map((cta: any, index: number) => {
+              let fontIconStyle: { [key: string]: any };
+
+              if (
+                cta?.buttonAction ===
+                  AppStrings.str_details_program_record_button ||
+                cta?.buttonAction ===
+                  AppStrings?.str_details_series_record_button
+              ) {
+                fontIconStyle = styles.ctaFontIconStyle;
+              }
+
+              return (
+                <MFButton
+                  key={`ctaBtn_${cta.buttonText}_${index}`}
+                  iconSource={0}
+                  imageSource={0}
+                  avatarSource={undefined}
+                  variant={MFButtonVariant.Icon}
+                  textLabel={cta.buttonText}
+                  iconStyles={fontIconStyle!}
+                  style={styles.ctaButtonStyle}
+                  iconButtonStyles={{
+                    shouldRenderImage: true,
+                    placeholderStyles: fontIconStyle!,
+                  }}
+                />
+              );
+            })}
+        </ScrollView>
+      </View>
+    );
+  };
+
   const renderShowcard = () => {
     const { image2x3PosterURL = undefined, image2x3KeyArtURL = undefined } =
       udpDataAsset || {};
@@ -282,7 +348,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         <View style={styles.imageContainer}>
           <ImageBackground source={imageSource} style={styles.showcardImage} />
         </View>
-        <View style={styles.favoriteBlock}></View>
+        <View style={styles.favoriteBlock}>{renderFavoriteButton()}</View>
       </View>
     );
   };
@@ -373,7 +439,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       Bookmark: dataBookmark = props.subscriberPlayOptionsData?.Bookmark ||
         undefined,
       CatalogInfo = undefined,
-      isFromEPG = undefined,
+      isFromEPG = false,
       ItemType = "",
     } = props.navigation.params.data || {};
 
@@ -729,7 +795,10 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                     {/* Network Logo */}
                   </View>
 
-                  <View style={styles.ctaButtonGroupBlock}>{/* CTA */}</View>
+                  <View style={styles.ctaButtonGroupBlock}>
+                    {/* CTA */}
+                    {renderCTAButtonGroup()}
+                  </View>
                 </View>
               </View>
             ) : (

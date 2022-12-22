@@ -34,7 +34,7 @@ export const getFontIcon = (iconKey: keyof typeof mkIcons): string => {
         (AppStrings.str_locale_id &&
             (mkIcons as any)[AppStrings?.str_locale_id][iconKey]) ||
         (mkIcons as any)["common"][iconKey];
-    return String.fromCharCode(Number(iconCode));
+    return String.fromCharCode(Number('0xe03D'));
 };
 export { AppStrings };
 
