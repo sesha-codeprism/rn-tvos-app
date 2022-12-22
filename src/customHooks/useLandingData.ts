@@ -50,7 +50,6 @@ const useLanding = (url: string) => {
       landingInfo.setVersion?.(version);
     }
   }, [landingResponse.isSuccess, landingResponse.data?.data]);
-  console.log('returing', landingResponse)
   return landingResponse;
 };
 
