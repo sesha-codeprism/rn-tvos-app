@@ -12,7 +12,7 @@ export const globalStyles = {
         regular: "Inter-Regular",
         semiBold: "Inter-SemiBold",
         bold: "Inter-Bold",
-        icons: "Mediakind-Icons",
+        icons: "MyFontRegular",
     },
     fontSizes: {
         caption1: 23,

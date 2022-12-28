@@ -1,7 +1,11 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
+  Alert,
+  Dimensions,
+  Image,
   ImageBackground,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,17 +17,17 @@ import { AppImages } from "../../../assets/images";
 import MFText from "../../../components/MFText";
 import {
   DateToAMPM,
-  getMetadataLine2,
+  getBookmark,
+  getChannelName,
+  getVodVideoProfileId,
   isExpiringSoon,
+  massageCastAndCrew,
   massageDiscoveryFeedAsset,
   massagePreviousDate,
   massageProgramDataForUDP,
+  SubscriptionPackages,
 } from "../../../utils/assetUtils";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../utils/dimensions";
-import {
-  getImageUri,
-  metadataSeparator,
-} from "../../../utils/Subscriber.utils";
+import { metadataSeparator } from "../../../utils/Subscriber.utils";
 import { getUIdef, scaleAttributes } from "../../../utils/uidefinition";
 import { globalStyles as g } from "../../../config/styles/GlobalStyles";
 import { PageContainer } from "../../../components/PageContainer";
@@ -35,7 +39,7 @@ import {
   ContentType,
   fontIconsObject,
   languageKey,
-  placeholder2x3Image,
+  pbr,
   sourceTypeString,
 } from "../../../utils/analytics/consts";
 import { Genre } from "../../../utils/common";
@@ -49,6 +53,13 @@ import MFLoader from "../../../components/MFLoader";
 import MFButton, {
   MFButtonVariant,
 } from "../../../components/MFButton/MFButton";
+import MFMenuStyles from "../../../config/styles/MFMenuStyles";
+import MFSwimLane from "../../../components/MFSwimLane";
+import { ButtonVariantProps } from "../../../components/MFButtonGroup/MFButtonGroup";
+import { BookmarkType as udlBookMark } from "../../../utils/Subscriber.utils";
+import { DetailsSidePanel } from "./DetailSidePanel";
+import MFSwim from "../../../components/MFSwim";
+const { width, height } = Dimensions.get("window");
 
 interface AssetData {
   id: string;
@@ -73,6 +84,8 @@ interface SideMenuState {
   panelName: string;
 }
 
+const fontSize = { fontSize: 25 };
+
 const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const feed: Feed = props.route.params.feed;
   const [similarData, setSimilarData] = useState<any>(undefined);
@@ -83,11 +96,237 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [playActionsData, setplayActionsData] = useState<any>(undefined);
   const [subscriberData, setsubscriberData] = useState<any>(undefined);
   const [udpDataAsset, setUDPDataAsset] = useState<any>();
-  const [sidePanelState, setSidePanelState] = useState<SideMenuState>({
-    panelName: "",
-    visible: false,
-  });
+  const [isCTAButtonFocused, setIsCTAButtonFocused] = useState(false);
+  const [open, setOpen] = useState(false);
+  const drawerRef: React.MutableRefObject<any> = useRef();
+  const [similarItemsSwimLaneKey, setSimilarItemsSwimLaneKey] = useState("");
+  const [castnCrewSwimLaneKey, setCastnCrewSwimlaneKey] = useState("");
+
   let scrollViewRef: any = React.createRef<ScrollView>();
+  //@ts-ignore
+  const favoriteSelected = getFontIcon("favorite_selected");
+  //@ts-ignore
+  const favoriteUnselected = getFontIcon("favorite_unselected");
+  //@ts-ignore
+  const listAdd = getFontIcon("list_add");
+  //@ts-ignore
+  const listAdded = getFontIcon("list_added");
+  let buttonRefObject: Record<string, React.RefObject<any>> = {
+    [AppStrings?.str_details_cta_subscribe]: React.createRef(),
+    [AppStrings?.str_details_cta_play]: React.createRef(),
+    [AppStrings?.str_details_cta_resume]: React.createRef(),
+    [AppStrings?.str_details_cta_restart]: React.createRef(),
+    [AppStrings?.str_details_cta_more_info]: React.createRef(),
+    [AppStrings?.str_details_cta_more_episodes]: React.createRef(),
+    [AppStrings?.str_details_cta_waystowatch]: React.createRef(),
+    [AppStrings?.str_details_program_record_button]: React.createRef(),
+    [AppStrings?.str_details_series_record_button]: React.createRef(),
+    [AppStrings?.str_dvr_resolve_conflict]: React.createRef(),
+    [AppStrings?.str_app_edit]: React.createRef(),
+    [AppStrings?.str_details_cta_rent]: React.createRef(),
+    [AppStrings?.str_details_cta_buy]: React.createRef(),
+    [AppStrings?.str_details_cta_rentbuy]: React.createRef(),
+    [AppStrings?.str_details_cta_package]: React.createRef(),
+  };
+
+  let ctaButtonRef: React.RefObject<any> = React.createRef();
+  const favoriteButtonRef: React.RefObject<any> = React.createRef();
+  const listAddButtonRef: React.RefObject<any> = React.createRef();
+  const buttonFocuszoneRef: React.RefObject<any> = React.createRef();
+  let networkInfo: any;
+
+  const featureNotImplementedAlert = (
+    title: string = "Missing implementation",
+    message: string = "This feature not implemented yet"
+  ) => {
+    return Alert.alert(title, message);
+  };
+
+  const toggleSidePanel = () => {
+    setOpen(open);
+    drawerRef.current.open();
+    // drawerRef.current.open();
+  };
+  const openNewRecording = () => {
+    featureNotImplementedAlert();
+  };
+
+  const startResolveConflict = () => {
+    featureNotImplementedAlert();
+  };
+
+  const openEditRecordingsPanel = (data: any) => {
+    featureNotImplementedAlert();
+  };
+
+  const handlePlayDvr = () => {};
+  const ctaButtonPress = {
+    [AppStrings?.str_details_cta_subscribe]: () => {},
+    [AppStrings?.str_details_cta_play]: () => {
+      const playAction = getRestrictionsForVod(
+        udpDataAsset.usablePlayActions,
+        false
+      );
+      getBookmark(
+        getVodVideoProfileId(udpDataAsset.usablePlayActions, false),
+        udlBookMark.VOD
+      )
+        .then((bookmark) => {
+          udpDataAsset["playSource"] = sourceTypeString.VOD;
+          udpDataAsset["playAction"] = playAction;
+          if (
+            udpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP
+          ) {
+            udpDataAsset["combinedEntitlements"] = [];
+          }
+          navigateToPlayer(bookmark);
+        })
+        .catch(() => {
+          udpDataAsset["playSource"] = sourceTypeString.VOD;
+          udpDataAsset["playAction"] = playAction;
+          if (
+            udpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP
+          ) {
+            udpDataAsset["combinedEntitlements"] = [];
+          }
+          navigateToPlayer();
+        });
+    },
+    [AppStrings?.str_details_cta_trailer]: () => {
+      const playAction = getRestrictionsForVod(
+        udpDataAsset.usablePlayActions,
+        true
+      );
+      udpDataAsset["playSource"] = sourceTypeString.VOD;
+      udpDataAsset["isTrailer"] = true;
+      udpDataAsset["playAction"] = playAction;
+      navigateToPlayer();
+    },
+    [AppStrings?.str_details_cta_play_from_beginning]: () => {
+      const playAction = getRestrictionsForVod(
+        udpDataAsset.usablePlayActions,
+        false
+      );
+      udpDataAsset["restart"] = true;
+
+      udpDataAsset["playSource"] = sourceTypeString.VOD;
+      udpDataAsset["playAction"] = playAction;
+      if (udpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP) {
+        udpDataAsset["combinedEntitlements"] = [];
+      }
+      navigateToPlayer();
+    },
+    [AppStrings?.str_details_cta_watch_live]: () => {
+      let isHDMIblocked = udpDataAsset?.combinedEntitlements?.some(
+        (entitlement: string) => entitlement == pbr.RestrictionsType.HI
+      );
+      if (isHDMIblocked) {
+        // displayModal({
+        //   text: AppStrings?.str_restrictions.apple_tv_blocked,
+        //   defaultFocusTitle: AppStrings?.str_ok,
+        //   buttonDataSource: [
+        //     {
+        //       title: AppStrings?.str_ok,
+        //       onPress: setFocusBack,
+        //     },
+        //   ],
+        // });
+        return;
+      }
+      if (udpDataAsset?.ppvInfo?.hasPPV && !udpDataAsset?.ppvInfo?.isinHome) {
+        const isOutOfHomeBlocked = udpDataAsset?.ppvInfo?.Entitlement?.some(
+          (entitlement: string) =>
+            entitlement == pbr.RestrictionsType.OUTOFHOME_BLOCKED ||
+            entitlement == pbr.RestrictionsType.OH
+        );
+        if (isOutOfHomeBlocked) {
+          // displayModal({
+          //   text: AppStrings?.str_restrictions.oh,
+          //   defaultFocusTitle: AppStrings?.str_ok,
+          //   buttonDataSource: [
+          //     {
+          //       title: AppStrings?.str_ok,
+          //       onPress: setFocusBack,
+          //     },
+          //   ],
+          // });
+          return;
+        }
+      }
+      udpDataAsset["playSource"] = sourceTypeString.LIVE;
+      navigateToPlayer();
+    },
+    [AppStrings?.str_details_cta_restart]: () => {
+      const catchupSchedule = udpDataAsset.currentCatchupSchedule?.Schedule;
+      getBookmark(
+        `${catchupSchedule?.StationId.trim()}_${catchupSchedule?.StartUtc.trim()}_${catchupSchedule?.EndUtc.trim()}`,
+        udlBookMark.CATCHUP
+      )
+        .then((bookmark) => {
+          handleRestart(bookmark);
+        })
+        .catch(() => {
+          handleRestart();
+        });
+    },
+    [AppStrings?.str_details_cta_more_info]: toggleSidePanel,
+    [AppStrings?.str_details_cta_more_episodes]: () => {
+      featureNotImplementedAlert();
+    },
+    [AppStrings?.str_details_cta_waystowatch]: () => {
+      featureNotImplementedAlert();
+    },
+    [AppStrings?.str_details_program_record_button]: openNewRecording,
+    [AppStrings?.str_details_series_record_button]: openNewRecording,
+    [AppStrings?.str_dvr_resolve_conflict]: startResolveConflict,
+    [AppStrings?.str_app_edit]: openEditRecordingsPanel,
+    [AppStrings?.str_details_cta_playdvr]: handlePlayDvr,
+    [AppStrings?.str_details_cta_rent]: () => {
+      //TODO: Finish implementation of CTA rent
+      featureNotImplementedAlert();
+    },
+    [AppStrings?.str_details_cta_buy]: () => {
+      //TODO: Finish implementation of CTA buy
+      featureNotImplementedAlert();
+    },
+    [AppStrings?.str_details_cta_rentbuy]: () => {
+      //TODO: Finish implementation of CTA rent-buy
+      featureNotImplementedAlert();
+    },
+    [AppStrings?.str_details_cta_package]: () => {
+      udpDataAsset["purchasePackage"] = true;
+      //TODO: Finish implementation of Package details
+      featureNotImplementedAlert();
+    },
+    [AppStrings?.str_details_cta_subscribe]: () => {
+      const networks = udpDataAsset.subscriptionPackages.filter(
+        (network: SubscriptionPackages) => {
+          return network.purchaseNetwork != undefined;
+        }
+      );
+      if (networks && networks.length > 0) {
+        //TODO: Finish implementation for PurchaseNetwork feature
+        // props.openPanel(true, SideMenuRoutes.PurchaseNetwork, {
+        //     udpAssetData: udpDataAsset,
+        //     panelTitle: AppStrings?.str_details_cta_subscribe,
+        //     panelSubtitle: udpDataAsset?.title,
+        //     confirmPlayCallBack: ctaButtonPress[
+        //         AppStrings?.str_details_cta_play
+        //     ],
+        // });
+      } else {
+        udpDataAsset["subscriptionExists"] = true;
+        //TODO: Finish implementation of PurchaseOptions
+        // props.openPanel(true, SideMenuRoutes.PurchaseOptions, {
+        //     udpAssetData: udpDataAsset,
+        //     panelTitle: AppStrings?.str_details_cta_subscribe,
+        //     confirmPlayCallBack: ctaButtonPress[
+        //         AppStrings?.str_details_cta_play
+        //     ],
+        // });
+      }
+    },
+  };
 
   const onGetScrollView = (scrolViewRef: ScrollView | null): void => {
     scrollViewRef = scrolViewRef;
@@ -126,22 +365,237 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
   const renderFavoriteButton = () => {
     return (
-      <View style={[styles.buttonContainerStyle, { backgroundColor: "red" }]}>
+      <View style={[styles.buttonContainerStyle]}>
         <MFButton
-          textLabel="Favorite button"
-          variant={MFButtonVariant.Icon}
-          iconSource={AppImages.placeholder}
-          iconStyles={{ height: 70, width: 70 }}
-          style={[styles.buttonIconContainer, styles.solidBackground]}
-          focusedStyle={styles.focusedBackground}
+          ref={favoriteButtonRef}
+          focusable
+          iconSource={0}
           imageSource={0}
           avatarSource={undefined}
-          iconButtonStyles={{
+          onFocus={() => {
+            // if (__DEV__) {
+            //   setTimeout(() => {
+            //     ctaButtonRef.current.setNativeProps({
+            //       hasTVPreferredFocus: true,
+            //     });
+            //   }, 2000);
+            // }
+          }}
+          variant={MFButtonVariant.FontIcon}
+          fontIconSource={favoriteSelected}
+          fontIconTextStyle={StyleSheet.flatten([
+            styles.textStyle,
+            { fontSize: 70, textAlign: "center", alignSelf: "center" },
+          ])}
+          style={[
+            styles.buttonIconContainer,
+            styles.solidBackground,
+            {
+              borderRadius: 35,
+              alignItems: "center",
+              alignContent: "center",
+              justifyContent: "center",
+            },
+          ]}
+          focusedStyle={styles.focusedBackground}
+          fontIconProps={{
+            iconPlacement: "Left",
             shouldRenderImage: true,
+          }}
+        />
+        <MFButton
+          ref={listAddButtonRef}
+          focusable
+          iconSource={0}
+          imageSource={0}
+          avatarSource={undefined}
+          variant={MFButtonVariant.FontIcon}
+          fontIconSource={listAdd}
+          fontIconTextStyle={StyleSheet.flatten([
+            styles.textStyle,
+            { fontSize: 70, textAlign: "center", alignSelf: "center" },
+          ])}
+          style={[
+            styles.buttonIconContainer,
+            styles.solidBackground,
+            {
+              borderRadius: 35,
+              alignItems: "center",
+              alignContent: "center",
+              justifyContent: "center",
+              marginLeft: 30,
+            },
+          ]}
+          focusedStyle={styles.focusedBackground}
+          fontIconProps={{
+            iconPlacement: "Left",
+            shouldRenderImage: true,
+          }}
+        />
+        <Pressable
+          style={{ width: 20, height: 20 }}
+          onFocus={() => {
+            if (isCTAButtonFocused) {
+              listAddButtonRef.current?.setNativeProps({
+                hasTVPreferredFocus: true,
+              });
+              setIsCTAButtonFocused(false);
+            } else {
+              ctaButtonRef.current?.setNativeProps({
+                hasTVPreferredFocus: true,
+              });
+              setIsCTAButtonFocused(true);
+            }
           }}
         />
       </View>
     );
+  };
+
+  const renderNetworkInfo = () => {
+    const { ChannelInfo = undefined, isFromEPG = false } = feed;
+
+    let { channel = undefined } = feed;
+    if (!isFromEPG) {
+      let channelInfo =
+        ChannelInfo?.channel || udpDataAsset?.ChannelInfo?.Channel;
+      networkInfo = (channelInfo && [channelInfo]) || udpDataAsset?.networkInfo;
+    } else {
+      //TODO: Re-implement this once the live api calls are written
+      // const { Schedule = undefined } = feed || {};
+      // const channelFromEPG = channelByStationId(
+      //   this.props.channelMap.Channels,
+      //   Schedule
+      // );
+      // if (channelFromEPG) {
+      //   channel = channelFromEPG.channel;
+      //   networkInfo = [channel];
+      // }
+    }
+
+    if (!networkInfo || !networkInfo.length) {
+      return null;
+    }
+
+    if (
+      channel &&
+      networkInfo?.Number &&
+      networkInfo.Number?.toString() !== channel.number
+    ) {
+      networkInfo = [channel];
+    }
+
+    const firstNetwork = networkInfo[0];
+    if (firstNetwork && !firstNetwork?.name) {
+      firstNetwork["name"] = getChannelName(firstNetwork);
+    }
+
+    let imageSource: any = null;
+    if (firstNetwork) {
+      imageSource =
+        firstNetwork.logoUri ||
+        channel?.logoUri ||
+        feed?.channel?.logoUri ||
+        firstNetwork.tenFootLargeURL ||
+        firstNetwork.twoFootLargeURL ||
+        firstNetwork.oneFootLargeURL ||
+        firstNetwork.tenFootSmallURL ||
+        firstNetwork.twoFootSmallURL ||
+        firstNetwork.oneFootSmallURL ||
+        AppStrings.placeholder;
+    }
+
+    const renderNetworkLogos = () => {
+      let items = [];
+      if (networkInfo && networkInfo.length > 1) {
+        const networkInfoLength = networkInfo.length;
+        for (let i = 1; i < networkInfoLength; i++) {
+          let networkData = networkInfo[i];
+          let networkSource =
+            networkData?.logoUri ||
+            channel?.logoUri ||
+            networkData?.tenFootLargeURL ||
+            networkData?.twoFootLargeURL ||
+            networkData?.oneFootLargeURL ||
+            networkData?.tenFootSmallURL ||
+            networkData?.twoFootSmallURL ||
+            networkData?.oneFootSmallURL ||
+            AppStrings.placeholder;
+          items.push(
+            <Image
+              source={networkSource}
+              style={[styles.networkImage, styles.marginRight20]}
+            />
+          );
+        }
+      }
+      return items;
+    };
+
+    return (
+      <View style={styles.thirdColumn}>
+        <View>
+          {imageSource ? (
+            <View style={styles.networkImageView}>
+              <Image source={imageSource} style={styles.networkImage} />
+            </View>
+          ) : null}
+          <Text style={styles.networkTitle}>
+            {firstNetwork?.name || firstNetwork?.Name}
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row" }}>{renderNetworkLogos()}</View>
+      </View>
+    );
+  };
+
+  const getCTAButtonDetails = (ctaList: Array<any>) => {
+    return ctaList.map((cta: any) => {
+      const element: ButtonVariantProps = {
+        variant: MFButtonVariant.FontIcon,
+        iconSource: 0,
+        imageSource: 0,
+        avatarSource: 0,
+        textLabel: cta.buttonText,
+        enableRTL: GLOBALS.enableRTL,
+        fontIconSource: cta.iconSource,
+        textStyle: {
+          textStyle: {
+            color: "#EEEEEE",
+            fontFamily: "Inter-SemiBold",
+            fontSize: 25,
+            fontWeight: "600",
+            textAlign: "center",
+            marginLeft: 21,
+          },
+          focusedStyle: StyleSheet.flatten([MFMenuStyles.focusedTextStyle]),
+          unfocusedStyle: StyleSheet.flatten([MFMenuStyles.textStyle]),
+          fontIconTextStyle: StyleSheet.flatten([
+            styles.textStyle,
+            { fontSize: 70 },
+          ]),
+        },
+        style: {
+          width: 175,
+          height: 62,
+          backgroundColor: "#424242",
+          borderRadius: 6,
+          paddingHorizontal: 35,
+        },
+        focusedStyle: styles.focusedBackground,
+      };
+      return element;
+    });
+  };
+
+  const navigateToPlayer = (bookmark?: any) => {
+    //TODO: Finish implementation of navigate to player..
+    featureNotImplementedAlert();
+  };
+
+  const handleRestart = (bookmark?: any) => {
+    featureNotImplementedAlert();
+    //TODO: Finish implementation of Handle restart..
   };
 
   const getDiscoverySchedules = async (assetData: AssetData) => {
@@ -296,17 +750,22 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }
   );
 
+  const getRestrictionsForVod = (
+    usablePlayActions: any,
+    isTrailer: boolean
+  ) => {};
+
   const renderCTAButtonGroup = () => {
-    const { visible, panelName } = sidePanelState;
-    const focusable = !(visible && panelName);
-    console.log("rendering CTA");
+    // const { visible, panelName } = sidePanelState;
+    // const focusable = !(visible && panelName);
+    const fontProps = getCTAButtonDetails(udpDataAsset.ctaButtons);
+    console.log("CTA Props", fontProps);
     return (
       <View style={[styles.buttonContainer]}>
-        <ScrollView horizontal>
+        <ScrollView horizontal nestedScrollEnabled>
           {udpDataAsset.ctaButtons?.length &&
             udpDataAsset.ctaButtons?.map((cta: any, index: number) => {
               let fontIconStyle: { [key: string]: any };
-
               if (
                 cta?.buttonAction ===
                   AppStrings.str_details_program_record_button ||
@@ -315,20 +774,50 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               ) {
                 fontIconStyle = styles.ctaFontIconStyle;
               }
-
               return (
                 <MFButton
                   key={`ctaBtn_${cta.buttonText}_${index}`}
+                  ref={
+                    index === 0
+                      ? ctaButtonRef
+                      : (buttonRefObject as any)[cta.buttonText]
+                  }
+                  focusable
                   iconSource={0}
                   imageSource={0}
                   avatarSource={undefined}
-                  variant={MFButtonVariant.Icon}
+                  onFocus={() => {
+                    setOpen(false);
+                    drawerRef.current.close();
+                  }}
+                  variant={MFButtonVariant.FontIcon}
+                  fontIconSource={cta.iconSource}
+                  fontIconTextStyle={StyleSheet.flatten([
+                    styles.textStyle,
+                    { fontSize: 90 },
+                  ])}
+                  onPress={ctaButtonPress[cta.buttonAction]}
+                  textStyle={{
+                    color: "#EEEEEE",
+                    fontFamily: "Inter-SemiBold",
+                    fontSize: 25,
+                    fontWeight: "600",
+                    textAlign: "center",
+                    marginLeft: 21,
+                  }}
                   textLabel={cta.buttonText}
-                  iconStyles={fontIconStyle!}
-                  style={styles.ctaButtonStyle}
-                  iconButtonStyles={{
+                  style={{
+                    width: 175,
+                    height: 62,
+                    backgroundColor: "#424242",
+                    borderRadius: 6,
+                    paddingHorizontal: 35,
+                    zIndex: 100,
+                  }}
+                  focusedStyle={styles.focusedBackground}
+                  fontIconProps={{
+                    iconPlacement: "Left",
                     shouldRenderImage: true,
-                    placeholderStyles: fontIconStyle!,
                   }}
                 />
               );
@@ -436,12 +925,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     const {
       Schedule: dataSchedule = undefined,
       assetType = undefined,
-      Bookmark: dataBookmark = props.subscriberPlayOptionsData?.Bookmark ||
-        undefined,
+      Bookmark: dataBookmark = playActionsData?.Bookmark || undefined,
       CatalogInfo = undefined,
       isFromEPG = false,
       ItemType = "",
-    } = props.navigation.params.data || {};
+    } = feed || {};
 
     if (Schedule || dataSchedule || currentCatchupSchedule) {
       if (isFromEPG && assetType?.sourceType === sourceTypeString.CATCHUP) {
@@ -510,16 +998,16 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         }
       } else if (
         sourceType === sourceTypeString.CATCHUP &&
-        props.subscriberPlayOptionsData?.Bookmark
+        playActionsData?.Bookmark
       ) {
         if (convertedEndDate < now || convertedStartDate > now) {
           showLiveBadge = false;
         }
-        progressDataSource = props.subscriberPlayOptionsData?.Bookmark;
+        progressDataSource = props.playActionsData?.Bookmark;
       } else {
         showLiveBadge = sourceType === sourceTypeString.LIVE || isLiveAsset;
       }
-    } else if (props.seriesSubscriberData) {
+    } else if (props?.seriesSubscriberData!) {
       if (assetType?.contentType === ContentType.EPISODE) {
         if (CatalogInfo) {
           ({
@@ -540,7 +1028,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           progressDataSource.TimeSeconds = TimeSeconds || 0;
         }
       } else {
-        const { PriorityEpisodeTitle } = props.seriesSubscriberData;
+        const { PriorityEpisodeTitle } = props.seriesSubscriberData!;
 
         if (PriorityEpisodeTitle) {
           const { CatalogInfo = {} } = PriorityEpisodeTitle || {};
@@ -566,8 +1054,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         }
       }
     }
-
-    contextualSchedule = programId;
 
     // DVR Details
     if (playDvr && ProgramDetails) {
@@ -649,6 +1135,45 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     );
   };
 
+  const renderMoreLikeThis = () => {
+    const feed = { Name: "Similar Items" };
+    return (
+      <MFSwimLane
+        //@ts-ignore
+        feed={feed}
+        data={similarData}
+        swimLaneKey={similarItemsSwimLaneKey}
+        updateSwimLaneKey={setSimilarItemsSwimLaneKey}
+        limitSwimlane
+        ItemsTo={10}
+      />
+    );
+  };
+
+  const renderCastAndCrew = () => {
+    let roles: any = [];
+    if (
+      assetData.assetType?.contentType === ContentType.PROGRAM ||
+      assetData.assetType?.contentType === ContentType.GENERIC
+    ) {
+      roles = discoveryProgramData?.Roles;
+    } else {
+      //TODO: This should actually be: {this.props.seriesDiscoveryData}.. fix it ASAP
+      roles = discoveryProgramData?.Roles;
+    }
+
+    const feedItem = { Name: "Cast and Crew" };
+    return (
+      <MFSwimLane
+        //@ts-ignore
+        feed={feedItem}
+        data={roles && massageCastAndCrew(roles, assetTypeObject.PERSON)}
+        swimLaneKey={castnCrewSwimLaneKey}
+        updateSwimLaneKey={setCastnCrewSwimlaneKey}
+      />
+    );
+  };
+
   const renderIndicators = () => {
     let {
       locale,
@@ -664,7 +1189,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       (combinedAudioTags?.length && combinedAudioTags) ||
       [];
     const statusTextItem = (statusText?.length && statusText[0]) || "";
-
+    console.log(
+      "Quality Indicators",
+      qualityLevel,
+      "Language Indicators",
+      langaugeIndicator
+    );
     // Schedules
     return (
       <View>
@@ -782,39 +1312,47 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         imageStyle={{ resizeMode: "stretch" }}
       >
         <View style={styles.containerOpacity}>
-          <ScrollView key={`detailspagekey`} ref={onGetScrollView}>
-            {udpDataQuery.data ? (
+          {udpDataAsset ? (
+            <ScrollView key={`detailspagekey`} ref={onGetScrollView}>
               <View style={styles.detailsBlock}>
                 {renderShowcard()}
-
                 <View style={styles.secondBlock}>
-                  <View style={styles.flexRow}>
-                    {/* Metadata and CTA */}
-                    {renderAssetInfo()}
-
-                    {/* Network Logo */}
-                  </View>
-
+                  <View style={styles.flexRow}>{renderAssetInfo()}</View>
+                  {/* Network Logo */}
+                  {renderNetworkInfo()}
                   <View style={styles.ctaButtonGroupBlock}>
-                    {/* CTA */}
                     {renderCTAButtonGroup()}
                   </View>
                 </View>
               </View>
-            ) : (
-              <View
-                style={{
-                  alignContent: "center",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <MFLoader />
+              <View style={styles.moreDetailsContainer}>
+                {similarData && renderMoreLikeThis()}
+                {/* Cast and Crew */}
+                {discoveryProgramData && renderCastAndCrew()}
               </View>
-            )}
-          </ScrollView>
+            </ScrollView>
+          ) : (
+            <MFLoader />
+          )}
         </View>
       </ImageBackground>
+      <DetailsSidePanel
+        ref={drawerRef}
+        drawerPercentage={37}
+        animationTime={200}
+        overlay={false}
+        opacity={1}
+        open={open}
+        animatedWidth={width * 0.37}
+        closeOnPressBack={false}
+        navigation={props.navigation}
+        drawerContent={false}
+        moreInfoProps={{
+          udpData: udpDataAsset,
+          networkInfo: networkInfo,
+          genres: udpDataAsset?.genre || discoveryProgramData?.genre,
+        }}
+      />
     </PageContainer>
   );
 };
@@ -940,7 +1478,7 @@ const styles = StyleSheet.create(
         backgroundColor: g.backgroundColors.shade4,
       },
       moreDetailsContainer: {
-        marginTop: 104,
+        marginTop: 130,
       },
       contentRatingsContainer: {
         flexDirection: "row",

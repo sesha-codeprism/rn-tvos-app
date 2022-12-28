@@ -6,12 +6,13 @@ import React, {
   useState,
 } from "react";
 import { Animated, Dimensions, StyleSheet, Modal } from "react-native";
-import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
-import { GLOBALS } from "../../utils/globals";
+import { SettingsNavigator } from "../../../config/navigation/RouterOutlet";
+import { GLOBALS } from "../../../utils/globals";
+import MoreInfoPanel from "./MoreInfoPanel";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-interface MFDrawerProps {
+interface DetailsDrawerProps {
   open: boolean;
   drawerPercentage: number;
   animationTime: number;
@@ -22,8 +23,15 @@ interface MFDrawerProps {
   closeOnPressBack?: boolean;
   navigation?: any;
   children?: any;
+  moreInfoProps: {
+    udpData: any;
+    networkInfo: any;
+    genres: any;
+    episodeData?: any;
+    episodeDetailsData?: any;
+  };
 }
-const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
+const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
   const [expanded, setExpanded] = useState(props.open);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
   const leftOffset = new Animated.Value(
@@ -135,7 +143,13 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
               },
             ]}
           >
-            <SettingsNavigator isAuthorized={true} />
+            <MoreInfoPanel
+              udpData={props.moreInfoProps.udpData}
+              networkInfo={props.moreInfoProps.networkInfo}
+              genres={props.moreInfoProps.genres}
+              episodeData={props.moreInfoProps.episodeData}
+              episodeDetailsData={props.moreInfoProps.episodeDetailsData}
+            />
           </Animated.View>
         </Animated.View>
       </Modal>
@@ -143,7 +157,7 @@ const Drawer = (props: MFDrawerProps, ref: Ref<any>) => {
   };
   return renderPush();
 };
-export const MFDrawer = forwardRef(Drawer);
+export const DetailsSidePanel = forwardRef(DetailsDrawer);
 
 const styles = StyleSheet.create({
   main: {
@@ -166,3 +180,12 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
 });
+
+DetailsSidePanel.defaultProps = {
+  drawerPercentage: 37,
+  animationTime: 200,
+  overlay: false,
+  animatedWidth: SCREEN_WIDTH * 0.2,
+  closeOnPressBack: false,
+  drawerContent: false,
+};

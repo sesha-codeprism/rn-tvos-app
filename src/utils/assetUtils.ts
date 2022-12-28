@@ -13,6 +13,8 @@ import { getNetworkImageUri } from "./images";
 import { replacePlaceHoldersInTemplatedString } from "./strings";
 import { generateType, getImageUri, isScheduleCurrent, metadataSeparator } from "./Subscriber.utils";
 import { getFontIcon } from "../config/strings";
+import * as _ from "lodash";
+
 
 export const assetExpiryDaysThreshold = 14;
 
@@ -1612,6 +1614,77 @@ const isChannelNotSubscribed = (playOptions: any, channelMap: any) => {
     }
 };
 
+export async function isPconBlocked(playInfo: any, locale?: any) {
+    let ratings = (playInfo && playInfo.Ratings) || [],
+        isRated = Array.isArray(ratings) && ratings.length,
+        isLocked: any;
+
+    let ratingProviders: string[];
+    let strCurrentLocale: string = locale || "";
+    let obj: any = pconConfig.ratingProvider;
+    if (pconConfig.ratingProvider) {
+        ratingProviders = obj[strCurrentLocale];
+        if (!ratingProviders) {
+            ratingProviders = pconConfig.ratingProvider["default"] || [];
+        }
+        ratings = ratings.filter((rating: any) => {
+            if (rating.System?.toUpperCase() === "NR") {
+                isRated = 0;
+                return false;
+            } else {
+                isRated = 1;
+            }
+
+            if (
+                ratingProviders.indexOf(rating?.System?.toUpperCase()) > -1 ||
+                ratingProviders.indexOf(rating?.System) > -1
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        if (isRated) {
+            let strUpperCase = ratingProviders?.length && ratingProviders[0];
+            for (let rt in ratings) {
+                let isBlocked = await isRatingLocked(ratings[rt], strUpperCase);
+                if (isBlocked) {
+                    isLocked = isBlocked;
+                    break;
+                }
+            }
+        } else {
+            isLocked = await isUnratedContentLocked();
+        }
+        if (playInfo) {
+            if (
+                playInfo?.pconInfo &&
+                playInfo?.id === playInfo?.pconInfo?.forProgramId
+            ) {
+                isLocked = false;
+            }
+            // editMode is set when user is trying to Updating Recordings(Save Recordings button)
+            // There should not be PCON when Updating Recordings
+            if (playInfo?.editMode) {
+                isLocked = false;
+            }
+        }
+        let showPconDialog = isLocked;
+        return showPconDialog;
+    }
+}
+
+export const isChannelPlayable = (
+    channel: Pick<IChannel, "isSubscribed" | "isPermitted">
+): boolean => {
+    if (!channel) {
+        return false;
+    }
+
+    return channel.isSubscribed && channel.isPermitted;
+};
+
 const getPlayableLiveSchedule = (
     liveSchedules: any,
     params: any,
@@ -2927,7 +3000,7 @@ const getSchedulesWithPPVChannels = (
 ) => {
     schedules.forEach((schedule: any) => {
         const { ChannelNumber = -1 } = schedule || {};
-        const ch = channelMap.findChannelByNumber(ChannelNumber);
+        const ch = channelMap?.findChannelByNumber!(ChannelNumber);
         const service = ch && channelMap.getService(ch?.channel);
 
         const rights = channelRights?.channels[ChannelNumber];
@@ -2936,7 +3009,7 @@ const getSchedulesWithPPVChannels = (
             rights &&
             some(rights, (s) => !!s.s && !!s.e && new Date(s.e) >= now);
         const serviceCollectionId = ch?.channel?.ServiceCollectionId;
-        const serviceItms = channelMap.ServiceCollections.find(
+        const serviceItms = channelMap.ServiceCollections?.find(
             (s: any) => s.Id === serviceCollectionId
         );
 
@@ -5256,5 +5329,108 @@ function getScheduledEndTime(si: any): Date {
         si?.ScheduledRuntimeSeconds * 1000
     );
 }
+
+export const getBookmark = (
+    Id: string,
+    type: udlBookMark,
+    programId: string = Id
+) => {
+    return new Promise(function (resolve, reject) {
+        const bookMarkKey: any = {};
+        const key =
+            type === udlBookMark.RECORDING
+                ? `DVR_Bookmark`
+                : type === udlBookMark.CATCHUP
+                    ? `CATCHUP_Bookmark`
+                    : `VOD_Bookmark`;
+        if (!cachedBookmarkData.has(Id)) {
+            getStore()
+                .dispatch(
+                    actionCreators.subscriber.bookmark.request(
+                        type,
+                        Id,
+                        programId
+                    )
+                )
+                .promise.then(() => {
+                    bookMarkKey[key] = selectors.subscriber.bookmark.get(
+                        getStore().getState(),
+                        type,
+                        Id,
+                        programId
+                    );
+                    cachedBookmarkData.set(Id);
+                    resolve(bookMarkKey);
+                })
+                .catch(() => {
+                    cachedBookmarkData.set(Id);
+                    bookMarkKey[key] = { TimeSeconds: 0 };
+                    reject(bookMarkKey);
+                });
+        } else {
+            getStore()
+                .dispatch(
+                    actionCreators.subscriber.bookmark.reload(
+                        type,
+                        Id,
+                        programId
+                    )
+                )
+                .then(() => {
+                    bookMarkKey[key] = selectors.subscriber.bookmark.get(
+                        getStore().getState(),
+                        type,
+                        Id,
+                        programId
+                    );
+                    cachedBookmarkData.set(Id);
+                    resolve(bookMarkKey);
+                })
+                .catch(() => {
+                    cachedBookmarkData.set(Id);
+                    bookMarkKey[key] = { TimeSeconds: 0 };
+                    reject(bookMarkKey);
+                });
+        }
+    });
+};
+
+export const validateEntitlements = (
+    entitlements: string[],
+    recorderModels: any
+) => {
+    let hasLocalRecorder = false;
+    let hasPrivateRecorder = false;
+    let hasSharedRecorder = false;
+
+    recorderModels?.forEach((model: any) => {
+        if (model?.RecorderModel === RecorderModel.Local) {
+            hasLocalRecorder = true;
+        } else if (model?.RecorderModel === RecorderModel.Private) {
+            hasPrivateRecorder = true;
+        } else if (model?.RecorderModel === RecorderModel.Shared) {
+            hasSharedRecorder = true;
+        }
+    });
+
+    const blockedRecorders = _.invert(
+        _.map(entitlements, (entitlement: string) => entitlement.toLowerCase())
+    );
+
+    const blockedLocal = !!blockedRecorders.lb;
+    const blockedNetwork = !!blockedRecorders.nb;
+    const blockedShared =
+        !!blockedRecorders.sb || !!blockedRecorders.record_blocked;
+
+    const isAllowed =
+        (hasLocalRecorder && !blockedLocal) ||
+        (!hasLocalRecorder && hasPrivateRecorder && !blockedNetwork) ||
+        (!hasLocalRecorder &&
+            hasSharedRecorder &&
+            !blockedNetwork &&
+            !blockedShared);
+
+    return isAllowed;
+};
 
 

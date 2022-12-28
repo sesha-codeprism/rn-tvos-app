@@ -1,8 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 import React from "react";
 interface Props {
   title?: string;
+  titleStyles?: StyleProp<TextStyle>;
   subTitle?: string;
+  subTitleStyles?: StyleProp<TextStyle>;
   contentContainerStyle?: any;
 }
 
@@ -10,9 +12,9 @@ const SideMenuLayout: React.FunctionComponent<Props> = (props) => {
   return (
     <View style={styles.root} pointerEvents="box-none">
       <View style={styles.headerContainer}>
-        <Text style={styles.subTitle}>{props.title}</Text>
+        <Text style={props.subTitleStyles}>{props.title}</Text>
         {props.subTitle ? (
-          <Text style={styles.titleText}>{props.subTitle}</Text>
+          <Text style={props.titleStyles}>{props.subTitle}</Text>
         ) : null}
       </View>
       {/* <ScrollView> */}
@@ -66,3 +68,8 @@ const styles = StyleSheet.create({
     lineHeight: 50,
   },
 });
+
+SideMenuLayout.defaultProps = {
+  titleStyles: styles.titleText,
+  subTitleStyles: styles.subTitle,
+};

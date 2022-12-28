@@ -18,11 +18,13 @@ import { MFContainedButtonProps } from "../MFButtonsVariants/MFContainedButton";
 import { MFOutlinedButtonProps } from "../MFButtonsVariants/MFOutlinedButton";
 import { Source, ImageStyle } from "react-native-fast-image";
 import { MFUnderlinedButtonProps } from "../MFButtonsVariants/MFUnderlinedButton";
+import { MFFontIconProps } from "../MFButtonsVariants/MFFontIconButton";
 
 export interface MFButtonTextStyle {
   textStyle: StyleProp<TextStyle>;
   focusedStyle: StyleProp<TextStyle>;
   unfocusedStyle: StyleProp<TextStyle>;
+  fontIconTextStyle?: StyleProp<TextStyle>;
 }
 export interface ButtonVariantProps {
   variant: MFButtonVariant | any;
@@ -33,6 +35,7 @@ export interface ButtonVariantProps {
   imageStyles?: StyleProp<ImageStyle>;
   iconStyles?: StyleProp<ImageStyle>;
   avatarStyles?: StyleProp<ImageStyle>;
+  fontIconSource?: string;
   style?: StyleProp<ViewStyle>;
   focusedStyle?: StyleProp<ViewStyle>;
   textStyle?: MFButtonTextStyle;
@@ -45,6 +48,7 @@ export interface MFButtonGroupProps {
   containedButtonProps?: MFContainedButtonProps;
   outlinedButtonProps?: MFOutlinedButtonProps;
   underlinedButtonProps?: MFUnderlinedButtonProps;
+  fontIconProps?: MFFontIconProps;
   hasTVPreferredFocus?: boolean;
   enableRTL?: boolean;
   vertical?: boolean;
@@ -158,6 +162,8 @@ const MFButtonGroup: React.FunctionComponent<MFButtonGroupProps> = (props) => {
               imageStyles={item.imageStyles}
               avatarStyles={item.avatarStyles}
               iconStyles={item.iconStyles}
+              fontIconSource={item.fontIconSource}
+              fontIconTextStyle={item.textStyle?.fontIconTextStyle}
               textStyle={StyleSheet.flatten([
                 item.textStyle?.textStyle,
                 hubIndex === index
@@ -184,6 +190,7 @@ const MFButtonGroup: React.FunctionComponent<MFButtonGroupProps> = (props) => {
               iconSource={item.iconSource || {}}
               imageSource={item.imageSource || {}}
               avatarSource={item.avatarSource || {}}
+              fontIconProps={props.fontIconProps}
             />
           )}
         />

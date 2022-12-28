@@ -1,7 +1,7 @@
 import { GLOBALS } from "./globals";
 import { logger, consoleTransport } from "react-native-logs";
 import DeviceInfo from "react-native-device-info";
-import { Settings } from "react-native";
+import { Alert, Settings } from "react-native";
 import SHA256 from "crypto-js/sha256";
 
 
@@ -79,12 +79,12 @@ export function convertStringToHashKey(str: string): string {
 
 export function getPasscodeHash(passcode: string, accountId: string): string {
   if (!isHash(passcode)) {
-      let encryptedPasscode: string = convertStringToHashKey(
-          passcode + accountId
-      );
-      return encryptedPasscode;
+    let encryptedPasscode: string = convertStringToHashKey(
+      passcode + accountId
+    );
+    return encryptedPasscode;
   } else {
-      return passcode;
+    return passcode;
   }
 }
 
@@ -93,3 +93,4 @@ export function isHash(str: string) {
   let sha256Regex = new RegExp(/^([a-f0-9]{64})$/);
   return sha256Regex.test(str);
 }
+

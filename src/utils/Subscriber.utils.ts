@@ -20,6 +20,22 @@ import { getNetworkImageUri } from "./images";
 
 export const metadataSeparator = "  ·  ";
 
+export enum BookmarkType {
+  VOD,
+  CATCHUP,
+  RECORDING
+}
+
+export interface IBookmark {
+  SeriesId: string | null | undefined;
+  RecordingId: string | null | undefined;
+  OriginalProgramId: string | null | undefined;
+  TimeSeconds: number | null | undefined;
+  ProgramId: string | null | undefined;
+  RuntimeSeconds: number | null | undefined;
+}
+
+
 export const isScheduleCurrent = (
   schedule: { StartUtc: string; EndUtc: string },
   rangeStartUtc?: string,
