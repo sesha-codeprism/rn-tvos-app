@@ -18,8 +18,9 @@ public class MKGuideBridgeManager: NSObject {
    })
   }
 
-  func updateSlotsOnTime() {
-//    MKFullGuideStorageManager.shared.updateSlotsOnTime()
+  @objc func updateSlotsOnTime() {
+    print("updateSlotsontime")
+    MKFullGuideStorageManager.shared.updateSlotsOnTime()
   }
 
 //  static let shared: MKFullGuideStorageManager = MKFullGuideStorageManager()

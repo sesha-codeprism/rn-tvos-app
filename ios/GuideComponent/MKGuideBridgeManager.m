@@ -11,4 +11,5 @@
 
 @interface RCT_EXTERN_MODULE(MKGuideBridgeManager, NSObject)
 RCT_EXTERN_METHOD(getCurrentSlots: (BOOL)useCache callback:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(updateSlotsOnTime)
 @end
