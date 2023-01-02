@@ -62,7 +62,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           ref={ref}
           limitSwimlaneItemsTo={props.limitSwimlaneItemsTo}
           enableCircularLayout
-          title={props.feed.Name}
+          title={props.feed?.Name || props.feed.name}
           style={
             props.feed.ShowcardAspectRatio === layout2x3
               ? HomeScreenStyles.portraitCardStyles

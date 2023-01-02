@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState, useEffect, useContext } from "react";
 import { View } from "react-native";
 import FastImage from "react-native-fast-image";
@@ -9,10 +10,8 @@ import { AppImages } from "../../assets/images";
 import { ShortCodeStyles } from "./shortCode.style";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
-import {
-  processBootStrap,
-} from "../../../backend/authentication/authentication";
-import { infoLog, updateStore } from "../../utils/helpers";
+import { processBootStrap } from "../../../backend/authentication/authentication";
+import { updateStore } from "../../utils/helpers";
 import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { initUdls } from "../../../backend";
 import { Routes } from "../../config/navigation/RouterOutlet";
@@ -45,32 +44,46 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
   props
 ) => {
   const [verificationCode, setVerficationCode] = useState(Array());
-  const [latestToken, setLatestToken ] = useState(null);
-
+  const [latestToken, setLatestToken] = useState(null);
+  const [latestRefreshToken, setLatestRefreshToken] = useState(null);
+  //@ts-ignore
   const landingResponse = useLanding(GLOBALS.store?.MFGlobalsConfig?.url);
+  //@ts-ignore
   const shortCodeData = useShortCode(GLOBALS.store?.MFGlobalsConfig?.url);
-  const bootstrapData = useBootstrap(latestToken);
+  const bootstrapData = useBootstrap(latestToken, latestRefreshToken);
   const currentContext = useContext(GlobalContext);
-  
- 
+
   const [navigateTo, bootstrapUrl, acessToken, response] = bootstrapData || {};
+  const rightsGroupIds = GLOBALS.store?.rightsGroupIds;
 
-  const storeResults = useQuery(['stores', response?.data?.data?.ServiceMap?.Services?.discovery], getStoresOfZones, {
-    cacheTime: Infinity,
-    staleTime: Infinity,
-    enabled: !!response?.data?.data?.ServiceMap?.Services?.discovery,
-  });
-
+  const storeResults = useQuery(
+    //@ts-ignore
+    ["stores", response?.data?.data?.ServiceMap?.Services?.discovery],
+    getStoresOfZones,
+    {
+      cacheTime: Infinity,
+      staleTime: Infinity,
+      //@ts-ignore
+      enabled: !!(response?.data?.data?.ServiceMap?.Services?.discovery && rightsGroupIds),
+    }
+  );
 
   const onRefresh = async () => {
-    resetSpecificQuery(['shotcode',landingResponse, GLOBALS.deviceInfo])
+    resetSpecificQuery(["shotcode", landingResponse, GLOBALS.deviceInfo]);
   };
 
   useEffect(() => {
+    // bootstrap response arrived
+    if(response?.data?.data){
+      setGlobalData(response?.data?.data);
+    }
+  }, [response?.data, response?.isSuccess]);
+
+  useEffect(() => {
     const onDuplexMessage = (message: any) => {
-      if(message?.type === "DeviceDeleted"){
-        const { payload : {deviceId = ""}  = {} } = message;
-        if(deviceId === GLOBALS.deviceInfo.deviceId){
+      if (message?.type === "DeviceDeleted") {
+        const { payload: { deviceId = "" } = {} } = message;
+        if (deviceId === GLOBALS.deviceInfo.deviceId) {
           // logout
           const resetStore = resetAuthData();
           updateStore(resetStore);
@@ -78,29 +91,49 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
           GLOBALS.rootNavigation.replace(Routes.ShortCode);
         }
       }
-    }
-    currentContext.addOnDuplexMessageHandlers([...currentContext.onDuplexMessageHandlers, onDuplexMessage]);
+    };
+    currentContext.addOnDuplexMessageHandlers([
+      ...currentContext.onDuplexMessageHandlers,
+      onDuplexMessage,
+    ]);
   }, []);
 
   useEffect(() => {
-    if(shortCodeData?.data?.RegistrationCode){
-      setVerficationCode(shortCodeData?.data?.RegistrationCode?.split(''));
+    //@ts-ignore
+    if (shortCodeData?.data?.RegistrationCode) {
+      //@ts-ignore
+      setVerficationCode(shortCodeData?.data?.RegistrationCode?.split(""));
+      //@ts-ignore
       GLOBALS.deviceInfo.regCode = shortCodeData?.data?.RegistrationCode;
     }
+    //@ts-ignore
   }, [shortCodeData?.data?.RegistrationCode]);
 
   useEffect(() => {
-    if(GLOBALS.store && shortCodeData?.data?.AccessToken &&  shortCodeData?.data?.RefreshToken){
+    if (
+      GLOBALS.store &&
+      shortCodeData?.data?.AccessToken &&
+      shortCodeData?.data?.RefreshToken
+    ) {
       GLOBALS.store.accessToken = shortCodeData?.data?.AccessToken;
       GLOBALS.store.refreshToken = shortCodeData?.data?.RefreshToken;
       setLatestToken(shortCodeData?.data?.AccessToken);
+      setLatestRefreshToken(shortCodeData?.data?.RefreshToken)
       updateStore(GLOBALS.store);
     }
   }, [shortCodeData?.data?.AccessToken]);
 
   useEffect(() => {
-    const {data, isSuccess, isError, error } = response || {};
-    if(isSuccess && data?.data && navigateTo === "NAVIGATEINNTOAPP" && bootstrapUrl && acessToken && GLOBALS.deviceInfo && storeResults?.data?.data){
+    const { data, isSuccess, isError, error } = response || {};
+    if (
+      isSuccess &&
+      data?.data &&
+      navigateTo === "NAVIGATEINNTOAPP" &&
+      bootstrapUrl &&
+      acessToken &&
+      GLOBALS.deviceInfo &&
+      storeResults?.data?.data
+    ) {
       processBootStrap(data?.data, "10ft").then(() => {
         initUdls();
         setDefaultStore(storeResults?.data?.data, data?.data);
@@ -111,7 +144,14 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
         props.navigation.replace(Routes.WhoIsWatching);
       });
     }
-  }, [response?.data, navigateTo, bootstrapUrl, acessToken, shortCodeData?.data?.AccessToken, storeResults?.data?.data])
+  }, [
+    response?.data,
+    navigateTo,
+    bootstrapUrl,
+    acessToken,
+    shortCodeData?.data?.AccessToken,
+    storeResults?.data?.data,
+  ]);
 
   return (
     <View style={ShortCodeStyles.root} testID="root">

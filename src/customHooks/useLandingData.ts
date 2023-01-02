@@ -7,7 +7,7 @@ import { GLOBALS, landingInfo } from "../utils/globals";
 import { getBestSupportedLocaleID } from "../utils/splash/splash_utils";
 
 const useLanding = (url: string) => {
-  const [landingUrl, setLandingUrl ] = useState(GLOBALS.store?.MFGlobalsConfig.url);
+  const [landingUrl, setLandingUrl] = useState(GLOBALS.store?.MFGlobalsConfig.url);
   const landingResponse = useQuery(['landing', landingUrl], getLanding, {
     cacheTime: Infinity,
     staleTime: Infinity,
@@ -40,17 +40,16 @@ const useLanding = (url: string) => {
           short: firstLanguage,
           enableRTL: isRTL,
         };
-        if(GLOBALS.store){
+        if (GLOBALS.store) {
           GLOBALS.store.onScreenLanguage = local;
         }
       }
-      MFGlobalsConfig.stsUrl  = sts;
+      MFGlobalsConfig.stsUrl = sts;
       landingInfo.setOauth?.(oauth);
       landingInfo.setTenant?.(tenant);
       landingInfo.setVersion?.(version);
     }
   }, [landingResponse.isSuccess, landingResponse.data?.data]);
-
   return landingResponse;
 };
 

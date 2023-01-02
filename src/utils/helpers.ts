@@ -12,7 +12,7 @@ export const Log =
     : () => { };
 
 export const updateStore = (MFStore: any) => {
-  const sanitizedStore = {...MFStore, landingInfo: {...landingInfo}, MFGlobalsConfig: {...MFGlobalsConfig}};
+  const sanitizedStore = { ...MFStore, landingInfo: { ...landingInfo }, MFGlobalsConfig: { ...MFGlobalsConfig } };
   Settings.set({ store: JSON.stringify(sanitizedStore) });
   GLOBALS.store = getStore();
 }
@@ -20,21 +20,18 @@ export const updateStore = (MFStore: any) => {
 
 export const getStore = () => {
   let serializedStore = Settings.get("store");;
-  if(serializedStore){
+  if (serializedStore) {
     serializedStore = JSON.parse(serializedStore);
     serializedStore.landingInfo = landingInfo?.reviveLandingInfo?.(serializedStore.landingInfo);
-    if(serializedStore.MFGlobalsConfig && serializedStore.MFGlobalsConfig.url){
+    if (serializedStore.MFGlobalsConfig && serializedStore.MFGlobalsConfig.url) {
       MFGlobalsConfig.stsUrl = serializedStore.MFGlobalsConfig.stsUrl;
       MFGlobalsConfig.url = serializedStore.MFGlobalsConfig.url;
     }
     serializedStore.MFGlobalsConfig = MFGlobalsConfig;
     return serializedStore;
-  }else {
+  } else {
     return {
-      MFGlobalsConfig: {
-        url: null,
-        stsUrl: null
-      },
+      MFGlobalsConfig: MFGlobalsConfig,
       landingInfo: {
         oauth: null,
         tenantId: null,
@@ -62,7 +59,7 @@ export const getStore = () => {
             title: "English (US)",
             languageCode: "en-US",
             enableRTL: false
-  
+
           },
           closedCaption: "",
         },
@@ -140,12 +137,12 @@ export function convertStringToHashKey(str: string): string {
 
 export function getPasscodeHash(passcode: string, accountId: string): string {
   if (!isHash(passcode)) {
-      let encryptedPasscode: string = convertStringToHashKey(
-          passcode + accountId
-      );
-      return encryptedPasscode;
+    let encryptedPasscode: string = convertStringToHashKey(
+      passcode + accountId
+    );
+    return encryptedPasscode;
   } else {
-      return passcode;
+    return passcode;
   }
 }
 

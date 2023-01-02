@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import { Animated, Dimensions, StyleSheet, Modal } from "react-native";
 import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
-import { AppStrings } from "../../config/strings";
 import { GLOBALS } from "../../utils/globals";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;

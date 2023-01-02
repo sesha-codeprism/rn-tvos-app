@@ -35,9 +35,9 @@ export const getHubs = async (id: string, params: any) => {
 };
 
 
-export const getStoresOfZones = async ({ queryKey } : any) => {
+export const getStoresOfZones = async ({ queryKey }: any) => {
   const [, discoveryUrl] = queryKey;
-    const url: string =
+  const url: string =
     parseUri(
       discoveryUrl
     ) +
@@ -47,8 +47,9 @@ export const getStoresOfZones = async ({ queryKey } : any) => {
   return await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds!,
       storeId: DefaultStore.Id,
+      //@ts-ignore
       lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
     },
   });
@@ -61,13 +62,13 @@ export const getMovies = async (id?: string, params?: any) => {
   const url: string =
     parseUri(
       GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
-        "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
+      "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
     ) + "/v4/feeds/movies/items";
   console.log("UDL: getMovies", id, params, url);
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
       lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
@@ -92,7 +93,7 @@ export const getTVShows = async (id?: string, params?: any) => {
   const url: string =
     parseUri(
       GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
-        "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
+      "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
     ) +
     versionString +
     "feeds/tvshows/items";
@@ -100,7 +101,7 @@ export const getTVShows = async (id?: string, params?: any) => {
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
       lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
@@ -118,7 +119,7 @@ const getPackages = async (id: string, params: Object) => {
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
       lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
@@ -138,7 +139,7 @@ const getmoviesandtvshowsByLicenseWindow = async (
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
       lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
@@ -159,7 +160,7 @@ const getMoviesAndTV = async (id: string, params: any) => {
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
       lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
@@ -184,7 +185,7 @@ const discoverSubscriptions = async (
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
       lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
@@ -201,7 +202,7 @@ const getPayPerView = async () => {
   const response = await GET({
     url: url,
     params: {
-      $groups: GLOBALS.store.rightsGroupIds,
+      $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
       lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
@@ -213,7 +214,7 @@ const getPayPerView = async () => {
 };
 
 export const getStoresList = async () => {
-  const rightIds = GLOBALS.store.rightsGroupIds;
+  const rightIds = GLOBALS.store?.rightsGroupIds;
   const STORE_TYPE = "HubsAndFeeds";
   const defaultMainStore = "HubsAndFeeds-Main";
   const url: string =
@@ -238,7 +239,7 @@ export const getFeedByID = async (id: string) => {
     url: uri,
 
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -250,7 +251,7 @@ export const getDiscoveryCategoryItems = async (id: string, params: any) => {
     url: url,
     params: params,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -265,7 +266,7 @@ export const getDiscoverCategoryItemPivots = async (
     url: url,
     params: params,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -277,7 +278,7 @@ export const getDiscoveryLibraryItems = async (id: string, params: any) => {
     url: url,
     params: params,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -292,7 +293,7 @@ export const getDiscoveryLibrariesCompletePivots = async (
     url: url,
     params: {},
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -307,7 +308,7 @@ const getDiscoveryLibrariesPivotCategories = async (
     url: url,
     params: params,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -319,7 +320,7 @@ const getDiscoverLibraryItemPivots = async (id: string, params: any) => {
     url: url,
     params: {},
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
@@ -331,7 +332,7 @@ const getDiscoveryLibraryPackages = async (id: string, params: any) => {
     url: url,
     params: params,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;

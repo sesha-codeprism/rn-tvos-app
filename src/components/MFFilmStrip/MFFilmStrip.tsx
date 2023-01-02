@@ -110,10 +110,25 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
           setDataSource([...dataSource, ...(props.dataSource || [])]);
         }
       }
-      if (props.libraryItems && props.libraryItems[index]) {
+      if (
+        Array.isArray(props.libraryItems) &&
+        props.libraryItems &&
+        props.libraryItems[index]
+      ) {
         setCurrentFeed(props.libraryItems![index]);
+      } else if (Object.keys(props.libraryItems)[0]) {
+        setCurrentFeed(
+          props.libraryItems[Object.keys(props.libraryItems)[0]][index]
+        );
       }
-      props.updateSwimLaneKey && props.updateSwimLaneKey(props.title!);
+      props.updateSwimLaneKey && props.title
+        ? props.updateSwimLaneKey(props.title)
+        : props.updateSwimLaneKey &&
+          props.libraryItems[Object.keys(props.libraryItems)[0]][index]
+        ? props.updateSwimLaneKey(
+            props.libraryItems[Object.keys(props.libraryItems)[0]][index].title
+          )
+        : null;
     };
     const dataArray: Array<SubscriberFeed> | undefined = Array.isArray(
       props.libraryItems
@@ -126,6 +141,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
         )
       : [];
     const cardWidth = parseInt(props.style?.width?.toString() || "300");
+    
     return (
       <View style={[Styles.railContainer, props.railContainerStyles]}>
         {
@@ -259,7 +275,8 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
         >
           {currentFeed &&
             props.swimLaneKey?.trim().length! > 0 &&
-            props.swimLaneKey === props.title && (
+            (props.swimLaneKey === props.title ||
+              props.swimLaneKey === currentFeed?.title) && (
               <MFMetaData currentFeed={currentFeed} />
             )}
         </View>

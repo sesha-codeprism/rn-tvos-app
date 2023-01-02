@@ -1,14 +1,22 @@
-#import "SearchControllerView.h"
-#import <React/UIView+React.h>
+//
+//  RCTSearchViewTVOS.m
+//  FocusPOC
+//
+//  Created by Godwin Vinny Carole Kati on 09/12/22.
+//
 
-@implementation SearchControllerView
-{
-    UIViewController *uiViewController;
-    UISearchController *uiSearchController;
-    UISearchContainerViewController *uiSearchContainerController;
-  
+#import "RCTSearchViewTVOS.h"
+#import "React/RCTComponent.h"
+#import "React/UIView+React.h"
+#import "SearchResultsViewTVOSController.h"
+
+
+@implementation RCTSearchViewTVOS{
+  UIViewController *uiViewController;
+  UISearchController *uiSearchController;
+  UISearchContainerViewController *uiSearchContainerController;
+
 }
-
 
 
 - (void)layoutSubviews
@@ -27,9 +35,6 @@
 
 - (void)embedSearchController
 {
-  NSLog(@"BackgroundColor: %@",self.backgroundColor);
-  NSLog(@"width: %@",self.width);
-  NSLog(@"height: %@",self.height);
   
   UIViewController *parentVC = self.reactViewController;
     
@@ -38,16 +43,15 @@
     }
   uiViewController = [[UIViewController alloc] init];
   uiSearchController = [[UISearchController alloc] init ];
-  uiSearchController.view.frame = CGRectMake(0, 0, [self.width doubleValue], [self.height doubleValue]);
+  uiSearchController.view.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
   uiSearchContainerController = [[UISearchContainerViewController alloc] initWithSearchController:uiSearchController];
   uiSearchController.view.backgroundColor = self.backgroundColor;
   uiSearchController.searchBar.searchBarStyle = UISearchBarStyleProminent;
   [uiSearchController setObscuresBackgroundDuringPresentation:true];
   uiSearchController.hidesNavigationBarDuringPresentation = false;
   uiSearchController.obscuresBackgroundDuringPresentation = false;
+  uiSearchController.searchResultsUpdater =self;
   
-//  [uiViewController setView:parentVC.view];
-
 
     
     [parentVC addChildViewController:uiSearchContainerController];
@@ -80,10 +84,44 @@
 
 - (void)updateSearchResultsForSearchController:(nonnull UISearchController *)searchController
 {
+    NSLog(@"Test firing log..", searchController.searchBar.text);
   if (self.onChangeText) {
     self.onChangeText(@{@"text": searchController.searchBar.text});
   }
 }
 
+//- (void)reactBridgeDidFinishTransaction{
+//  if(self.containerVC){
+//    return;
+//  }
+//
+//  UIViewController *reactController = self.reactSubviews.firstObject.reactViewController;
+//
+//  SearchResultsViewTVOSController *resultsVC = [[SearchResultsViewTVOSController alloc] initWithReactViewController:reactController];
+//
+//  UISearchController *searchController = [[UISearchController alloc] initWithSearchResultsController:resultsVC];
+//
+//  self.containerVC = [[UISearchContainerViewController alloc] initWithSearchController:searchController];
+//
+//  self.containerVC.tabBarItem = self.reactViewController.tabBarItem;
+//
+//  UITabBarController *tabBarVC = self.reactViewController.tabBarController;
+//
+//  NSMutableArray *viewControllers = tabBarVC.viewControllers.mutableCopy;
+//
+//  NSUInteger index = [tabBarVC.viewControllers indexOfObject:self.reactViewController];
+//
+//  [viewControllers replaceObjectAtIndex:index withObject:self.containerVC];
+//
+//  tabBarVC.viewControllers = viewControllers;
+//
+//  UIView *rootView = tabBarVC.view.window.rootViewController.view;
+//  for (UIGestureRecognizer *recognizer in rootView.gestureRecognizers) {
+//    if([recognizer.allowedPressTypes containsObject:@(UIPressTypeSelect)] && [recognizer isKindOfClass:[UITapGestureRecognizer class]]){
+//      [recognizer.view removeGestureRecognizer:recognizer];
+//    }
+//  }
+//
+//}
 
 @end

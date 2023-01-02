@@ -261,7 +261,7 @@ export const setDefaultStore = async (storeresponse: any, bootstrapSelectors: an
 
 
 export const DefaultStore: IStore = {
-    Id: "?",
+    Id: HUBS_AND_FEEDS + "-Main",
     Name: "",
     Locale: "",
     IsAdult: false,

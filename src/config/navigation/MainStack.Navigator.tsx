@@ -9,6 +9,7 @@ import CreateProfileScreen from "../../views/app/profile_screens/Create.profile.
 import ProfileFinalisationScreen from "../../views/app/profile_screens/Profile.Finalise";
 import ProfilePersonalizationScreen from "../../views/app/profile_screens/Profile.personalization";
 import ProfileScreen from "../../views/app/profile_screens/Profile.screen";
+import TestScreen from "../../views/app/test.screen";
 import WhoIsWatchingScreen from "../../views/app/WhoIsWatching.screen";
 import LoginScreen from "../../views/auth/Login.screen";
 import ShortCodeScreen from "../../views/auth/Shortcode.screen";
@@ -61,7 +62,7 @@ export const AppNavigator: React.FunctionComponent = (props) => {
       <Stack.Screen name={Routes.Home} component={HomeScreen} />
       <Stack.Screen name={Routes.Guide} component={GuideScreen} />
       <Stack.Screen name={Routes.Search} component={SearchScreen} />
-      {/* <Stack.Screen name={Routes.Test} component={TestScreen} /> */}
+      <Stack.Screen name={Routes.Test} component={TestScreen} />
       <Stack.Screen name={Routes.Profile} component={ProfileScreen} />
       <Stack.Screen
         name={Routes.CreateProfile}
