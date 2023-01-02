@@ -1,7 +1,17 @@
 import Foundation
 import UIKit
-class MKGuide: UIView {
-    weak var epgVC: EPGViewController?
+import FullGuideComponent
+
+class MKGuide: UIView, channelProgramDelegate{
+    weak var epgVC: UIViewController?
+
+  @objc var onUpdate: RCTBubblingEventBlock?
+
+  func selectedProgram(program: [String : Any]) {
+    if onUpdate != nil {
+      onUpdate!(["program": program])
+    }
+  }
     
     var token: String? {
         didSet {
@@ -14,9 +24,10 @@ class MKGuide: UIView {
        // Access your data here
      }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    MKFullGuideStorageManager.shared.selectedDelegate = self
+  }
   
     required init?(coder aDecoder: NSCoder) { fatalError("nope") }
 

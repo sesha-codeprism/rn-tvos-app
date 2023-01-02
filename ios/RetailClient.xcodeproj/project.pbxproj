@@ -131,6 +131,14 @@
 		8168724427307BAC00960AFF /* MKGuide.h in Sources */ = {isa = PBXBuildFile; fileRef = 0F6088BD272063140052254E /* MKGuide.h */; };
 		8168724527307BAC00960AFF /* MKGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8168723A273073D200960AFF /* MKGuide.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		BC051737295DFCAA00539EA2 /* MKGuideBridgeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC051736295DFCAA00539EA2 /* MKGuideBridgeManager.m */; };
+		BC051738295DFCAA00539EA2 /* MKGuideBridgeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC051736295DFCAA00539EA2 /* MKGuideBridgeManager.m */; };
+		BC051739295DFCAA00539EA2 /* MKGuideBridgeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC051736295DFCAA00539EA2 /* MKGuideBridgeManager.m */; };
+		BC05173A295DFCAA00539EA2 /* MKGuideBridgeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC051736295DFCAA00539EA2 /* MKGuideBridgeManager.m */; };
+		BC05173C295DFCE600539EA2 /* MKGuideBridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC05173B295DFCE600539EA2 /* MKGuideBridgeManager.swift */; };
+		BC05173D295DFCE600539EA2 /* MKGuideBridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC05173B295DFCE600539EA2 /* MKGuideBridgeManager.swift */; };
+		BC05173E295DFCE600539EA2 /* MKGuideBridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC05173B295DFCE600539EA2 /* MKGuideBridgeManager.swift */; };
+		BC05173F295DFCE600539EA2 /* MKGuideBridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC05173B295DFCE600539EA2 /* MKGuideBridgeManager.swift */; };
 		EE57DEA5314790D63C074D03 /* libPods-RetailClient-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA54FCF2086BA3B4678F8237 /* libPods-RetailClient-tvOS.a */; };
 /* End PBXBuildFile section */
 
@@ -221,6 +229,9 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RetailClient/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8DC2855AB2CCC04BED0978AE /* libPods-RetailClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RetailClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0216F1136BF7C90703C880F /* libPods-RetailClient-tvOS-RetailClient-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RetailClient-tvOS-RetailClient-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC051736295DFCAA00539EA2 /* MKGuideBridgeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKGuideBridgeManager.m; sourceTree = "<group>"; };
+		BC05173B295DFCE600539EA2 /* MKGuideBridgeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKGuideBridgeManager.swift; sourceTree = "<group>"; };
+		BC051740295DFD2600539EA2 /* RetailClient-tvOS-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RetailClient-tvOS-Bridging-Header.h"; path = "../../../../../Desktop/ios/RetailClient-tvOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		CCE9A90FED9D09047497AB6D /* Pods-RetailClient-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS/Pods-RetailClient-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E8891750AE2DFBD87A5BDB74 /* Pods-RetailClient-tvOS-RetailClient-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS-RetailClient-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS-RetailClient-tvOSTests/Pods-RetailClient-tvOS-RetailClient-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EA54FCF2086BA3B4678F8237 /* libPods-RetailClient-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RetailClient-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -332,6 +343,7 @@
 				0F6088BD272063140052254E /* MKGuide.h */,
 				0F6088BE2720633E0052254E /* MKGuide.m */,
 				8168723A273073D200960AFF /* MKGuide.swift */,
+				BC05173B295DFCE600539EA2 /* MKGuideBridgeManager.swift */,
 				8168724127307A1500960AFF /* MKGuideManager.swift */,
 				0035DCA0276BB1A600360F43 /* SampleStoryboard.storyboard */,
 				0035DCA1276BB1A600360F43 /* SampleViewController.swift */,
@@ -342,12 +354,15 @@
 		13B07FAE1A68108700A75B9A /* RetailClient */ = {
 			isa = PBXGroup;
 			children = (
+				BC051735295DFCAA00539EA2 /* GuideComponent */,
 				59C74688294A45BA009D2E1D /* RCTSearchViewTVOS.h */,
 				59C7468B294A45BB009D2E1D /* RCTSearchViewTVOS.m */,
 				59C74689294A45BB009D2E1D /* RCTSearchViewTVOSManager.m */,
 				59C7468A294A45BB009D2E1D /* SearchRestultsViewTVOSController.m */,
 				59C74687294A45B9009D2E1D /* SearchResultsViewTVOSController.h */,
 				59A99A902853227300560F39 /* Resources */,
+				BC051740295DFD2600539EA2 /* RetailClient-tvOS-Bridging-Header.h */,
+				BC051740295DFD2600539EA2 /* RetailClient-tvOS-Bridging-Header.h */,
 				009FA73B2738F4DE00417869 /* sampleSwiftUI */,
 				0F6088BC272062F40052254E /* MKGuide */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -442,6 +457,14 @@
 				3BDF8C4CCF278F944E8C6CBF /* Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		BC051735295DFCAA00539EA2 /* GuideComponent */ = {
+			isa = PBXGroup;
+			children = (
+				BC051736295DFCAA00539EA2 /* MKGuideBridgeManager.m */,
+			);
+			path = GuideComponent;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -902,6 +925,8 @@
 				00E356F31AD99517003FC87E /* RetailClientTests.m in Sources */,
 				59C74695294A45BB009D2E1D /* RCTSearchViewTVOS.m in Sources */,
 				009FA7402738F53600417869 /* ContentView.swift in Sources */,
+				BC051738295DFCAA00539EA2 /* MKGuideBridgeManager.m in Sources */,
+				BC05173D295DFCE600539EA2 /* MKGuideBridgeManager.swift in Sources */,
 				8147B2FB273DF77B00A45F38 /* NativeText.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -911,6 +936,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				00352440276BBF4200360F43 /* BaseTableViewCell.swift in Sources */,
+				BC05173C295DFCE600539EA2 /* MKGuideBridgeManager.swift in Sources */,
+				BC05173C295DFCE600539EA2 /* MKGuideBridgeManager.swift in Sources */,
 				00352452276BBF4200360F43 /* DiscoveryModels.swift in Sources */,
 				004DE6DF27ABA5B6003439C1 /* LogoViewController.swift in Sources */,
 				8168724227307A1500960AFF /* MKGuideManager.swift in Sources */,
@@ -924,6 +951,7 @@
 				59C7468C294A45BB009D2E1D /* RCTSearchViewTVOSManager.m in Sources */,
 				0F6088BF2720633E0052254E /* MKGuide.m in Sources */,
 				00352454276BBF4200360F43 /* OnNowNoDataTableViewCell.swift in Sources */,
+				BC051737295DFCAA00539EA2 /* MKGuideBridgeManager.m in Sources */,
 				0035243E276BBF4200360F43 /* EPGViewController.swift in Sources */,
 				59C74690294A45BB009D2E1D /* SearchRestultsViewTVOSController.m in Sources */,
 				0097B10427AC556200742D4C /* EPGBackup.swift in Sources */,
@@ -969,9 +997,11 @@
 				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
 				0035243F276BBF4200360F43 /* EPGViewController.swift in Sources */,
 				0035244F276BBF4200360F43 /* FocusableView.swift in Sources */,
+				BC05173E295DFCE600539EA2 /* MKGuideBridgeManager.swift in Sources */,
 				0035243D276BBF4200360F43 /* UILabelFontable.swift in Sources */,
 				00352451276BBF4200360F43 /* LiveChannelMap.swift in Sources */,
 				8147B2FC273DF77B00A45F38 /* NativeText.m in Sources */,
+				BC051739295DFCAA00539EA2 /* MKGuideBridgeManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -981,10 +1011,13 @@
 			files = (
 				59C74693294A45BB009D2E1D /* SearchRestultsViewTVOSController.m in Sources */,
 				59C7468F294A45BB009D2E1D /* RCTSearchViewTVOSManager.m in Sources */,
+				BC05173A295DFCAA00539EA2 /* MKGuideBridgeManager.m in Sources */,
+				BC05173A295DFCAA00539EA2 /* MKGuideBridgeManager.m in Sources */,
 				0F6088C22722B9060052254E /* MKGuide.m in Sources */,
 				2DCD954D1E0B4F2C00145EB5 /* RetailClientTests.m in Sources */,
 				59C74697294A45BB009D2E1D /* RCTSearchViewTVOS.m in Sources */,
 				009FA7422738F53600417869 /* ContentView.swift in Sources */,
+				BC05173F295DFCE600539EA2 /* MKGuideBridgeManager.swift in Sources */,
 				8147B2FD273DF77B00A45F38 /* NativeText.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
