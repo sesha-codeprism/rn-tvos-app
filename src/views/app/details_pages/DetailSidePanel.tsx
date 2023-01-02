@@ -6,7 +6,6 @@ import React, {
   useState,
 } from "react";
 import { Animated, Dimensions, StyleSheet, Modal } from "react-native";
-import { SettingsNavigator } from "../../../config/navigation/RouterOutlet";
 import { GLOBALS } from "../../../utils/globals";
 import MoreInfoPanel from "./MoreInfoPanel";
 

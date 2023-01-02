@@ -7,7 +7,7 @@ export const DVRPROXY_URL = GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr;
 
 
 export const getViewableSubscriptionStems = async (uri: string, params: any) => {
-    const url = `${DVRPROXY_URL}/v1/subscription-groups`;
+    const url = `${DVRPROXY_URL}v1/subscription-groups`;
     const response = await GET({
         url,
         params: params,

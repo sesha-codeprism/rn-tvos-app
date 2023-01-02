@@ -69,12 +69,6 @@ const MFFontIconButton: React.FunctionComponent<MFFontIconProps> =
     const _onPress = (event: GestureResponderEvent) => {
       props.onPress && props.onPress(event);
     };
-    console.log("Props for fontIcon", props, "isSource null", props.fontIcon);
-    if (props.fontIcon) {
-      console.log("Source not null");
-    } else {
-      console.log("Source null");
-    }
     return (
       <Pressable
         ref={ref}

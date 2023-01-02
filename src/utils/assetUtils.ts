@@ -1,5 +1,5 @@
-// @ts-nocheck
-import { some } from "lodash";
+//@ts-nocheck
+import { some, includes, find } from "lodash";
 import { PurchaseAction } from "../@types/SubscriberFeed";
 import { PlayAction, Library } from "../@types/UDLResponse";
 import { config } from "../config/config";
@@ -52,6 +52,21 @@ export enum RequestType {
     DELETE,
     RESOLVE_CONFLICT,
 }
+
+export function recentlyAiredRights(
+    channel: Pick<any, "LiveRights">
+): boolean {
+    if (!channel) {
+        return false;
+    }
+    const { LiveRights = [] } = channel;
+    if (LiveRights.length > 0) {
+        const { r = "" } = LiveRights[0];
+        return r.split(",").indexOf(pbr.RestrictionsType.RA) === -1;
+    }
+    return false;
+}
+
 
 export interface FeedContentItem {
     Id: string;
@@ -229,9 +244,9 @@ const getPlayableCatchupSchedule = (
                             button: {
                                 buttonType: "TextIcon",
                                 buttonText:
-                                    global.lStrings?.str_details_cta_resume,
+                                    AppStrings?.str_details_cta_resume,
                                 buttonAction:
-                                    global.lStrings?.str_details_cta_restart,
+                                    AppStrings?.str_details_cta_restart,
                                 iconSource: playIcon,
                             },
                             ChannelInfo: channelInfo,
@@ -241,9 +256,9 @@ const getPlayableCatchupSchedule = (
                             button: {
                                 buttonType: "TextIcon",
                                 buttonText:
-                                    global.lStrings?.str_details_cta_restart,
+                                    AppStrings?.str_details_cta_restart,
                                 buttonAction:
-                                    global.lStrings?.str_details_cta_restart,
+                                    AppStrings?.str_details_cta_restart,
                                 iconSource: playIcon,
                             },
                             ChannelInfo: channelInfo,
@@ -307,9 +322,9 @@ const getPlayableCatchupSchedule = (
                                 button: {
                                     buttonType: "TextIcon",
                                     buttonText:
-                                        global.lStrings?.str_details_cta_resume,
+                                        AppStrings?.str_details_cta_resume,
                                     buttonAction:
-                                        global.lStrings
+                                        AppStrings
                                             ?.str_details_cta_restart,
                                     iconSource: playIcon,
                                 },
@@ -320,10 +335,10 @@ const getPlayableCatchupSchedule = (
                                 button: {
                                     buttonType: "TextIcon",
                                     buttonText:
-                                        global.lStrings
+                                        AppStrings
                                             ?.str_details_cta_restart,
                                     buttonAction:
-                                        global.lStrings
+                                        AppStrings
                                             ?.str_details_cta_restart,
                                     iconSource: playIcon,
                                 },
@@ -1615,6 +1630,8 @@ const isChannelNotSubscribed = (playOptions: any, channelMap: any) => {
 };
 
 export async function isPconBlocked(playInfo: any, locale?: any) {
+    const { pconConfig } = config;
+
     let ratings = (playInfo && playInfo.Ratings) || [],
         isRated = Array.isArray(ratings) && ratings.length,
         isLocked: any;
@@ -1676,7 +1693,7 @@ export async function isPconBlocked(playInfo: any, locale?: any) {
 }
 
 export const isChannelPlayable = (
-    channel: Pick<IChannel, "isSubscribed" | "isPermitted">
+    channel: Pick<any, "isSubscribed" | "isPermitted">
 ): boolean => {
     if (!channel) {
         return false;
@@ -3710,8 +3727,8 @@ export const getCTAButtons = (
     //VOD CTA Button Logic
     let playAction = undefined;
     if (
-        playActions?.length > 0 &&
-        (programUDPData?.isInHome || seriesUDPData?.isInHome)
+        playActions?.length > 0
+        // (programUDPData?.isInHome || seriesUDPData?.isInHome)
     ) {
         if (!sourceType) {
             sourceType = SourceType.VOD;
@@ -4666,6 +4683,59 @@ export const getVodVideoProfileId = (
     )[0];
 };
 
+export const getSupportedPlayActions = (usablePlayActions: IPlayAction[]) => {
+    if (!usablePlayActions || usablePlayActions.length <= 0) {
+        return;
+    }
+
+    const playActionByQuality = [];
+    let supportedPlayActions =
+        usablePlayActions?.length > 0 &&
+        usablePlayActions?.filter(
+            (usablePlayAction: IPlayAction) =>
+                (config.playerConfig.supportedEncodings as any)[
+                usablePlayAction.VideoProfile.Encoding
+                ]
+        );
+
+    for (let supportedPlayAction of supportedPlayActions) {
+        const index = (orderedQualityLevels as any)[
+            supportedPlayAction.VideoProfile.QualityLevel
+        ];
+        playActionByQuality[index] = supportedPlayAction;
+    }
+
+    return supportedPlayActions?.filter((n: any) => n);
+};
+
+export const getRestrictionsForVod = (
+    usablePlayActions: any,
+    isTrailer: boolean
+) => {
+    let supportedPlayActions;
+    if (
+        usablePlayActions?.length &&
+        getSupportedPlayActions(usablePlayActions)?.length
+    ) {
+        if (isTrailer) {
+            supportedPlayActions = getSupportedPlayActions(
+                usablePlayActions
+            )?.find((playAction: PlayAction) =>
+                playAction?.Tags?.includes("Trailer")
+            );
+        } else {
+            supportedPlayActions = getSupportedPlayActions(
+                usablePlayActions
+            )?.find((playAction: PlayAction) =>
+                playAction?.Tags?.includes("Feature")
+            );
+        }
+    }
+
+    return supportedPlayActions;
+};
+
+
 export const DateToAMPM = (date: Date) => {
     let hours = date?.getHours();
     let minutes = date?.getMinutes();
@@ -4673,11 +4743,11 @@ export const DateToAMPM = (date: Date) => {
         hours >= 12 ? AppStrings?.str_pm : AppStrings?.str_am;
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
-    //@ts-ignore
     minutes = minutes < 10 ? "0" + minutes : minutes;
     const strTime = `${hours}:${minutes} ${ampm}`;
     return strTime;
 };
+
 
 export const getMonthName = (date: Date, isNotUTC?: boolean) => {
     // Months of the year.

@@ -87,7 +87,7 @@ export const config = {
     defaultOrderBy: "Popularity",
     longPressThreshold: 500,
     inhomeDetection: {
-        inHomeDefault: false,
+        inHomeDefault: true,
         connectionUrl: "mkinhome.azurewebsites.net",
         inHomeApiEndpoint: "/v1/ihd/users/userAccount/{accountId}/isInHome",
         useSubscriberInHome: false,
@@ -143,6 +143,7 @@ export const config = {
         areYouStillWatchingTimerInMin: 240,
         supportedEncodings: {
             Jitp: 1,
+            Hls: 2
         },
         audioDescriptionTrackLanguageCode: ["est", "afr", "enm", "frm"],
         skipBackSeconds: 7,

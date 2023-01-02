@@ -2,17 +2,10 @@ import React, { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
 import AnimatedLottieView from "lottie-react-native";
-import {
-  View,
-  StyleSheet,
-  Image,
-  Dimensions,
-  Settings,
-  Alert,
-} from "react-native";
+import { View, StyleSheet, Image, Dimensions } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { GLOBALS, resetAuthData } from "../../utils/globals";
-import { getStore, infoLog } from "../../utils/helpers";
+import { infoLog } from "../../utils/helpers";
 import {
   getBootStrap,
   processBootStrap,
@@ -20,9 +13,7 @@ import {
 import { initUdls } from "../../../backend";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { appUIDefinition } from "../../config/constants";
-import { duplex } from "../../modules/duplex";
-import { generateGUID } from "../../utils/guid";
-import { DefaultStore, setDefaultStore } from "../../utils/DiscoveryUtils";
+import { setDefaultStore } from "../../utils/DiscoveryUtils";
 import { connectDuplex, setGlobalData } from "../../utils/splash/splash_utils";
 import { getMovies, getTVShows } from "../../../backend/discovery/discovery";
 
@@ -106,7 +97,8 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const setDeviceInfo = async () => {
     const isEmulator: boolean = await DeviceInfo.isEmulator();
     if (isEmulator) {
-      const deviceID = await DeviceInfo.getDeviceName();
+      const deviceID = await DeviceInfo.getMacAddress();
+      GLOBALS.deviceInfo.deviceId = deviceID;
       //If device is running on Emulator
       // Device info details on emulator are useless.. no need of setting values;
       return true;

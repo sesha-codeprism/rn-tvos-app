@@ -47,7 +47,7 @@ import { useQuery } from "react-query";
 import { defaultQueryOptions } from "../../../config/constants";
 import { DefaultStore, getEpisodeInfo } from "../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../utils/globals";
-import { getDataFromUDL } from "../../../../backend";
+import { getDataFromUDL, getMassagedData } from "../../../../backend";
 import ProgressBar from "../../../components/MFProgress";
 import MFLoader from "../../../components/MFLoader";
 import MFButton, {
@@ -350,7 +350,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
   let assetData: AssetData = updateAssetData();
 
-  const getSimilarItemsForFeed = async (assetData: AssetData) => {
+  const getSimilarItemsForFeed = async ({ queryKey }: any) => {
+    console.log("Querykey", queryKey);
+    const [, assetData] = queryKey;
     if (!assetData) {
       console.log("No asset data to make api call..");
       return undefined;
@@ -359,8 +361,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     const params = `?$top=${assetData.$top}&$skip=${assetData.$skip}&storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${assetData.pivots}&id=${id}&itemType=${assetData.contentTypeEnum}`;
     const udlParam = "udl://subscriber/similarprograms/" + params;
     const data = await getDataFromUDL(udlParam);
-    setSimilarData(data.data);
-    return data;
+    const massagedData = getMassagedData(
+      "udl://subscriber/similarprograms/",
+      data
+    );
+    setSimilarData(massagedData);
+    return massagedData;
   };
 
   const renderFavoriteButton = () => {
@@ -707,8 +713,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     );
 
   const similarDataQuery = useQuery(
-    ["get-similarItems", assetData?.id],
-    () => getSimilarItemsForFeed(assetData),
+    [`get-similarItems-${assetData?.id}`, assetData],
+    getSimilarItemsForFeed,
     defaultQueryOptions
   );
 
@@ -758,8 +764,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const renderCTAButtonGroup = () => {
     // const { visible, panelName } = sidePanelState;
     // const focusable = !(visible && panelName);
-    const fontProps = getCTAButtonDetails(udpDataAsset.ctaButtons);
-    console.log("CTA Props", fontProps);
+    // const fontProps = getCTAButtonDetails(udpDataAsset.ctaButtons);
+    // console.log("CTA Props", fontProps);
+
     return (
       <View style={[styles.buttonContainer]}>
         <ScrollView horizontal nestedScrollEnabled>
@@ -1164,13 +1171,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
     const feedItem = { Name: "Cast and Crew" };
     return (
-      <MFSwimLane
-        //@ts-ignore
-        feed={feedItem}
-        data={roles && massageCastAndCrew(roles, assetTypeObject.PERSON)}
-        swimLaneKey={castnCrewSwimLaneKey}
-        updateSwimLaneKey={setCastnCrewSwimlaneKey}
-      />
+      <View style={{ marginTop: 20 }}>
+        <MFSwimLane
+          //@ts-ignore
+          feed={feedItem}
+          data={roles && massageCastAndCrew(roles, assetTypeObject.PERSON)}
+          swimLaneKey={castnCrewSwimLaneKey}
+          updateSwimLaneKey={setCastnCrewSwimlaneKey}
+        />
+      </View>
     );
   };
 

@@ -31,8 +31,15 @@ export const getMassagedData = (uri: string, data: any) => {
         return massagedData;
       }
     } else if (udlID!.id.split("/")[0] === 'subscriber') {
-      const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
-      return massagedData;
+      const hasDataItems = data.data.LibraryItems;
+      if (!hasDataItems) {
+        const dataSource = { LibraryItems: data.data };
+        const massagedData = massageSubscriberFeed(dataSource, "", SourceType.VOD);
+        return massagedData;
+      } else {
+        const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
+        return massagedData;
+      }
     }
   } else {
     return undefined;
