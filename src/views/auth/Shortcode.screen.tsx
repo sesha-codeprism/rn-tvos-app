@@ -64,7 +64,9 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
       cacheTime: Infinity,
       staleTime: Infinity,
       //@ts-ignore
-      enabled: !!(response?.data?.data?.ServiceMap?.Services?.discovery && rightsGroupIds),
+      enabled: !!(
+        response?.data?.data?.ServiceMap?.Services?.discovery && rightsGroupIds
+      ),
     }
   );
 
@@ -74,7 +76,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
 
   useEffect(() => {
     // bootstrap response arrived
-    if(response?.data?.data){
+    if (response?.data?.data) {
       setGlobalData(response?.data?.data);
     }
   }, [response?.data, response?.isSuccess]);
@@ -118,7 +120,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
       GLOBALS.store.accessToken = shortCodeData?.data?.AccessToken;
       GLOBALS.store.refreshToken = shortCodeData?.data?.RefreshToken;
       setLatestToken(shortCodeData?.data?.AccessToken);
-      setLatestRefreshToken(shortCodeData?.data?.RefreshToken)
+      setLatestRefreshToken(shortCodeData?.data?.RefreshToken);
       updateStore(GLOBALS.store);
     }
   }, [shortCodeData?.data?.AccessToken]);

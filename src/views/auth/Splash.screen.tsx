@@ -125,19 +125,23 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const _onAnimationFinish = () => {};
 
   const setDeviceInfo = async () => {
-    const isEmulator: boolean = await DeviceInfo.isEmulator();
-    if (isEmulator) {
-      const deviceID = await DeviceInfo.getMacAddress();
-      GLOBALS.deviceInfo.deviceId = deviceID;
-      setDevice(GLOBALS.deviceInfo.deviceId);
-      return true;
-    } else {
-      // If device is running on real device
-      const deviceID = DeviceInfo.getUniqueId();
-      GLOBALS.deviceInfo.deviceId = deviceID;
-      setDevice(GLOBALS.deviceInfo.deviceId);
-      return true;
-    }
+    const deviceID = await DeviceInfo.getMacAddress();
+    GLOBALS.deviceInfo.deviceId = generateGUID(deviceID);
+    setDevice(GLOBALS.deviceInfo.deviceId);
+    return true;
+    // const isEmulator: boolean = await DeviceInfo.isEmulator();
+    // if (isEmulator) {
+    //   const deviceID = await DeviceInfo.getMacAddress();
+    //   GLOBALS.deviceInfo.deviceId = generateGUID(deviceID);
+    //   setDevice(GLOBALS.deviceInfo.deviceId);
+    //   return true;
+    // } else {
+    //   // If device is running on real device
+    //   const deviceID = DeviceInfo.getUniqueId();
+    //   GLOBALS.deviceInfo.deviceId = deviceID;
+    //   setDevice(GLOBALS.deviceInfo.deviceId);
+    //   return true;
+    // }
   };
   const showAnimation = appUIDefinition.config.useLottieAnimationOnSplash;
   const getMoviesAndTvShow = async () => {
