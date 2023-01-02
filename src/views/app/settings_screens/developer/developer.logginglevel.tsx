@@ -13,39 +13,41 @@ import {
   import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
   import { GLOBALS } from "../../../../utils/globals";
   import { updateStore } from "../../../../utils/helpers";
+import { AppStrings } from "../../../../config/strings";
   interface Props {
     navigation: NativeStackNavigationProp<any>;
   }
-  const list = [
-    {
-      title: "On",
-      action: "On",
-    },
-    {
-      title: "Off",
-      action: "Off",
-    },
-  ];
-  const DescriptiveAudioScreen: React.FunctionComponent<Props> = (props: any) => {
+  const list = AppStrings.str_selectLogginLevel;
+
+  const DeveloperLoggingLevelScreen: React.FunctionComponent<Props> = (props: any) => {
+
     const [focussed, setFocussed] = useState<any>("");
-    const [descriptiveAudio, setDescriptiveAudio] = useState<any>("");
-    const onPress = (item: string) => {
-      setDescriptiveAudio(item);
-      GLOBALS.store.settings.audio.descriptiveAudio = item;
-      updateStore(GLOBALS.store);
+
+    const [selectedLevel, setSelectedLevel] = useState<any>({});
+
+    const onPress = (item: any) => {
+        if(GLOBALS.store && item.value !== GLOBALS.store?.loggingLevel ){
+            GLOBALS.store.loggingLevel = item.value;
+            updateStore(GLOBALS.store);
+        }
+        setSelectedLevel(item);
     };
-    const getValues = () => {
-      setDescriptiveAudio(GLOBALS.store.settings.audio.descriptiveAudio);
+
+    const getCurrentLoggingLevel = () => {
+        setSelectedLevel({value: GLOBALS.store?.loggingLevel || "none"});
     };
+
     useEffect(() => {
-      getValues();
+        if(GLOBALS){
+            getCurrentLoggingLevel();
+        }
     }, []);
-  
+
     return (
-      <SideMenuLayout title="Display" subTitle="Descriptive Audio">
+      <SideMenuLayout title={AppStrings?.developer_settings} subTitle={AppStrings?.developer_settings_logging_level}>
         <FlatList
           data={list}
-          keyExtractor={(item) => item.title}
+          keyExtractor={(item) => item.value}
           renderItem={({ item, index }) => {
             return (
               <Pressable
@@ -53,7 +55,7 @@ import {
                   setFocussed(index);
                 }}
                 onPress={() => {
-                  onPress(item.action);
+                  onPress(item);
                 }}
                 style={
                   index === focussed
@@ -63,7 +65,7 @@ import {
                 key={index}
               >
                 <View style={styles.icContainer}>
-                  {descriptiveAudio === item.action ? (
+                  {selectedLevel.value && item.value == selectedLevel.value ? (
                     <Image
                       source={AppImages.checked_circle}
                       style={styles.icCircle}
@@ -82,19 +84,18 @@ import {
                       { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
                     ]}
                   >
-                    {item.title}
+                    {item.name}
                   </Text>
                 </View>
               </Pressable>
             );
           }}
         />
-       
       </SideMenuLayout>
     );
   };
   
-  export default DescriptiveAudioScreen;
+  export default DeveloperLoggingLevelScreen;
   
   const styles = StyleSheet.create({
     contentTitleContainer: {

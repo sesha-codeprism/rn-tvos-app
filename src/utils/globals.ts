@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {
   MFbootstrapLandingInfo,
   MFDeviceInfo,
@@ -6,10 +7,44 @@ import { BootStrapResponse } from "../@types/BootStrapResponse";
 import { UserProfile } from "../@types/UserProfile";
 import { BrowseGallery } from "./common";
 
-export const landingInfo: MFbootstrapLandingInfo = {
-  oauth: "liveid",
-  tenantId: "default",
-};
+export const landingInfo = (function(): MFbootstrapLandingInfo{
+  this.oauth = "liveid";
+  this.tenantId = "default";
+  this.version = "";
+
+  const setOauth = (auth: string) => {
+    this.oauth = auth;
+    return this;
+  }
+
+  const setTenant = (tenant: string) => {
+    this.tenantId = tenant;
+    return this;
+  }
+
+  const setVersion = (v: string) => {
+    this.version = v;
+    return this;
+  }
+
+  const reviveLandingInfo = (serializedInstance: any) => {
+    if(serializedInstance){
+      this.oauth = serializedInstance?.oauth;
+      this.tenantId = serializedInstance?.tenantId;
+      this.version = serializedInstance?.setVersion;
+    }
+    return this;
+  }
+  return {
+    reviveLandingInfo,
+    setOauth,
+    setTenant,
+    setVersion,
+    oauth: this.oauth,
+    tenantId: this.tenantId,
+    version: this.version
+  }
+})();
 export interface CreateUserProfileObject {
   name: string;
   image: string;
@@ -87,7 +122,7 @@ interface GLOBALSType {
         descriptiveAudio: string;
       };
     };
-  };
+  } | null;
   [key: string]: any;
 }
 /** GLOBAL config where all runtime constants are stored */
@@ -97,6 +132,7 @@ export const GLOBALS: GLOBALSType = {
     deviceId: "c-a34d8e5a-a0558797-22855546b4",
     deviceType: "AppleTV",
     tenantId: landingInfo.tenantId,
+    regCode: null
   },
   createUserProfile: { image: "", name: "", optOutPersonalDataUse: false },
   editUserProfile: {
@@ -116,44 +152,8 @@ export const GLOBALS: GLOBALSType = {
     itemFeed: [],
     filterData: {},
   },
-  moviesAndTvShows:[],
-  store: {
-    accessToken: null,
-    refreshToken: null,
-    userProfile: undefined,
-    rightsGroupIds: null,
-    accountID: '',
-    settings: {
-      parentalControll: {
-        contentLock: {},
-        adultLock: {},
-        purchaseLock: {},
-      },
-      display: {
-        subtitleConfig: {
-          primary: "en",
-          secondary: "fr",
-          tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
-        },
-        bitrates10ft: {},
-        onScreenLanguage: {
-          title: "English (US)",
-          languageCode: "en-US",
-          enableRTL: false
-
-        },
-        closedCaption: "",
-      },
-      audio: {
-        audioLanguages: {
-          primary: "en",
-          secondary: "fr",
-          tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
-        },
-        descriptiveAudio: "",
-      },
-    },
-  },
+  moviesAndTvShows: [],
+  store: null,
   storeID: undefined,
 };
 
@@ -162,6 +162,7 @@ export const resetAuthData = () => {
     ...GLOBALS.store,
     accessToken: null,
     refreshToken: null,
+    userProfile: undefined
 
   }
 };
@@ -188,7 +189,6 @@ export const deleteUserSettings = () => {
           title: "English (US)",
           languageCode: "en-US",
           enableRTL: false
-
         },
         closedCaption: "",
       },

@@ -31,7 +31,7 @@ const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
       } else {
         GLOBALS.store.settings.display.subtitleConfig.secondary = item;
       }
-      updateStore(JSON.stringify(GLOBALS.store));
+      updateStore(GLOBALS.store);
     } catch (error) {
       console.log("error", error);
     }

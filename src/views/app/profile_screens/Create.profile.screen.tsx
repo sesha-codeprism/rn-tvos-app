@@ -36,6 +36,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
 ) => {
   const maxProfileNameLength = appUIDefinition.config.maxProfileNameLength;
   console.log("props coming to create profile", props);
+  const keys = keyboard;
   const CaretComponent = () => {
     return (
       <Text
@@ -142,9 +143,9 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
           </View>
           <View style={{ marginTop: 50 }}>
             <FlatList
-              hasTVPreferredFocus
-              data={keyboard.row1}
+              data={keys.row1}
               horizontal
+              initialNumToRender={keys.row1.length}
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
                 <View style={{ flexDirection: "row" }}>
@@ -232,9 +233,10 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
               )}
             />
             <FlatList
-              data={keyboard.row2}
+              data={keys.row2}
               horizontal
               keyExtractor={(x, i) => i.toString()}
+              initialNumToRender={keys.row2.length}
               renderItem={({ item, index }) => (
                 <View style={MFProfileStyle.create_keyboardButton}>
                   {item.type === "number" || item.type === "text" ? (
@@ -278,8 +280,9 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
               )}
             />
             <FlatList
-              data={keyboard.row3}
+              data={keys.row3}
               horizontal
+              initialNumToRender={keys.row3.length}
               keyExtractor={(x, i) => i.toString()}
               renderItem={({ item, index }) => (
                 <View style={MFProfileStyle.create_keyboardButton}>
@@ -347,7 +350,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                 setFocus("");
               }}
               onPress={() => {
-                if (titleString == "") {
+                if (titleString.trim() === "") {
                   Alert.alert("Please enter some name");
                 } else {
                   props.route.params.mode === "edit"
@@ -378,7 +381,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
               onPress={() => {
                 props.route.params.mode === "edit"
                   ? props.navigation.goBack()
-                  : props.navigation.pop(2);
+                  : props.navigation.pop();
               }}
               textLabel="Cancel"
               imageSource={0}

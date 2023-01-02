@@ -40,7 +40,7 @@ const VideoQualityScreen: React.FunctionComponent<Props> = (props: any) => {
   const onPress = (item: any) => {
     setSelectedQyality(item);
     GLOBALS.store.settings.display.bitrates10ft = item;
-    updateStore(JSON.stringify(GLOBALS.store));
+    updateStore(GLOBALS.store);
   };
   const getValues = () => {
     setSelectedQyality(GLOBALS.store.settings.display.bitrates10ft);

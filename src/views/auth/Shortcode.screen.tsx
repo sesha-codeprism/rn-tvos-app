@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+//@ts-nocheck
+import React, { useState, useEffect, useContext } from "react";
 import { View } from "react-native";
 import FastImage from "react-native-fast-image";
 import MFText from "../../components/MFText";
@@ -9,14 +10,9 @@ import { AppImages } from "../../assets/images";
 import { ShortCodeStyles } from "./shortCode.style";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
-import { MFDeviceInfo } from "../../../backend/@types/globals";
-import {
-  getShortCodeAuthenticate,
-  getBootStrap,
-  processBootStrap,
-} from "../../../backend/authentication/authentication";
-import { infoLog, updateStore } from "../../utils/helpers";
-import { GLOBALS } from "../../utils/globals";
+import { processBootStrap } from "../../../backend/authentication/authentication";
+import { updateStore } from "../../utils/helpers";
+import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { initUdls } from "../../../backend";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { appUIDefinition } from "../../config/constants";
@@ -26,6 +22,13 @@ import {
   setGlobalData,
   verifyAccountAndLogin,
 } from "../../utils/splash/splash_utils";
+import useLanding from "../../customHooks/useLandingData";
+import useBootstrap from "../../customHooks/useBootstrapData";
+import useShortCode from "../../customHooks/useShortCode";
+import { resetCaches, resetSpecificQuery } from "../../config/queries";
+import { GlobalContext } from "../../contexts/globalContext";
+import { useQuery } from "react-query";
+import { getStoresOfZones } from "../../../backend/discovery/discovery";
 
 const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
 
@@ -40,91 +43,116 @@ export interface ShortCodeScreenProps {
 const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
   props
 ) => {
-  let intervalTimer: NodeJS.Timer;
-  const [code, setCode] = useState("");
-  const [isTesting, setIsTesting] = useState(false);
   const [verificationCode, setVerficationCode] = useState(Array());
+  const [latestToken, setLatestToken] = useState(null);
+  const [latestRefreshToken, setLatestRefreshToken] = useState(null);
+  //@ts-ignore
+  const landingResponse = useLanding(GLOBALS.store?.MFGlobalsConfig?.url);
+  //@ts-ignore
+  const shortCodeData = useShortCode(GLOBALS.store?.MFGlobalsConfig?.url);
+  const bootstrapData = useBootstrap(latestToken, latestRefreshToken);
+  const currentContext = useContext(GlobalContext);
 
-  const makeBackendRequest = async (deviceInfo: MFDeviceInfo) => {
-    const { data } = await getShortCodeAuthenticate(deviceInfo);
-    const registrationCode: string = data.RegistrationCode;
-    try {
-      if (registrationCode) {
-        setCode(registrationCode);
-        setVerficationCode(registrationCode.split(""));
-        getAccessToken(deviceInfo, data.NextCheckInterval);
-      }
-    } catch (e) {
-      infoLog(`Something went wrong:${e}`);
+  const [navigateTo, bootstrapUrl, acessToken, response] = bootstrapData || {};
+  const rightsGroupIds = GLOBALS.store?.rightsGroupIds;
+
+  const storeResults = useQuery(
+    //@ts-ignore
+    ["stores", response?.data?.data?.ServiceMap?.Services?.discovery],
+    getStoresOfZones,
+    {
+      cacheTime: Infinity,
+      staleTime: Infinity,
+      //@ts-ignore
+      enabled: !!(response?.data?.data?.ServiceMap?.Services?.discovery && rightsGroupIds),
     }
-  };
+  );
 
   const onRefresh = async () => {
-    if (__DEV__ && isTesting) {
-      console.log("Testing..");
-      setVerficationCode([]);
-      setTimeout(() => {
-        setVerficationCode("TESTIN".split(""));
-      }, 1000);
-    } else {
-      clearInterval(intervalTimer);
-      setVerficationCode([]);
-      makeBackendRequest(GLOBALS.deviceInfo);
-    }
+    resetSpecificQuery(["shotcode", landingResponse, GLOBALS.deviceInfo]);
   };
 
   useEffect(() => {
-    if (__DEV__ && isTesting) {
-      console.log("Testing right now..");
-      setVerficationCode("TESTIN".split(""));
-    } else {
-      console.log("Dev build.. so testing for now");
-      makeBackendRequest(GLOBALS.deviceInfo).catch((err) => {
-        infoLog(`Something went wrong ${err}`);
-      });
+    // bootstrap response arrived
+    if(response?.data?.data){
+      setGlobalData(response?.data?.data);
     }
+  }, [response?.data, response?.isSuccess]);
+
+  useEffect(() => {
+    const onDuplexMessage = (message: any) => {
+      if (message?.type === "DeviceDeleted") {
+        const { payload: { deviceId = "" } = {} } = message;
+        if (deviceId === GLOBALS.deviceInfo.deviceId) {
+          // logout
+          const resetStore = resetAuthData();
+          updateStore(resetStore);
+          resetCaches();
+          GLOBALS.rootNavigation.replace(Routes.ShortCode);
+        }
+      }
+    };
+    currentContext.addOnDuplexMessageHandlers([
+      ...currentContext.onDuplexMessageHandlers,
+      onDuplexMessage,
+    ]);
   }, []);
 
-  const getAccessToken = async (
-    deviceInfo: MFDeviceInfo,
-    retryInterval: number
-  ) => {
-    if (!intervalTimer) {
-      intervalTimer = setInterval(async () => {
-        try {
-          const { data } = await getShortCodeAuthenticate(deviceInfo);
-          if (data.AccessToken) {
-            clearInterval(intervalTimer);
-            GLOBALS.store.accessToken = data.AccessToken;
-            GLOBALS.store.refreshToken = data.RefreshToken;
-            updateStore(JSON.stringify(GLOBALS.store));
-            getBootStrap(GLOBALS.store.accessToken).then(({ data }) => {
-              setGlobalData(data);
-              processBootStrap(data, "10ft").then(() => {
-                setGlobalData(data);
-                initUdls();
-                setDefaultStore();
-                var value = verifyAccountAndLogin();
-                console.log("verifyAccountAndLogin", value);
-                connectDuplex();
-                props.navigation.replace(Routes.WhoIsWatching);
-              });
-            });
-          } else {
-            const registrationCode: string = data.RegistrationCode;
-            const currentCode: string = verificationCode.join("");
-            if (registrationCode && registrationCode !== currentCode) {
-              setVerficationCode(registrationCode.split(""));
-            }
-          }
-        } catch (e) {
-          console.log(`Something went wrong:${e}`);
-        }
-      }, retryInterval * 1000);
-    } else {
-      infoLog("Timer exists..no resetting required");
+  useEffect(() => {
+    //@ts-ignore
+    if (shortCodeData?.data?.RegistrationCode) {
+      //@ts-ignore
+      setVerficationCode(shortCodeData?.data?.RegistrationCode?.split(""));
+      //@ts-ignore
+      GLOBALS.deviceInfo.regCode = shortCodeData?.data?.RegistrationCode;
     }
-  };
+    //@ts-ignore
+  }, [shortCodeData?.data?.RegistrationCode]);
+
+  useEffect(() => {
+    if (
+      GLOBALS.store &&
+      shortCodeData?.data?.AccessToken &&
+      shortCodeData?.data?.RefreshToken
+    ) {
+      GLOBALS.store.accessToken = shortCodeData?.data?.AccessToken;
+      GLOBALS.store.refreshToken = shortCodeData?.data?.RefreshToken;
+      setLatestToken(shortCodeData?.data?.AccessToken);
+      setLatestRefreshToken(shortCodeData?.data?.RefreshToken)
+      updateStore(GLOBALS.store);
+    }
+  }, [shortCodeData?.data?.AccessToken]);
+
+  useEffect(() => {
+    const { data, isSuccess, isError, error } = response || {};
+    if (
+      isSuccess &&
+      data?.data &&
+      navigateTo === "NAVIGATEINNTOAPP" &&
+      bootstrapUrl &&
+      acessToken &&
+      GLOBALS.deviceInfo &&
+      storeResults?.data?.data
+    ) {
+      processBootStrap(data?.data, "10ft").then(() => {
+        initUdls();
+        setDefaultStore(storeResults?.data?.data, data?.data);
+        setGlobalData(data?.data);
+        var value = verifyAccountAndLogin();
+        console.log("verifyAccountAndLogin", value);
+        connectDuplex(currentContext.duplexMessagee);
+        props.navigation.replace(Routes.WhoIsWatching);
+      });
+    }
+  }, [
+    response?.data,
+    navigateTo,
+    bootstrapUrl,
+    acessToken,
+    shortCodeData?.data?.AccessToken,
+    storeResults?.data?.data,
+  ]);
+
   return (
     <View style={ShortCodeStyles.root} testID="root">
       <View style={ShortCodeStyles.scrollbarView} testID="imageView">
@@ -190,7 +218,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
           />
         </View>
         <View style={{ flexDirection: "row" }}>
-          {verificationCode.map((i, e) => {
+          {verificationCode?.map((i, e) => {
             return (
               <View
                 key={`Index${e}`}

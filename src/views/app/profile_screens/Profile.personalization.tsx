@@ -48,10 +48,12 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
     GLOBALS.editUserProfile.AdditionalFields = {
       optOutPersonalDataUse: "true",
     };
-    props.navigation.navigate(Routes.ProfileFinalise, {
-      item: GLOBALS.editUserProfile,
-      mode: "edit",
-    });
+    // props.navigation.navigate(Routes.ProfileFinalise, {
+    //   item: GLOBALS.editUserProfile,
+    //   mode: "edit",
+    // });
+    toggleShouldRenderImage(false);
+    setShowPersonalizationPopup(false);
   };
   const clearHistory = async () => {
     try {
@@ -95,7 +97,16 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
             displayText="Profile personalization"
             textStyle={MFProfileStyle.personalize_profileTitleStyle}
           />
-          <View style={{ marginTop: 80 }}>
+          <View
+            style={
+              focused
+                ? {
+                    ...MFProfileStyle.personalize_allow_container,
+                    backgroundColor: "#053C69",
+                  }
+                : MFProfileStyle.personalize_allow_container
+            }
+          >
             <View style={{ flexDirection: "row" }}>
               <Pressable
                 hasTVPreferredFocus
@@ -107,6 +118,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                 }}
                 onPress={() => {
                   toggleShouldRenderImage(!shouldRenderImage);
+                  shouldRenderImage ? setShowPersonalizationPopup(true) : null;
                 }}
                 style={{ height: "100%" }}
               >
@@ -132,8 +144,15 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                   shouldRenderText={true}
                   displayText={"Allow Profile Personalization"}
                 />
+                <Text style={MFProfileStyle.personalize_subTitleStyles}>
+                  Enabling Profile Personalization will allow the system to to
+                  improve the viewing experience for ndividual profiles. It is
+                  highly recommended that you enable this feature for the best
+                  viewing experience.
+                </Text>
+                {/* <MFText
                 {/* <Text style={MFProfileStyle.personalize_subTitleStyles}>Enabling Profile Personalization will allow the system to to improve the viewing experience for ndividual profiles. It is highly recommended that you enable this feature for the best viewing experience.</Text> */}
-                <MFText
+                {/* <MFText
                   textStyle={MFProfileStyle.personalize_subTitleStyles}
                   shouldRenderText={true}
                   displayText={
@@ -141,7 +160,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                   }
                   adjustsFontSizeToFit={false}
                   numberOfLines={3}
-                />
+                /> */}
               </View>
             </View>
             {/* <MFButton
@@ -181,11 +200,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
           <MFButton
             variant={MFButtonVariant.Contained}
             textLabel={
-              props.route.params.mode === "create"
-                ? "Continue"
-                : shouldRenderImage
-                ? "Done"
-                : "Cancel"
+              props.route.params.mode === "create" ? "Continue" : "Done"
             }
             iconSource={0}
             imageSource={0}
@@ -249,7 +264,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
             }}
             onPress={() => {
               props.route.params.mode === "create"
-                ? props.navigation.goBack()
+                ? props.navigation.pop(3)
                 : setShowClearHistory(true);
             }}
             textLabel={
@@ -270,7 +285,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
           />
         </View>
       </View>
-      {!shouldRenderImage && (
+      {showPersonalizationPopup && (
         <MFPopup
           buttons={[
             {
@@ -280,7 +295,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
             {
               title: "Cancel",
               onPress: () => {
-                toggleShouldRenderImage(true);
+                setShowPersonalizationPopup(false);
               },
             },
           ]}

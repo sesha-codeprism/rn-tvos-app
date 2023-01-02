@@ -21,6 +21,11 @@ import AudioLanguageScreen from "../../views/app/settings_screens/audio/audio_la
 import DescriptiveAudioScreen from "../../views/app/settings_screens/audio/descriptive_audio.screen";
 import SystemSettingsScreen from "../../views/app/settings_screens/system/system.screen";
 import SystemInformationScreen from "../../views/app/settings_screens/system/system_info.screen";
+import DeveloperScreen from "../../views/app/settings_screens/developer/developer.screen";
+import SelectServiceScreen from "../../views/app/settings_screens/developer/developer.selectservice";
+import DeveloperUserInfoSettingsScreen from "../../views/app/settings_screens/developer/developer.userinfo";
+import DeveloperCurrentStoreSettingsScreen from "../../views/app/settings_screens/developer/developer.currentstore";
+import DeveloperLoggingLevelScreen from "../../views/app/settings_screens/developer/developer.logginglevel";
 import DvrSettingsScreen from "../../views/app/settings_screens/dvr/dvr.screen";
 import StopRecordingScreen from "../../views/app/settings_screens/dvr/stop_recording.screen";
 import { GLOBALS } from "../../utils/globals";
@@ -41,7 +46,8 @@ import FossLicenseScreen from "../../views/app/settings_screens/system/foss_lice
 import GalleryScreen from "../../views/app/BrowsePages/BrowseGallery/Browse.Gallery.Screen";
 import RouteFallBackScreen from "../../views/app/Route.Fallback.screen";
 import BrowseCategoryScreen from "../../views/app/BrowsePages/BrowseCategory/Browse.Category.screen";
-import DetailsScreen from "../../views/app/details_pages/Details.Screen";
+import TestScreen from "../../views/app/test.screen";
+
 interface RouterOutletProps {}
 
 export const Routes = {
@@ -78,6 +84,11 @@ export const Routes = {
   AudioLanguage: "audio_language",
   DescriptiveAudio: "descriptive_audio",
   SystemSettings: "system_settings",
+  DeveloperSettings: "developer_settings",
+  SelectServiceSettings: "developer_select_service_settings",
+  DeveloperUserInfoSettingsScreen: "developer_user_info_settings",
+  DeveloperCurrentStoreSettingsScreen: "developer_current_store_settings",
+  DeveloperLoggingLevelScreen: "developer_logging_level",
   SystemInformation: "system_info",
   DVRSettings: "dvr_settings",
   StopRecording: "stop_recording",
@@ -159,6 +170,26 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           component={SystemSettingsScreen}
         />
         <Stack.Screen
+          name={Routes.DeveloperSettings}
+          component={DeveloperScreen}
+        />
+        <Stack.Screen
+          name={Routes.SelectServiceSettings}
+          component={SelectServiceScreen}
+        />
+        <Stack.Screen
+          name={Routes.DeveloperUserInfoSettingsScreen}
+          component={DeveloperUserInfoSettingsScreen}
+        />
+        <Stack.Screen
+          name={Routes.DeveloperCurrentStoreSettingsScreen}
+          component={DeveloperCurrentStoreSettingsScreen}
+        />
+        <Stack.Screen
+          name={Routes.DeveloperLoggingLevelScreen}
+          component={DeveloperLoggingLevelScreen}
+        />
+        <Stack.Screen
           name={Routes.SystemInformation}
           component={SystemInformationScreen}
         />
@@ -179,12 +210,14 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
     try {
       // Attempt to load local store
       var store = getStore();
-      console.log("Store", store);
-    } catch (e) {
-      console.log("Some error", e);
-    }
+      if (false) {
+        store.MFGlobalsConfig.url = "https://reachclient.dev.mr.tv3cloud.com/";
+        store.MFGlobalsConfig.stsUrl =
+          "https://ottapp-appgw-client-A.dev.mr.tv3cloud.com/Green/sts/";
+      }
+    } catch (e) {}
     if (store) {
-      GLOBALS.store = JSON.parse(store);
+      GLOBALS.store = store;
       console.log("Settings store successful", GLOBALS.store);
       const isLoggedIn =
         GLOBALS.store.accessToken !== null &&
@@ -246,6 +279,8 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
         name={Routes.BrowseCategory}
         component={BrowseCategoryScreen}
       />
+      <Stack.Screen name={Routes.Test} component={TestScreen} />
+
       <Stack.Screen name={Routes.FallBack} component={RouteFallBackScreen} />
     </Stack.Navigator>
   );

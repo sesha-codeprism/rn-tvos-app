@@ -1817,8 +1817,8 @@
     },
     "RECOMM": {
       "metadata1": "{Image}",
-      "metadata2": "{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}",
-      "metadata3": "{Name}"
+      "metadata3": "{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}",
+      "metadata2": "{Name}"
     },
     "STORE": {
       "metadata": "{Name}",

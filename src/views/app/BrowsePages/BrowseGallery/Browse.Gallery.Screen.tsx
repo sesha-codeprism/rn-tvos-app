@@ -55,15 +55,20 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const baseValues = getBaseValues(feed, browsePageConfig);
   const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
   const [browsePivots, setBrowsePivots] = useState(browseFeed.pivots);
+  const [filterFocused, setFilterFocused] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
   // const menuRef = filterData.map(() => useRef<PressableProps>(null));
-  // const subMenuFirstRef = useRef<PressableProps>(null);
+  const barRef = useRef<TouchableOpacity>(null);
+  const filterRef = useRef<PressableProps>(null);
+  const cardRef = useRef<PressableProps>(null);
   const pivotsParam = "pivots=true";
   const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
 
-  const filterRef = useEffect(() => {
-    if (didMountRef.current) {
-    } else didMountRef.current = true;
-  });
+  // const filterRef = useEffect(() => {
+  //   if (didMountRef.current) {
+  //   } else didMountRef.current = true;
+  // });
 
   UNSTABLE_usePreventRemove(openMenu, (data) => {
     // openSubMenu ? setOpenSubMenu(false) : setOpenMenu(false);
@@ -210,7 +215,15 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   };
 
   console.log("Current data", data);
-
+  const onFocusBar = () => {
+    if (!filterFocused) {
+      setFilterFocused(true);
+      filterRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+    } else {
+      setFilterFocused(false);
+      cardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+    }
+  };
   return (
     <View style={styles.root}>
       <View style={styles.topRow}>
@@ -223,6 +236,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
         </View>
         <View style={styles.filterButtonContainerStyle}>
           <MFButton
+            ref={filterRef}
             variant={MFButtonVariant.Icon}
             iconSource={AppImages["filter"]}
             imageSource={0}
@@ -259,110 +273,124 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
         <MFLoader />
       ) : (
         <View style={styles.contentContainerStyles}>
-          {data ? (
-            <>
-              <View style={styles.currentFeedContainerStyles}>
-                {currentFeed && (
-                  <>
-                    <View style={styles.posterImageContainerStyles}>
-                      <FastImage
-                        style={styles.posterImageStyle}
-                        source={{
-                          uri:
-                            currentFeed?.image16x9PosterURL != undefined
-                              ? currentFeed!.image16x9PosterURL.uri
-                              : AppImages.tvshowPlaceholder,
-                          priority: FastImage.priority.normal,
-                        }}
-                      >
-                        <LinearGradient
-                          colors={["transparent", "#00030E", "#00030E"]}
-                          start={{ x: 0, y: 0.8 }}
-                          end={{ x: 0, y: 1 }}
-                          style={{
-                            flex: 1,
+          <>
+            {data ? (
+              <>
+                <View style={styles.currentFeedContainerStyles}>
+                  {currentFeed && (
+                    <>
+                      <View style={styles.posterImageContainerStyles}>
+                        <FastImage
+                          style={styles.posterImageStyle}
+                          source={{
+                            uri:
+                              currentFeed?.image16x9PosterURL != undefined
+                                ? currentFeed!.image16x9PosterURL.uri
+                                : AppImages.tvshowPlaceholder,
+                            priority: FastImage.priority.normal,
                           }}
+                        >
+                          <LinearGradient
+                            colors={["transparent", "#00030E", "#00030E"]}
+                            start={{ x: 0, y: 0.8 }}
+                            end={{ x: 0, y: 1 }}
+                            style={{
+                              flex: 1,
+                            }}
+                          />
+                        </FastImage>
+                      </View>
+                      <View style={styles.metadataContainerStyles}>
+                        {currentFeed?.CatalogInfo &&
+                          currentFeed.CatalogInfo.Network && (
+                            <View style={styles.networkLogoContainerStyle}>
+                              <FastImage
+                                source={{
+                                  uri: getNetworkInfo(currentFeed)
+                                    .tenFootLargeURL.uri,
+                                }}
+                                style={styles.networkLogoStyles}
+                              />
+                            </View>
+                          )}
+                        <MFText
+                          shouldRenderText
+                          displayText={currentFeed!.title}
+                          textStyle={styles.titleTextStyle}
                         />
-                      </FastImage>
-                    </View>
-                    <View style={styles.metadataContainerStyles}>
-                      {currentFeed?.CatalogInfo &&
-                        currentFeed.CatalogInfo.Network && (
-                          <View style={styles.networkLogoContainerStyle}>
-                            <FastImage
-                              source={{
-                                uri: getNetworkInfo(currentFeed).tenFootLargeURL
-                                  .uri,
-                              }}
-                              style={styles.networkLogoStyles}
-                            />
-                          </View>
-                        )}
-                      <MFText
-                        shouldRenderText
-                        displayText={currentFeed!.title}
-                        textStyle={styles.titleTextStyle}
-                      />
-                      <MFText
-                        shouldRenderText
-                        displayText={getResolvedMetadata(
-                          appUIDefinition.metadataByItemType.RECOMM.metadata2,
-                          currentFeed
-                        )}
-                        textStyle={styles.metadataLine2Styles}
-                      />
-                      {renderRatingValues()}
-                    </View>
-                  </>
-                )}
-              </View>
-              <View style={styles.gridViewContainerStyles}>
-                <LinearGradient
-                  colors={[
-                    "transparent",
-                    "#00030E",
-                    "#00030E",
-                    "#00030E",
-                    "#00030E",
-                    "#00030E",
-                  ]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0.1, y: 0 }}
-                  style={{
-                    flex: 1,
-                  }}
-                >
-                  <MFGridView
-                    dataSource={data}
-                    style={HomeScreenStyles.portraitCardStyles}
-                    imageStyle={HomeScreenStyles.portraitCardImageStyles}
-                    focusedStyle={HomeScreenStyles.focusedStyle}
-                    onFocus={updateFeed}
-                    autoFocusOnFirstCard
+                        <MFText
+                          shouldRenderText
+                          displayText={getResolvedMetadata(
+                            appUIDefinition.metadataByItemType.RECOMM.metadata2,
+                            currentFeed
+                          )}
+                          textStyle={styles.metadataLine2Styles}
+                        />
+                        {renderRatingValues()}
+                      </View>
+                    </>
+                  )}
+                </View>
+                <View style={styles.gridViewContainerStyles}>
+                  <TouchableOpacity
+                    ref={barRef}
+                    style={{
+                      backgroundColor: "transparent",
+                      width: "100%",
+                      height: 5,
+                      // position: "absolute",
+                    }}
+                    onFocus={onFocusBar}
                   />
-                </LinearGradient>
+                  <LinearGradient
+                    colors={[
+                      "transparent",
+                      "#00030E",
+                      "#00030E",
+                      "#00030E",
+                      "#00030E",
+                      "#00030E",
+                    ]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0.1, y: 0 }}
+                    style={{
+                      flex: 1,
+                    }}
+                  >
+                    <MFGridView
+                      ref={cardRef}
+                      dataSource={data}
+                      style={HomeScreenStyles.portraitCardStyles}
+                      imageStyle={HomeScreenStyles.portraitCardImageStyles}
+                      focusedStyle={HomeScreenStyles.focusedStyle}
+                      onFocus={updateFeed}
+                      autoFocusOnFirstCard
+                      selectedId={currentFeed?.Id}
+                    />
+                  </LinearGradient>
+                </View>
+              </>
+            ) : (
+              <View
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  alignContent: "center",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <MFText
+                  shouldRenderText
+                  displayText={`Couldn't fetch data for ${browseFeed.Uri}`}
+                  textStyle={[
+                    MFTabBarStyles.tabBarItemText,
+                    { color: "white", marginTop: 5 },
+                  ]}
+                />
               </View>
-            </>
-          ) : (
-            <View
-              style={{
-                height: "100%",
-                width: "100%",
-                alignContent: "center",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <MFText
-                shouldRenderText
-                displayText={`Couldn't fetch data for ${browseFeed.Uri}`}
-                textStyle={[
-                  MFTabBarStyles.tabBarItemText,
-                  { color: "white", marginTop: 5 },
-                ]}
-              />
-            </View>
-          )}
+            )}
+          </>
         </View>
       )}
       {pivotQuery.isLoading ? (

@@ -32,7 +32,7 @@ const ClosedCaptionScreen: React.FunctionComponent<Props> = (props: any) => {
   const onPress = (item: string) => {
     setClosedCaption(item);
     GLOBALS.store.settings.display.closedCaption = item;
-    updateStore(JSON.stringify(GLOBALS.store));
+    updateStore(GLOBALS.store);
   };
   const getValues = () => {
     setClosedCaption(GLOBALS.store.settings.display.closedCaption);

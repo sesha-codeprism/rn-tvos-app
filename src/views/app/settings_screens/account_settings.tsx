@@ -25,10 +25,12 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
     if (__DEV__ && !isTesting) {
       /** Get default store for user */
       const resetStore = resetAuthData();
+      console.log("After resetting", resetStore);
       /** Update the current Async NSUserDefaults store with resetStore */
-      updateStore(JSON.stringify(resetStore));
+      updateStore(resetStore);
       /** Reset the Query cache to make sure no cached API data is returned by React-Query */
       resetCaches();
+      GLOBALS.userProfile = undefined;
     } else {
       console.log("Test functions.. so just simply trying to navigate");
     }
