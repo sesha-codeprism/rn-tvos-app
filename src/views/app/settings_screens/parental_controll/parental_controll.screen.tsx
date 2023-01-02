@@ -83,8 +83,8 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
 
   return (
     <SideMenuLayout
-      title={AppStrings.str_settings_parental_controls}
-      subTitle={AppStrings.str_settings_pcon_label}
+      title={AppStrings.str_settings_home_heading}
+      subTitle={AppStrings.str_settings_home_parental_controls}
     >
       <FlatList
         data={list}

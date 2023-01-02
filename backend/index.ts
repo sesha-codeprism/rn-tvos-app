@@ -1,3 +1,4 @@
+import { massageDVRFeed } from "../src/utils/assetUtils";
 import { SourceType } from "../src/utils/common";
 import { massageDiscoveryFeed } from "../src/utils/DiscoveryUtils";
 import { massageSubscriberFeed } from "../src/utils/Subscriber.utils";
@@ -40,6 +41,9 @@ export const getMassagedData = (uri: string, data: any) => {
         const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
         return massagedData;
       }
+    } else if (udlID!.id.split("/")[0] === 'dvrproxy') {
+      const massagedData = massageDVRFeed(data.data);
+      return massagedData;
     }
   } else {
     return undefined;

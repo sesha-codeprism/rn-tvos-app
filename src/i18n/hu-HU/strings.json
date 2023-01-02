@@ -227,6 +227,75 @@
   "str_details_more_like_this": "More Like This",
   "str_details_cast_n_crew": "Cast And Crew",
   "str_selected": "Selected",
+  "ISO": {
+    "af": "Afrikaans",
+    "ar": "Arabic",
+    "az": "Azeri",
+    "be": "Belarusian",
+    "bg": "Bulgarian",
+    "ca": "Catalan",
+    "cs": "Czech",
+    "cy": "Welsh",
+    "da": "Danish",
+    "de": "German",
+    "el": "Greek",
+    "en": "English",
+    "es": "Spanish",
+    "et": "Estonian",
+    "eu": "Basque",
+    "fa": "Persian",
+    "fi": "Finnish",
+    "fo": "Faroese",
+    "fr": "French",
+    "gd": "Gaelic",
+    "gl": "Galician",
+    "gu": "Gujarati",
+    "he": "Hebrew",
+    "hi": "Hindi",
+    "hr": "Croatian",
+    "hu": "Hungarian",
+    "hy": "Armenian",
+    "id": "Indonesian",
+    "is": "Icelandic",
+    "it": "Italian",
+    "ja": "Japanese",
+    "ka": "Georgian",
+    "kk": "Kazakh",
+    "kn": "Kannada",
+    "ko": "Korean",
+    "ky": "Kyrgyz",
+    "lt": "Lithuanian",
+    "lv": "Latvian",
+    "mk": "Macedonian",
+    "mn": "Mongolian",
+    "mr": "Marathi",
+    "ms": "Malay",
+    "mul": "Multiple Languages",
+    "nl": "Dutch",
+    "no": "Norwegian",
+    "pa": "Punjabi",
+    "pl": "Polish",
+    "pt": "Portuguese",
+    "ro": "Romanian",
+    "ru": "Russian",
+    "sa": "Sanskrit",
+    "sk": "Slovak",
+    "sl": "Slovenian",
+    "sq": "Albanian",
+    "sr": "Serbian",
+    "sv": "Swedish",
+    "sw": "Swahili",
+    "ta": "Tamil",
+    "te": "Telugu",
+    "th": "Thai",
+    "tr": "Turkish",
+    "tt": "Tatar",
+    "uk": "Ukrainian",
+    "ur": "Urdu",
+    "uz": "Uzbek",
+    "vi": "Vietnamese",
+    "zh": "Chinese"
+  },
   "str_settings_audio": {
     "audioPrimaryLangHeader": "Primary Audio Language",
     "selectAudioLangLabel": "Select Audio languages",
@@ -316,6 +385,102 @@
     "vi": "Vietnamese",
     "zh": "Chinese"
   },
+  "remote_record_dialog": {
+    "title": "Do you want to stop recording this episode or the series?",
+    "cancel_single_event": "Stop recording this episode",
+    "cancel_schedule": "Stop recording the series",
+    "cancel": "Cancel"
+  },
+  "str_selectServices": [
+    {
+      "name": "DevTest",
+      "value": "MR.dev",
+      "path": "https://reachclient.dev.mr.tv3cloud.com"
+    },
+    {
+      "name": "OSim",
+      "value": "MR.osim",
+      "path": "https://reachclient.osim.mr.tv3cloud.com"
+    },
+    {
+      "name": "Demo",
+      "value": "MR.demo",
+      "path": "https://reachclient.demo.mr.tv3cloud.com"
+    },
+    {
+      "name": "Cip",
+      "value": "MR.cip",
+      "path": "https://reachclient.cip.mr.tv3cloud.com"
+    },
+    {
+      "name": "Integration",
+      "value": "MR.oint",
+      "path": "https://reachclient.oint.mr.tv3cloud.com"
+    },
+    {
+      "name": "OFunk",
+      "value": "MR.ofunk",
+      "path": "https://reachclient.ofunk.mr.tv3cloud.com"
+    },
+    {
+      "name": "PreProd",
+      "value": "MR.pprod",
+      "path": "https://reachclient.pprod.mr.tv3cloud.com"
+    },
+    {
+      "name": "MFNA",
+      "value": "mfn.proda",
+      "path": "https://reachclient.proda.mfn.tv3cloud.com"
+    },
+    {
+      "name": "ProdC (Telus)",
+      "value": "TELUS.prodc",
+      "path": "https://reachclient.prodc.tls.tv3cloud.com"
+    },
+    {
+      "name": "CIM",
+      "value": "MR.CIM",
+      "path": "https://reachclient.cim.mr.tv3cloud.com"
+    },
+    {
+      "name": "TMO",
+      "value": "TMO.proda",
+      "path": "https://reachclient.proda.tmo.tv3cloud.com"
+    }
+  ],
+  "str_selectLogginLevel": [
+    {
+      "name": "None",
+      "value": "none"
+    },
+    {
+      "name": "Error",
+      "value": "error"
+    },
+    {
+      "name": "Warning",
+      "value": "warn"
+    },
+    {
+      "name": "Debug",
+      "value": "debug"
+    },
+    {
+      "name": "Info",
+      "value": "info"
+    }
+  ],
+  "developer_settings": "Developer",
+  "developer_settings_user_info": "User Info",
+  "developer_settings_logging_level": "Logging Level",
+  "developer_settings_select_service": "Select Services",
+  "developer_settings_current_store": "Current Store Version",
+  "developer_settings_store_version": "Store Version",
+  "developer_settings_user_info_account": "Account ID: ",
+  "developer_settings_user_info_userid": "User ID: ",
+  "developer_settings_user_info_subscriber_group": "Subscriber Group: ",
+  "developer_settings_user_info_subscriber_local": "Local ID: ",
+  "developer_settings_user_info_subscriber_acceptLaguage": "Accept Language: ",
   "str_filter": "Filter",
   "str_clear": "Clear",
   "str_asset_expires": "Expires in",
