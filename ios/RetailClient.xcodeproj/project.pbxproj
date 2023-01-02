@@ -359,6 +359,7 @@
 				59C74687294A45B9009D2E1D /* SearchResultsViewTVOSController.h */,
 				59A99A902853227300560F39 /* Resources */,
 				BC051740295DFD2600539EA2 /* RetailClient-tvOS-Bridging-Header.h */,
+				BC051740295DFD2600539EA2 /* RetailClient-tvOS-Bridging-Header.h */,
 				009FA73B2738F4DE00417869 /* sampleSwiftUI */,
 				0F6088BC272062F40052254E /* MKGuide */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -930,6 +931,7 @@
 			files = (
 				00352440276BBF4200360F43 /* BaseTableViewCell.swift in Sources */,
 				BC05173C295DFCE600539EA2 /* MKGuideBridgeManager.swift in Sources */,
+				BC05173C295DFCE600539EA2 /* MKGuideBridgeManager.swift in Sources */,
 				00352452276BBF4200360F43 /* DiscoveryModels.swift in Sources */,
 				004DE6DF27ABA5B6003439C1 /* LogoViewController.swift in Sources */,
 				8168724227307A1500960AFF /* MKGuideManager.swift in Sources */,
@@ -1003,6 +1005,7 @@
 			files = (
 				59C74693294A45BB009D2E1D /* SearchRestultsViewTVOSController.m in Sources */,
 				59C7468F294A45BB009D2E1D /* RCTSearchViewTVOSManager.m in Sources */,
+				BC05173A295DFCAA00539EA2 /* MKGuideBridgeManager.m in Sources */,
 				BC05173A295DFCAA00539EA2 /* MKGuideBridgeManager.m in Sources */,
 				0F6088C22722B9060052254E /* MKGuide.m in Sources */,
 				2DCD954D1E0B4F2C00145EB5 /* RetailClientTests.m in Sources */,
