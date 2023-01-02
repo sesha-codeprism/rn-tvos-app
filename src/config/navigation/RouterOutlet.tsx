@@ -47,6 +47,7 @@ import GalleryScreen from "../../views/app/BrowsePages/BrowseGallery/Browse.Gall
 import RouteFallBackScreen from "../../views/app/Route.Fallback.screen";
 import BrowseCategoryScreen from "../../views/app/BrowsePages/BrowseCategory/Browse.Category.screen";
 import TestScreen from "../../views/app/test.screen";
+import DetailsScreen from "../../views/app/details_pages/Details.Screen";
 
 interface RouterOutletProps {}
 
@@ -88,13 +89,14 @@ export const Routes = {
   SelectServiceSettings: "developer_select_service_settings",
   DeveloperUserInfoSettingsScreen: "developer_user_info_settings",
   DeveloperCurrentStoreSettingsScreen: "developer_current_store_settings",
-  DeveloperLoggingLevelScreen:  "developer_logging_level",
+  DeveloperLoggingLevelScreen: "developer_logging_level",
   SystemInformation: "system_info",
   DVRSettings: "dvr_settings",
   StopRecording: "stop_recording",
   FOSSLicense: "foss_license",
   BrowseCategory: "BrowseCategory",
   BrowseGallery: "BrowseGallery",
+  Details: "details",
   FallBack: "fallBack",
 };
 
@@ -176,7 +178,7 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           name={Routes.SelectServiceSettings}
           component={SelectServiceScreen}
         />
-         <Stack.Screen
+        <Stack.Screen
           name={Routes.DeveloperUserInfoSettingsScreen}
           component={DeveloperUserInfoSettingsScreen}
         />
@@ -209,13 +211,7 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
     try {
       // Attempt to load local store
       var store = getStore();
-      if(false){
-        store.MFGlobalsConfig.url = 'https://reachclient.dev.mr.tv3cloud.com/';
-        store.MFGlobalsConfig.stsUrl = 'https://ottapp-appgw-client-A.dev.mr.tv3cloud.com/Green/sts/';
-      }
-    } catch (e) {
-      console.log("Some error", e);
-    }
+    } catch (e) {}
     if (store) {
       GLOBALS.store = store;
       console.log("Settings store successful", GLOBALS.store);
@@ -255,6 +251,7 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
         name={Routes.CreateProfile}
         component={CreateProfileScreen}
       />
+      <Stack.Screen name={Routes.Details} component={DetailsScreen} />
       <Stack.Screen
         name={Routes.ChooseProfile}
         component={ChooseProfileScreen}

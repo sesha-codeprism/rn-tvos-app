@@ -338,6 +338,38 @@ const getDiscoveryLibraryPackages = async (id: string, params: any) => {
   return response;
 };
 
+const getDiscoveryProgramDetailsById = async (itemID: string, params: any) => {
+  const { id } = params;
+  const url = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discoverySSL || '') + `/v3/programs/${id}`;
+  const response = await GET({
+    url: url,
+    params: params,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+
+  });
+  return response;
+}
+
+const getDiscoveryProgramSchedules = async (itemId: string, params: any) => {
+  const { id } = params;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discoverySSL || '') + `/v3/programs/${id}/schedules`;
+  try {
+    const response = await GET({
+      url: url,
+      params: params,
+      headers: {
+        Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      },
+    })
+    return response;
+  } catch (e) {
+    console.error("Cannot getDiscoveryProgramSchedules due to", e);
+    return undefined;
+  }
+}
+
 export const registerDiscoveryUdls = () => {
   const BASE = "discovery";
 
@@ -374,6 +406,11 @@ export const registerDiscoveryUdls = () => {
       prefix: BASE + "libraryprograms/collections/packages",
       getDiscoveryLibraryPackages,
     },
+    {
+      prefix: BASE + '/programs/',
+      getter: getDiscoveryProgramDetailsById
+    },
+    { prefix: BASE + '/programSchedules/', getter: getDiscoveryProgramSchedules }
   ];
   return discoveryUdls;
 };

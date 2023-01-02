@@ -27,7 +27,7 @@
     "notification": "0xe018",
     "pause": "0xe019",
     "pin_digit": "0xe01A",
-    "play": "0xe01B",
+    "play": "0x25B6",
     "profile_add": "0xe01C",
     "profile_manage": "0xe01D",
     "profile_user": "0xe01E",

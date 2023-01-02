@@ -13,23 +13,55 @@ export interface SearchParam {
   searchLive: boolean;
   mediaTypes?: string;
 }
-const getProgramPlayActions = async (id: string, params: Object) => {
-  const res = {
-    name: "subscriber/getProgramPlayActions",
-    count: 20,
-    response: [1, 2, 3],
-  };
-  return res;
+
+export const assetObject = {
+  0: "programs",
+  1: "season",
+  2: "series",
+  3: "series"
 };
 
-const getSimilarPrograms = async (id: string, params: Object) => {
-  const res = {
-    name: "subscriber/getSimilarPrograms",
-    count: 20,
-    response: [1, 2, 3],
-  };
-  return res;
+const getProgramPlayActions = async (itemID: string, params: any) => {
+  const { id } = params;
+  const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v4/programs/${id}/play-options/`;
+  try {
+    const response = await GET({
+      url: uri,
+      params: params,
+      headers: {
+        Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+      },
+    });
+    return response;
+  } catch (e) {
+    console.error("Cannot getProgramPlayActions due to ", e);
+    return undefined;
+  }
 };
+
+const getSimilarPrograms = async (itemId: string, params: any) => {
+  console.log(params)
+  const { itemType, id } = params;
+  //   const res = {
+  //     name: "subscriber/getSimilarPrograms",
+  //     count: 20,
+  //     response: [1, 2, 3],
+  //   };
+  //   return res;
+  // };
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v4/${(assetObject as any)[itemType || 0]
+    }/${id}/similar-items/`;
+  const response = await GET({
+    url: url,
+    params: params,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+    },
+  });
+  return response;
+}
+
+
 
 const getYouMightLike = async (params: any) => {
   const url: string =
@@ -43,11 +75,11 @@ const getYouMightLike = async (params: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store!.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
   });
   return response;
@@ -57,15 +89,12 @@ export const searchItems = async (params: SearchParam) => {
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.search || "") +
     "/v4/search/items";
   const response = await GET({
-    url: `${url}?partialName=${params.searchString}&storeId=${
-      DefaultStore.Id
-    }&$skip=${params.$skip}&$top=${params.$top}&searchLive=${
-      params.searchLive
-    }&$groups=${GLOBALS.bootstrapSelectors?.RightsGroupIds}&$lang=${
-      GLOBALS.store?.onScreenLanguage?.languageCode || lang || "en-US"
-    }`,
+    url: `${url}?partialName=${params.searchString}&storeId=${DefaultStore.Id
+      }&$skip=${params.$skip}&$top=${params.$top}&searchLive=${params.searchLive
+      }&$groups=${GLOBALS.bootstrapSelectors?.RightsGroupIds}&$lang=${GLOBALS.store!.onScreenLanguage?.languageCode || lang || "en-US"
+      }`,
     headers: {
-      authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
   });
   return response;
@@ -83,11 +112,11 @@ const getBookmarks = async (uri: string, params: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store!.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
       'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
@@ -106,11 +135,11 @@ const getSubscriberPins = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store!.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
       'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
@@ -129,11 +158,11 @@ const getReminders = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store!.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
       'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
@@ -151,11 +180,11 @@ const getSubscriberSubscriptions = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store!.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
       'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
@@ -174,11 +203,11 @@ const getYouMightLikeByTaste = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store!.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
   });
   return response;
@@ -195,11 +224,11 @@ const getYouMightLikeBySpecificTaste = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store!.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
       'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
@@ -217,11 +246,11 @@ const getLibrary = async (params?: any) => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store!.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
       'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
@@ -239,11 +268,11 @@ const getLiveTrendingPrograms = async () => {
       atHome: true,
       $skip: 0,
       $top: 16,
-      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store!.onScreenLanguage?.languageCode || lang,
       storeId: DefaultStore.Id,
     },
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
   });
   return response;
@@ -256,7 +285,7 @@ export const getAllSubscriberProfiles = async () => {
   const response = await GET({
     url: url,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
   });
   return response;
@@ -280,7 +309,7 @@ export const createUserProfile = async (
       AdditionalFields: { optOutPersonalDataUse: optOutPersonalDataUse },
     },
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
   });
   return response;
@@ -304,7 +333,7 @@ export const updateUserProfile = async (data: {
       ...data,
     },
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
   });
   return response;
@@ -316,7 +345,7 @@ export const deleteUserProfile = async (id: string) => {
   const response = await DELETE({
     url: url,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
   });
 
@@ -330,7 +359,7 @@ export const getPasscodes = async (PasscodeType: PinType) => {
   const response = await GET({
     url: url,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
   });
   return response;
@@ -345,7 +374,7 @@ export const createPasscodes = async (PasscodeType: PinType, pin: string) => {
     const response = await PUT({
       url: url,
       headers: {
-        Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+        Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
       },
       params: { PasscodeType, Passcode: pin },
     });
@@ -353,7 +382,6 @@ export const createPasscodes = async (PasscodeType: PinType, pin: string) => {
   } catch (error) {
     console.log("error in createPasscodes", error);
   }
-  
 };
 export const changePasscodes = async (PasscodeType: PinType, pin: string) => {
   const url: string =
@@ -362,18 +390,18 @@ export const changePasscodes = async (PasscodeType: PinType, pin: string) => {
   const response = await PUT({
     url: url,
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
     params: { PasscodeType, Passcode: pin },
   });
   return response;
 };
 export const deleteDevice = async () => {
-  const { accessToken } = GLOBALS.store;
+  const { accessToken } = GLOBALS.store!;
   const url: string = parseUri(
     `${MFGlobalsConfig?.stsUrl}/oauth/signout/liveid`
   );
-  
+
   const response = await DELETE({
     url: url,
     headers: {
@@ -382,6 +410,25 @@ export const deleteDevice = async () => {
   });
   return response;
 };
+
+export const getProgramSubscriberData = async (item: string, params: any) => {
+  const { id } = params;
+  const { accessToken } = GLOBALS.store!;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v4/programs/${id}/titles/`
+  try {
+    const response = await GET({
+      url: url,
+      params: params,
+      headers: {
+        Authorization: `OAUTH2 access_token="${accessToken}"`,
+      },
+    });
+    return response;
+  } catch (e) {
+    console.error("Cannot getProgramSubscriberData due to ", e);
+    return undefined;
+  }
+}
 
 export const registerSubscriberUdls = (params?: any) => {
   const BASE = "subscriber";
@@ -413,6 +460,10 @@ export const registerSubscriberUdls = (params?: any) => {
       prefix: BASE + "/feeds/live-trending-programs",
       getter: getLiveTrendingPrograms,
     },
+    {
+      prefix: BASE + "/getProgramSubscriberData/",
+      getter: getProgramSubscriberData
+    }
   ];
   return subscriberUdls;
 };

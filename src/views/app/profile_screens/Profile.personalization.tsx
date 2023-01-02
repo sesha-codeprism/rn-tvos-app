@@ -22,8 +22,6 @@ import { updateUserProfile } from "../../../../backend/subscriber/subscriber";
 import { MFProfileStyle } from "../../../config/styles/MFProfileStyles";
 import FastImage from "react-native-fast-image";
 
-const { width, height } = Dimensions.get("window");
-
 interface ProfilePersonalizationScreen {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
   mode: "edit" | "create";

@@ -43,8 +43,8 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
   return (
     <>
       <SideMenuLayout
-        title={AppStrings.str_settings_signout_Account_Settings}
-        subTitle={AppStrings.str_settings_signout_Account}
+        title={AppStrings.str_settings_account_heading}
+        subTitle={AppStrings.str_settings_account_label}
         contentContainerStyle={styles.contentContainer}
       >
         <View>
@@ -74,7 +74,7 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
             }}
           >
             <Text style={[styles.titleText, { fontSize: 29 }]}>
-              {AppStrings.str_settings_signout}
+              {AppStrings.str_settings_account_signout}
             </Text>
           </Pressable>
         </View>

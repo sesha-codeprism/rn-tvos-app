@@ -30,38 +30,38 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
     console.log("format list called", GLOBALS.store.settings.display);
     const listItem = [
       {
-        title: AppStrings.str_settings_android_specific_language,
+        title: AppStrings.str_settings_display_on_screen_language,
         subTitle: onScrreenLanguage.title,
         action: "on_screen_language",
         icon: "",
       },
       {
-        title: AppStrings.str_settings_closed_captions,
+        title: AppStrings.str_settings_display_closed_captions,
         subTitle: closedCaption,
         action: "closed_caption",
         icon: "",
       },
       {
-        title: AppStrings.str_settings_subtitle_primary_label,
+        title: AppStrings.str_settings_display_primary_subtitle_language,
         //@ts-ignore
-        subTitle: AppStrings.ISO[subtitleConfig.primary],
+        subTitle: AppStrings.str_settings_languages[subtitleConfig.primary],
         action: "subtitle_language",
         type: "primary",
         icon: "",
       },
       {
-        title: AppStrings.str_settings_subtitle_secondary_label,
+        title: AppStrings.str_settings_display_secondary_subtitle_language,
         subTitle:
           subtitleConfig.secondary !== "None"
             ? //@ts-ignore
-              AppStrings.ISO[subtitleConfig.secondary]
+              AppStrings.str_settings_languages[subtitleConfig.secondary]
             : subtitleConfig.secondary,
         action: "subtitle_language",
         type: "secondary",
         icon: "",
       },
       {
-        title: AppStrings.str_settings_download_quality_label,
+        title: AppStrings.str_settings_display_video_quality,
         //@ts-ignore
         subTitle: AppStrings[bitrates10ft.localizedText],
         action: "video_quality",
@@ -82,8 +82,8 @@ const DiaplayScreen: React.FunctionComponent<Props> = (props: any) => {
   }, []);
   return (
     <SideMenuLayout
-      title={AppStrings.str_navigation_settings}
-      subTitle={AppStrings.str_settings_display_label}
+      title={AppStrings.str_settings_home_heading}
+      subTitle={AppStrings.str_settings_home_display}
     >
       {/* {console.log('screen rendered', list)} */}
       <FlatList

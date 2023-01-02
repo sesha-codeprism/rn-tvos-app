@@ -25,24 +25,25 @@ const AudioScreen: React.FunctionComponent<Props> = (props: any) => {
     // console.log("format list called", GLOBALS.store.settings.display);
     const listItem = [
       {
-        title: AppStrings.str_settings_audio_language_primary_label,
+        title: AppStrings.str_settings_audio.audioPrimaryLangHeader,
         //@ts-ignore
-        subTitle: AppStrings.ISO[audioLanguages.primary],
+        subTitle: AppStrings.str_settings_languages[audioLanguages.primary],
         action: "audio_language",
         type: "primary",
         icon: "",
       },
       {
-        title: AppStrings.str_settings_audio_language_secondary_label,
+        title: AppStrings.str_settings_audio.audioSecondaryLangHeader,
         //@ts-ignore
         subTitle:
-          AppStrings.ISO[audioLanguages.secondary] || "Select audio language",
+          AppStrings.str_settings_languages[audioLanguages.secondary] ||
+          "Select audio language",
         action: "audio_language",
         type: "secondary",
         icon: "",
       },
       {
-        title: AppStrings.str_settings_audio_descriptive_track_label,
+        title: AppStrings.str_settings_audio.descriptiveAudioLabel,
         subTitle: descriptiveAudio,
         action: "descriptive_audio",
         icon: "",
@@ -62,8 +63,8 @@ const AudioScreen: React.FunctionComponent<Props> = (props: any) => {
   }, []);
   return (
     <SideMenuLayout
-      title={AppStrings.str_navigation_settings}
-      subTitle={AppStrings.str_playback_audio_title}
+      title={AppStrings.str_settings_audio.heading1}
+      subTitle={AppStrings.str_settings_audio.heading2}
     >
       {/* {console.log('screen rendered', list)} */}
       <FlatList

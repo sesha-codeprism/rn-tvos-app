@@ -1,5 +1,5 @@
-// @ts-nocheck
-import { some } from "lodash";
+//@ts-nocheck
+import { some, includes, find } from "lodash";
 import { PurchaseAction } from "../@types/SubscriberFeed";
 import { PlayAction, Library } from "../@types/UDLResponse";
 import { config } from "../config/config";
@@ -12,6 +12,9 @@ import { discoveryFeedItem } from "./DiscoveryUtils";
 import { getNetworkImageUri } from "./images";
 import { replacePlaceHoldersInTemplatedString } from "./strings";
 import { generateType, getImageUri, isScheduleCurrent, metadataSeparator } from "./Subscriber.utils";
+import { getFontIcon } from "../config/strings";
+import * as _ from "lodash";
+
 
 export const assetExpiryDaysThreshold = 14;
 
@@ -24,6 +27,46 @@ const audioTagIndicator: any = {
     AudioDescription: "1",
     Dolby: "1",
 };
+export enum DvrButtonAction {
+    None,
+    Record,
+    Edit,
+    Promote,
+    ResolveConflicts,
+    Wait,
+}
+
+export enum DvrCapabilityType {
+    NODVR = "NoDvr",
+    MEDIAROOMDVR = "MediaroomDvr",
+    CLOUDDVR = "CloudDvr",
+    ZEROQUOTA = "ZeroQuota",
+}
+
+export enum RequestType {
+    GET,
+    SCHEDULE,
+    UPDATE,
+    CANCEL,
+    STOP,
+    DELETE,
+    RESOLVE_CONFLICT,
+}
+
+export function recentlyAiredRights(
+    channel: Pick<any, "LiveRights">
+): boolean {
+    if (!channel) {
+        return false;
+    }
+    const { LiveRights = [] } = channel;
+    if (LiveRights.length > 0) {
+        const { r = "" } = LiveRights[0];
+        return r.split(",").indexOf(pbr.RestrictionsType.RA) === -1;
+    }
+    return false;
+}
+
 
 export interface FeedContentItem {
     Id: string;
@@ -107,6 +150,262 @@ export function durationInHoursMinutes(dataObject: any): string {
 
     return `${hours ? hours + "h " : ""}${mins ? mins + "m" : ""}`;
 }
+
+const playIcon = getFontIcon("play");
+const restart = getFontIcon("restart");
+const trailerIcon = getFontIcon("trailer");
+const subscribeIcon = getFontIcon("subscribe");
+const episodeListIcon = getFontIcon("episode_list");
+const waysToWatchIcon = getFontIcon("ways_to_watch");
+const rentBuyIcon = getFontIcon("rent_buy");
+const moreInfoIcon = getFontIcon("info");
+const recordSingle = getFontIcon("record");
+const recordSeries = getFontIcon("record_series");
+const recordEdit = getFontIcon("edit");
+
+
+const getPlayableCatchupSchedule = (
+    programPlayOptions: any,
+    params: any,
+    channelMap: any,
+    account: any,
+    isFromEPG?: boolean,
+    StationIdFromEPG?: any,
+    ipStatus?: any,
+    playAction?: any,
+    ctaButtonGroup?: any
+) => {
+    if (!programPlayOptions) {
+        return;
+    }
+
+    const { CatchupSchedules, Bookmark, Vods } = programPlayOptions;
+    const ctaButtonList: any = [];
+
+    if (CatchupSchedules) {
+        let contextualSchedule: any = null;
+        let validCatchupSchedule: any = null;
+        let validCatchupChannel: any = null;
+
+        const bookmark =
+            Bookmark || (Vods?.length > 0 && Vods[0].BookmarkDetail) || null;
+        const bookmarkSeconds: number =
+            (bookmark && bookmark?.TimeSeconds) ||
+            bookmark?.LastBookmarkSeconds ||
+            0;
+        const runTimeSeconds: number =
+            (bookmark && bookmark.RuntimeSeconds) || 0;
+
+        contextualSchedule = find(CatchupSchedules, (schedule: any) => {
+            const entitlements: string[] = schedule.Entitlements;
+            const channel: any = findChannelByStationId(
+                isFromEPG ? StationIdFromEPG : schedule?.StationId,
+                undefined,
+                undefined,
+                channelMap
+            ).channel;
+            const isSchedulePlayable =
+                isPlayable(entitlements, account) && isChannelPlayable(channel);
+            const isCurrentSchedule = isScheduleCurrent({
+                StartUtc: schedule.CatchupStartUtc,
+                EndUtc: schedule.CatchupEndUtc,
+            });
+            //Check Channel Recently Aired Restriction
+            if (isSchedulePlayable && isCurrentSchedule) {
+                // If the catchup schedule is current and playable, use it
+                validCatchupSchedule = schedule;
+                validCatchupChannel = channel;
+
+                // Contextual button based on passed in channelNumber, start and end times
+                if (
+                    (schedule?.ChannelNumber === +params?.channelNumber ||
+                        schedule?.ChannelNumber === +params?.ChannelNumber) &&
+                    (schedule.StartUtc === params.startUtc ||
+                        schedule.StartUtc === params.StartUtc) &&
+                    (schedule.EndUtc === params.endUtc ||
+                        schedule.EndUtc === params.EndUtc) &&
+                    recentlyAiredRights(channel)
+                ) {
+                    const channelInfo = {
+                        Schedule: schedule,
+                        Channel: channel,
+                        Service: channelMap.getService(channel),
+                    };
+
+                    if (
+                        !playAction &&
+                        bookmark &&
+                        bookmarkSeconds > 0 &&
+                        hasRemainingSeconds(bookmarkSeconds, runTimeSeconds) &&
+                        bookmark?.BookmarkType === bookmarkType.Catchup &&
+                        ctaButtonGroup?.length < 2
+                    ) {
+                        ctaButtonList.push({
+                            button: {
+                                buttonType: "TextIcon",
+                                buttonText:
+                                    AppStrings?.str_details_cta_resume,
+                                buttonAction:
+                                    AppStrings?.str_details_cta_restart,
+                                iconSource: playIcon,
+                            },
+                            ChannelInfo: channelInfo,
+                        });
+                    } else {
+                        ctaButtonList.push({
+                            button: {
+                                buttonType: "TextIcon",
+                                buttonText:
+                                    AppStrings?.str_details_cta_restart,
+                                buttonAction:
+                                    AppStrings?.str_details_cta_restart,
+                                iconSource: playIcon,
+                            },
+                            ChannelInfo: channelInfo,
+                        });
+                    }
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        // If no contextualSchedule, keep searching for the "best option" (catchup schedule that is current)
+        if (
+            !contextualSchedule &&
+            validCatchupSchedule &&
+            validCatchupChannel
+        ) {
+            //Check Channel Recently Aired Restriction
+            if (recentlyAiredRights(validCatchupChannel)) {
+                const validChannelInfo = {
+                    Schedule: validCatchupSchedule,
+                    Channel: validCatchupChannel,
+                    Service: channelMap.getService(validCatchupChannel),
+                };
+
+                const combinedEntitlements =
+                    (validCatchupSchedule?.Entitlements &&
+                        removeEntitlementsAbbreviationsAndSort(
+                            validCatchupSchedule.Entitlements
+                        )) ||
+                    [];
+
+                if (isInHome(combinedEntitlements, ipStatus)) {
+                    // with out subscription also able to see restart button
+                    const channelInfo = findChannelByField(
+                        params?.ChannelNumber ||
+                        validCatchupSchedule?.ChannelNumber ||
+                        validCatchupChannel?.Number,
+                        "Number",
+                        undefined,
+                        undefined,
+                        channelMap?.Channels
+                    ).channel;
+                    if (
+                        channelInfo &&
+                        channelInfo.isSubscribed &&
+                        channelInfo.isPermitted &&
+                        channelMap.getService(channelInfo)
+                    ) {
+                        if (
+                            playAction &&
+                            bookmark &&
+                            bookmarkSeconds > 0 &&
+                            hasRemainingSeconds(
+                                bookmarkSeconds,
+                                runTimeSeconds
+                            ) &&
+                            bookmark?.BookmarkType === bookmarkType.Catchup
+                        ) {
+                            ctaButtonList.push({
+                                button: {
+                                    buttonType: "TextIcon",
+                                    buttonText:
+                                        AppStrings?.str_details_cta_resume,
+                                    buttonAction:
+                                        AppStrings
+                                            ?.str_details_cta_restart,
+                                    iconSource: playIcon,
+                                },
+                                ChannelInfo: validChannelInfo,
+                            });
+                        } else {
+                            ctaButtonList.push({
+                                button: {
+                                    buttonType: "TextIcon",
+                                    buttonText:
+                                        AppStrings
+                                            ?.str_details_cta_restart,
+                                    buttonAction:
+                                        AppStrings
+                                            ?.str_details_cta_restart,
+                                    iconSource: playIcon,
+                                },
+                                ChannelInfo: validChannelInfo,
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return ctaButtonList;
+};
+
+export const isPlayable = (entitlements: any, account: any) => {
+    // TODO
+    if (account?.pbrOverride) {
+        return true;
+    }
+
+    if (0 === entitlements?.length) {
+        return true;
+    }
+
+    // if (
+    //     isPhoneBlocked(entitlements) ||
+    //     isIOsBlocked(entitlements) ||
+    //     isAndroidBlocked(entitlements) ||
+    //     isTabletBlocked(entitlements) ||
+    //     isBrowserBlocked(entitlements) ||
+    //     isOutOfHomeBlocked(entitlements) ||
+    //     isWifiBlocked(entitlements) ||
+    //     isCellularBlocked(entitlements)
+    //     isHdmiBlocked(entitlements) ||
+    //     isRecentlyAiredBlocked(entitlements)
+    // ) {
+    //     return false;
+    // }
+    return true;
+};
+
+export const isInHome = (restrictions: any, ipStatus: any) => {
+    const { InHome = undefined, InCountry = undefined } = ipStatus || {};
+
+    if (InCountry !== RestrictionValue.Yes) {
+        return false;
+    }
+
+    if (!restrictions || !restrictions.length) {
+        return true;
+    }
+
+    const { OUTOFHOME_BLOCKED, OH } = pbr.RestrictionsType;
+
+    let isAllowedToPlay = true;
+    for (let restriction of restrictions) {
+        // Is 'out_of_home_blocked' or 'oh' exists in the restrictions list?
+        if (restriction === OUTOFHOME_BLOCKED || restriction === OH) {
+            isAllowedToPlay =
+                InHome === RestrictionValue.Yes &&
+                InCountry === RestrictionValue.Yes;
+            break;
+        }
+    }
+
+    return isAllowedToPlay;
+};
 
 export function durationInDaysHoursMinutes(seconds: number): string {
     const days = Math.floor(seconds / (24 * 3600));
@@ -254,6 +553,19 @@ export const getNetworkInfo = (item: any) => {
     return;
 };
 
+export const removeEntitlementsAbbreviationsAndSort = (entitlements: any) => {
+    if (!entitlements || !entitlements.length) {
+        return;
+    }
+
+    entitlements.forEach((entitlement, index) => {
+        if (pbr.AbbreviatedRestrictions[entitlement]) {
+            entitlements[index] = pbr.AbbreviatedRestrictions[entitlement];
+        }
+    });
+    return sortInorder(entitlements, null);
+};
+
 export const massageDiscoveryFeed = (
     feed: any,
     sourceType: SourceType,
@@ -385,21 +697,21 @@ export const massageDiscoveryFeedAsset = (
     return item;
 };
 
-// export const isExpiringSoon = (item: any): boolean => {
-//     if (item) {
-//         const expiryDate = new Date(item.ContentExpiryUtc);
-//         let itemExpires = false;
-//         if (item.ItemState === DvrItemState.RECORDED) {
-//             itemExpires =
-//                 isDateWithinExpiryThreshold(
-//                     expiryDate,
-//                     assetExpiryDaysThreshold
-//                 ) || hasRecordingExpired(expiryDate);
-//         }
-//         return itemExpires;
-//     }
-//     return false;
-// };
+export const isExpiringSoon = (item: any): boolean => {
+    if (item) {
+        const expiryDate = new Date(item.ContentExpiryUtc);
+        let itemExpires = false;
+        if (item.ItemState === DvrItemState.RECORDED) {
+            itemExpires =
+                isDateWithinExpiryThreshold(
+                    expiryDate,
+                    assetExpiryDaysThreshold
+                ) || hasRecordingExpired(expiryDate);
+        }
+        return itemExpires;
+    }
+    return false;
+};
 
 export const timeLeft = (expirationUtc: string): string => {
     if (!expirationUtc) {
@@ -1317,8 +1629,167 @@ const isChannelNotSubscribed = (playOptions: any, channelMap: any) => {
     }
 };
 
+export async function isPconBlocked(playInfo: any, locale?: any) {
+    const { pconConfig } = config;
+
+    let ratings = (playInfo && playInfo.Ratings) || [],
+        isRated = Array.isArray(ratings) && ratings.length,
+        isLocked: any;
+
+    let ratingProviders: string[];
+    let strCurrentLocale: string = locale || "";
+    let obj: any = pconConfig.ratingProvider;
+    if (pconConfig.ratingProvider) {
+        ratingProviders = obj[strCurrentLocale];
+        if (!ratingProviders) {
+            ratingProviders = pconConfig.ratingProvider["default"] || [];
+        }
+        ratings = ratings.filter((rating: any) => {
+            if (rating.System?.toUpperCase() === "NR") {
+                isRated = 0;
+                return false;
+            } else {
+                isRated = 1;
+            }
+
+            if (
+                ratingProviders.indexOf(rating?.System?.toUpperCase()) > -1 ||
+                ratingProviders.indexOf(rating?.System) > -1
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        if (isRated) {
+            let strUpperCase = ratingProviders?.length && ratingProviders[0];
+            for (let rt in ratings) {
+                let isBlocked = await isRatingLocked(ratings[rt], strUpperCase);
+                if (isBlocked) {
+                    isLocked = isBlocked;
+                    break;
+                }
+            }
+        } else {
+            isLocked = await isUnratedContentLocked();
+        }
+        if (playInfo) {
+            if (
+                playInfo?.pconInfo &&
+                playInfo?.id === playInfo?.pconInfo?.forProgramId
+            ) {
+                isLocked = false;
+            }
+            // editMode is set when user is trying to Updating Recordings(Save Recordings button)
+            // There should not be PCON when Updating Recordings
+            if (playInfo?.editMode) {
+                isLocked = false;
+            }
+        }
+        let showPconDialog = isLocked;
+        return showPconDialog;
+    }
+}
+
+export const isChannelPlayable = (
+    channel: Pick<any, "isSubscribed" | "isPermitted">
+): boolean => {
+    if (!channel) {
+        return false;
+    }
+
+    return channel.isSubscribed && channel.isPermitted;
+};
+
+const getPlayableLiveSchedule = (
+    liveSchedules: any,
+    params: any,
+    channelMap: any,
+    account: any,
+    isFromEPG?: boolean,
+    StationIdFromEPG?: any,
+    channelInfo?: any,
+    programSubscriberData?: any
+) => {
+    if (!liveSchedules || !liveSchedules.length || !params) {
+        return;
+    }
+
+    // Watch Live button
+    // Find currently playing schedule based on startUtc, endUtc, channelNumber, if the asset is not playable on the current (contextual) channel then pick the 'best option'
+    // NOTE: it is ok for the button to not be contextual is the correct schedule is not avaialble. Ex. user opens details page from guide channel 1 but when they hit "Watch Live" it plays from channel 2
+    let validLiveSchedule: any = null;
+    let validLiveChannel: any = null;
+    let contextualChannel: any = null;
+    const contextualSchedule = find(liveSchedules, (schedule: any) => {
+        const { StartUtc, EndUtc, ChannelNumber, Entitlements, StationId } =
+            schedule || {};
+        const channel: any = findChannelByStationId(
+            isFromEPG ? StationIdFromEPG : StationId,
+            undefined,
+            undefined,
+            channelMap
+        ).channel;
+
+        if (
+            (channelInfo &&
+                channelInfo.channel &&
+                channelInfo.channel.StationId !== StationId) ||
+            (programSubscriberData &&
+                programSubscriberData.Schedule?.channelId &&
+                programSubscriberData.Schedule.channelId !== StationId)
+        ) {
+            return false;
+        }
+
+        const isSchedulePlayable =
+            isPlayable(Entitlements, account) && isChannelPlayable(channel);
+        const isCurrentSchedule = isScheduleCurrent(schedule);
+
+        // Current schedule must match the passed in start and end time, if there is an asset that is playing on repeat we do not want to render the Watch Live button for the upcoming time slot
+        if (
+            isSchedulePlayable &&
+            isCurrentSchedule &&
+            ((StartUtc === params.StartUtc && EndUtc === params.EndUtc) ||
+                (Date.parse(StartUtc) === params.startTime * 1000 &&
+                    Date.parse(EndUtc) === params.endTime * 1000))
+        ) {
+            validLiveSchedule = schedule;
+            validLiveChannel = channel;
+            // Contextual button based on passed in channelNumber
+            if (ChannelNumber === +params.ChannelNumber) {
+                contextualChannel = channel;
+                return true;
+            }
+        }
+        return false;
+    });
+
+    // If no contextualSchedule, take the "best option" validLiveSchedule (schedule that is current but might not match the channel number)
+    const schedule = contextualSchedule || validLiveSchedule;
+    const channel = contextualChannel || validLiveChannel;
+
+    if (schedule && channel) {
+        const isSchedulePlayable =
+            isPlayable(schedule.Entitlements, account) &&
+            isChannelPlayable(channel);
+
+        if (
+            isSchedulePlayable &&
+            isScheduleCurrent(schedule) &&
+            isChannelPlayable(channel)
+        ) {
+            return {
+                Schedule: schedule,
+                Channel: channel,
+                Service: channelMap.getService(channel),
+            };
+        }
+    }
+};
+
 export const massageProgramDataForUDP = (
-    recorders: any,
     playOptions: any,
     subscriberData: any,
     discoveryData: any,
@@ -1327,11 +1798,12 @@ export const massageProgramDataForUDP = (
     liveSchedules: any,
     allSubcriptionGroups: any,
     account: any,
-    networkIHD: any,
     subscriberProgramData: any,
     filteredEpisodePlayOptions?: any,
     viewableRecordings?: any,
     scheduledSubscriptionGroup?: any,
+    recorders: any,
+    networkIHD: any,
     isSeriesRecordingBlocked?: boolean,
     stationIdFromNavigation?: any,
     startDateFromEPG?: any,
@@ -1341,6 +1813,7 @@ export const massageProgramDataForUDP = (
     StationIdFromEPG?: any,
     hasFeatureIosCarrierBilling?: boolean
 ): any => {
+    console.log("playOptions", playOptions)
     let programUDPData: any = {};
     let ipStatus = account?.ClientIpStatus || {};
     if (!config.inhomeDetection.useSubscriberInHome) {
@@ -2544,7 +3017,7 @@ const getSchedulesWithPPVChannels = (
 ) => {
     schedules.forEach((schedule: any) => {
         const { ChannelNumber = -1 } = schedule || {};
-        const ch = channelMap.findChannelByNumber(ChannelNumber);
+        const ch = channelMap?.findChannelByNumber!(ChannelNumber);
         const service = ch && channelMap.getService(ch?.channel);
 
         const rights = channelRights?.channels[ChannelNumber];
@@ -2553,7 +3026,7 @@ const getSchedulesWithPPVChannels = (
             rights &&
             some(rights, (s) => !!s.s && !!s.e && new Date(s.e) >= now);
         const serviceCollectionId = ch?.channel?.ServiceCollectionId;
-        const serviceItms = channelMap.ServiceCollections.find(
+        const serviceItms = channelMap.ServiceCollections?.find(
             (s: any) => s.Id === serviceCollectionId
         );
 
@@ -3081,6 +3554,7 @@ export const getCTAButtons = (
     StationIdFromEPG?: any,
     hasFeatureIosCarrierBilling?: boolean
 ): any => {
+    console.log("Reading AppStrings", AppStrings?.str_details_cta_more_info);
     const { episodes, assetType } = seriesUDPData || {};
     const isLive = isFromSeries
         ? seriesData?.assetType?.sourceType === sourceTypeString.LIVE
@@ -3217,7 +3691,7 @@ export const getCTAButtons = (
             programUDPData["ChannelInfo"] = {
                 Schedule: schedule,
                 Channel: channel,
-                Service: channelMap.getService(channel),
+                Service: channelMap?.getService(channel) || '',
             };
         }
 
@@ -3253,8 +3727,8 @@ export const getCTAButtons = (
     //VOD CTA Button Logic
     let playAction = undefined;
     if (
-        playActions?.length > 0 &&
-        (programUDPData?.isInHome || seriesUDPData?.isInHome)
+        playActions?.length > 0
+        // (programUDPData?.isInHome || seriesUDPData?.isInHome)
     ) {
         if (!sourceType) {
             sourceType = SourceType.VOD;
@@ -3736,8 +4210,8 @@ export const getCTAButtons = (
 
     ctaButtonGroup.push({
         buttonType: "TextIcon",
-        buttonText: AppStrings?.str_details_cta_more_info,
-        buttonAction: AppStrings?.str_details_cta_more_info,
+        buttonText: AppStrings?.str_details_cta_more_info || "ABC",
+        buttonAction: AppStrings?.str_details_cta_more_info || "ABNC",
         iconSource: moreInfoIcon,
     });
 
@@ -4209,6 +4683,59 @@ export const getVodVideoProfileId = (
     )[0];
 };
 
+export const getSupportedPlayActions = (usablePlayActions: IPlayAction[]) => {
+    if (!usablePlayActions || usablePlayActions.length <= 0) {
+        return;
+    }
+
+    const playActionByQuality = [];
+    let supportedPlayActions =
+        usablePlayActions?.length > 0 &&
+        usablePlayActions?.filter(
+            (usablePlayAction: IPlayAction) =>
+                (config.playerConfig.supportedEncodings as any)[
+                usablePlayAction.VideoProfile.Encoding
+                ]
+        );
+
+    for (let supportedPlayAction of supportedPlayActions) {
+        const index = (orderedQualityLevels as any)[
+            supportedPlayAction.VideoProfile.QualityLevel
+        ];
+        playActionByQuality[index] = supportedPlayAction;
+    }
+
+    return supportedPlayActions?.filter((n: any) => n);
+};
+
+export const getRestrictionsForVod = (
+    usablePlayActions: any,
+    isTrailer: boolean
+) => {
+    let supportedPlayActions;
+    if (
+        usablePlayActions?.length &&
+        getSupportedPlayActions(usablePlayActions)?.length
+    ) {
+        if (isTrailer) {
+            supportedPlayActions = getSupportedPlayActions(
+                usablePlayActions
+            )?.find((playAction: PlayAction) =>
+                playAction?.Tags?.includes("Trailer")
+            );
+        } else {
+            supportedPlayActions = getSupportedPlayActions(
+                usablePlayActions
+            )?.find((playAction: PlayAction) =>
+                playAction?.Tags?.includes("Feature")
+            );
+        }
+    }
+
+    return supportedPlayActions;
+};
+
+
 export const DateToAMPM = (date: Date) => {
     let hours = date?.getHours();
     let minutes = date?.getMinutes();
@@ -4216,11 +4743,11 @@ export const DateToAMPM = (date: Date) => {
         hours >= 12 ? AppStrings?.str_pm : AppStrings?.str_am;
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
-    //@ts-ignore
     minutes = minutes < 10 ? "0" + minutes : minutes;
     const strTime = `${hours}:${minutes} ${ampm}`;
     return strTime;
 };
+
 
 export const getMonthName = (date: Date, isNotUTC?: boolean) => {
     // Months of the year.
@@ -4872,5 +5399,108 @@ function getScheduledEndTime(si: any): Date {
         si?.ScheduledRuntimeSeconds * 1000
     );
 }
+
+export const getBookmark = (
+    Id: string,
+    type: udlBookMark,
+    programId: string = Id
+) => {
+    return new Promise(function (resolve, reject) {
+        const bookMarkKey: any = {};
+        const key =
+            type === udlBookMark.RECORDING
+                ? `DVR_Bookmark`
+                : type === udlBookMark.CATCHUP
+                    ? `CATCHUP_Bookmark`
+                    : `VOD_Bookmark`;
+        if (!cachedBookmarkData.has(Id)) {
+            getStore()
+                .dispatch(
+                    actionCreators.subscriber.bookmark.request(
+                        type,
+                        Id,
+                        programId
+                    )
+                )
+                .promise.then(() => {
+                    bookMarkKey[key] = selectors.subscriber.bookmark.get(
+                        getStore().getState(),
+                        type,
+                        Id,
+                        programId
+                    );
+                    cachedBookmarkData.set(Id);
+                    resolve(bookMarkKey);
+                })
+                .catch(() => {
+                    cachedBookmarkData.set(Id);
+                    bookMarkKey[key] = { TimeSeconds: 0 };
+                    reject(bookMarkKey);
+                });
+        } else {
+            getStore()
+                .dispatch(
+                    actionCreators.subscriber.bookmark.reload(
+                        type,
+                        Id,
+                        programId
+                    )
+                )
+                .then(() => {
+                    bookMarkKey[key] = selectors.subscriber.bookmark.get(
+                        getStore().getState(),
+                        type,
+                        Id,
+                        programId
+                    );
+                    cachedBookmarkData.set(Id);
+                    resolve(bookMarkKey);
+                })
+                .catch(() => {
+                    cachedBookmarkData.set(Id);
+                    bookMarkKey[key] = { TimeSeconds: 0 };
+                    reject(bookMarkKey);
+                });
+        }
+    });
+};
+
+export const validateEntitlements = (
+    entitlements: string[],
+    recorderModels: any
+) => {
+    let hasLocalRecorder = false;
+    let hasPrivateRecorder = false;
+    let hasSharedRecorder = false;
+
+    recorderModels?.forEach((model: any) => {
+        if (model?.RecorderModel === RecorderModel.Local) {
+            hasLocalRecorder = true;
+        } else if (model?.RecorderModel === RecorderModel.Private) {
+            hasPrivateRecorder = true;
+        } else if (model?.RecorderModel === RecorderModel.Shared) {
+            hasSharedRecorder = true;
+        }
+    });
+
+    const blockedRecorders = _.invert(
+        _.map(entitlements, (entitlement: string) => entitlement.toLowerCase())
+    );
+
+    const blockedLocal = !!blockedRecorders.lb;
+    const blockedNetwork = !!blockedRecorders.nb;
+    const blockedShared =
+        !!blockedRecorders.sb || !!blockedRecorders.record_blocked;
+
+    const isAllowed =
+        (hasLocalRecorder && !blockedLocal) ||
+        (!hasLocalRecorder && hasPrivateRecorder && !blockedNetwork) ||
+        (!hasLocalRecorder &&
+            hasSharedRecorder &&
+            !blockedNetwork &&
+            !blockedShared);
+
+    return isAllowed;
+};
 
 

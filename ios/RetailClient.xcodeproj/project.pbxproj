@@ -70,6 +70,8 @@
 		2DCD954D1E0B4F2C00145EB5 /* RetailClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RetailClientTests.m */; };
 		41BF5F3596F87FEE707DDD11 /* libPods-RetailClient-RetailClientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F21F13455730034D850CD1C /* libPods-RetailClient-RetailClientTests.a */; };
 		47EB63F3390701B2260096C6 /* libPods-RetailClient-tvOS-RetailClient-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0216F1136BF7C90703C880F /* libPods-RetailClient-tvOS-RetailClient-tvOSTests.a */; };
+		591E32CC295793F400D60141 /* Mediakind-Icons.otf in Resources */ = {isa = PBXBuildFile; fileRef = 591E32CB295793F300D60141 /* Mediakind-Icons.otf */; };
+		591E32CD295793F400D60141 /* Mediakind-Icons.otf in Resources */ = {isa = PBXBuildFile; fileRef = 591E32CB295793F300D60141 /* Mediakind-Icons.otf */; };
 		593AF51228AE700E002740B8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 593AF51128AE700E002740B8 /* CoreData.framework */; };
 		59A99A9A2853229A00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
 		59A99A9B2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
@@ -195,6 +197,7 @@
 		388308430DF4BE056B0CEF13 /* Pods-RetailClient-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS.release.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS/Pods-RetailClient-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		3BDF8C4CCF278F944E8C6CBF /* Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS-RetailClient-tvOSTests/Pods-RetailClient-tvOS-RetailClient-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		4F21F13455730034D850CD1C /* libPods-RetailClient-RetailClientTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RetailClient-RetailClientTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		591E32CB295793F300D60141 /* Mediakind-Icons.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Mediakind-Icons.otf"; path = "../src/assets/fonts/Mediakind-Icons.otf"; sourceTree = "<group>"; };
 		593AF51128AE700E002740B8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS15.4.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		59A99A912853229900560F39 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraBold.ttf"; path = "../src/assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		59A99A922853229900560F39 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -379,6 +382,7 @@
 		59A99A902853227300560F39 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				591E32CB295793F300D60141 /* Mediakind-Icons.otf */,
 				59A99A972853229A00560F39 /* Inter-Black.ttf */,
 				59A99A982853229A00560F39 /* Inter-Bold.ttf */,
 				59A99A912853229900560F39 /* Inter-ExtraBold.ttf */,
@@ -607,6 +611,7 @@
 				59A99AB22853229B00560F39 /* Inter-Black.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				59A99ABA2853229B00560F39 /* Inter-Medium.ttf in Resources */,
+				591E32CC295793F400D60141 /* Mediakind-Icons.otf in Resources */,
 				00352444276BBF4200360F43 /* EPGViewController.storyboard in Resources */,
 				59A99AAA2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */,
 				59A99AB62853229B00560F39 /* Inter-Bold.ttf in Resources */,
@@ -627,6 +632,7 @@
 				59A99ABC2853229B00560F39 /* Inter-Medium.ttf in Resources */,
 				59A99AA82853229B00560F39 /* Inter-Thin.ttf in Resources */,
 				00352445276BBF4200360F43 /* EPGViewController.storyboard in Resources */,
+				591E32CD295793F400D60141 /* Mediakind-Icons.otf in Resources */,
 				0035DCA3276BB1A600360F43 /* SampleStoryboard.storyboard in Resources */,
 				004DE6DA27A95D1D003439C1 /* EditedData.json in Resources */,
 				59A99AB42853229B00560F39 /* Inter-Black.ttf in Resources */,
@@ -669,7 +675,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		0D7507D506130F6246FD97BE /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

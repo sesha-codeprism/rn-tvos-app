@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  PressableProps,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFText from "../../../../components/MFText";
@@ -14,7 +8,10 @@ import MFButton, {
   MFButtonVariant,
 } from "../../../../components/MFButton/MFButton";
 import MFGridView from "../../../../components/MFGridView";
-import { appUIDefinition } from "../../../../config/constants";
+import {
+  appUIDefinition,
+  defaultQueryOptions,
+} from "../../../../config/constants";
 import { HomeScreenStyles } from "../../Homescreen.styles";
 import { SubscriberFeed } from "../../../../@types/SubscriberFeed";
 import MFLoader from "../../../../components/MFLoader";
@@ -141,10 +138,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const { data, isLoading } = useQuery(
     ["browseFeed", browsePivots],
     () => fetchFeeds(browsePivots),
-    {
-      cacheTime: appUIDefinition.config.queryCacheTime,
-      staleTime: appUIDefinition.config.queryStaleTime,
-    }
+    defaultQueryOptions
   );
 
   const pivotQuery = useQuery(
@@ -251,7 +245,6 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
               height: 28,
               width: 28,
               marginRight: 20,
-              tintColor: "#EEEEEE",
             }}
             textLabel="Filter"
             textStyle={styles.filterButtonLabelStyle}

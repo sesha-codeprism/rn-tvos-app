@@ -64,7 +64,9 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
       cacheTime: Infinity,
       staleTime: Infinity,
       //@ts-ignore
-      enabled: !!(response?.data?.data?.ServiceMap?.Services?.discovery && rightsGroupIds),
+      enabled: !!(
+        response?.data?.data?.ServiceMap?.Services?.discovery && rightsGroupIds
+      ),
     }
   );
 
@@ -74,7 +76,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
 
   useEffect(() => {
     // bootstrap response arrived
-    if(response?.data?.data){
+    if (response?.data?.data) {
       setGlobalData(response?.data?.data);
     }
   }, [response?.data, response?.isSuccess]);
@@ -118,7 +120,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
       GLOBALS.store.accessToken = shortCodeData?.data?.AccessToken;
       GLOBALS.store.refreshToken = shortCodeData?.data?.RefreshToken;
       setLatestToken(shortCodeData?.data?.AccessToken);
-      setLatestRefreshToken(shortCodeData?.data?.RefreshToken)
+      setLatestRefreshToken(shortCodeData?.data?.RefreshToken);
       updateStore(GLOBALS.store);
     }
   }, [shortCodeData?.data?.AccessToken]);
@@ -165,14 +167,21 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
       </View>
       <View style={ShortCodeStyles.codeView}>
         <MFText
-          displayText={AppStrings.pair_device}
+          displayText={AppStrings.str_login_pair_device_title}
           shouldRenderText
           textStyle={ShortCodeStyles.titleTextStyle}
           adjustsFontSizeToFit={false}
         />
         <View style={ShortCodeStyles.textViewStyle}>
           <MFText
-            displayText={AppStrings.pair_directions_1}
+            displayText={AppStrings.str_login_pair_device_instruction_line2}
+            shouldRenderText
+            textStyle={ShortCodeStyles.subtitleText}
+            adjustsFontSizeToFit={false}
+            numberOfLines={2}
+          />
+          <MFText
+            displayText={AppStrings.str_login_pair_device_instruction_line3}
             shouldRenderText
             textStyle={ShortCodeStyles.subtitleText}
             adjustsFontSizeToFit={false}
@@ -181,7 +190,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
         </View>
         <View style={ShortCodeStyles.textViewStyle}>
           <MFText
-            displayText={AppStrings.or_string}
+            displayText={AppStrings.str_login_pair_device_instruction_line4}
             shouldRenderText
             textStyle={ShortCodeStyles.subtitleText}
             adjustsFontSizeToFit={false}
@@ -189,14 +198,14 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
         </View>
         <View style={ShortCodeStyles.textViewStyle}>
           <MFText
-            displayText={AppStrings.pair_directions_2}
+            displayText={AppStrings.str_login_pair_device_instruction_line5}
             shouldRenderText
             textStyle={ShortCodeStyles.subtitleText}
           />
         </View>
         <View style={ShortCodeStyles.textViewStyle}>
           <MFText
-            displayText={AppStrings.url_link}
+            displayText={AppStrings.str_login_pair_device_instruction_line6}
             shouldRenderText
             textStyle={ShortCodeStyles.urlStyles}
             adjustsFontSizeToFit={false}
@@ -204,7 +213,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
         </View>
         <View style={ShortCodeStyles.textViewStyle}>
           <MFText
-            displayText={AppStrings.pair_directions_3}
+            displayText={AppStrings.str_login_pair_device_instruction_line7}
             shouldRenderText
             textStyle={ShortCodeStyles.subtitleText}
             adjustsFontSizeToFit={false}
@@ -244,7 +253,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
                 unFocusedBackgroundColor: appUIDefinition.theme.colors.primary,
               },
             }}
-            textLabel={AppStrings.refresh_code}
+            textLabel={AppStrings.str_login_refresh_code}
             onPress={onRefresh}
           />
         </View>

@@ -54,7 +54,6 @@ const MFMenu = (props: MFMenuProps) => {
   };
 
   useEffect(() => {
-    console.log("HubsList", props.hubList);
     let array1: Array<ButtonVariantProps> = [];
     const identityAssigned = isFeatureAssigned("identity");
     setIdentityAssigned(identityAssigned);

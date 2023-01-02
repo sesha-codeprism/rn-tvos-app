@@ -1,7 +1,7 @@
 import { GLOBALS, landingInfo } from "./globals";
 import { logger, consoleTransport } from "react-native-logs";
 import DeviceInfo from "react-native-device-info";
-import { Settings } from "react-native";
+import { Alert, Settings } from "react-native";
 import SHA256 from "crypto-js/sha256";
 import { MFGlobalsConfig } from "../../backend/configs/globals";
 
@@ -151,3 +151,4 @@ export function isHash(str: string) {
   let sha256Regex = new RegExp(/^([a-f0-9]{64})$/);
   return sha256Regex.test(str);
 }
+

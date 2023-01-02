@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
@@ -6,7 +7,6 @@ import { View, StyleSheet, Image, Dimensions, Settings } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { processBootStrap } from "../../../backend/authentication/authentication";
-import { initUdls } from "../../../backend";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { appUIDefinition } from "../../config/constants";
 import { setDefaultStore } from "../../utils/DiscoveryUtils";
@@ -23,6 +23,7 @@ import { updateStore } from "../../utils/helpers";
 import { GlobalContext } from "../../contexts/globalContext";
 import { resetCaches } from "../../config/queries";
 import { useQuery } from "react-query";
+import { initUdls } from "../../../backend";
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
@@ -32,7 +33,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const bootstrapData = useBootstrap();
   const [navigateTo, bootstrapUrl, acessToken, response] = bootstrapData || {};
 
-   const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [deviceInfo, setDevice] = useState("");
   const currentContext = useContext(GlobalContext);
 
@@ -124,19 +125,23 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const _onAnimationFinish = () => {};
 
   const setDeviceInfo = async () => {
-    const isEmulator: boolean = await DeviceInfo.isEmulator();
-    if (isEmulator) {
-      const deviceID = await DeviceInfo.getMacAddress();
-      GLOBALS.deviceInfo.deviceId = deviceID;
-      setDevice(GLOBALS.deviceInfo.deviceId);
-      return true;
-    } else {
-      // If device is running on real device
-      const deviceID = DeviceInfo.getUniqueId();
-      GLOBALS.deviceInfo.deviceId = deviceID;
-      setDevice(GLOBALS.deviceInfo.deviceId);
-      return true;
-    }
+    const deviceID = await DeviceInfo.getMacAddress();
+    GLOBALS.deviceInfo.deviceId = generateGUID(deviceID);
+    setDevice(GLOBALS.deviceInfo.deviceId);
+    return true;
+    // const isEmulator: boolean = await DeviceInfo.isEmulator();
+    // if (isEmulator) {
+    //   const deviceID = await DeviceInfo.getMacAddress();
+    //   GLOBALS.deviceInfo.deviceId = generateGUID(deviceID);
+    //   setDevice(GLOBALS.deviceInfo.deviceId);
+    //   return true;
+    // } else {
+    //   // If device is running on real device
+    //   const deviceID = DeviceInfo.getUniqueId();
+    //   GLOBALS.deviceInfo.deviceId = deviceID;
+    //   setDevice(GLOBALS.deviceInfo.deviceId);
+    //   return true;
+    // }
   };
   const showAnimation = appUIDefinition.config.useLottieAnimationOnSplash;
   const getMoviesAndTvShow = async () => {

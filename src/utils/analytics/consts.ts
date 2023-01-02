@@ -142,6 +142,13 @@ export enum ContentType {
     EPISODE = "EPISODE",
 }
 
+export type BookmarkType =
+    | sourceTypeString.VOD
+    | sourceTypeString.CATCHUP
+    | sourceTypeString.DVR
+    | sourceTypeString.LIVE;
+
+
 export const itemTypeString: { [key: string]: string } = {
     0: "Program",
     2: "Series",

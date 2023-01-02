@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import {
   GestureResponderEvent,
   NativeSyntheticEvent,
-  Pressable,
   StyleProp,
   StyleSheet,
   TargetedEvent,
   TextStyle,
-  TVFocusGuideView,
   ViewStyle,
 } from "react-native";
 
@@ -23,11 +21,13 @@ import MFOutlinedButton, {
 import { MFAvatarButtonProps } from "../MFButtonsVariants/MFAvatarButton";
 import { MFContainedButtonProps } from "../MFButtonsVariants/MFContainedButton";
 import { Source, ImageStyle } from "react-native-fast-image";
-import MFText from "../MFText";
 import MFUnderlinedButton from "../MFButtonsVariants/MFUnderlinedButton";
 import { MFUnderlinedButtonProps } from "../MFButtonsVariants/MFUnderlinedButton";
 import MFTextButton from "../MFButtonsVariants/MFTextButton";
 import MFDefaultButton from "../MFButtonsVariants/MFDefaultButton";
+import MFFontIconButton, {
+  MFFontIconProps,
+} from "../MFButtonsVariants/MFFontIconButton";
 
 /**Variant of the Button */
 export enum MFButtonVariant {
@@ -45,6 +45,8 @@ export enum MFButtonVariant {
   Icon = "Icon",
   /** Button to render an  avatar */
   Avatar = "Avatar",
+  /**Button to render Font-Icon */
+  FontIcon = "FontIcon",
 }
 
 /**
@@ -149,6 +151,8 @@ export interface MFButtonProps {
   enableRTL?: boolean;
   /** Event to be triggered when focused */
   iconButtonStyles?: IconButtonProps;
+  fontIconSource?: string;
+  fontIconTextStyle?: StyleProp<TextStyle>;
   onFocus?:
     | null
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
@@ -164,6 +168,7 @@ export interface MFButtonProps {
   disabled?: boolean;
   focusable?: boolean;
   children?: any;
+  fontIconProps?: MFFontIconProps;
 }
 
 const MFButton = React.forwardRef(({ ...props }: MFButtonProps, ref) => {
@@ -294,6 +299,27 @@ const MFButton = React.forwardRef(({ ...props }: MFButtonProps, ref) => {
       textStyle={props.textStyle}
       enableRTL={props.enableRTL}
       underlinedButtonStyle={props.underlinedButtonProps?.underlinedButtonStyle}
+    />
+  ) : props.variant === MFButtonVariant.FontIcon ? (
+    <MFFontIconButton
+      // @ts-ignore
+      ref={ref}
+      iconPlacement={props.fontIconProps?.iconPlacement}
+      fontIcon={props.fontIconSource}
+      fontIconStyle={props.fontIconTextStyle}
+      focused={focused}
+      style={props.style}
+      focusedStyle={props.focusedStyle}
+      textLabel={props.textLabel}
+      textLabelStyle={props.textStyle}
+      enableRTL={props.enableRTL}
+      onFocus={_onFocus}
+      onBlur={_onBlur}
+      onPress={_onPress}
+      shouldRenderImage={props.fontIconProps?.shoulRenderLabel}
+      hasTVPreferredFocus={props.hasTVPreferredFocus}
+      focusable={props.focusable === false ? false : true}
+      shoulRenderLabel={props.fontIconProps?.shouldRenderImage}
     />
   ) : (
     <MFDefaultButton
