@@ -7,7 +7,7 @@ import { DefaultStore } from "../utils/DiscoveryUtils";
 import { GLOBALS } from "../utils/globals";
 import { appUIDefinition, lang, pivots } from "./constants";
 
-const queryClient = useQueryClient()
+export const queryClient = useQueryClient()
 export interface QueryResponse {
     data: any;
     isError: boolean;

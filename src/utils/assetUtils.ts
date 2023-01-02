@@ -4289,6 +4289,101 @@ const handleWaysToWatchCtaButton = (
     }
 };
 
+let discoveryPackageAsset: any;
+
+export const massageDiscoveryPackageAsset = (
+    item: any,
+    packageActions: any,
+    sourceType: SourceType,
+    hasFeatureIosCarrierBilling?: boolean
+): any => {
+    if (!item) {
+        return;
+    }
+    let expirationUtc;
+    if (packageActions?.IsFree) {
+        expirationUtc = packageActions.FreeExpires;
+    } else if (packageActions?.IsPurchased) {
+        expirationUtc = packageActions?.RentExpires;
+    }
+
+    const minPrice =
+        packageActions &&
+        Math.min(
+            ...packageActions.PurchaseActions?.map(
+                (purchaseAction: any) => purchaseAction.Price
+            )
+        );
+    const minPurchaseAction =
+        packageActions &&
+        packageActions.PurchaseActions?.filter(
+            (purchaseAction: any) => purchaseAction.Price === minPrice
+        );
+
+    const purchaseActionExists =
+        packageActions && packageActions.PurchaseActions?.length > 0
+            ? true
+            : false;
+    let timeLeftToExpiry;
+    if (expirationUtc) {
+        timeLeftToExpiry = timeLeft(expirationUtc);
+    }
+
+    let statusText = [];
+    if (purchaseActionExists && hasFeatureIosCarrierBilling) {
+        statusText.push(
+            replacePlaceHoldersInTemplatedString(
+                global.lStrings?.str_purchase_vod_message,
+                {
+                    Currency: minPurchaseAction[0]?.Currency,
+                    Price: minPurchaseAction[0]?.Price,
+                }
+            )
+        );
+    } else {
+        statusText.push(
+            timeLeftToExpiry || global.lStrings?.str_purchase_blocked
+        );
+    }
+    // Status Text Order: Banned Purchase Text, Watched Text, Playback restricts
+    item["statusText"] = statusText;
+    item["networkLogoURL"] = item?.Network?.Images
+        ? { uri: item?.Network?.Images[0].Uri }
+        : undefined;
+    item["assetType"] = generateType(item, sourceType);
+    item["image16x9PosterURL"] = getImageUri(item, "16x9/Poster");
+    item["image16x9KeyArtURL"] = getImageUri(item, "16x9/KeyArt");
+    item["image2x3PosterURL"] = getImageUri(item, "2x3/Poster");
+    item["image2x3KeyArtURL"] = getImageUri(item, "2x3/KeyArt");
+    item["genre"] = item?.Genres?.length && getGenreName(item.Genres)[0]?.Name;
+    item["description"] = item?.Description;
+
+    // Quality Indicators
+    let combinedQualityLevels: string[] = [];
+    packageActions?.IsFree
+        ? combinedQualityLevels.push(...packageActions.FreeQualityLevels)
+        : packageActions?.QualityLevels &&
+        combinedQualityLevels.push(...packageActions?.QualityLevels);
+
+    if (item.Offers && item.Offers?.length) {
+        for (let offer of item.Offers) {
+            offer.QualityLevels &&
+                combinedQualityLevels.push(...offer.QualityLevels);
+        }
+    }
+    combinedQualityLevels = generalizeQuality(combinedQualityLevels);
+
+    // Remove duplicates and Sort Quality Levels with order
+    item["combinedQualityLevels"] = sortInorder(
+        combinedQualityLevels,
+        orderedQualityLevels
+    );
+    item["SourceIndicators"] = {};
+    discoveryPackageAsset = item;
+    item["isExpiringSoon"] = isExpiringSoon(item);
+    return item;
+};
+
 export const waystoWatchSchedules = (
     schedules: any,
     channelMap: any,

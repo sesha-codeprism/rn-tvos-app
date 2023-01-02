@@ -1,5 +1,5 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -38,6 +38,7 @@ import {
   BookmarkType,
   ContentType,
   fontIconsObject,
+  itemTypeString,
   languageKey,
   pbr,
   sourceTypeString,
@@ -59,6 +60,9 @@ import { ButtonVariantProps } from "../../../components/MFButtonGroup/MFButtonGr
 import { BookmarkType as udlBookMark } from "../../../utils/Subscriber.utils";
 import { DetailsSidePanel } from "./DetailSidePanel";
 import MFSwim from "../../../components/MFSwim";
+import { isFeatureAssigned } from "../../../utils/helpers";
+import { queryClient } from "../../../config/queries";
+import { pinItem, unpinItem } from "../../../../backend/subscriber/subscriber";
 const { width, height } = Dimensions.get("window");
 
 interface AssetData {
@@ -84,10 +88,27 @@ interface SideMenuState {
   panelName: string;
 }
 
+interface DetailsState {
+  similarItemsData?: Array<any>;
+  discoveryProgramData?: any;
+  discoverySeriesData?: any;
+  playActionsData?: any;
+  discoveryProgramScheduleData?: any;
+  discoverySeriesScheduleData?: any;
+  subscriberData?: any;
+  scheduleCache?: any;
+  channelMap?: any;
+  channelRightsData?: any;
+  viewableSubscriptionGroupsData?: any;
+  scheduledSubscriptionGroupsData?: any;
+  allSubScriptionsData?: any;
+}
+
 const fontSize = { fontSize: 25 };
 
 const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const feed: Feed = props.route.params.feed;
+  const drawerRef: React.MutableRefObject<any> = useRef();
   const [similarData, setSimilarData] = useState<any>(undefined);
   const [discoveryProgramData, setdiscoveryProgramData] =
     useState<any>(undefined);
@@ -98,9 +119,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [udpDataAsset, setUDPDataAsset] = useState<any>();
   const [isCTAButtonFocused, setIsCTAButtonFocused] = useState(false);
   const [open, setOpen] = useState(false);
-  const drawerRef: React.MutableRefObject<any> = useRef();
   const [similarItemsSwimLaneKey, setSimilarItemsSwimLaneKey] = useState("");
   const [castnCrewSwimLaneKey, setCastnCrewSwimlaneKey] = useState("");
+  const [viewableSubscriptionGroups, setViewableSubscriptionGroups] =
+    useState<any>();
+  const [scheduledSubScriptionGroups, setScheduledSubScriptionGroups] =
+    useState<any>();
+  const [allSubscriptionGroups, setAllSubscriptionGroups] = useState<any>();
+  const [isItemPinned, setIsItemPinned] = useState(false);
 
   let scrollViewRef: any = React.createRef<ScrollView>();
   //@ts-ignore
@@ -349,6 +375,50 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     };
   };
   let assetData: AssetData = updateAssetData();
+  const getAllViewableSubscriptions = async ({ queryKey }: any) => {
+    const [, assetData] = queryKey;
+    if (!assetData) {
+      console.log("No asset data to make api call..");
+      return undefined;
+    }
+    const udlParams = "udl://dvrproxy/viewable-subscription-items/";
+    const data = await getDataFromUDL(udlParams);
+    const massagedData = getMassagedData(udlParams, data);
+    setViewableSubscriptionGroups(massagedData);
+    return massagedData;
+  };
+
+  const getScheduledSubscriptionGroups = async ({ queryKey }: any) => {
+    const [, assetData] = queryKey;
+    if (!assetData) {
+      console.log("No asset data to make api call..");
+      return undefined;
+    }
+    const udlParams = "udl://dvrproxy/get-scheduled-subscription-groups/";
+    const data = await getDataFromUDL(udlParams);
+    const massagedData = getMassagedData(udlParams, data);
+    setScheduledSubScriptionGroups(massagedData);
+    return massagedData;
+  };
+
+  const getAllSubscriptionGroups = async ({ queryKey }: any) => {
+    const [, assetData] = queryKey;
+    if (!assetData) {
+      console.log("No asset data to make api call..");
+      return undefined;
+    }
+    const udlParams = "udl://dvrproxy/get-all-subscriptionGroups/";
+    const data = await getDataFromUDL(udlParams);
+    const massagedData = getMassagedData(udlParams, data);
+    setAllSubscriptionGroups(massagedData);
+    return massagedData;
+  };
+
+  useEffect(() => {
+    const status = getItemPinnedStatus();
+    console.log("status", status);
+    setIsItemPinned(status);
+  }, []);
 
   const getSimilarItemsForFeed = async ({ queryKey }: any) => {
     console.log("Querykey", queryKey);
@@ -358,7 +428,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       return undefined;
     }
     const id = getItemId(feed);
-    const params = `?$top=${assetData.$top}&$skip=${assetData.$skip}&storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${assetData.pivots}&id=${id}&itemType=${assetData.contentTypeEnum}`;
+    const params = `?$top=${assetData.$top}&$skip=${assetData.$skip}&storeId=${
+      DefaultStore.Id
+    }&$groups=${GLOBALS.store!.rightsGroupIds}&pivots=${
+      assetData.pivots
+    }&id=${id}&itemType=${assetData.contentTypeEnum}`;
     const udlParam = "udl://subscriber/similarprograms/" + params;
     const data = await getDataFromUDL(udlParam);
     const massagedData = getMassagedData(
@@ -367,6 +441,37 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     );
     setSimilarData(massagedData);
     return massagedData;
+  };
+
+  const handleFavoritePress = async () => {
+    const seriesId = udpDataAsset?.SeriesId;
+    let assetId;
+    let assetType;
+    if (seriesId) {
+      assetId = seriesId;
+      assetType = itemTypeString[assetTypeObject.SERIES];
+    } else {
+      assetId = assetData.id;
+      assetType = itemTypeString[assetData.contentTypeEnum];
+    }
+
+    if (isItemPinned) {
+      //@ts-ignore
+      const resp = await unpinItem(assetId, assetType);
+      if (resp.status === 201) {
+        setIsItemPinned(false);
+      } else {
+        Alert.alert("Something went wrong");
+      }
+    } else {
+      //@ts-ignore
+      const resp = await pinItem(assetId, assetType);
+      if (resp.status >= 200 && resp.status <= 300) {
+        setIsItemPinned(true);
+      } else {
+        Alert.alert("Something went wrong");
+      }
+    }
   };
 
   const renderFavoriteButton = () => {
@@ -387,8 +492,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             //   }, 2000);
             // }
           }}
+          onPress={handleFavoritePress}
           variant={MFButtonVariant.FontIcon}
-          fontIconSource={favoriteSelected}
+          fontIconSource={isItemPinned ? favoriteSelected : favoriteUnselected}
           fontIconTextStyle={StyleSheet.flatten([
             styles.textStyle,
             { fontSize: 70, textAlign: "center", alignSelf: "center" },
@@ -610,7 +716,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       return undefined;
     }
     const id = getItemId(feed);
-    const params = `?$top=${assetData.$top}&$skip=${assetData.$skip}&storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${assetData.pivots}&id=${id}&itemType=${assetData.contentTypeEnum}&lang="en-US"`;
+    const params = `?$top=${assetData.$top}&$skip=${assetData.$skip}&storeId=${
+      DefaultStore.Id
+    }&$groups=${GLOBALS.store!.rightsGroupIds}&pivots=${
+      assetData.pivots
+    }&id=${id}&itemType=${assetData.contentTypeEnum}&lang="en-US"`;
     const udlParam = "udl://discovery/programSchedules/" + params;
     const data = await getDataFromUDL(udlParam);
     setdiscoverySchedulesData(data.data);
@@ -623,7 +733,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       return undefined;
     }
     const id = getItemId(feed);
-    const params = `?storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${assetData.pivots}&id=${id}`;
+    const params = `?storeId=${DefaultStore.Id}&$groups=${
+      GLOBALS.store!.rightsGroupIds
+    }&pivots=${assetData.pivots}&id=${id}`;
     const udlParam = "udl://discovery/programs/" + params;
     const data = await getDataFromUDL(udlParam);
     const massagedData = massageDiscoveryFeedAsset(
@@ -631,6 +743,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       assetTypeObject[assetData.contentTypeEnum]
     );
     setdiscoveryProgramData(massagedData);
+
     return massagedData;
   };
 
@@ -640,7 +753,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       return undefined;
     }
     const id = getItemId(feed);
-    const params = `?catchup=false&storeId=${DefaultStore.Id}&groups=${GLOBALS.store.rightsGroupIds}&id=${id}`;
+    const params = `?catchup=false&storeId=${DefaultStore.Id}&groups=${
+      GLOBALS.store!.rightsGroupIds
+    }&id=${id}`;
     const udlParam = "udl://subscriber/programplayactions/" + params;
     const data = await getDataFromUDL(udlParam);
     setplayActionsData(data.data);
@@ -660,6 +775,25 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     return data;
   };
 
+  const getItemPinnedStatus = () => {
+    const pinnedItems = queryClient.getQueryData([
+      "feed",
+      "udl://subscriber/library/Pins",
+    ]);
+    const pinnedItem = getPinnedItem(pinnedItems, feed);
+    if (pinnedItem) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getPinnedItem = (pinnedItems: Array<any>, feed: any) => {
+    return pinnedItems.find((element: any) => {
+      return element.Id === feed.Id;
+    });
+  };
+
   const getUDPData = async () => {
     if (
       !similarDataQuery.data &&
@@ -675,7 +809,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       //@ts-ignore
       assetTypeObject[feed?.assetType?.contentType] ||
       assetTypeObject[ContentType.PROGRAM];
-
     const udpData = massageProgramDataForUDP(
       playActionsData,
       subscriberData,
@@ -683,10 +816,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       undefined,
       discoverySchedulesData,
       undefined,
-      undefined,
+      allSubscriptionGroups,
       undefined,
       subscriberData,
       undefined,
+      viewableSubscriptionGroups,
+      scheduledSubScriptionGroups,
       undefined,
       undefined,
       undefined,
@@ -696,9 +831,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       undefined,
       undefined,
       undefined,
-      undefined,
-      undefined,
-      undefined
+      isFeatureAssigned("IOSCarrierBilling")
     );
     console.log("UDP data", udpData);
     setUDPDataAsset(udpData);
@@ -715,44 +848,68 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const similarDataQuery = useQuery(
     [`get-similarItems-${assetData?.id}`, assetData],
     getSimilarItemsForFeed,
-    defaultQueryOptions
+    { ...defaultQueryOptions, refetchOnMount: "always" }
   );
 
   const discoveryProgramDataQuery = useQuery(
     ["get-program-data", assetData?.id],
     () => getDiscoveryProgramData(assetData),
-    defaultQueryOptions
+    {
+      ...defaultQueryOptions,
+      refetchOnMount: "always",
+    }
   );
 
   const discoverySchedulesQuery = useQuery(
     ["get-discoveryschedules", assetData?.id],
     () => getDiscoverySchedules(assetData),
-    defaultQueryOptions
+    { ...defaultQueryOptions, refetchOnMount: "always" }
   );
 
   const playActionsQuery = useQuery(
     ["get-playActiosn", assetData?.id],
     () => getPlayActions(assetData),
-    defaultQueryOptions
+    { ...defaultQueryOptions, refetchOnMount: "always" }
   );
 
   const subscriberDataQuery = useQuery(
     ["get-subscriber-data", assetData?.id],
     () => getProgramSubscriberData(assetData),
-    defaultQueryOptions
+    { ...defaultQueryOptions, refetchOnMount: "always" }
   );
 
-  const udpDataQuery = useQuery(
+  const viewableSubscriptionGroupsQuery = useQuery(
+    [`get-viewableSubscriptionGroupsQuery-${assetData?.id}`, assetData],
+    getAllViewableSubscriptions,
+    { ...defaultQueryOptions, refetchOnMount: "always" }
+  );
+
+  const getScheduledSubscriptionsQuery = useQuery(
+    [`get-getScheduledSubscriptionsQuery-${assetData?.id}`, assetData],
+    getScheduledSubscriptionGroups,
+    { ...defaultQueryOptions, refetchOnMount: "always" }
+  );
+
+  const getAllSubscriptionsQuery = useQuery(
+    [`get-getScheduledSubscriptionsQuery-${assetData?.id}`, assetData],
+    getAllSubscriptionGroups,
+    { ...defaultQueryOptions, refetchOnMount: "always" }
+  );
+
+  const { data, isLoading } = useQuery(
     ["get-UDP-data", assetData?.id],
     () => getUDPData(),
     {
+      refetchOnMount: "always",
       enabled:
         !!similarData &&
         !!discoveryProgramData &&
         !!discoverySchedulesData &&
         !!discoverySchedulesQuery.data &&
         !!playActionsData &&
-        !!subscriberData,
+        !!subscriberData &&
+        !!viewableSubscriptionGroups &&
+        !!scheduledSubScriptionGroups,
     }
   );
 
@@ -1198,12 +1355,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       (combinedAudioTags?.length && combinedAudioTags) ||
       [];
     const statusTextItem = (statusText?.length && statusText[0]) || "";
-    console.log(
-      "Quality Indicators",
-      qualityLevel,
-      "Language Indicators",
-      langaugeIndicator
-    );
     // Schedules
     return (
       <View>

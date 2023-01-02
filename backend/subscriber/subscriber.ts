@@ -5,6 +5,7 @@ import { lang } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import axios from "axios";
 import { MFGlobalsConfig } from "../configs/globals";
+import { PinnedItemType } from "../../src/utils/pinnedItemType";
 export type PinType = "adult" | "parentalcontrol" | "purchase";
 export interface SearchParam {
   searchString: string;
@@ -411,6 +412,7 @@ export const deleteDevice = async () => {
   return response;
 };
 
+
 export const getProgramSubscriberData = async (item: string, params: any) => {
   const { id } = params;
   const { accessToken } = GLOBALS.store!;
@@ -429,6 +431,39 @@ export const getProgramSubscriberData = async (item: string, params: any) => {
     return undefined;
   }
 }
+
+export const pinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?: boolean) => {
+  const { accessToken } = GLOBALS.store!;
+  //@ts-ignore
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + "/v2/pinned-items/";
+  const response = await POST({
+    url: url,
+    params: {
+      storeId: DefaultStore.Id,
+      Id: Id,
+      ItemType: ItemType
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  });
+  return response;
+}
+
+export const unpinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?: boolean) => {
+  const { accessToken } = GLOBALS.store!;
+  //@ts-ignore
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v2/pinned-items/${ItemType}/${Id}?`;
+  const response = await DELETE({
+    url: url,
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  });
+  return response;
+}
+
+
 
 export const registerSubscriberUdls = (params?: any) => {
   const BASE = "subscriber";
