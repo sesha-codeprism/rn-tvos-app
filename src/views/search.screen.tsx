@@ -60,18 +60,17 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
     setSwimLaneKey(key);
   };
   let timer: any;
-  const onChangeText = (event: {
-    nativeEvent: { text: React.SetStateAction<string> };
-  }) => {
-    console.log("event.nativeEvent.text", event.nativeEvent.text);
-    if (event.nativeEvent.text.length >= 0) {
+  const onChangeText = (event: any) => {
+    if (event.nativeEvent.text.length > 0) {
       /** User is entering some text. Stop showing trending items and start showing search results */
+      const text = event.nativeEvent.text
       setSearchString(event.nativeEvent.text);
       clearTimeout(timer);
+
       timer = setTimeout(() => {
         setShowTrending(false);
         setShowSearchResult(true);
-        onSearch(searchString);
+        onSearch(text);
       }, 1000);
     } else {
       /**Text length is zero. User has cleared out text. Show trending items only */
@@ -160,9 +159,9 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   };
   const onSearch = async (text: any) => {
     console.log("text", text);
-    if (searchString && searchString.length >= 3) {
+    if (text && text.length >= 3) {
       const params: SearchParam = {
-        searchString: searchString,
+        searchString: text,
         searchLive: false,
         $skip: 0,
         $top: 50,
