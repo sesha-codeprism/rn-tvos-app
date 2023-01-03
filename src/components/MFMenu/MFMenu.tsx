@@ -10,6 +10,7 @@ import {
   GestureResponderEvent,
   Pressable,
   StyleSheet,
+  useTVEventHandler,
   View,
 } from "react-native";
 import { HubsList } from "../../@types/Hubs";
@@ -52,7 +53,18 @@ const MFMenu = (props: MFMenuProps) => {
   const _onFocus = (index: number) => {
     props.onFocus && props.onFocus(index);
   };
-
+  // focus handler for handling focus from settings and profile icon
+  const myTVEventHandler = (evt: any) => {
+    if (
+      evt.eventType === "down" &&
+      (focused === "profile" || focused === "settings")
+    ) {
+      console.log("evt.eventType", evt);
+      props.setCardFocus();
+      setFocused("");
+    }
+  };
+  useTVEventHandler(myTVEventHandler);
   useEffect(() => {
     let array1: Array<ButtonVariantProps> = [];
     const identityAssigned = isFeatureAssigned("identity");
@@ -116,6 +128,7 @@ const MFMenu = (props: MFMenuProps) => {
                 }
               >
                 <MFButton
+                  hasTVPreferredFocus={false}
                   variant={MFButtonVariant.Icon}
                   iconSource={AppImages.search}
                   iconStyles={MFMenuStyles.iconStyles}

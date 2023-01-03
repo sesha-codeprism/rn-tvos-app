@@ -45,14 +45,15 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
   const [focused, setFocus] = useState(false);
   console.log("props in personalization", props);
   const onpressDisable = () => {
-    GLOBALS.editUserProfile.AdditionalFields = {
-      optOutPersonalDataUse: "true",
-    };
+    toggleShouldRenderImage(!shouldRenderImage);
+    // GLOBALS.editUserProfile.AdditionalFields = {
+    //   optOutPersonalDataUse: "true",
+    // };
     // props.navigation.navigate(Routes.ProfileFinalise, {
     //   item: GLOBALS.editUserProfile,
     //   mode: "edit",
     // });
-    toggleShouldRenderImage(false);
+    // toggleShouldRenderImage(false);
     setShowPersonalizationPopup(false);
   };
   const clearHistory = async () => {
@@ -117,8 +118,8 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                   setFocus(false);
                 }}
                 onPress={() => {
-                  toggleShouldRenderImage(!shouldRenderImage);
-                  shouldRenderImage ? setShowPersonalizationPopup(true) : null;
+                 
+                  shouldRenderImage ? setShowPersonalizationPopup(true) : toggleShouldRenderImage(!shouldRenderImage);
                 }}
                 style={{ height: "100%" }}
               >

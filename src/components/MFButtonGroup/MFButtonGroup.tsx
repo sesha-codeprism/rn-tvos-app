@@ -18,6 +18,7 @@ import { MFContainedButtonProps } from "../MFButtonsVariants/MFContainedButton";
 import { MFOutlinedButtonProps } from "../MFButtonsVariants/MFOutlinedButton";
 import { Source, ImageStyle } from "react-native-fast-image";
 import { MFUnderlinedButtonProps } from "../MFButtonsVariants/MFUnderlinedButton";
+import { SCREEN_WIDTH } from "../../utils/dimensions";
 import { MFFontIconProps } from "../MFButtonsVariants/MFFontIconButton";
 
 export interface MFButtonTextStyle {
@@ -201,7 +202,7 @@ const MFButtonGroup: React.FunctionComponent<MFButtonGroupProps> = (props) => {
         style={{
           backgroundColor: "transparent",
           height: 20,
-          width: "100%",
+          width: SCREEN_WIDTH,
           marginTop: 50,
         }}
       ></TouchableOpacity>
