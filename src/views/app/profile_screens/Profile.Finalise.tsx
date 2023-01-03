@@ -431,7 +431,7 @@ const ProfileFinalisationScreen: React.FunctionComponent<
               props.route.params.mode === "edit" &&
               currentContext.userProfile.Id !== GLOBALS.editUserProfile.Id
                 ? setShowDelete(true)
-                : props.navigation.goBack();
+                : props.navigation.pop(4);
             }}
             textLabel={
               props.route.params.mode === "edit" &&
