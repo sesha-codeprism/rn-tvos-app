@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -8,6 +8,9 @@ import {
   NativeSyntheticEvent,
   BackHandler,
   TVMenuControl,
+  PressableProps,
+  TouchableOpacity,
+  useTVEventHandler,
 } from "react-native";
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -37,7 +40,11 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
   const [userProfiles, setProfiles] = useState(Array<UserProfile>());
   const [editFocused, setEditFocused] = useState(false);
   const [focused, setFocused] = useState<any>("");
-
+  const [lastEventType, setLastEventType] = useState("");
+  var lastEvent: any = "";
+  const profileRef = Array(8)
+    .fill(0)
+    .map(() => useRef<PressableProps>(null));
   const currentContext: any = useContext(GlobalContext);
   // console.log('data inside context',currentContext);
   const getProfiles = async () => {
@@ -57,11 +64,37 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [props.navigation]);
+
+  const myTVEventHandler = (evt: {
+    eventType: React.SetStateAction<string>;
+  }) => {
+    // @ts-ignore
+    if (!evt.tag && evt.eventType) {
+      console.log("evt.eventType", evt);
+      editFocused && evt.eventType === "right"
+        ? profileRef[
+            focused < 8 ? focused + 1 : focused
+            // @ts-ignore
+          ].current?.setNativeProps({
+            hasTVPreferredFocus: true,
+          })
+        : editFocused && evt.eventType === "left"
+        ? // @ts-ignore
+          profileRef[focused > 0 ? focused - 1 : 0].current?.setNativeProps({
+            hasTVPreferredFocus: true,
+          })
+        : null;
+      lastEvent = evt.eventType;
+      setLastEventType(evt.eventType);
+    }
+  };
+  useTVEventHandler(myTVEventHandler);
   const onFocus = (
     event: NativeSyntheticEvent<TargetedEvent>,
     index: number
   ) => {
     setFocused(index);
+    setEditFocused(false);
   };
 
   const _onFocusEdit = () => {
@@ -82,7 +115,7 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
   };
 
   useEffect(() => {
-    console.log("Enabling TVMenuKey");
+    // console.log("Enabling TVMenuKey");
     TVMenuControl.enableTVMenuKey();
     BackHandler.addEventListener("hardwareBackPress", backAction);
   });
@@ -120,6 +153,8 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
             return item.UserCreated ? (
               <View style={{ marginBottom: 120 }} key={`Index${index}`}>
                 <MFUserProfile
+                  // @ts-ignore
+                  ref={profileRef[index]}
                   userProfile={item}
                   navigation={props.navigation}
                   onFocus={(e) => {

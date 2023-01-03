@@ -52,124 +52,126 @@ interface MFUserProfileProps {
   checkedOnFocus?: boolean;
 }
 
-const MFUserProfile: React.FunctionComponent<MFUserProfileProps> = (props) => {
-  const [focused, setFocused] = useState(false);
-  const currentContext: any = useContext(GlobalContext);
+const MFUserProfile: React.FunctionComponent<MFUserProfileProps> =
+  React.forwardRef(({ ...props }, ref: any) => {
+    const [focused, setFocused] = useState(false);
+    const currentContext: any = useContext(GlobalContext);
 
-  const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(true);
-    console.log("_onFocus called");
-    props.onFocus && props.onFocus(event);
-  };
-  const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
-    setFocused(false);
-    console.log("_onBlur called");
-    props.onBlur && props.onBlur(event);
-  };
+    const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(true);
+      console.log("_onFocus called");
+      props.onFocus && props.onFocus(event);
+    };
+    const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
+      setFocused(false);
+      console.log("_onBlur called");
+      props.onBlur && props.onBlur(event);
+    };
 
-  const _onPress = (event: GestureResponderEvent) => {
-    if (props.onPress) {
-      props.onPress(event);
-    } else {
-      if (props.userProfile) {
-        console.log("Userprofile found");
-        GLOBALS.userProfile = props.userProfile;
-        GLOBALS.store.userProfile = GLOBALS.userProfile;
-        updateStore(GLOBALS.store);
-        currentContext.setUserProfile(GLOBALS.userProfile);
-        props.navigation.replace(Routes.Home);
+    const _onPress = (event: GestureResponderEvent) => {
+      if (props.onPress) {
+        props.onPress(event);
       } else {
-        console.log("No user profile");
-        props.navigation.navigate(Routes.CreateProfile, {
-          item: null,
-          mode: "create",
-        });
-      }
-    }
-  };
-
-  return (
-    <View>
-      <Pressable
-        hasTVPreferredFocus={
-          GLOBALS.userProfile?.Id === props.userProfile?.Id ? true : false
+        if (props.userProfile) {
+          console.log("Userprofile found");
+          GLOBALS.userProfile = props.userProfile;
+          GLOBALS.store.userProfile = GLOBALS.userProfile;
+          updateStore(JSON.stringify(GLOBALS.store));
+          currentContext.setUserProfile(GLOBALS.userProfile);
+          props.navigation.replace(Routes.Home);
+        } else {
+          console.log("No user profile");
+          props.navigation.navigate(Routes.CreateProfile, {
+            item: null,
+            mode: "create",
+          });
         }
-        style={[
-          styles.rootContainer,
-          StyleSheet.flatten(
-            (styles.unfocusedStyle, styles.rootContainer, props.focusedStyle)
-          ),
-        ]}
-        onFocus={_onFocus}
-        onBlur={_onBlur}
-        onPress={_onPress}
-      >
-        <View
+      }
+    };
+
+    return (
+      <View>
+        <Pressable
+          ref={ref}
+          hasTVPreferredFocus={
+            GLOBALS.userProfile?.Id === props.userProfile?.Id ? true : false
+          }
           style={[
-            styles.imageContainer,
-            {
-              borderColor: focused ? "#053C69" : "#151214",
-              borderWidth: 5,
-              padding: 5,
-              borderRadius: 220 / 2,
-              backgroundColor: !props.userProfile ? "grey" : "transparent",
-            },
+            styles.rootContainer,
+            StyleSheet.flatten(
+              (styles.unfocusedStyle, styles.rootContainer, props.focusedStyle)
+            ),
           ]}
+          onFocus={_onFocus}
+          onBlur={_onBlur}
+          onPress={_onPress}
         >
-          <FastImage
-            source={
-              props.userProfile
-                ? //@ts-ignore
-                  AppImages[props.userProfile.Image]
-                : AppImages.icon_add
-            }
-            style={
-              !focused
-                ? !focused
-                  ? {
-                      width: props.userProfile ? 200 : 62,
-                      height: props.userProfile ? 200 : 62,
-                      borderRadius: props.userProfile ? 200 / 2 : 62 / 2,
-                    }
+          <View
+            style={[
+              styles.imageContainer,
+              {
+                borderColor: focused ? "#053C69" : "#151214",
+                borderWidth: 5,
+                padding: 5,
+                borderRadius: 220 / 2,
+                backgroundColor: !props.userProfile ? "grey" : "transparent",
+              },
+            ]}
+          >
+            <FastImage
+              source={
+                props.userProfile
+                  ? //@ts-ignore
+                    AppImages[props.userProfile.Image]
+                  : AppImages.icon_add
+              }
+              style={
+                !focused
+                  ? !focused
+                    ? {
+                        width: props.userProfile ? 200 : 62,
+                        height: props.userProfile ? 200 : 62,
+                        borderRadius: props.userProfile ? 200 / 2 : 62 / 2,
+                      }
+                    : {
+                        width: props.userProfile ? 180 : 62,
+                        height: props.userProfile ? 180 : 62,
+                        borderRadius: 180 / 2,
+                      }
                   : {
                       width: props.userProfile ? 180 : 62,
                       height: props.userProfile ? 180 : 62,
                       borderRadius: 180 / 2,
                     }
-                : {
-                    width: props.userProfile ? 180 : 62,
-                    height: props.userProfile ? 180 : 62,
-                    borderRadius: 180 / 2,
-                  }
-            }
-          />
-          {props.userProfile &&
-          props.userProfile.Id === GLOBALS.userProfile?.Id &&
-          props.checkedOnFocus ? (
-            <View style={styles.activeProfileIndicator}>
-              <FastImage
-                source={AppImages.tick_active}
-                style={styles.activeProfileIndicatorImage}
-              />
-            </View>
-          ) : (
-            <View />
-          )}
-        </View>
-        <View style={styles.textContainer}>
-          <Text
-            numberOfLines={1}
-            style={
-              focused ? styles.focusedTextStyle : styles.unFocusedTextStyle
-            }
-          >
-            {props.userProfile ? props.userProfile.Name : "New"}
-          </Text>
-        </View>
-      </Pressable>
-    </View>
-  );
-};
+              }
+            />
+            {props.userProfile &&
+            props.userProfile.Id === GLOBALS.userProfile?.Id &&
+            props.checkedOnFocus ? (
+              <View style={styles.activeProfileIndicator}>
+                <FastImage
+                  source={AppImages.tick_active}
+                  style={styles.activeProfileIndicatorImage}
+                />
+              </View>
+            ) : (
+              <View />
+            )}
+          </View>
+          <View style={styles.textContainer}>
+            <Text
+              numberOfLines={1}
+              style={
+                focused ? styles.focusedTextStyle : styles.unFocusedTextStyle
+              }
+            >
+              {props.userProfile ? props.userProfile.Name : "New"}
+            </Text>
+          </View>
+        </Pressable>
+      </View>
+    );
+  });
 
 const styles = StyleSheet.create({
   rootContainer: {
