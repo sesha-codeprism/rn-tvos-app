@@ -208,7 +208,6 @@ export const getDefaultStore = (): string | undefined => {
 }
 export const setDefaultStore = async (storeresponse: any, bootstrapSelectors: any) => {
     if (bootstrapSelectors) {
-        console.log(storeresponse);
         const stores = storeresponse?.data;
         const STORE_TYPE = "HubsAndFeeds";
         const defaultMainStore = "HubsAndFeeds-Main";
