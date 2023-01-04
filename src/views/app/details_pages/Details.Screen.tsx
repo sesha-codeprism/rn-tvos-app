@@ -789,7 +789,10 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const getPinnedItem = (pinnedItems: Array<any>, feed: any) => {
-    return pinnedItems.find((element: any) => {
+    if (!pinnedItems) {
+      return undefined;
+    }
+    return pinnedItems?.find((element: any) => {
       return element.Id === feed.Id;
     });
   };

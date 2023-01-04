@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  PressableProps,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFText from "../../../../components/MFText";
