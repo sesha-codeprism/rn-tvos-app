@@ -1,0 +1,38 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)
+// swift-module-flags: -target arm64-apple-tvos15.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name FullGuideComponent
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import Alamofire
+import Foundation
+@_exported import FullGuideComponent
+import Kingfisher
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+public protocol channelProgramDelegate {
+  func selectedProgram(program: [Swift.String : Any])
+}
+extension Foundation.Date {
+  public static func hoursAndMinutesFrom(_ from: Foundation.Date?) -> Swift.String
+}
+@_hasMissingDesignatedInitializers public class MKFullGuideAPIClient {
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class MKFullGuideStorageManager {
+  public static let shared: FullGuideComponent.MKFullGuideStorageManager
+  public var selectedDelegate: FullGuideComponent.channelProgramDelegate?
+  @objc deinit
+}
+extension FullGuideComponent.MKFullGuideStorageManager {
+  public func getCurrentSlots(useCache: Swift.Bool = false, onSuccess: @escaping (([[Swift.String : Any]]) -> Swift.Void))
+  public func updateSlotsOnTime()
+}
+@_hasMissingDesignatedInitializers public class LiveChannel : Swift.Codable {
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers public class LiveStation : FullGuideComponent.LiveChannel {
+  @objc deinit
+}

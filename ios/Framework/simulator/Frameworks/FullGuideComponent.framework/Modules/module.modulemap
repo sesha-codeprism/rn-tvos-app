@@ -1,0 +1,11 @@
+framework module FullGuideComponent {
+  umbrella header "FullGuideComponent.h"
+
+  export *
+  module * { export * }
+}
+
+module FullGuideComponent.Swift {
+  header "FullGuideComponent-Swift.h"
+  requires objc
+}

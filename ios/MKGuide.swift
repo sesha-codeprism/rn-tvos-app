@@ -1,15 +1,15 @@
 import Foundation
 import UIKit
 class MKGuide: UIView {
-    weak var epgVC: EPGViewController?
-    
+    weak var epgVC: UIViewController?
+
     var token: String? {
         didSet {
             print("Token: received \(self)")
             setNeedsLayout()
         }
     }
-  
+
     func setData(data: Dictionary<String,Any>) {
        // Access your data here
      }
@@ -31,17 +31,14 @@ class MKGuide: UIView {
     }
 
     private func embed() {
-      let sampleSB = UIStoryboard.init(name: "EPGViewController", bundle: nil)
-      let sampleVC = sampleSB.instantiateViewController(withIdentifier: "EPGViewController") as! EPGViewController
-      sampleVC.view.frame = CGRect(x: 0,
-                                y: 0,
-                                width: self.frame.size.width,
-                                height: self.frame.size.height
-      );
-      self.addSubview(sampleVC.view)
-      epgVC = sampleVC
+      let bundle = Bundle(identifier: "com.mediakind.FullGuideComponent")
+      let Storyboard  = UIStoryboard(name: "EPGViewController", bundle: bundle)
+      let vc = Storyboard.instantiateViewController(withIdentifier: "EPGViewController")
+      vc.view.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height);
+      self.addSubview(vc.view)
+      epgVC = vc
     }
-  
+
 }
 
 extension UIView {
