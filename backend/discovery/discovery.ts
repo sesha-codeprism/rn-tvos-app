@@ -9,12 +9,12 @@ import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 /** Note: Discovery calls don't require AUTH token */
 
 /** URL Endpoint for all Discovery calls */
-export const DISCOVERY_URL =
-  GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery;
+// export const DISCOVERY_URL =
+//   GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery;
 
 const versionString = "/v4/";
 
-// export const DISCOVERY_URL = 'https://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/discovery';
+// export const GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery = 'https://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/discovery';
 
 /** API call to get all Hubs data */
 export const getHubs = async (id: string, params: any) => {
@@ -115,7 +115,7 @@ export const getTVShows = async (id?: string, params?: any) => {
 const getPackages = async (id: string, params: Object) => {
   console.log("UDL: getPackages", id, params);
   const url: string =
-    parseUri(DISCOVERY_URL || "") + versionString + "feeds/packages/items";
+    parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/packages/items";
   const response = await GET({
     url: url,
     params: {
@@ -135,7 +135,7 @@ const getmoviesandtvshowsByLicenseWindow = async (
 ) => {
   console.log("UDL: getMoviesAndTvshowsByLicenseWindows", id, params);
   const url: string =
-    parseUri(DISCOVERY_URL || "") + versionString + "moviesandtvshows/items";
+    parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "moviesandtvshows/items";
   const response = await GET({
     url: url,
     params: {
@@ -154,7 +154,7 @@ const getMoviesAndTV = async (id: string, params: any) => {
   console.log("UDL: getMovisAndTV", id, params);
   const { orderBy } = params;
   const url: string =
-    parseUri(DISCOVERY_URL || "") +
+    parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") +
     versionString +
     "feeds/moviesandtvshows/items";
   const response = await GET({
@@ -181,7 +181,7 @@ const discoverSubscriptions = async (
 ) => {
   console.log("UDL: getTVShows", id, params);
   const url: string =
-    parseUri(DISCOVERY_URL || "") + versionString + "feeds/subscriptions/items";
+    parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/subscriptions/items";
   const response = await GET({
     url: url,
     params: {
@@ -198,7 +198,7 @@ const discoverSubscriptions = async (
 
 const getPayPerView = async () => {
   const url: string =
-    parseUri(DISCOVERY_URL || "") + versionString + "feeds/payperview/items";
+    parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/payperview/items";
   const response = await GET({
     url: url,
     params: {
@@ -234,7 +234,7 @@ export const getStoresList = async () => {
 };
 
 export const getFeedByID = async (id: string) => {
-  const uri: string = parseUri(DISCOVERY_URL || "") + `/v3/programs/${id}`;
+  const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + `/v3/programs/${id}`;
   const response = await GET({
     url: uri,
 
@@ -303,7 +303,7 @@ const getDiscoveryLibrariesPivotCategories = async (
   id: string,
   params: any
 ) => {
-  const url = `${DISCOVERY_URL}/v3/libraries/complete/pivot-items`;
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery}/v3/libraries/complete/pivot-items`;
   const response = await GET({
     url: url,
     params: params,
@@ -315,7 +315,7 @@ const getDiscoveryLibrariesPivotCategories = async (
 };
 
 const getDiscoverLibraryItemPivots = async (id: string, params: any) => {
-  const url = `${DISCOVERY_URL}/v3/libraries/complete/pivots`;
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery}/v3/libraries/complete/pivots`;
   const response = await GET({
     url: url,
     params: {},
@@ -327,7 +327,7 @@ const getDiscoverLibraryItemPivots = async (id: string, params: any) => {
 };
 
 const getDiscoveryLibraryPackages = async (id: string, params: any) => {
-  const url = `${DISCOVERY_URL}/v3/libraries/Collections/items`;
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery}/v3/libraries/Collections/items`;
   const response = await GET({
     url: url,
     params: params,
