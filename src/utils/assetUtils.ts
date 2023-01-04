@@ -3010,6 +3010,27 @@ const getFutureSchedules = (schedules: any[], startDate?: any) => {
     }
 };
 
+export function getScheduleTime(schedule: {
+    StartUtc: string;
+    EndUtc: string;
+}): string {
+    if (schedule && schedule.StartUtc && schedule.EndUtc) {
+        const startTime: Date = new Date(schedule.StartUtc);
+        const endTime: Date = new Date(schedule.EndUtc);
+
+        if (startTime && endTime) {
+            if (startTime > new Date()) {
+                return "upcoming";
+            } else if (endTime < new Date()) {
+                return "restart";
+            } else {
+                return "watchLive";
+            }
+        }
+    }
+    return "";
+}
+
 const getSchedulesWithPPVChannels = (
     schedules: any,
     channelMap: any,
@@ -3018,7 +3039,7 @@ const getSchedulesWithPPVChannels = (
     schedules.forEach((schedule: any) => {
         const { ChannelNumber = -1 } = schedule || {};
         const ch = channelMap?.findChannelByNumber!(ChannelNumber);
-        const service = ch && channelMap.getService(ch?.channel);
+        const service = ch && channelMap?.getService(ch?.channel);
 
         const rights = channelRights?.channels[ChannelNumber];
         const now = new Date(Date.now());
@@ -3026,11 +3047,11 @@ const getSchedulesWithPPVChannels = (
             rights &&
             some(rights, (s) => !!s.s && !!s.e && new Date(s.e) >= now);
         const serviceCollectionId = ch?.channel?.ServiceCollectionId;
-        const serviceItms = channelMap.ServiceCollections?.find(
+        const serviceItms = channelMap?.ServiceCollections?.find(
             (s: any) => s.Id === serviceCollectionId
         );
 
-        if (ch.channel) {
+        if (ch?.channel) {
             schedule["Channel"] = ch.channel;
             let hasPPV = false;
             for (let j = 0; j < serviceItms?.ServiceItems?.length || 0; j++) {
@@ -3167,7 +3188,7 @@ const getPPVServiceId = (
             }
         }
         if (ppvQualities.length > 0) {
-            const validIds = Object.keys(channelMap.ServiceMap);
+            const validIds = Object.keys(channelMap?.ServiceMap);
             // Commented for React
             // ppvQualities = sortQualityLevels(ppvQualities);
             for (const q of ppvQualities) {
@@ -3191,9 +3212,9 @@ export const getRefreshedService = (
 ): any => {
     let ch;
     if (typeof channel === "object") {
-        ch = channelMap.findChannelByNumber(channel.Number);
+        ch = channelMap?.findChannelByNumber(channel.Number);
     } else if (typeof channel === "number" || typeof channel === "string") {
-        ch = channelMap.findChannelByNumber(channel);
+        ch = channelMap?.findChannelByNumber(channel);
     }
     const serviceMap = channelMap.ServiceMap;
     const service =
@@ -4496,7 +4517,7 @@ export const waystoWatchSchedules = (
             undefined,
             channelMap
         );
-        const service = channelMap.getService(channel?.channel);
+        const service = channelMap?.getService(channel?.channel);
 
         const setWaysToWatchSchedules = (
             channelInfo: {

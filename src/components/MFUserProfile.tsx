@@ -75,8 +75,8 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> =
         if (props.userProfile) {
           console.log("Userprofile found");
           GLOBALS.userProfile = props.userProfile;
-          GLOBALS.store.userProfile = GLOBALS.userProfile;
-          updateStore(JSON.stringify(GLOBALS.store));
+          GLOBALS.store!.userProfile = GLOBALS.userProfile;
+          updateStore(GLOBALS.store);
           currentContext.setUserProfile(GLOBALS.userProfile);
           props.navigation.replace(Routes.Home);
         } else {
