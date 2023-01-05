@@ -1,6 +1,16 @@
 import Foundation
 import UIKit
-class MKGuide: UIView {
+import FullGuideComponent
+
+class MKGuide: UIView, channelProgramDelegate {
+
+  @objc var onUpdate: RCTBubblingEventBlock?
+
+  func selectedProgram(program: [String : Any]) {
+    if onUpdate != nil {
+      onUpdate!(["program": program])
+    }
+  }
     weak var epgVC: UIViewController?
 
     var token: String? {
@@ -14,9 +24,10 @@ class MKGuide: UIView {
        // Access your data here
      }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    MKFullGuideStorageManager.shared.selectedDelegate = self
+  }
   
     required init?(coder aDecoder: NSCoder) { fatalError("nope") }
 

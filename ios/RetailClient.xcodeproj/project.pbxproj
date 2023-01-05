@@ -104,8 +104,10 @@
 		BC9B1DE929642B020019A926 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BC9B1DE229642B000019A926 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BC9B1DEA29642B030019A926 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC9B1DE329642B010019A926 /* Reachability.framework */; };
 		BC9B1DEB29642B030019A926 /* Reachability.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BC9B1DE329642B010019A926 /* Reachability.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BCB30F22296323C400B0F659 /* MKGuideBridgeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC051736295DFCAA00539EA2 /* MKGuideBridgeManager.m */; };
-		BCB30F23296323D400B0F659 /* MKGuideBridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC05173B295DFCE600539EA2 /* MKGuideBridgeManager.swift */; };
+		BCC177A52965B4BF00B9752A /* MKGuideBridgeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BCC177A42965B4BF00B9752A /* MKGuideBridgeManager.m */; };
+		BCC177A62965B4BF00B9752A /* MKGuideBridgeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BCC177A42965B4BF00B9752A /* MKGuideBridgeManager.m */; };
+		BCC177A82965B56D00B9752A /* MKGuideBridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC177A72965B56D00B9752A /* MKGuideBridgeManager.swift */; };
+		BCC177A92965B56D00B9752A /* MKGuideBridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC177A72965B56D00B9752A /* MKGuideBridgeManager.swift */; };
 		BCF149AF2962F04100F6271C /* RCTSearchViewTVOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C7468B294A45BB009D2E1D /* RCTSearchViewTVOS.m */; };
 		BCF149B02962F04100F6271C /* MKGuide.h in Sources */ = {isa = PBXBuildFile; fileRef = 0F6088BD272063140052254E /* MKGuide.h */; };
 		BCF149B12962F04100F6271C /* MKGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8168723A273073D200960AFF /* MKGuide.swift */; };
@@ -245,14 +247,15 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RetailClient/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8DC2855AB2CCC04BED0978AE /* libPods-RetailClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RetailClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0216F1136BF7C90703C880F /* libPods-RetailClient-tvOS-RetailClient-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RetailClient-tvOS-RetailClient-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BC051740295DFD2600539EA2 /* RetailClient-tvOS-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RetailClient-tvOS-Bridging-Header.h"; path = "../../../../../Desktop/ios/RetailClient-tvOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		BC9B1DE029642AFF0019A926 /* FullGuideComponent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FullGuideComponent.framework; path = Framework/AppleTV/FullGuideComponent.framework; sourceTree = "<group>"; };
 		BC9B1DE129642AFF0019A926 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Framework/AppleTV/Kingfisher.framework; sourceTree = "<group>"; };
 		BC9B1DE229642B000019A926 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Framework/AppleTV/Alamofire.framework; sourceTree = "<group>"; };
 		BC9B1DE329642B010019A926 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Framework/AppleTV/Reachability.framework; sourceTree = "<group>"; };
+		BCA52F0B2966932900A45C8F /* RetailClient-tvOS-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RetailClient-tvOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		BCC177A42965B4BF00B9752A /* MKGuideBridgeManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MKGuideBridgeManager.m; sourceTree = "<group>"; };
+		BCC177A72965B56D00B9752A /* MKGuideBridgeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKGuideBridgeManager.swift; sourceTree = "<group>"; };
 		BCF149D02962F04100F6271C /* RetailClient-tvOS_Player.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RetailClient-tvOS_Player.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCF149D12962F04200F6271C /* RetailClient-tvOS_Player-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "RetailClient-tvOS_Player-Info.plist"; path = "/Users/prathibha/Documents/UMC/Client/MFRetailClient/ios/RetailClient-tvOS_Player-Info.plist"; sourceTree = "<absolute>"; };
-		BC051740295DFD2600539EA2 /* RetailClient-tvOS-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RetailClient-tvOS-Bridging-Header.h"; path = "../../../../../Desktop/ios/RetailClient-tvOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		BCF5F72729640172004CD3AF /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Framework/simulator/Frameworks/Reachability.framework; sourceTree = "<group>"; };
 		BCF5F72829640173004CD3AF /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Framework/simulator/Frameworks/Kingfisher.framework; sourceTree = "<group>"; };
 		BCF5F72929640173004CD3AF /* Pods_FullGuideComponent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_FullGuideComponent.framework; path = Framework/simulator/Frameworks/Pods_FullGuideComponent.framework; sourceTree = "<group>"; };
@@ -325,6 +328,7 @@
 			isa = PBXGroup;
 			children = (
 				009FA73E2738F53600417869 /* ContentView.swift */,
+				BCA52F0B2966932900A45C8F /* RetailClient-tvOS-Bridging-Header.h */,
 				009FA73C2738F53500417869 /* RetailClientTests-Bridging-Header.h */,
 				009FA73D2738F53500417869 /* RetailClient-tvOSTests-Bridging-Header.h */,
 			);
@@ -354,6 +358,7 @@
 				0F6088BD272063140052254E /* MKGuide.h */,
 				0F6088BE2720633E0052254E /* MKGuide.m */,
 				8168723A273073D200960AFF /* MKGuide.swift */,
+				BCC177A72965B56D00B9752A /* MKGuideBridgeManager.swift */,
 				8168724127307A1500960AFF /* MKGuideManager.swift */,
 				0035DCA0276BB1A600360F43 /* SampleStoryboard.storyboard */,
 				0035DCA1276BB1A600360F43 /* SampleViewController.swift */,
@@ -364,6 +369,7 @@
 		13B07FAE1A68108700A75B9A /* RetailClient */ = {
 			isa = PBXGroup;
 			children = (
+				BCC177A32965B46C00B9752A /* GuideComponent */,
 				59C74688294A45BA009D2E1D /* RCTSearchViewTVOS.h */,
 				59C7468B294A45BB009D2E1D /* RCTSearchViewTVOS.m */,
 				59C74689294A45BB009D2E1D /* RCTSearchViewTVOSManager.m */,
@@ -480,6 +486,14 @@
 				7B9DAB63B6273FB87ED198A6 /* Pods-RetailClient-tvOS_Player.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		BCC177A32965B46C00B9752A /* GuideComponent */ = {
+			isa = PBXGroup;
+			children = (
+				BCC177A42965B4BF00B9752A /* MKGuideBridgeManager.m */,
+			);
+			name = GuideComponent;
 			sourceTree = "<group>";
 		};
 		BCF5F736296401AA004CD3AF /* Recovered References */ = {
@@ -1114,8 +1128,10 @@
 				8168724327307B9F00960AFF /* MKGuideManager.swift in Sources */,
 				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
 				0F6088C02720633E0052254E /* MKGuide.m in Sources */,
+				BCC177A52965B4BF00B9752A /* MKGuideBridgeManager.m in Sources */,
 				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
 				8147B2FC273DF77B00A45F38 /* NativeText.m in Sources */,
+				BCC177A82965B56D00B9752A /* MKGuideBridgeManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1140,8 +1156,10 @@
 				BCF149AF2962F04100F6271C /* RCTSearchViewTVOS.m in Sources */,
 				BCF149B02962F04100F6271C /* MKGuide.h in Sources */,
 				BCF149B12962F04100F6271C /* MKGuide.swift in Sources */,
+				BCC177A92965B56D00B9752A /* MKGuideBridgeManager.swift in Sources */,
 				BCF149B22962F04100F6271C /* ContentView.swift in Sources */,
 				BCF149B32962F04100F6271C /* SampleViewController.swift in Sources */,
+				BCC177A62965B4BF00B9752A /* MKGuideBridgeManager.m in Sources */,
 				BCF149B42962F04100F6271C /* RCTSearchViewTVOSManager.m in Sources */,
 				BCF149B52962F04100F6271C /* SearchRestultsViewTVOSController.m in Sources */,
 				BCF149B62962F04100F6271C /* MKGuideManager.swift in Sources */,
