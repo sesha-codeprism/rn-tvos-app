@@ -52,12 +52,8 @@ const DeveloperUserInfoSettingsScreen: React.FunctionComponent<
           <Text style={styles.emailText}>
             {landingResponse.data?.data?.acceptLanguage}
           </Text>
-          <Text style={[styles.titleText, { fontSize: 25 }]}>
-            {AppStrings?.developer_settings_user_info_subscriber_acceptLaguage}
-          </Text>
-          <Text style={styles.emailText}>
-            {landingResponse.data?.data?.acceptLanguage}
-          </Text>
+          <Text style={[styles.titleText, { fontSize: 25 }]}>Device ID:</Text>
+          <Text style={styles.emailText}>{GLOBALS.deviceInfo.deviceId}</Text>
         </View>
       </SideMenuLayout>
     </>
