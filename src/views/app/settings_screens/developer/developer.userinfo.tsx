@@ -9,10 +9,9 @@ import { AppStrings } from "../../../../config/strings";
 interface DeveloperUserInfoSettingsProps {
   navigation: NativeStackNavigationProp<any>;
 }
-const DeveloperUserInfoSettingsScreen: React.FunctionComponent<DeveloperUserInfoSettingsProps> = (
-  props
-) => {
-
+const DeveloperUserInfoSettingsScreen: React.FunctionComponent<
+  DeveloperUserInfoSettingsProps
+> = (props) => {
   const landingResponse = useLanding(GLOBALS.store?.MFGlobalsConfig?.url);
 
   return (
@@ -53,8 +52,13 @@ const DeveloperUserInfoSettingsScreen: React.FunctionComponent<DeveloperUserInfo
           <Text style={styles.emailText}>
             {landingResponse.data?.data?.acceptLanguage}
           </Text>
+          <Text style={[styles.titleText, { fontSize: 25 }]}>
+            {AppStrings?.developer_settings_user_info_subscriber_acceptLaguage}
+          </Text>
+          <Text style={styles.emailText}>
+            {landingResponse.data?.data?.acceptLanguage}
+          </Text>
         </View>
-       
       </SideMenuLayout>
     </>
   );

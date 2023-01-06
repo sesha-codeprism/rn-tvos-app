@@ -149,10 +149,10 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const getMoviesAndTvShow = async () => {
     console.log("getMoviesAndTvShow");
     const movies = await getMovies("", {
-      pivots: "LicenseWindow",
+      pivots: "LicenseWindow|Trending",
     });
     const TVShow = await getTVShows("", {
-      pivots: "LicenseWindow",
+      pivots: "LicenseWindow|Trending",
     });
     const massagedTVData = massageSubscriberFeed(
       { LibraryItems: TVShow.data.Items },

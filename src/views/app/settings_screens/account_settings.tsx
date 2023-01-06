@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MFPopup from "../../../components/MFPopup";
 import { GLOBALS, resetAuthData } from "../../../utils/globals";
 import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
-import { updateStore } from "../../../utils/helpers";
+import { getStore, updateStore } from "../../../utils/helpers";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import { resetCaches } from "../../../config/queries";
 import { AppStrings } from "../../../config/strings";
@@ -22,18 +22,19 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
   useEffect(() => {}, [props.navigation]);
 
   const logUserOut = async () => {
-    if (__DEV__ && !isTesting) {
-      /** Get default store for user */
-      const resetStore = resetAuthData();
-      console.log("After resetting", resetStore);
-      /** Update the current Async NSUserDefaults store with resetStore */
-      updateStore(resetStore);
-      /** Reset the Query cache to make sure no cached API data is returned by React-Query */
-      resetCaches();
-      GLOBALS.userProfile = undefined;
-    } else {
-      console.log("Test functions.. so just simply trying to navigate");
-    }
+    /** Get default store for user */
+    const resetStore = resetAuthData();
+    console.log("After resetting", resetStore);
+    /** Update the current Async NSUserDefaults store with resetStore */
+    updateStore(resetStore);
+    console.log("Current store after cleanup", getStore());
+    /** Reset the Query cache to make sure no cached API data is returned by React-Query */
+    resetCaches();
+    GLOBALS.userProfile = undefined;
+    // if (__DEV__ && !isTesting) {
+    // } else {
+    //   console.log("Test functions.. so just simply trying to navigate");
+    // }
     /** Async store is done.. now move user to logout screen */
     GLOBALS.rootNavigation.replace(Routes.ShortCode);
     const resp = deleteDevice();
