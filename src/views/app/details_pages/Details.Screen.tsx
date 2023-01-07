@@ -1303,7 +1303,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const renderMoreLikeThis = () => {
-    const feed = { Name: "Similar Items" };
+    const feed = { Name: "More Like this" };
     return (
       <MFSwimLane
         //@ts-ignore
@@ -1480,10 +1480,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               <View style={styles.detailsBlock}>
                 {renderShowcard()}
                 <View style={styles.secondBlock}>
-                  <View style={styles.flexRow}>{renderAssetInfo()}</View>
+                  <View style={styles.flexRow}>
+                    {/* Metadata and CTA */}
+                    {renderAssetInfo()}
+                  </View>
                   {/* Network Logo */}
                   {renderNetworkInfo()}
                   <View style={styles.ctaButtonGroupBlock}>
+                    {/* CTA */}
                     {renderCTAButtonGroup()}
                   </View>
                 </View>

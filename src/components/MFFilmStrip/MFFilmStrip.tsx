@@ -135,13 +135,13 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
     )
       ? props.libraryItems?.slice(0, props.limitSwimlaneItemsTo)
       : props.libraryItems !== undefined
-      ? props.libraryItems[Object.keys(props.libraryItems)[0]].slice(
+      ? props.libraryItems[Object.keys(props.libraryItems)[0]]?.slice(
           0,
-          props.limitSwimlaneItemsTo
+          props.limitSwimlaneItemsTo!
         )
       : [];
     const cardWidth = parseInt(props.style?.width?.toString() || "300");
-    
+
     return (
       <View style={[Styles.railContainer, props.railContainerStyles]}>
         {

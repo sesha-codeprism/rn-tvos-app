@@ -1559,6 +1559,98 @@ export const massageCastAndCrew = (
     });
 };
 
+export const getRestrictionsStringObject = (type: string): string => {
+    const restrictionsStringObject = {
+        [pbr.RestrictionsType.AIRPLAY_BLOCKED]:
+            AppStrings?.str_restrictions.airplay_blocked,
+        [pbr.RestrictionsType.AP]:
+            AppStrings?.str_restrictions.airplay_blocked,
+        [pbr.RestrictionsType.CELLULAR_BLOCKED]:
+            AppStrings?.str_restrictions.cellular_blocked,
+        [pbr.RestrictionsType.CE]:
+            AppStrings?.str_restrictions.cellular_blocked,
+        [pbr.RestrictionsType.DESKTOP_BLOCKED]:
+            AppStrings?.str_restrictions.desktop_blocked,
+        [pbr.RestrictionsType.DT]:
+            AppStrings?.str_restrictions.desktop_blocked,
+        [pbr.RestrictionsType.FWD_BLOCKED]:
+            AppStrings?.str_restrictions.fwd_blocked,
+        [pbr.RestrictionsType.FW]:
+            AppStrings?.str_restrictions.fwd_blocked,
+        [pbr.RestrictionsType.HDMI_BLOCKED]:
+            AppStrings?.str_restrictions.hdmi_blocked,
+        [pbr.RestrictionsType.HI]:
+            AppStrings?.str_restrictions.hdmi_blocked,
+        [pbr.RestrictionsType.JAILBROKEN_BLOCKED]:
+            AppStrings?.str_restrictions.jailbroken_blocked,
+        [pbr.RestrictionsType.PHONE_BLOCKED]:
+            AppStrings?.str_restrictions.phone_blocked,
+        [pbr.RestrictionsType.PH]:
+            AppStrings?.str_restrictions.phone_blocked,
+        [pbr.RestrictionsType.RWD_BLOCKED]:
+            AppStrings?.str_restrictions.rwd_blocked,
+        [pbr.RestrictionsType.RW]:
+            AppStrings?.str_restrictions.rwd_blocked,
+        [pbr.RestrictionsType.TABLET_BLOCKED]:
+            AppStrings?.str_restrictions.tablet_blocked,
+        [pbr.RestrictionsType.TB]:
+            AppStrings?.str_restrictions.tablet_blocked,
+        [pbr.RestrictionsType.WIFI_BLOCKED]:
+            AppStrings?.str_restrictions.wifi_blocked,
+        [pbr.RestrictionsType.WF]:
+            AppStrings?.str_restrictions.wifi_blocked,
+        [pbr.RestrictionsType.OUTOFHOME_BLOCKED]:
+            AppStrings?.str_restrictions.oh,
+        [pbr.RestrictionsType.OH]: AppStrings?.str_restrictions.oh,
+        [pbr.RestrictionsType.NB]: AppStrings?.str_restrictions.nb,
+        [pbr.RestrictionsType.LB]: AppStrings?.str_restrictions.lb,
+        [pbr.RestrictionsType.SB]: AppStrings?.str_restrictions.sb,
+        [pbr.RestrictionsType.TIMESHIFT_BLOCKED]:
+            AppStrings?.str_restrictions.timeshift_blocked,
+        [pbr.RestrictionsType.TS]:
+            AppStrings?.str_restrictions.timeshift_blocked,
+        [pbr.RestrictionsType.CATCHUP_BLOCKED]:
+            AppStrings?.str_restrictions.catchup_blocked,
+        [pbr.RestrictionsType.CU]:
+            AppStrings?.str_restrictions.catchup_blocked,
+        [pbr.RestrictionsType.RECENTLYAIRED_BLOCKED]:
+            AppStrings?.str_restrictions.recentlyAired_blocked,
+        [pbr.RestrictionsType.RA]:
+            AppStrings?.str_restrictions.recentlyAired_blocked,
+        [pbr.RestrictionsType.IOS_BLOCKED]:
+            AppStrings?.str_restrictions.ios_blocked,
+        [pbr.RestrictionsType.ANDROID_BLOCKED]:
+            AppStrings?.str_restrictions.android_blocked,
+        [pbr.RestrictionsType.SEEK_SKIP_BLOCKED]:
+            AppStrings?.str_restrictions.seek_skip_blocked,
+        [pbr.RestrictionsType.SEEK_SKIP_FWD_BLOCKED]:
+            AppStrings?.str_restrictions.seek_skip_fwd_blocked,
+        [pbr.RestrictionsType.SEEK_SKIP_RWD_BLOCKED]:
+            AppStrings?.str_restrictions.seek_skip_rwd_blocked,
+        [pbr.RestrictionsType.RECORD_BLOCKED]:
+            AppStrings?.str_restrictions.record_blocked,
+        [pbr.RestrictionsType.LOCAL_RECORD_BLOCKED]:
+            AppStrings?.str_restrictions.local_record_blocked,
+        [pbr.RestrictionsType.FOURG_BLOCKED]:
+            AppStrings?.str_restrictions.fourg_blocked,
+        [pbr.RestrictionsType.THREEG_BLOCKED]:
+            AppStrings?.str_restrictions.threeg_blocked,
+        [pbr.RestrictionsType.OUTOFHOME_BLOCKED]:
+            AppStrings?.str_restrictions.out_of_home_blocked,
+        [pbr.RestrictionsType.PAUSE_RESUME_BLOCKED]:
+            AppStrings?.str_restrictions.pause_resume_blocked,
+        [pbr.RestrictionsType.RESTART_NOW_BLOCKED]:
+            AppStrings?.str_restrictions.restart_now_blocked,
+        [pbr.RestrictionsType.DOWNLOAD_BLOCKED]:
+            AppStrings?.str_restrictions.download_blocked,
+    };
+    return restrictionsStringObject[type];
+};
+
+export const getRestrictionsText = (type: string) => {
+    return getRestrictionsStringObject(type);
+};
+
 export function getDateDifferenceInSeconds(date1: Date, date2: Date): number {
     const dateDiffInMS = date2.getTime() - date1.getTime();
     return Math.abs(Math.floor(dateDiffInMS / 1000));
@@ -4354,7 +4446,7 @@ export const massageDiscoveryPackageAsset = (
     if (purchaseActionExists && hasFeatureIosCarrierBilling) {
         statusText.push(
             replacePlaceHoldersInTemplatedString(
-                global.lStrings?.str_purchase_vod_message,
+                AppStrings?.str_purchase_vod_message,
                 {
                     Currency: minPurchaseAction[0]?.Currency,
                     Price: minPurchaseAction[0]?.Price,
@@ -4363,7 +4455,7 @@ export const massageDiscoveryPackageAsset = (
         );
     } else {
         statusText.push(
-            timeLeftToExpiry || global.lStrings?.str_purchase_blocked
+            timeLeftToExpiry || AppStrings?.str_purchase_blocked
         );
     }
     // Status Text Order: Banned Purchase Text, Watched Text, Playback restricts

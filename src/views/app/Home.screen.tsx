@@ -70,24 +70,24 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
         (e) => e.Name === "{profile_name}"
       );
       if (replace_hub.length > 0) {
-        if (GLOBALS.userProfile) {
-          /** If the value of @param GLOBALS.userProfile * is not  null or  undefined */
-          if (GLOBALS.userProfile.Name?.toLowerCase() === "default") {
+        if (GLOBALS.store!.userProfile) {
+          /** If the value of @param GLOBALS.store!.userProfile * is not  null or  undefined */
+          if (GLOBALS.store!.userProfile.Name?.toLowerCase() === "default") {
             /** If default profile is used to login to the app..replace `${profile_name}` with "You"*/
             replace_hub[0].Name = AppStrings.str_hub_name_you;
           } else {
             /** If user created profile is chosen to login, replace with profile name */
-            if (GLOBALS.userProfile.Name!.length > 10) {
+            if (GLOBALS.store!.userProfile.Name!.length > 10) {
               replace_hub[0].Name =
-                GLOBALS.userProfile.Name!.substring(0, 9) + "..." ||
+                GLOBALS.store!.userProfile.Name!.substring(0, 9) + "..." ||
                 AppStrings.str_hub_name_you;
             } else {
               replace_hub[0].Name =
-                GLOBALS.userProfile.Name || AppStrings.str_hub_name_you;
+                GLOBALS.store!.userProfile.Name || AppStrings.str_hub_name_you;
             }
           }
         } else {
-          /** If there's no @param GLOBALS.UserProfile set*/
+          /** If there's no @param GLOBALS.store!.userProfile set*/
           replace_hub[0].Name = AppStrings.str_hub_name_you;
         }
       } else {
