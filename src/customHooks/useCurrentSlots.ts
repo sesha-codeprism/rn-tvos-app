@@ -11,10 +11,17 @@ const useCurrentSlots = (params?: CurrentSlotsParams) => {
     const [intervalTimer, setIntervalTimer] = useState(120000); // 2 mins timeout for testing
     // const [intervalTimer, setIntervalTimer] = useState(10800000); // 3*(1000*60 * 60)
     const getSlotsData = () => {
-        return NativeModules.MKGuideBridgeManager.getCurrentSlots(true, (result: any) => {
-            const data = JSON.parse(result);
-            const finalData = data.map((element: CurrentSlotObject) => element);
-            return finalData;
+        return new Promise((resolve, reject) => {
+            NativeModules.MKGuideBridgeManager.getCurrentSlots(true, (result: any) => {
+                try {
+                    const data = JSON.parse(result);
+                    const finalData = data.map((element: CurrentSlotObject) => element);
+                    resolve(finalData);
+                } catch (e) {
+                    console.warn("Something went wronge", e);
+                    reject(e);
+                }
+            });
         });
     };
 
