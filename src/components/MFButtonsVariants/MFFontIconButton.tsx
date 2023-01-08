@@ -96,6 +96,8 @@ const MFFontIconButton: React.FunctionComponent<MFFontIconProps> =
                 shouldRenderText
                 displayText={props.fontIcon}
                 textStyle={props.fontIconStyle}
+                adjustsFontSizeToFit={false}
+                numberOfLines={1}
               />
             )}
             {props.shoulRenderLabel && (
@@ -103,6 +105,8 @@ const MFFontIconButton: React.FunctionComponent<MFFontIconProps> =
                 shouldRenderText
                 displayText={props.textLabel}
                 textStyle={props.textLabelStyle}
+                adjustsFontSizeToFit={false}
+                numberOfLines={2}
               />
             )}
           </React.Fragment>
@@ -113,6 +117,8 @@ const MFFontIconButton: React.FunctionComponent<MFFontIconProps> =
                 shouldRenderText
                 displayText={props.textLabel}
                 textStyle={props.textLabelStyle}
+                adjustsFontSizeToFit={false}
+                numberOfLines={2}
               />
             )}
             {props.shouldRenderImage && (
@@ -120,6 +126,8 @@ const MFFontIconButton: React.FunctionComponent<MFFontIconProps> =
                 shouldRenderText
                 displayText={props.fontIcon}
                 textStyle={props.fontIconStyle}
+                adjustsFontSizeToFit={false}
+                numberOfLines={1}
               />
             )}
           </React.Fragment>
