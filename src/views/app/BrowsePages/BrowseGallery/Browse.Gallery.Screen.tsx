@@ -91,6 +91,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const fetchFeeds = async (requestPivots: any) => {
     try {
       const uri = `${browseFeed.Uri}?$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${requestPivots}`;
+      console.log("Requesting data for:", uri);
       const data = await getDataFromUDL(uri);
       if (data) {
         /** we have data from backend, so use the data and setState */
@@ -127,14 +128,6 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       finalPivots
     );
     setBrowsePivots(parsedPivots);
-    // resetSpecificQuery("browseFeed").then(() => {
-    //   feedQuery
-    //     .refetch({})
-    //     .then((value) => {
-    //       console.log("Refetching done with", browsePivots);
-    //     })
-    //     .catch((err) => console.log("some error happened", err));
-    // });
   };
 
   const updateFeed = (focusedFeed: SubscriberFeed) => {
@@ -151,6 +144,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     "pivots",
     async () => {
       try {
+        console.log("Requesting pivots for:", pivotURL);
         const pivots = await getDataFromUDL(pivotURL);
         const firstFilter = createInitialFilterState(pivots.data, baseValues);
         setFilterState(firstFilter);
@@ -220,7 +214,6 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     );
   };
 
-  console.log("Current data", data);
   const onFocusBar = () => {
     if (!filterFocused) {
       setFilterFocused(true);
@@ -241,38 +234,40 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
           />
         </View>
         <View style={styles.filterButtonContainerStyle}>
-          <MFButton
-            ref={filterRef}
-            variant={MFButtonVariant.Icon}
-            iconSource={AppImages["filter"]}
-            imageSource={0}
-            avatarSource={undefined}
-            iconStyles={{
-              height: 28,
-              width: 28,
-              marginRight: 20,
-            }}
-            textLabel="Filter"
-            textStyle={styles.filterButtonLabelStyle}
-            style={styles.filterButtonBackgroundStyles}
-            focusedStyle={styles.filterButtonFocusedStyle}
-            onFocus={() => {
-              console.log("Filter focused");
-            }}
-            onPress={toggleMenu}
-            iconButtonStyles={{
-              shouldRenderImage: true,
-              iconPlacement: "Left",
-            }}
-            containedButtonProps={{
-              containedButtonStyle: {
-                focusedBackgroundColor: appUIDefinition.theme.colors.blue,
-                enabled: true,
-                hoverColor: appUIDefinition.theme.colors.blue,
-                elevation: 5,
-              },
-            }}
-          />
+          {pivotQuery.data && (
+            <MFButton
+              ref={filterRef}
+              variant={MFButtonVariant.Icon}
+              iconSource={AppImages["filter"]}
+              imageSource={0}
+              avatarSource={undefined}
+              iconStyles={{
+                height: 28,
+                width: 28,
+                marginRight: 20,
+              }}
+              textLabel="Filter"
+              textStyle={styles.filterButtonLabelStyle}
+              style={styles.filterButtonBackgroundStyles}
+              focusedStyle={styles.filterButtonFocusedStyle}
+              onFocus={() => {
+                console.log("Filter focused");
+              }}
+              onPress={toggleMenu}
+              iconButtonStyles={{
+                shouldRenderImage: true,
+                iconPlacement: "Left",
+              }}
+              containedButtonProps={{
+                containedButtonStyle: {
+                  focusedBackgroundColor: appUIDefinition.theme.colors.blue,
+                  enabled: true,
+                  hoverColor: appUIDefinition.theme.colors.blue,
+                  elevation: 5,
+                },
+              }}
+            />
+          )}
         </View>
       </View>
       {isLoading ? (
