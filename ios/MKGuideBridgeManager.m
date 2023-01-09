@@ -12,4 +12,7 @@
 @interface RCT_EXTERN_MODULE(MKGuideBridgeManager, NSObject)
 RCT_EXTERN_METHOD(getCurrentSlots: (BOOL)useCache callback:(RCTResponseSenderBlock)callback)
 RCT_EXTERN_METHOD(updateSlotsOnTime)
+RCT_EXTERN_METHOD(setChannelmapId:(int)value)
+RCT_EXTERN_METHOD(getChannelMapInfo:(RCTResponseSenderBlock)callback)
+
 @end

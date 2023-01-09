@@ -22,5 +22,19 @@ public class MKGuideBridgeManager: NSObject {
     print("updateSlotsontime")
     MKFullGuideStorageManager.shared.updateSlotsOnTime()
   }
+
+  @objc func setChannelmapId(_ value: Int) {
+    print("channelmapId in swift = \(value)")
+    MKFullGuideStorageManager.shared.setChannelmapId(value: value)
+  }
+
+  @objc func getChannelMapInfo(_ callback: @escaping RCTResponseSenderBlock) -> Void {
+    MKFullGuideStorageManager.shared.getChannelMapData(onSuccess: {(json) in
+      let returnedJSON: Dictionary = json
+//			print("getChannelMapInfo \(returnedJSON)")
+
+      callback([returnedJSON,returnedJSON])
+    })
+  }
 }
 
