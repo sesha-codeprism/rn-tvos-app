@@ -7,7 +7,7 @@ import { BootStrapResponse } from "../@types/BootStrapResponse";
 import { UserProfile } from "../@types/UserProfile";
 import { BrowseGallery } from "./common";
 
-export const landingInfo = (function(): MFbootstrapLandingInfo{
+export const landingInfo = (function (): MFbootstrapLandingInfo {
   this.oauth = "liveid";
   this.tenantId = "default";
   this.version = "";
@@ -28,7 +28,7 @@ export const landingInfo = (function(): MFbootstrapLandingInfo{
   }
 
   const reviveLandingInfo = (serializedInstance: any) => {
-    if(serializedInstance){
+    if (serializedInstance) {
       this.oauth = serializedInstance?.oauth;
       this.tenantId = serializedInstance?.tenantId;
       this.version = serializedInstance?.setVersion;
@@ -93,6 +93,7 @@ interface GLOBALSType {
   /** Should the UI be RTL */
   enableRTL: boolean;
   browseGalleryData?: BrowseGallery;
+  currentSlots: any
   moviesAndTvShows?: any[];
   /** Async store data */
   store: {
@@ -134,6 +135,7 @@ export const GLOBALS: GLOBALSType = {
     tenantId: landingInfo.tenantId,
     regCode: null
   },
+  currentSlots: null,
   createUserProfile: { image: "", name: "", optOutPersonalDataUse: false },
   editUserProfile: {
     Name: "",

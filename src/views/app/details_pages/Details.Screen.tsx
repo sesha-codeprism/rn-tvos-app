@@ -63,6 +63,7 @@ import MFSwim from "../../../components/MFSwim";
 import { isFeatureAssigned } from "../../../utils/helpers";
 import { queryClient } from "../../../config/queries";
 import { pinItem, unpinItem } from "../../../../backend/subscriber/subscriber";
+import { SafeAreaView } from "react-native-safe-area-context";
 const { width, height } = Dimensions.get("window");
 
 interface AssetData {
@@ -515,7 +516,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             shouldRenderImage: true,
           }}
         />
-        <MFButton
+        {/* <MFButton
           ref={listAddButtonRef}
           focusable
           iconSource={0}
@@ -543,12 +544,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             iconPlacement: "Left",
             shouldRenderImage: true,
           }}
-        />
+        /> */}
         <Pressable
           style={{ width: 20, height: 20 }}
           onFocus={() => {
             if (isCTAButtonFocused) {
-              listAddButtonRef.current?.setNativeProps({
+              favoriteButtonRef.current?.setNativeProps({
                 hasTVPreferredFocus: true,
               });
               setIsCTAButtonFocused(false);
@@ -974,8 +975,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   }}
                   textLabel={cta.buttonText}
                   style={{
-                    width: 175,
                     height: 62,
+                    alignSelf: "center",
+                    padding: 12,
                     backgroundColor: "#424242",
                     borderRadius: 6,
                     paddingHorizontal: 35,
@@ -1305,15 +1307,17 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const renderMoreLikeThis = () => {
     const feed = { Name: "More Like this" };
     return (
-      <MFSwimLane
-        //@ts-ignore
-        feed={feed}
-        data={similarData}
-        swimLaneKey={similarItemsSwimLaneKey}
-        updateSwimLaneKey={setSimilarItemsSwimLaneKey}
-        limitSwimlane
-        ItemsTo={10}
-      />
+      <SafeAreaView>
+        <MFSwimLane
+          //@ts-ignore
+          feed={feed}
+          data={similarData}
+          swimLaneKey={similarItemsSwimLaneKey}
+          updateSwimLaneKey={setSimilarItemsSwimLaneKey}
+          limitSwimlane
+          ItemsTo={10}
+        />
+      </SafeAreaView>
     );
   };
 
@@ -1331,7 +1335,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
     const feedItem = { Name: "Cast and Crew" };
     return (
-      <View style={{ marginTop: 20 }}>
+      <SafeAreaView style={{ marginTop: -150 }}>
         <MFSwimLane
           //@ts-ignore
           feed={feedItem}
@@ -1339,7 +1343,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           swimLaneKey={castnCrewSwimLaneKey}
           updateSwimLaneKey={setCastnCrewSwimlaneKey}
         />
-      </View>
+      </SafeAreaView>
     );
   };
 
@@ -1492,11 +1496,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   </View>
                 </View>
               </View>
-              <View style={styles.moreDetailsContainer}>
-                {similarData && renderMoreLikeThis()}
-                {/* Cast and Crew */}
-                {discoveryProgramData && renderCastAndCrew()}
-              </View>
+              {similarData && renderMoreLikeThis()}
+              {/* Cast and Crew */}
+              {discoveryProgramData && renderCastAndCrew()}
             </ScrollView>
           ) : (
             <MFLoader />

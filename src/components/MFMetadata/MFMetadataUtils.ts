@@ -38,7 +38,7 @@ export function getResolvedMetadata(templateString: string, item: any): string {
         channelNumber = `${item?.Schedule?.channel?.Number}`
     }
     if (item?.CatalogInfo && item.CatalogInfo.Network) {
-        image = getNetworkInfo(item).tenFootLargeURL.uri;
+        image = getNetworkInfo(item)?.tenFootLargeURL?.uri;
     }
     const replacements = { ReleaseYear: releaseYear, Ratings: contentRatings, CallLetter: callLetter, ChannelNumber: channelNumber, Image: image, Name: item?.title || item?.Name || item?.CatalogInfo?.Name }
     const replacedString = replacePlaceHoldersInTemplatedString(templateString, replacements);
