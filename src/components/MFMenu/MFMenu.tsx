@@ -55,8 +55,9 @@ const MFMenu = (props: MFMenuProps) => {
   };
   // focus handler for handling focus from settings and profile icon
   const myTVEventHandler = (evt: any) => {
+    // console.log("evt.eventType", evt);
     if (
-      evt.eventType === "down" &&
+     ( evt.eventType === "down" ||  evt.eventType === "swipeDown") &&
       (focused === "profile" || focused === "settings")
     ) {
       console.log("evt.eventType", evt);

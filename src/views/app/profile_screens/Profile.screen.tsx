@@ -71,14 +71,14 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
     // @ts-ignore
     if (!evt.tag && evt.eventType) {
       console.log("evt.eventType", evt);
-      editFocused && evt.eventType === "right"
+      editFocused && (evt.eventType === "right" || evt.eventType === "swipeRight")
         ? profileRef[
             focused < 8 ? focused + 1 : focused
             // @ts-ignore
           ].current?.setNativeProps({
             hasTVPreferredFocus: true,
           })
-        : editFocused && evt.eventType === "left"
+        : editFocused && (evt.eventType === "left" || evt.eventType === "swipeLeft")
         ? // @ts-ignore
           profileRef[focused > 0 ? focused - 1 : 0].current?.setNativeProps({
             hasTVPreferredFocus: true,
