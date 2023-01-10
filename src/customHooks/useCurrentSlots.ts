@@ -7,6 +7,10 @@ interface CurrentSlotsParams {
 
 }
 const useCurrentSlots = (params?: CurrentSlotsParams) => {
+    var today = new Date();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date + ' ' + time;
     // Refetch timer duration in milliseconds
     const [intervalTimer, setIntervalTimer] = useState(120000); // 2 mins timeout for testing
     // const [intervalTimer, setIntervalTimer] = useState(10800000); // 3*(1000*60 * 60)
@@ -26,13 +30,9 @@ const useCurrentSlots = (params?: CurrentSlotsParams) => {
     };
 
 
-    const currentSlotsQuery = useQuery(['get-current-slots'], () => { getSlotsData() }, { refetchInterval: intervalTimer })
+    const currentSlotsQuery = useQuery(['get-current-slots', dateTime], () => { getSlotsData() }, { refetchInterval: intervalTimer })
 
     useEffect(() => {
-        var today = new Date();
-        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        var dateTime = date + ' ' + time;
         console.log("Fetched", currentSlotsQuery, "at", dateTime)
         //@ts-ignore
         GLOBALS.currentSlots = currentSlotsQuery.data;
