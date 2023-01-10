@@ -370,6 +370,23 @@ const getDiscoveryProgramSchedules = async (itemId: string, params: any) => {
   }
 }
 
+export const getDiscoveryCollectionItems = async (id: string, params: any) => {
+  const uri: any = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + `/v3/libraries/Collections/items`;
+  try {
+    const response = await GET({
+      url: uri,
+      params: params,
+      headers: {
+        Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+      },
+    })
+    return response;
+  } catch (e) {
+    console.error("Cannot getDiscoveryCollectionItems due to", e);
+    return undefined;
+  }
+}
+
 export const registerDiscoveryUdls = () => {
   const BASE = "discovery";
 
@@ -410,7 +427,8 @@ export const registerDiscoveryUdls = () => {
       prefix: BASE + '/programs/',
       getter: getDiscoveryProgramDetailsById
     },
-    { prefix: BASE + '/programSchedules/', getter: getDiscoveryProgramSchedules }
+    { prefix: BASE + '/programSchedules/', getter: getDiscoveryProgramSchedules },
+    { prefix: BASE + '/libraryprograms/collections/packages/', getter: getDiscoveryCollectionItems }
   ];
   return discoveryUdls;
 };
