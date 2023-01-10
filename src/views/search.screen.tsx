@@ -60,18 +60,24 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
     setSwimLaneKey(key);
   };
   let timer: any;
+  let searchQuery: string = "";
   const onChangeText = (event: any) => {
     if (event.nativeEvent.text.length > 0) {
       /** User is entering some text. Stop showing trending items and start showing search results */
-      const text = event.nativeEvent.text
-      setSearchString(event.nativeEvent.text);
-      clearTimeout(timer);
+      const text = event.nativeEvent.text;
+      if (event.nativeEvent.text === searchString) {
+        null
+      } else {
+        searchQuery = event.nativeEvent.text;
+        setSearchString(event.nativeEvent.text);
+        clearTimeout(timer);
 
-      timer = setTimeout(() => {
-        setShowTrending(false);
-        setShowSearchResult(true);
-        onSearch(text);
-      }, 1000);
+        timer = setTimeout(() => {
+          setShowTrending(false);
+          setShowSearchResult(true);
+          onSearch(text);
+        }, 1000);
+      }
     } else {
       /**Text length is zero. User has cleared out text. Show trending items only */
       setShowSearchResult(false);
@@ -179,25 +185,26 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
           }
         });
         console.log("respData", respData);
-        const massagedData: SearchResultObject[] = respData.map(
-          (item: {}, swimlaneIndex: number) => {
-            const searchResultsFeedName = Object.keys(item)[0];
-            // const items = Object.values(item)[0];
-            // let itemsList = {
-            //   LibraryItems: items,
-            // };
-            // const massagedlistItems: any = (massageResult as any)[
-            //   searchResultsFeedName
-            // ](itemsList, null, null);
-            return {
+        const massagedData: SearchResultObject[] = [];
+        respData.forEach((item: {}, swimlaneIndex: number) => {
+          const searchResultsFeedName = Object.keys(item)[0];
+          // const items = Object.values(item)[0];
+          // let itemsList = {
+          //   LibraryItems: items,
+          // };
+          // const massagedlistItems: any = (massageResult as any)[
+          //   searchResultsFeedName
+          // ](itemsList, null, null);
+          if (Object.values(item)[0].length) {
+            massagedData.push({
               name: searchResultsFeedName,
               items: Object.values(item)[0],
               index: swimlaneIndex,
               aspectRatio:
                 searchResultsFeedName === ItemShowType.Person ? "3x4" : "2x3",
-            };
+            });
           }
-        );
+        });
         console.log("massagedData", massagedData);
         setSearchResult(massagedData);
         // const data = formatSearchRsult(result.data);
@@ -259,7 +266,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
             {showTrending
               ? renderTrending()
               : showSearchResults
-              ? searchResult?.length! <= 0
+              ? !searchResult || searchResult?.length! === 0
                 ? renderNoResults()
                 : renderSearchResults()
               : renderNoResults()}
