@@ -5,25 +5,32 @@ import { Alert, Settings } from "react-native";
 import SHA256 from "crypto-js/sha256";
 import { MFGlobalsConfig } from "../../backend/configs/globals";
 
-
 export const Log =
   __DEV__ && global && global.console
     ? console.log.bind(global.console)
-    : () => { };
+    : () => {};
 
 export const updateStore = (MFStore: any) => {
-  const sanitizedStore = { ...MFStore, landingInfo: { ...landingInfo }, MFGlobalsConfig: { ...MFGlobalsConfig } };
+  const sanitizedStore = {
+    ...MFStore,
+    landingInfo: { ...landingInfo },
+    MFGlobalsConfig: { ...MFGlobalsConfig },
+  };
   Settings.set({ store: JSON.stringify(sanitizedStore) });
   GLOBALS.store = getStore();
-}
-
+};
 
 export const getStore = () => {
-  let serializedStore = Settings.get("store");;
+  let serializedStore = Settings.get("store");
   if (serializedStore) {
     serializedStore = JSON.parse(serializedStore);
-    serializedStore.landingInfo = landingInfo?.reviveLandingInfo?.(serializedStore.landingInfo);
-    if (serializedStore.MFGlobalsConfig && serializedStore.MFGlobalsConfig.url) {
+    serializedStore.landingInfo = landingInfo?.reviveLandingInfo?.(
+      serializedStore.landingInfo
+    );
+    if (
+      serializedStore.MFGlobalsConfig &&
+      serializedStore.MFGlobalsConfig.url
+    ) {
       MFGlobalsConfig.stsUrl = serializedStore.MFGlobalsConfig.stsUrl;
       MFGlobalsConfig.url = serializedStore.MFGlobalsConfig.url;
     }
@@ -35,13 +42,13 @@ export const getStore = () => {
       landingInfo: {
         oauth: null,
         tenantId: null,
-        version: null
+        version: null,
       },
       accessToken: null,
       refreshToken: null,
       userProfile: undefined,
       rightsGroupIds: null,
-      accountID: '',
+      accountID: "",
       settings: {
         parentalControll: {
           contentLock: {},
@@ -58,8 +65,7 @@ export const getStore = () => {
           onScreenLanguage: {
             title: "English (US)",
             languageCode: "en-US",
-            enableRTL: false
-
+            enableRTL: false,
           },
           closedCaption: "",
         },
@@ -74,10 +80,9 @@ export const getStore = () => {
       },
     };
   }
-}
+};
 
 // AsyncStorage.getItem("MFStore");
-
 
 export const getGloablStore = () => GLOBALS.store;
 
@@ -121,14 +126,16 @@ export const isSimulator = () => {
   return DeviceInfo.isEmulator();
 };
 
-
 export const getIdFromURI = (uri: string): string => {
   return uri?.replace(/\/$/, "").split("/").pop() || "";
 };
 
 export const isFeatureAssigned = (feature: string) => {
-  return GLOBALS.bootstrapSelectors!.Features.filter((e) => e!.toLowerCase()).length > 0;
-}
+  return (
+    GLOBALS.bootstrapSelectors!.Features.filter((e) => e!.toLowerCase())
+      .length > 0
+  );
+};
 
 export function convertStringToHashKey(str: string): string {
   let secretKey: string = SHA256(str).toString();
@@ -151,4 +158,3 @@ export function isHash(str: string) {
   let sha256Regex = new RegExp(/^([a-f0-9]{64})$/);
   return sha256Regex.test(str);
 }
-

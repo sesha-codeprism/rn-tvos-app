@@ -100,17 +100,17 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
                   ? props.navigation.navigate(item.action, {
                       screenName: item.title,
                       pinType:
-                        item.title === AppStrings.str_settings_pcon_contentlock
+                        item.title === AppStrings.str_settings_content_locks
                           ? "parentalcontrol"
                           : item.title ===
-                            AppStrings.str_settings_pcon_purchaselock
+                            AppStrings.str_settings_content_purchase_locks
                           ? "purchase"
                           : item.title ===
-                            AppStrings.str_settings_pcon_adultlock_description
+                            AppStrings.str_settings_adult_locks
                           ? "adult"
                           : "",
                       action: PinActionTypes["VERIFY"],
-                      label: "Input 4-digit PIN",
+                      label: AppStrings.str_settings_pin_prompt,
                       screenTarget: item.screenTarget,
                     })
                   : item.action !== "" && item.action !== "pin_lock"

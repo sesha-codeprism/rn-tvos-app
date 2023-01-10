@@ -14,7 +14,7 @@ import {
   getPasscodes,
   PinType,
 } from "../../../../../backend/subscriber/subscriber";
-import { getPasscodeHash } from "../../../../utils/helpers";
+import { getPasscodeHash, isHash } from "../../../../utils/helpers";
 import { GLOBALS } from "../../../../utils/globals";
 import { PinActionTypes } from "./parental_controll.screen";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
@@ -52,7 +52,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
               AppStrings.str_pcon_locks_are_unset_title,
               AppStrings.str_pcon_locks_are_unset_description
             );
-            setLabel("Enter the new PIN");
+            setLabel(AppStrings.str_settings_new_pin);
             setActionType(PinActionTypes["CREATE"]);
           } else {
             setActionType(PinActionTypes["VERIFY"]);
@@ -69,6 +69,13 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
             console.log("password found", password);
             if (password) {
               setPasswordRes(password.Passcode);
+            } else {
+              Alert.alert(
+                AppStrings.str_pcon_locks_are_unset_title,
+                AppStrings.str_pcon_locks_are_unset_description
+              );
+              setLabel(AppStrings.str_settings_new_pin);
+              setActionType(PinActionTypes["CREATE"]);
             }
           }
         })
@@ -96,7 +103,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         setActionType(PinActionTypes["CONFIRM"]);
         props.route.params.action === PinActionTypes["UPDATE"]
           ? setLabel("Re-enter the Changed PIN")
-          : setLabel("Re-enter the new PIN");
+          : setLabel(AppStrings.str_settings_confirm_pin);
         // setPinConfirm(["","","",""]);
         // if pin action type is confirm
       } else if (
@@ -109,7 +116,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
           const res = setPasscode(props.route.params.pinType);
           console.log("setpin response", res);
         } else {
-          setErrMessage("Pin Mismatch");
+          setErrMessage(AppStrings.str_settings_pin_mismatch);
           setPinConfirm(["", "", "", ""]);
         }
       } else if (
@@ -121,7 +128,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
           const res = updatePasscode(props.route.params.pinType);
           console.log("change pin response", res);
         } else {
-          setErrMessage("Pin Mismatch");
+          setErrMessage(AppStrings.str_settings_pin_mismatch);
           setPinConfirm(["", "", "", ""]);
         }
       } else if (actionType === PinActionTypes["VERIFY"]) {
@@ -142,22 +149,28 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
 
   const checkPasscode = async (passcode: string, type: PinType) => {
     try {
-      const pinInput = pin.join();
+      const pinInput = pin.join("");
       const hashedPin = getPasscodeHash(
         pinInput,
-        GLOBALS.bootstrapSelectors?.AccountId
-          ? GLOBALS.bootstrapSelectors?.AccountId
-          : ""
+        GLOBALS.bootstrapSelectors?.OriginalAccountId ||
+          GLOBALS.bootstrapSelectors?.AccountId ||
+          ""
       );
-      console.log("inside check password", passcode, "hashedPin", hashedPin);
+      console.log(
+        "inside check password",
+        passcode,
+        isHash(passcode),
+        "hashedPin",
+        hashedPin
+      );
       // const data = await getPassword(type);
-      if (passcode === hashedPin) {
+      if (passcode && isHash(passcode) && passcode === hashedPin) {
         console.log("password matching", props.route.params.screenTarget);
         props.navigation.replace(props.route.params.screenTarget);
         return true;
       } else {
         console.log("incorrect password");
-        setErrMessage("Incorrect Password");
+        setErrMessage(AppStrings.str_settings_wrong_pin);
         setTimeout(() => {
           setErrMessage("");
           setPin(["", "", "", ""]);
@@ -175,9 +188,9 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
       const pinInput = pin.join();
       const hashedPin = getPasscodeHash(
         pinInput,
-        GLOBALS.bootstrapSelectors?.AccountId
-          ? GLOBALS.bootstrapSelectors?.AccountId
-          : ""
+        GLOBALS.bootstrapSelectors?.OriginalAccountId ||
+          GLOBALS.bootstrapSelectors?.AccountId ||
+          ""
       );
       const res = await createPasscodes(type, hashedPin);
       console.log("Create password response", res);
@@ -198,9 +211,9 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
       const pinInput = pin.join();
       const hashedPin = getPasscodeHash(
         pinInput,
-        GLOBALS.bootstrapSelectors?.AccountId
-          ? GLOBALS.bootstrapSelectors?.AccountId
-          : ""
+        GLOBALS.bootstrapSelectors?.OriginalAccountId ||
+          GLOBALS.bootstrapSelectors?.AccountId ||
+          ""
       );
       const res = await changePasscodes(type, hashedPin);
       if (res.status === 200 || res.status === 201) {

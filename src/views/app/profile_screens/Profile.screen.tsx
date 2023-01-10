@@ -110,7 +110,7 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
   };
 
   const backAction = () => {
-    console.log("Capturing hadware back presses");
+    console.log("Capturing hadware back presses on profile screen");
     return null;
   };
 
