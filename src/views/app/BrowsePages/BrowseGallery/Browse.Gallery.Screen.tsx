@@ -318,6 +318,8 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                           shouldRenderText
                           displayText={currentFeed!.title}
                           textStyle={styles.titleTextStyle}
+                          adjustsFontSizeToFit={false}
+                          numberOfLines={3}
                         />
                         <MFText
                           shouldRenderText
@@ -326,6 +328,8 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                             currentFeed
                           )}
                           textStyle={styles.metadataLine2Styles}
+                          adjustsFontSizeToFit={false}
+                          numberOfLines={3}
                         />
                         {renderRatingValues()}
                       </View>
