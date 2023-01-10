@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  BackHandler,
   PressableProps,
   StyleSheet,
   Text,
   TouchableOpacity,
+  TVMenuControl,
   View,
 } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
@@ -75,7 +77,22 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   //   if (didMountRef.current) {
   //   } else didMountRef.current = true;
   // });
-
+  // const backAction = () => {
+  //   if (openMenu) {
+  //     setOpenSubMenu(false);
+  //     setOpenMenu(false);
+  //     return true;
+  //   } else {
+  //     // Open !true. So something is happening. Removed some console.log
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (openMenu) {
+  //     console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
+  //     TVMenuControl.enableTVMenuKey();
+  //     BackHandler.addEventListener("hardwareBackPress", backAction);
+  //   }
+  // }, []);
   UNSTABLE_usePreventRemove(openMenu, (data) => {
     // openSubMenu ? setOpenSubMenu(false) : setOpenMenu(false);
     setOpenSubMenu(false);
@@ -83,8 +100,9 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   });
 
   const toggleMenu = () => {
-    setOpenMenu(true);
-    setOpenSubMenu(true);
+    console.log('Pressed on the browse filter', openMenu)
+    setOpenMenu(!openMenu);
+    setOpenSubMenu(!openSubMenu);
   };
 
   //@ts-ignore
@@ -412,6 +430,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
           subMenuOpen={openSubMenu}
           filterState={filterState}
           setOpenSubMenu={() => {}}
+          setOpenMenu={setOpenMenu}
           handleOnPress={handleFilterChange}
           // filterState={filterValue!}
           // onChange={function (filterState: FilterValue): void {

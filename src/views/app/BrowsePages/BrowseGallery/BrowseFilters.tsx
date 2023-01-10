@@ -30,6 +30,7 @@ type BrowseFilterProps = {
   filterState: any;
   setOpenSubMenu: (open: boolean) => void;
   subMenuOpen: boolean;
+  setOpenMenu: any;
   handleOnPress?: (value: any) => void;
 };
 const filterData = [
@@ -237,6 +238,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   const fullCloseOffset = Dimensions.get("screen").width * 0.5;
   const fullOpenOffset = 0;
   const [menuList, setMenuList] = useState<Array<any>>();
+  const [expanded, setExpanded] = useState(props.open);
   const [subMenuList, setSubMenuList] = useState<Array<any>>([]);
   const [focusedMenu, setFocusedMenu] = useState(0);
   const [focusedSubMenu, setFocusedSubMenu] = useState<any>(0);
@@ -268,15 +270,23 @@ const BrowseFilter = (props: BrowseFilterProps) => {
     //@ts-ignore
     setMenuList(menu);
     console.log("props.open in useEffect", props.open);
-    offset.value = props.open
-      ? props.subMenuOpen
-        ? fullOpenOffset
-        : halfOpenOffset
-      : fullCloseOffset;
-    if (!props.open) {
-      props.setOpenSubMenu(false);
-    }
-  }, [props.open, props.subMenuOpen]);
+    props.open ? open() : close();
+  }, [props.open]);
+
+  const open = () => {
+    console.log("browse filter is open");
+    offset.value = props.open ? fullOpenOffset : fullCloseOffset;
+    // if (!props.open) {
+    //   props.setOpenSubMenu(false);
+    // }
+    setExpanded(true);
+  };
+  const close = () => {
+    console.log("browse filter is closed");
+    offset.value = fullCloseOffset;
+    setExpanded(false);
+    props.setOpenMenu(false)
+  };
   const onFocusMenu = (name: any, index: number) => {
     // @ts-ignore
     setFocusedMenu(index);
@@ -303,172 +313,172 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   };
   return (
     <Modal
-        animationType="none"
-        transparent={true}
-        visible={props.open}
-        onRequestClose={() => {
-          // setExpanded(false);
-          // closeDrawer();
-          console.log("Modal has been closed.", props.open);
-        }}
-        style={[styles.main, GLOBALS.enableRTL ? { left: 0 } : { right: 0 }]}
-        onDismiss={() => {
-          console.log("Modal dismissed", props.open);
-        }}
-        presentationStyle={"overFullScreen"}
-      >
-    <Animated.View style={[styles.container, animatedStyles]}>
-      <View style={styles.innerContainer}>
-        <>
-          {menuList?.map((item, index) => {
-            return (
-              <Pressable
-                // @ts-ignore
-                ref={menuRef[index]}
-                hasTVPreferredFocus={index === 0}
-                key={index}
-                style={
-                  focusedMenu === index
-                    ? [
-                        styles.menuItem,
-                        { borderRadius: 6, backgroundColor: "#063961" },
-                      ]
-                    : styles.menuItem
-                }
-                onFocus={() => {
-                  setSelectedMenu(item);
-                  onFocusMenu(item, index);
-                  // setFocusedSubMenu(null)
-                }}
-                onPress={() => {
-                  setSelectedMenu(item);
-                  props.setOpenSubMenu(true);
-                }}
-              >
-                <Text
+      animationType="none"
+      transparent={true}
+      visible={expanded}
+      onRequestClose={() => {
+        // setExpanded(false);
+        close();
+        console.log("Modal has been closed.", props.open);
+      }}
+      style={[styles.main, GLOBALS.enableRTL ? { left: 0 } : { right: 0 }]}
+      onDismiss={() => {
+        console.log("Modal dismissed", props.open);
+      }}
+      presentationStyle={"overFullScreen"}
+    >
+      <Animated.View style={[styles.container, animatedStyles]}>
+        <View style={styles.innerContainer}>
+          <>
+            {menuList?.map((item, index) => {
+              return (
+                <Pressable
+                  // @ts-ignore
+                  ref={menuRef[index]}
+                  hasTVPreferredFocus={index === 0}
+                  key={index}
                   style={
                     focusedMenu === index
-                      ? { ...styles.MenuItemText, color: "white" }
-                      : styles.MenuItemText
+                      ? [
+                          styles.menuItem,
+                          { borderRadius: 6, backgroundColor: "#063961" },
+                        ]
+                      : styles.menuItem
                   }
+                  onFocus={() => {
+                    setSelectedMenu(item);
+                    onFocusMenu(item, index);
+                    // setFocusedSubMenu(null)
+                  }}
+                  onPress={() => {
+                    setSelectedMenu(item);
+                    props.setOpenSubMenu(true);
+                  }}
                 >
-                  {item.Name}
-                </Text>
-                {focusedMenu === index && (
-                  <Image
-                    source={AppImages.rightArrowWhite}
-                    style={{ width: 14, height: 24 }}
-                  />
-                )}
-              </Pressable>
-            );
-          })}
-          <TouchableOpacity
-            style={styles.touchableBar}
-            onFocus={onFocusBar}
-          ></TouchableOpacity>
-        </>
-        <Pressable
-          // @ts-ignore
-          hasTVPreferredFocus={false}
-          style={
-            clearFocused
-              ? [
-                  styles.menuItem,
-                  {
-                    borderRadius: 6,
-                    height: 62,
-                    backgroundColor: "#063961",
-                    alignContent: "center",
-                    justifyContent: "center",
-                  },
-                ]
-              : [
-                  styles.menuItem,
-                  {
-                    backgroundColor: "#3A3A3B",
-                    height: 62,
-                    alignContent: "center",
-                    justifyContent: "center",
-                  },
-                ]
-          }
-          onFocus={() => {
-            setClearFocused(true);
-            setFocusedMenu(-1);
-            // setFocusedSubMenu(null)
-          }}
-          onBlur={() => {
-            setClearFocused(false);
-          }}
-          onPress={() => {
-            //TODO: Write logic for clear function
-          }}
-        >
-          <Text
-            style={{
-              ...styles.MenuItemText,
-              color: "white",
-              textAlign: "center",
-              fontSize: 25,
-              fontWeight: "600",
-              alignSelf: "center",
+                  <Text
+                    style={
+                      focusedMenu === index
+                        ? { ...styles.MenuItemText, color: "white" }
+                        : styles.MenuItemText
+                    }
+                  >
+                    {item.Name}
+                  </Text>
+                  {focusedMenu === index && (
+                    <Image
+                      source={AppImages.rightArrowWhite}
+                      style={{ width: 14, height: 24 }}
+                    />
+                  )}
+                </Pressable>
+              );
+            })}
+            <TouchableOpacity
+              style={styles.touchableBar}
+              onFocus={onFocusBar}
+            ></TouchableOpacity>
+          </>
+          <Pressable
+            // @ts-ignore
+            hasTVPreferredFocus={false}
+            style={
+              clearFocused
+                ? [
+                    styles.menuItem,
+                    {
+                      borderRadius: 6,
+                      height: 62,
+                      backgroundColor: "#063961",
+                      alignContent: "center",
+                      justifyContent: "center",
+                    },
+                  ]
+                : [
+                    styles.menuItem,
+                    {
+                      backgroundColor: "#3A3A3B",
+                      height: 62,
+                      alignContent: "center",
+                      justifyContent: "center",
+                    },
+                  ]
+            }
+            onFocus={() => {
+              setClearFocused(true);
+              setFocusedMenu(-1);
+              // setFocusedSubMenu(null)
+            }}
+            onBlur={() => {
+              setClearFocused(false);
+            }}
+            onPress={() => {
+              //TODO: Write logic for clear function
             }}
           >
-            Clear Focused
-          </Text>
-        </Pressable>
-      </View>
-      <View style={styles.subMenuContainer}>
-        <ScrollView>
-          {subMenuList.map((item, i) => {
-            return (
-              <Pressable
-                // @ts-ignore
-                ref={i === 0 ? subMenuFirstRef : null}
-                // hasTVPreferredFocus={i === 0}
-                key={i}
-                style={
-                  focusedSubMenu === i
-                    ? [
-                        styles.subMenuItem,
-                        {
-                          backgroundColor: "#053C69",
-                          borderRadius: 6,
-                        },
-                      ]
-                    : styles.subMenuItem
-                }
-                onFocus={() => {
-                  setFocusedSubMenu(i);
-                }}
-                onPress={() => {
-                  // props.setOpenSubMenu(!props.subMenuOpen);
-                  const values = { key: selectedMenu.Id, value: item };
-                  props.handleOnPress && props.handleOnPress(values);
-                  setSelectedSubMenu(item.Name);
-                }}
-              >
-                {props.filterState[selectedMenu.Id]?.selectedIds?.includes(
-                  item.Id
-                ) ? (
-                  <Image
-                    source={AppImages.checked_circle}
-                    style={styles.icCircle}
-                  />
-                ) : (
-                  <Image
-                    source={AppImages.unchecked_circle}
-                    style={styles.icCircle}
-                  />
-                )}
-                <Text style={styles.MenuItemText}>{item.Name}</Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-      </View>
-    </Animated.View>
+            <Text
+              style={{
+                ...styles.MenuItemText,
+                color: "white",
+                textAlign: "center",
+                fontSize: 25,
+                fontWeight: "600",
+                alignSelf: "center",
+              }}
+            >
+              Clear Focused
+            </Text>
+          </Pressable>
+        </View>
+        <View style={styles.subMenuContainer}>
+          <ScrollView>
+            {subMenuList.map((item, i) => {
+              return (
+                <Pressable
+                  // @ts-ignore
+                  ref={i === 0 ? subMenuFirstRef : null}
+                  // hasTVPreferredFocus={i === 0}
+                  key={i}
+                  style={
+                    focusedSubMenu === i
+                      ? [
+                          styles.subMenuItem,
+                          {
+                            backgroundColor: "#053C69",
+                            borderRadius: 6,
+                          },
+                        ]
+                      : styles.subMenuItem
+                  }
+                  onFocus={() => {
+                    setFocusedSubMenu(i);
+                  }}
+                  onPress={() => {
+                    // props.setOpenSubMenu(!props.subMenuOpen);
+                    const values = { key: selectedMenu.Id, value: item };
+                    props.handleOnPress && props.handleOnPress(values);
+                    setSelectedSubMenu(item.Name);
+                  }}
+                >
+                  {props.filterState[selectedMenu.Id]?.selectedIds?.includes(
+                    item.Id
+                  ) ? (
+                    <Image
+                      source={AppImages.checked_circle}
+                      style={styles.icCircle}
+                    />
+                  ) : (
+                    <Image
+                      source={AppImages.unchecked_circle}
+                      style={styles.icCircle}
+                    />
+                  )}
+                  <Text style={styles.MenuItemText}>{item.Name}</Text>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        </View>
+      </Animated.View>
     </Modal>
   );
 };
