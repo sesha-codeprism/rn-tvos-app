@@ -27,6 +27,8 @@ extension Foundation.Date {
 extension FullGuideComponent.MKFullGuideStorageManager {
   public func getCurrentSlots(useCache: Swift.Bool = false, onSuccess: @escaping (([[Swift.String : Any]]) -> Swift.Void))
   public func updateSlotsOnTime()
+  public func setChannelmapId(value: Swift.Int)
+  public func getChannelMapData(onSuccess: @escaping (([Swift.String : Any]) -> Swift.Void))
 }
 @_hasMissingDesignatedInitializers public class LiveChannel : Swift.Codable {
   @objc deinit
