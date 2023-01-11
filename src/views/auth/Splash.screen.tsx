@@ -23,9 +23,8 @@ import { updateStore } from "../../utils/helpers";
 import { GlobalContext } from "../../contexts/globalContext";
 import { resetCaches } from "../../config/queries";
 import { useQuery } from "react-query";
-
 import { initUdls } from "../../../backend";
-import { generateGUID } from "../../utils/guid";
+import { generateGUID, makeRandomHexString } from "../../utils/guid";
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
@@ -127,24 +126,20 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const _onAnimationFinish = () => {};
 
   const setDeviceInfo = async () => {
-    const deviceID = await DeviceInfo.getMacAddress();
-    GLOBALS.deviceInfo.deviceId = generateGUID(deviceID);
-    setDevice(GLOBALS.deviceInfo.deviceId);
-    return true;
-    // const isEmulator: boolean = await DeviceInfo.isEmulator();
-    // if (isEmulator) {
-    //   const deviceID = await DeviceInfo.getMacAddress();
-    //   GLOBALS.deviceInfo.deviceId = generateGUID(deviceID);
-    //   setDevice(GLOBALS.deviceInfo.deviceId);
-    //   return true;
-    // } else {
-    //   // If device is running on real device
-    //   const deviceID = DeviceInfo.getUniqueId();
-    //   GLOBALS.deviceInfo.deviceId = deviceID;
-    //   setDevice(GLOBALS.deviceInfo.deviceId);
-    //   return true;
-    // }
-  };
+    const deviceID = await DeviceInfo.getUniqueId;
+    const isEmulator: boolean = await DeviceInfo.isEmulator();
+    if (isEmulator) {
+      // If device is running on emulator, mac address is same everrytime
+      GLOBALS.deviceInfo.deviceId = generateGUID(makeRandomHexString(11, true));
+      setDevice(GLOBALS.deviceInfo.deviceId);
+      return true;
+    } else {
+      // If device is running on real device
+      GLOBALS.deviceInfo.deviceId = generateGUID(deviceID);
+      setDevice(GLOBALS.deviceInfo.deviceId);
+      return true;
+    }
+  }
   const showAnimation = appUIDefinition.config.useLottieAnimationOnSplash;
   const getMoviesAndTvShow = async () => {
     console.log("getMoviesAndTvShow");
