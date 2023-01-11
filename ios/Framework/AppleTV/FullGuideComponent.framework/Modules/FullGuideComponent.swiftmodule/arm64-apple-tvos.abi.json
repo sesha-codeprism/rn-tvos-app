@@ -28701,13 +28701,6 @@
         ]
       },
       {
-        "kind": "Import",
-        "name": "Kingfisher",
-        "printedName": "Kingfisher",
-        "declKind": "Import",
-        "moduleName": "FullGuideComponent"
-      },
-      {
         "kind": "TypeDecl",
         "name": "EPGChannelCellDelegate",
         "printedName": "EPGChannelCellDelegate",
@@ -31616,6 +31609,119 @@
             ]
           },
           {
+            "kind": "Var",
+            "name": "channelMapId",
+            "printedName": "channelMapId",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.Int?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC12channelMapIdSiSgvp",
+            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC12channelMapIdSiSgvp",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.Int?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Int",
+                        "printedName": "Swift.Int",
+                        "usr": "s:Si"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC12channelMapIdSiSgvg",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC12channelMapIdSiSgvg",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.Int?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Int",
+                        "printedName": "Swift.Int",
+                        "usr": "s:Si"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC12channelMapIdSiSgvs",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC12channelMapIdSiSgvs",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC12channelMapIdSiSgvM",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC12channelMapIdSiSgvM",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
             "kind": "Function",
             "name": "saveDataFor",
             "printedName": "saveDataFor(slot:programs:)",
@@ -31858,6 +31964,87 @@
             "declKind": "Func",
             "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC17updateSlotsOnTimeyyF",
             "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC17updateSlotsOnTimeyyF",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setChannelmapId",
+            "printedName": "setChannelmapId(value:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC15setChannelmapId5valueySi_tF",
+            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC15setChannelmapId5valueySi_tF",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "getChannelMapData",
+            "printedName": "getChannelMapData(onSuccess:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "([Swift.String : Any]) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Dictionary",
+                    "printedName": "[Swift.String : Any]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ProtocolComposition",
+                        "printedName": "Any"
+                      }
+                    ],
+                    "usr": "s:SD"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC17getChannelMapData9onSuccessyySDySSypGc_tF",
+            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC17getChannelMapData9onSuccessyySDySSypGc_tF",
             "moduleName": "FullGuideComponent",
             "isOpen": true,
             "declAttributes": [
@@ -46947,147 +47134,147 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/MKFullGuideAPIClient.swift",
       "kind": "BooleanLiteral",
-      "offset": 1565,
+      "offset": 1728,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "BooleanLiteral",
-      "offset": 1215,
+      "offset": 1197,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 1252,
+      "offset": 1234,
       "length": 146,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "IntegerLiteral",
-      "offset": 1326,
+      "offset": 1308,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 1329,
+      "offset": 1311,
       "length": 1,
       "value": "\"\n\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 1379,
+      "offset": 1361,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 1382,
+      "offset": 1364,
       "length": 584,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "Dictionary",
-      "offset": 1678,
+      "offset": 1660,
       "length": 3,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "IntegerLiteral",
-      "offset": 1710,
+      "offset": 1692,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 1844,
+      "offset": 1826,
       "length": 11,
       "value": "\"isFocused\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "BooleanLiteral",
-      "offset": 1869,
+      "offset": 1851,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 1919,
+      "offset": 1901,
       "length": 9,
       "value": "\"Channel\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 1976,
+      "offset": 1958,
       "length": 143,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 2021,
+      "offset": 2003,
       "length": 15,
       "value": "\"ChannelNumber\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "IntegerLiteral",
-      "offset": 2049,
+      "offset": 2031,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 2052,
+      "offset": 2034,
       "length": 1,
       "value": "\"\n\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 2075,
+      "offset": 2057,
       "length": 13,
       "value": "\"CallLetters\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 2104,
+      "offset": 2086,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 2107,
+      "offset": 2089,
       "length": 9275,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 2378,
+      "offset": 2360,
       "length": 10,
       "value": "\"Schedule\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
-      "offset": 2474,
+      "offset": 2456,
       "length": 10,
       "value": "\"StartUtc\""
     },
@@ -47107,8 +47294,15 @@
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/MKFullGuideStorageManager.swift",
+      "kind": "StringLiteral",
+      "offset": 497,
+      "length": 27,
+      "value": "\"queue_fetchchannelMapInfo\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/MKFullGuideStorageManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 1560,
+      "offset": 1706,
       "length": 5,
       "value": "false"
     },
