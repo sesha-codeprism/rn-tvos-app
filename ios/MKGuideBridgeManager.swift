@@ -36,5 +36,21 @@ public class MKGuideBridgeManager: NSObject {
       callback([returnedJSON,returnedJSON])
     })
   }
+
+  @objc func setEnvironment(_ value: String) {
+    print("setEnvironment in swift = \(value)")
+    MKFullGuideStorageManager.shared.setEnvironment(value: value)
+  }
+
+  @objc func setToken(_ value: String) {
+    print("setToken in swift = \(value)")
+    MKFullGuideStorageManager.shared.setToken(value: value)
+  }
+
+  @objc func setRefreshToken(_ value: String) {
+    print("setRefreshToken in swift = \(value)")
+    MKFullGuideStorageManager.shared.setRefrestToken(value: value)
+  }
+
 }
 
