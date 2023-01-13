@@ -94,6 +94,7 @@ interface GLOBALSType {
   enableRTL: boolean;
   browseGalleryData?: BrowseGallery;
   currentSlots: any
+  channelMap: any
   moviesAndTvShows?: any[];
   /** Async store data */
   store: {

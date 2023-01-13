@@ -353,7 +353,7 @@ const getPlayableCatchupSchedule = (
     return ctaButtonList;
 };
 
-export const isPlayable = (entitlements: any, account: any) => {
+export const isPlayable = (entitlements: any, account?: any) => {
     // TODO
     if (account?.pbrOverride) {
         return true;
@@ -5170,10 +5170,10 @@ const cache:
 
 export const findChannelByField = (
     value: number | string,
-    channels: any,
     field: string,
     defaultIndex?: number,
     force = false,
+    channels: any
 ): IChannelIndex => {
     if (!force && _byNumber && (_byNumber as any)[value]) {
         return (_byNumber as any)[value];
@@ -5710,5 +5710,3 @@ export const validateEntitlements = (
 
     return isAllowed;
 };
-
-

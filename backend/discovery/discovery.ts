@@ -5,6 +5,7 @@ import { parseUri } from "../utils/url/urlUtil";
 import { GLOBALS } from "../../src/utils/globals";
 import { lang, pivots } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
+import { gethubRestartTvShowcards } from "../live/live";
 
 /** Note: Discovery calls don't require AUTH token */
 
@@ -256,6 +257,38 @@ export const getDiscoveryCategoryItems = async (id: string, params: any) => {
   });
   return response;
 };
+
+export const getDiscoveryFeedItems = async (id: string, params: any) => {
+  console.log("Params in getDiscoveryFeedItems", params)
+  const { isTrending } = params || false;
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v4/feeds/${params.id}/items`;
+  const response = await GET({
+    url: url,
+    params: params,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
+    },
+  });
+  if (isTrending) {
+    const trendingStations = response.data.Items;
+    if (!trendingStations || !trendingStations.length) {
+      return
+    }
+    const recentlyAired = await gethubRestartTvShowcards("", {});
+    if (recentlyAired) {
+      const current = new Date();
+      const nextSlot = current.setMinutes(current.getMinutes() + 30);
+      const nextSlotString = new Date(nextSlot).toISOString();
+
+      return recentlyAired
+        .find((slot: any) => slot.StartTime <= nextSlotString && slot.EndTime >= nextSlotString)
+        ?.Schedules.filter((t: any) => trendingStations.indexOf(t.StationId) !== -1)
+    }
+    return recentlyAired
+  } else {
+    return response;
+  }
+}
 
 export const getDiscoverCategoryItemPivots = async (
   id: string,

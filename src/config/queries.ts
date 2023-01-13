@@ -37,7 +37,9 @@ export function getProfiles() {
 }
 
 export function getDataForUDL(query: string, pageNo: number = 0, shouldMassageData: boolean = true, shouldSendParams: boolean = true) {
-    return useQuery(query, () => { return getUDLData(query, pageNo, shouldMassageData,) }, { staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true });
+    return useQuery(query, () => { return getUDLData(query, pageNo, shouldMassageData,) }, {
+        staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true, retry: 10, // Will retry failed requests 10 times before displaying an error
+    });
 }
 
 export function getAllHubs(): any {
@@ -61,7 +63,7 @@ const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: bo
                 }
 
             } catch (e) {
-                console.log("Cannot get data for UDL", udlID)
+                console.log("Cannot get data for UDL", udlID, 'due to', e)
             }
         } else {
             console.log(uri, "has no providers set ");

@@ -8,13 +8,24 @@
 import Foundation
 import FullGuideComponent
 
+extension Collection where Iterator.Element == [String: Any] {
+  func toJSONString(options: JSONSerialization.WritingOptions = .prettyPrinted) -> String {
+    if let arr = self as? [[String: Any]],
+       let dat = try? JSONSerialization.data(withJSONObject: arr, options: options),
+       let str = String(data: dat, encoding: String.Encoding.utf8) {
+      return str
+    }
+    return "[]"
+  }
+}
+
 @objc (MKGuideBridgeManager)
 public class MKGuideBridgeManager: NSObject {
 
   @objc func getCurrentSlots(_ useCache: Bool, callback: @escaping RCTResponseSenderBlock) -> Void {
     MKFullGuideStorageManager.shared.getCurrentSlots(useCache: true, onSuccess: {(json) in
-      print("Json value \(json)")
-      callback(json)
+      let finalJson = json.toJSONString();
+      callback([finalJson])
     })
   }
 
