@@ -44,6 +44,8 @@ export const getMassagedData = (uri: string, data: any) => {
     } else if (udlID!.id.split("/")[0] === 'dvrproxy') {
       const massagedData = massageDVRFeed(data.data);
       return massagedData;
+    } else {
+      return data
     }
   } else {
     return undefined;

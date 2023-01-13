@@ -109,6 +109,7 @@ const fontSize = { fontSize: 25 };
 
 const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const feed: Feed = props.route.params.feed;
+  console.log("Feed", feed);
   const drawerRef: React.MutableRefObject<any> = useRef();
   const [similarData, setSimilarData] = useState<any>(undefined);
   const [discoveryProgramData, setdiscoveryProgramData] =
@@ -138,6 +139,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const listAdd = getFontIcon("list_add");
   //@ts-ignore
   const listAdded = getFontIcon("list_added");
+  //@ts-ignore
+  const liveIcon = getFontIcon("source_live");
+
   let buttonRefObject: Record<string, React.RefObject<any>> = {
     [AppStrings?.str_details_cta_subscribe]: React.createRef(),
     [AppStrings?.str_details_cta_play]: React.createRef(),
@@ -817,7 +821,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       playActionsData,
       subscriberData,
       discoveryProgramData,
-      undefined,
+      GLOBALS.channelMap,
       discoverySchedulesData,
       undefined,
       allSubscriptionGroups,
@@ -1247,10 +1251,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     // PPV
 
     if (hasPPV) {
-      //TODO: Fix this mess.. Understand what's going on..
-      // const isFromLibrary =
-      //   props.navigation?.params?.data?.libraryId === "Library";
-      const isFromLibrary = false;
+      //@ts-ignore
+      const isFromLibrary = feed.libraryId === "Library";
       const { StartUtc, EndUtc, ChannelNumber } = currentSelectedSchedule;
       isLive = isPPVWatchable;
       metadata.push(`Airs on ${ChannelNumber}`);

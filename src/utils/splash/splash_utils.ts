@@ -9,10 +9,14 @@ import { generateGUID } from '../guid';
 import { updateStore } from '../helpers';
 import { addPrefixToUrl } from '../strings';
 import { DefaultStore } from '../DiscoveryUtils';
+import { NativeModules } from 'react-native';
+import { getChannelMap, makeSlabUrl } from "../../utils/live/LiveUtils";
+import { getChannelRights } from "../../../backend/live/live";
+
 
 
 export const setGlobalData = (bootStrapResponse: BootStrapResponse) => {
-    if(bootStrapResponse){
+    if (bootStrapResponse) {
         const data = bootStrapResponse;
         GLOBALS.bootstrapSelectors = data;
         GLOBALS.store.rightsGroupIds = data?.RightsGroupIds;
@@ -124,4 +128,42 @@ export const getBestSupportedLocaleID = (acceptLanguage: string): string | null 
     }
     // if no match found, return first locale in the config.json
     return parsedLocalJson[0];
+}
+
+export const setLiveData = async () => {
+    const promise1 = new Promise((resolve, reject) => {
+        try {
+            NativeModules.MKGuideBridgeManager.getCurrentSlots(
+                true,
+                (result: any) => {
+                    const data = JSON.parse(result);
+                    const finalData = data.map((element: CurrentSlotObject) => element);
+                    GLOBALS.currentSlots = finalData;
+                    resolve(finalData)
+                }
+            );
+        } catch (e) {
+            reject(e);
+        }
+    });
+    const promise2 = new Promise((resolve, reject) => {
+        try {
+            NativeModules.MKGuideBridgeManager.getChannelMapInfo(async (result) => {
+                console.log("coming inside getChannelMapInfo");
+                console.log(result);
+                const channelRights = await getChannelRights();
+                const memoizedChannelMap = getChannelMap(
+                    result,
+                    channelRights?.data,
+                    DefaultStore.Id,
+                    "en-US"
+                );
+                GLOBALS.channelMap = memoizedChannelMap
+                console.log("Set live data", GLOBALS);
+            });
+        } catch (e) {
+            reject(e);
+        }
+    })
+    return Promise.all(promise1, promise2)
 }

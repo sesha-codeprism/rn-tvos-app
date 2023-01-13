@@ -3,14 +3,25 @@ import React, { useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
 import AnimatedLottieView from "lottie-react-native";
-import { View, StyleSheet, Image, Dimensions, Settings } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Dimensions,
+  Settings,
+  NativeModules,
+} from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { processBootStrap } from "../../../backend/authentication/authentication";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { appUIDefinition } from "../../config/constants";
 import { setDefaultStore } from "../../utils/DiscoveryUtils";
-import { connectDuplex, setGlobalData } from "../../utils/splash/splash_utils";
+import {
+  connectDuplex,
+  setGlobalData,
+  setLiveData,
+} from "../../utils/splash/splash_utils";
 import {
   getMovies,
   getStoresOfZones,
@@ -104,15 +115,18 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       acessToken &&
       storeResults?.data?.data
     ) {
-      processBootStrap(data?.data, "10ft").then(() => {
-        initUdls();
-        setDefaultStore(storeResults?.data?.data, data?.data);
-        setGlobalData(data?.data);
-        connectDuplex(currentContext.duplexMessage);
-        setLoading(false);
-        getMoviesAndTvShow();
-        props.navigation.replace(Routes.WhoIsWatching);
-      });
+      processBootStrap(data?.data, "10ft")
+        .then(async () => {
+          initUdls();
+          await setLiveData();
+          setDefaultStore(storeResults?.data?.data, data?.data);
+          setGlobalData(data?.data);
+          connectDuplex(currentContext.duplexMessage);
+          setLoading(false);
+          getMoviesAndTvShow();
+          props.navigation.replace(Routes.WhoIsWatching);
+        })
+        .catch((err) => console.warn(err));
     }
   }, [
     //@ts-ignore
@@ -139,7 +153,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       setDevice(GLOBALS.deviceInfo.deviceId);
       return true;
     }
-  }
+  };
   const showAnimation = appUIDefinition.config.useLottieAnimationOnSplash;
   const getMoviesAndTvShow = async () => {
     console.log("getMoviesAndTvShow");

@@ -465,6 +465,7 @@ export const unpinItem = async (Id: string, ItemType: PinnedItemType, requestFla
 
 
 
+
 export const registerSubscriberUdls = (params?: any) => {
   const BASE = "subscriber";
 
@@ -498,7 +499,7 @@ export const registerSubscriberUdls = (params?: any) => {
     {
       prefix: BASE + "/getProgramSubscriberData/",
       getter: getProgramSubscriberData
-    }
+    },
   ];
   return subscriberUdls;
 };

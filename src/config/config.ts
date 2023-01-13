@@ -142,7 +142,6 @@ export const config = {
         ForceHideFeedbackControlsTimerInSec: 5,
         areYouStillWatchingTimerInMin: 240,
         supportedEncodings: {
-            Jitp: 1,
             Hls: 2
         },
         audioDescriptionTrackLanguageCode: ["est", "afr", "enm", "frm"],

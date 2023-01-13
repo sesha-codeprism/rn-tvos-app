@@ -598,3 +598,57 @@ export interface BrowseGallery {
   filterData: FilterValue;
 }
 
+export var RestrictionsType = {
+  DESKTOP_BLOCKED: "desktop_blocked",
+  PHONE_BLOCKED: "phone_blocked",
+  TABLET_BLOCKED: "tablet_blocked",
+  FWD_BLOCKED: "fwd_blocked",
+  RECORD_BLOCKED: "record_blocked",
+  LOCAL_RECORD_BLOCKED: "local_record_blocked",
+  FOURG_BLOCKED: "fourg_blocked",
+  THREEG_BLOCKED: "threeg_blocked",
+  CELLULAR_BLOCKED: "cellular_blocked",
+  WIFI_BLOCKED: "wifi_blocked",
+  OUTOFCOUNTRY_BLOCKED: "out_of_country",
+  OUTOFHOME_BLOCKED: "out_of_home_blocked",
+  AIRPLAY_BLOCKED: "airplay_blocked",
+  HDMI_BLOCKED: "hdmi_blocked",
+  CASTING_BLOCKED: "casting_blocked",
+  RWD_BLOCKED: "rwd_blocked",
+  RECENTLYAIRED_BLOCKED: "recentlyAired_blocked",
+  TIMESHIFT_BLOCKED: "timeshift_blocked",
+  CATCHUP_BLOCKED: "catchup_blocked",
+  JAILBROKEN_BLOCKED: "jailbroken_blocked",
+  PAUSE_RESUME_BLOCKED: "pause_resume_blocked",
+  SEEK_SKIP_BLOCKED: "seek_skip_blocked",
+  SEEK_SKIP_FWD_BLOCKED: "seek_skip_fwd_blocked",
+  SEEK_SKIP_RWD_BLOCKED: "seek_skip_rwd_blocked",
+  RESTART_NOW_BLOCKED: "restart_now_blocked",
+  ANDROID_BLOCKED: "android_blocked",
+  IOS_BLOCKED: "ios_blocked",
+  PH: "ph", // phone blocked
+  TB: "tb", // tablet blocked
+  DT: "dt", // desktop blocked
+  OH: "oh", // out of home blocked
+  HI: "hi", // hdmi blocked
+  CX: "cx", // casting blocked
+  AP: "ap", // airplay blocked
+  FW: "fw", // forward blocked
+  RW: "rw", // rewind blocked
+  WF: "wf", // wifi blocked
+  CE: "ce", // cellular blocked
+  PR: "pr", // pause resume blocked
+  SS: "ss", // seek skip blocked NOTE: to be deprecated
+  SF: "sf", // seek skip forward blocked
+  SR: "sr", // seek skip rewind blocked
+  RN: "rn", // restart now blocked
+  CT: "ct", // catchup allowed
+  SB: "sb", // recording network share blocked
+  NB: "nb", // recording network blocked
+  LB: "lb", // recording local blocked
+  TS: "ts", // timeshift blocked
+  RA: "ra", // recently aired blocked
+  CU: "cu", // catch up blocked
+  DOWNLOAD_BLOCKED: "download_blocked"
+};
+
