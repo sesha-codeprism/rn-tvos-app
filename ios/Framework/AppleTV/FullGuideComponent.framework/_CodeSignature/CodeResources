@@ -26,7 +26,7 @@
 		</data>
 		<key>EPGViewController.storyboardc/stb-iC-LEn-view-L1W-8E-Efy.nib</key>
 		<data>
-		1IQuOVGduixMovHeHFpqpPCRynA=
+		WBCvpkpllFiM6A2cumNCzg3yOYs=
 		</data>
 		<key>EPGViewController.storyboardc/ye0-cS-pmP-view-UKr-HT-bAA.nib</key>
 		<data>
@@ -50,11 +50,11 @@
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.abi.json</key>
 		<data>
-		jomgSOroQj2JJfnbB369onVtMR0=
+		FhPBYoLUYtaYlZt5fR4voJaxpPg=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.private.swiftinterface</key>
 		<data>
-		kXKr+l/l1QQPWwO2SIoWifoiWt0=
+		Gm3TqLhHbzhma5vztUCZrY9tjwI=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftdoc</key>
 		<data>
@@ -62,11 +62,11 @@
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftinterface</key>
 		<data>
-		kXKr+l/l1QQPWwO2SIoWifoiWt0=
+		Gm3TqLhHbzhma5vztUCZrY9tjwI=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftmodule</key>
 		<data>
-		XL2RztEI1CsQ6SMQMZlYivv6yzc=
+		VuQPjupHgbLJDbeC0mX7eEuue9s=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -114,7 +114,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			rvHt7K+mMXvssYu9ad5GN5cbZ4g7huG8mKpbz2U4iLw=
+			7Munrc+A0mDHB4bp0OzEiplM4cMk1iI71ImvCg51+rI=
 			</data>
 		</dict>
 		<key>EPGViewController.storyboardc/ye0-cS-pmP-view-UKr-HT-bAA.nib</key>
@@ -149,14 +149,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			LGffhUxRHw3P5rpTk8aLDGzaIuJ/cGTvIou9zWaTTik=
+			i+z2xES8xVuZ5YTWeeaLHtzixUlcXs9cdH5dnFYJcU8=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			qxpsO8bNijFOlMrzuvTyk8wz/O2loX+LgodSGQQam8A=
+			ysNC1gM4mhEoHUymRd8Oj+vGpLAt5Bojgx+7sGusBdo=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftdoc</key>
@@ -170,14 +170,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			qxpsO8bNijFOlMrzuvTyk8wz/O2loX+LgodSGQQam8A=
+			ysNC1gM4mhEoHUymRd8Oj+vGpLAt5Bojgx+7sGusBdo=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ii7r2W7NnWm/o8SNKmyRl6YiuzP0JNl13Otb0mQEMC0=
+			yaqk/bwLLxTGbF4hs4m5eXkbjzmXv+BFaofDCZ+wviw=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

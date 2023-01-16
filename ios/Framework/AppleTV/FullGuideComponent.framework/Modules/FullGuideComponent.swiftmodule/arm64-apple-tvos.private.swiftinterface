@@ -29,6 +29,9 @@ extension FullGuideComponent.MKFullGuideStorageManager {
   public func updateSlotsOnTime()
   public func setChannelmapId(value: Swift.Int)
   public func getChannelMapData(onSuccess: @escaping (([Swift.String : Any]) -> Swift.Void))
+  public func setEnvironment(value: Swift.String)
+  public func setToken(value: Swift.String)
+  public func setRefrestToken(value: Swift.String)
 }
 @_hasMissingDesignatedInitializers public class LiveChannel : Swift.Codable {
   @objc deinit
