@@ -3,6 +3,7 @@ import { getDataFromUDL, getMassagedData } from "../../backend";
 import { getAllSubscriberProfiles } from "../../backend/subscriber/subscriber";
 import { parseUdl, UdlProviders } from "../../backend/udl/provider";
 import { FeedItem, HubsResponse } from "../@types/HubsResponse";
+import useCurrentSlots from "../customHooks/useCurrentSlots";
 import { DefaultStore } from "../utils/DiscoveryUtils";
 import { GLOBALS } from "../utils/globals";
 import { appUIDefinition, lang, pivots } from "./constants";
@@ -16,6 +17,8 @@ export interface QueryResponse {
     refetch: any;
     isSuccess: boolean;
 }
+
+// export const slots = useCurrentSlots();
 
 export const getHubs = async () => {
     const data = await getDataFromUDL(
@@ -38,7 +41,7 @@ export function getProfiles() {
 
 export function getDataForUDL(query: string, pageNo: number = 0, shouldMassageData: boolean = true, shouldSendParams: boolean = true) {
     return useQuery(query, () => { return getUDLData(query, pageNo, shouldMassageData,) }, {
-        staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true, retry: 10, // Will retry failed requests 10 times before displaying an error
+        staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true, retry: 10, enabled: !!GLOBALS.currentSlots
     });
 }
 

@@ -6,15 +6,28 @@ interface Props {
   subTitle?: string;
   subTitleStyles?: StyleProp<TextStyle>;
   contentContainerStyle?: any;
+  isTitleInverted?: boolean;
 }
 
 const SideMenuLayout: React.FunctionComponent<Props> = (props) => {
   return (
     <View style={styles.root} pointerEvents="box-none">
       <View style={styles.headerContainer}>
-        <Text style={props.subTitleStyles}>{props.title}</Text>
+        <Text
+          style={
+            props.isTitleInverted ? props.subTitleStyles : props.titleStyles
+          }
+        >
+          {props.title}
+        </Text>
         {props.subTitle ? (
-          <Text style={props.titleStyles}>{props.subTitle}</Text>
+          <Text
+            style={
+              props.isTitleInverted ? props.titleStyles : props.subTitleStyles
+            }
+          >
+            {props.subTitle}
+          </Text>
         ) : null}
       </View>
       {/* <ScrollView> */}
@@ -72,4 +85,5 @@ const styles = StyleSheet.create({
 SideMenuLayout.defaultProps = {
   titleStyles: styles.titleText,
   subTitleStyles: styles.subTitle,
+  isTitleInverted: false,
 };

@@ -36,6 +36,7 @@ import { resetCaches } from "../../config/queries";
 import { useQuery } from "react-query";
 import { initUdls } from "../../../backend";
 import { generateGUID, makeRandomHexString } from "../../utils/guid";
+import useCurrentSlots from "../../customHooks/useCurrentSlots";
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
@@ -118,7 +119,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       processBootStrap(data?.data, "10ft")
         .then(async () => {
           initUdls();
-          await setLiveData();
+          // await setLiveData();
           setDefaultStore(storeResults?.data?.data, data?.data);
           setGlobalData(data?.data);
           connectDuplex(currentContext.duplexMessage);

@@ -1307,7 +1307,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const renderMoreLikeThis = () => {
-    const feed = { Name: "More Like this" };
+    const feed = { Name: AppStrings.str_details_more_like_this };
     return (
       <SafeAreaView>
         <MFSwimLane
