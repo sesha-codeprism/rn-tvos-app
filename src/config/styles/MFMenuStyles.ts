@@ -65,7 +65,7 @@ const MFMenuStyles = StyleSheet.create({
     alignSelf: "center",
   },
   searchContainerStyles: {
-    width: SCREEN_WIDTH * 0.1,
+    width: SCREEN_WIDTH * 0.05,
     height: 147,
     alignContent: "center",
     alignItems: "center",
@@ -73,7 +73,7 @@ const MFMenuStyles = StyleSheet.create({
     // paddingTop: 10,
     paddingBottom: 10,
     flexDirection: 'row',
-    // backgroundColor: __DEV__ ? 'blue' : 'transparent',
+    //backgroundColor: __DEV__ ? 'blue' : 'transparent',
   },
   hubsContainerStyles: {
     flex: 2.6,

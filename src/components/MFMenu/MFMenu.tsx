@@ -57,7 +57,7 @@ const MFMenu = (props: MFMenuProps) => {
   const myTVEventHandler = (evt: any) => {
     // console.log("evt.eventType", evt);
     if (
-     ( evt.eventType === "down" ||  evt.eventType === "swipeDown") &&
+      (evt.eventType === "down" || evt.eventType === "swipeDown") &&
       (focused === "profile" || focused === "settings")
     ) {
       console.log("evt.eventType", evt);
@@ -149,45 +149,6 @@ const MFMenu = (props: MFMenuProps) => {
                   }}
                 />
               </View>
-              <MFButton
-                variant={MFButtonVariant.Outlined}
-                iconSource={{}}
-                iconStyles={{}}
-                avatarSource={{}}
-                imageSource={{}}
-                textLabel="Guide"
-                enableRTL={GLOBALS.enableRTL}
-                textStyle={StyleSheet.flatten([
-                  MFMenuStyles.textStyle,
-                  focused === "guide"
-                    ? MFMenuStyles.focusedTextStyle
-                    : MFMenuStyles.textStyle,
-                ])}
-                focusedStyle={StyleSheet.flatten([
-                  MFMenuStyles.tabBarItem,
-                  MFMenuStyles.tabBarItemFocused1,
-                ])}
-                onFocus={() => {
-                  setTimeout(() => {
-                    setFocused("guide");
-                  }, 200);
-                }}
-                style={StyleSheet.flatten([MFMenuStyles.tabBarItem])}
-                onBlur={() => {}}
-                onPress={() => {
-                  props.navigation.navigate("guide");
-                }}
-                outlinedButtonProps={{
-                  outlinedButtonStyle: {
-                    focusedBorderColor: appUIDefinition.theme.colors.primary,
-                    unFocusedBorderColor:
-                      appUIDefinition.theme.colors.secondary,
-                    focusedBorderWidth: 5,
-                    unFocusedBorderWidth: 2,
-                    isDisabled: true,
-                  },
-                }}
-              />
             </View>
             <View
               style={StyleSheet.flatten([MFMenuStyles.hubsContainerStyles])}

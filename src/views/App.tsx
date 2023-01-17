@@ -11,6 +11,12 @@ import { initializeAnalyticsService } from "../utils/analytics/analytics";
 interface AppProps {}
 
 const App: React.FunctionComponent<AppProps> = (props) => {
+  if (__DEV__) {
+    const date = new Date();
+    console.log(
+      `app-start-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+    );
+  }
   const queryClient = new QueryClient();
   const [userProfile, setUserProfile] = useState({});
   const [onScreenLanguage, setOnScreenLanguage] = useState(
@@ -26,8 +32,8 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   const duplexMessage = (message: any) => {
     onDuplexMessageHandlers?.forEach((fn: any) => {
       fn?.(message);
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     getLandingData();
@@ -57,7 +63,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     shouldEnableRTL,
     onDuplexMessageHandlers, // the current list of message handlers from various components thoguhout the application
     addOnDuplexMessageHandlers, // Add Duplex message handler function from any component
-    duplexMessage // root application duplex message handler which dispatches the message to individual component specific message handlers.
+    duplexMessage, // root application duplex message handler which dispatches the message to individual component specific message handlers.
   };
 
   return (
