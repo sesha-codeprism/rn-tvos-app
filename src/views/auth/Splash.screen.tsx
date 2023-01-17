@@ -21,6 +21,7 @@ import {
   connectDuplex,
   setGlobalData,
   setLiveData,
+  setNativeModuleData,
 } from "../../utils/splash/splash_utils";
 import {
   getMovies,
@@ -117,14 +118,16 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     ) {
       processBootStrap(data?.data, "10ft")
         .then(async () => {
-          initUdls();
-          await setLiveData();
-          setDefaultStore(storeResults?.data?.data, data?.data);
-          setGlobalData(data?.data);
-          connectDuplex(currentContext.duplexMessage);
-          setLoading(false);
-          getMoviesAndTvShow();
-          props.navigation.replace(Routes.WhoIsWatching);
+          setGlobalData(data?.data).then(async () => {
+            await setNativeModuleData();
+            initUdls();
+            await setLiveData();
+            setDefaultStore(storeResults?.data?.data, data?.data);
+            connectDuplex(currentContext.duplexMessage);
+            setLoading(false);
+            getMoviesAndTvShow();
+            props.navigation.replace(Routes.WhoIsWatching);
+          });
         })
         .catch((err) => console.warn(err));
     }

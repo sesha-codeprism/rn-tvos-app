@@ -27,6 +27,7 @@ import { Layout } from "../../utils/analytics/consts";
 import { ItemShowType } from "../../utils/common";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { buildNowNextMap } from "../../utils/live/LiveUtils";
+import useCurrentSlots from "../../customHooks/useCurrentSlots";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
