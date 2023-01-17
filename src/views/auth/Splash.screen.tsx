@@ -174,8 +174,8 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       SourceType.VOD
     );
     GLOBALS.moviesAndTvShows = [
-      { TVShow: massagedTVData },
-      { Movie: massagedMovieData },
+      { "Trending TV Shows": massagedTVData },
+      { "Trending Movies": massagedMovieData },
     ];
     console.log("movies", movies);
     console.log("TVShow", TVShow);
