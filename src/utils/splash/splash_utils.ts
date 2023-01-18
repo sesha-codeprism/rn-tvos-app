@@ -16,18 +16,23 @@ import { getChannelRights } from "../../../backend/live/live";
 
 
 export const setGlobalData = (bootStrapResponse: BootStrapResponse) => {
-    if (bootStrapResponse) {
-        const data = bootStrapResponse;
-        GLOBALS.bootstrapSelectors = data;
-        GLOBALS.store.rightsGroupIds = data?.RightsGroupIds;
-        GLOBALS.store.accountID = GLOBALS.bootstrapSelectors?.AccountId;
-        GLOBALS.enableRTL =
-            GLOBALS.store.settings.display.onScreenLanguage.enableRTL;
-        setOnScreenLanguage(GLOBALS.store.settings.display.onScreenLanguage.languageCode)
-        GLOBALS.store.CurrentStoreID = DefaultStore.Id;
-        console.log("GLOBALS", GLOBALS);
-        updateStore(GLOBALS.store);
-    }
+    return new Promise((resolve, reject) => {
+        if (bootStrapResponse) {
+            const data = bootStrapResponse;
+            GLOBALS.bootstrapSelectors = data;
+            GLOBALS.store.rightsGroupIds = data?.RightsGroupIds;
+            GLOBALS.store.accountID = GLOBALS.bootstrapSelectors?.AccountId;
+            GLOBALS.enableRTL =
+                GLOBALS.store.settings.display.onScreenLanguage.enableRTL;
+            setOnScreenLanguage(GLOBALS.store.settings.display.onScreenLanguage.languageCode)
+            GLOBALS.store.CurrentStoreID = DefaultStore.Id;
+            console.log("GLOBALS", GLOBALS);
+            updateStore(GLOBALS.store);
+            resolve(GLOBALS.store);
+        } else {
+            reject("No Global data");
+        }
+    });
 }
 
 ///  
@@ -165,5 +170,25 @@ export const setLiveData = async () => {
             reject(e);
         }
     })
-    return Promise.all(promise1, promise2)
+    return new Promise.all(promise1, promise2)
+}
+
+export const setNativeModuleData = async () => {
+    return new Promise((resolve, reject) => {
+        try {
+            NativeModules.MKGuideBridgeManager.setToken(GLOBALS.store?.accessToken);
+            NativeModules.MKGuideBridgeManager.setRefreshToken(GLOBALS.store?.refreshToken);
+            const scheduleCacheUrl = GLOBALS.bootstrapSelectors?.ServiceMap.Services.scheduleCache.split(".");
+            if (__DEV__) {
+                console.log(scheduleCacheUrl)
+                console.log(`${scheduleCacheUrl[1]}.${scheduleCacheUrl[2]}`)
+            }
+            const appEnv = `${scheduleCacheUrl[1]}.${scheduleCacheUrl[2]}`;
+            NativeModules.MKGuideBridgeManager.setEnvironment(appEnv);
+            resolve()
+        } catch (e) {
+            reject(e);
+
+        }
+    });
 }

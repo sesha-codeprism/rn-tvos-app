@@ -20,6 +20,7 @@ import { setDefaultStore } from "../../utils/DiscoveryUtils";
 import {
   connectDuplex,
   setGlobalData,
+  setNativeModuleData,
   verifyAccountAndLogin,
 } from "../../utils/splash/splash_utils";
 import useLanding from "../../customHooks/useLandingData";
@@ -137,13 +138,18 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
       storeResults?.data?.data
     ) {
       processBootStrap(data?.data, "10ft").then(() => {
-        initUdls();
-        setDefaultStore(storeResults?.data?.data, data?.data);
-        setGlobalData(data?.data);
-        var value = verifyAccountAndLogin();
-        console.log("verifyAccountAndLogin", value);
-        connectDuplex(currentContext.duplexMessagee);
-        props.navigation.replace(Routes.WhoIsWatching);
+        setGlobalData(data?.data).then(async () => {
+          setNativeModuleData().then(async () => {
+            initUdls();
+            await setLiveData();
+            setDefaultStore(storeResults?.data?.data, data?.data);
+            setGlobalData(data?.data);
+            var value = verifyAccountAndLogin();
+            console.log("verifyAccountAndLogin", value);
+            connectDuplex(currentContext.duplexMessagee);
+            props.navigation.replace(Routes.WhoIsWatching);
+          });
+        });
       });
     }
   }, [
