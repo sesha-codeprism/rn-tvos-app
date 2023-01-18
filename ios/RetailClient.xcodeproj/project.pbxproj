@@ -38,6 +38,7 @@
 		591E32CC295793F400D60141 /* Mediakind-Icons.otf in Resources */ = {isa = PBXBuildFile; fileRef = 591E32CB295793F300D60141 /* Mediakind-Icons.otf */; };
 		591E32CD295793F400D60141 /* Mediakind-Icons.otf in Resources */ = {isa = PBXBuildFile; fileRef = 591E32CB295793F300D60141 /* Mediakind-Icons.otf */; };
 		593AF51228AE700E002740B8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 593AF51128AE700E002740B8 /* CoreData.framework */; };
+		594E610C2977FEA9004C1D05 /* Mediakind-Icons.otf in Resources */ = {isa = PBXBuildFile; fileRef = 594E610B2977FEA8004C1D05 /* Mediakind-Icons.otf */; };
 		59A99A9A2853229A00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
 		59A99A9B2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
 		59A99A9C2853229B00560F39 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59A99A912853229900560F39 /* Inter-ExtraBold.ttf */; };
@@ -223,6 +224,7 @@
 		4F21F13455730034D850CD1C /* libPods-RetailClient-RetailClientTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RetailClient-RetailClientTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		591E32CB295793F300D60141 /* Mediakind-Icons.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Mediakind-Icons.otf"; path = "../src/assets/fonts/Mediakind-Icons.otf"; sourceTree = "<group>"; };
 		593AF51128AE700E002740B8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS15.4.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
+		594E610B2977FEA8004C1D05 /* Mediakind-Icons.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Mediakind-Icons.otf"; path = "../src/assets/fonts/Mediakind-Icons.otf"; sourceTree = "<group>"; };
 		59A99A912853229900560F39 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraBold.ttf"; path = "../src/assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		59A99A922853229900560F39 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		59A99A932853229900560F39 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
@@ -445,6 +447,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				594E610B2977FEA8004C1D05 /* Mediakind-Icons.otf */,
 				13B07FAE1A68108700A75B9A /* RetailClient */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RetailClientTests */,
@@ -762,6 +765,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				594E610C2977FEA9004C1D05 /* Mediakind-Icons.otf in Resources */,
 				BCF149BF2962F04100F6271C /* MKFullGuide in Resources */,
 				BCF149C02962F04100F6271C /* Inter-ExtraLight.ttf in Resources */,
 				BCF149C12962F04100F6271C /* Images.xcassets in Resources */,
@@ -1165,10 +1169,8 @@
 				BCF149B62962F04100F6271C /* MKGuideManager.swift in Sources */,
 				BCF149B72962F04100F6271C /* main.m in Sources */,
 				BCF149B82962F04100F6271C /* MKGuide.m in Sources */,
-				BCB30F22296323C400B0F659 /* MKGuideBridgeManager.m in Sources */,
 				BCF149B92962F04100F6271C /* AppDelegate.m in Sources */,
 				BCF149BA2962F04100F6271C /* NativeText.m in Sources */,
-				BCB30F23296323D400B0F659 /* MKGuideBridgeManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
