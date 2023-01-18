@@ -20,6 +20,7 @@ import { setDefaultStore } from "../../utils/DiscoveryUtils";
 import {
   connectDuplex,
   setGlobalData,
+  setLiveData,
   setNativeModuleData,
   verifyAccountAndLogin,
 } from "../../utils/splash/splash_utils";
