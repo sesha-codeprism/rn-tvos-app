@@ -1,26 +1,26 @@
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Dimensions,
   StyleSheet,
   ImageBackground,
-  Text,
-  Alert,
   SafeAreaView,
   FlatList,
+  useTVEventHandler,
+  TouchableOpacity,
 } from "react-native";
 import FastImage from "react-native-fast-image";
 import { searchItems } from "../../backend/subscriber/subscriber";
 import { AppImages } from "../assets/images";
 import Search from "../components/MFSearch";
-import MFSearch from "../components/MFSearch";
 import MFSwimLane from "../components/MFSwimLane";
 import MFText from "../components/MFText";
-import { massageDiscoveryFeed, massageResult } from "../utils/assetUtils";
-import { ItemShowType, SourceType } from "../utils/common";
+import { massageResult } from "../utils/assetUtils";
+import { ItemShowType } from "../utils/common";
 import { SCREEN_WIDTH } from "../utils/dimensions";
 import { GLOBALS } from "../utils/globals";
+import { getUIdef } from "../utils/uidefinition";
 
 // const Search = requireNativeComponent('NKSearchComponent');
 
@@ -46,6 +46,8 @@ interface SearchResultObject {
 }
 const searchHeight = height * 0.3;
 const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
+  const searchPageConfig: any = getUIdef("Search")?.config;
+
   const [searchString, setSearchString] = useState("");
   const [searchResult, setSearchResult] = useState<
     SearchResultObject[] | undefined
@@ -56,32 +58,48 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const [showTrending, setShowTrending] = useState(true);
   const [showSearchResults, setShowSearchResult] = useState(false);
   const [swimLaneKey, setSwimLaneKey] = useState("");
+  const [swimLaneFocused, setSwimLaneFocused] = useState(false);
+  const firstCardRef = useRef<TouchableOpacity>(null);
+
   const updateSwimLaneKey = (key: string) => {
     setSwimLaneKey(key);
   };
   let timer: any;
-  let searchQuery: string = "";
+
+  const myTVEventHandler = (evt: any) => {
+    if (
+      (evt.eventType === "down" || evt.eventType === "swipeDown") &&
+      !swimLaneFocused
+    ) {
+      firstCardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+    }
+  };
+  useTVEventHandler(myTVEventHandler);
   const onChangeText = (event: any) => {
-    if (event.nativeEvent.text.length > 0) {
+    swimLaneFocused ? setSwimLaneFocused(false) : null;
+    if (!_.isEmpty(event.nativeEvent.text)) {
       /** User is entering some text. Stop showing trending items and start showing search results */
       const text = event.nativeEvent.text;
       if (event.nativeEvent.text === searchString) {
-        null
+        null;
       } else {
-        searchQuery = event.nativeEvent.text;
         setSearchString(event.nativeEvent.text);
         clearTimeout(timer);
-
         timer = setTimeout(() => {
           setShowTrending(false);
           setShowSearchResult(true);
           onSearch(text);
-        }, 1000);
+        }, 600);
       }
     } else {
       /**Text length is zero. User has cleared out text. Show trending items only */
-      setShowSearchResult(false);
-      setShowTrending(true);
+      /**Timer of 650 ms is given to set showTrending to true as we gave a debounce in search as well */
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        setShowSearchResult(false);
+        setShowTrending(true);
+        setSearchResult([]);
+      }, 650);
     }
   };
   // useEffect(() => {
@@ -105,15 +123,23 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
           />
         )}
         renderItem={({ item, index }) => {
-          console.log(item, item.Name);
+          // console.log(item, item.Name);
           return (
             <MFSwimLane
+              // @ts-ignore
+              ref={index === 0 ? firstCardRef : null}
               key={index}
               feed={item}
               data={item}
               limitSwimlaneItemsTo={10}
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}
+              onFocus={() => {
+                console.log("MFSwimLane focused in search screen", index);
+                setTimeout(() => {
+                  setSwimLaneFocused(true);
+                }, 500);
+              }}
             />
           );
         }}
@@ -129,6 +155,8 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
           alignItems: "center",
           alignSelf: "center",
           marginTop: 100,
+          backgroundColor: "#00030E",
+          height: "100%",
         }}
       >
         <FastImage
@@ -164,16 +192,16 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
     );
   };
   const onSearch = async (text: any) => {
-    console.log("text", text);
-    if (text && text.length >= 3) {
+    console.log("searchPageConfig", searchPageConfig);
+    if (text && text.length >= searchPageConfig.minQueryLength) {
       const params: SearchParam = {
         searchString: text,
         searchLive: false,
-        $skip: 0,
-        $top: 50,
+        $skip: searchPageConfig.$skip,
+        $top: searchPageConfig.$top,
       };
       const result = await searchItems(params);
-      console.log("search result", result);
+      // console.log("search result", result);
       if (result.status === 200) {
         const objMatch: any = { TVShow: 1, Movie: 2, Person: 3, Dvr: 4 };
         const newArray: any = [];
@@ -184,7 +212,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
             newArray[objMatch[itemIndex] - 1] = si;
           }
         });
-        console.log("respData", respData);
+        // console.log("respData", respData);
         const massagedData: SearchResultObject[] = [];
         respData.forEach((item: {}, swimlaneIndex: number) => {
           const searchResultsFeedName = Object.keys(item)[0];
@@ -205,7 +233,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
             });
           }
         });
-        console.log("massagedData", massagedData);
+        // console.log("massagedData", massagedData);
         setSearchResult(massagedData);
         // const data = formatSearchRsult(result.data);
         // setSearchResult(_.isEmpty(data) ? [] : result.data);
@@ -242,6 +270,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
           );
           return (
             <MFSwimLane
+              ref={index === 0 ? firstCardRef : null}
               key={index}
               //@ts-ignore
               feed={item}
@@ -249,6 +278,12 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
               limitSwimlaneItemsTo={10}
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}
+              onFocus={() => {
+                console.log("MFSwimLane focused in search screen", index);
+                setTimeout(() => {
+                  setSwimLaneFocused(true);
+                }, 500);
+              }}
             />
           );
         }}
@@ -258,20 +293,18 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   return (
     <View style={styles.root}>
       <View style={styles.secondComponent}>
-        <ImageBackground
+        {/* <ImageBackground
           source={require("../assets/images/onboarding_1280x752_landscape.jpg")}
           style={styles.imageComponent}
-        >
-          <SafeAreaView style={{ paddingBottom: 100 }}>
-            {showTrending
-              ? renderTrending()
-              : showSearchResults
-              ? !searchResult || searchResult?.length! === 0
-                ? renderNoResults()
-                : renderSearchResults()
-              : renderNoResults()}
-          </SafeAreaView>
-        </ImageBackground>
+        > */}
+        <SafeAreaView style={{ paddingBottom: 100 }}>
+          {showTrending && !showSearchResults
+            ? renderTrending()
+            : showSearchResults && searchResult && searchResult?.length !== 0
+            ? renderSearchResults()
+            : renderNoResults()}
+        </SafeAreaView>
+        {/* </ImageBackground> */}
       </View>
       <View style={styles.search}>
         <Search
@@ -301,8 +334,10 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   secondComponent: {
-    height: height - searchHeight,
-    marginTop: searchHeight - 150,
+    height: height,
+    marginTop: searchHeight,
+    backgroundColor: "#00030E",
+    paddingBottom: 300,
   },
   imageComponent: {
     height: 800,

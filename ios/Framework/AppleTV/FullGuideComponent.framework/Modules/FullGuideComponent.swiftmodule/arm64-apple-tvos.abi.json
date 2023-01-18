@@ -6349,6 +6349,34 @@
           },
           {
             "kind": "Var",
+            "name": "dateFormatter",
+            "printedName": "dateFormatter",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "ISO8601DateFormatter",
+                "printedName": "Foundation.ISO8601DateFormatter",
+                "usr": "c:objc(cs)NSISO8601DateFormatter"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:18FullGuideComponent17EPGViewControllerC13dateFormatter33_4B1731F0BDF93BDE7387946120B3698ELLSo013NSISO8601DateG0Cvp",
+            "mangledName": "$s18FullGuideComponent17EPGViewControllerC13dateFormatter33_4B1731F0BDF93BDE7387946120B3698ELLSo013NSISO8601DateG0Cvp",
+            "moduleName": "FullGuideComponent",
+            "isInternal": true,
+            "declAttributes": [
+              "Custom",
+              "HasInitialValue",
+              "Final",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "fixedbinaryorder": 41,
+            "isLet": true,
+            "hasStorage": true
+          },
+          {
+            "kind": "Var",
             "name": "lastChannelFromOnNow",
             "printedName": "lastChannelFromOnNow",
             "children": [
@@ -6377,7 +6405,7 @@
               "HasInitialValue",
               "HasStorage"
             ],
-            "fixedbinaryorder": 41,
+            "fixedbinaryorder": 42,
             "hasStorage": true,
             "accessors": [
               {
@@ -6485,7 +6513,7 @@
               "HasStorage",
               "AccessControl"
             ],
-            "fixedbinaryorder": 42,
+            "fixedbinaryorder": 43,
             "hasStorage": true
           },
           {
@@ -6511,7 +6539,7 @@
               "HasStorage",
               "AccessControl"
             ],
-            "fixedbinaryorder": 43,
+            "fixedbinaryorder": 44,
             "hasStorage": true
           },
           {
@@ -6537,7 +6565,7 @@
               "HasStorage",
               "AccessControl"
             ],
-            "fixedbinaryorder": 44,
+            "fixedbinaryorder": 45,
             "hasStorage": true
           },
           {
@@ -6563,7 +6591,7 @@
               "HasStorage",
               "AccessControl"
             ],
-            "fixedbinaryorder": 45,
+            "fixedbinaryorder": 46,
             "hasStorage": true
           },
           {
@@ -6589,7 +6617,7 @@
               "HasStorage",
               "AccessControl"
             ],
-            "fixedbinaryorder": 46,
+            "fixedbinaryorder": 47,
             "hasStorage": true
           },
           {
@@ -6614,7 +6642,7 @@
               "Final",
               "HasStorage"
             ],
-            "fixedbinaryorder": 47,
+            "fixedbinaryorder": 48,
             "isLet": true,
             "hasStorage": true,
             "accessors": [
@@ -6664,7 +6692,7 @@
               "Final",
               "HasStorage"
             ],
-            "fixedbinaryorder": 48,
+            "fixedbinaryorder": 49,
             "isLet": true,
             "hasStorage": true,
             "accessors": [
@@ -6714,7 +6742,7 @@
               "HasInitialValue",
               "HasStorage"
             ],
-            "fixedbinaryorder": 49,
+            "fixedbinaryorder": 50,
             "hasStorage": true,
             "accessors": [
               {
@@ -6806,7 +6834,7 @@
               "HasStorage",
               "AccessControl"
             ],
-            "fixedbinaryorder": 50,
+            "fixedbinaryorder": 51,
             "hasStorage": true
           },
           {
@@ -8130,6 +8158,35 @@
             "isOpen": true,
             "declAttributes": [
               "Custom"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "updateDateSelectionButtonOnScroll",
+            "printedName": "updateDateSelectionButtonOnScroll(nextProgramStartUtc:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Date",
+                "printedName": "Foundation.Date",
+                "usr": "s:10Foundation4DateV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:18FullGuideComponent17EPGViewControllerC33updateDateSelectionButtonOnScroll19nextProgramStartUtcy10Foundation0G0V_tF",
+            "mangledName": "$s18FullGuideComponent17EPGViewControllerC33updateDateSelectionButtonOnScroll19nextProgramStartUtcy10Foundation0G0V_tF",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "Custom",
+              "RawDocComment"
             ],
             "isFromExtension": true,
             "funcSelfKind": "NonMutating"
@@ -31174,6 +31231,174 @@
       },
       {
         "kind": "TypeDecl",
+        "name": "Environment",
+        "printedName": "Environment",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "dev",
+            "printedName": "dev",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(FullGuideComponent.Environment.Type) -> FullGuideComponent.Environment",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Environment",
+                    "printedName": "FullGuideComponent.Environment",
+                    "usr": "s:18FullGuideComponent11EnvironmentO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "FullGuideComponent.Environment.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Environment",
+                        "printedName": "FullGuideComponent.Environment",
+                        "usr": "s:18FullGuideComponent11EnvironmentO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:18FullGuideComponent11EnvironmentO3devyA2CmF",
+            "mangledName": "$s18FullGuideComponent11EnvironmentO3devyA2CmF",
+            "moduleName": "FullGuideComponent",
+            "fixedbinaryorder": 0
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(rawValue:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "FullGuideComponent.Environment?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Environment",
+                    "printedName": "FullGuideComponent.Environment",
+                    "usr": "s:18FullGuideComponent11EnvironmentO"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:18FullGuideComponent11EnvironmentO8rawValueACSgSS_tcfc",
+            "mangledName": "$s18FullGuideComponent11EnvironmentO8rawValueACSgSS_tcfc",
+            "moduleName": "FullGuideComponent",
+            "implicit": true,
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Var",
+            "name": "rawValue",
+            "printedName": "rawValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:18FullGuideComponent11EnvironmentO8rawValueSSvp",
+            "mangledName": "$s18FullGuideComponent11EnvironmentO8rawValueSSvp",
+            "moduleName": "FullGuideComponent",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent11EnvironmentO8rawValueSSvg",
+                "mangledName": "$s18FullGuideComponent11EnvironmentO8rawValueSSvg",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:18FullGuideComponent11EnvironmentO",
+        "mangledName": "$s18FullGuideComponent11EnvironmentO",
+        "moduleName": "FullGuideComponent",
+        "enumRawTypeName": "String",
+        "isEnumExhaustive": true,
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "RawRepresentable",
+            "printedName": "RawRepresentable",
+            "children": [
+              {
+                "kind": "TypeWitness",
+                "name": "RawValue",
+                "printedName": "RawValue",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ]
+              }
+            ],
+            "usr": "s:SY",
+            "mangledName": "$sSY"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
         "name": "MKFullGuideStorageManager",
         "printedName": "MKFullGuideStorageManager",
         "children": [
@@ -31722,6 +31947,345 @@
             ]
           },
           {
+            "kind": "Var",
+            "name": "environment",
+            "printedName": "environment",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC11environmentSSSgvp",
+            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC11environmentSSSgvp",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC11environmentSSSgvg",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC11environmentSSSgvg",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC11environmentSSSgvs",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC11environmentSSSgvs",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC11environmentSSSgvM",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC11environmentSSSgvM",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "token",
+            "printedName": "token",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC5tokenSSSgvp",
+            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC5tokenSSSgvp",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC5tokenSSSgvg",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC5tokenSSSgvg",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC5tokenSSSgvs",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC5tokenSSSgvs",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC5tokenSSSgvM",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC5tokenSSSgvM",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "refreshToken",
+            "printedName": "refreshToken",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC12refreshTokenSSSgvp",
+            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC12refreshTokenSSSgvp",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC12refreshTokenSSSgvg",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC12refreshTokenSSSgvg",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC12refreshTokenSSSgvs",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC12refreshTokenSSSgvs",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC12refreshTokenSSSgvM",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC12refreshTokenSSSgvM",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
             "kind": "Function",
             "name": "saveDataFor",
             "printedName": "saveDataFor(slot:programs:)",
@@ -32052,6 +32616,90 @@
             ],
             "isFromExtension": true,
             "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setEnvironment",
+            "printedName": "setEnvironment(value:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC14setEnvironment5valueySS_tF",
+            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC14setEnvironment5valueySS_tF",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setToken",
+            "printedName": "setToken(value:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC8setToken5valueySS_tF",
+            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC8setToken5valueySS_tF",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setRefrestToken",
+            "printedName": "setRefrestToken(value:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC15setRefrestToken5valueySS_tF",
+            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC15setRefrestToken5valueySS_tF",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
           }
         ],
         "declKind": "Class",
@@ -32087,61 +32735,6 @@
         "printedName": "Client",
         "children": [
           {
-            "kind": "Var",
-            "name": "token",
-            "printedName": "token",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:18FullGuideComponent6ClientC5token33_16510EE2586F519564B3E6D1CA3E767CLLSSvp",
-            "mangledName": "$s18FullGuideComponent6ClientC5token33_16510EE2586F519564B3E6D1CA3E767CLLSSvp",
-            "moduleName": "FullGuideComponent",
-            "isInternal": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "Final",
-              "HasStorage",
-              "AccessControl",
-              "RawDocComment"
-            ],
-            "fixedbinaryorder": 0,
-            "isLet": true,
-            "hasStorage": true
-          },
-          {
-            "kind": "Var",
-            "name": "refreshToken",
-            "printedName": "refreshToken",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:18FullGuideComponent6ClientC12refreshToken33_16510EE2586F519564B3E6D1CA3E767CLLSSvp",
-            "mangledName": "$s18FullGuideComponent6ClientC12refreshToken33_16510EE2586F519564B3E6D1CA3E767CLLSSvp",
-            "moduleName": "FullGuideComponent",
-            "isInternal": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "Final",
-              "HasStorage",
-              "AccessControl"
-            ],
-            "fixedbinaryorder": 1,
-            "isLet": true,
-            "hasStorage": true
-          },
-          {
             "kind": "Function",
             "name": "cancelAllRequests",
             "printedName": "cancelAllRequests()",
@@ -32158,7 +32751,8 @@
             "moduleName": "FullGuideComponent",
             "static": true,
             "declAttributes": [
-              "Final"
+              "Final",
+              "RawDocComment"
             ],
             "funcSelfKind": "NonMutating"
           },
@@ -32192,7 +32786,7 @@
               "HasStorage",
               "AccessControl"
             ],
-            "fixedbinaryorder": 2,
+            "fixedbinaryorder": 0,
             "hasStorage": true
           },
           {
@@ -44943,91 +45537,91 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "StringLiteral",
-      "offset": 2930,
+      "offset": 2980,
       "length": 27,
       "value": "\"Loading Channels Data ...\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "IntegerLiteral",
-      "offset": 3763,
+      "offset": 3813,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "StringLiteral",
-      "offset": 3799,
+      "offset": 3849,
       "length": 26,
       "value": "\"No Information Available\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "StringLiteral",
-      "offset": 3853,
+      "offset": 3903,
       "length": 19,
       "value": "\"No Info Available\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 14493,
+      "offset": 14263,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 43202,
+      "offset": 43070,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 43684,
+      "offset": 43552,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 43781,
+      "offset": 43649,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 43907,
+      "offset": 43775,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "Array",
-      "offset": 48447,
+      "offset": 48315,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 48728,
+      "offset": 48596,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 50487,
+      "offset": 50308,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 82684,
+      "offset": 83901,
       "length": 5,
       "value": "false"
     },
@@ -47134,7 +47728,7 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/MKFullGuideAPIClient.swift",
       "kind": "BooleanLiteral",
-      "offset": 1728,
+      "offset": 1793,
       "length": 5,
       "value": "false"
     },
@@ -47281,77 +47875,77 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/MKFullGuideStorageManager.swift",
       "kind": "StringLiteral",
-      "offset": 294,
+      "offset": 164,
+      "length": 8,
+      "value": "\"dev.mr\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/MKFullGuideStorageManager.swift",
+      "kind": "StringLiteral",
+      "offset": 164,
+      "length": 8,
+      "value": "\"dev.mr\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/MKFullGuideStorageManager.swift",
+      "kind": "StringLiteral",
+      "offset": 348,
       "length": 12,
       "value": "\"asyncQueue\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/MKFullGuideStorageManager.swift",
       "kind": "StringLiteral",
-      "offset": 388,
+      "offset": 442,
       "length": 17,
       "value": "\"queue_fetchdata\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/MKFullGuideStorageManager.swift",
       "kind": "StringLiteral",
-      "offset": 497,
+      "offset": 551,
       "length": 27,
       "value": "\"queue_fetchchannelMapInfo\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/MKFullGuideStorageManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 1706,
+      "offset": 1842,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
-      "kind": "StringLiteral",
-      "offset": 241,
-      "length": 671,
-      "value": "\"AuthToken1lZBdb5swFIZ_TbgD4S8wF1yQpk2zteq2sGrrnWOfJG4MZrZpm_76mSzVpGmVNgmbV4fnnIOeZlQaegn1PoTBz0gzw1fxcWCOut8NwoVjpuAp61wWnog0dlSZtF1EkpX3I7g_Gn3w7_ET-JuTe-iEz146460YMut2sfrs44XznMXX6dIK-qDDMUZphO6m773ooBYKmJBkmxK-pSktKE1FJUSKuUSVyNWWEZQs4ElLWKn_odvjAHUzDAba-6SFXvQhDlCwFaMJyRcQpqtvVveXq0XS2gP0J369ty5cWAVJI6Udzy0wiEM2iJ1QwogZzTtQWhx0fzIS151GfvXg_oG-AhFGB0tnxyHimFclw9XfnXZaOuvtNpzNv1nlk9XiHavOGqj9uPHS6Q24ZOniHl9jUuSM0xmeo3hiLvE5TwfznFRT5qxkU8AF_kUUJcEVO7VQHnfO6TSIJY0x9hnUm1hfC2OSZgxRoH4VQdv-VvhDTXge2xFHKP4AxowjWrACFxzlZUWK5PJl0A78XV-jElGEGKNFcuGiJFBTsWAop2QqfoTjctRRsMSUEYxTIlmeUow3acWhSinZMLbBRBLCk-vb5mJ93WBW1OP2ZXfnPj38-LwePzyWqFo_9t_wcPO9bS-rYQ6HhzlrTU4WV82MqJ8\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
-      "kind": "StringLiteral",
-      "offset": 942,
-      "length": 487,
-      "value": "\"AuthToken1hZDbaoNAEIafRu8UswerF15IkjaSlJYmtLR34-5olui6ddek9ulrpFAolMIwM_zzzYHJB6lQC8yOzhnr0dwjt5P12IxK1wZ6N4YSz2Hbh-5MRdMNMhRdOyF-Ye2A_a9G6-xf_BX84cQRW7DhR9vYDkzY9fWkXuzkSBTxKcxOSdROuXFKRQOqvdY1tJhJRAOn0EANEhrwWNSiVHBSet7nrz-M6tE-6GwRJ4TfpJzF_rJHcChnkS8iRq9iLkQ3aFfIf2eu8KwETiBI5CBoFdCkYgGLGQsgBQhIIhYpRLLidPFNH0aDWW5Mg4dn_4AavjdVMDTOf0Jo2mxXPK-LlX_oTqhnfn_serfsJPp7VetCz5X53b9u3-J4N6hpniCMU0ICKngUMELKIE0wDRgtOS8JFZQm_uY-X-43OeFxVkSPtaA4vq2IPT0eX-_ih3LN9u-fF-ORim1qMLtoCx4pP29eLoVH5Rc\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 2072,
+      "offset": 2275,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 2117,
+      "offset": 2320,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 2164,
+      "offset": 2367,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 3774,
+      "offset": 3977,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 3837,
+      "offset": 4040,
       "length": 5,
       "value": "false"
     },
@@ -47512,7 +48106,7 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/UserInputViewController.swift",
       "kind": "Array",
-      "offset": 540,
+      "offset": 536,
       "length": 2,
       "value": "[]"
     },

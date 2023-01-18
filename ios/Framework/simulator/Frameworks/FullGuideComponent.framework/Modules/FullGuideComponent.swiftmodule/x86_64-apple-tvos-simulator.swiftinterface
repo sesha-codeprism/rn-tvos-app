@@ -1,6 +1,6 @@
 // swift-interface-format-version: 1.0
 // swift-compiler-version: Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)
-// swift-module-flags: -target x86_64-apple-tvos15.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name FullGuideComponent
+// swift-module-flags: -target x86_64-apple-tvos15.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name FullGuideComponent
 // swift-module-flags-ignorable: -enable-bare-slash-regex
 import Alamofire
 import Foundation
@@ -29,6 +29,9 @@ extension FullGuideComponent.MKFullGuideStorageManager {
   public func updateSlotsOnTime()
   public func setChannelmapId(value: Swift.Int)
   public func getChannelMapData(onSuccess: @escaping (([Swift.String : Any]) -> Swift.Void))
+  public func setEnvironment(value: Swift.String)
+  public func setToken(value: Swift.String)
+  public func setRefrestToken(value: Swift.String)
 }
 @_hasMissingDesignatedInitializers public class LiveChannel : Swift.Codable {
   @objc deinit

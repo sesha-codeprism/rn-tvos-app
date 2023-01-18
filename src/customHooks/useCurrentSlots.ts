@@ -14,7 +14,7 @@ const useCurrentSlots = (params?: CurrentSlotsParams) => {
     const [intervalTimer, setIntervalTimer] = useState(10000); // 10 sec timeout for testing
     // const [intervalTimer, setIntervalTimer] = useState(10800000); // 3*(1000*60 * 60)
     const getSlotsData = () => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             return NativeModules.MKGuideBridgeManager.getCurrentSlots(true, (result: any) => {
                 try {
                     const data = JSON.parse(result);

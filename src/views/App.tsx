@@ -11,6 +11,12 @@ import { initializeAnalyticsService } from "../utils/analytics/analytics";
 interface AppProps {}
 
 const App: React.FunctionComponent<AppProps> = (props) => {
+  if (__DEV__) {
+    const date = new Date();
+    console.log(
+      `app-start-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+    );
+  }
   const queryClient = new QueryClient();
   const [userProfile, setUserProfile] = useState({});
   const [onScreenLanguage, setOnScreenLanguage] = useState(

@@ -765,6 +765,14 @@
       ]
     },
     {
+      "id":"Search",
+      "config":{
+        "minQueryLength": 1,
+        "$skip":0,
+        "$top": 50
+      }
+    },
+    {
       "id": "Details",
       "config": {
         "assetExpiryDaysThreshold": 14

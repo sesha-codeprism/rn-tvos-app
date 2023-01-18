@@ -27,6 +27,7 @@ import { Layout } from "../../utils/analytics/consts";
 import { ItemShowType } from "../../utils/common";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { buildNowNextMap } from "../../utils/live/LiveUtils";
+import useCurrentSlots from "../../customHooks/useCurrentSlots";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -145,6 +146,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
         updateRoute("DvrManager", payload);
       },
       liveTvGuide: () => {
+        props.navigation.navigate("guide");
         /** Commenting out LiveTV view all.. we'll figure out the rest implement it  */
         // if (isDefaultSubscribedFilterEnabled) {
         //   payload["initialFilter"] = ["Subscribed"];
@@ -231,6 +233,13 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       TVMenuControl.enableTVMenuKey();
       BackHandler.addEventListener("hardwareBackPress", backAction);
     }
+    if (__DEV__) {
+      const date = new Date();
+      console.log(
+        `app-end-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      );
+    }
+
     // setTimeout(() => {
     //   getUpdatedChannelsList();
     // }, 20000);
