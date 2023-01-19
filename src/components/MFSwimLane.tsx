@@ -20,6 +20,7 @@ interface MFSwimLaneProps {
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
   updateSwimLaneKey?: null | ((event: string) => void) | undefined;
   swimLaneKey?: string;
+  cardStyle?: "16x9" | "3x4" | "2x3";
   limitSwimlaneItemsTo?: number;
   onViewAllPressed?: null | ((event: SubscriberFeed) => void) | undefined;
   onListEmptyElementFocus?:
@@ -64,12 +65,12 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           enableCircularLayout
           title={props.feed?.Name || props.feed.name}
           style={
-            props.feed.ShowcardAspectRatio === layout2x3
+            props.cardStyle === "2x3"
               ? HomeScreenStyles.portraitCardStyles
               : HomeScreenStyles.landScapeCardStyles
           }
           imageStyle={
-            props.feed.ShowcardAspectRatio === layout2x3
+            props.cardStyle === "2x3"
               ? HomeScreenStyles.portraitCardImageStyles
               : HomeScreenStyles.landScapeCardImageStyles
           }
@@ -81,6 +82,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           updateSwimLaneKey={props.updateSwimLaneKey}
           railContainerStyles={{}}
           libraryItems={props.data}
+          cardStyle={props.cardStyle}
           onPress={props.onPress}
           onBlur={(event) => {
             _onBlur();
@@ -144,5 +146,8 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
     );
   }
 );
+MFSwimLane.defaultProps = {
+  cardStyle: "16x9",
+};
 
 export default MFSwimLane;

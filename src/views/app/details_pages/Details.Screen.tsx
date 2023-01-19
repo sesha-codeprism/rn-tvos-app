@@ -25,6 +25,7 @@ import {
   massageDiscoveryFeedAsset,
   massagePreviousDate,
   massageProgramDataForUDP,
+  massageSeriesDataForUDP,
   SubscriptionPackages,
 } from "../../../utils/assetUtils";
 import { metadataSeparator } from "../../../utils/Subscriber.utils";
@@ -109,7 +110,6 @@ const fontSize = { fontSize: 25 };
 
 const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const feed: Feed = props.route.params.feed;
-  console.log("Feed", feed);
   const drawerRef: React.MutableRefObject<any> = useRef();
   const [similarData, setSimilarData] = useState<any>(undefined);
   const [discoveryProgramData, setdiscoveryProgramData] =
@@ -165,6 +165,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const listAddButtonRef: React.RefObject<any> = React.createRef();
   const buttonFocuszoneRef: React.RefObject<any> = React.createRef();
   let networkInfo: any;
+
+  const isSeries = (assetData: AssetData) =>
+    assetData.assetType.contentType === ContentType.SERIES ||
+    assetData.assetType.contentType === ContentType.EPISODE;
+
+  const isProgramOrGeneric = (assetData: AssetData) =>
+    assetData.assetType.contentType === ContentType.PROGRAM ||
+    assetData.assetType.contentType === ContentType.GENERIC;
 
   const featureNotImplementedAlert = (
     title: string = "Missing implementation",
@@ -366,7 +374,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     //@ts-ignore
     const assetType = feed?.assetType!;
     const id = getItemId(feed);
-    const language = languageKey.language + GLOBALS.store.onScreenLanguage.languageCode?.split('-')?.[0] || 'en';
+    const language =
+      languageKey.language +
+        GLOBALS?.store?.onScreenLanguage.languageCode?.split("-")?.[0] || "en";
 
     return {
       id,
@@ -720,36 +730,43 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       console.log("No asset data to make api call..");
       return undefined;
     }
+    let udlParam: string = "";
     const id = getItemId(feed);
     const params = `?$top=${assetData.$top}&$skip=${assetData.$skip}&storeId=${
       DefaultStore.Id
     }&$groups=${GLOBALS.store!.rightsGroupIds}&pivots=${
       assetData.pivots
-    }&id=${id}&itemType=${assetData.contentTypeEnum}&lang=${GLOBALS.store.onScreenLanguage.languageCode}`;
-    const udlParam = "udl://discovery/programSchedules/" + params;
+    }&id=${id}&itemType=${assetData.contentTypeEnum}&lang=${
+      GLOBALS.store!.onScreenLanguage.languageCode
+    }`;
+    if (isSeries(assetData)) {
+      udlParam = "udl://discovery/seriesSchedules/" + params;
+    } else if (isProgramOrGeneric(assetData)) {
+      udlParam = "udl://discovery/programSchedules/" + params;
+    }
     const data = await getDataFromUDL(udlParam);
     setdiscoverySchedulesData(data.data);
     return data;
   };
 
   const getDiscoveryProgramData = async (assetData: AssetData) => {
+    let udlParam: string = "";
+    const id = getItemId(feed);
+    const params = `?storeId=${DefaultStore.Id}&$groups=${
+      GLOBALS.store!.rightsGroupIds
+    }&pivots=${assetData.pivots}&id=${id}&lang=${
+      GLOBALS?.store?.onScreenLanguage.languageCode
+    }`;
     if (!assetData) {
       console.log("No asset data to make api call..");
       return undefined;
     }
-    if (assetData.assetType.contentType === ContentType.SERIES) {
-      console.log("this is  a series");
-    } else if (
-      assetData.assetType.contentType === ContentType.PROGRAM ||
-      assetData.assetType.contentType === ContentType.GENERIC
-    ) {
-      console.log("This is either a program or generic");
+    if (isSeries(assetData)) {
+      udlParam = "udl://discovery/series/" + params;
+    } else if (isProgramOrGeneric(assetData)) {
+      udlParam = "udl://discovery/programs/" + params;
     }
-    const id = getItemId(feed);
-    const params = `?storeId=${DefaultStore.Id}&$groups=${
-      GLOBALS.store!.rightsGroupIds
-    }&pivots=${assetData.pivots}&id=${id}&lang=${GLOBALS.store.onScreenLanguage.languageCode}`;
-    const udlParam = "udl://discovery/programs/" + params;
+
     const data = await getDataFromUDL(udlParam);
     const massagedData = massageDiscoveryFeedAsset(
       data.data,
@@ -780,9 +797,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       console.log("No asset data to make api call..");
       return undefined;
     }
+    let udlParam: string = "";
     const id = getItemId(feed);
     const params = `?storeId=${DefaultStore.Id}&id=${id}`;
-    const udlParam = "udl://subscriber/getProgramSubscriberData/" + params;
+    if (isSeries(assetData)) {
+      udlParam = "udl://subscriber/getSeriesSubscriberData/" + params;
+    } else if (isProgramOrGeneric(assetData)) {
+      udlParam = "udl://subscriber/getProgramSubscriberData/" + params;
+    }
     const data = await getDataFromUDL(udlParam);
     setsubscriberData(data.data);
     return data;
@@ -811,6 +833,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const getUDPData = async () => {
+    console.log("Fetching UDP data");
     if (
       !similarDataQuery.data &&
       !discoveryProgramDataQuery.data &&
@@ -825,30 +848,50 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       //@ts-ignore
       assetTypeObject[feed?.assetType?.contentType] ||
       assetTypeObject[ContentType.PROGRAM];
-    const udpData = massageProgramDataForUDP(
-      playActionsData,
-      subscriberData,
-      discoveryProgramData,
-      GLOBALS.channelMap,
-      discoverySchedulesData,
-      undefined,
-      allSubscriptionGroups,
-      undefined,
-      subscriberData,
-      undefined,
-      viewableSubscriptionGroups,
-      scheduledSubScriptionGroups,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      isFeatureAssigned("IOSCarrierBilling")
-    );
+    const udpData = isSeries(assetData)
+      ? massageSeriesDataForUDP(
+          subscriberData,
+          discoveryProgramData,
+          discoverySchedulesData,
+          GLOBALS.channelMap,
+          feed,
+          GLOBALS.currentSlots,
+          allSubscriptionGroups,
+          GLOBALS.bootstrapSelectors,
+          undefined,
+          playActionsData,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          false,
+          undefined,
+          isFeatureAssigned("IOSCarrierBilling")
+        )
+      : massageProgramDataForUDP(
+          playActionsData,
+          subscriberData,
+          discoveryProgramData,
+          GLOBALS.channelMap,
+          discoverySchedulesData,
+          undefined,
+          allSubscriptionGroups,
+          undefined,
+          subscriberData,
+          undefined,
+          viewableSubscriptionGroups,
+          scheduledSubScriptionGroups,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          isFeatureAssigned("IOSCarrierBilling")
+        );
     console.log("UDP data", udpData);
     setUDPDataAsset(udpData);
     return udpData;
@@ -921,11 +964,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         !!similarData &&
         !!discoveryProgramData &&
         !!discoverySchedulesData &&
-        !!discoverySchedulesQuery.data &&
         !!playActionsData &&
-        !!subscriberData &&
-        !!viewableSubscriptionGroups &&
-        !!scheduledSubScriptionGroups,
+        !!subscriberData,
     }
   );
 

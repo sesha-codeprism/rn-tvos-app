@@ -16,7 +16,6 @@ import { MFThemeObject } from "../@types/MFTheme";
 import { appUIDefinition } from "../config/constants";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { AppImages } from "../assets/images";
-import MFMetaData from "./MFMetadata/MFMetaData";
 const MFTheme: MFThemeObject = require("../config/theme/theme.json");
 
 export enum AspectRatios {
@@ -47,6 +46,7 @@ export interface MFLibraryCardProps {
   imageStyle?: StyleProp<ImageStyle>;
   focusedStyle?: StyleProp<ViewStyle>;
   titlePlacement?: TitlePlacement;
+  cardStyle?: "16x9" | "3x4" | "2x3";
   overlayComponent?: React.ReactElement;
   shouldRenderText: boolean;
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
@@ -96,6 +96,44 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
         duration: 250,
       }).start();
       props.onBlur && props.onBlur(event);
+    };
+
+    const getRenderImageURI = (renderType: any) => {
+      switch (renderType) {
+        case "16x9":
+          //* : Return the !undefined 16x9 image or undefined otherwise */
+          if (props.data.image16x9KeyArtURL) {
+            return props.data.image16x9KeyArtURL.uri;
+          } else if (props.data.image16x9PosterURL) {
+            return props.data.image16x9PosterURL.uri;
+          } else {
+            return undefined;
+          }
+        case "2x3":
+          //* : Return the !undefined 2x3 image or undefined otherwise */
+          if (props.data.image2x3KeyArtURL) {
+            return props.data.image2x3KeyArtURL.uri;
+          } else if (props.data.image2x3PosterURL) {
+            return props.data.image2x3PosterURL.uri;
+          } else {
+            return undefined;
+          }
+        case "3x4":
+          //* : Return the !undefined 3x4 image or undefined otherwise */
+          //@ts-ignore
+          if (props.data.image3x4PosterURL) {
+            //@ts-ignore
+            return props.data.image3x4PosterURL.uri;
+            //@ts-ignore
+          } else if (props.data.image3x4KeyArtURL) {
+            //@ts-ignore
+            return props.data.image3x4KeyArtURL.uri;
+          } else {
+            return undefined;
+          }
+        default:
+          return undefined;
+      }
     };
 
     const TitleAndSubtitle = () =>
@@ -199,13 +237,11 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
         <View style={StyleSheet.flatten([props.imageStyle])}>
           <FastImage
             style={[props.imageStyle]}
-            source={{
-              uri:
-                props.data.image16x9PosterURL != undefined
-                  ? props.data.image16x9PosterURL.uri
-                  : AppImages.tvshowPlaceholder,
-              priority: FastImage.priority.normal,
-            }}
+            source={
+              getRenderImageURI(props.cardStyle)
+                ? { uri: getRenderImageURI(props.cardStyle) }
+                : AppImages.placeholder
+            }
           >
             {props.overlayComponent}
             <View>

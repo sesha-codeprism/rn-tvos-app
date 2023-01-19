@@ -416,7 +416,7 @@ export const deleteDevice = async () => {
 export const getProgramSubscriberData = async (item: string, params: any) => {
   const { id } = params;
   const { accessToken } = GLOBALS.store!;
-  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v4/programs/${id}/titles/`
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v4/programs/${id}/titles`
   try {
     const response = await GET({
       url: url,
@@ -430,6 +430,26 @@ export const getProgramSubscriberData = async (item: string, params: any) => {
     console.error("Cannot getProgramSubscriberData due to ", e);
     return undefined;
   }
+}
+
+export const getSeriesSubscriberData = async (item: string, params: any) => {
+  const { id } = params;
+  const { accessToken } = GLOBALS.store!;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v4/series/${id}`
+  try {
+    const response = await GET({
+      url: url,
+      params: params,
+      headers: {
+        Authorization: `OAUTH2 access_token="${accessToken}"`,
+      },
+    });
+    return response;
+  } catch (e) {
+    console.error("Cannot getProgramSubscriberData due to ", e);
+    return undefined;
+  }
+
 }
 
 export const pinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?: boolean) => {
@@ -499,6 +519,10 @@ export const registerSubscriberUdls = (params?: any) => {
     {
       prefix: BASE + "/getProgramSubscriberData/",
       getter: getProgramSubscriberData
+    },
+    {
+      prefix: BASE + "/getSeriesSubscriberData/",
+      getter: getSeriesSubscriberData
     },
   ];
   return subscriberUdls;

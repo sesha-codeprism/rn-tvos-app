@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FlatList } from "react-native";
 import { FeedItem } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
+import { layout2x3 } from "../config/constants";
 import { getAllFeedDataForFeed } from "../config/queries";
 import MFSwimLane from "./MFSwimLane";
 
@@ -55,6 +56,9 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
               onPress={props.onPress}
               limitSwimlaneItemsTo={props.limitSwimlaneItemsTo}
               onBlur={props.onBlur}
+              cardStyle={
+                item.ShowcardAspectRatio === layout2x3 ? "2x3" : "16x9"
+              }
               onFocus={props.onFocus}
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}

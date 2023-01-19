@@ -62,8 +62,6 @@ export const HomeScreenStyles = StyleSheet.create({
     borderColor: appUIDefinition.theme.colors.primary,
     borderRadius: 10,// overflow: 'visible'
   },
-
-
   linearGradientStyles: { padding: 10 },
   posterImageStyles: {
     height: 220,
