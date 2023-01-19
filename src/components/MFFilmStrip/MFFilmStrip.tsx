@@ -226,7 +226,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                     <MFOverlay
                       //@ts-ignore
                       renderGradiant={true}
-                      showProgress={true}
+                      showProgress={item.Bookmark! || false}
                       progress={20}
                       // displayTitle={item.title}
                       bottomText={item.runtime}

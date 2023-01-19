@@ -16,6 +16,9 @@ import { MFThemeObject } from "../@types/MFTheme";
 import { appUIDefinition } from "../config/constants";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { AppImages } from "../assets/images";
+import { Value } from "react-native-reanimated";
+import { SCREEN_HEIGHT } from "../utils/dimensions";
+import { globalStyles } from "../config/styles/GlobalStyles";
 const MFTheme: MFThemeObject = require("../config/theme/theme.json");
 
 export enum AspectRatios {
@@ -62,6 +65,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
   React.forwardRef(({ ...props }, ref: any) => {
     const [focused, setFocused] = useState(false);
     const fadeAnim = useRef(new Animated.Value(0)).current;
+    const textFadeAnim = useRef(new Animated.Value(1)).current;
     const translateAnim = useRef(new Animated.Value(0)).current;
     const _onPress = (event: GestureResponderEvent) => {
       props.onPress && props.onPress(props.data);
@@ -73,6 +77,12 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
         toValue: 1,
         duration: 250,
       }).start();
+      Animated.timing(textFadeAnim, {
+        useNativeDriver: true,
+        toValue: 0,
+        duration: 250,
+      }).start();
+
       Animated.timing(translateAnim, {
         useNativeDriver: true,
         toValue: -15,
@@ -90,6 +100,12 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
         toValue: 0,
         duration: 250,
       }).start();
+      Animated.timing(textFadeAnim, {
+        useNativeDriver: true,
+        toValue: 1,
+        duration: 250,
+      }).start();
+
       Animated.timing(translateAnim, {
         useNativeDriver: true,
         toValue: 0,
@@ -234,16 +250,55 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
         onFocus={_onFocus}
         onBlur={_onBlur}
       >
-        <View style={StyleSheet.flatten([props.imageStyle])}>
+        <View
+          style={StyleSheet.flatten([
+            props.imageStyle,
+            {
+              backgroundColor:
+                getRenderImageURI(props.cardStyle) === undefined
+                  ? globalStyles.backgroundColors.shade2
+                  : "transparent",
+            },
+          ])}
+        >
           <FastImage
             style={[props.imageStyle]}
             source={
               getRenderImageURI(props.cardStyle)
                 ? { uri: getRenderImageURI(props.cardStyle) }
-                : AppImages.placeholder
+                : AppImages.bgPlaceholder
             }
+            fallback
+            defaultSource={AppImages.bgPlaceholder}
           >
             {props.overlayComponent}
+            {getRenderImageURI(props.cardStyle) === undefined && !focused && (
+              <Animated.View
+                style={{
+                  opacity: textFadeAnim,
+                  position: "absolute",
+                  alignSelf: "center",
+                  alignContent: "center",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 1,
+                  marginTop: SCREEN_HEIGHT * 0.07,
+                }}
+              >
+                <MFText
+                  shouldRenderText
+                  displayText={props.data.title}
+                  textStyle={[
+                    styles.cardTitleText,
+                    {
+                      fontSize: 25,
+                      textAlign: "center",
+                      textAlignVertical: "center",
+                    },
+                  ]}
+                />
+              </Animated.View>
+            )}
             <View>
               {props.showProgress && props.progressComponent != undefined
                 ? props.progressComponent

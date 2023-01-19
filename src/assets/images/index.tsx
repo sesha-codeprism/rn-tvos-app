@@ -43,6 +43,7 @@ const AppImages: { [key: string]: Source | any } = {
   filter: require(`${imagesDirectory}/Filter.png`),
   rightArrowWhite: require(`${imagesDirectory}/right_arrow_white.png`),
   noSearchResult: require(`${imagesDirectory}/no_search_result.png`),
+  bgPlaceholder: require(`${imagesDirectory}/bg_placeholder.png`),
 };
 
 export { AppImages };

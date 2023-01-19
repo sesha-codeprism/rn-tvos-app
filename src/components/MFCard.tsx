@@ -16,6 +16,8 @@ import { Feed } from "../@types/HubsResponse";
 import { appUIDefinition, debounceTime } from "../config/constants";
 import Styles from "./MFButtonsVariants/MFButtonStyles";
 import { AppImages } from "../assets/images";
+import { globalStyles } from "../config/styles/GlobalStyles";
+import { getFontIcon } from "../config/strings";
 
 export enum AspectRatios {
   "2:3" = "2:3",
@@ -56,13 +58,15 @@ export interface MFCardProps {
 }
 
 const MFCard: React.FunctionComponent<MFCardProps> = React.forwardRef(
-  ({...props}, ref: any) => {
+  ({ ...props }, ref: any) => {
     const [focused, setFocused] = useState(false);
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const translateAnim = useRef(new Animated.Value(0)).current;
     const _onPress = () => {
       props.onPress && props.onPress(props.data);
     };
+    //@ts-ignore
+    const view_all = getFontIcon("view_all");
 
     const _onFocus = () => {
       setFocused(true);
@@ -189,54 +193,37 @@ const MFCard: React.FunctionComponent<MFCardProps> = React.forwardRef(
         onFocus={_onFocus}
         onBlur={_onBlur}
       >
-        <View style={StyleSheet.flatten([props.imageStyle])}>
-          <FastImage style={[props.imageStyle]} source={AppImages.placeholder}>
-            {props.overlayComponent}
-            <View>
-              {props.showProgress && props.progressComponent != undefined
-                ? props.progressComponent
-                : undefined}
-            </View>
-            <View
-              style={[
-                styles.overlay,
-                props.titlePlacement === TitlePlacement.overlayTop
-                  ? styles.overlayTopStyles
-                  : props.titlePlacement === TitlePlacement.overlayBottom
-                  ? styles.overlayBottomStyles
-                  : props.titlePlacement === TitlePlacement.overlayCenter
-                  ? styles.overlayCenterStyles
-                  : {},
-              ]}
-            >
-              {props.titlePlacement != TitlePlacement.beneath ? (
-                <TitleAndSubtitle />
-              ) : undefined}
-            </View>
-          </FastImage>
-          {props.titlePlacement === TitlePlacement.beneath ? (
-            props.showTitleOnlyOnFocus ? (
-              <Animated.View
-                style={[
-                  styles.cardContentContainer,
-                  {
-                    opacity: fadeAnim,
-                    transform: [
-                      {
-                        translateY: translateAnim,
-                      },
-                    ],
-                  },
-                ]}
-              >
-                <TitleAndSubtitle />
-              </Animated.View>
-            ) : (
-              <View style={[styles.cardContentContainer]}>
-                <TitleAndSubtitle />
-              </View>
-            )
-          ) : undefined}
+        <View
+          style={StyleSheet.flatten([
+            props.imageStyle,
+            {
+              backgroundColor: globalStyles.backgroundColors.shade2,
+              justifyContent: "center",
+              paddingBottom: 50,
+            },
+          ])}
+        >
+          {props.title.includes("View") && (
+            <MFText
+              shouldRenderText
+              displayText={view_all}
+              textStyle={{
+                fontFamily: globalStyles.fontFamily.icons,
+                fontSize: 150,
+                color: globalStyles.fontColors.light,
+                textAlign: "center",
+                textAlignVertical: "center",
+              }}
+            />
+          )}
+          <MFText
+            shouldRenderText
+            displayText={props.title}
+            textStyle={[
+              styles.cardTitleText,
+              { marginTop: props.title.includes("View") ? 0 : 30 },
+            ]}
+          />
         </View>
       </TouchableOpacity>
     );
@@ -268,8 +255,11 @@ const styles = StyleSheet.create({
   },
   cardTitleText: {
     color: "white",
-    fontSize: appUIDefinition.theme.fontSizes.subTitle1,
-    marginTop: 10,
+    fontSize: globalStyles.fontSizes.body1,
+    marginTop: -10,
+    fontFamily: globalStyles.fontFamily.bold,
+    textAlign: "center",
+    textAlignVertical: "center",
   },
   cardSubTitleText: {
     color: "white",

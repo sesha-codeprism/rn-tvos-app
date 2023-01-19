@@ -1392,6 +1392,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           data={roles && massageCastAndCrew(roles, assetTypeObject.PERSON)}
           swimLaneKey={castnCrewSwimLaneKey}
           updateSwimLaneKey={setCastnCrewSwimlaneKey}
+          cardStyle="3x4"
         />
       </SafeAreaView>
     );
