@@ -20,6 +20,7 @@ import {
 import { setOnScreenLanguage } from "../../../../config/strings";
 import { GlobalContext } from "../../../../contexts/globalContext";
 import { OnscreenLanguage } from "../../../../@types/UIDefinition";
+import { Routes } from "../../../../config/navigation/RouterOutlet";
 
 interface Props {
   navigation: NativeStackNavigationProp<any>;
@@ -33,13 +34,17 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const onPress = (item: OnscreenLanguage) => {
     console.log("first");
     setSelectedLang(item.onScreenName);
-    GLOBALS.store.settings.display.onScreenLanguage.title = item.onScreenName;
-    GLOBALS.store.settings.display.onScreenLanguage.languageCode =
-      item.languageCode;
-    GLOBALS.store.settings.display.onScreenLanguage.enableRTL = item.isRTL;
+    const lannguageObject = {
+      title: item.onScreenName,
+      languageCode: item.languageCode,
+      enableRTL:  item.isRTL
+    };
+    GLOBALS.store.settings.display.onScreenLanguage = lannguageObject;
+    GLOBALS.store.onScreenLanguage = lannguageObject;
     updateStore(GLOBALS.store);
     setOnScreenLanguage(item.languageCode);
     GLOBALS.enableRTL = item.isRTL;
+    GLOBALS.rootNavigation.replace(Routes.Splash);
     // currentContext.shouldEnableRTL(item.isRTL);
   };
   const getValues = () => {

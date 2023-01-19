@@ -22,8 +22,13 @@ export const setGlobalData = (bootStrapResponse: BootStrapResponse) => {
             GLOBALS.bootstrapSelectors = data;
             GLOBALS.store.rightsGroupIds = data?.RightsGroupIds;
             GLOBALS.store.accountID = GLOBALS.bootstrapSelectors?.AccountId;
-            GLOBALS.enableRTL =
+            if(!GLOBALS.store.settings.display.onScreenLanguage.enableRTL){
+                GLOBALS.enableRTL =
                 GLOBALS.store.settings.display.onScreenLanguage.enableRTL;
+            }
+            if(GLOBALS.store.settings.display.onScreenLanguage.languageCode == ""){
+                GLOBALS.store.settings.display.onScreenLanguage.languageCode = "en-US";
+            }
             setOnScreenLanguage(GLOBALS.store.settings.display.onScreenLanguage.languageCode)
             GLOBALS.store.CurrentStoreID = DefaultStore.Id;
             console.log("GLOBALS", GLOBALS);

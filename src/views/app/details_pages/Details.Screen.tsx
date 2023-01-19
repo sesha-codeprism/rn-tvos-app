@@ -366,7 +366,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     //@ts-ignore
     const assetType = feed?.assetType!;
     const id = getItemId(feed);
-    const language = languageKey.language + "en";
+    const language = languageKey.language + GLOBALS.store.onScreenLanguage.languageCode?.split('-')?.[0] || 'en';
 
     return {
       id,
@@ -725,7 +725,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       DefaultStore.Id
     }&$groups=${GLOBALS.store!.rightsGroupIds}&pivots=${
       assetData.pivots
-    }&id=${id}&itemType=${assetData.contentTypeEnum}&lang="en-US"`;
+    }&id=${id}&itemType=${assetData.contentTypeEnum}&lang=${GLOBALS.store.onScreenLanguage.languageCode}`;
     const udlParam = "udl://discovery/programSchedules/" + params;
     const data = await getDataFromUDL(udlParam);
     setdiscoverySchedulesData(data.data);
@@ -740,7 +740,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     const id = getItemId(feed);
     const params = `?storeId=${DefaultStore.Id}&$groups=${
       GLOBALS.store!.rightsGroupIds
-    }&pivots=${assetData.pivots}&id=${id}`;
+    }&pivots=${assetData.pivots}&id=${id}&lang=${GLOBALS.store.onScreenLanguage.languageCode}`;
     const udlParam = "udl://discovery/programs/" + params;
     const data = await getDataFromUDL(udlParam);
     const massagedData = massageDiscoveryFeedAsset(
