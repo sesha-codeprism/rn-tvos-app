@@ -27,7 +27,7 @@ const useLanding = (url: string) => {
   useEffect(() => {
     if (landingResponse.isSuccess && landingResponse.data?.data) {
       const { tenant, version, sts = MFGlobalsConfig.stsUrl, oauth, acceptLanguage } = landingResponse.data?.data || {};
-      if (acceptLanguage) {
+      if (acceptLanguage && GLOBALS.store.settings.display.onScreenLanguage.languageCode == "") {
         const supportedLocale = getBestSupportedLocaleID(acceptLanguage);
         const firstLanguage = supportedLocale?.split("-")[0] || acceptLanguage.split(";")[0];
 
@@ -42,6 +42,7 @@ const useLanding = (url: string) => {
         };
         if (GLOBALS.store) {
           GLOBALS.store.onScreenLanguage = local;
+          GLOBALS.store.settings.display.onScreenLanguage = local;
         }
       }
       MFGlobalsConfig.stsUrl = sts;

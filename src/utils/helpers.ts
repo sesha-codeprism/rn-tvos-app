@@ -20,7 +20,7 @@ export const updateStore = (MFStore: any) => {
   GLOBALS.store = getStore();
 };
 
-export const getStore = () => {
+export let getStore = () => {
   let serializedStore = Settings.get("store");
   if (serializedStore) {
     serializedStore = JSON.parse(serializedStore);
@@ -63,8 +63,8 @@ export const getStore = () => {
           },
           bitrates10ft: {},
           onScreenLanguage: {
-            title: "English (US)",
-            languageCode: "en-US",
+            title: "",
+            languageCode: "",
             enableRTL: false,
           },
           closedCaption: "",

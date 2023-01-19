@@ -28,7 +28,7 @@ export const getHubs = async (id: string, params: any) => {
     params: {
       $groups: rightIds,
       storeId: storeId,
-      lang: lang,
+      $lang: lang,
       pivots: pivots,
     },
   });
@@ -51,15 +51,15 @@ export const getStoresOfZones = async ({ queryKey }: any) => {
       $groups: GLOBALS.store?.rightsGroupIds!,
       storeId: DefaultStore.Id,
       //@ts-ignore
-      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
     },
   });
 };
 
 
 export const getMovies = async (id?: string, params?: any) => {
-  const { parentalrating, pivots, rating } = params;
-
+  const { parentalrating, rating } = params;
+  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
   const url: string =
     parseUri(
       GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
@@ -71,7 +71,7 @@ export const getMovies = async (id?: string, params?: any) => {
     params: {
       $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -89,8 +89,8 @@ export const getMovies = async (id?: string, params?: any) => {
   //   return res;
 };
 export const getTVShows = async (id?: string, params?: any) => {
-  const { OfferType, pivots } = params;
-
+  const { OfferType } = params;
+  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
   const url: string =
     parseUri(
       GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
@@ -104,7 +104,7 @@ export const getTVShows = async (id?: string, params?: any) => {
     params: {
       $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -114,6 +114,7 @@ export const getTVShows = async (id?: string, params?: any) => {
   return response;
 };
 const getPackages = async (id: string, params: Object) => {
+  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
   console.log("UDL: getPackages", id, params);
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/packages/items";
@@ -122,7 +123,7 @@ const getPackages = async (id: string, params: Object) => {
     params: {
       $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -134,7 +135,7 @@ const getmoviesandtvshowsByLicenseWindow = async (
   id: string,
   params: Object
 ) => {
-  console.log("UDL: getMoviesAndTvshowsByLicenseWindows", id, params);
+  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "moviesandtvshows/items";
   const response = await GET({
@@ -142,7 +143,7 @@ const getmoviesandtvshowsByLicenseWindow = async (
     params: {
       $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -152,7 +153,7 @@ const getmoviesandtvshowsByLicenseWindow = async (
 };
 
 const getMoviesAndTV = async (id: string, params: any) => {
-  console.log("UDL: getMovisAndTV", id, params);
+  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
   const { orderBy } = params;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") +
@@ -163,7 +164,7 @@ const getMoviesAndTV = async (id: string, params: any) => {
     params: {
       $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -180,7 +181,7 @@ const discoverSubscriptions = async (
   $skip: number = 0,
   $top: number = 10
 ) => {
-  console.log("UDL: getTVShows", id, params);
+  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/subscriptions/items";
   const response = await GET({
@@ -188,7 +189,7 @@ const discoverSubscriptions = async (
     params: {
       $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -198,6 +199,7 @@ const discoverSubscriptions = async (
 };
 
 const getPayPerView = async () => {
+  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/payperview/items";
   const response = await GET({
@@ -205,7 +207,7 @@ const getPayPerView = async () => {
     params: {
       $groups: GLOBALS.store?.rightsGroupIds,
       storeId: DefaultStore.Id,
-      lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
       $top: 16,
       $skip: 0,
@@ -215,6 +217,7 @@ const getPayPerView = async () => {
 };
 
 export const getStoresList = async () => {
+  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
   const rightIds = GLOBALS.store?.rightsGroupIds;
   const STORE_TYPE = "HubsAndFeeds";
   const defaultMainStore = "HubsAndFeeds-Main";
