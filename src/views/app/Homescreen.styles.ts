@@ -57,6 +57,20 @@ export const HomeScreenStyles = StyleSheet.create({
     height: appUIDefinition.config.height2x3 * 0.9,
     borderRadius: 10,
   },
+  card3x4Styles: {
+    width: ((346 * 3)) / 4,
+    height: 346,
+    borderRadius: 10,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  card3x4ImageStyles: {
+    width: ((346 * 3)) / 4 - 25,
+    height: 346 * 0.9,
+    borderRadius: 10,
+
+  },
   focusedStyle: {
     borderWidth: 5,
     borderColor: appUIDefinition.theme.colors.primary,

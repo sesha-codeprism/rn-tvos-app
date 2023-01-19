@@ -67,11 +67,19 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           style={
             props.cardStyle === "2x3"
               ? HomeScreenStyles.portraitCardStyles
+              : props.cardStyle === "16x9"
+              ? HomeScreenStyles.landScapeCardStyles
+              : props.cardStyle === "3x4"
+              ? HomeScreenStyles.card3x4Styles
               : HomeScreenStyles.landScapeCardStyles
           }
           imageStyle={
             props.cardStyle === "2x3"
               ? HomeScreenStyles.portraitCardImageStyles
+              : props.cardStyle === "16x9"
+              ? HomeScreenStyles.landScapeCardImageStyles
+              : props.cardStyle === "3x4"
+              ? HomeScreenStyles.card3x4ImageStyles
               : HomeScreenStyles.landScapeCardImageStyles
           }
           focusedStyle={HomeScreenStyles.focusedStyle}
