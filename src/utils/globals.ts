@@ -136,7 +136,8 @@ export const GLOBALS: GLOBALSType = {
     tenantId: landingInfo.tenantId,
     regCode: null
   },
-  currentSlots: null,
+  currentSlots: undefined,
+  channelMap: undefined,
   createUserProfile: { image: "", name: "", optOutPersonalDataUse: false },
   editUserProfile: {
     Name: "",

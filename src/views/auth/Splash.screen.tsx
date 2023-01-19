@@ -37,6 +37,7 @@ import { resetCaches } from "../../config/queries";
 import { useQuery } from "react-query";
 import { initUdls } from "../../../backend";
 import { generateGUID, makeRandomHexString } from "../../utils/guid";
+import useCurrentSlots from "../../customHooks/useCurrentSlots";
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;

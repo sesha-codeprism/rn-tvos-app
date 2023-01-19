@@ -40,7 +40,6 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
   );
 
   useEffect(() => {
-    console.log("inside useEffect", expanded, props.open);
     expanded ? openDrawer() : closeDrawer();
   }, [expanded]);
   useImperativeHandle(ref, () => ({
@@ -50,11 +49,9 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
     close,
   }));
   const open = () => {
-    console.log("open");
     setExpanded(true);
   };
   const close = () => {
-    console.log("close");
     setExpanded(false);
   };
   const openDrawer = () => {

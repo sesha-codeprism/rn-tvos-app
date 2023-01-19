@@ -48,6 +48,7 @@ import RouteFallBackScreen from "../../views/app/Route.Fallback.screen";
 import BrowseCategoryScreen from "../../views/app/BrowsePages/BrowseCategory/Browse.Category.screen";
 import TestScreen from "../../views/app/test.screen";
 import DetailsScreen from "../../views/app/details_pages/Details.Screen";
+import useCurrentSlots from "../../customHooks/useCurrentSlots";
 
 interface RouterOutletProps {}
 
@@ -289,6 +290,8 @@ interface RouterOutletProps {
 const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
   routerProps: RouterOutletProps
 ) => {
+  const slots = useCurrentSlots();
+
   return (
     <NavigationContainer>
       <Stack.Navigator

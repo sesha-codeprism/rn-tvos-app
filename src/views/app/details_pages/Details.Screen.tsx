@@ -737,6 +737,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       console.log("No asset data to make api call..");
       return undefined;
     }
+    if (assetData.assetType.contentType === ContentType.SERIES) {
+      console.log("this is  a series");
+    } else if (
+      assetData.assetType.contentType === ContentType.PROGRAM ||
+      assetData.assetType.contentType === ContentType.GENERIC
+    ) {
+      console.log("This is either a program or generic");
+    }
     const id = getItemId(feed);
     const params = `?storeId=${DefaultStore.Id}&$groups=${
       GLOBALS.store!.rightsGroupIds
@@ -1307,7 +1315,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const renderMoreLikeThis = () => {
-    const feed = { Name: "More Like this" };
+    const feed = { Name: AppStrings.str_details_more_like_this };
     return (
       <SafeAreaView>
         <MFSwimLane

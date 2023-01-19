@@ -17,6 +17,8 @@ import {
 import { globalStyles as globals } from "../../../config/styles/GlobalStyles";
 import { getUIdef, scaleAttributes } from "../../../utils/uidefinition";
 import { fontIconsObject } from "../../../utils/analytics/consts";
+import HeaderComponent from "../../../components/HeaderComponent";
+import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
 
 export type State = {
   opacity: Animated.Value;
@@ -152,7 +154,11 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
           networkData.oneFootSmallURL ||
           AppStrings.placeholder;
         items.push(
-          <Image source={networkSource} style={styles.networkImage} />
+          <Image
+            key={`Index${i}`}
+            source={networkSource}
+            style={styles.networkImage}
+          />
         );
       }
     }
@@ -234,118 +240,135 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
     : description;
 
   const genresList = getGenreText(genres);
+  console.log("MoreInfo", getMetadataString());
 
   return (
-    <ScrollView style={styles.bodyRoot}>
-      {!!(statusTextList && statusTextList.length) && (
-        <TouchableWithoutFeedback>
-          <View style={styles.row}>
-            {statusTextList.map((text: string, index: number) => {
-              const statusTextStyle =
-                index === 0 ? styles.statusTextStyle : styles.statusTextStyles;
-              return (
-                <Text style={statusTextStyle} key={`statustext_${index}`}>
-                  {text || ""}
-                </Text>
-              );
-            })}
-          </View>
-        </TouchableWithoutFeedback>
-      )}
-
-      {genresList?.length ? (
-        <Text style={[styles.genreTextStyle]}>{genresList}</Text>
-      ) : null}
-      {assetDescription ? (
-        <TouchableWithoutFeedback>
-          <View>
-            <Text style={[styles.bodyTextStyle, styles.row]}>
-              {assetDescription}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-      ) : null}
-      <Text style={[styles.bodyTextStyle, styles.audioText]}>
-        {AppStrings?.str_audio}:{" "}
-        {(AppStrings?.str_settings_languages as any)[languageIndicator]}
-      </Text>
-      <Text style={[styles.bodyTextStyle, styles.row]}>
-        {AppStrings?.str_subtitle}:{" "}
-        {(AppStrings?.str_settings_languages as any)[languageIndicator]}
-      </Text>
-      <View style={styles.ratingContainer}>
-        <View style={styles.ratingIndicator} />
-        <Text style={[styles.ratingTextStyle]}>
-          {ratings
-            ? `${AppStrings?.str_rated} ${ratings}`
-            : `${AppStrings?.str_unrated}`}
-        </Text>
-      </View>
-      <View>
-        <View style={styles.separatorStyle} />
-      </View>
-
-      <View style={styles.entitlementRow}>
-        {/* Quality Indicators */}
-        {combinedQualityLevels?.map((quality: string) => {
-          return (
-            <View key={quality}>
-              <Text style={styles.indicatorIconStyle}>
-                {getFontIcon((fontIconsObject as any)[quality])}
-              </Text>
+    <SideMenuLayout
+      title={props.udpData?.title}
+      subTitle={getMetadataString()}
+      contentContainerStyle={{
+        padding: 0,
+        width: "100%",
+        paddintTop: 0,
+        height: "80%",
+      }}
+      isTitleInverted={false}
+    >
+      <ScrollView style={styles.bodyRoot}>
+        {!!(statusTextList && statusTextList.length) && (
+          <TouchableWithoutFeedback>
+            <View style={styles.row}>
+              {statusTextList.map((text: string, index: number) => {
+                const statusTextStyle =
+                  index === 0
+                    ? styles.statusTextStyle
+                    : styles.statusTextStyles;
+                return (
+                  <Text style={statusTextStyle} key={`statustext_${index}`}>
+                    {text || ""}
+                  </Text>
+                );
+              })}
             </View>
-          );
-        })}
-
-        {/* Language Indicators */}
-        {!!languageIndicator && (
-          <View>
-            <Text style={styles.indicatorIconStyle}>
-              {getFontIcon((fontIconsObject as any)[languageIndicator])}
-            </Text>
-          </View>
+          </TouchableWithoutFeedback>
         )}
 
-        {/* Audio Indicator */}
-        {!!audioTags.length &&
-          audioTags.map((audioTag: string) => {
+        {genresList?.length ? (
+          <Text style={[styles.genreTextStyle]}>{genresList}</Text>
+        ) : null}
+        {assetDescription ? (
+          <TouchableWithoutFeedback>
+            <View>
+              <Text style={[styles.bodyTextStyle, styles.row]}>
+                {assetDescription}
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
+        ) : null}
+        <Text style={[styles.bodyTextStyle, styles.audioText]}>
+          {AppStrings?.str_audio}:{" "}
+          {(AppStrings?.str_settings_languages as any)[languageIndicator]}
+        </Text>
+        <Text style={[styles.bodyTextStyle, styles.row]}>
+          {AppStrings?.str_subtitle}:{" "}
+          {(AppStrings?.str_settings_languages as any)[languageIndicator]}
+        </Text>
+        <View style={styles.ratingContainer}>
+          <View style={styles.ratingIndicator} />
+          <Text style={[styles.ratingTextStyle]}>
+            {ratings
+              ? `${AppStrings?.str_rated} ${ratings}`
+              : `${AppStrings?.str_unrated}`}
+          </Text>
+        </View>
+        <View>
+          <View style={styles.separatorStyle} />
+        </View>
+
+        <View style={styles.entitlementRow}>
+          {/* Quality Indicators */}
+          {combinedQualityLevels?.map((quality: string) => {
             return (
-              <View key={audioTag}>
+              <View key={quality}>
                 <Text style={styles.indicatorIconStyle}>
-                  {getFontIcon((fontIconsObject as any)[audioTag])}
+                  {getFontIcon((fontIconsObject as any)[quality])}
                 </Text>
               </View>
             );
           })}
-      </View>
 
-      {!!showSourceIndicators && (
-        <View style={styles.entitlementRow}>
-          {!!IsLive && <Text style={styles.sourceIcon}>{liveIcon}</Text>}
-          {!!IsDVR && <Text style={styles.sourceIcon}>{dvrIcon}</Text>}
-          {!!IsRestart && <Text style={styles.sourceIcon}>{restartIcon}</Text>}
-          {!!IsVOD && <Text style={styles.sourceIcon}>{vodIcon}</Text>}
-          {!!IsUpcoming && (
-            <Text style={styles.sourceIcon}>{upcomingIcon}</Text>
+          {/* Language Indicators */}
+          {!!languageIndicator && (
+            <View>
+              <Text style={styles.indicatorIconStyle}>
+                {getFontIcon((fontIconsObject as any)[languageIndicator])}
+              </Text>
+            </View>
           )}
-          {!!IsPPV && <Text style={styles.sourceIcon}>{ppvIcon}</Text>}
+
+          {/* Audio Indicator */}
+          {!!audioTags.length &&
+            audioTags.map((audioTag: string) => {
+              return (
+                <View key={audioTag}>
+                  <Text style={styles.indicatorIconStyle}>
+                    {getFontIcon((fontIconsObject as any)[audioTag])}
+                  </Text>
+                </View>
+              );
+            })}
         </View>
-      )}
 
-      <View>
-        <View style={styles.separatorStyle} />
-      </View>
+        {!!showSourceIndicators && (
+          <View style={styles.entitlementRow}>
+            {!!IsLive && <Text style={styles.sourceIcon}>{liveIcon}</Text>}
+            {!!IsDVR && <Text style={styles.sourceIcon}>{dvrIcon}</Text>}
+            {!!IsRestart && (
+              <Text style={styles.sourceIcon}>{restartIcon}</Text>
+            )}
+            {!!IsVOD && <Text style={styles.sourceIcon}>{vodIcon}</Text>}
+            {!!IsUpcoming && (
+              <Text style={styles.sourceIcon}>{upcomingIcon}</Text>
+            )}
+            {!!IsPPV && <Text style={styles.sourceIcon}>{ppvIcon}</Text>}
+          </View>
+        )}
 
-      <View>
-        <View style={styles.flexRow}>{renderNetworkLogos()}</View>
-      </View>
-
-      <TouchableWithoutFeedback>
         <View>
-          <View style={styles.entitlementRow}></View>
+          <View style={styles.separatorStyle} />
         </View>
-      </TouchableWithoutFeedback>
-    </ScrollView>
+
+        <View>
+          <View style={styles.flexRow}>{renderNetworkLogos()}</View>
+        </View>
+
+        <TouchableWithoutFeedback>
+          <View>
+            <View style={styles.entitlementRow}></View>
+          </View>
+        </TouchableWithoutFeedback>
+      </ScrollView>
+    </SideMenuLayout>
   );
 };
 

@@ -36,6 +36,7 @@ const { width, height } = Dimensions.get("window");
 const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   props: HomeScreenProps
 ) => {
+  console.log(GLOBALS);
   const [feeds, setFeeds] = useState<FeedItem>();
   const [hubs, setHubs] = useState(Array<FeedItem>());
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
