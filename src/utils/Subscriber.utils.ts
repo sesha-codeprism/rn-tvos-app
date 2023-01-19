@@ -14,6 +14,7 @@ import {
   ShowType,
   SourceType,
 } from "./common";
+import { GLOBALS } from "./globals";
 import { getNetworkImageUri } from "./images";
 
 
@@ -467,6 +468,29 @@ export const findImage = (
   });
 };
 
+const getConstructedImageUri = (item: feedType, aspectRatio: aspectRatio) => {
+  const serviceMap = GLOBALS?.bootstrapSelectors?.ServiceMap.Services!;
+  const imgBase = serviceMap.image;
+  const imgType = item.ItemType ? item.ItemType : "person";
+
+  return (
+    imgBase +
+    "/" +
+    item.ImageBucketId +
+    "/" +
+    imgType +
+    "/" +
+    item.Id +
+    "/" +
+    imageMappingObject[aspectRatio]
+  ).toLowerCase();
+};
+
+export const placeholder = (data: any) => {
+  if (data?.ItemType === ItemShowType.App)
+    return { uri: `res://drawable/default/PlaceHolder_${data?.Name}.png` };
+};
+
 export const getImageUri = (
   item: feedType,
   aspectRatio: aspectRatio
@@ -491,11 +515,31 @@ export const getImageUri = (
       const last = uri.substring(uri.lastIndexOf("/") + 1, uri.length);
       let updatedUri;
 
+      if (
+        supportedImages?.length &&
+        supportedImages[0] === "3x4/KeyArt"
+      ) {
+        updatedUri = uri.replace(
+          last,
+          imageMappingObject[supportedImages[0]]
+        );
+        return updatedUri ? { uri: updatedUri } : undefined;
+      }
       if (supportedImages.indexOf(aspectRatio) !== -1) {
         updatedUri = uri.replace(last, imageMappingObject[aspectRatio]);
       }
       return updatedUri ? { uri: updatedUri } : undefined;
     }
+  }
+
+  if (
+    !images &&
+    (item?.ItemType == "Person" || item?.hasOwnProperty("PersonId")) &&
+    item?.SupportedImages?.indexOf(aspectRatio) !== -1 &&
+    item?.ImageBucketId
+  ) {
+    let constructedImageUri = getConstructedImageUri(item, aspectRatio);
+    return { uri: constructedImageUri };
   }
 
   return undefined;

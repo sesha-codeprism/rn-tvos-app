@@ -80,6 +80,7 @@ export interface MFFilmStripProps {
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
   libraryItems?: Array<SubscriberFeed> | any;
+  cardStyle?: "16x9" | "3x4" | "2x3";
   updateSwimLaneKey?: null | ((event: string) => void) | undefined;
   swimLaneKey?: string;
   onListFooterElementFocus?:
@@ -211,6 +212,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                   }
                   key={`Index${index}`}
                   data={item}
+                  cardStyle={props.cardStyle}
                   style={props.style}
                   focusedStyle={props.focusedStyle}
                   imageStyle={props.imageStyle}

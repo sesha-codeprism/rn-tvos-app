@@ -765,10 +765,10 @@
       ]
     },
     {
-      "id":"Search",
-      "config":{
+      "id": "Search",
+      "config": {
         "minQueryLength": 1,
-        "$skip":0,
+        "$skip": 0,
         "$top": 50
       }
     },
@@ -1672,7 +1672,7 @@
     "currentLocale": { "full": "en-US", "short": "fr" },
     "useLottieAnimationOnSplash": false,
     "height16x9": 253,
-    "height2x3": 339,
+    "height2x3": 350,
     "height4x3": 234,
     "queryCacheTime": 3600000,
     "queryStaleTime": 3600000,

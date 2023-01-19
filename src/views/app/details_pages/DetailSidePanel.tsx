@@ -105,8 +105,6 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
   const renderPush = () => {
     const { drawerPercentage } = props;
     const animated = { transform: [{ translateX: leftOffset }] };
-    console.log("renderPush");
-
     return (
       <Modal
         animationType="none"

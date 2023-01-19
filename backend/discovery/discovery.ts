@@ -374,6 +374,7 @@ const getDiscoveryLibraryPackages = async (id: string, params: any) => {
   return response;
 };
 
+
 const getDiscoveryProgramDetailsById = async (itemID: string, params: any) => {
   const { id } = params;
   const url = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discoverySSL || '') + `/v3/programs/${id}`;
@@ -386,6 +387,22 @@ const getDiscoveryProgramDetailsById = async (itemID: string, params: any) => {
 
   });
   return response;
+}
+
+const getDiscoverySeriesDetailsByID = async (itemID: string, params: any) => {
+  const { id } = params;
+  const url = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discoverySSL || '') + `/v3/series/${id}`;
+  const response = await GET({
+    url: url,
+    params: params,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+    },
+
+  });
+  return response;
+
+
 }
 
 const getDiscoveryProgramSchedules = async (itemId: string, params: any) => {
@@ -404,6 +421,25 @@ const getDiscoveryProgramSchedules = async (itemId: string, params: any) => {
     console.error("Cannot getDiscoveryProgramSchedules due to", e);
     return undefined;
   }
+}
+
+const getDiscoverySeriesSchedules = async (ItemID: string, params: any) => {
+  const { id } = params;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discoverySSL || '') + `/v3/series/${id}/schedules`;
+  try {
+    const response = await GET({
+      url: url,
+      params: params,
+      headers: {
+        Authorization: `OAUTH2 access_token="${GLOBALS.store.accessToken}"`,
+      },
+    })
+    return response;
+  } catch (e) {
+    console.error("Cannot getDiscoveryProgramSchedules due to", e);
+    return undefined;
+  }
+
 }
 
 export const getDiscoveryCollectionItems = async (id: string, params: any) => {
@@ -463,7 +499,12 @@ export const registerDiscoveryUdls = () => {
       prefix: BASE + '/programs/',
       getter: getDiscoveryProgramDetailsById
     },
+    {
+      prefix: BASE + '/series/',
+      getter: getDiscoverySeriesDetailsByID
+    },
     { prefix: BASE + '/programSchedules/', getter: getDiscoveryProgramSchedules },
+    { prefix: BASE + '/seriesSchedules/', getter: getDiscoverySeriesSchedules },
     { prefix: BASE + '/libraryprograms/collections/packages/', getter: getDiscoveryCollectionItems }
   ];
   return discoveryUdls;

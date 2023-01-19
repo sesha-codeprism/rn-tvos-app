@@ -5710,3 +5710,659 @@ export const validateEntitlements = (
 
     return isAllowed;
 };
+
+export const getGenreName = (genres: Genre[]) => {
+    genres = genres.filter((genre) => {
+        genre.Name =
+            (global.lStrings?.str_genres &&
+                global.lStrings.str_genres[genre.Id]) ||
+            genre.Name;
+        return genre;
+    });
+    return genres;
+};
+
+
+
+export const massageSeriesDataForUDP = (
+    seriesSubscriberData: any,
+    seriesDiscoveryData: any,
+    seriesSchedulesData: any,
+    channelMap: any,
+    data: any,
+    liveSchedules: any,
+    allSubcriptionGroups: any,
+    recordedSubscriptionGroups: any,
+    scheduledSubscriptionGroups: any,
+    account: any,
+    recorders: any,
+    subscriberPlayOptionsData: any,
+    networkIHD: any,
+    startDateFromEPG?: any,
+    endDateFromEPG?: any,
+    channelRights?: any,
+    isFromEPG?: boolean,
+    StationIdFromEPG?: any,
+    hasFeatureIosCarrierBilling?: boolean
+): any => {
+    const { str_seasons_count, str_single_season_count } =
+        global.lStrings || {};
+
+    const { Schedule = {} } = data;
+
+    const seriesUDPData: any = {};
+    let playActionsExists = false;
+    let purchaseActionsExists = false;
+    let isRent = false;
+    let isSubscribe = false;
+
+    seriesUDPData["assetType"] = seriesDiscoveryData?.assetType;
+
+    seriesUDPData["Bookmark"] =
+        subscriberPlayOptionsData?.Bookmark || data?.Bookmark;
+
+    seriesUDPData["usablePlayActions"] = [];
+    seriesUDPData["image16x9PosterURL"] =
+        seriesDiscoveryData?.image16x9PosterURL;
+    seriesUDPData["image16x9KeyArtURL"] =
+        seriesDiscoveryData?.image16x9KeyArtURL;
+    seriesUDPData["image2x3PosterURL"] = seriesDiscoveryData?.image2x3PosterURL;
+    seriesUDPData["image2x3KeyArtURL"] = seriesDiscoveryData?.image2x3KeyArtURL;
+
+    seriesUDPData["title"] = seriesDiscoveryData?.Name;
+    const seasonsCount = seriesSubscriberData?.CatalogInfo?.SeasonsCount;
+
+    seriesUDPData["seasonsCount"] =
+        seasonsCount &&
+        format(
+            seasonsCount > 1 ? str_seasons_count : str_single_season_count,
+            seasonsCount.toString()
+        );
+
+    seriesUDPData["genre"] = seriesDiscoveryData?.Genres?.length
+        ? getGenreName(seriesDiscoveryData?.Genres)
+        : [];
+    seriesUDPData["locale"] = seriesDiscoveryData?.Locale;
+    seriesUDPData["Rating"] = chooseRating(seriesDiscoveryData?.Ratings) || "";
+    seriesUDPData["ReleaseYear"] =
+        seriesDiscoveryData?.StartYear ||
+        seriesDiscoveryData?.ReleaseYear ||
+        seriesSubscriberData?.CatalogInfo?.ReleaseYear ||
+        seriesSubscriberData?.PriorityEpisodeTitle?.CatalogInfo?.ReleaseYear ||
+        "";
+    seriesUDPData["episodes"] = [];
+    seriesSubscriberData?.PriorityEpisodeTitle &&
+        seriesUDPData.episodes.push(seriesSubscriberData?.PriorityEpisodeTitle);
+    seriesSubscriberData?.MoreEpisodes &&
+        seriesUDPData.episodes.push(...seriesSubscriberData?.MoreEpisodes);
+
+    seriesUDPData["ChannelInfo"] = data?.ChannelInfo;
+
+    seriesUDPData["IsGeneric"] = Schedule?.IsGeneric || data?.IsGeneric;
+
+    let combinedQualityLevels: string[] = [];
+    let combinedEntitlements: any = [];
+    let expirationUTC;
+    let purchaseNetwork: Network;
+    const subscriptionPackages: SubscriptionPackages[] = [];
+    let combinedAudioIndicator: any = [];
+    let usablePlayActions: any = [];
+    let purchaseActions: any = [];
+    let purchasePackageActions: any = [];
+    let subscribeActions: PurchaseAction[] = [];
+    let isVod = false;
+    let purchasePackageExists = false;
+    purchaseNetwork =
+        seriesSubscriberData?.PriorityEpisodeTitle?.CatalogInfo?.Network;
+    seriesSubscriberData?.PriorityEpisodeTitle?.PurchaseActions?.length &&
+        seriesSubscriberData.PriorityEpisodeTitle?.PurchaseActions?.map(
+            (purchaseAction: any) => {
+                if (!isVod) {
+                    isVod = true;
+                }
+
+                purchaseActionsExists = true;
+
+                if (
+                    purchaseAction.ResourceType &&
+                    purchaseAction.ResourceType === "Package"
+                ) {
+                    purchasePackageExists = true;
+                    purchasePackageActions.push(purchaseAction);
+                } else {
+                    purchaseActions.push(purchaseAction);
+                }
+
+                // Subscription Package
+                if (
+                    purchaseAction.TransactionType === transactionType.SUBSCRIBE
+                ) {
+                    subscribeActions.push(purchaseAction);
+                    isSubscribe = true;
+                } else if (
+                    purchaseAction.TransactionType === transactionType.RENT
+                ) {
+                    isRent = true;
+                }
+
+                // Combined Quality Levels
+                purchaseAction.QualityLevels &&
+                    combinedQualityLevels.push(...purchaseAction.QualityLevels);
+            }
+        );
+
+    if (subscribeActions.length > 0) {
+        subscriptionPackages.push({
+            purchaseNetwork,
+            purchaseActions: subscribeActions,
+        });
+    }
+
+    // Play Actions
+    if (seriesSubscriberData?.PriorityEpisodeTitle?.PlayActions?.length) {
+        seriesSubscriberData?.PriorityEpisodeTitle?.PlayActions?.length > 0 &&
+            seriesSubscriberData.PriorityEpisodeTitle?.PlayActions?.map(
+                (playAction: any) => {
+                    if (!isVod) {
+                        isVod = true;
+                    }
+
+                    // Usable play actions
+                    if (filterUsablePlayActions(playAction)) {
+                        playAction["Tags"] =
+                            seriesSubscriberData?.PriorityEpisodeTitle?.CatalogInfo?.Tags;
+                        playAction["Bookmark"] =
+                            seriesSubscriberData?.PriorityEpisodeTitle?.Bookmark;
+                        playAction["CatalogInfo"] =
+                            seriesSubscriberData?.PriorityEpisodeTitle?.CatalogInfo;
+                        playAction["Id"] =
+                            seriesSubscriberData?.PriorityEpisodeTitle?.Id;
+                        usablePlayActions.push(playAction);
+                        playActionsExists = true;
+                    }
+
+                    // Restrictions
+                    playAction.Restrictions?.length &&
+                        combinedEntitlements.push(...playAction.Restrictions);
+
+                    // Expiry attribute
+                    expirationUTC =
+                        playAction.ExpirationUtc || playAction.CatchupEndUtc;
+
+                    // Combined Quality Levels
+                    combinedQualityLevels.push(
+                        playAction.VideoProfile.QualityLevel
+                    );
+
+                    //combined Audio indicators
+                    let audioEntries = playAction.VideoProfile?.AudioTags
+                        ? getAudioTags(
+                            Object.keys(playAction.VideoProfile?.AudioTags)
+                        )
+                        : [];
+                    audioEntries &&
+                        combinedAudioIndicator.push(...audioEntries);
+                }
+            );
+    } else if (subscriberPlayOptionsData?.Vods?.length) {
+        subscriberPlayOptionsData?.Vods?.map((vod: any) => {
+            vod?.PurchaseActions?.length &&
+                vod?.PurchaseActions?.map((purchaseAction: any) => {
+                    purchaseActionsExists = true;
+
+                    // Subscription Package
+                    if (
+                        purchaseAction.TransactionType ===
+                        transactionType.SUBSCRIBE
+                    ) {
+                        subscribeActions.push(purchaseAction);
+                        isSubscribe = true;
+                    } else if (
+                        purchaseAction.TransactionType === transactionType.RENT
+                    ) {
+                        isRent = true;
+                    }
+
+                    // Combined Quality Levels
+                    purchaseAction.QualityLevels &&
+                        combinedQualityLevels.push(
+                            ...purchaseAction.QualityLevels
+                        );
+                });
+
+            // Play Actions
+            vod?.PlayActions?.length > 0 &&
+                vod?.PlayActions?.map((playAction: any) => {
+                    if (!isVod) {
+                        isVod = true;
+                    }
+
+                    // Usable play actions
+                    if (filterUsablePlayActions(playAction)) {
+                        playAction["Tags"] = vod?.CatalogInfo?.Tags;
+                        playAction["Bookmark"] = vod?.Bookmark;
+                        playAction["CatalogInfo"] = vod?.CatalogInfo;
+                        playAction["Id"] = vod?.Id;
+                        usablePlayActions.push(playAction);
+                    }
+
+                    // Restrictions
+                    playAction.Restrictions?.length &&
+                        combinedEntitlements.push(...playAction.Restrictions);
+
+                    // Expiry attribute
+                    expirationUTC =
+                        playAction.ExpirationUtc || playAction.CatchupEndUtc;
+
+                    // Combined Quality Levels
+                    combinedQualityLevels.push(
+                        playAction.VideoProfile.QualityLevel
+                    );
+
+                    //combined Audio indicators
+                    let audioEntries = playAction.VideoProfile?.AudioTags
+                        ? getAudioTags(
+                            Object.keys(playAction.VideoProfile?.AudioTags)
+                        )
+                        : [];
+                    audioEntries &&
+                        combinedAudioIndicator.push(...audioEntries);
+                });
+        });
+    }
+
+    if (
+        !seriesUDPData.episodes.length &&
+        seriesSubscriberData?.CatalogInfo?.Seasons?.length
+    ) {
+        // This logic handles "Default Season"
+        seriesUDPData.episodes.push(
+            seriesSubscriberData?.CatalogInfo?.Seasons[0]
+        );
+    }
+
+    seriesUDPData["combinedAudioIndicator"] = sortInorder(
+        combinedAudioIndicator
+    );
+    seriesUDPData["IsVOD"] = isVod;
+    seriesUDPData["statusText"] = [];
+    seriesUDPData["playActionsExists"] = playActionsExists;
+    seriesUDPData["purchasePackageExists"] = purchasePackageExists;
+    seriesUDPData["purchaseActions"] = purchaseActions;
+    seriesUDPData["purchasePackageActions"] = purchasePackageActions;
+    seriesUDPData["subscriptionPackages"] = subscriptionPackages;
+    seriesUDPData["usablePlayActions"] = usablePlayActions;
+
+    // Banned Purchase Text
+    if (
+        !seriesUDPData.ChannelInfo?.channel?.isSubscribed &&
+        isSubscribe &&
+        !isRent &&
+        subscriptionPackages?.length
+    ) {
+        !playActionsExists &&
+            seriesUDPData["statusText"].push(
+                global.lStrings?.str_subscription_required
+            );
+    } else if (
+        data?.playSource === sourceTypeString.LIVE &&
+        !data?.channel?.isSubscribed
+    ) {
+        !playActionsExists &&
+            seriesUDPData["statusText"].push(
+                global.lStrings?.str_subscription_required
+            );
+    }
+
+    const currentCatchupSchedule = {
+        currentCatchupSchedule: getCurrentCatchupScheduleData(
+            subscriberPlayOptionsData?.CatchupSchedules,
+            data
+        ),
+    };
+
+    if (currentCatchupSchedule?.currentCatchupSchedule) {
+        seriesUDPData["currentCatchupSchedule"] =
+            currentCatchupSchedule.currentCatchupSchedule;
+        Schedule["Entitlements"] =
+            currentCatchupSchedule?.currentCatchupSchedule?.Entitlements;
+    }
+
+    const entitlements =
+        Schedule?.Entitlements ||
+        data?.Entitlements ||
+        subscriberPlayOptionsData?.Vods[0]?.CatalogInfo?.Entitlements ||
+        [];
+    combinedEntitlements.push(...entitlements);
+
+    let ipStatus = account?.ClientIpStatus || {};
+    if (!config.inhomeDetection.useSubscriberInHome) {
+        // networkIHD data
+        const inHomeValue =
+            networkIHD?.status === "inHome" ||
+            config.inhomeDetection.inHomeDefault;
+        ipStatus["InHome"] = inHomeValue
+            ? RestrictionValue.Yes
+            : RestrictionValue.No;
+    }
+
+    const pbrCheck: boolean = account?.PbrOverride;
+    seriesUDPData["isPlayable"] = pbrCheck;
+
+    // Status Text
+    if (expirationUTC) {
+        seriesUDPData["statusText"].push(timeLeft(expirationUTC));
+        seriesUDPData["isExpiringSoon"] = isExpiringSoon(seriesUDPData);
+    }
+
+    const seriesId = seriesSubscriberData?.CatalogInfo?.Id;
+    const startTimeUtc = undefined;
+    const stationId = undefined;
+    const channelNumber = undefined;
+
+    let dvrPlayActions = DvrButtonAction.None;
+    let hasCloudDvr = false;
+    if (account) {
+        hasCloudDvr = account.DvrCapability === DvrCapabilityType.CLOUDDVR;
+    }
+    const isRecordingBlocked = !validateEntitlements(
+        combinedEntitlements,
+        recorders?.recorders
+    );
+    if (
+        hasCloudDvr &&
+        seriesSubscriberData &&
+        seriesSchedulesData &&
+        recorders &&
+        recorders?.recorders &&
+        recorders?.recorders?.length &&
+        allSubcriptionGroups &&
+        liveSchedules &&
+        seriesSubscriberData.CatalogInfo &&
+        !isRecordingBlocked
+    ) {
+        dvrPlayActions = calculateSeriesButtonAction(
+            seriesId,
+            startTimeUtc,
+            stationId,
+            channelNumber,
+            entitlements,
+            recordedSubscriptionGroups,
+            scheduledSubscriptionGroups,
+            seriesSchedulesData,
+            allSubcriptionGroups,
+            [],
+            recorders.recorders,
+            hasCloudDvr,
+            channelMap
+        );
+    }
+
+    seriesUDPData["PbrOverride"] = account?.PbrOverride;
+    seriesUDPData["SourceIndicators"] = undefined;
+
+    // Play DVR CTA
+    let playDvr = false;
+    let subscriptionGroupForProgram;
+    let subscriptionItemForThisSeries;
+    if (data?.SeriesId || data?.SubscriptionItems) {
+        const sg = recordedSubscriptionGroups?.SubscriptionGroups?.find(
+            (sg: any) => sg?.SeriesDetails?.SeriesId == data?.SeriesId
+        );
+        const si = sg?.SubscriptionItems?.find(
+            (si: any) =>
+                si?.ProgramDetails?.UniversalSeriesId === data?.SeriesId
+        );
+        const filteredRecording = recordedSubscriptionGroups?.SubscriptionGroups?.filter(
+            (item: any) => {
+                return item.SubscriptionItems.length > 0;
+            }
+        );
+
+        if (data && filteredRecording) {
+            if (data?.Schedule) {
+                subscriptionGroupForProgram = filteredRecording?.find(
+                    (sg: any) =>
+                        sg?.SubscriptionItems?.find(
+                            (si: any) =>
+                                si &&
+                                si.ProgramDetails &&
+                                (si.ItemState === DvrItemState.RECORDED ||
+                                    si.ItemState === DvrItemState.RECORDING) &&
+                                si.ProgramDetails.UniversalProgramId ===
+                                data?.Schedule?.ProgramId
+                        )
+                );
+
+                subscriptionItemForThisSeries = subscriptionGroupForProgram?.SubscriptionItems?.find(
+                    (si: any) =>
+                        si &&
+                        si.ProgramDetails &&
+                        (si.ItemState === DvrItemState.RECORDED ||
+                            si.ItemState === DvrItemState.RECORDING) &&
+                        si.ProgramDetails.UniversalProgramId ===
+                        data?.Schedule?.ProgramId
+                );
+            } else {
+                //DVR Manager Feed will not be containing any Schedules
+                subscriptionGroupForProgram = filteredRecording?.find(
+                    (sg: any) =>
+                        sg?.SubscriptionItems?.find(
+                            (si: any) =>
+                                si &&
+                                si.ProgramDetails &&
+                                (si.ItemState === DvrItemState.RECORDED ||
+                                    si.ItemState === DvrItemState.RECORDING) &&
+                                si?.ProgramDetails?.UniversalSeriesId ===
+                                data?.SeriesDetails?.SeriesId
+                        )
+                );
+
+                subscriptionItemForThisSeries = subscriptionGroupForProgram?.SubscriptionItems?.find(
+                    (si: any) =>
+                        si &&
+                        si.ProgramDetails &&
+                        (si.ItemState === DvrItemState.RECORDED ||
+                            si.ItemState === DvrItemState.RECORDING) &&
+                        si?.ProgramDetails?.UniversalSeriesId ===
+                        data?.SeriesDetails?.SeriesId
+                );
+            }
+
+            if (
+                subscriptionItemForThisSeries &&
+                subscriptionItemForThisSeries?.PlayInfo &&
+                subscriptionItemForThisSeries?.PlayInfo?.length
+            ) {
+                // We have an subscription Item with correct state, add CTA
+                const entitlements = removeEntitlementsAbbreviationsAndSort(
+                    subscriptionItemForThisSeries.PlayInfo[0].Entitlements
+                );
+                combinedEntitlements?.push(
+                    ...subscriptionItemForThisSeries.PlayInfo[0].Entitlements
+                );
+
+                playDvr =
+                    isInHome(entitlements, ipStatus) && !isRecordingBlocked;
+
+                seriesUDPData["playDvr"] = playDvr;
+                seriesUDPData[
+                    "subscriptionItemForProgram"
+                ] = subscriptionItemForThisSeries;
+            }
+        } else if (si) {
+            if (si && si?.PlayInfo && si?.PlayInfo?.length) {
+                // We have an subscription Item with correct state, add CTA
+                const entitlements = removeEntitlementsAbbreviationsAndSort(
+                    si.PlayInfo[0].Entitlements
+                );
+                combinedEntitlements?.push(...si.PlayInfo[0].Entitlements);
+
+                playDvr =
+                    isInHome(entitlements, ipStatus) && !isRecordingBlocked;
+
+                seriesUDPData["playDvr"] = playDvr;
+                seriesUDPData["subscriptionItemForProgram"] = si;
+            }
+        }
+    }
+
+    combinedEntitlements = removeEntitlementsAbbreviationsAndSort(
+        combinedEntitlements
+    );
+    seriesUDPData["combinedEntitlements"] = combinedEntitlements;
+
+    seriesUDPData["isInHome"] = isInHome(combinedEntitlements, ipStatus);
+    if (seriesUDPData["isInHome"] && combinedEntitlements) {
+        combinedEntitlements = combinedEntitlements.filter(
+            (entitle: string) =>
+                entitle !== pbr.RestrictionsType.OUTOFHOME_BLOCKED
+        );
+    }
+
+    // Call to action buttons
+    // Play Live, Resume, PlayVod, Play, Restart, Rent, Buy, RentBuy, Unsubscribe, Subscribe, WaysToWatch, Trailer, Favorite, Unfavorite, Upcoming, Episodes, Record, Packages, Downlaod
+
+    const [ctaButtonGroup, ppvInfo] = getCTAButtons(
+        usablePlayActions,
+        purchaseActions,
+        subscribeActions,
+        null,
+        seriesUDPData,
+        seriesSchedulesData,
+        dvrPlayActions,
+        true,
+        currentCatchupSchedule,
+        subscriberPlayOptionsData,
+        channelMap,
+        account,
+        seriesSubscriberData,
+        playDvr,
+        ipStatus,
+        data,
+        startDateFromEPG,
+        endDateFromEPG,
+        channelRights,
+        isFromEPG,
+        StationIdFromEPG,
+        hasFeatureIosCarrierBilling
+    );
+
+    if (seriesUDPData?.Bookmark) {
+        const {
+            RuntimeSeconds = undefined,
+            TimeSeconds = undefined,
+        } = seriesUDPData?.Bookmark;
+
+        if (RuntimeSeconds && TimeSeconds >= 0) {
+            seriesUDPData["timeLeft"] = durationInDaysHoursMinutes(
+                RuntimeSeconds - TimeSeconds
+            );
+        }
+    }
+
+    seriesUDPData["ctaButtons"] = ctaButtonGroup;
+    seriesUDPData["ppvInfo"] = ppvInfo;
+    //CatchupEndUtc time
+    const catchupEndUtc =
+        seriesUDPData?.currentCatchupSchedule?.Channel?.LastCatchupEndUtc ||
+        seriesUDPData?.ChannelInfo?.Channel?.LastCatchupEndUtc;
+    if (
+        !expirationUTC &&
+        seriesUDPData?.SourceIndicators?.IsRestart &&
+        catchupEndUtc
+    ) {
+        seriesUDPData["isExpiringSoon"] = isExpiringSoon(seriesUDPData);
+        seriesUDPData["statusText"].push(timeLeft(catchupEndUtc));
+    }
+
+    seriesUDPData["description"] =
+        seriesDiscoveryData?.Description ||
+        seriesUDPData?.ChannelInfo?.Schedule?.Description;
+
+    // Status Text Order: Banned Purchase Text, Watched Text, Playback restricts
+    if (combinedEntitlements && combinedEntitlements.length) {
+        for (let entitlement of combinedEntitlements) {
+            const restrictionText = getRestrictionsText(entitlement);
+            restrictionText && seriesUDPData.statusText.push(restrictionText);
+        }
+    }
+
+    seriesUDPData["assetType"] =
+        generateType(seriesDiscoveryData, seriesUDPData.SourceType) ||
+        seriesDiscoveryData?.assetType ||
+        seriesSubscriberData?.assetType;
+
+    seriesUDPData.ChannelInfo?.Service?.QualityLevel &&
+        combinedQualityLevels.push(
+            seriesUDPData.ChannelInfo.Service.QualityLevel
+        );
+
+    // Remove duplicates and Sort Quality Levels with order
+    combinedQualityLevels = generalizeQuality(combinedQualityLevels);
+    seriesUDPData["combinedQualityLevels"] = sortInorder(
+        combinedQualityLevels,
+        orderedQualityLevels
+    );
+
+    //adding the durationMinutesString.
+    if (seriesUDPData?.ChannelInfo?.Schedule) {
+        let startUtc: string | undefined;
+        let endUtc: string | undefined;
+        if (seriesUDPData?.ChannelInfo?.Schedule || Schedule) {
+            startUtc =
+                seriesUDPData?.ChannelInfo?.Schedule?.StartUtc ||
+                Schedule?.StartUtc;
+            endUtc =
+                seriesUDPData?.ChannelInfo?.Schedule?.EndUtc ||
+                Schedule?.EndUtc;
+        } else if (seriesSubscriberData) {
+            if (data?.assetType?.contentType === "EPISODE") {
+                if (data?.CatalogInfo) {
+                    startUtc = data?.CatalogInfo?.StartUtc;
+                    endUtc = data?.CatalogInfo?.EndUtc;
+                }
+            } else {
+                startUtc =
+                    seriesSubscriberData?.PriorityEpisodeTitle?.CatalogInfo
+                        ?.StartUtc;
+                endUtc =
+                    seriesSubscriberData?.PriorityEpisodeTitle?.CatalogInfo
+                        ?.EndUtc;
+            }
+        }
+        if (startUtc && endUtc) {
+            const startEpoc = Date.parse(startUtc);
+            const endEpoc = Date.parse(endUtc);
+            const RuntimeSeconds = ((endEpoc - startEpoc) / 1000).toFixed(1);
+            seriesUDPData["durationMinutesString"] =
+                (RuntimeSeconds &&
+                    durationInHoursMinutes({ RuntimeSeconds })) ||
+                "";
+        }
+    }
+
+    if (seriesUDPData?.ChannelInfo?.Channel) {
+        const { Channel } = seriesUDPData?.ChannelInfo;
+        seriesUDPData.ChannelInfo.Channel["name"] =
+            getChannelName(Channel) || Schedule?.channelName;
+        seriesUDPData.ChannelInfo.Channel["logoUri"] = Channel?.LogoUri && {
+            uri: Channel?.LogoUri,
+        };
+    }
+
+    seriesUDPData["statusText"] = filterStatusList(
+        seriesUDPData["statusText"],
+        seriesUDPData["ctaButtons"]
+    );
+
+    if (
+        !seriesUDPData?.ChannelInfo &&
+        data?.playSource === sourceTypeString.UPCOMING &&
+        Schedule
+    ) {
+        seriesUDPData["ChannelInfo"] = { Schedule };
+    }
+
+    return seriesUDPData;
+};
