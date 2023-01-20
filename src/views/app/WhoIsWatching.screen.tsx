@@ -191,6 +191,11 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
                 <View />
               );
             })}
+            {userProfiles.length < 8 ? (
+            <View style={{ marginBottom: 120 }}>
+              <MFUserProfile navigation={props.navigation} />
+            </View>
+          ) : undefined}
           </View>
         </View>
       ) : (

@@ -45,6 +45,7 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
   const profileRef = Array(8)
     .fill(0)
     .map(() => useRef<PressableProps>(null));
+  // const addButtonRef = useRef<PressableProps>(null);
   const currentContext: any = useContext(GlobalContext);
   // console.log('data inside context',currentContext);
   const getProfiles = async () => {
@@ -71,19 +72,22 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
     // @ts-ignore
     if (!evt.tag && evt.eventType) {
       console.log("evt.eventType", evt);
-      editFocused && (evt.eventType === "right" || evt.eventType === "swipeRight")
+      editFocused &&
+      (evt.eventType === "right" || evt.eventType === "swipeRight")
         ? profileRef[
-            focused < 8 ? focused + 1 : focused
+            focused < userProfiles.length - 1 ? focused + 1 : userProfiles.length
             // @ts-ignore
-          ].current?.setNativeProps({
+          ]?.current?.setNativeProps({
             hasTVPreferredFocus: true,
           })
-        : editFocused && (evt.eventType === "left" || evt.eventType === "swipeLeft")
+        : editFocused &&
+          (evt.eventType === "left" || evt.eventType === "swipeLeft")
         ? // @ts-ignore
           profileRef[focused > 0 ? focused - 1 : 0].current?.setNativeProps({
             hasTVPreferredFocus: true,
           })
         : null;
+
       lastEvent = evt.eventType;
       setLastEventType(evt.eventType);
     }
@@ -206,7 +210,7 @@ const ProfileScreen: React.FunctionComponent<ProfileScreenProps> = (
           })}
           {userProfiles.length < 8 ? (
             <View style={{ marginBottom: 120 }}>
-              <MFUserProfile navigation={props.navigation} />
+              <MFUserProfile ref={profileRef[userProfiles.length]} navigation={props.navigation} />
             </View>
           ) : undefined}
         </View>

@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -9,8 +10,8 @@ import {
   View,
   ScrollView,
   Modal,
+  FlatList,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -237,15 +238,17 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   const halfOpenOffset = Dimensions.get("screen").width * 0.25;
   const fullCloseOffset = Dimensions.get("screen").width * 0.5;
   const fullOpenOffset = 0;
-  const [menuList, setMenuList] = useState<Array<any>>();
+  const [menuList, setMenuList] = useState<Array<any>>([]);
   const [expanded, setExpanded] = useState(props.open);
   const [subMenuList, setSubMenuList] = useState<Array<any>>([]);
   const [focusedMenu, setFocusedMenu] = useState(0);
-  const [focusedSubMenu, setFocusedSubMenu] = useState<any>(0);
+  const [focusedSubMenu, setFocusedSubMenu] = useState<any>(-1);
   const [selectedMenu, setSelectedMenu] = useState<any>();
   const [selectedSubMenu, setSelectedSubMenu] = useState("");
   const [clearFocused, setClearFocused] = useState(false);
-  const menuRef = filterData.map(() => useRef<PressableProps>(null));
+  const menuRef = Array(20)
+    .fill(0)
+    .map(() => useRef<PressableProps>(null));
   const subMenuFirstRef = useRef<PressableProps>(null);
   const [menuHasFocus, setMenuHasFocus] = useState(true);
   const offset = useSharedValue(fullCloseOffset);
@@ -285,30 +288,49 @@ const BrowseFilter = (props: BrowseFilterProps) => {
     console.log("browse filter is closed");
     offset.value = fullCloseOffset;
     setExpanded(false);
-    props.setOpenMenu(false)
+    props.setOpenMenu(false);
   };
   const onFocusMenu = (name: any, index: number) => {
-    // @ts-ignore
+    console.log("onFocusMenu:index", index);
     setFocusedMenu(index);
-    const subMenu = filterData.find((item) => {
-      return item.Name === name.Name;
-    })?.Pivots;
-    setSubMenuList(subMenu ? subMenu : []);
+    if (name !== "clear") {
+      const subMenu = filterData.find((item) => {
+        return item.Name === name.Name;
+      })?.Pivots;
+      setSubMenuList(subMenu ? subMenu : []);
+    }
   };
   const onFocusBar = () => {
+    try {
+      console.log("Browse filter bar is focussed: menuHasFocus-", menuHasFocus);
     if (!menuHasFocus) {
-      // @ts-ignore
-      menuRef[focusedMenu].current?.setNativeProps({
+      console.log(
+        "Browse filter bar ==> menu is focussed: menuRef[focusedMenu]",
+        menuRef[focusedMenu]
+      );
+      menuRef[focusedMenu]?.current?.setNativeProps({
         hasTVPreferredFocus: true,
       });
       setFocusedSubMenu(null);
       setMenuHasFocus(true);
     } else {
+      console.log(
+        "Browse filter menu ==> bar is focussed: subMenuFirstRef",
+        subMenuFirstRef
+      );
       setMenuHasFocus(false);
+      // subMenuFirstRef.current?.current.viewConfig.validAttributes.hasTVPreferredFocus = true;
       // @ts-ignore
-      subMenuFirstRef.current?.setNativeProps({
-        hasTVPreferredFocus: true,
-      });
+      subMenuList.length === 0
+        ? menuRef[focusedMenu]?.current?.setNativeProps({
+            hasTVPreferredFocus: true,
+          })
+        : subMenuFirstRef?.current?.setNativeProps({
+            hasTVPreferredFocus: true,
+          });
+    }
+    } catch (error) {
+      console.log("Error",error)
     }
   };
   return (
@@ -329,8 +351,10 @@ const BrowseFilter = (props: BrowseFilterProps) => {
     >
       <Animated.View style={[styles.container, animatedStyles]}>
         <View style={styles.innerContainer}>
-          <>
-            {menuList?.map((item, index) => {
+          <FlatList
+            data={menuList}
+            keyExtractor={(item) => item.Id}
+            renderItem={({ item, index }) => {
               return (
                 <Pressable
                   // @ts-ignore
@@ -346,6 +370,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                       : styles.menuItem
                   }
                   onFocus={() => {
+                    clearFocused ? setClearFocused(false) : null;
                     setSelectedMenu(item);
                     onFocusMenu(item, index);
                     // setFocusedSubMenu(null)
@@ -372,74 +397,93 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                   )}
                 </Pressable>
               );
-            })}
-            <TouchableOpacity
-              style={styles.touchableBar}
-              onFocus={onFocusBar}
-            ></TouchableOpacity>
-          </>
-          <Pressable
-            // @ts-ignore
-            hasTVPreferredFocus={false}
-            style={
-              clearFocused
-                ? [
-                    styles.menuItem,
-                    {
-                      borderRadius: 6,
-                      height: 62,
-                      backgroundColor: "#063961",
-                      alignContent: "center",
-                      justifyContent: "center",
-                    },
-                  ]
-                : [
-                    styles.menuItem,
-                    {
-                      backgroundColor: "#3A3A3B",
-                      height: 62,
-                      alignContent: "center",
-                      justifyContent: "center",
-                    },
-                  ]
-            }
-            onFocus={() => {
-              setClearFocused(true);
-              setFocusedMenu(-1);
-              // setFocusedSubMenu(null)
             }}
-            onBlur={() => {
-              setClearFocused(false);
+            ListFooterComponentStyle={{
+              width: "100%",
+              height: 120,
+              justifyContent: "flex-end",
             }}
-            onPress={() => {
-              //TODO: Write logic for clear function
-            }}
-          >
-            <Text
-              style={{
-                ...styles.MenuItemText,
-                color: "white",
-                textAlign: "center",
-                fontSize: 25,
-                fontWeight: "600",
-                alignSelf: "center",
-              }}
-            >
-              Clear Focused
-            </Text>
-          </Pressable>
-        </View>
-        <View style={styles.subMenuContainer}>
-          <ScrollView>
-            {subMenuList.map((item, i) => {
+            ListFooterComponent={() => {
               return (
                 <Pressable
                   // @ts-ignore
-                  ref={i === 0 ? subMenuFirstRef : null}
-                  // hasTVPreferredFocus={i === 0}
-                  key={i}
+                  ref={menuRef[menuList.length]}
                   style={
-                    focusedSubMenu === i
+                    focusedMenu === menuList.length
+                      ? [
+                          styles.menuItem,
+                          {
+                            // marginTop: 10,
+                            borderRadius: 6,
+                            height: 62,
+                            backgroundColor: "#063961",
+                            alignContent: "center",
+                            justifyContent: "center",
+                          },
+                        ]
+                      : [
+                          styles.menuItem,
+                          {
+                            // marginTop: 10,
+                            backgroundColor: "#3A3A3B",
+                            height: 62,
+                            alignContent: "center",
+                            justifyContent: "center",
+                          },
+                        ]
+                  }
+                  onFocus={() => {
+                    console.log("on Clear focus");
+                    onFocusMenu("clear", menuList.length);
+                    // menuRef[0]?.current?.setNativeProps({
+                    //   hasTVPreferredFocus: true,
+                    // });
+                    // setClearFocused(true);
+                    // setSubMenuList([]);
+                    // setFocusedMenu(menuList.length);
+
+                    // setFocusedSubMenu(null)
+                  }}
+                  // onBlur={() => {
+                  //   console.log("Not on Clear focus");
+                  //   setClearFocused(false);
+                  // }}
+                  onPress={() => {
+                    //TODO: Write logic for clear function
+                    console.log("TODO: Write logic for clear function");
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...styles.MenuItemText,
+                      color: "white",
+                      textAlign: "center",
+                      fontSize: 25,
+                      fontWeight: "600",
+                      alignSelf: "center",
+                    }}
+                  >
+                    Clear Focused
+                  </Text>
+                </Pressable>
+              );
+            }}
+          />
+          <TouchableOpacity style={styles.touchableBar} onFocus={onFocusBar} />
+        </View>
+        <View style={styles.subMenuContainer}>
+          <FlatList
+            data={focusedMenu === menuList.length ? [] : subMenuList}
+            keyExtractor={(item) => item.Id}
+            renderItem={({ item, index }) => {
+              return (
+                <Pressable
+                  // @ts-ignore
+                  ref={index === 0 ? subMenuFirstRef : null}
+                  // hasTVPreferredFocus={i === 0}
+                  key={index}
+                  style={
+                    focusedSubMenu === index
                       ? [
                           styles.subMenuItem,
                           {
@@ -450,7 +494,8 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                       : styles.subMenuItem
                   }
                   onFocus={() => {
-                    setFocusedSubMenu(i);
+                    console.log("submenu: index-", index);
+                    setFocusedSubMenu(index);
                   }}
                   onPress={() => {
                     // props.setOpenSubMenu(!props.subMenuOpen);
@@ -475,8 +520,8 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                   <Text style={styles.MenuItemText}>{item.Name}</Text>
                 </Pressable>
               );
-            })}
-          </ScrollView>
+            }}
+          />
         </View>
       </Animated.View>
     </Modal>
@@ -548,9 +593,11 @@ const styles = StyleSheet.create({
     marginRight: 25,
   },
   touchableBar: {
-    height: "100%",
+    height: "85%",
     width: 30,
     position: "absolute",
+    backgroundColor: __DEV__ ? "red" : "transparent",
     right: 0,
+    top: 50,
   },
 });

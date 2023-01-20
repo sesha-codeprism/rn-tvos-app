@@ -242,7 +242,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
             );
           })}
         </View>
-        <View>
+        {/* <View>
           <MFButton
             variant={MFButtonVariant.Contained}
             style={ShortCodeStyles.refreshCodePressableStyles}
@@ -263,7 +263,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
             textLabel={AppStrings.str_login_refresh_code}
             onPress={onRefresh}
           />
-        </View>
+        </View> */}
       </View>
     </View>
   );
