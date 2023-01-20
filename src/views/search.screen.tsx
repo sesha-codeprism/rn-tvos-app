@@ -1,3 +1,4 @@
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _ from "lodash";
 import React, { useRef, useState } from "react";
 import {
@@ -9,6 +10,7 @@ import {
   FlatList,
   useTVEventHandler,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import FastImage from "react-native-fast-image";
 import { searchItems } from "../../backend/subscriber/subscriber";
@@ -16,8 +18,9 @@ import { AppImages } from "../assets/images";
 import Search from "../components/MFSearch";
 import MFSwimLane from "../components/MFSwimLane";
 import MFText from "../components/MFText";
+import { Routes } from "../config/navigation/RouterOutlet";
 import { massageResult } from "../utils/assetUtils";
-import { ItemShowType } from "../utils/common";
+import { ContentType, ItemShowType } from "../utils/common";
 import { SCREEN_WIDTH } from "../utils/dimensions";
 import { GLOBALS } from "../utils/globals";
 import { getUIdef } from "../utils/uidefinition";
@@ -27,6 +30,7 @@ import { getUIdef } from "../utils/uidefinition";
 const { width, height } = Dimensions.get("window");
 
 interface SearchScreenProps {
+  navigation: NativeStackNavigationProp<any>;
   showSearchResults: boolean;
 }
 export interface SearchParam {
@@ -134,6 +138,9 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
               limitSwimlaneItemsTo={10}
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}
+              onPress={(event) => {
+                props.navigation.push(Routes.Details, { feed: event });
+              }}
               onFocus={() => {
                 console.log("MFSwimLane focused in search screen", index);
                 setTimeout(() => {
@@ -278,8 +285,18 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
               limitSwimlaneItemsTo={10}
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}
+              onPress={(event) => {
+                //@ts-ignore
+                if (event.assetType.contentType === "PERSON") {
+                  Alert.alert(
+                    "No implementation found",
+                    "Person details screen not implemented yet"
+                  );
+                } else {
+                  props.navigation.push(Routes.Details, { feed: event });
+                }
+              }}
               onFocus={() => {
-                console.log("MFSwimLane focused in search screen", index);
                 setTimeout(() => {
                   setSwimLaneFocused(true);
                 }, 500);
