@@ -65,6 +65,8 @@ import { isFeatureAssigned } from "../../../utils/helpers";
 import { queryClient } from "../../../config/queries";
 import { pinItem, unpinItem } from "../../../../backend/subscriber/subscriber";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
+import { Routes } from "../../../config/navigation/RouterOutlet";
 const { width, height } = Dimensions.get("window");
 
 interface AssetData {
@@ -183,7 +185,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
   const toggleSidePanel = () => {
     setOpen(open);
-    drawerRef.current.open();
+    drawerRef?.current?.open();
     // drawerRef.current.open();
   };
   const openNewRecording = () => {
@@ -562,6 +564,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         <Pressable
           style={{ width: 20, height: 20 }}
           onFocus={() => {
+            console.log(scrollViewRef);
             if (isCTAButtonFocused) {
               favoriteButtonRef.current?.setNativeProps({
                 hasTVPreferredFocus: true,
@@ -1366,6 +1369,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           updateSwimLaneKey={setSimilarItemsSwimLaneKey}
           limitSwimlane
           ItemsTo={10}
+          onPress={(event) => {
+            console.info("event", event);
+            // console.log(props.navigation.getState());
+            props.navigation.push(Routes.Details, { feed: event });
+          }}
         />
       </SafeAreaView>
     );
@@ -1531,7 +1539,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       >
         <View style={styles.containerOpacity}>
           {udpDataAsset ? (
-            <ScrollView key={`detailspagekey`} ref={onGetScrollView}>
+            <ScrollView key={`detailspagekey`} ref={scrollViewRef}>
               <View style={styles.detailsBlock}>
                 {renderShowcard()}
                 <View style={styles.secondBlock}>
