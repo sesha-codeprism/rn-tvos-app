@@ -44,6 +44,7 @@ import {
   createInitialFilterState,
 } from "./BrowseUtils/BrowseUtils";
 import { MFTabBarStyles } from "../../../../components/MFTabBar/MFTabBarStyles";
+import { Routes } from "../../../../config/navigation/RouterOutlet";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -100,7 +101,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   });
 
   const toggleMenu = () => {
-    console.log('Pressed on the browse filter', openMenu)
+    console.log("Pressed on the browse filter", openMenu);
     setOpenMenu(!openMenu);
     setOpenSubMenu(!openSubMenu);
   };
@@ -389,6 +390,9 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                       onFocus={updateFeed}
                       autoFocusOnFirstCard
                       selectedId={currentFeed?.Id}
+                      onPress={(event) => {
+                        props.navigation.push(Routes.Details, { feed: event });
+                      }}
                     />
                   </LinearGradient>
                 </View>

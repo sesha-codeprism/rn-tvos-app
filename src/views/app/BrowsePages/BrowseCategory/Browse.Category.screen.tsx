@@ -111,7 +111,10 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
             {feedDispatch !== null &&
             feedDispatch !== undefined &&
             feedDispatch.length > 0 ? (
-              <BrowseCategoryCarousel feedDispatch={feedDispatch} />
+              <BrowseCategoryCarousel
+                feedDispatch={feedDispatch}
+                navigation={props.navigation}
+              />
             ) : isFeedDispatchSet ? (
               <MFText
                 shouldRenderText

@@ -3,17 +3,18 @@ import { Alert, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useQuery } from "react-query";
 import { getDataFromUDL } from "../../../../../backend";
-import { parseUdl } from "../../../../../backend/udl/provider";
 import MFLoader from "../../../../components/MFLoader";
 import MFSwimLane from "../../../../components/MFSwimLane";
 import { MFTabBarStyles } from "../../../../components/MFTabBar/MFTabBarStyles";
 import MFText from "../../../../components/MFText";
 import { appUIDefinition } from "../../../../config/constants";
-import { massageSubscriberFeed } from "../../../../utils/assetUtils";
-import { ILibrarySet, SourceType } from "../../../../utils/common";
 import { getScaledValue, SCREEN_WIDTH } from "../../../../utils/dimensions";
-import { massageDiscoveryFeed } from "../../../../utils/DiscoveryUtils";
 import { getUIdef } from "../../../../utils/uidefinition";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { massageDiscoveryFeed } from "../../../../utils/DiscoveryUtils";
+import { SourceType } from "../../../../utils/common";
+import { Routes } from "../../../../config/navigation/RouterOutlet";
+
 const browsePageConfig: any = getUIdef("BrowseCategory")?.config;
 const scaledSnapToInterval = getScaledValue(browsePageConfig.snapToInterval);
 const extraPadding = {
@@ -22,6 +23,7 @@ const extraPadding = {
 
 interface BrowseCategoryCarouselProps {
   feedDispatch: any;
+  navigation: NativeStackNavigationProp<any>;
 }
 
 const BrowseCategoryCarousel: React.FunctionComponent<
@@ -35,7 +37,7 @@ const BrowseCategoryCarousel: React.FunctionComponent<
   const getFeedsList = async () => {
     if (props.feedDispatch) {
       const data = await getDataFromUDL(props.feedDispatch);
-      console.log(data);
+      console.log("Got response data", data.data);
       if (data) {
         return filterData(data.data);
       } else {
@@ -109,10 +111,16 @@ const BrowseCategoryCarousel: React.FunctionComponent<
                 <MFSwimLane
                   key={index}
                   feed={item}
-                  data={item.Items}
+                  data={massageDiscoveryFeed(
+                    { Items: item.Items },
+                    SourceType.VOD
+                  )}
                   limitSwimlaneItemsTo={16}
                   swimLaneKey={swimLaneKey}
                   updateSwimLaneKey={updateSwimLaneKey}
+                  onPress={(event) => {
+                    props.navigation.push(Routes.Details, { feed: event });
+                  }}
                 />
               );
             }}
