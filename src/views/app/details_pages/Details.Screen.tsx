@@ -1370,8 +1370,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           limitSwimlane
           ItemsTo={10}
           onPress={(event) => {
-            console.info("event", event);
-            // console.log(props.navigation.getState());
             props.navigation.push(Routes.Details, { feed: event });
           }}
         />
@@ -1397,7 +1395,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         <MFSwimLane
           //@ts-ignore
           feed={feedItem}
-          data={roles && massageCastAndCrew(roles, assetTypeObject.PERSON)}
+          data={
+            roles !== undefined
+              ? massageCastAndCrew(roles, assetTypeObject.PERSON)
+              : []
+          }
           swimLaneKey={castnCrewSwimLaneKey}
           updateSwimLaneKey={setCastnCrewSwimlaneKey}
           cardStyle="3x4"
