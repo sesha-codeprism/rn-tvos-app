@@ -17,11 +17,6 @@ const useShortCode = (url: string) => {
   return useRetringQuery(['shotcode', landingResponse, GLOBALS.deviceInfo], getShortCodeAuthenticate, {
     cacheTime: appUIDefinition.config.queryCacheTime,
     staleTime: appUIDefinition.config.queryStaleTime,
-    onError: (error: any) => {
-      MFGlobalsConfig.url = 'https://reachclient.dev.mr.tv3cloud.com/';
-      MFGlobalsConfig.stsUrl = '';
-      setLandingUrl('https://reachclient.dev.mr.tv3cloud.com/');
-    },
     enabled: !!GLOBALS.store && !!landingResponse
   });
 

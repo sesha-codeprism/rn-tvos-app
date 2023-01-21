@@ -1,6 +1,6 @@
 const GlobalsConfig = (function(){
 	let url = 'https://reachclient.dev.mr.tv3cloud.com/';
-	let stsUrl = 'https://ottapp-appgw-client-A.dev.mr.tv3cloud.com/Green/sts/';
+	let stsUrl = '';
     
 
 	return {

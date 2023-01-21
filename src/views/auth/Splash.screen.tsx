@@ -144,7 +144,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const _onAnimationFinish = () => {};
 
   const setDeviceInfo = async () => {
-    const deviceID = await DeviceInfo.getUniqueId;
+    const deviceID = DeviceInfo.getUniqueId();
     const isEmulator: boolean = await DeviceInfo.isEmulator();
     if (isEmulator) {
       // If device is running on emulator, mac address is same everrytime

@@ -11,12 +11,7 @@ const useLanding = (url: string) => {
   const landingResponse = useQuery(['landing', landingUrl], getLanding, {
     cacheTime: Infinity,
     staleTime: Infinity,
-    retry: false,
-    onError: (error: any) => {
-      MFGlobalsConfig.url = 'https://reachclient.dev.mr.tv3cloud.com/';
-      MFGlobalsConfig.stsUrl = '';
-      setLandingUrl('https://reachclient.dev.mr.tv3cloud.com/');
-    },
+    retry: 5,
     enabled: !!GLOBALS.store
   });
 
