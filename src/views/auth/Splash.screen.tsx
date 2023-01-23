@@ -33,11 +33,15 @@ import { massageSubscriberFeed } from "../../utils/Subscriber.utils";
 import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
 import { GlobalContext } from "../../contexts/globalContext";
-import { resetCaches } from "../../config/queries";
-import { useQuery } from "react-query";
+import {
+  invalidateQueryBasedOnSpecificKeys,
+  queryClient,
+  resetCaches,
+} from "../../config/queries";
+import { useQuery, useQueryClient } from "react-query";
 import { initUdls } from "../../../backend";
 import { generateGUID, makeRandomHexString } from "../../utils/guid";
-import useCurrentSlots from "../../customHooks/useCurrentSlots";
+import NotificationType from "../../@types/NotificationType";
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
@@ -68,7 +72,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   useEffect(() => {
     setDeviceInfo();
     const onDuplexMessage = (message: any) => {
-      if (message?.type === "DeviceDeleted") {
+      if (message?.type === NotificationType.DeviceDeleted) {
         const { payload: { deviceId = "" } = {} } = message;
         if (deviceId === GLOBALS.deviceInfo.deviceId) {
           // logout
@@ -77,6 +81,12 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
           resetCaches();
           GLOBALS.rootNavigation.replace(Routes.ShortCode);
         }
+      } else if (message?.type === NotificationType.dvrUpdated) {
+        console.log("DVR update notification received");
+        invalidateQueryBasedOnSpecificKeys(
+          "feed",
+          "udl://dvrproxy/viewable-subscription-items/"
+        );
       }
     };
     // proper way of adding handler

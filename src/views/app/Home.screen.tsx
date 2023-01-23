@@ -95,6 +95,13 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       } else {
         console.log("No hub to replace");
       }
+      const applicationHub = hubsResponse.find(
+        (element) => element?.IsApplicationHub
+      );
+      if (applicationHub) {
+        const indexOfHub = hubsResponse.indexOf(applicationHub);
+        hubsResponse.splice(indexOfHub, 1);
+      }
       setHubs(hubsResponse);
       setFeeds(hubsResponse[0]);
       GLOBALS.rootNavigation = props.navigation;

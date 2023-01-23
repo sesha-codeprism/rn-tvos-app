@@ -42,7 +42,7 @@ export function getProfiles() {
 
 export function getDataForUDL(query: string, pageNo: number = 0, shouldMassageData: boolean = true, shouldSendParams: boolean = true) {
     return useQuery(query, () => { return getUDLData(query, pageNo, shouldMassageData,) }, {
-        staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true, retry: 10, enabled: !!GLOBALS.currentSlots
+        staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime, keepPreviousData: true, retry: 10
     });
 }
 
@@ -104,4 +104,19 @@ export const resetSpecificQuery = async (key: any) => {
     queryClient.invalidateQueries({ queryKey: key }).then(() => {
         console.log('Invalidated', key, "query");
     });
+}
+
+export const invalidateQueryBasedOnSpecificKeys = (firstKey: string, secondKey: string) => {
+    queryClient
+        .invalidateQueries({
+            predicate: (query) =>
+                query.queryKey[0] === firstKey &&
+                //@ts-ignore
+                query.queryKey[1] === secondKey,
+        })
+        .then(() => {
+            console.log("Update done");
+        })
+        .catch((e: any) => console.log("Cannot find Query call", firstKey, secondKey, "due to", e));
+
 }
