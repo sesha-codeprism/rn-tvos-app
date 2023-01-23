@@ -12,10 +12,9 @@ export const getViewableSubscriptionStems = async (uri: string, params: any) => 
     const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr}v1/subscription-groups/`;
     const paramsObject = {
         "$type-filter": "all",
-        "$state-filter": "viewable-scheduled-failed",
+        "$state-filter": "viewable",
         "$orderby": "startdate",
-        //TODO: Fix this language hardcoding
-        "$lang": "en-US",
+        "$lang": lang,
         "storeId": DefaultStore.Id
     }
     const response = await GET({
@@ -25,7 +24,10 @@ export const getViewableSubscriptionStems = async (uri: string, params: any) => 
             Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
         },
     })
-    return response;
+    let data = response.data;
+    const viewableItems = data.SubscriptionGroups.filter((element: any) => element.SubscriptionItems.length > 0);
+    data.SubscriptionGroups = viewableItems;
+    return { data: data };
 }
 
 export const getScheduledSubscriptionGroups = async (uri: string, params: any) => {
@@ -34,8 +36,7 @@ export const getScheduledSubscriptionGroups = async (uri: string, params: any) =
         "$type-filter": "all",
         "$state-filter": "scheduled",
         "$orderby": "startdate",
-        //TODO: Fix this language hardcoding
-        "$lang": "en-US",
+        "$lang": lang,
         "storeId": DefaultStore.Id
     }
     const response = await GET({
@@ -52,10 +53,9 @@ export const getAllSubscriptionGroups = async (uri: string, params: any) => {
     const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr}v1/subscription-groups/`;
     const paramsObject = {
         "$type-filter": params?.type || "all",
-        "$state-filter": params?.state || "viewable-scheduled",
+        "$state-filter": params?.state || "viewable-scheduled-failed",
         "$orderby": params?.orderBy || "startdate",
-        //TODO: Fix this language hardcoding
-        "$lang": "en-US",
+        "$lang": lang,
         "storeId": DefaultStore.Id
     }
     const response = await GET({

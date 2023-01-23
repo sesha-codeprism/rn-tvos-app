@@ -42,7 +42,7 @@ export const getMassagedData = (uri: string, data: any) => {
         return massagedData;
       }
     } else if (udlID!.id.split("/")[0] === 'dvrproxy') {
-      const massagedData = massageDVRFeed(data.data);
+      const massagedData = massageDVRFeed(data.data, SourceType.DVR, "", undefined, false);
       return massagedData;
     } else {
       return data
