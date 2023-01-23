@@ -24,6 +24,7 @@ export interface MFViewAllButtonProps {
   onPress?: null | ((event: any) => void) | undefined;
   /** Function to execute when card is focused */
   onFocus?: null | ((event: any) => void) | undefined;
+  onViewAllFocus?: null | ((event: any) => void) | undefined;
   /** Feed that is being used to display */
   feed?: any;
 }
@@ -54,6 +55,7 @@ const MFViewAllButton: React.FunctionComponent<MFViewAllButtonProps> =
         onFocus={(event) => {
           console.log("MFViewAll focused", props.onFocus);
           props.onFocus && props.onFocus(event);
+          props.onViewAllFocus && props.onViewAllFocus(event);
         }}
         onPress={(event) => {
           _onPressed(event);

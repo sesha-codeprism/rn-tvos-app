@@ -90,6 +90,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           updateSwimLaneKey={props.updateSwimLaneKey}
           railContainerStyles={{}}
           libraryItems={props.data}
+          feed={props.feed}
           cardStyle={props.cardStyle}
           onPress={props.onPress}
           onBlur={(event) => {
@@ -122,33 +123,9 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
             />
           }
           shouldRenderFooter={showViewAll}
-          viewAll={
-            <MFViewAllButton
-              displayStyles={Styles.railTitle}
-              feed={props.feed}
-              displayText={
-                props.feed.NavigationTargetText &&
-                props.feed.NavigationTargetText.includes("{")
-                  ? format(props.feed.NavigationTargetText, props.feed.Name)
-                  : props.feed.NavigationTargetText!
-              }
-              style={
-                props.feed.ShowcardAspectRatio === layout2x3
-                  ? HomeScreenStyles.portraitCardStyles
-                  : HomeScreenStyles.landScapeCardStyles
-              }
-              imageStyle={
-                props.feed.ShowcardAspectRatio === layout2x3
-                  ? HomeScreenStyles.portraitCardImageStyles
-                  : HomeScreenStyles.landScapeCardImageStyles
-              }
-              focusedStyle={HomeScreenStyles.focusedStyle}
-              onPress={props.onViewAllPressed}
-              onFocus={props.onListFooterElementFocus}
-            />
-          }
           onListFooterElementOnPress={props.onListFooterElementOnPress}
           onListFooterElementFocus={props.onListFooterElementFocus}
+          onViewAllPressed={props.onViewAllPressed}
         />
       </View>
     );

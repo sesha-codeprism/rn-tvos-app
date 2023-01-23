@@ -1679,7 +1679,8 @@
     "enableMarquee": false,
     "metadataTemplate": "{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}",
     "limitSwimlaneItemsTo": 8,
-    "maxProfileNameLength": 20
+    "maxProfileNameLength": 20,
+    "viewAllPeekValue": 50
   },
   "onscreenLanguage": [
     {

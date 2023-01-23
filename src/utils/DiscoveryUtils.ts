@@ -252,6 +252,7 @@ export const setDefaultStore = async (storeresponse: any, bootstrapSelectors: an
             }
         }
 
+        //@ts-ignore
         DefaultStore.Id = defaultMainStore?.Id;
         return;
     }

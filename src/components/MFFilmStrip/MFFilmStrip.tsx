@@ -1,9 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
   StyleProp,
   StyleSheet,
   TextStyle,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
@@ -21,6 +22,8 @@ import MFViewAllButton from "./ViewAllComponent";
 import { SCREEN_WIDTH } from "../../utils/dimensions";
 import MFOverlay from "../MFOverlay";
 import MFMetaData from "../MFMetadata/MFMetaData";
+import { format } from "../../utils/DiscoveryUtils";
+import { appUIDefinition, layout2x3 } from "../../config/constants";
 // export interface FeedsObject {
 //   imageSource?: string;
 //   imageStyles?: StyleProp<ImageStyle>;
@@ -38,8 +41,6 @@ export interface MFFilmStripProps {
   titleStyles?: StyleProp<TextStyle>;
   /** Array of FeedObjects to be rendered in FilmStrip */
   dataSource?: Array<Feed>;
-  /** Component to be rendered at the end of the list. To enable View All feature*/
-  viewAll?: React.ReactElement;
   /**Component to be rendered when list is empty */
   listEmptyComponent?: React.ReactElement;
   /** Specify if the View All component should be rendered with the list*/
@@ -93,6 +94,9 @@ export interface MFFilmStripProps {
     | undefined;
   flatListStyle?: any;
   autoFocusOnFirstCard?: boolean;
+  /** Feed being rendered */
+  feed: Feed;
+  onViewAllPressed?: null | ((event: SubscriberFeed) => void) | undefined;
 }
 /**
  * Component that renders horizontal-scrolling collection of items
@@ -104,6 +108,37 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
     const flatListRef = useRef<FlatList>(null);
     const [dataSource, setDataSource] = useState([...(props.dataSource || [])]);
     const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
+    //@ts-ignore
+    const viewAllPeekValue = appUIDefinition.config?.viewAllPeekValue;
+
+    const dataArray: Array<SubscriberFeed> | undefined = Array.isArray(
+      props.libraryItems
+    )
+      ? props.libraryItems?.slice(0, props.limitSwimlaneItemsTo)
+      : props.libraryItems !== undefined
+      ? props.libraryItems[Object.keys(props.libraryItems)[0]]?.slice(
+          0,
+          props.limitSwimlaneItemsTo!
+        )
+      : [];
+
+    if(dataArray?.length && props.shouldRenderFooter){
+      // add view all
+      if(props.appendViewAll && props.viewAllPlacement === "Prepend"){
+        //@ts-ignore
+        dataArray.unshift({"viewAll": true});
+      }
+      if((props.viewAllPlacement === "Append" || !props.viewAllPlacement) ){
+        //@ts-ignore
+        dataArray.push({"viewAll": true});
+      }
+    }
+
+
+    const viewAllFocused  = (index: number) => {
+      flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: viewAllPeekValue });
+    }
+
     const _onFocus = (index: number) => {
       flatListRef.current?.scrollToIndex({ animated: true, index: index });
       if (props.isCircular) {
@@ -131,16 +166,8 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
           )
         : null;
     };
-    const dataArray: Array<SubscriberFeed> | undefined = Array.isArray(
-      props.libraryItems
-    )
-      ? props.libraryItems?.slice(0, props.limitSwimlaneItemsTo)
-      : props.libraryItems !== undefined
-      ? props.libraryItems[Object.keys(props.libraryItems)[0]]?.slice(
-          0,
-          props.limitSwimlaneItemsTo!
-        )
-      : [];
+
+
     const cardWidth = parseInt(props.style?.width?.toString() || "300");
 
     return (
@@ -178,29 +205,45 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
               data={dataArray}
               initialNumToRender={20}
               keyExtractor={(x, i) => i.toString()}
-              ListHeaderComponent={
-                props.appendViewAll && props.viewAllPlacement === "Prepend"
-                  ? props.shouldRenderFooter
-                    ? props.viewAll
-                    : null
-                  : null
-              }
               ListEmptyComponent={props.listEmptyComponent}
-              ListFooterComponent={
-                props.appendViewAll &&
-                (props.viewAllPlacement === "Append" || !props.viewAllPlacement)
-                  ? props.shouldRenderFooter
-                    ? props.viewAll
-                    : null
-                  : null
-              }
               getItemLayout={(data, index) => ({
                 length: cardWidth,
                 offset: cardWidth * index,
                 index,
               })}
-              renderItem={({ item, index }) => (
-                <MFLibraryCard
+              renderItem={({ item, index }) => {
+               if(item.viewAll){
+                return (
+                  <MFViewAllButton
+                  displayStyles={Styles.railTitle}
+                  feed={props.feed}
+                  displayText={
+                    props.feed.NavigationTargetText &&
+                    props.feed.NavigationTargetText.includes("{")
+                      ? format(props.feed.NavigationTargetText, props.feed.Name)
+                      : props.feed.NavigationTargetText!
+                  }
+                  style={
+                    props.feed.ShowcardAspectRatio === layout2x3
+                      ? HomeScreenStyles.portraitCardStyles
+                      : HomeScreenStyles.landScapeCardStyles
+                  }
+                  imageStyle={
+                    props.feed.ShowcardAspectRatio === layout2x3
+                      ? HomeScreenStyles.portraitCardImageStyles
+                      : HomeScreenStyles.landScapeCardImageStyles
+                  }
+                  focusedStyle={HomeScreenStyles.focusedStyle}
+                  onPress={props.onViewAllPressed}
+                  onFocus={(event) => {
+                    viewAllFocused(index);
+                    props.onListFooterElementFocus && props.onListFooterElementFocus(event);
+                  }}
+                />
+                )
+               }else {
+                return (
+                  <MFLibraryCard
                   // @ts-ignore
                   ref={index === 0 ? ref : null}
                   autoFocusOnFirstCard={
@@ -246,7 +289,9 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                   }}
                   onBlur={(event) => {}}
                 />
-              )}
+                )
+               }
+              }}
             />
           ) : (
             /** UDL data undefined.. So basically UDL call isn't implemented or call failed with some error code. */

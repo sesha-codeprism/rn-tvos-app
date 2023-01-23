@@ -13,17 +13,7 @@ test("MFFilmStripTest", () => {
       limitItemsTo={10}
       title={"Test Render title"}
       appendViewAll
-      viewAllPlacement={"Prepend"}
-      viewAll={
-        <MFViewAllButton
-          displayStyles={{
-            color: "white",
-            textAlign: "center",
-            textAlignVertical: "center",
-          }}
-          displayText={"View All"}
-        ></MFViewAllButton>
-      }
+      viewAllPlacement={"Prepend"} 
     />
   );
   const filmStripComponent = component.root.findByType(MFFilmStrip);
