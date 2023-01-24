@@ -1,18 +1,5 @@
 import React from "react";
-import {
-  GestureResponderEvent,
-  NativeSyntheticEvent,
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  TargetedEvent,
-  Text,
-  TextStyle,
-  ViewStyle,
-  View,
-  Dimensions,
-  Animated,
-} from "react-native";
+import { StyleSheet, View, Dimensions, Animated } from "react-native";
 interface MFProgressBarProps {
   backgroundColor: string;
   foregroundColor: string;
@@ -49,12 +36,12 @@ const { height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     height: 4,
-    width: '95%',
+    width: "95%",
     backgroundColor: "white",
     borderRadius: 30,
     overflow: "hidden",
     marginBottom: height * 0.005,
-    borderColor:'transparent'
+    borderColor: "transparent",
   },
   ProgressBar: {
     height: "100%",

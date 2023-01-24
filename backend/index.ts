@@ -1,7 +1,6 @@
-import { massageDVRFeed } from "../src/utils/assetUtils";
+import { massageDVRFeed, massageSubscriberFeed } from "../src/utils/assetUtils";
 import { SourceType } from "../src/utils/common";
 import { massageDiscoveryFeed } from "../src/utils/DiscoveryUtils";
-import { massageSubscriberFeed } from "../src/utils/Subscriber.utils";
 import { registerUdls, parseUdl, getList, UdlProviders } from "./udl/provider";
 
 export const initUdls = () => {

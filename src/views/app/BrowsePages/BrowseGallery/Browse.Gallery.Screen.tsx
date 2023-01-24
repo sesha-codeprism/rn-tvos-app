@@ -382,6 +382,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                     }}
                   >
                     <MFGridView
+                      //@ts-ignore
                       ref={cardRef}
                       dataSource={data}
                       style={HomeScreenStyles.portraitCardStyles}

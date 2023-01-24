@@ -106,6 +106,7 @@ export interface MFFilmStripProps {
  */
 const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
   ({ ...props }, ref: any) => {
+    // console.log(props.libraryItems);
     const flatListRef = useRef<FlatList>(null);
     const [dataSource, setDataSource] = useState([...(props.dataSource || [])]);
     const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
@@ -275,12 +276,15 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                       titlePlacement={props.titlePlacement}
                       overlayComponent={
                         <MFOverlay
-                          //@ts-ignore
                           renderGradiant={true}
                           showProgress={item.Bookmark! || false}
-                          progress={20}
+                          progress={item.progress ? item.progress * 100 : 20}
                           // displayTitle={item.title}
-                          bottomText={item.runtime}
+                          bottomText={
+                            item.metadataLine3 ||
+                            item.durationMinutesString ||
+                            ""
+                          }
                           // showRec={true}
                           // recType={"series"}
                         />
