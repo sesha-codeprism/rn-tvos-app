@@ -118,6 +118,7 @@ const BrowseCategoryCarousel: React.FunctionComponent<
                   limitSwimlaneItemsTo={16}
                   swimLaneKey={swimLaneKey}
                   updateSwimLaneKey={updateSwimLaneKey}
+                  renderViewAll={item.HasMore}
                   onPress={(event) => {
                     props.navigation.push(Routes.Details, { feed: event });
                   }}
