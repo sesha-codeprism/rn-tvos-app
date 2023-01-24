@@ -29,7 +29,7 @@ const MFText: React.FunctionComponent<MFTextProps> = (props) => {
 };
 
 MFText.defaultProps = {
-  adjustsFontSizeToFit: true,
+  adjustsFontSizeToFit: false,
   numberOfLines: 1,
 };
 
