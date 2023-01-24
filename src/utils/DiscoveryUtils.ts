@@ -129,7 +129,7 @@ export const getEpisodeInfo = (item: any): string | undefined => {
     }
     return seasonInfo.join(" ");
 };
-export const massageDiscoveryFeed = (
+const massageDiscoveryFeed = (
     feed: any,
     sourceType: SourceType,
     liveSchedules?: any

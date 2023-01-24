@@ -4,7 +4,6 @@ import { Feed } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { layout2x3 } from "../config/constants";
 import { NavigationTarget } from "../utils/analytics/consts";
-import { format } from "../utils/DiscoveryUtils";
 import { GLOBALS } from "../utils/globals";
 import { HomeScreenStyles } from "../views/app/Homescreen.styles";
 import Styles from "./MFButtonsVariants/MFButtonStyles";

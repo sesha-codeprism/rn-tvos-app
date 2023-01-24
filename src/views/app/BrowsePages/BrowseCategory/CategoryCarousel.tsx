@@ -11,9 +11,9 @@ import { appUIDefinition } from "../../../../config/constants";
 import { getScaledValue, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { getUIdef } from "../../../../utils/uidefinition";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { massageDiscoveryFeed } from "../../../../utils/DiscoveryUtils";
 import { SourceType } from "../../../../utils/common";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
+import { massageDiscoveryFeed } from "../../../../utils/assetUtils";
 
 const browsePageConfig: any = getUIdef("BrowseCategory")?.config;
 const scaledSnapToInterval = getScaledValue(browsePageConfig.snapToInterval);
