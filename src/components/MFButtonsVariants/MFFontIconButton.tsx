@@ -52,6 +52,8 @@ export interface MFFontIconProps {
   focusable?: boolean;
   /** Prop to decide if the Textlabel should be rendered */
   shoulRenderLabel?: boolean;
+  /** Props to control font icon auto-sizing */
+  shouldAutoSizeIcon?: boolean;
 }
 
 const MFFontIconButton: React.FunctionComponent<MFFontIconProps> =
@@ -96,6 +98,7 @@ const MFFontIconButton: React.FunctionComponent<MFFontIconProps> =
                 shouldRenderText
                 displayText={props.fontIcon}
                 textStyle={props.fontIconStyle}
+                adjustsFontSizeToFit={props.shouldAutoSizeIcon}
               />
             )}
             {props.shoulRenderLabel && (
@@ -124,6 +127,7 @@ const MFFontIconButton: React.FunctionComponent<MFFontIconProps> =
                 shouldRenderText
                 displayText={props.fontIcon}
                 textStyle={props.fontIconStyle}
+                adjustsFontSizeToFit={props.shouldAutoSizeIcon}
               />
             )}
           </React.Fragment>
@@ -139,6 +143,7 @@ MFFontIconButton.defaultProps = {
     fontFamily: globalStyles.fontFamily.icons,
   },
   shoulRenderLabel: true,
+  shouldAutoSizeIcon: true,
 };
 
 export default MFFontIconButton;

@@ -1499,7 +1499,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
   const renderRatingValues = () => {
     //@ts-ignore
-    const [first, second] = feed!.ratingValues || [];
+    const [first, second] = udpDataAsset!.ratingValues || [];
     return (
       <View style={styles.contentRatingsContainer}>
         {first && (
