@@ -29,19 +29,18 @@ import {
   getTVShows,
 } from "../../../backend/discovery/discovery";
 import useBootstrap from "../../customHooks/useBootstrapData";
-import { massageSubscriberFeed } from "../../utils/Subscriber.utils";
 import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
 import { GlobalContext } from "../../contexts/globalContext";
 import {
   invalidateQueryBasedOnSpecificKeys,
-  queryClient,
   resetCaches,
 } from "../../config/queries";
 import { useQuery, useQueryClient } from "react-query";
 import { initUdls } from "../../../backend";
 import { generateGUID, makeRandomHexString } from "../../utils/guid";
 import NotificationType from "../../@types/NotificationType";
+import { massageSubscriberFeed } from "../../utils/assetUtils";
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
