@@ -70,6 +70,11 @@ interface Ratings {
   title: string;
 }
 
+export interface TrendingItems {
+  Name: string,
+  Elements: string
+}
+
 interface OnScreenLanguage {
   title: string;
   languageCode: string;
@@ -95,7 +100,7 @@ interface GLOBALSType {
   browseGalleryData?: BrowseGallery;
   currentSlots: any
   channelMap: any
-  moviesAndTvShows?: any[];
+  moviesAndTvShows?: TrendingItems[];
   /** Async store data */
   store: {
     accessToken: string | null;
