@@ -173,7 +173,6 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
     };
 
     const cardWidth = parseInt(props.style?.width?.toString() || "300");
-
     return (
       <View style={[Styles.railContainer, props.railContainerStyles]}>
         {

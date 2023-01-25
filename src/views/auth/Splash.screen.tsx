@@ -3,14 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
 import AnimatedLottieView from "lottie-react-native";
-import {
-  View,
-  StyleSheet,
-  Image,
-  Dimensions,
-  Settings,
-  NativeModules,
-} from "react-native";
+import { View, StyleSheet, Image, Dimensions } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { processBootStrap } from "../../../backend/authentication/authentication";
@@ -36,11 +29,12 @@ import {
   invalidateQueryBasedOnSpecificKeys,
   resetCaches,
 } from "../../config/queries";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { initUdls } from "../../../backend";
 import { generateGUID, makeRandomHexString } from "../../utils/guid";
 import NotificationType from "../../@types/NotificationType";
 import { massageSubscriberFeed } from "../../utils/assetUtils";
+import { AppStrings } from "../../config/strings";
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
@@ -186,9 +180,14 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       "",
       SourceType.VOD
     );
+    const tvShowsString =
+      AppStrings?.str_search_catagory_tvshows || "Trending TV Shows";
+    const trendingMovieString =
+      AppStrings?.str_search_catagory_movie || "Trending Movies";
     GLOBALS.moviesAndTvShows = [
-      { "Trending TV Shows": massagedTVData },
-      { "Trending Movies": massagedMovieData },
+      //@ts-ignore
+      { Name: tvShowsString, Elements: massagedTVData },
+      { Name: trendingMovieString, Elements: massagedMovieData },
     ];
     console.log("movies", movies);
     console.log("TVShow", TVShow);

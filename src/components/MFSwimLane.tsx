@@ -58,6 +58,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
       (props.feed?.NavigationTargetVisibility ===
         NavigationTarget.CLIENT_DEFINED &&
         props.data?.length >= props.limitSwimlaneItemsTo!);
+
     return (
       <View style={{ flexDirection: "column" }}>
         <MFFilmStrip

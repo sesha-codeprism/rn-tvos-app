@@ -5,12 +5,12 @@ import {
   View,
   Dimensions,
   StyleSheet,
-  ImageBackground,
   SafeAreaView,
   FlatList,
   useTVEventHandler,
   TouchableOpacity,
   Alert,
+  ImageBackground,
 } from "react-native";
 import FastImage from "react-native-fast-image";
 import { searchItems } from "../../backend/subscriber/subscriber";
@@ -19,9 +19,10 @@ import Search from "../components/MFSearch";
 import MFSwimLane from "../components/MFSwimLane";
 import MFText from "../components/MFText";
 import { Routes } from "../config/navigation/RouterOutlet";
+import { AppStrings } from "../config/strings";
 import { massageResult } from "../utils/assetUtils";
-import { ContentType, ItemShowType } from "../utils/common";
-import { SCREEN_WIDTH } from "../utils/dimensions";
+import { ItemShowType } from "../utils/common";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/dimensions";
 import { GLOBALS } from "../utils/globals";
 import { getUIdef } from "../utils/uidefinition";
 
@@ -56,9 +57,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const [searchResult, setSearchResult] = useState<
     SearchResultObject[] | undefined
   >();
-  const [trendingData, setTrendingData] = useState<any>(
-    GLOBALS.moviesAndTvShows
-  );
+  const [trendingData, setTrendingData] = useState(GLOBALS.moviesAndTvShows);
   const [showTrending, setShowTrending] = useState(true);
   const [showSearchResults, setShowSearchResult] = useState(false);
   const [swimLaneKey, setSwimLaneKey] = useState("");
@@ -127,14 +126,15 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
           />
         )}
         renderItem={({ item, index }) => {
-          // console.log(item, item.Name);
+          // console.log(item, item.Name, item.name);
           return (
             <MFSwimLane
               // @ts-ignore
               ref={index === 0 ? firstCardRef : null}
               key={index}
+              // @ts-ignore
               feed={item}
-              data={item}
+              data={item.Elements}
               limitSwimlaneItemsTo={10}
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}
@@ -180,7 +180,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
             textAlign: "center",
             marginTop: 20,
           }}
-          displayText="No Results Found"
+          displayText={AppStrings?.str_search_no_result || "No Results Found"}
           shouldRenderText={true}
         />
         <MFText
@@ -192,7 +192,10 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
             textAlign: "center",
             marginTop: 10,
           }}
-          displayText={`Sorry, we couldn't find any content for ${searchString}`}
+          displayText={`${
+            AppStrings.str_search_no_result_key ||
+            "Sorry, we couldn't find any content for"
+          } ${searchString}`}
           shouldRenderText={true}
         />
       </View>
@@ -219,17 +222,11 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
             newArray[objMatch[itemIndex] - 1] = si;
           }
         });
-        // console.log("respData", respData);
+        console.log("respData", respData);
         const massagedData: SearchResultObject[] = [];
-        respData.forEach((item: {}, swimlaneIndex: number) => {
+        newArray.forEach((item: {}, swimlaneIndex: number) => {
+          console.log("Item is", item, "swimlaneIndex", swimlaneIndex);
           const searchResultsFeedName = Object.keys(item)[0];
-          // const items = Object.values(item)[0];
-          // let itemsList = {
-          //   LibraryItems: items,
-          // };
-          // const massagedlistItems: any = (massageResult as any)[
-          //   searchResultsFeedName
-          // ](itemsList, null, null);
           if (Object.values(item)[0].length) {
             massagedData.push({
               name: searchResultsFeedName,
@@ -249,6 +246,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   };
 
   const renderSearchResults = () => {
+    console.log("SearchResult", searchResult);
     return (
       <FlatList
         data={searchResult}
@@ -270,6 +268,17 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
           let itemsList = {
             LibraryItems: item.items,
           };
+          switch (mediaTypes) {
+            case ItemShowType.TVShow:
+              mediaTypes = AppStrings?.str_catagory_tvshows;
+              break;
+            case ItemShowType.Movie:
+              mediaTypes = AppStrings?.str_catagory_movie;
+              break;
+            case ItemShowType.Person:
+              mediaTypes = AppStrings?.str_search_person;
+              break;
+          }
           const massagedlistItems: any = (massageResult as any)[item.name](
             itemsList,
             null,
@@ -280,11 +289,12 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
               ref={index === 0 ? firstCardRef : null}
               key={index}
               //@ts-ignore
-              feed={item}
-              data={item.items}
+              feed={{ Name: mediaTypes }}
+              data={massagedlistItems}
               limitSwimlaneItemsTo={10}
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}
+              cardStyle={mediaTypes === "Person" ? "3x4" : "16x9"}
               onPress={(event) => {
                 //@ts-ignore
                 if (event.assetType.contentType === "PERSON") {
@@ -308,32 +318,33 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
     );
   };
   return (
-    <View style={styles.root}>
-      <View style={styles.secondComponent}>
-        {/* <ImageBackground
-          source={require("../assets/images/onboarding_1280x752_landscape.jpg")}
-          style={styles.imageComponent}
-        > */}
-        <SafeAreaView style={{ paddingBottom: 100 }}>
-          {showTrending && !showSearchResults
-            ? renderTrending()
-            : showSearchResults && searchResult && searchResult?.length !== 0
-            ? renderSearchResults()
-            : renderNoResults()}
-        </SafeAreaView>
-        {/* </ImageBackground> */}
+    <ImageBackground
+      source={require("../assets/images/onboarding_1280x752_landscape.jpg")}
+      style={styles.imageComponent}
+    >
+      <View style={styles.root}>
+        <View style={styles.secondComponent}>
+          <SafeAreaView style={{ paddingBottom: 100 }}>
+            {showTrending && !showSearchResults
+              ? renderTrending()
+              : showSearchResults && searchResult && searchResult?.length !== 0
+              ? renderSearchResults()
+              : renderNoResults()}
+          </SafeAreaView>
+          {/* </ImageBackground> */}
+        </View>
+        <View style={styles.search}>
+          <Search
+            onChangeText={onChangeText}
+            style={{
+              width: Dimensions.get("screen").width,
+              height: searchHeight,
+              backgroundColor: "#00030E",
+            }}
+          />
+        </View>
       </View>
-      <View style={styles.search}>
-        <Search
-          onChangeText={onChangeText}
-          style={{
-            width: Dimensions.get("screen").width,
-            height: searchHeight,
-            backgroundColor: "#00030E",
-          }}
-        />
-      </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -341,6 +352,8 @@ const styles = StyleSheet.create({
   root: {
     // height: height,
     // width: width,
+    backgroundColor: "#00030E",
+    opacity: 0.9,
   },
   search: {
     position: "absolute",
@@ -355,11 +368,14 @@ const styles = StyleSheet.create({
     marginTop: searchHeight,
     backgroundColor: "#00030E",
     paddingBottom: 300,
+    opacity: 0.9,
   },
   imageComponent: {
-    height: 800,
-    width: width,
-    marginTop: 150,
+    // height: 800,
+    // width: width,
+    // marginTop: 150,
+    height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH,
   },
 });
 
