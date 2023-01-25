@@ -31,7 +31,7 @@ const useCurrentSlots = (params?: CurrentSlotsParams) => {
     };
 
 
-    const currentSlotsQuery = useQuery(['get-current-slots', dateTime], getSlotsData, { refetchInterval: intervalTimer })
+    const currentSlotsQuery = useQuery(['get-current-slots', dateTime], getSlotsData, { refetchInterval: intervalTimer , enabled: !!GLOBALS.bootstrapSelectors?.ServiceMap.Services})
 
     useEffect(() => {
         console.log("Fetching slots")

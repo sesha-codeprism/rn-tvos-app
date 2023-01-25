@@ -183,17 +183,18 @@ export const setNativeModuleData = async () => {
         try {
             NativeModules.MKGuideBridgeManager.setToken(GLOBALS.store?.accessToken);
             NativeModules.MKGuideBridgeManager.setRefreshToken(GLOBALS.store?.refreshToken);
+            NativeModules.MKGuideBridgeManager.setChannelmapId(GLOBALS.bootstrapSelectors?.ChannelMapId);
             const scheduleCacheUrl = GLOBALS.bootstrapSelectors?.ServiceMap.Services.scheduleCache.split(".");
             if (__DEV__) {
                 console.log(scheduleCacheUrl)
                 console.log(`${scheduleCacheUrl[1]}.${scheduleCacheUrl[2]}`)
             }
             const appEnv = `${scheduleCacheUrl[1]}.${scheduleCacheUrl[2]}`;
-            NativeModules.MKGuideBridgeManager.setEnvironment(appEnv);
+            NativeModules.MKGuideBridgeManager.setEnvironment(GLOBALS.bootstrapSelectors?.ServiceMap.Services);
             resolve()
         } catch (e) {
             reject(e);
 
         }
     });
-}
+}   

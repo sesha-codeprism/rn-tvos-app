@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  NativeModules,
   Pressable,
   StyleSheet,
   Text,
@@ -29,6 +30,7 @@ const SelectServiceScreen: React.FunctionComponent<Props> = (props: any) => {
   const [selectedService, setSelectedService] = useState<any>({});
 
   const onPress = (item: any) => {
+    NativeModules.MKGuideBridgeManager.clearCacheData();
     setSelectedService(item);
     GLOBALS.store.MFGlobalsConfig.url = parseUri(item.path);
     GLOBALS.store.MFGlobalsConfig.stsUrl = "";
@@ -37,6 +39,7 @@ const SelectServiceScreen: React.FunctionComponent<Props> = (props: any) => {
     const resetStore = resetAuthData();
     /** Update the current Async NSUserDefaults store with resetStore */
     updateStore(resetStore);
+    GLOBALS.bootstrapSelectors = null;
     /** Reset the Query cache to make sure no cached API data is returned by React-Query */
     resetCaches();
     GLOBALS.rootNavigation.replace(Routes.ShortCode);

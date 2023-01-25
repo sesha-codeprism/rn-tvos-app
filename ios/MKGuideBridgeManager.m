@@ -14,7 +14,8 @@ RCT_EXTERN_METHOD(getCurrentSlots: (BOOL)useCache callback:(RCTResponseSenderBlo
 RCT_EXTERN_METHOD(updateSlotsOnTime)
 RCT_EXTERN_METHOD(setChannelmapId:(int)value)
 RCT_EXTERN_METHOD(getChannelMapInfo:(RCTResponseSenderBlock)callback)
-RCT_EXTERN_METHOD(setEnvironment:(NSString)value)
+RCT_EXTERN_METHOD(setEnvironment:(NSDictionary)value)
 RCT_EXTERN_METHOD(setToken:(NSString)value)
 RCT_EXTERN_METHOD(setRefreshToken:(NSString)value)
+RCT_EXTERN_METHOD(clearCacheData)
 @end

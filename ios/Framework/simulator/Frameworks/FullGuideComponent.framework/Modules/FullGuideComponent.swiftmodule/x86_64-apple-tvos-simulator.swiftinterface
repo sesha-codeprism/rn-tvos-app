@@ -22,6 +22,7 @@ extension Foundation.Date {
 @_hasMissingDesignatedInitializers public class MKFullGuideStorageManager {
   public static let shared: FullGuideComponent.MKFullGuideStorageManager
   public var selectedDelegate: FullGuideComponent.channelProgramDelegate?
+  public func clearCacheData()
   @objc deinit
 }
 extension FullGuideComponent.MKFullGuideStorageManager {
@@ -29,7 +30,7 @@ extension FullGuideComponent.MKFullGuideStorageManager {
   public func updateSlotsOnTime()
   public func setChannelmapId(value: Swift.Int)
   public func getChannelMapData(onSuccess: @escaping (([Swift.String : Any]) -> Swift.Void))
-  public func setEnvironment(value: Swift.String)
+  public func setEnvironment(value: Swift.Dictionary<Swift.String, Any>)
   public func setToken(value: Swift.String)
   public func setRefrestToken(value: Swift.String)
 }

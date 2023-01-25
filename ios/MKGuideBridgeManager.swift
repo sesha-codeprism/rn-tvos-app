@@ -48,7 +48,7 @@ public class MKGuideBridgeManager: NSObject {
     })
   }
 
-  @objc func setEnvironment(_ value: String) {
+  @objc func setEnvironment(_ value: Dictionary<String, Any>) {
     print("setEnvironment in swift = \(value)")
     MKFullGuideStorageManager.shared.setEnvironment(value: value)
   }
@@ -61,6 +61,11 @@ public class MKGuideBridgeManager: NSObject {
   @objc func setRefreshToken(_ value: String) {
     print("setRefreshToken in swift = \(value)")
     MKFullGuideStorageManager.shared.setRefrestToken(value: value)
+  }
+
+  @objc func clearCacheData() {
+    print("clearCacheData")
+    MKFullGuideStorageManager.shared.clearCacheData()
   }
 
 }

@@ -26,7 +26,7 @@
 		</data>
 		<key>EPGViewController.storyboardc/stb-iC-LEn-view-L1W-8E-Efy.nib</key>
 		<data>
-		WBCvpkpllFiM6A2cumNCzg3yOYs=
+		BxAOZJf/KWQU1+q/93+dbP7uxcc=
 		</data>
 		<key>EPGViewController.storyboardc/ye0-cS-pmP-view-UKr-HT-bAA.nib</key>
 		<data>
@@ -50,11 +50,11 @@
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.abi.json</key>
 		<data>
-		FhPBYoLUYtaYlZt5fR4voJaxpPg=
+		Iiln++AMNSeokBNL3sFNfYygdZ8=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.private.swiftinterface</key>
 		<data>
-		KSwxveNQPbNxXn+QJXYOJkLQ0z4=
+		8GkQrlZ5OEU/cjhqIxzoWWSuyvw=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.swiftdoc</key>
 		<data>
@@ -62,19 +62,19 @@
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.swiftinterface</key>
 		<data>
-		KSwxveNQPbNxXn+QJXYOJkLQ0z4=
+		8GkQrlZ5OEU/cjhqIxzoWWSuyvw=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.swiftmodule</key>
 		<data>
-		fF0IylXvT3WBTwxdqgWdJsMX6zM=
+		nTFWAS/vZ7Ob+NGKkk+SjfO6kJg=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.abi.json</key>
 		<data>
-		FhPBYoLUYtaYlZt5fR4voJaxpPg=
+		Iiln++AMNSeokBNL3sFNfYygdZ8=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.private.swiftinterface</key>
 		<data>
-		eyECntnL19cSdCwCjBFnX5VZvng=
+		XJvSEW+tJttQbnr0d7pILZGgzMI=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.swiftdoc</key>
 		<data>
@@ -82,11 +82,11 @@
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.swiftinterface</key>
 		<data>
-		eyECntnL19cSdCwCjBFnX5VZvng=
+		XJvSEW+tJttQbnr0d7pILZGgzMI=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.swiftmodule</key>
 		<data>
-		nNtkAmyZWI0ZqJtomBQ1FTWRXE0=
+		dCtyx4sTZdtfTPQc+tkP3lZjDMc=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -134,7 +134,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			7Munrc+A0mDHB4bp0OzEiplM4cMk1iI71ImvCg51+rI=
+			+vnFlw4LWARXp5r+W3XZM9lH6xAp4z7ujpRQS7iOZC4=
 			</data>
 		</dict>
 		<key>EPGViewController.storyboardc/ye0-cS-pmP-view-UKr-HT-bAA.nib</key>
@@ -169,14 +169,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			i+z2xES8xVuZ5YTWeeaLHtzixUlcXs9cdH5dnFYJcU8=
+			w4YtjfZUV92nhhqlEfxfkIZGnGoJ8ifUS85sN991lhw=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5vtSDQPSlWMP+J2ZSHnDcdkUqu3Ruyt0FRqRP3pTYQw=
+			0whuk0/ka1IN5Hn0f7+IjlhQILBUvil+mYUrH5Zb9bk=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.swiftdoc</key>
@@ -190,28 +190,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			5vtSDQPSlWMP+J2ZSHnDcdkUqu3Ruyt0FRqRP3pTYQw=
+			0whuk0/ka1IN5Hn0f7+IjlhQILBUvil+mYUrH5Zb9bk=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			0rLZGY67xQ/nAaH3/uuadzT05VevcpJwnaHfrNMtntU=
+			QH5mxocX1di48o8qanZTtd0J7/ToEmpdXJqj7N9W0mw=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			i+z2xES8xVuZ5YTWeeaLHtzixUlcXs9cdH5dnFYJcU8=
+			w4YtjfZUV92nhhqlEfxfkIZGnGoJ8ifUS85sN991lhw=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+kLVb9hcVZBQswweOaEU4gowaz5IJiO9mT6WhGhoJvE=
+			Qqka8yMykFcZLr+gyJhW8DeG/Z9wlaAE4VD7dP35e8E=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.swiftdoc</key>
@@ -225,14 +225,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+kLVb9hcVZBQswweOaEU4gowaz5IJiO9mT6WhGhoJvE=
+			Qqka8yMykFcZLr+gyJhW8DeG/Z9wlaAE4VD7dP35e8E=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			CZlzCPDg8V6DyfjkX5LmhBAl0px3lLUoWNx1s040e1I=
+			wNdPI63rCHeqLEfeFUssQyHRketEQ1OI1Tdkobz7O50=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
