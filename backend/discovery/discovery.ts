@@ -58,8 +58,8 @@ export const getStoresOfZones = async ({ queryKey }: any) => {
 
 
 export const getMovies = async (id?: string, params?: any) => {
-  const { parentalrating, rating } = params;
-  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
+  const { parentalrating, rating, pivots } = params;
+  // const pivots = `LicenseWindow|New|Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
   const url: string =
     parseUri(
       GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
@@ -89,8 +89,8 @@ export const getMovies = async (id?: string, params?: any) => {
   //   return res;
 };
 export const getTVShows = async (id?: string, params?: any) => {
-  const { OfferType } = params;
-  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
+  const { OfferType, pivots } = params;
+  // const pivots = `LicenseWindow|New|Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
   const url: string =
     parseUri(
       GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||

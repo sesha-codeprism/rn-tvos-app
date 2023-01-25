@@ -165,10 +165,18 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   const getMoviesAndTvShow = async () => {
     console.log("getMoviesAndTvShow");
     const movies = await getMovies("", {
-      pivots: "LicenseWindow|Trending",
+      pivots: `LicenseWindow|New|Language|${
+        GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split(
+          "-"
+        )?.[0] || "en"
+      }`,
     });
     const TVShow = await getTVShows("", {
-      pivots: "LicenseWindow|Trending",
+      pivots: `LicenseWindow|New|Language|${
+        GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split(
+          "-"
+        )?.[0] || "en"
+      }`,
     });
     const massagedTVData = massageSubscriberFeed(
       { LibraryItems: TVShow.data.Items },
