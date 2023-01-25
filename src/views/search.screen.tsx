@@ -270,10 +270,10 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
           };
           switch (mediaTypes) {
             case ItemShowType.TVShow:
-              mediaTypes = AppStrings?.str_catagory_tvshows;
+              mediaTypes = AppStrings?.str_search_tvshow;
               break;
             case ItemShowType.Movie:
-              mediaTypes = AppStrings?.str_catagory_movie;
+              mediaTypes = AppStrings?.str_search_movie;
               break;
             case ItemShowType.Person:
               mediaTypes = AppStrings?.str_search_person;
