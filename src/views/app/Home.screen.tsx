@@ -26,8 +26,6 @@ import { Routes } from "../../config/navigation/RouterOutlet";
 import { Layout } from "../../utils/analytics/consts";
 import { ItemShowType } from "../../utils/common";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { buildNowNextMap } from "../../utils/live/LiveUtils";
-import useCurrentSlots from "../../customHooks/useCurrentSlots";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -225,14 +223,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     }
   };
 
-  const getUpdatedChannelsList = async () => {
-    const nowNextMap = buildNowNextMap(
-      GLOBALS.currentSlots,
-      GLOBALS.channelMap
-    );
-    console.log("nowNextMap", nowNextMap);
-  };
-
   useEffect(() => {
     if (!open) {
       console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
@@ -245,10 +235,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
         `app-end-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
       );
     }
-
-    // setTimeout(() => {
-    //   getUpdatedChannelsList();
-    // }, 20000);
   }, []);
 
   setHubsData();

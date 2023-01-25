@@ -22,6 +22,8 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
   useEffect(() => {}, [props.navigation]);
 
   const logUserOut = async () => {
+    const resp = await deleteDevice();
+    console.log("Logout", resp);
     /** Get default store for user */
     const resetStore = resetAuthData();
     console.log("After resetting", resetStore);
@@ -31,14 +33,7 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
     /** Reset the Query cache to make sure no cached API data is returned by React-Query */
     resetCaches();
     GLOBALS.userProfile = undefined;
-    // if (__DEV__ && !isTesting) {
-    // } else {
-    //   console.log("Test functions.. so just simply trying to navigate");
-    // }
-    /** Async store is done.. now move user to logout screen */
     GLOBALS.rootNavigation.replace(Routes.ShortCode);
-    const resp = deleteDevice();
-    console.log("Logout", resp);
   };
 
   return (
