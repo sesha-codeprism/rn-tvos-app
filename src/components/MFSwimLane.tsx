@@ -23,6 +23,8 @@ interface MFSwimLaneProps {
   cardStyle?: "16x9" | "3x4" | "2x3";
   limitSwimlaneItemsTo?: number;
   onViewAllPressed?: null | ((event: SubscriberFeed) => void) | undefined;
+  renderViewAll?: boolean;
+  customViewAllTitle?: string;
   onListEmptyElementFocus?:
     | null
     | ((event: SubscriberFeed) => void)
@@ -51,6 +53,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
       props.onFocus && event && props.onFocus(event);
     };
     const showViewAll =
+      props.renderViewAll ||
       props.feed?.NavigationTargetVisibility ===
         NavigationTarget.SHOW_FEED_ALWAYS ||
       (props.feed?.NavigationTargetVisibility ===
@@ -63,6 +66,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           ref={ref}
           limitSwimlaneItemsTo={props.limitSwimlaneItemsTo}
           enableCircularLayout
+          // @ts-ignore
           title={props.feed?.Name || props.feed.name}
           style={
             props.cardStyle === "2x3"
@@ -90,6 +94,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           updateSwimLaneKey={props.updateSwimLaneKey}
           railContainerStyles={{}}
           libraryItems={props.data}
+          customViewAllTitle={props.customViewAllTitle}
           feed={props.feed}
           cardStyle={props.cardStyle}
           onPress={props.onPress}
@@ -133,6 +138,8 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
 );
 MFSwimLane.defaultProps = {
   cardStyle: "16x9",
+  renderViewAll: undefined,
+  customViewAllTitle: "View All",
 };
 
 export default MFSwimLane;

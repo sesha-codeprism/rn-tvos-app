@@ -84,6 +84,7 @@ export interface MFFilmStripProps {
   cardStyle?: "16x9" | "3x4" | "2x3";
   updateSwimLaneKey?: null | ((event: string) => void) | undefined;
   swimLaneKey?: string;
+  customViewAllTitle?: string;
   onListFooterElementFocus?:
     | null
     | ((event: SubscriberFeed) => void)
@@ -122,22 +123,25 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
         )
       : [];
 
-    if(dataArray?.length && props.shouldRenderFooter){
+    if (dataArray?.length && props.shouldRenderFooter) {
       // add view all
-      if(props.appendViewAll && props.viewAllPlacement === "Prepend"){
+      if (props.appendViewAll && props.viewAllPlacement === "Prepend") {
         //@ts-ignore
-        dataArray.unshift({"viewAll": true});
+        dataArray.unshift({ viewAll: true });
       }
-      if((props.viewAllPlacement === "Append" || !props.viewAllPlacement) ){
+      if (props.viewAllPlacement === "Append" || !props.viewAllPlacement) {
         //@ts-ignore
-        dataArray.push({"viewAll": true});
+        dataArray.push({ viewAll: true });
       }
     }
 
-
-    const viewAllFocused  = (index: number) => {
-      flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: viewAllPeekValue });
-    }
+    const viewAllFocused = (index: number) => {
+      flatListRef.current?.scrollToIndex({
+        animated: true,
+        index: index,
+        viewOffset: viewAllPeekValue,
+      });
+    };
 
     const _onFocus = (index: number) => {
       flatListRef.current?.scrollToIndex({ animated: true, index: index });
@@ -166,7 +170,6 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
           )
         : null;
     };
-
 
     const cardWidth = parseInt(props.style?.width?.toString() || "300");
 
@@ -212,85 +215,90 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                 index,
               })}
               renderItem={({ item, index }) => {
-               if(item.viewAll){
-                return (
-                  <MFViewAllButton
-                  displayStyles={Styles.railTitle}
-                  feed={props.feed}
-                  displayText={
-                    props.feed.NavigationTargetText &&
-                    props.feed.NavigationTargetText.includes("{")
-                      ? format(props.feed.NavigationTargetText, props.feed.Name)
-                      : props.feed.NavigationTargetText!
-                  }
-                  style={
-                    props.feed.ShowcardAspectRatio === layout2x3
-                      ? HomeScreenStyles.portraitCardStyles
-                      : HomeScreenStyles.landScapeCardStyles
-                  }
-                  imageStyle={
-                    props.feed.ShowcardAspectRatio === layout2x3
-                      ? HomeScreenStyles.portraitCardImageStyles
-                      : HomeScreenStyles.landScapeCardImageStyles
-                  }
-                  focusedStyle={HomeScreenStyles.focusedStyle}
-                  onPress={props.onViewAllPressed}
-                  onFocus={(event) => {
-                    viewAllFocused(index);
-                    props.onListFooterElementFocus && props.onListFooterElementFocus(event);
-                  }}
-                />
-                )
-               }else {
-                return (
-                  <MFLibraryCard
-                  // @ts-ignore
-                  ref={index === 0 ? ref : null}
-                  autoFocusOnFirstCard={
-                    props.autoFocusOnFirstCard
-                      ? index === 0
-                        ? true
-                        : false
-                      : false
-                  }
-                  key={`Index${index}`}
-                  data={item}
-                  cardStyle={props.cardStyle}
-                  style={props.style}
-                  focusedStyle={props.focusedStyle}
-                  imageStyle={props.imageStyle}
-                  title={""}
-                  layoutType={
-                    props.enableCircularLayout ? "Circular" : "LandScape"
-                  }
-                  showTitleOnlyOnFocus={false}
-                  titlePlacement={props.titlePlacement}
-                  overlayComponent={
-                    <MFOverlay
-                      //@ts-ignore
-                      renderGradiant={true}
-                      showProgress={item.Bookmark! || false}
-                      progress={20}
-                      // displayTitle={item.title}
-                      bottomText={item.runtime}
-                      // showRec={true}
-                      // recType={"series"}
+                if (item.viewAll) {
+                  return (
+                    <MFViewAllButton
+                      displayStyles={Styles.railTitle}
+                      feed={props.feed}
+                      displayText={
+                        props.feed.NavigationTargetText
+                          ? props.feed.NavigationTargetText.includes("{")
+                            ? format(
+                                props.feed.NavigationTargetText,
+                                props.feed.Name
+                              )
+                            : props.feed.NavigationTargetText!
+                          : props.customViewAllTitle || "View All"
+                      }
+                      style={
+                        props.feed.ShowcardAspectRatio === layout2x3
+                          ? HomeScreenStyles.portraitCardStyles
+                          : HomeScreenStyles.landScapeCardStyles
+                      }
+                      imageStyle={
+                        props.feed.ShowcardAspectRatio === layout2x3
+                          ? HomeScreenStyles.portraitCardImageStyles
+                          : HomeScreenStyles.landScapeCardImageStyles
+                      }
+                      focusedStyle={HomeScreenStyles.focusedStyle}
+                      onPress={props.onViewAllPressed}
+                      onFocus={(event) => {
+                        viewAllFocused(index);
+                        props.onListFooterElementFocus &&
+                          props.onListFooterElementFocus(event);
+                      }}
                     />
-                  }
-                  progressComponent={props.progressElement}
-                  showProgress={props.shouldRenderProgress}
-                  shouldRenderText
-                  onFocus={(event) => {
-                    _onFocus(index);
-                    props.onFocus && props.onFocus(event);
-                  }}
-                  onPress={(event) => {
-                    props.onPress && props.onPress(event);
-                  }}
-                  onBlur={(event) => {}}
-                />
-                )
-               }
+                  );
+                } else {
+                  return (
+                    <MFLibraryCard
+                      // @ts-ignore
+                      ref={index === 0 ? ref : null}
+                      autoFocusOnFirstCard={
+                        props.autoFocusOnFirstCard
+                          ? index === 0
+                            ? true
+                            : false
+                          : false
+                      }
+                      key={`Index${index}`}
+                      data={item}
+                      cardStyle={props.cardStyle}
+                      style={props.style}
+                      focusedStyle={props.focusedStyle}
+                      imageStyle={props.imageStyle}
+                      title={""}
+                      layoutType={
+                        props.enableCircularLayout ? "Circular" : "LandScape"
+                      }
+                      showTitleOnlyOnFocus={false}
+                      titlePlacement={props.titlePlacement}
+                      overlayComponent={
+                        <MFOverlay
+                          //@ts-ignore
+                          renderGradiant={true}
+                          showProgress={item.Bookmark! || false}
+                          progress={20}
+                          // displayTitle={item.title}
+                          bottomText={item.runtime}
+                          // showRec={true}
+                          // recType={"series"}
+                        />
+                      }
+                      progressComponent={props.progressElement}
+                      showProgress={props.shouldRenderProgress}
+                      shouldRenderText
+                      onFocus={(event) => {
+                        _onFocus(index);
+                        props.onFocus && props.onFocus(event);
+                      }}
+                      onPress={(event) => {
+                        props.onPress && props.onPress(event);
+                      }}
+                      onBlur={(event) => {}}
+                    />
+                  );
+                }
               }}
             />
           ) : (
