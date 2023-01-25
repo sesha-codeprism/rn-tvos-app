@@ -9,6 +9,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import FastImage from "react-native-fast-image";
@@ -60,13 +61,12 @@ import MFSwimLane from "../../../components/MFSwimLane";
 import { ButtonVariantProps } from "../../../components/MFButtonGroup/MFButtonGroup";
 import { BookmarkType as udlBookMark } from "../../../utils/Subscriber.utils";
 import { DetailsSidePanel } from "./DetailSidePanel";
-import MFSwim from "../../../components/MFSwim";
 import { isFeatureAssigned } from "../../../utils/helpers";
 import { queryClient } from "../../../config/queries";
 import { pinItem, unpinItem } from "../../../../backend/subscriber/subscriber";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
 import { Routes } from "../../../config/navigation/RouterOutlet";
+import { SCREEN_WIDTH } from "../../../utils/dimensions";
 const { width, height } = Dimensions.get("window");
 
 interface AssetData {
@@ -113,6 +113,10 @@ const fontSize = { fontSize: 25 };
 const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const feed: Feed = props.route.params.feed;
   const drawerRef: React.MutableRefObject<any> = useRef();
+
+  const castAndCrewRef: React.MutableRefObject<any> = useRef();
+  const moreLikeThisRef: React.MutableRefObject<any> = useRef();
+
   const [similarData, setSimilarData] = useState<any>(undefined);
   const [discoveryProgramData, setdiscoveryProgramData] =
     useState<any>(undefined);
@@ -561,23 +565,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             shouldRenderImage: true,
           }}
         /> */}
-        <Pressable
-          style={{ width: 20, height: 20 }}
-          onFocus={() => {
-            console.log(scrollViewRef);
-            if (isCTAButtonFocused) {
-              favoriteButtonRef.current?.setNativeProps({
-                hasTVPreferredFocus: true,
-              });
-              setIsCTAButtonFocused(false);
-            } else {
-              ctaButtonRef.current?.setNativeProps({
-                hasTVPreferredFocus: true,
-              });
-              setIsCTAButtonFocused(true);
-            }
-          }}
-        />
       </View>
     );
   };
@@ -1362,6 +1349,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     return (
       <SafeAreaView>
         <MFSwimLane
+          ref={moreLikeThisRef}
           //@ts-ignore
           feed={feed}
           data={similarData}
@@ -1393,6 +1381,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     return (
       <SafeAreaView style={{ marginTop: -150 }}>
         <MFSwimLane
+          ref={castAndCrewRef}
           //@ts-ignore
           feed={feedItem}
           data={
@@ -1532,6 +1521,31 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       </View>
     );
   };
+
+  const onFocusBar = () => {
+    if(isCTAButtonFocused){
+      if(similarData && moreLikeThisRef?.current){
+        moreLikeThisRef.current?.setNativeProps({
+          hasTVPreferredFocus: true,
+        });
+        setIsCTAButtonFocused(false);
+      }else if(discoveryProgramData && castAndCrewRef?.current){
+        castAndCrewRef.current?.setNativeProps({
+          hasTVPreferredFocus: true,
+        });
+        setIsCTAButtonFocused(false);
+      }
+    }else {
+      if(ctaButtonRef?.current){
+        ctaButtonRef.current?.setNativeProps({
+          hasTVPreferredFocus: true,
+        });
+        setIsCTAButtonFocused(true);
+      }
+    }
+  };
+
+
   return (
     <PageContainer type="FullPage">
       <ImageBackground
@@ -1557,6 +1571,16 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   </View>
                 </View>
               </View>
+              <TouchableOpacity
+                accessible={true}
+                onFocus={onFocusBar}
+                style={{
+                  backgroundColor: "transparent",
+                  height: 20,
+                  width: SCREEN_WIDTH,
+                  marginTop: 50,
+                }}
+              ></TouchableOpacity>
               {similarData && renderMoreLikeThis()}
               {/* Cast and Crew */}
               {discoveryProgramData && renderCastAndCrew()}
