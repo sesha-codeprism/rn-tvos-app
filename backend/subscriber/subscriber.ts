@@ -398,15 +398,12 @@ export const changePasscodes = async (PasscodeType: PinType, pin: string) => {
   return response;
 };
 export const deleteDevice = async () => {
-  const { accessToken } = GLOBALS.store!;
-  const url: string = parseUri(
-    `${MFGlobalsConfig?.stsUrl}/oauth/signout/liveid`
-  );
+  const url: string = `${MFGlobalsConfig?.stsUrl}oauth/signout/liveid`;
 
-  const response = await DELETE({
+  const response = await GET({
     url: url,
     headers: {
-      Authorization: `OAUTH2 access_token="${accessToken}"`,
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
   });
   return response;
