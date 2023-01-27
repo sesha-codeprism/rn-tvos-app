@@ -126,6 +126,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [subscriberData, setsubscriberData] = useState<any>(undefined);
   const [udpDataAsset, setUDPDataAsset] = useState<any>();
   const [isCTAButtonFocused, setIsCTAButtonFocused] = useState(false);
+  const [isFavoriteButtonFocused, setIsFavoriteButtonFocused] = useState(false);
   const [open, setOpen] = useState(false);
   const [similarItemsSwimLaneKey, setSimilarItemsSwimLaneKey] = useState("");
   const [castnCrewSwimLaneKey, setCastnCrewSwimlaneKey] = useState("");
@@ -505,6 +506,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           imageSource={0}
           avatarSource={undefined}
           onFocus={() => {
+            setIsFavoriteButtonFocused(true);
             // if (__DEV__) {
             //   setTimeout(() => {
             //     ctaButtonRef.current.setNativeProps({
@@ -534,6 +536,29 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           fontIconProps={{
             iconPlacement: "Left",
             shouldRenderImage: true,
+          }}
+        />
+        <Pressable
+          style={{
+            width: 10,
+            height: 10,
+            marginLeft: 20,
+            backgroundColor: "transparent",
+          }}
+          onFocus={() => {
+            if (isCTAButtonFocused) {
+              favoriteButtonRef.current?.setNativeProps({
+                hasTVPreferredFocus: true,
+              });
+              setIsCTAButtonFocused(false);
+              setIsFavoriteButtonFocused(true);
+            } else {
+              ctaButtonRef.current?.setNativeProps({
+                hasTVPreferredFocus: true,
+              });
+              setIsFavoriteButtonFocused(false);
+              setIsCTAButtonFocused(true);
+            }
           }}
         />
         {/* <MFButton
@@ -640,6 +665,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             AppStrings.placeholder;
           items.push(
             <Image
+              key={`Index${i}`}
               source={networkSource}
               style={[styles.networkImage, styles.marginRight20]}
             />
@@ -1347,21 +1373,23 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const renderMoreLikeThis = () => {
     const feed = { Name: AppStrings.str_details_more_like_this };
     return (
-      <SafeAreaView>
-        <MFSwimLane
-          ref={moreLikeThisRef}
-          //@ts-ignore
-          feed={feed}
-          data={similarData}
-          swimLaneKey={similarItemsSwimLaneKey}
-          updateSwimLaneKey={setSimilarItemsSwimLaneKey}
-          limitSwimlane
-          ItemsTo={10}
-          onPress={(event) => {
-            props.navigation.push(Routes.Details, { feed: event });
-          }}
-        />
-      </SafeAreaView>
+      similarData.length > 0 && (
+        <SafeAreaView>
+          <MFSwimLane
+            ref={moreLikeThisRef}
+            //@ts-ignore
+            feed={feed}
+            data={similarData}
+            swimLaneKey={similarItemsSwimLaneKey}
+            updateSwimLaneKey={setSimilarItemsSwimLaneKey}
+            limitSwimlane
+            ItemsTo={10}
+            onPress={(event) => {
+              props.navigation.push(Routes.Details, { feed: event });
+            }}
+          />
+        </SafeAreaView>
+      )
     );
   };
 
@@ -1379,21 +1407,23 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
     const feedItem = { Name: "Cast and Crew" };
     return (
-      <SafeAreaView style={{ marginTop: -150 }}>
-        <MFSwimLane
-          ref={castAndCrewRef}
-          //@ts-ignore
-          feed={feedItem}
-          data={
-            roles !== undefined
-              ? massageCastAndCrew(roles, assetTypeObject.PERSON)
-              : []
-          }
-          swimLaneKey={castnCrewSwimLaneKey}
-          updateSwimLaneKey={setCastnCrewSwimlaneKey}
-          cardStyle="3x4"
-        />
-      </SafeAreaView>
+      roles && (
+        <SafeAreaView style={{ marginTop: -150 }}>
+          <MFSwimLane
+            ref={castAndCrewRef}
+            //@ts-ignore
+            feed={feedItem}
+            data={
+              roles !== undefined
+                ? massageCastAndCrew(roles, assetTypeObject.PERSON)
+                : []
+            }
+            swimLaneKey={castnCrewSwimLaneKey}
+            updateSwimLaneKey={setCastnCrewSwimlaneKey}
+            cardStyle="3x4"
+          />
+        </SafeAreaView>
+      )
     );
   };
 
@@ -1523,20 +1553,35 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const onFocusBar = () => {
-    if(isCTAButtonFocused){
-      if(similarData && moreLikeThisRef?.current){
+    console.log(ctaButtonRef?.current);
+    if (isFavoriteButtonFocused) {
+      /** If user is on Favorite button and presses down, navigate to current swimlane and focus on first element */
+      if (similarData && moreLikeThisRef?.current) {
+        moreLikeThisRef.current?.setNativeProps({
+          hasTVPreferredFocus: true,
+        });
+        setIsFavoriteButtonFocused(false);
+      } else if (discoveryProgramData && castAndCrewRef?.current) {
+        castAndCrewRef.current?.setNativeProps({
+          hasTVPreferredFocus: true,
+        });
+        setIsFavoriteButtonFocused(false);
+      }
+    } else if (isCTAButtonFocused) {
+      if (similarData && moreLikeThisRef?.current) {
         moreLikeThisRef.current?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsCTAButtonFocused(false);
-      }else if(discoveryProgramData && castAndCrewRef?.current){
+      } else if (discoveryProgramData && castAndCrewRef?.current) {
         castAndCrewRef.current?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsCTAButtonFocused(false);
       }
-    }else {
-      if(ctaButtonRef?.current){
+    } else {
+      console.log("From else condition.. trying to navigate from SwimLane");
+      if (ctaButtonRef?.current) {
         ctaButtonRef.current?.setNativeProps({
           hasTVPreferredFocus: true,
         });
@@ -1544,7 +1589,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       }
     }
   };
-
 
   return (
     <PageContainer type="FullPage">
@@ -1573,6 +1617,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               </View>
               <TouchableOpacity
                 accessible={true}
+                activeOpacity={0.3}
                 onFocus={onFocusBar}
                 style={{
                   backgroundColor: "transparent",
