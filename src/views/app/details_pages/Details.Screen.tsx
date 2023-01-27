@@ -1606,9 +1606,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   <View style={styles.flexRow}>
                     {/* Metadata and CTA */}
                     {renderAssetInfo()}
+                    {/* Network Logo */}
+                    {renderNetworkInfo()}
                   </View>
-                  {/* Network Logo */}
-                  {renderNetworkInfo()}
                   <View style={styles.ctaButtonGroupBlock}>
                     {/* CTA */}
                     {renderCTAButtonGroup()}
