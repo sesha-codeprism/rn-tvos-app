@@ -190,7 +190,7 @@ export const setNativeModuleData = async () => {
                 console.log(`${scheduleCacheUrl[1]}.${scheduleCacheUrl[2]}`)
             }
             const appEnv = `${scheduleCacheUrl[1]}.${scheduleCacheUrl[2]}`;
-            NativeModules.MKGuideBridgeManager.setEnvironment(JSON.stringify(GLOBALS.bootstrapSelectors?.ServiceMap.Services));
+            NativeModules.MKGuideBridgeManager.setEnvironment(GLOBALS.bootstrapSelectors?.ServiceMap.Services);
             resolve()
         } catch (e) {
             reject(e);
