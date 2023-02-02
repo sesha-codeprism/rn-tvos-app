@@ -38,7 +38,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const [hubs, setHubs] = useState(Array<FeedItem>());
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const [open, setOpen] = useState(false);
-  const firstCardRef = useRef<TouchableOpacity>(null);
+  const firstSwimlaneRef = useRef<TouchableOpacity>(null);
   const drawerRef: React.MutableRefObject<any> = useRef();
 
   let feedTimeOut: any = null;
@@ -239,9 +239,9 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
 
   setHubsData();
   const setCardFocus = () => {
-    // console.log("firstCardRef.current", firstCardRef.current);
-    // Alert.alert("Set hub data called");
-    firstCardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+     // @ts-ignore
+    const cardRef = firstSwimlaneRef.current?.focused|| firstSwimlaneRef.current?.first || firstSwimlaneRef.current?.viewAll?.current || firstSwimlaneRef.current?.feedNotImplemented?.current;
+    cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
   return (
     <View style={HomeScreenStyles.container}>

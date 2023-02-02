@@ -1559,12 +1559,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     if (isFavoriteButtonFocused) {
       /** If user is on Favorite button and presses down, navigate to current swimlane and focus on first element */
       if (similarData && moreLikeThisRef?.current) {
-        moreLikeThisRef.current?.setNativeProps({
+        const cardToFocus =  moreLikeThisRef.current?.focused|| moreLikeThisRef.current?.first;
+        cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsFavoriteButtonFocused(false);
       } else if (discoveryProgramData && castAndCrewRef?.current) {
-        castAndCrewRef.current?.setNativeProps({
+        const cardToFocus =  castAndCrewRef.current?.focused|| castAndCrewRef.current?.first;
+        cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsFavoriteButtonFocused(false);
@@ -1576,12 +1578,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       }
     } else if (isCTAButtonFocused) {
       if (similarData && moreLikeThisRef?.current) {
-        moreLikeThisRef.current?.setNativeProps({
+        const cardToFocus =  moreLikeThisRef.current?.focused|| moreLikeThisRef.current?.first;
+        cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsCTAButtonFocused(false);
       } else if (discoveryProgramData && castAndCrewRef?.current) {
-        castAndCrewRef.current?.setNativeProps({
+        const cardToFocus =  castAndCrewRef.current?.focused|| castAndCrewRef.current?.first;
+        cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsCTAButtonFocused(false);
