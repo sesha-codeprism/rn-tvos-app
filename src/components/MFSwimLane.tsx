@@ -21,6 +21,7 @@ interface MFSwimLaneProps {
   swimLaneKey?: string;
   cardStyle?: "16x9" | "3x4" | "2x3";
   limitSwimlaneItemsTo?: number;
+  swimId?: string;
   onViewAllPressed?: null | ((event: SubscriberFeed) => void) | undefined;
   renderViewAll?: boolean;
   customViewAllTitle?: string;
@@ -64,6 +65,8 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
         <MFFilmStrip
           // @ts-ignore
           ref={ref}
+          key={`${props.swimId}-filmStrip`}
+          filmStripId={`${props.swimId}-filmStrip`}
           limitSwimlaneItemsTo={props.limitSwimlaneItemsTo}
           enableCircularLayout
           // @ts-ignore

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
 import AnimatedLottieView from "lottie-react-native";
@@ -62,31 +62,33 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     }
   );
 
+  const onDuplexMessage = useCallback((message: any) => {
+    if (message?.type === NotificationType.DeviceDeleted) {
+      const { payload: { deviceId = "" } = {} } = message;
+      if (deviceId === GLOBALS.deviceInfo.deviceId) {
+        // logout
+        const resetStore = resetAuthData();
+        updateStore(resetStore);
+        resetCaches();
+        GLOBALS.rootNavigation.replace(Routes.ShortCode);
+      }
+    } else if (message?.type === NotificationType.dvrUpdated) {
+      console.log("DVR update notification received");
+      invalidateQueryBasedOnSpecificKeys(
+        "feed",
+        "udl://dvrproxy/viewable-subscription-items/"
+      );
+    }
+  }, [GLOBALS.deviceInfo.deviceId]);
+
+
   useEffect(() => {
     setDeviceInfo();
-    const onDuplexMessage = (message: any) => {
-      if (message?.type === NotificationType.DeviceDeleted) {
-        const { payload: { deviceId = "" } = {} } = message;
-        if (deviceId === GLOBALS.deviceInfo.deviceId) {
-          // logout
-          const resetStore = resetAuthData();
-          updateStore(resetStore);
-          resetCaches();
-          GLOBALS.rootNavigation.replace(Routes.ShortCode);
-        }
-      } else if (message?.type === NotificationType.dvrUpdated) {
-        console.log("DVR update notification received");
-        invalidateQueryBasedOnSpecificKeys(
-          "feed",
-          "udl://dvrproxy/viewable-subscription-items/"
-        );
-      }
-    };
-    // proper way of adding handler
-    currentContext.addOnDuplexMessageHandlers([
-      ...currentContext.onDuplexMessageHandlers,
-      onDuplexMessage,
-    ]);
+    currentContext.addDuplexMessageHandler(onDuplexMessage);
+
+    () => {
+      currentContext.removeDuplexHandler(onDuplexMessage);
+    }
   }, []);
 
   useEffect(() => {

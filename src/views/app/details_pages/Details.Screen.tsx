@@ -130,6 +130,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [udpDataAsset, setUDPDataAsset] = useState<any>();
   const [isCTAButtonFocused, setIsCTAButtonFocused] = useState(false);
   const [isFavoriteButtonFocused, setIsFavoriteButtonFocused] = useState(false);
+  const [ctaButtonFocusState,  setCTAButtonFocusState ] = useState('');
   const [open, setOpen] = useState(false);
   const [similarItemsSwimLaneKey, setSimilarItemsSwimLaneKey] = useState("");
   const [castnCrewSwimLaneKey, setCastnCrewSwimlaneKey] = useState("");
@@ -1037,6 +1038,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   onFocus={() => {
                     setOpen(false);
                     drawerRef.current.close();
+                    setCTAButtonFocusState(cta.buttonText)
                   }}
                   variant={MFButtonVariant.FontIcon}
                   fontIconSource={cta.iconSource}
@@ -1565,31 +1567,53 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const onFocusBar = () => {
-    console.log(ctaButtonRef?.current);
+    console.log(ctaButtonFocusState);
     if (isFavoriteButtonFocused) {
       /** If user is on Favorite button and presses down, navigate to current swimlane and focus on first element */
       if (similarData && moreLikeThisRef?.current) {
-        moreLikeThisRef.current?.setNativeProps({
+        const cardToFocus =  moreLikeThisRef.current?.focused|| moreLikeThisRef.current?.first;
+        cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsFavoriteButtonFocused(false);
       } else if (discoveryProgramData && castAndCrewRef?.current) {
-        castAndCrewRef.current?.setNativeProps({
+        const cardToFocus =  castAndCrewRef.current?.focused|| castAndCrewRef.current?.first;
+        cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsFavoriteButtonFocused(false);
+      } else {
+        /** if no  swimlane exists  remain in fav */
+        favoriteButtonRef.current?.setNativeProps({
+          hasTVPreferredFocus: true,
+        });
       }
     } else if (isCTAButtonFocused) {
       if (similarData && moreLikeThisRef?.current) {
-        moreLikeThisRef.current?.setNativeProps({
+        const cardToFocus =  moreLikeThisRef.current?.focused|| moreLikeThisRef.current?.first;
+        cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsCTAButtonFocused(false);
       } else if (discoveryProgramData && castAndCrewRef?.current) {
-        castAndCrewRef.current?.setNativeProps({
+        const cardToFocus =  castAndCrewRef.current?.focused|| castAndCrewRef.current?.first;
+        cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsCTAButtonFocused(false);
+      } else {
+        /** if no  swimlane exists  focus on the first  button */
+        if(buttonRefObject[ctaButtonFocusState].current){
+          buttonRefObject[ctaButtonFocusState].current?.setNativeProps({
+            hasTVPreferredFocus: true,
+          });
+          setIsCTAButtonFocused(true);
+        }else if (ctaButtonRef?.current) {
+          ctaButtonRef.current?.setNativeProps({
+            hasTVPreferredFocus: true,
+          });
+          setIsCTAButtonFocused(true);
+        }
       }
     } else {
       console.log("From else condition.. trying to navigate from SwimLane");

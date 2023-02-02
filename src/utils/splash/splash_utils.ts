@@ -190,6 +190,7 @@ export const setNativeModuleData = async () => {
             } else {
                 NativeModules.MKGuideBridgeManager.setEnvironment(GLOBALS.bootstrapSelectors?.ServiceMap.Services);
             }
+            NativeModules.MKGuideBridgeManager.setEnvironment(GLOBALS.bootstrapSelectors?.ServiceMap.Services);
             resolve()
         } catch (e) {
             reject(e);

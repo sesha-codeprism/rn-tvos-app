@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
 import {
   FlatList,
   StyleProp,
@@ -98,6 +98,7 @@ export interface MFFilmStripProps {
   /** Feed being rendered */
   feed: Feed;
   onViewAllPressed?: null | ((event: SubscriberFeed) => void) | undefined;
+  filmStripId?: string;
 }
 /**
  * Component that renders horizontal-scrolling collection of items
@@ -105,11 +106,16 @@ export interface MFFilmStripProps {
  * @returns MFFilmStrip component
  */
 const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
-  ({ ...props }, ref: any) => {
+  ({ ...props }, inRef: any) => {
     // console.log(props.libraryItems);
     const flatListRef = useRef<FlatList>(null);
     const [dataSource, setDataSource] = useState([...(props.dataSource || [])]);
     const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
+    const  [focusedIndex, setFocusIndex]= useState(0);
+    const itemsRef = useRef([]);
+    let innerViewAllRef = useRef<TouchableOpacity>(null);
+    const  innerFeedNotImplementedRef = useRef<TouchableOpacity>(null);
+
     //@ts-ignore
     const viewAllPeekValue = appUIDefinition.config?.viewAllPeekValue;
 
@@ -136,7 +142,33 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
       }
     }
 
+    const items = dataArray?.filter((item:  any) => !item?.viewAll);
+    const  lastIndex = (items && items.length) ? items.length - 1 : 0;
+
+    useImperativeHandle(inRef, () => ({
+      get first() {
+          return itemsRef.current?.[0];
+      },
+      get focused() {
+        if(focusedIndex === props.limitSwimlaneItemsTo){
+          return innerViewAllRef.current;
+        }else {
+          return itemsRef.current?.[focusedIndex];
+        }
+      },
+      get last() {
+        return itemsRef.current?.[lastIndex];
+      },
+      get viewAll() {
+        return innerViewAllRef;
+      },
+      get feedNotImplemented() {
+        return innerFeedNotImplementedRef;
+      }
+    }));
+
     const viewAllFocused = (index: number) => {
+      setFocusIndex(index);
       flatListRef.current?.scrollToIndex({
         animated: true,
         index: index,
@@ -146,6 +178,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
 
     const _onFocus = (index: number) => {
       flatListRef.current?.scrollToIndex({ animated: true, index: index });
+      setFocusIndex(index);
       if (props.isCircular) {
         if (index > dataSource.length - 3) {
           setDataSource([...dataSource, ...(props.dataSource || [])]);
@@ -207,17 +240,21 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
               inverted={props.enableRTL}
               data={dataArray}
               initialNumToRender={20}
-              keyExtractor={(x, i) => i.toString()}
+              keyExtractor={(x, i) => `${props.filmStripId}-flatlist-${i}` }
               ListEmptyComponent={props.listEmptyComponent}
               getItemLayout={(data, index) => ({
                 length: cardWidth,
                 offset: cardWidth * index,
                 index,
               })}
+              key={`${props.filmStripId}-flatlist`}
               renderItem={({ item, index }) => {
                 if (item.viewAll) {
                   return (
                     <MFViewAllButton
+                      //@ts-ignore
+                      ref={innerViewAllRef}
+                      key={`${props.filmStripId}-flatlist-${index}`}
                       displayStyles={Styles.railTitle}
                       feed={props.feed}
                       displayText={
@@ -253,7 +290,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                   return (
                     <MFLibraryCard
                       // @ts-ignore
-                      ref={index === 0 ? ref : null}
+                      ref={(reference: any) => itemsRef.current[index] = reference}
                       autoFocusOnFirstCard={
                         props.autoFocusOnFirstCard
                           ? index === 0
@@ -261,7 +298,8 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                             : false
                           : false
                       }
-                      key={`Index${index}`}
+                      key={`${props.filmStripId}-flatlist-${index}`}
+                      libraryCardId={`${props.filmStripId}-flatlist-${index}`}
                       data={item}
                       cardStyle={props.cardStyle}
                       style={props.style}
@@ -313,7 +351,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
             >
               <MFViewAllButton
                 // @ts-ignore
-                ref={ref}
+                ref={innerFeedNotImplementedRef}
                 displayStyles={Styles.railTitle}
                 displayText={"Feed Not Implemented"}
                 style={[HomeScreenStyles.landScapeCardStyles]}
@@ -321,6 +359,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                 focusedStyle={HomeScreenStyles.focusedStyle}
                 onPress={props.onListFooterElementOnPress}
                 onFocus={props.onListFooterElementFocus}
+                key={`${props.filmStripId}-flatlist`}
               />
             </View>
           )
@@ -335,7 +374,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
             props.swimLaneKey?.trim().length! > 0 &&
             (props.swimLaneKey === props.title ||
               props.swimLaneKey === currentFeed?.title) && (
-              <MFMetaData currentFeed={currentFeed} />
+              <MFMetaData currentFeed={currentFeed} key={`${props.filmStripId}-flatlist`}/>
             )}
         </View>
       </View>
