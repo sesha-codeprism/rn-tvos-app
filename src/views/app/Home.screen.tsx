@@ -26,6 +26,7 @@ import { Routes } from "../../config/navigation/RouterOutlet";
 import { Layout } from "../../utils/analytics/consts";
 import { ItemShowType } from "../../utils/common";
 import { SafeAreaView } from "react-native-safe-area-context";
+import useAccount from "../../customHooks/useAccount";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -40,6 +41,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const [open, setOpen] = useState(false);
   const firstCardRef = useRef<TouchableOpacity>(null);
   const drawerRef: React.MutableRefObject<any> = useRef();
+  const accountInfo = useAccount();
 
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;

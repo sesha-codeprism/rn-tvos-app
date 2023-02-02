@@ -161,19 +161,20 @@ const MFMenu = (props: MFMenuProps) => {
                   containedButtonStyle: {
                     enabled: true,
                     focusedBackgroundColor:
-                      appUIDefinition.theme.colors.primary,
+                      appUIDefinition.theme.backgroundColors.primary1,
                     elevation: 5,
                     hoverColor: "red",
                     unFocusedBackgroundColor:
-                      appUIDefinition.theme.colors.secondary,
+                      appUIDefinition.theme.backgroundColors.primary1,
                   },
                 }}
                 enableRTL={GLOBALS.enableRTL}
                 outlinedButtonProps={{
                   outlinedButtonStyle: {
-                    focusedBorderColor: appUIDefinition.theme.colors.primary,
+                    focusedBorderColor:
+                      appUIDefinition.theme.backgroundColors.primary1,
                     unFocusedBorderColor:
-                      appUIDefinition.theme.colors.secondary,
+                      appUIDefinition.theme.backgroundColors.primary1,
                     focusedBorderWidth: 5,
                     unFocusedBorderWidth: 2,
                     isDisabled: true,

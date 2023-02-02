@@ -214,14 +214,15 @@ const getFavoriteChannels = async (params?: any) => {
 export const registerLiveUdls = () => {
   const BASE = "live";
 
-  const subscriberUdls = [
+  const liveUdls = [
     // { prefix: BASE + "/channelMap/", getter: getChannelMap },
     { prefix: BASE + "/catchup/", getter: getCatchUp },
     { prefix: BASE + "/feeds/playableChannels", getter: getPlayableChannels },
     { prefix: BASE + "/myStations/", getter: getMyChannels },
     { prefix: BASE + '/feeds/playableChannels/Movie', getter: getPlayableMovieChannels },
     { prefix: BASE + '/feeds/hubRestartTvShowcards', getter: gethubRestartTvShowcards },
-    { prefix: BASE + '/feeds/trending/', getter: getLiveTrends }
+    { prefix: BASE + '/feeds/trending/', getter: getLiveTrends },
+    { prefix: BASE + '/channelRights/', getter: getChannelRights }
   ];
-  return subscriberUdls;
+  return liveUdls;
 };

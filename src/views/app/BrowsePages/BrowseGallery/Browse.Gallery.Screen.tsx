@@ -279,9 +279,10 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
               }}
               containedButtonProps={{
                 containedButtonStyle: {
-                  focusedBackgroundColor: appUIDefinition.theme.colors.blue,
+                  focusedBackgroundColor:
+                    appUIDefinition.theme.backgroundColors.primary1,
                   enabled: true,
-                  hoverColor: appUIDefinition.theme.colors.blue,
+                  hoverColor: appUIDefinition.theme.backgroundColors.primary1,
                   elevation: 5,
                 },
               }}
@@ -484,7 +485,7 @@ const styles = StyleSheet.create({
         scale: 1.1,
       },
     ],
-    backgroundColor: appUIDefinition.theme.colors.blue,
+    backgroundColor: appUIDefinition.theme.backgroundColors.primary1,
   },
   filterButtonContainerStyle: {
     flex: 0.2,

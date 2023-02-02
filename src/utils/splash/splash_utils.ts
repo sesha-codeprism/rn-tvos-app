@@ -184,13 +184,12 @@ export const setNativeModuleData = async () => {
             NativeModules.MKGuideBridgeManager.setToken(GLOBALS.store?.accessToken);
             NativeModules.MKGuideBridgeManager.setRefreshToken(GLOBALS.store?.refreshToken);
             NativeModules.MKGuideBridgeManager.setChannelmapId(GLOBALS.bootstrapSelectors?.ChannelMapId);
-            const scheduleCacheUrl = GLOBALS.bootstrapSelectors?.ServiceMap.Services.scheduleCache.split(".");
-            if (__DEV__) {
-                console.log(scheduleCacheUrl)
-                console.log(`${scheduleCacheUrl[1]}.${scheduleCacheUrl[2]}`)
+            const isEmulator: boolean = await DeviceInfo.isEmulator();
+            if (isEmulator) {
+                NativeModules.MKGuideBridgeManager.setEnvironment(GLOBALS.bootstrapSelectors?.ServiceMap.Services);
+            } else {
+                NativeModules.MKGuideBridgeManager.setEnvironment(GLOBALS.bootstrapSelectors?.ServiceMap.Services);
             }
-            const appEnv = `${scheduleCacheUrl[1]}.${scheduleCacheUrl[2]}`;
-            NativeModules.MKGuideBridgeManager.setEnvironment(JSON.stringify(GLOBALS.bootstrapSelectors?.ServiceMap.Services));
             resolve()
         } catch (e) {
             reject(e);

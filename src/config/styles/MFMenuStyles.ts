@@ -114,7 +114,7 @@ const MFMenuStyles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
     borderWidth: 5,
-    borderColor: appUIDefinition.theme.colors.primary,
+    borderColor: appUIDefinition.theme.backgroundColors.primary1,
     justifyContent: "center",
   },
   profileCircleStyle: {
@@ -125,7 +125,7 @@ const MFMenuStyles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
-    borderColor: appUIDefinition.theme.colors.primary,
+    borderColor: appUIDefinition.theme.backgroundColors.primary1,
   },
 });
 

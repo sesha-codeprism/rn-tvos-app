@@ -8,6 +8,7 @@
     "Open XCWorkSpace": "cd ios && open RetailClient.xcworkspace && cd ..",
     "Generate TvOS build": "sh MakeIPA.sh",
     "start": "sh ./pre-build.sh $npm_config_skin && react-native start",
+    "uidef": "node scripts/parseDefinition.mjs --definition=./src/config/uidefinition.json",
     "postinstall": "patch-package",
     "Setup project": "yarn install && cd ios && pod install && cd ..",
     "Setup project for M1 Mac": "yarn install && cd ios && arch -x86_64 pod install && cd ..",
@@ -73,6 +74,7 @@
     "@types/react-native": "^0.64.13",
     "@types/react-redux": "^7.1.24",
     "@types/react-test-renderer": "^18.0.0",
+    "argv": "^0.0.2",
     "babel-jest": "26.6.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "enzyme": "^3.11.0",
@@ -86,9 +88,11 @@
     "react-scripts": "^4.0.3",
     "react-test-renderer": "17.0.1",
     "reactotron-react-native": "^5.0.0",
+    "strip-json-comments": "^5.0.0",
     "ts-jest": "26.5.5",
     "typedoc": "^0.22.17",
-    "typescript": "^4.7.3"
+    "typescript": "^4.7.3",
+    "util": "^0.12.5"
   },
   "peerDependencies": {
     "react": ">=16.8.0",

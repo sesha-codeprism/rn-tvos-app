@@ -28,6 +28,9 @@ import {
   massageProgramDataForUDP,
   massageSeriesDataForUDP,
   SubscriptionPackages,
+  validateEntitlements,
+  getEpisodeInfo,
+  massageDiscoveryFeed,
 } from "../../../utils/assetUtils";
 import { metadataSeparator } from "../../../utils/Subscriber.utils";
 import { getUIdef, scaleAttributes } from "../../../utils/uidefinition";
@@ -45,10 +48,10 @@ import {
   pbr,
   sourceTypeString,
 } from "../../../utils/analytics/consts";
-import { Genre } from "../../../utils/common";
+import { Genre, SourceType } from "../../../utils/common";
 import { useQuery } from "react-query";
 import { defaultQueryOptions } from "../../../config/constants";
-import { DefaultStore, getEpisodeInfo } from "../../../utils/DiscoveryUtils";
+import { DefaultStore } from "../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../utils/globals";
 import { getDataFromUDL, getMassagedData } from "../../../../backend";
 import ProgressBar from "../../../components/MFProgress";
@@ -317,7 +320,31 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     },
     [AppStrings?.str_details_cta_more_info]: toggleSidePanel,
     [AppStrings?.str_details_cta_more_episodes]: () => {
-      featureNotImplementedAlert();
+      //@ts-ignore
+      const { StationId, Schedule, ChannelInfo, isFromEPG } = feed;
+      const StationIdFromEPG = Schedule?.channelId;
+      const { combinedEntitlements = [] } = udpDataAsset || {};
+      const isRecordingBlocked = !validateEntitlements(
+        combinedEntitlements,
+        //TODO: Make api call and set this value
+        []
+      );
+      props.navigation.push(Routes.EpisodeList, {
+        discoveryData: discoveryProgramData,
+        subscriberData: subscriberData,
+        title: discoveryProgramData?.Name,
+        udpData: udpDataAsset,
+        //TODO: This is not supposed to be undefined. Find and fix the value
+        contextualSchedule: undefined,
+        stationId:
+          StationId ||
+          Schedule?.StationId ||
+          ChannelInfo?.channel?.StationId ||
+          Schedule?.channelId,
+        isSeriesRecordingBlocked: isRecordingBlocked,
+        isFromEPG,
+        StationIdFromEPG,
+      });
     },
     [AppStrings?.str_details_cta_waystowatch]: () => {
       featureNotImplementedAlert();
@@ -398,11 +425,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
   let assetData: AssetData = updateAssetData();
   const getAllViewableSubscriptions = async ({ queryKey }: any) => {
-    const [, assetData] = queryKey;
-    if (!assetData) {
-      console.log("No asset data to make api call..");
-      return undefined;
-    }
     const udlParams = "udl://dvrproxy/viewable-subscription-items/";
     const data = await getDataFromUDL(udlParams);
     const massagedData = getMassagedData(udlParams, data);
@@ -411,11 +433,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const getScheduledSubscriptionGroups = async ({ queryKey }: any) => {
-    const [, assetData] = queryKey;
-    if (!assetData) {
-      console.log("No asset data to make api call..");
-      return undefined;
-    }
     const udlParams = "udl://dvrproxy/get-scheduled-subscription-groups/";
     const data = await getDataFromUDL(udlParams);
     const massagedData = getMassagedData(udlParams, data);
@@ -424,11 +441,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const getAllSubscriptionGroups = async ({ queryKey }: any) => {
-    const [, assetData] = queryKey;
-    if (!assetData) {
-      console.log("No asset data to make api call..");
-      return undefined;
-    }
     const udlParams = "udl://dvrproxy/get-all-subscriptionGroups/";
     const data = await getDataFromUDL(udlParams);
     const massagedData = getMassagedData(udlParams, data);
@@ -873,7 +885,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           feed,
           GLOBALS.currentSlots,
           allSubscriptionGroups,
-          GLOBALS.bootstrapSelectors,
+          GLOBALS.userAccountInfo,
           undefined,
           playActionsData,
           undefined,
@@ -892,7 +904,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           discoverySchedulesData,
           undefined,
           allSubscriptionGroups,
-          undefined,
+          GLOBALS.userAccountInfo,
           subscriberData,
           undefined,
           viewableSubscriptionGroups,
@@ -954,19 +966,19 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   const viewableSubscriptionGroupsQuery = useQuery(
-    [`get-viewableSubscriptionGroupsQuery-${assetData?.id}`, assetData],
+    ["get-viewableSubscriptionGroupsQuery"],
     getAllViewableSubscriptions,
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
 
   const getScheduledSubscriptionsQuery = useQuery(
-    [`get-getScheduledSubscriptionsQuery-${assetData?.id}`, assetData],
+    [`get-ScheduledSubscriptionsQuery`],
     getScheduledSubscriptionGroups,
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
 
   const getAllSubscriptionsQuery = useQuery(
-    [`get-getScheduledSubscriptionsQuery-${assetData?.id}`, assetData],
+    [`get-AllSubscriptionsQuery`],
     getAllSubscriptionGroups,
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
@@ -1656,7 +1668,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 };
 
-const styles = StyleSheet.create(
+const styles: any = StyleSheet.create(
   getUIdef("Details.Showcard")?.style ||
     scaleAttributes({
       detailsBlock: {

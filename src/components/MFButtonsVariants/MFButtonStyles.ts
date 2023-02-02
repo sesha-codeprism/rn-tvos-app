@@ -23,7 +23,7 @@ const Styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 20,
     borderBottomWidth: 2,
-    borderBottomColor: appUIDefinition.theme.colors.primary,
+    borderBottomColor: appUIDefinition.theme.backgroundColors.primary1,
   },
   underlined: {
     paddingHorizontal: 10,
@@ -33,7 +33,7 @@ const Styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 10,
     borderBottomWidth: 2,
-    borderBottomColor: appUIDefinition.theme.colors.primary,
+    borderBottomColor: appUIDefinition.theme.backgroundColors.primary1,
   },
   focused: {
     // transform: [

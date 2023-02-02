@@ -3,6 +3,7 @@ import {
   MFbootstrapLandingInfo,
   MFDeviceInfo,
 } from "../../backend/@types/globals";
+import { UserAccountInfo } from "../@types/Account";
 import { BootStrapResponse } from "../@types/BootStrapResponse";
 import { UserProfile } from "../@types/UserProfile";
 import { BrowseGallery } from "./common";
@@ -97,6 +98,10 @@ interface GLOBALSType {
   rootNavigation: any;
   /** Should the UI be RTL */
   enableRTL: boolean;
+  /** User account info  */
+  /** ChannelRights Info */
+  channelRights: any;
+  userAccountInfo: UserAccountInfo
   browseGalleryData?: BrowseGallery;
   currentSlots: any
   channelMap: any

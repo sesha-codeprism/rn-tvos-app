@@ -6,6 +6,7 @@ import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import axios from "axios";
 import { MFGlobalsConfig } from "../configs/globals";
 import { PinnedItemType } from "../../src/utils/pinnedItemType";
+import { isFeatureAssigned } from "../../src/utils/helpers";
 export type PinType = "adult" | "parentalcontrol" | "purchase";
 export interface SearchParam {
   searchString: string;
@@ -481,6 +482,74 @@ export const unpinItem = async (Id: string, ItemType: PinnedItemType, requestFla
 }
 
 
+export const getSeasonPlayOptions = async (iD: string, params: any) => {
+  const { accessToken, rightsGroupIds } = GLOBALS.store! || undefined;
+  const { seriesID, seasonID } = params;
+  // const catchup =
+  // (GLOBALS.bootstrapSelectors.hasFeature(state, "catchupEnvironment") &&
+  //   bootstrapSelectors.hasFeature(state, "catchup")) ||
+  // false;
+  const isCatchUp = (isFeatureAssigned("catchupEnvironment") && isFeatureAssigned("catchup")) || false
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || '') + `/v3/series/${seriesID}/seasons/${seasonID}/play-options`
+  const types = ["Title"];
+  //@ts-ignore
+  if (GLOBALS.userAccountInfo && GLOBALS.userAccountInfo.DvrCapability === "CloudDvr") {
+    types.push("Recording");
+  }
+
+  const response = await GET({
+    url: url,
+    params: {
+      storeId: DefaultStore.Id,
+      groups: rightsGroupIds,
+      types: types.join(","),
+      catchup: isCatchUp
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  });
+  return response;
+}
+
+export const getSeriesPlayOptions = async (id: string, params: any) => {
+  const { accessToken, rightsGroupIds } = GLOBALS.store! || undefined;
+  const { seriesID } = params;
+  const isCatchUp = (isFeatureAssigned("catchupEnvironment") && isFeatureAssigned("catchup")) || false
+  const types = ["Title"];
+  //@ts-ignore
+  if (GLOBALS.bootstrapSelectors && GLOBALS.bootstrapSelectors.DvrCapability === "CloudDvr") {
+    types.push("Recording");
+  }
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || '') + `/v4/series/${seriesID}/play-options`
+  const response = await GET({
+    url: url,
+    params: {
+      storeId: DefaultStore.Id,
+      groups: rightsGroupIds,
+      types: types.join(","),
+      catchup: isCatchUp
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  });
+  return response;
+}
+
+export const getUserAccount = async (id: string, params: any) => {
+  const { accessToken } = GLOBALS.store!;
+  const url = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || '') + '/v2/account';
+  const response = await GET({
+    url: url,
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  })
+  return response;
+}
+
+
 
 
 export const registerSubscriberUdls = (params?: any) => {
@@ -521,6 +590,9 @@ export const registerSubscriberUdls = (params?: any) => {
       prefix: BASE + "/getSeriesSubscriberData/",
       getter: getSeriesSubscriberData
     },
+    { prefix: BASE + "/getSeasonPlayOptions/", getter: getSeasonPlayOptions },
+    { prefix: BASE + "/getSeriesPlayOptions", getter: getSeriesPlayOptions },
+    { prefix: BASE + "/account/", getter: getUserAccount }
   ];
   return subscriberUdls;
 };
