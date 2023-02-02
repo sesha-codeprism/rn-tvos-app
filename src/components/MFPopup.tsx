@@ -4,6 +4,7 @@ interface MFPopupProps {
   buttons?: Buttons[];
   title?: string;
   description?: string;
+  popupId?: string;
 }
 interface Buttons {
   title: string;
@@ -40,14 +41,15 @@ const MFPopup = (props: MFPopupProps) => {
             <FlatList data={props.buttons && props.buttons.length
               ? props.buttons
               : defaultProps.buttons}
-              keyExtractor={(item)=> item.title}
+              keyExtractor={(item, index)=> `${props.popupId}-${item.title}-${index}`}
+              key={props.popupId}
               renderItem={({item, index}) => {
                 return (
                   <Pressable
                     onFocus={() => {
                       setFocused(index);
                     }}
-                    key={index}
+                    key={`${props.popupId}-${item.title}-${index}`}
                     isTVSelectable={true}
                     hasTVPreferredFocus={index === 0 ? true: false}
                     style={

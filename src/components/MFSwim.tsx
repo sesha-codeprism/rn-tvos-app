@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import { FeedItem } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
@@ -35,9 +35,15 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
   ({ ...props }, ref: any) => {
     const data = getAllFeedDataForFeed(props.feeds!);
     const [swimLaneKey, setSwimLaneKey] = useState("");
+    const [hubName, setHubName] =useState("");
     const updateSwimLaneKey = (key: string) => {
       setSwimLaneKey(key);
     };
+
+    useEffect(() =>{
+     setHubName(props.feeds?.Name||  "")
+    });
+
     return (
       <FlatList
         data={props.feeds?.Feeds}
@@ -50,7 +56,8 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
             <MFSwimLane
               // @ts-ignore
               ref={index === 0 ? ref : null}
-              key={index}
+              key={`${hubName}-${index}`}
+              swimId={`${hubName}-${index}`}
               feed={item}
               data={data[index].data}
               onPress={props.onPress}

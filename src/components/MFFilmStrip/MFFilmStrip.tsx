@@ -98,6 +98,7 @@ export interface MFFilmStripProps {
   /** Feed being rendered */
   feed: Feed;
   onViewAllPressed?: null | ((event: SubscriberFeed) => void) | undefined;
+  filmStripId?: string;
 }
 /**
  * Component that renders horizontal-scrolling collection of items
@@ -239,19 +240,21 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
               inverted={props.enableRTL}
               data={dataArray}
               initialNumToRender={20}
-              keyExtractor={(x, i) => i.toString()}
+              keyExtractor={(x, i) => `${props.filmStripId}-flatlist-${i}` }
               ListEmptyComponent={props.listEmptyComponent}
               getItemLayout={(data, index) => ({
                 length: cardWidth,
                 offset: cardWidth * index,
                 index,
               })}
+              key={`${props.filmStripId}-flatlist`}
               renderItem={({ item, index }) => {
                 if (item.viewAll) {
                   return (
                     <MFViewAllButton
                       //@ts-ignore
                       ref={innerViewAllRef}
+                      key={`${props.filmStripId}-flatlist-${index}`}
                       displayStyles={Styles.railTitle}
                       feed={props.feed}
                       displayText={
@@ -295,7 +298,8 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                             : false
                           : false
                       }
-                      key={`Index${index}`}
+                      key={`${props.filmStripId}-flatlist-${index}`}
+                      libraryCardId={`${props.filmStripId}-flatlist-${index}`}
                       data={item}
                       cardStyle={props.cardStyle}
                       style={props.style}
@@ -355,6 +359,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                 focusedStyle={HomeScreenStyles.focusedStyle}
                 onPress={props.onListFooterElementOnPress}
                 onFocus={props.onListFooterElementFocus}
+                key={`${props.filmStripId}-flatlist`}
               />
             </View>
           )
@@ -369,7 +374,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
             props.swimLaneKey?.trim().length! > 0 &&
             (props.swimLaneKey === props.title ||
               props.swimLaneKey === currentFeed?.title) && (
-              <MFMetaData currentFeed={currentFeed} />
+              <MFMetaData currentFeed={currentFeed} key={`${props.filmStripId}-flatlist`}/>
             )}
         </View>
       </View>

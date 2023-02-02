@@ -59,6 +59,7 @@ export interface MFLibraryCardProps {
     | undefined;
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
   autoFocusOnFirstCard?: boolean;
+  libraryCardId?: string;
 }
 
 const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
@@ -176,6 +177,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
               },
             ],
           }}
+          key={`${props.libraryCardId}-av-1`}
         >
           <MFText
             textStyle={[
@@ -189,6 +191,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
             displayText={props.title}
             enableRTL={props.enableRTL}
             shouldRenderText={props.shouldRenderText}
+            key={`${props.libraryCardId}-av-1-text-1`}
           />
           <MFText
             textStyle={[
@@ -202,6 +205,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
             displayText={props.subTitle}
             enableRTL={props.enableRTL}
             shouldRenderText={props.shouldRenderText}
+            key={`${props.libraryCardId}-av-1-text-2`}
           />
         </Animated.View>
       ) : (
@@ -218,6 +222,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
             displayText={props.title}
             enableRTL={props.enableRTL}
             shouldRenderText={props.shouldRenderText}
+            key={`${props.libraryCardId}-v-1`}
           />
           <MFText
             textStyle={[
@@ -231,6 +236,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
             displayText={props.subTitle}
             enableRTL={props.enableRTL}
             shouldRenderText={props.shouldRenderText}
+            key={`${props.libraryCardId}-v-1-text-1`}
           />
         </View>
       );
@@ -249,6 +255,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
         onPress={_onPress}
         onFocus={_onFocus}
         onBlur={_onBlur}
+        key={`${props.libraryCardId}-to`}
       >
         <View
           style={StyleSheet.flatten([
@@ -260,6 +267,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
                   : "transparent",
             },
           ])}
+          key={`${props.libraryCardId}-to-v-1`}
         >
           <FastImage
             style={[props.imageStyle]}
@@ -270,6 +278,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
             }
             fallback
             defaultSource={AppImages.bgPlaceholder}
+            key={`${props.libraryCardId}-to-v-1-f-1`}
           >
             {props.overlayComponent}
             {getRenderImageURI(props.cardStyle) === undefined && !focused && (
@@ -284,6 +293,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
                   zIndex: 1,
                   marginTop: SCREEN_HEIGHT * 0.07,
                 }}
+                key={`${props.libraryCardId}-to-v-1-f-1-av-1`}
               >
                 <MFText
                   shouldRenderText
@@ -296,10 +306,11 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
                       textAlignVertical: "center",
                     },
                   ]}
+                  key={`${props.libraryCardId}-to-v-1-f-1-av-1-text-1`}
                 />
               </Animated.View>
             )}
-            <View>
+            <View key={`${props.libraryCardId}-to-v-1-f-1-v-1`}>
               {props.showProgress && props.progressComponent != undefined
                 ? props.progressComponent
                 : undefined}
@@ -315,9 +326,10 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
                   ? styles.overlayCenterStyles
                   : {},
               ]}
+              key={`${props.libraryCardId}-to-v-1-f-1-v-2`}
             >
               {props.titlePlacement != TitlePlacement.beneath ? (
-                <TitleAndSubtitle />
+                <TitleAndSubtitle key={`${props.libraryCardId}-to-v-1-f-1-v-2-title`}/>
               ) : undefined}
             </View>
           </FastImage>
@@ -335,12 +347,13 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
                     ],
                   },
                 ]}
+                key={`${props.libraryCardId}-to-v-1-ao-1`}
               >
-                <TitleAndSubtitle />
+                <TitleAndSubtitle  key={`${props.libraryCardId}-to-v-1-ao-1-title`}/>
               </Animated.View>
             ) : (
-              <View style={[styles.cardContentContainer]}>
-                <TitleAndSubtitle />
+              <View style={[styles.cardContentContainer]}  key={`${props.libraryCardId}-to-v-1-v-1`}>
+                <TitleAndSubtitle  key={`${props.libraryCardId}-to-v-1-v-1-title`}/>
               </View>
             )
           ) : undefined}

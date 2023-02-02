@@ -308,7 +308,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                   {!isLoading && (
                     <MFSwim
                       // @ts-ignore
-                      ref={firstCardRef}
+                      ref={firstSwimlaneRef}
                       feeds={feeds}
                       onFocus={onFeedFocus}
                       onPress={(event) => {
