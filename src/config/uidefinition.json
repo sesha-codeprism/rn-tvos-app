@@ -1684,13 +1684,10 @@
         },
         "seasonBlock": {
           "height": 62,
-          "width": 250,
-          "marginBottom": 43
-        },
-        "seasonBlockSelected": {
-          "height": 62,
-          "width": 250,
           "marginBottom": 43,
+          "alignSelf": "flex-start"
+        },
+        "seasonBlockSelectedHighlight": {
           "borderBottomColor": "${theme.backgroundColors.primary1}",
           "borderBottomWidth": 4
         },

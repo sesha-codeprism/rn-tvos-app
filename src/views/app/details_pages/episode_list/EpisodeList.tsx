@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {
+  Alert,
   FlatList,
   ImageBackground,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { getUIdef, scaleAttributes } from "../../../../utils/uidefinition";
-import { getScaledValue, SCREEN_WIDTH } from "../../../../utils/dimensions";
+import {
+  getScaledValue,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from "../../../../utils/dimensions";
 import { PageContainer } from "../../../../components/PageContainer";
 import {
   chooseRating,
@@ -42,6 +48,7 @@ import MFButton, {
   MFButtonVariant,
 } from "../../../../components/MFButton/MFButton";
 import { styles } from "../../BrowsePages/BrowseCategory/Browse.Category.screen";
+import { DetailsSidePanel } from "../DetailSidePanel";
 
 interface EpisodeListProps {
   navigation: NativeStackNavigationProp<any>;
@@ -63,15 +70,18 @@ const scaledSnapToInterval = getScaledValue(lazyListConfig.snapToInterval);
 
 const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const navigationParams = props.route.params;
+  console.log(navigationParams);
   const { udpData, subscriberData, discoveryData } = navigationParams;
   const [currentSeason, setCurrentSeason] = useState<any>();
   const [seasonItemHeight, setSeasonItemHeight] = useState(1);
   const [currentEpisode, setCurrentEpisode] = useState<any>();
-  const [ctaList, setCTAList] = useState<any>();
+  const [ctaList, setCTAList] = useState(Array<any>);
   const [currentSeasonEpisodes, setCurrentSeasonEpisodes] = useState(
     Array<any>
   );
   const [episodeDetailsData, setEpisodeDetailsData] = useState<any>();
+  const [open, setOpen] = useState(false);
+
   const metadataList: string[] = discoveryData?.ReleaseYear
     ? [discoveryData?.ReleaseYear]
     : discoveryData?.StartYear
@@ -81,14 +91,15 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     metadataList.push(chooseRating(discoveryData?.Ratings));
   }
   const metadata = metadataList.join(" · ");
+  const drawerRef: React.MutableRefObject<any> = useRef();
   const str_seasonNumber_episodeNumber: string =
     AppStrings?.str_seasonNumber_episodeNumber || "";
 
   let episodeFlatList = React.createRef<FlatList>();
   let seasonScrollView = React.createRef<ScrollView>();
-  let seasonButtonRef: React.RefObject<any>;
-  let firstEpisodeRef: React.RefObject<any>;
-  let lastEpisodeRef: React.RefObject<any>;
+  let seasonButtonRef: React.RefObject<any> = React.createRef<any>();
+  let firstEpisodeRef: React.RefObject<any> = React.createRef<any>();
+  let lastEpisodeRef: React.RefObject<any> = React.createRef<any>();
 
   let buttonRefObject = {
     [AppStrings?.str_details_cta_play]: React.createRef(),
@@ -101,9 +112,15 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     [AppStrings?.str_dvr_resolve_conflict]: React.createRef(),
   };
 
+  const toggleSidePanel = () => {
+    setOpen(open);
+    drawerRef?.current?.open();
+    // drawerRef.current.open();
+  };
+
   const ctaButtonPress: any = {
     [AppStrings?.str_details_program_record_button]: () => {},
-    [AppStrings?.str_details_cta_more_info]: () => {},
+    [AppStrings?.str_details_cta_more_info]: toggleSidePanel,
     [AppStrings?.str_details_cta_play]: () => {},
     [AppStrings?.str_details_cta_trailer]: () => {},
     [AppStrings?.str_details_cta_restart]: () => {},
@@ -119,7 +136,6 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     [AppStrings?.str_details_cta_package]: () => {},
     [AppStrings?.str_details_cta_subscribe]: () => {},
   };
-  const refArray = [];
 
   let firstButtonRef = React.createRef();
   let buttonFocuszoneRef = React.createRef();
@@ -556,9 +572,11 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       }
       skip = 0;
       top = 10;
+      setCTAList([]);
     } else {
       /** Focused season is same as currently active season  So, don't update anything */
       setCurrentEpisode(undefined);
+      setCTAList([]);
     }
   };
 
@@ -599,17 +617,21 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       handleSeasonFocus(season);
     };
     const isCurrentSeason = season?.Id && currentSeason?.Id === season?.Id;
+    const isCTAButtonlistEmpty = ctaList?.length <= 0;
+    const selectedHighlightStyles =
+      isCurrentSeason && isCTAButtonlistEmpty
+        ? episodeStyles.seasonBlockSelectedHighlight
+        : {};
 
     const textStyle = isCurrentSeason
       ? episodeStyles.seasonTextSelected
       : episodeStyles.seasonText;
     return (
       <View
-        style={
-          isCurrentSeason
-            ? episodeStyles.seasonBlockSelected
-            : episodeStyles.seasonBlock
-        }
+        style={StyleSheet.flatten([
+          episodeStyles.seasonBlock,
+          selectedHighlightStyles,
+        ])}
         key={`SeasonItem_${index}`}
       >
         <Pressable
@@ -653,10 +675,8 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     //   $top: 1000,
     // });
     if (episode?.index === skip - 2) {
-      console.log(episode?.index, skip, "Need to fetch more episodes");
       getMoreEpisodes();
     } else {
-      console.log(episode?.index, skip, "No Need to fetch more episodes");
     }
   };
 
@@ -669,16 +689,17 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     ) {
       return;
     }
-    const subData = navigationParams.subscriberData;
 
-    return subData?.CatalogInfo?.Seasons?.map((season: any, index: number) => {
-      season["index"] = index;
-      //   season["onFocus"] = handleSeasonFocus;
-      if (currentSeason?.Id === season?.Id && !isSeasonScrolled) {
-        scrollToSeasonItem(index);
+    return subscriberData?.CatalogInfo?.Seasons?.map(
+      (season: any, index: number) => {
+        season["index"] = index;
+        //   season["onFocus"] = handleSeasonFocus;
+        if (currentSeason?.Id === season?.Id && !isSeasonScrolled) {
+          scrollToSeasonItem(index);
+        }
+        return renderSeasonItem(season);
       }
-      return renderSeasonItem(season);
-    });
+    );
   };
 
   const renderEpisodeListItem = (episodeItem: any) => {
@@ -842,7 +863,10 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
                       hasTVPreferredFocus={index === 0}
                       imageSource={0}
                       avatarSource={undefined}
-                      onFocus={() => {}}
+                      onFocus={() => {
+                        setOpen(false);
+                        drawerRef.current.close();
+                      }}
                       variant={MFButtonVariant.FontIcon}
                       fontIconSource={cta.iconSource}
                       fontIconTextStyle={StyleSheet.flatten([
@@ -908,6 +932,26 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
               </ScrollView>
             </View>
           </View>
+          <TouchableOpacity
+            style={{
+              width: 10,
+              height: SCREEN_HEIGHT,
+              backgroundColor: "transparent",
+            }}
+            onFocus={() => {
+              if (ctaList.length <= 0) {
+                /** Basically we haven't focused on episodes yet.. so need to focus on episodes */
+                firstEpisodeRef?.current?.setNativeProps({
+                  hasTVPreferredFocus: true,
+                });
+              } else {
+                /** Coming from Episode list.. need to pick the correct season */
+                seasonButtonRef?.current?.setNativeProps({
+                  hasTVPreferredFocus: true,
+                });
+              }
+            }}
+          />
           <View style={episodeStyles.secondBlock}>
             <FlatList
               snapToInterval={scaledSnapToInterval}
@@ -935,6 +979,25 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
           </View>
         </View>
       </ImageBackground>
+      <DetailsSidePanel
+        ref={drawerRef}
+        drawerPercentage={37}
+        animationTime={200}
+        overlay={false}
+        opacity={1}
+        open={open}
+        animatedWidth={SCREEN_WIDTH * 0.37}
+        closeOnPressBack={false}
+        navigation={props.navigation}
+        drawerContent={false}
+        moreInfoProps={{
+          udpData: navigationParams.udpData,
+          networkInfo: navigationParams.udpData.networkInfo,
+          genres:
+            navigationParams.udpData?.genre ||
+            navigationParams.discoveryProgramData?.genre,
+        }}
+      />
     </PageContainer>
   );
 };
@@ -981,13 +1044,9 @@ const episodeStyles: any = StyleSheet.create(
         height: 62,
         width: 225,
         marginBottom: 43,
-      },
-      seasonBlockSelected: {
-        height: 62,
-        width: 225,
-        marginBottom: 43,
-        borderBottomColor: "#053C69",
-        borderBottomWidth: 4,
+        alignContent: "center",
+        alignItems: "center",
+        justifyContent: "center",
       },
       seasonText: {
         fontFamily: "Inter-Regular",
