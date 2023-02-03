@@ -130,7 +130,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [udpDataAsset, setUDPDataAsset] = useState<any>();
   const [isCTAButtonFocused, setIsCTAButtonFocused] = useState(false);
   const [isFavoriteButtonFocused, setIsFavoriteButtonFocused] = useState(false);
-  const [ctaButtonFocusState,  setCTAButtonFocusState ] = useState('');
+  const [ctaButtonFocusState, setCTAButtonFocusState] = useState("");
   const [open, setOpen] = useState(false);
   const [similarItemsSwimLaneKey, setSimilarItemsSwimLaneKey] = useState("");
   const [castnCrewSwimLaneKey, setCastnCrewSwimlaneKey] = useState("");
@@ -425,7 +425,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     };
   };
   let assetData: AssetData = updateAssetData();
-  const getAllViewableSubscriptions = async ({ queryKey }: any) => {
+  const getAllViewableSubscriptions = async () => {
     const udlParams = "udl://dvrproxy/viewable-subscription-items/";
     const data = await getDataFromUDL(udlParams);
     const massagedData = getMassagedData(udlParams, data);
@@ -433,7 +433,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     return massagedData;
   };
 
-  const getScheduledSubscriptionGroups = async ({ queryKey }: any) => {
+  const getScheduledSubscriptionGroups = async () => {
     const udlParams = "udl://dvrproxy/get-scheduled-subscription-groups/";
     const data = await getDataFromUDL(udlParams);
     const massagedData = getMassagedData(udlParams, data);
@@ -441,7 +441,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     return massagedData;
   };
 
-  const getAllSubscriptionGroups = async ({ queryKey }: any) => {
+  const getAllSubscriptionGroups = async () => {
     const udlParams = "udl://dvrproxy/get-all-subscriptionGroups/";
     const data = await getDataFromUDL(udlParams);
     const massagedData = getMassagedData(udlParams, data);
@@ -1038,7 +1038,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   onFocus={() => {
                     setOpen(false);
                     drawerRef.current.close();
-                    setCTAButtonFocusState(cta.buttonText)
+                    setCTAButtonFocusState(cta.buttonText);
                   }}
                   variant={MFButtonVariant.FontIcon}
                   fontIconSource={cta.iconSource}
@@ -1571,13 +1571,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     if (isFavoriteButtonFocused) {
       /** If user is on Favorite button and presses down, navigate to current swimlane and focus on first element */
       if (similarData && moreLikeThisRef?.current) {
-        const cardToFocus =  moreLikeThisRef.current?.focused|| moreLikeThisRef.current?.first;
+        const cardToFocus =
+          moreLikeThisRef.current?.focused || moreLikeThisRef.current?.first;
         cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsFavoriteButtonFocused(false);
       } else if (discoveryProgramData && castAndCrewRef?.current) {
-        const cardToFocus =  castAndCrewRef.current?.focused|| castAndCrewRef.current?.first;
+        const cardToFocus =
+          castAndCrewRef.current?.focused || castAndCrewRef.current?.first;
         cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
@@ -1590,25 +1592,27 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       }
     } else if (isCTAButtonFocused) {
       if (similarData && moreLikeThisRef?.current) {
-        const cardToFocus =  moreLikeThisRef.current?.focused|| moreLikeThisRef.current?.first;
+        const cardToFocus =
+          moreLikeThisRef.current?.focused || moreLikeThisRef.current?.first;
         cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsCTAButtonFocused(false);
       } else if (discoveryProgramData && castAndCrewRef?.current) {
-        const cardToFocus =  castAndCrewRef.current?.focused|| castAndCrewRef.current?.first;
+        const cardToFocus =
+          castAndCrewRef.current?.focused || castAndCrewRef.current?.first;
         cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsCTAButtonFocused(false);
       } else {
         /** if no  swimlane exists  focus on the first  button */
-        if(buttonRefObject[ctaButtonFocusState].current){
+        if (buttonRefObject[ctaButtonFocusState].current) {
           buttonRefObject[ctaButtonFocusState].current?.setNativeProps({
             hasTVPreferredFocus: true,
           });
           setIsCTAButtonFocused(true);
-        }else if (ctaButtonRef?.current) {
+        } else if (ctaButtonRef?.current) {
           ctaButtonRef.current?.setNativeProps({
             hasTVPreferredFocus: true,
           });

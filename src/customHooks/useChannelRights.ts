@@ -20,7 +20,7 @@ const useChannelRights = async () => {
             return null;
         }
     }
-    const { data: channelRights } = useQuery(['get-channel-rights'], getChannelRights, { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors && !!GLOBALS.store?.accessToken });
+    const { data: channelRights } = useQuery(['udl://live/channelRights/'], getChannelRights, { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors && !!GLOBALS.store?.accessToken });
 
     useEffect(() => {
         GLOBALS.channelRights = channelRights;
