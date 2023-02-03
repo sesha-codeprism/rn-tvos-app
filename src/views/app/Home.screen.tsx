@@ -132,6 +132,14 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     const navigationTargetUri =
       feed.NavigationTargetUri && feed.NavigationTargetUri.split("?")[0];
     const browseObject = () => {
+      if (
+        navigationTargetUri === "browsepromotions" ||
+        navigationTargetUri === "browsepayperview"
+      ) {
+        updateRoute("BrowseGallery", payload);
+        return;
+        // props.navigation.navigate(Routes.BrowseGallery, payload);
+      }
       if (feed.Layout === Layout.Category || feed.HasSubcategories === true) {
         updateRoute("BrowseCategory", payload);
       } else if (
@@ -241,8 +249,12 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
 
   setHubsData();
   const setCardFocus = () => {
-     // @ts-ignore
-    const cardRef = firstSwimlaneRef.current?.focused|| firstSwimlaneRef.current?.first || firstSwimlaneRef.current?.viewAll?.current || firstSwimlaneRef.current?.feedNotImplemented?.current;
+    // @ts-ignore
+    const cardRef =
+      firstSwimlaneRef.current?.focused ||
+      firstSwimlaneRef.current?.first ||
+      firstSwimlaneRef.current?.viewAll?.current ||
+      firstSwimlaneRef.current?.feedNotImplemented?.current;
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
   return (
