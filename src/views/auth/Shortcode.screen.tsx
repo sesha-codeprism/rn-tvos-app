@@ -222,28 +222,6 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
             );
           })}
         </View>
-        {/* <View>
-          <MFButton
-            variant={MFButtonVariant.Contained}
-            style={ShortCodeStyles.refreshCodePressableStyles}
-            focusedStyle={ShortCodeStyles.refreshCodePressableStyles}
-            avatarSource={AppImages.settings}
-            imageSource={AppImages.settings}
-            iconSource={AppImages.search}
-            hasTVPreferredFocus
-            containedButtonProps={{
-              containedButtonStyle: {
-                enabled: true,
-                focusedBackgroundColor: appUIDefinition.theme.colors.primary,
-                elevation: 5,
-                hoverColor: "red",
-                unFocusedBackgroundColor: appUIDefinition.theme.colors.primary,
-              },
-            }}
-            textLabel={AppStrings.str_login_refresh_code}
-            onPress={onRefresh}
-          />
-        </View> */}
       </View>
     </View>
   );

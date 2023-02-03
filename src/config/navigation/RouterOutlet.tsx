@@ -49,6 +49,8 @@ import BrowseCategoryScreen from "../../views/app/BrowsePages/BrowseCategory/Bro
 import TestScreen from "../../views/app/test.screen";
 import DetailsScreen from "../../views/app/details_pages/Details.Screen";
 import useCurrentSlots from "../../customHooks/useCurrentSlots";
+import EpisodeList from "../../views/app/details_pages/episode_list/EpisodeList";
+import useChannelRights from "../../customHooks/useChannelRights";
 
 interface RouterOutletProps {}
 
@@ -99,6 +101,7 @@ export const Routes = {
   BrowseGallery: "BrowseGallery",
   Details: "details",
   FallBack: "fallBack",
+  EpisodeList: "EpisodeList",
 };
 
 const Stack = createNativeStackNavigator();
@@ -277,7 +280,7 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
         component={BrowseCategoryScreen}
       />
       <Stack.Screen name={Routes.Test} component={TestScreen} />
-
+      <Stack.Screen name={Routes.EpisodeList} component={EpisodeList} />
       <Stack.Screen name={Routes.FallBack} component={RouteFallBackScreen} />
     </Stack.Navigator>
   );
@@ -291,7 +294,7 @@ const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
   routerProps: RouterOutletProps
 ) => {
   const slots = useCurrentSlots();
-
+  const channelRights = useChannelRights();
   return (
     <NavigationContainer>
       <Stack.Navigator

@@ -119,7 +119,7 @@ const MFCard: React.FunctionComponent<MFCardProps> = React.forwardRef(
                 alignSelf:
                   props.layoutType === "Circular" ? "center" : "flex-start",
                 paddingRight: props.layoutType === "Circular" ? 150 : 0,
-                color: appUIDefinition.theme.colors.white,
+                color: appUIDefinition.theme.backgroundColors.white,
                 fontFamily: "Inter-Bold",
               },
             ]}
@@ -134,7 +134,7 @@ const MFCard: React.FunctionComponent<MFCardProps> = React.forwardRef(
                 alignSelf:
                   props.layoutType === "Circular" ? "center" : "flex-start",
                 paddingRight: props.layoutType === "Circular" ? 150 : 0,
-                color: appUIDefinition.theme.colors.white,
+                color: appUIDefinition.theme.backgroundColors.white,
                 fontFamily: "Inter-Bold",
               },
             ]}
@@ -152,7 +152,7 @@ const MFCard: React.FunctionComponent<MFCardProps> = React.forwardRef(
                 alignSelf:
                   props.layoutType === "Circular" ? "center" : "flex-start",
                 paddingRight: props.layoutType === "Circular" ? 150 : 0,
-                color: appUIDefinition.theme.colors.white,
+                color: appUIDefinition.theme.backgroundColors.white,
                 fontFamily: "Inter-Bold",
               },
             ]}
@@ -168,7 +168,7 @@ const MFCard: React.FunctionComponent<MFCardProps> = React.forwardRef(
                 alignSelf:
                   props.layoutType === "Circular" ? "center" : "flex-start",
                 paddingRight: props.layoutType === "Circular" ? 150 : 0,
-                color: appUIDefinition.theme.colors.white,
+                color: appUIDefinition.theme.backgroundColors.white,
                 fontFamily: "Inter-Bold",
               },
             ]}

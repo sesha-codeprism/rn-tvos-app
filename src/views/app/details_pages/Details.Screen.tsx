@@ -28,6 +28,9 @@ import {
   massageProgramDataForUDP,
   massageSeriesDataForUDP,
   SubscriptionPackages,
+  validateEntitlements,
+  getEpisodeInfo,
+  massageDiscoveryFeed,
 } from "../../../utils/assetUtils";
 import { metadataSeparator } from "../../../utils/Subscriber.utils";
 import { getUIdef, scaleAttributes } from "../../../utils/uidefinition";
@@ -45,10 +48,10 @@ import {
   pbr,
   sourceTypeString,
 } from "../../../utils/analytics/consts";
-import { Genre } from "../../../utils/common";
+import { Genre, SourceType } from "../../../utils/common";
 import { useQuery } from "react-query";
 import { defaultQueryOptions } from "../../../config/constants";
-import { DefaultStore, getEpisodeInfo } from "../../../utils/DiscoveryUtils";
+import { DefaultStore } from "../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../utils/globals";
 import { getDataFromUDL, getMassagedData } from "../../../../backend";
 import ProgressBar from "../../../components/MFProgress";
@@ -127,7 +130,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [udpDataAsset, setUDPDataAsset] = useState<any>();
   const [isCTAButtonFocused, setIsCTAButtonFocused] = useState(false);
   const [isFavoriteButtonFocused, setIsFavoriteButtonFocused] = useState(false);
-  const [ctaButtonFocusState,  setCTAButtonFocusState ] = useState('');
+  const [ctaButtonFocusState, setCTAButtonFocusState] = useState("");
   const [open, setOpen] = useState(false);
   const [similarItemsSwimLaneKey, setSimilarItemsSwimLaneKey] = useState("");
   const [castnCrewSwimLaneKey, setCastnCrewSwimlaneKey] = useState("");
@@ -318,7 +321,31 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     },
     [AppStrings?.str_details_cta_more_info]: toggleSidePanel,
     [AppStrings?.str_details_cta_more_episodes]: () => {
-      featureNotImplementedAlert();
+      //@ts-ignore
+      const { StationId, Schedule, ChannelInfo, isFromEPG } = feed;
+      const StationIdFromEPG = Schedule?.channelId;
+      const { combinedEntitlements = [] } = udpDataAsset || {};
+      const isRecordingBlocked = !validateEntitlements(
+        combinedEntitlements,
+        //TODO: Make api call and set this value
+        []
+      );
+      props.navigation.push(Routes.EpisodeList, {
+        discoveryData: discoveryProgramData,
+        subscriberData: subscriberData,
+        title: discoveryProgramData?.Name,
+        udpData: udpDataAsset,
+        //TODO: This is not supposed to be undefined. Find and fix the value
+        contextualSchedule: undefined,
+        stationId:
+          StationId ||
+          Schedule?.StationId ||
+          ChannelInfo?.channel?.StationId ||
+          Schedule?.channelId,
+        isSeriesRecordingBlocked: isRecordingBlocked,
+        isFromEPG,
+        StationIdFromEPG,
+      });
     },
     [AppStrings?.str_details_cta_waystowatch]: () => {
       featureNotImplementedAlert();
@@ -398,12 +425,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     };
   };
   let assetData: AssetData = updateAssetData();
-  const getAllViewableSubscriptions = async ({ queryKey }: any) => {
-    const [, assetData] = queryKey;
-    if (!assetData) {
-      console.log("No asset data to make api call..");
-      return undefined;
-    }
+  const getAllViewableSubscriptions = async () => {
     const udlParams = "udl://dvrproxy/viewable-subscription-items/";
     const data = await getDataFromUDL(udlParams);
     const massagedData = getMassagedData(udlParams, data);
@@ -411,12 +433,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     return massagedData;
   };
 
-  const getScheduledSubscriptionGroups = async ({ queryKey }: any) => {
-    const [, assetData] = queryKey;
-    if (!assetData) {
-      console.log("No asset data to make api call..");
-      return undefined;
-    }
+  const getScheduledSubscriptionGroups = async () => {
     const udlParams = "udl://dvrproxy/get-scheduled-subscription-groups/";
     const data = await getDataFromUDL(udlParams);
     const massagedData = getMassagedData(udlParams, data);
@@ -424,12 +441,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     return massagedData;
   };
 
-  const getAllSubscriptionGroups = async ({ queryKey }: any) => {
-    const [, assetData] = queryKey;
-    if (!assetData) {
-      console.log("No asset data to make api call..");
-      return undefined;
-    }
+  const getAllSubscriptionGroups = async () => {
     const udlParams = "udl://dvrproxy/get-all-subscriptionGroups/";
     const data = await getDataFromUDL(udlParams);
     const massagedData = getMassagedData(udlParams, data);
@@ -874,7 +886,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           feed,
           GLOBALS.currentSlots,
           allSubscriptionGroups,
-          GLOBALS.bootstrapSelectors,
+          GLOBALS.userAccountInfo,
           undefined,
           playActionsData,
           undefined,
@@ -893,7 +905,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           discoverySchedulesData,
           undefined,
           allSubscriptionGroups,
-          undefined,
+          GLOBALS.userAccountInfo,
           subscriberData,
           undefined,
           viewableSubscriptionGroups,
@@ -955,19 +967,19 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   const viewableSubscriptionGroupsQuery = useQuery(
-    [`get-viewableSubscriptionGroupsQuery-${assetData?.id}`, assetData],
+    ["get-viewableSubscriptionGroupsQuery"],
     getAllViewableSubscriptions,
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
 
   const getScheduledSubscriptionsQuery = useQuery(
-    [`get-getScheduledSubscriptionsQuery-${assetData?.id}`, assetData],
+    [`get-ScheduledSubscriptionsQuery`],
     getScheduledSubscriptionGroups,
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
 
   const getAllSubscriptionsQuery = useQuery(
-    [`get-getScheduledSubscriptionsQuery-${assetData?.id}`, assetData],
+    [`get-AllSubscriptionsQuery`],
     getAllSubscriptionGroups,
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
@@ -1026,7 +1038,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   onFocus={() => {
                     setOpen(false);
                     drawerRef.current.close();
-                    setCTAButtonFocusState(cta.buttonText)
+                    setCTAButtonFocusState(cta.buttonText);
                   }}
                   variant={MFButtonVariant.FontIcon}
                   fontIconSource={cta.iconSource}
@@ -1559,13 +1571,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     if (isFavoriteButtonFocused) {
       /** If user is on Favorite button and presses down, navigate to current swimlane and focus on first element */
       if (similarData && moreLikeThisRef?.current) {
-        const cardToFocus =  moreLikeThisRef.current?.focused|| moreLikeThisRef.current?.first;
+        const cardToFocus =
+          moreLikeThisRef.current?.focused || moreLikeThisRef.current?.first;
         cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsFavoriteButtonFocused(false);
       } else if (discoveryProgramData && castAndCrewRef?.current) {
-        const cardToFocus =  castAndCrewRef.current?.focused|| castAndCrewRef.current?.first;
+        const cardToFocus =
+          castAndCrewRef.current?.focused || castAndCrewRef.current?.first;
         cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
@@ -1578,25 +1592,27 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       }
     } else if (isCTAButtonFocused) {
       if (similarData && moreLikeThisRef?.current) {
-        const cardToFocus =  moreLikeThisRef.current?.focused|| moreLikeThisRef.current?.first;
+        const cardToFocus =
+          moreLikeThisRef.current?.focused || moreLikeThisRef.current?.first;
         cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsCTAButtonFocused(false);
       } else if (discoveryProgramData && castAndCrewRef?.current) {
-        const cardToFocus =  castAndCrewRef.current?.focused|| castAndCrewRef.current?.first;
+        const cardToFocus =
+          castAndCrewRef.current?.focused || castAndCrewRef.current?.first;
         cardToFocus?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setIsCTAButtonFocused(false);
       } else {
         /** if no  swimlane exists  focus on the first  button */
-        if(buttonRefObject[ctaButtonFocusState].current){
+        if (buttonRefObject[ctaButtonFocusState].current) {
           buttonRefObject[ctaButtonFocusState].current?.setNativeProps({
             hasTVPreferredFocus: true,
           });
           setIsCTAButtonFocused(true);
-        }else if (ctaButtonRef?.current) {
+        } else if (ctaButtonRef?.current) {
           ctaButtonRef.current?.setNativeProps({
             hasTVPreferredFocus: true,
           });
@@ -1680,7 +1696,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 };
 
-const styles = StyleSheet.create(
+const styles: any = StyleSheet.create(
   getUIdef("Details.Showcard")?.style ||
     scaleAttributes({
       detailsBlock: {

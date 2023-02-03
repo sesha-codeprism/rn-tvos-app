@@ -1905,7 +1905,6 @@ export const massageProgramDataForUDP = (
     StationIdFromEPG?: any,
     hasFeatureIosCarrierBilling?: boolean
 ): any => {
-    console.log("playOptions", playOptions)
     let programUDPData: any = {};
     let ipStatus = account?.ClientIpStatus || {};
     if (!config.inhomeDetection.useSubscriberInHome) {
@@ -3667,7 +3666,6 @@ export const getCTAButtons = (
     StationIdFromEPG?: any,
     hasFeatureIosCarrierBilling?: boolean
 ): any => {
-    console.log("Reading AppStrings", AppStrings?.str_details_cta_more_info);
     const { episodes, assetType } = seriesUDPData || {};
     const isLive = isFromSeries
         ? seriesData?.assetType?.sourceType === sourceTypeString.LIVE

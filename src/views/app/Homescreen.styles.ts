@@ -73,7 +73,7 @@ export const HomeScreenStyles = StyleSheet.create({
   },
   focusedStyle: {
     borderWidth: 5,
-    borderColor: appUIDefinition.theme.colors.primary,
+    borderColor: appUIDefinition.theme.backgroundColors.primary1,
     borderRadius: 10,// overflow: 'visible'
   },
   linearGradientStyles: { padding: 10 },

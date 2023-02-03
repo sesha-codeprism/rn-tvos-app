@@ -1,6 +1,6 @@
 import { GenericObject } from "../@types/GenericObject";
 // import uidef from "../config/";
-const uidef = require("../config/uidefinition.json")
+const uidef = require("../config/uidefinition.parsed.json")
 import { getScaledWidth, getScaledHeight } from "./dimensions";
 
 const memoizedUIDef: GenericObject = { compiledUIDef: null };

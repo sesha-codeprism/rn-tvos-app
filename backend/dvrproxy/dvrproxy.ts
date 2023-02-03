@@ -2,6 +2,7 @@ import { lang } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { GLOBALS } from "../../src/utils/globals";
 import { GET } from "../utils/common/cloud";
+import { parseUri } from "../utils/url/urlUtil";
 
 
 export const DVRPROXY_URL = GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr;
@@ -66,7 +67,21 @@ export const getAllSubscriptionGroups = async (uri: string, params: any) => {
         },
     })
     return response;
+}
 
+export const getDVRRecorders = async (id: string, params: any) => {
+    const { storeId } = params || DefaultStore?.Id;
+    const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr || '') + '/v1/subscriber-recorders';
+    const response = await GET({
+        url: uri,
+        params: {
+            storeId: storeId
+        },
+        headers: {
+            Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+        },
+    })
+    return response;
 }
 
 
@@ -75,7 +90,8 @@ export const registerDVRProxyUdls = () => {
     const dvrProxyUdls = [
         { prefix: BASE + '/viewable-subscription-items/', getter: getViewableSubscriptionStems },
         { prefix: BASE + '/get-scheduled-subscription-groups/', getter: getScheduledSubscriptionGroups },
-        { prefix: BASE + '/get-all-subscriptionGroups/', getter: getAllSubscriptionGroups }
+        { prefix: BASE + '/get-all-subscriptionGroups/', getter: getAllSubscriptionGroups },
+        { prefix: BASE + '/get-dvr-recorders/', getter: getDVRRecorders }
     ];
     return dvrProxyUdls;
 }

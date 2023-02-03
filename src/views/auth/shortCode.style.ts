@@ -96,7 +96,7 @@ export const ShortCodeStyles = StyleSheet.create({
   refreshCodePressableStyles: {
     height: 80,
     width: 200,
-    backgroundColor: appUIDefinition.theme.colors.primary,
+    backgroundColor: appUIDefinition.theme.backgroundColors.primary1,
     borderRadius: 5,
     alignContent: "center",
     justifyContent: "center",
