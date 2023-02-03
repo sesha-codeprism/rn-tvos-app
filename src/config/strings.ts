@@ -20,14 +20,11 @@ export const stringLocales = {
 
 }
 
-console.log('en-US ', enUS);
 let AppStrings: StringsObject = enUS;
-console.log('AppStringsS ', AppStrings);
 
 export const setOnScreenLanguage = (onScreenLanguage: any) => {
     //@ts=ignore
     AppStrings = stringLocales[onScreenLanguage]
-    console.log("AppStrings", AppStrings);
 }
 
 export const getFontIcon = (iconKey: keyof typeof mkIcons): string => {
