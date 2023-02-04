@@ -179,12 +179,10 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
                   <MFUserProfile
                     userProfile={item}
                     navigation={props.navigation}
-                    // onBlur={(e) => {
-                    //   onBlur(e, index);
-                    // }}
                     onFocus={(e) => {
                       onFocus(e, index);
                     }}
+                    focusOnFirstElement={index === 0}
                   />
                 </View>
               ) : (
@@ -192,10 +190,10 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
               );
             })}
             {userProfiles.length < 8 ? (
-            <View style={{ marginBottom: 120 }}>
-              <MFUserProfile navigation={props.navigation} />
-            </View>
-          ) : undefined}
+              <View style={{ marginBottom: 120 }}>
+                <MFUserProfile navigation={props.navigation} />
+              </View>
+            ) : undefined}
           </View>
         </View>
       ) : (
