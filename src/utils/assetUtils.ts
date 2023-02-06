@@ -5744,7 +5744,7 @@ export const massageSeriesDataForUDP = (
     hasFeatureIosCarrierBilling?: boolean
 ): any => {
     const { str_seasons_count, str_single_season_count } =
-        global.lStrings || {};
+        AppStrings || {};
 
     const { Schedule = {} } = data;
 

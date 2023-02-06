@@ -71,6 +71,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import { SCREEN_WIDTH } from "../../../utils/dimensions";
 const { width, height } = Dimensions.get("window");
+import MFProgressBar from "../../../components/MFProgressBar";
 
 interface AssetData {
   id: string;
@@ -888,9 +889,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           allSubscriptionGroups,
           GLOBALS.userAccountInfo,
           undefined,
+          GLOBALS.userAccountInfo,
+          undefined,
           playActionsData,
-          undefined,
-          undefined,
           undefined,
           undefined,
           false,
@@ -1144,7 +1145,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       ((!currentCatchupSchedule &&
         !Schedule &&
         !playDvr &&
-        !props.seriesSubscriberData?.PriorityEpisodeTitle) ||
+        !subscriberData?.PriorityEpisodeTitle) ||
         (Bookmark && Schedule?.playSource !== sourceTypeString.UPCOMING))
     ) {
       return;
@@ -1254,11 +1255,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         if (convertedEndDate < now || convertedStartDate > now) {
           showLiveBadge = false;
         }
-        progressDataSource = props.playActionsData?.Bookmark;
+        progressDataSource = playActionsData?.Bookmark;
       } else {
         showLiveBadge = sourceType === sourceTypeString.LIVE || isLiveAsset;
       }
-    } else if (props?.seriesSubscriberData!) {
+    } else if (subscriberData!) {
       if (assetType?.contentType === ContentType.EPISODE) {
         if (CatalogInfo) {
           ({
@@ -1279,7 +1280,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           progressDataSource.TimeSeconds = TimeSeconds || 0;
         }
       } else {
-        const { PriorityEpisodeTitle } = props.seriesSubscriberData!;
+        const { PriorityEpisodeTitle } = subscriberData!;
 
         if (PriorityEpisodeTitle) {
           const { CatalogInfo = {} } = PriorityEpisodeTitle || {};
@@ -1299,8 +1300,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             progressDataSource.BookmarkType =
               sourceTypeString.VOD as BookmarkType;
             progressDataSource.RuntimeSeconds = CatalogInfo.RuntimeSeconds || 0;
-            progressDataSource.TimeSeconds =
-              props.episodeBookmarkData?.TimeSeconds || 0;
+            //TODO:Fix this up
+            // progressDataSource.TimeSeconds =
+            //   props.episodeBookmarkData?.TimeSeconds || 0;
           }
         }
       }
@@ -1369,15 +1371,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           </View>
         )}
         {!!progressDataSource && (
-          <ProgressBar
-            styles={{
-              progressBarContainer: [
-                styles.progressBarContainer,
-                { marginTop: 0 },
-              ],
-            }}
-            dataSource={progressDataSource}
-            progressInfo={""}
+          <MFProgressBar
+            backgroundColor={"#424242"}
+            foregroundColor={"#E7A230"}
+            toValue={progressDataSource.TimeSeconds}
+            maxHeight={15}
+            maxWidth={350}
           />
         )}
       </View>
