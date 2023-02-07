@@ -45,6 +45,9 @@ import {
 } from "./BrowseUtils/BrowseUtils";
 import { MFTabBarStyles } from "../../../../components/MFTabBar/MFTabBarStyles";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
+import { browseType } from "../../../../utils/common";
+import { metadataSeparator } from "../../../../utils/Subscriber.utils";
+import { globalStyles } from "../../../../config/styles/GlobalStyles";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -233,6 +236,29 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     );
   };
 
+  const getGenreText = (genres?: Genre[]) =>
+    genres?.map((genre) => `${genre.Name}`);
+
+  const renderMetadata = () => {
+    let metadata: string[] | undefined;
+
+    const navigationTargetUri = feed?.NavigationTargetUri?.split("?")[0];
+    if (navigationTargetUri !== browseType.restartTv) {
+      metadata = currentFeed?.genre ? getGenreText(currentFeed?.genre) : [];
+
+      currentFeed?.ReleaseYear && metadata?.push(currentFeed?.ReleaseYear);
+      currentFeed?.Rating && metadata?.push(currentFeed?.Rating);
+    }
+
+    return (
+      <View style={styles.metadataContainer}>
+        <Text numberOfLines={2} style={styles.metadataLine2}>
+          {metadata?.join(metadataSeparator) || currentFeed?.metadataLine2}
+        </Text>
+      </View>
+    );
+  };
+
   const onFocusBar = () => {
     if (!filterFocused) {
       setFilterFocused(true);
@@ -242,6 +268,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       cardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
     }
   };
+
   return (
     <View style={styles.root}>
       <View style={styles.topRow}>
@@ -341,16 +368,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                           adjustsFontSizeToFit={false}
                           numberOfLines={3}
                         />
-                        <MFText
-                          shouldRenderText
-                          displayText={getResolvedMetadata(
-                            appUIDefinition.metadataByItemType.RECOMM.metadata2,
-                            currentFeed
-                          )}
-                          textStyle={styles.metadataLine2Styles}
-                          adjustsFontSizeToFit={false}
-                          numberOfLines={3}
-                        />
+                        {renderMetadata()}
                         {renderRatingValues()}
                       </View>
                     </>
@@ -501,6 +519,17 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 38,
     textAlign: "center",
+  },
+  metadataContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  metadataLine2: {
+    color: globalStyles.fontColors.light,
+    fontFamily: globalStyles.fontFamily.semiBold,
+    fontSize: globalStyles.fontSizes.body2,
+    lineHeight: globalStyles.lineHeights.body2,
+    width: 650,
   },
   filterButtonBackgroundStyles: {
     width: 175,
