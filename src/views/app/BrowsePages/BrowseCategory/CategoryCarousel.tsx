@@ -96,7 +96,7 @@ const BrowseCategoryCarousel: React.FunctionComponent<
   return isLoading ? (
     <MFLoader />
   ) : (
-    <SafeAreaView style={{ paddingBottom: 50 }}>
+    <SafeAreaView style={{ paddingBottom: 110 }}>
       {dataSource !== undefined ? (
         dataSource.length > 0 ? (
           <FlatList
@@ -132,10 +132,18 @@ const BrowseCategoryCarousel: React.FunctionComponent<
                     props.navigation.push(Routes.Details, { feed: event });
                   }}
                   onFocus={(event) => {
-                    flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: 200 });
+                    flatListRef.current?.scrollToIndex({
+                      animated: true,
+                      index: index,
+                      viewOffset: 200,
+                    });
                   }}
                   onListEmptyElementFocus={(event) => {
-                      flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: 200 });
+                    flatListRef.current?.scrollToIndex({
+                      animated: true,
+                      index: index,
+                      viewOffset: 200,
+                    });
                   }}
                   navigation={props.navigation}
                 />
