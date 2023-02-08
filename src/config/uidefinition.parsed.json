@@ -1,1 +1,2318 @@
-{"skin":"clientV2.default","version":"1.0.0","theme":{"fontColors":{"light":"#EEEEEE","lightGrey":"#A7A7A7","darkGrey":"#6D6D6D","orange":"#FFA300","statusWarning":"#E7A230","statusError":"#E15554","badge":"#B22334"},"fontFamily":{"regular":"Inter-Regular","semiBold":"Inter-SemiBold","bold":"Inter-Bold","icons":"MyFontRegular"},"fontSizes":{"caption1":23,"body1":29,"body2":25,"heading1":76,"heading2":57,"heading3":48,"subTitle1":38,"subTitle2":31},"lineHeights":{"caption1":38,"body1":50,"body2":38,"heading1":76,"heading2":72,"heading3":60,"subTitle1":55,"subTitle2":50},"backgroundColors":{"primary1":"#053C69","primary2":"#3DA6FF","shade1":"#00030E","shade2":"#202124","shade3":"#282828","shade4":"#424242","shade5":"#A0A0A0","white":"#EEEEEE","black":"#000000"},"auxiliaryColors":{"overlay1":"#rgba(0,03,14,0.9)","overlay2":"#rgba(0,03,14,0.65)","overlay3":"#rgba(0,03,14,0.2)","overlay4":"#rgba(0,03,14,0.4)","statusWarning":"#E7A230","statusError":"#B22334","statusSuccess":"#48A651"}},"assets":{"images":{"logo":"../assets/images/logo.png","logo_short":"../assets/images/logo_short.jpg","search":"../assets/images/search.png","message":"../assets/images/message.png","onboarding":"../assets/images/onboarding_1280x752_landscape.jpg","settings":"../assets/images/settings.png","viewMore":"../assets/images/ViewMore.png","avatar":"../assets/images/avatar.png","splashImage":"logo.png","splashAnimation":"splash.json"}},"components":[{"id":"LoginPage","config":{"$top":8,"$skip":0},"components":[{"id":"Logo","title":"${str_component_title}","config":{"dataSource":{"uri":"res://drawable/default/MediaKindLogo.png"}},"style":{"backgroundColor":"#000000"}},{"id":"SpinnerButton","title":"${str_component_title}","config":{"dataSource":{"uri":"res://drawable/default/spinner.png"}}},{"id":"Instructions","style":{"container":{"flex":1,"flexDirection":"row"},"logoContainer":{"width":813},"logo":{"width":475,"height":77,"marginTop":469,"marginLeft":190},"instructionContainer":{"flex":1},"t1":{"fontSize":57,"color":"#EEEEEE","marginTop":158,"marginBottom":31,"fontFamily":"Inter-SemiBold"},"t2":{"fontSize":31,"marginBottom":11,"color":"#A7A7A7"},"t3":{"fontSize":48,"marginBottom":11,"color":"#EEEEEE"},"t4":{"paddingLeft":64.5},"optionText":{"fontSize":31,"marginBottom":11,"color":"#EEEEEE"},"codeContainer":{"flexDirection":"row","marginTop":51,"marginBottom":64},"codeBlock":{"width":130,"height":130,"backgroundColor":"#202124","marginRight":20,"justifyContent":"center","alignItems":"center","borderRadius":4},"code":{"fontSize":76,"color":"#EEEEEE","fontFamily":"Inter-SemiBold"},"codeInactive":{"fontSize":76,"fontFamily":"Inter-SemiBold","color":"#6D6D6D"},"refreshBtn":{"width":275,"height":70},"refreshBtnTextStyle":{"fontFamily":"Inter-SemiBold"}}}]},{"id":"BrowseGallery","config":{"browserecommendations":{"uri":"udl://subscriber/libraries/YouMightLikeByTasteId/","params":{"$top":100,"$skip":0}},"browsemovies":{"uri":"udl://discovery/libraryprograms/complete/","params":{"showType":"Movie","pivotSource":"filters/movies/","baseFilters":"ShowType|Movie","$top":100,"$orderBy":"Popularity","$skip":0}},"browsetv":{"uri":"udl://discovery/libraryprograms/complete/","params":{"showType":"TVShow","pivotSource":"filters/tvshow/","baseFilters":"ShowType|TVShow","$top":100,"$orderBy":"Popularity","$skip":0}},"browsemoviesandtv":{"Program":{"uri":"udl://discovery/libraryprograms/complete/","params":{"showType":"MovieAndTVShow","pivotSource":"filters/tvshow/","baseFilters":"ShowType|MovieAndTVShow","$top":100,"$orderBy":"Popularity","$skip":0}},"SvodPackage":{"uri":"udl://discovery/subscriptionPackage/items/","params":{"$skip":0,"$top":100}}},"browsepackages":{"uri":"udl://discovery/libraryprograms/collections/packages/","params":{"pivotSource":"filters/collections","baseFilters":"Language|","$top":100,"$orderBy":"Popularity","$skip":0}},"browsepromotions":{"discovery":{"uri":"udl://discovery/categories/items/","params":{"pivotSource":"","baseFilters":"Language|","$orderBy":"Popularity","$top":100,"$skip":0}},"subscriber":{"uri":"udl://subscriber/library","params":{"$top":100,"$skip":0,"types":"Title"}},"SvodPackage":{"uri":"udl://discovery/subscriptionPackage/items/","params":{"$skip":0,"$top":100}},"catchup":{"uri":"udl://live/feeds/catchup","params":{"$skip":0,"$top":100}}},"browsemixedrecommendations":{"uri":"udl://subscriber/similarprograms/","params":{"pivotSource":"","baseFilters":"Language|","$top":100,"$skip":0,"ShowType":"series"}},"libraries":{"uri":"udl://subscriber/library","params":{"$top":100,"$skip":0,"types":"PayPerView|Title"}},"continue":{"uri":"udl://subscriber/library/Continue","params":{"$top":16,"$skip":0,"types":"PayPerView|Title"}},"favorites":{"uri":"udl://subscriber/library/Pins","params":{"$top":100,"$skip":0}},"restartTv":{"uri":"udl://live/catchup/items/","params":{"pivots":"","$top":100,"$skip":0,"$orderBy":"Popularity","baseFilters":"Language|en"}},"browseSvodPackage":{"uri":"udl://discovery/subscriptionPackage/items/","params":{"$skip":0,"$top":100}},"browsepayperview":{"uri":"udl://discovery/feeds/payperview","params":{"$itemsPerRow":16,"baseFilters":"Language|","$top":12,"$skip":0,"client":"reach"}},"browsetrending":{"uri":"udl://live/feeds/trending","params":{"$itemsPerRow":16,"baseFilters":"Language|","$top":100,"$skip":0,"client":"reach"}},"browsedvrtvshows":{"uri":"udl://dvrproxy/viewable-subscription-items-showtype/","params":{"showType":"TVShow","pivotSource":"filters/dvr/tvshow","baseFilters":"ShowType|TVShow","$top":100,"recordingState":1,"$orderBy":"Popularity","$skip":0}},"browsedvrmovies":{"uri":"udl://dvrproxy/viewable-subscription-items-showtype/","params":{"showType":"Movie","pivotSource":"filters/dvr/Movie","baseFilters":"ShowType|Movie","$top":100,"recordingState":1,"$orderBy":"Popularity","$skip":0}},"browsesearch":{"uri":"udl://search/view-all","params":{"$top":100,"$skip":0,"searchLive":true}}},"style":{"container":{"flex":1,"flexDirection":"row"},"backgroundImageStyle":{"position":"relative","top":120,"height":520,"width":918,"flex":1,"shadowOpacity":0.5},"gradientViewStyle":{"height":519,"width":920},"metadataViewStyle":{"flex":0.65},"metadataInnerViewStyle":{"flex":1,"paddingLeft":93,"paddingRight":93,"justifyContent":"flex-end","width":"85%"},"imageStyle":{"resizeMode":"contain"},"contentRatingsContainer":{"marginTop":30,"flexDirection":"row"},"contentRatingsIcon":{"width":30,"height":30},"contentRatingText":{"marginLeft":10},"ratingBlock":{"marginRight":30,"flexDirection":"row"},"metadataContainer":{"flexDirection":"row","marginTop":10},"ratingTextStyle":{"fontFamily":"Inter-SemiBold","color":"#6D6D6D","fontSize":25},"metadataTitle":{"color":"#EEEEEE","fontFamily":"Inter-Bold","fontSize":57,"paddingTop":12,"lineHeight":72,"width":650},"metadataLine2":{"color":"#EEEEEE","fontFamily":"Inter-SemiBold","fontSize":25,"lineHeight":38,"width":650},"fontIconStyle":{"fontFamily":"MyFontRegular","color":"#EEEEEE","fontSize":70,"marginRight":15,"marginBottom":-15},"statusTextStyle":{"color":"#E7A230","fontFamily":"Inter-Regular","fontSize":25,"marginTop":30},"filterViewStyle":{"position":"absolute","flexDirection":"row","flex":1,"top":0,"right":0,"alignItems":"center","alignContent":"flex-end","zIndex":1000},"filterContainerStyle":{"flexDirection":"row","alignItems":"center"},"buttonContainerStyle":{"height":66,"width":180,"marginTop":30},"innerViewStyle1":{"flex":1.5},"showcardViewStyle":{"paddingTop":10,"paddingBottom":10,"flex":2.3,"marginTop":120,"flexDirection":"column"},"headerViewStyle":{"flexDirection":"column","flex":1,"position":"absolute","height":120,"width":1920},"headerInnerStyle":{"height":120,"width":1920},"headerTitleViewStyle":{"flexDirection":"row","left":89,"flex":2,"alignItems":"center"},"headerUnderLine":{"width":1920,"opacity":0.4,"height":1,"borderWidth":0.4,"borderColor":"#A0A0A0","backgroundColor":"#A0A0A0"},"headerTitleStyle":{"color":"#EEEEEE","fontFamily":"Inter-SemiBold","fontSize":38},"emptyMessageContainer":{"flex":1,"justifyContent":"center","alignItems":"center"},"image":{"width":250,"height":260,"marginBottom":29},"networkImage":{"width":85,"height":63,"resizeMode":"contain"},"networkImageView":{"justifyContent":"center","alignItems":"center","backgroundColor":"#282828","borderRadius":3,"height":111,"width":111,"padding":25,"marginBottom":15},"subtitleEmptyMessage":{"fontSize":25,"color":"#6D6D6D","marginTop":17}},"components":[{"id":"GradientView","config":{"gradientType":"linear","startColor":{"red":0,"green":3,"blue":14,"alpha":50},"endColor":{"red":0,"green":0,"blue":0,"alpha":255},"start":{"x":0,"y":0.3},"end":{"x":0,"y":0.5}}},{"id":"LazyListWrapper","config":{"snapToInterval":90,"snapToAlignment":"start","horizontal":false,"numColumns":4,"placeHolder":{"uri":"res://drawable/default/PlaceHolder.png"}},"style":{"compositionContainer":{"height":390,"width":260,"padding":10},"listWrapperStyle":{"flex":1},"flatListContainerStyle":{}}}]},{"id":"BrowseCategory","config":{"browsemovies":{"uri":"udl://discovery/librariespivotcategories/items/","params":{"pivotGroup":"Genre","$itemsPerRow":16,"pivotSource":"filters/movies/","baseFilters":"ShowType|Movie,Language|","$top":12,"$skip":0,"client":"reach"}},"browsetv":{"uri":"udl://discovery/librariespivotcategories/items/","params":{"pivotGroup":"Genre","$itemsPerRow":16,"pivotSource":"filters/tvshow/","baseFilters":"ShowType|TVShow,Language|","$top":12,"$skip":0,"client":"reach"}},"browsepayperview":{"uri":"udl://discovery/feeds/payperview","params":{"$itemsPerRow":16,"baseFilters":"Language|","$top":12,"$skip":0,"client":"reach"}},"browsetrending":{"uri":"udl://live/feeds/trending","params":{"$itemsPerRow":16,"baseFilters":"Language|","$top":100,"$skip":0,"client":"reach"}},"browsemoviesandtv":{"uri":"udl://discovery/librariespivotcategories/items/","params":{"pivotGroup":"Genre","$itemsPerRow":16,"pivotSource":"filters/movieandtvshow/","baseFilters":"ShowType|MovieAndTVShow,Language|","$top":12,"$skip":0,"client":"reach"}},"browsepromotions":{"uri":"udl://discovery/promotionalcategories/items/","params":{"$itemsPerRow":16,"$top":12,"$skip":0,"client":"reach"}},"browsepromotionsCategory":{"uri":"udl://discovery/categories/items/","params":{"$itemsPerRow":16,"$top":12,"$skip":0,"client":"reach"}},"browserecommendations":{"uri":"udl://subscriber/libraries/dynamicFeeds/YouMightLikeByTaste","params":{"atHome":true,"$top":12,"$skip":0}},"browsemixedrecommendations":{"uri":"udl://subscriber/libraries/dynamicFeeds/MixedRecommendations","params":{"$top":12,"$skip":0}},"restartTv":{"uri":"udl://live/catchup/pivotitems/","params":{"$top":100,"$skip":0,"$itemsPerRow":9}},"browseSvodPackage":{"uri":"udl://discovery/subscriptionPackage/CategoryItems/","params":{"$skip":0,"$top":12,"$itemsPerRow":16}},"snapToInterval":280,"snapToAlignment":"start"},"style":{"headerTitleStyle":{"color":"#EEEEEE","fontFamily":"Inter-SemiBold","fontSize":38},"emptyMessageContainer":{"flex":1,"justifyContent":"center","alignItems":"center"},"image":{"width":250,"height":260,"marginBottom":29}},"components":[{"id":"SwimlaneContainer","style":{"container":{"flex":1},"mainContainer":{"flex":1},"scrollView":{"flex":1,"marginTop":120,"paddingTop":120},"backgroundImageStyle":{"flex":1},"imageStyle":{"resizeMode":"stretch"}}}]},{"id":"Search","config":{"minQueryLength":1,"$skip":0,"$top":50}},{"id":"Details","config":{"assetExpiryDaysThreshold":14},"components":[{"id":"Showcard","style":{"detailsBlock":{"height":852,"flexDirection":"row"},"secondBlock":{"marginTop":86,"flexDirection":"column","flex":1,"height":627},"flexRow":{"flexDirection":"row"},"ctaBlock":{"flexDirection":"row"},"favoriteBlock":{"width":583,"marginTop":69},"ctaButtonGroupBlock":{"marginTop":69},"containerOpacity":{"backgroundColor":"#00030E","opacity":0.9,"height":"100%","width":"100%"},"firstColumn":{"width":583,"alignItems":"center"},"imageContainer":{"borderRadius":4,"overflow":"hidden","marginTop":86,"height":627},"secondColumn":{"width":905,"height":627,"justifyContent":"center"},"thirdColumn":{"flex":1,"paddingRight":90,"alignItems":"flex-end"},"networkImageView":{"justifyContent":"center","alignItems":"center","backgroundColor":"#282828","borderRadius":3,"height":111,"width":111,"padding":25,"marginBottom":15},"networkImage":{"height":63,"width":85,"resizeMode":"contain"},"marginRight20":{"marginRight":20},"networkTitle":{"fontFamily":"Inter-SemiBold","fontSize":29,"color":"#6D6D6D","paddingTop":18},"metadataContainer":{"flexDirection":"row","paddingBottom":23},"title":{"fontFamily":"Inter-Bold","fontSize":57,"color":"#EEEEEE","paddingBottom":10},"metadataLine1":{"fontFamily":"Inter-SemiBold","fontSize":25,"color":"#A7A7A7","marginBottom":25},"description":{"fontFamily":"Inter-Regular","fontSize":25,"color":"#A7A7A7","lineHeight":38},"showcardImage":{"height":628,"width":419},"buttonContainerStyle":{"flexDirection":"row","alignItems":"center","justifyContent":"center"},"buttonIconContainer":{"width":70,"height":70},"solidBackground":{"backgroundColor":"#424242"},"focusedBackground":{"backgroundColor":"#053C69"},"moreDetailsContainer":{"marginTop":104},"contentRatingsContainer":{"flexDirection":"row","marginBottom":25},"contentRatingsIcon":{"width":30,"height":30},"contentRatingText":{"marginLeft":10},"ratingBlock":{"marginRight":30,"flexDirection":"row"},"textStyle":{"fontFamily":"MyFontRegular","color":"#EEEEEE"},"progressBarContainer":{"height":3},"progressInfoText":{"fontFamily":"Inter-SemiBold","fontSize":25,"color":"#A7A7A7","paddingBottom":35,"lineHeight":38,"marginBottom":20},"statusTextStyle":{"fontSize":25,"fontFamily":"Inter-Regular","color":"#E7A230","marginBottom":25},"fontIconStyle":{"fontFamily":"MyFontRegular","color":"#A7A7A7","fontSize":70,"marginRight":15,"marginTop":-40,"marginBottom":10},"flexOne":{"flex":1,"marginHorizontal":20,"marginVertical":20},"ctaButtonStyle":{"height":66,"fontFamily":"Inter-SemiBold"},"ctaFontIconStyle":{"fontFamily":"MyFontRegular","color":"#E15554"},"buttonContainer":{"flexDirection":"row","alignItems":"center"},"modalContainer":{"position":"absolute","top":0,"right":0,"zIndex":2},"episodeBlockContainer":{"marginTop":35.5},"episodeBlockTitle":{"marginBottom":20,"fontSize":29,"fontFamily":"Inter-Bold","color":"#EEEEEE"},"episodeMetadata":{"marginBottom":20,"fontSize":25,"fontFamily":"Inter-SemiBold","color":"#A7A7A7"},"badgeStyle":{"fontFamily":"MyFontRegular","color":"#E15554","fontSize":50,"marginLeft":20,"marginTop":-10},"marginTop":{"marginTop":8},"hourGlass":{"width":16,"height":22,"marginTop":26,"marginLeft":15},"descriptionText":{"fontSize":25,"fontFamily":"Inter-Regular","color":"#A7A7A7","lineHeight":38,"marginBottom":25}}},{"id":"MoreInfoPanel","style":{"bodyRoot":{"paddingLeft":54,"paddingRight":54,"paddingTop":34,"paddingBottom":34,"backgroundColor":"#202124"},"statusTextStyles":{"fontSize":25,"color":"#E7A230","marginTop":13},"statusTextStyle":{"fontSize":25,"color":"#E7A230"},"headerContainer":{"width":"100%","height":185,"backgroundColor":"#191b1f","padding":50,"justifyContent":"center"},"titleStyles":{},"subTitleStyles":{},"genreTextStyle":{"fontSize":25,"fontFamily":"Inter-Bold","color":"#EEEEEE","marginBottom":13,"lineHeight":38},"bodyTextStyle":{"fontSize":25,"color":"#A7A7A7","lineHeight":38,"fontFamily":"Inter-Regular"},"ratingTextStyle":{"fontSize":25,"fontFamily":"Inter-Bold","color":"#A7A7A7"},"row":{"paddingBottom":30},"audioText":{"paddingBottom":5},"ratingContainer":{"flexDirection":"row","marginBottom":24,"marginTop":10},"ratingIndicator":{"width":5,"height":"100%","backgroundColor":"#A0A0A0","marginRight":14},"separatorStyle":{"width":"100%","height":1,"opacity":0.3,"backgroundColor":"#A0A0A0","marginBottom":20},"entitlementRow":{"marginBottom":20,"flexDirection":"row"},"sourceIcon":{"fontFamily":"MyFontRegular","fontSize":50,"color":"#A7A7A7","marginRight":15,"marginTop":-16,"marginBottom":-4},"indicatorIconStyle":{"fontFamily":"MyFontRegular","fontSize":70,"color":"#A7A7A7","marginRight":15,"marginTop":-12,"marginBottom":-12},"networkImage":{"height":28,"width":67,"resizeMode":"contain","marginRight":20},"flexRow":{"flexDirection":"row"}}},{"id":"PlayVodPanel","style":{"root":{"paddingTop":34,"paddingLeft":40,"paddingRight":40,"paddingBottom":34},"selectButtonContainer":{"width":"100%","height":100}}},{"id":"PurchaseInformationPanel","style":{"container":{"flexGrow":1},"confirmButton":{"height":70,"width":533,"marginHorizontal":90,"marginBottom":30},"loaderButton":{"height":70,"width":300,"marginHorizontal":90,"marginBottom":30,"alignSelf":"center"},"textStyle":{"fontFamily":"Inter-SemiBold"},"statusTextStyle":{"fontSize":25,"fontFamily":"Inter-Regular","color":"#E7A230","marginBottom":25,"marginLeft":54,"marginTop":25},"selectButtonContainer":{"width":"100%","height":100,"paddingLeft":20,"paddingRight":20}}},{"id":"PurchaseOptionsPanel","style":{"scrollViewContainer":{"paddingTop":34,"paddingLeft":40,"paddingRight":40,"marginBottom":200},"selectButtonContainer":{"width":"100%","height":100},"viewContainer":{"flex":1},"innerScrollViewContainerRentBuy":{"height":395,"paddingTop":15,"paddingBottom":15,"paddingLeft":40,"paddingRight":40},"innerScrollViewContainer":{"height":800,"paddingTop":15,"paddingBottom":15,"paddingLeft":40,"paddingRight":40},"textStyle":{"fontFamily":"Inter-Bold","color":"#EEEEEE","fontSize":31,"marginLeft":51,"marginTop":20},"subTextStyle":{"color":"#EEEEEE","marginLeft":51,"marginTop":20,"marginBottom":20}}},{"id":"PurchaseNetworkSelectionPanel","style":{"root":{"paddingTop":37},"selectButtonContainer":{"width":"100%","height":100,"paddingLeft":20,"paddingRight":20},"scrollViewContainer":{"paddingTop":34,"paddingLeft":20,"paddingRight":20,"marginBottom":200},"statusTextStyle":{"color":"#EEEEEE","fontSize":25,"marginLeft":50,"marginRight":50,"marginTop":20,"marginBottom":40}}},{"id":"RestartPanel","style":{"root":{"paddingTop":34,"paddingLeft":40,"paddingRight":40,"paddingBottom":34},"selectButtonContainer":{"width":"100%","height":100}}},{"id":"UpcomingPanel","style":{"dayTitle":{"flexDirection":"row","alignItems":"center","marginBottom":30},"rowMarginTop":{"marginTop":25},"dayText":{"color":"#EEEEEE","fontFamily":"Inter-Bold","fontSize":29},"secondaryText":{"color":"#A7A7A7","fontFamily":"Inter-SemiBold","fontSize":25,"lineHeight":38},"scheduleContainer":{"paddingVertical":0,"flexDirection":"row"},"scheduleContentContainer":{"flex":3},"scheduleImageContainer":{"flex":0.5,"alignSelf":"center","flexDirection":"row","justifyContent":"flex-end","paddingLeft":10},"scheduleImageStyle":{"height":50,"width":70,"resizeMode":"contain","alignSelf":"center"},"timeText":{"fontSize":23,"color":"#A7A7A7","marginTop":15},"divider":{"width":"100%","height":2,"marginVertical":27,"backgroundColor":"#A0A0A0"},"focused":{"opacity":0.5},"unfocused":{"opacity":0.2},"root":{"paddingTop":34,"paddingLeft":54,"paddingRight":54,"paddingBottom":34},"flexRow":{"flexDirection":"row"}}},{"id":"Description","style":{"root":{"flexDirection":"row","alignItems":"flex-end"},"descriptionText":{"fontFamily":"Inter-Regular","fontSize":25,"color":"#A7A7A7","lineHeight":38,"marginBottom":25}}},{"id":"SubscribeChannel","style":{"container":{"flex":1},"networkImageView":{"justifyContent":"center","alignItems":"center","backgroundColor":"#282828","borderRadius":3,"height":111,"width":111,"padding":25,"marginBottom":15},"networkImage":{"height":80,"width":100,"resizeMode":"contain"},"marginRight20":{"marginRight":20},"thirdColumn":{"paddingTop":140,"paddingLeft":137,"alignItems":"flex-start"},"networkTitle":{"fontFamily":"${fontFamily.bold}","fontSize":"${fontSizes.body1}","color":"${fontColors.light}"},"backgroundImageStyle":{"flex":1},"imageStyle":{"resizeMode":"stretch"},"scheduleTitle":{"lineHeight":"${lineHeights.body1}","fontFamily":"${fontFamily.bold}","fontSize":"${fontSizes.body1}","color":"${fontColors.light}"},"scheduleDescription":{"width":"60%","lineHeight":"${lineHeights.body1}","fontFamily":"${fontFamily.semiBold}","fontSize":"${fontSizes.body2}","color":"${fontColors.light}"},"scheduleInfoContainer":{"paddingTop":50,"paddingLeft":137,"flexDirection":"column"},"separatorStyle":{"width":150,"height":5,"opacity":0.3,"backgroundColor":"${backgroundColors.shade5}","marginTop":50,"marginLeft":137},"subscriptionStatusMessage":{"marginLeft":137,"marginTop":50,"lineHeight":"${lineHeights.body1}","fontFamily":"${fontFamily.semiBold}","fontSize":"${fontSizes.body2}","color":"${fontColors.statusWarning}"},"ctaFontIconStyle":{"fontFamily":"${fontFamily.icons}","color":"${fontColors.light}"},"buttonIconContainer":{"marginLeft":122,"marginTop":30,"borderRadius":0,"width":350,"height":60,"overflow":"hidden","marginHorizontal":90},"buttonTextStyle":{"fontFamily":"${fontFamily.bold}"}}}]},{"id":"PersonDetails","components":[{"id":"Showcard","style":{"detailsBlock":{"height":626,"flexDirection":"row"},"secondBlock":{"flexDirection":"column","flex":1,"height":627},"flexRow":{"flexDirection":"row"},"firstColumn":{"width":467,"alignItems":"center"},"imageContainer":{"borderRadius":4,"overflow":"hidden","marginTop":60,"height":400},"secondColumn":{"flex":1,"height":476},"title":{"fontFamily":"Inter-Bold","fontSize":57,"color":"#EEEEEE","paddingBottom":8,"marginTop":60},"metadataLine1":{"fontFamily":"Inter-SemiBold","fontSize":25,"color":"#A7A7A7"},"description":{"fontFamily":"Inter-Regular","fontSize":25,"color":"#A7A7A7","lineHeight":38},"showcardImage":{"height":400,"width":300},"textStyle":{"fontFamily":"MyFontRegular","color":"#EEEEEE"},"imageBackgroundContainer":{"flex":1,"backgroundColor":"#00030E","opacity":0.9}}}]},{"id":"SlideMenu","components":[{"id":"SideMenuPanel","style":{"sideMenuContainer":{"backgroundColor":"transparent"},"headerContainer":{"flex":1,"flexDirection":"column"}}},{"id":"SideMenu","style":{"sideMenuContainer":{"width":714,"position":"absolute","right":0,"top":0,"backgroundColor":"#202124","zIndex":150,"paddingTop":0},"headerContainer":{"height":175,"width":714,"paddingLeft":54,"paddingTop":49,"backgroundColor":"#rgba(0,03,14,0.2)"},"header1":{"color":"#A7A7A7","fontSize":25,"fontFamily":"Inter-SemiBold"},"header2":{"fontFamily":"Inter-Bold","color":"#EEEEEE","fontSize":38},"header1Spacing":{"marginTop":18,"paddingBottom":13,"paddingRight":54},"headerContainerStyle":{"paddingRight":54}}}]},{"id":"PackageDetails","components":[{"id":"Showcard","style":{"containerOpacity":{"flex":1,"backgroundColor":"#00030E","opacity":0.9},"title":{"fontFamily":"Inter-Bold","fontSize":57,"color":"#EEEEEE","paddingBottom":30},"metadataLine1":{"fontFamily":"Inter-SemiBold","fontSize":25,"color":"#A7A7A7","paddingBottom":30},"description":{"fontFamily":"Inter-Regular","fontSize":25,"color":"#A7A7A7","lineHeight":38,"textAlign":"justify","width":800},"showcardImage":{"height":330,"width":587},"detailContainer":{"flexDirection":"row","paddingTop":60,"paddingLeft":88},"metadataViewStyle":{"paddingLeft":76},"moreDetailsContainer":{"marginTop":104},"imageBackgroundStyle":{"flex":1},"bgImageStyle":{"resizeMode":"stretch"},"textStyle":{"fontFamily":"MyFontRegular","color":"#EEEEEE"},"statusTextStyle":{"fontSize":25,"color":"#E7A230","paddingBottom":30},"fontIconStyle":{"fontFamily":"MyFontRegular","color":"#A7A7A7","fontSize":70,"marginRight":15,"marginBottom":23},"ctaButtonStyle":{"height":66,"fontFamily":"Inter-SemiBold"},"buttonContainer":{"flexDirection":"row","alignItems":"center","marginTop":28}}}]},{"id":"PageContainer","style":{"FullPage":{"backgroundColor":"#282828","flex":1},"TabPage":{"backgroundColor":"#282828","flex":1,"paddingTop":120},"overlay":{"backgroundColor":"#282828"}}},{"id":"EpisodeList","config":{"snapToInterval":20},"style":{"containerStyle":{"flex":1,"flexDirection":"row","paddingTop":72,"paddingLeft":90,"paddingRight":58,"backgroundColor":"#00030E","opacity":0.9},"firstBlock":{"width":543},"titleBlock":{"marginBottom":116},"seasonTitle":{"fontFamily":"Inter-Bold","fontSize":38,"color":"#EEEEEE","marginBottom":15},"seasonMetadata":{"fontFamily":"Inter-SemiBold","fontSize":25,"color":"#A7A7A7"},"flexOne":{"flex":1},"seasonScrollView":{"marginBottom":30},"secondBlock":{"flex":1},"seasonBlock":{"height":62,"marginBottom":43,"alignSelf":"flex-start"},"seasonBlockSelectedHighlight":{"borderBottomColor":"#053C69","borderBottomWidth":4},"seasonText":{"fontFamily":"Inter-Regular","color":"#6D6D6D","fontSize":38},"seasonTextSelected":{"fontFamily":"Inter-Bold","color":"#EEEEEE","fontSize":38},"episodeItemContainer":{"padding":10,"marginBottom":20,"borderRadius":4},"selectedEpisode":{"backgroundColor":"#202124"},"unSelectedEpisode":{"opacity":0.8},"episodeItemImage":{"height":237,"width":419},"episodeItemShowcard":{"flexDirection":"row"},"episodeItemCTA":{"marginLeft":25},"episodeItemInfo":{"height":237,"justifyContent":"center","flex":1,"paddingLeft":25,"paddingRight":25},"episodeItemTitle":{"fontFamily":"Inter-Bold","color":"#EEEEEE","fontSize":31,"lineHeight":50},"episodeItemMetadata":{"fontFamily":"Inter-SemiBold","color":"#A7A7A7","fontSize":25,"lineHeight":38},"episodeItemDescription":{"fontFamily":"Inter-Regular","color":"#6D6D6D","fontSize":25,"lineHeight":38},"imageContainer":{"borderRadius":4,"overflow":"hidden","height":237},"textOnImage":{"zIndex":10,"position":"absolute","right":19,"top":16,"fontFamily":"Inter-SemiBold","fontSize":29,"color":"#EEEEEE"},"ctaBtnContainer":{"flex":1,"marginTop":28},"buttonGroupContainer":{"flexDirection":"row","flex":1},"iconContainer":{"width":100},"solidBackground":{"backgroundColor":"#424242"},"focusedBackground":{"backgroundColor":"#053C69"},"buttonIconContainer":{"width":70,"height":70},"ctaButtonStyle":{"height":66,"fontFamily":"Inter-SemiBold"},"ctaFontIconStyle":{"fontFamily":"MyFontRegular","color":"#E15554"},"buttonContainer":{"flexDirection":"row","alignItems":"center","marginTop":28},"statusIcon":{"fontFamily":"MyFontRegular"},"descriptionStyle":{"color":"#6D6D6D","fontFamily":"Inter-Regular"},"statusTextStyle":{"color":"#E7A230","fontFamily":"Inter-Regular","fontSize":25},"metadataStyle":{"color":"#A7A7A7","fontFamily":"Inter-SemiBold"},"titleStyle":{"color":"#EEEEEE","fontFamily":"Inter-Bold"},"seasonNumberTextStyle":{"fontFamily":"Inter-SemiBold","color":"#EEEEEE"},"networkImageStyle":{"resizeMode":"contain","height":64,"width":64},"separatorTextStyle":{"color":"#A7A7A7"},"focusedUnderLine":{"backgroundColor":"#053C69"}}},{"id":"DVRConflict","style":{"container":{"flexGrow":1},"conflictListContainer":{"height":120,"width":624},"conflictItemContainer":{"width":591,"height":83,"flexDirection":"row","justifyContent":"flex-start","marginLeft":61},"conflictItemMetadataContainer":{"width":422,"height":83},"conflictItemMetadataLine1Container":{"flexDirection":"row"},"conflictItemMetadataLine1":{"width":288,"height":50,"fontSize":29,"fontFamily":"Inter-Regular","color":"#A7A7A7"},"conflictIcon":{"fontSize":20,"fontFamily":"Inter-Bold","color":"#000"},"conflictIconContainer":{"backgroundColor":"#E7A230","borderRadius":15,"width":30,"height":30,"alignItems":"center","justifyContent":"center"},"conflictItemMetadataLine2":{"width":422,"height":50,"fontSize":23,"fontFamily":"Inter-Regular","color":"#A7A7A7"},"conflictItemActionButtonContainer":{"width":61,"height":61,"marginLeft":108},"conflictItemActionButtonTextStyle":{"fontFamily":"MyFontRegular","color":"#A7A7A7","fontSize":200},"conflicItemActionButtonStyleProp":{"borderRadius":29.5,"width":61,"height":61,"overflow":"hidden","backgroundColor":"transparent"},"conflictItemActionButtonSolidBackground":{"backgroundColor":"#202124"},"conflictItemActionButtonBorder":{"backgroundColor":"#202124"},"buttonContainer":{"marginTop":120,"width":714,"marginLeft":31},"saveButton":{"height":70,"width":654,"backgroundColor":"#282828","marginBottom":10},"cancelButton":{"height":70,"width":654,"backgroundColor":"#282828","marginBottom":90},"headerUnderLine":{"width":604,"opacity":0.4,"height":1,"borderWidth":0.4,"borderColor":"#053C69","backgroundColor":"#A0A0A0","alignSelf":"center","marginLeft":61},"showNotRecordedMessage":{"fontSize":25,"fontFamily":"Inter-SemiBold","color":"#EEEEEE","marginBottom":17,"marginTop":30.5,"marginLeft":61},"selectButtonContainer":{"height":120,"width":654,"marginLeft":31},"selectButtonTitle":{"color":"#EEEEEE","fontFamily":"Inter-Regular"},"selectButtonContent":{"color":"#6D6D6D","fontFamily":"Inter-Regular"},"selectButtonContentActive":{"color":"#EEEEEE","opacity":0.7,"fontFamily":"Inter-Regular"},"selectButtonIcon":{"width":16,"height":26},"buttonTextStyle":{"fontSize":25,"fontFamily":"Inter-SemiBold","color":"#EEEEEE"}},"config":{"seriesPopup":{"containerWidth":900,"buttonWidth":759}}},{"id":"ProgressBar","style":{"bookmarkActive":{"backgroundColor":"#E7A230"},"bookmarkBuffer":{"backgroundColor":"#A0A0A0"},"bookmarkBase":{"backgroundColor":"#424242"}}},{"id":"Header","components":[{"id":"Logo","config":{"dataSource":{"uri":"res://drawable/default/MediaKindLogo.png"},"newIcon":"profile_add"},"style":{"resizeMode":"contain","width":200,"height":70}},{"id":"Profile","style":{"width":80,"height":80},"components":[{"id":"WhosWatching","style":{"container":{"flex":1},"titleContainer":{"marginTop":233,"marginBottom":176,"alignItems":"center","justifyContent":"center"},"title":{"color":"#EEEEEE","fontSize":48,"fontFamily":"Inter-SemiBold"},"swimlaneContainer":{"flex":1},"scrollViewContainer":{"alignItems":"center","justifyContent":"center"},"profileIconContainer":{"height":250},"circularImageContainerStyle":{"width":250,"height":250},"imageStyle":{"width":200,"height":200},"addProfileContainerStyle":{"width":200,"height":200},"addProfileIconColor":{"color":"#A0A0A0"},"addProfileBackgroundColor":{"backgroundColor":"#424242"},"addImageStyle":{"width":62,"height":62},"profileName":{"color":"#6D6D6D","fontSize":31},"profileNameSelected":{"color":"#EEEEEE","fontSize":38,"fontFamily":"Inter-SemiBold"},"circularImageTitle":{"alignItems":"center","justifyContent":"center","width":250},"firstProfilePeeking":{"marginLeft":88}}},{"id":"ChooseProfile","style":{"container":{"flex":1,"alignItems":"center","justifyContent":"center"},"titleContainer":{"marginTop":233,"alignItems":"center","justifyContent":"center"},"title":{"color":"#EEEEEE","fontSize":48,"fontFamily":"Inter-SemiBold","marginBottom":103},"swimlaneContainer":{"flex":1},"scrollViewContainer":{"height":450,"alignItems":"center","justifyContent":"center"},"profileIconContainer":{"height":250},"circularImageContainerStyle":{"width":250,"height":250},"addProfileContainerStyle":{"width":200,"height":200},"addProfileIconColor":{"color":"#A0A0A0"},"addProfileBackgroundColor":{"backgroundColor":"#424242"},"addImageStyle":{"width":62,"height":62},"imageStyle":{"width":200,"height":200},"iconStyle":{"fontFamily":"MyFontRegular","color":"#EEEEEE","fontSize":150},"profileName":{"color":"#6D6D6D","fontSize":31},"profileNameSelected":{"color":"#EEEEEE","fontSize":38,"fontFamily":"Inter-SemiBold"},"doneButton":{"width":215,"height":66,"marginRight":35,"fontFamily":"Inter-SemiBold"},"manageProfileButton":{"width":283,"height":66,"fontFamily":"Inter-SemiBold"},"buttonContainer":{"marginTop":190,"flexDirection":"row","alignItems":"center"},"circularImageTitle":{"alignItems":"center","justifyContent":"center","width":250},"firstProfilePeeking":{"marginLeft":88},"circularButtonContainer":{"alignSelf":"center","marginTop":40},"textStyle":{"fontFamily":"MyFontRegular","color":"#EEEEEE"},"buttonIconContainer":{"borderRadius":35,"width":70,"height":70,"overflow":"hidden","backgroundColor":"transparent"},"solidBackground":{"backgroundColor":"#424242"}},"config":{"dataSource":{"focusedOverlayIcon":"select"},"newIcon":"add"}},{"id":"ToggleButton","style":{"container":{"width":1033,"height":245},"imageStyle":{"width":37,"height":37},"titleText":{"color":"#EEEEEE"},"valueText":{"color":"#EEEEEE"},"focusedBackground":{"backgroundColor":"#053C69"}}}]},{"id":"MainTopBar","config":{"exitZoneButtonIcon":"store_exit","tizenLeftMarginLogo":-10,"tizenLeftMarginSearch":10},"style":{"mainTopBarViewStyle":{"flex":1,"flexDirection":"row","position":"absolute","top":0,"marginHorizontal":90,"marginTop":38,"marginBottom":86},"logo":{"resizeMode":"contain","width":235,"height":42},"profileViewStyle":{"width":90,"marginRight":64},"mfmenuViewStyle":{"flex":2,"justifyContent":"center"},"navButtonViewStyle":{"flex":1,"height":90,"flexDirection":"row","alignItems":"center","justifyContent":"space-between"},"newProfileContainerSize":{"width":90,"height":90},"newProfileIconColor":{"color":"#A0A0A0"},"newProfileBackground":{"backgroundColor":"#424242"}},"components":[{"id":"MFCircularImage","style":{"circularImageContainerStyle":{"width":90,"height":90},"imageStyle":{"width":70,"height":70}}},{"id":"MFMenu","config":{"title":"You","defaultMenuItem":0,"numberOfCharacters":12},"style":{"container":{"justifyContent":"center","paddingRight":70,"alignItems":"center"},"compContainer":{"width":"100%","height":98},"hiddenTextStyle":{"opacity":0},"textOverlay":{"opacity":0,"fontSize":38},"buttonBackground":{"backgroundColor":"transparent"},"buttonSolidBackground":{"backgroundColor":"transparent"},"titleTextActive":{"fontFamily":"Inter-Bold","color":"#EEEEEE"},"titleText":{"fontFamily":"Inter-Regular","color":"#A7A7A7"},"buttonBottomLineStyle":{"backgroundColor":"#053C69"}}},{"id":"MFButtonGroup","style":{"textStyle":{"fontFamily":"MyFontRegular","color":"#A7A7A7"},"buttonIconContainer":{"borderRadius":35,"width":70,"height":70,"overflow":"hidden","backgroundColor":"transparent"}},"config":{"dataSource":[{"id":"search","buttonIconSource":{"uri":"res://drawable/default/Search.png"}},{"id":"settings","buttonIconSource":{"uri":"res://drawable/default/Settings.png"}}]}},{"id":"Logo","config":{"dataSource":{"uri":"res://drawable/default/MediaKindLogo.png"}},"style":{"imageStyle":{"resizeMode":"contain","width":235,"height":42}}}]},{"id":"TopBarWithTitle","style":{"full":{"display":"flex","flex":1,"flexDirection":"row","alignItems":"center","justifyContent":"space-between","backgroundColor":"#rgba(0,03,14,0.2)"},"logo":{"resizeMode":"contain","width":200,"height":60},"headerUnderLine":{"width":1920,"opacity":0.4,"height":1,"borderWidth":0.4,"borderColor":"#A0A0A0","backgroundColor":"#A0A0A0","alignSelf":"center"},"title":{"color":"#EEEEEE","fontSize":38,"fontFamily":"Inter-SemiBold"},"titlePadding":{"paddingLeft":88},"logoPadding":{"paddingRight":92},"topBar":{"maxHeight":132},"fullWidth":{"width":"100%"},"fullScreen":{"width":"100%","height":118}}}]}],"onScreenLanguages":[{"title":"English (US)","action":"en"},{"title":"English (Canada)","action":"en-ca"},{"title":"Francais (Canada)","action":"ca"}],"config":{"enableRTL":false,"debounceTime":500,"protocol":"https","hostname":"reachclient.dev.mr.tv3cloud.com","currentLocale":{"full":"en-US","short":"fr"},"useLottieAnimationOnSplash":false,"height16x9":253,"height2x3":350,"height4x3":234,"queryCacheTime":3600000,"queryStaleTime":3600000,"enableMarquee":false,"metadataTemplate":"{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}","limitSwimlaneItemsTo":16,"maxProfileNameLength":20,"viewAllPeekValue":50},"onscreenLanguage":[{"onScreenName":"English (US)","languageCode":"en-US","isRTL":false},{"onScreenName":"Francais (Canada)","languageCode":"fr-CA","isRTL":false},{"onScreenName":"Arabic (Qatar)","languageCode":"ar-QA","isRTL":true}],"metadataByItemType":{"PROGRAM-LIVE":{"metadata":"{ChannelNumber} {CallLetters} <or> {Name}","metadata2":"{EpisodeName} <or> {Name}","metadata3":"{Name}","metadata_selected":"{ChannelNumber} {CallLetters} <or> {Name}","metadata3_selected":"{Name}"},"PROGRAM-UPCOMING":{"metadata":"{StartDateDay} {StartTime} <or> {Name}","metadata2":"{EpisodeName} <or> {Name}","metadata3":"{Name}","metadata_selected":"{ChannelNumber} {CallLetters} <or> {Name}","metadata3_selected":"{Name}"},"PROGRAM-VOD":{"metadata":"{ReleaseYear} | {Rating}","metadata2":"{Name}","metadata_selected":"{ReleaseYear} | {Rating}","metadata2_selected":"{Name}"},"PROGRAM-DVR":{"metadata":"{TimeLeft} <or> {Duration}","metadata2":"{Name}","metadata3":"{Name}","metadata_selected":"{TimeLeft} <or> {Duration}","metadata3_selected":"{Name}"},"PROGRAM-CATCHUP":{"metadata":"{FirstAired} <or> {StartDate} | {StartTime}","metadata2":"{Name}","metadata2_selected":"{Name}","metadata3":"{Name}","metadata_selected":"{FirstAired} <or> {StartDate} | {StartTime}","metadata3_selected":"{Name}"},"PROGRAM-PACKAGE":{"metadata":"{ReleaseYear} | {Rating}","metadata2":"{Name}","metadata2_selected":"{Name}","metadata3":"{Name}","metadata_selected":"{ReleaseYear} | {Rating}","metadata3_selected":"{Name}"},"EPISODE-LIVE":{"metadata":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {ChannelNumber} {CallLetters}","metadata2":"{EpisodeName} <or> {Name}","metadata2_selected":"{EpisodeName} <or> {Name}","metadata3":"{EpisodeName}","metadata_selected":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {StartTimeToEndTime} <or> {EpisodeNameOnSeriesPage} {ChannelNumber} {CallLetters}","metadata3_selected":"{EpisodeName} <or> {ChannelNumber} {CallLetters}","metadata_extra_height":"40px"},"EPISODE-UPCOMING":{"metadata":"{StartDateDay} {StartTime} <or> {ReleaseYear} | {Rating}","metadata2":"{EpisodeName} <or> {Name}","metadata3":"{EpisodeName}","metadata_selected":"{SeriesEpisodeNumber} {ChannelNumber} {CallLetters} <or> {ReleaseYear} | {Rating}","metadata3_selected":"{EpisodeName} <or> {ChannelNumber} {CallLetters}","metadata_extra_height":"24px"},"EPISODE-VOD":{"metadata":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} <or> {ReleaseYear} | {Rating}","metadata2":"{Name}","metadata3":"{EpisodeName}","metadata_selected":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} <or> {ReleaseYear} | {Rating}","metadata2_selected":"{Name}","metadata3_selected":"{EpisodeName}","metadata_extra_height":"40px"},"EPISODE-DVR":{"metadata":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}","metadata2":"{Name}","metadata2_selected":"{Name}","metadata3":"{EpisodeName}","metadata_selected":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}","metadata3_selected":"{EpisodeName}","metadata_extra_height":"40px"},"SINGLETIME-DVR":{"metadata":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}","metadata2":"{Name}","metadata3":"{EpisodeName}","metadata_selected":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}","metadata3_selected":"{EpisodeName}","metadata_extra_height":"40px"},"EPISODE-CATCHUP":{"metadata":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {FirstAired} <or> {EpisodeNameOnSeriesPage} {StartDate} | {StartTime}","metadata2":"{Name}","metadata2_selected":"{Name}","metadata3":"{EpisodeName}","metadata_selected":"{SeriesEpisodeNumber} {EpisodeName} {FirstAired} <or> {EpisodeNameOnSeriesPage} {StartDate} | {StartTime}","metadata3_selected":"{EpisodeName}","metadata_extra_height":"40px"},"EPISODE-PACKAGE":{"metadata":"{EpisodeNameOnSeriesPage} {ReleaseYear} | {Rating}","metadata3":"{EpisodeName} <or> {Name}","metadata_selected":"{EpisodeNameOnSeriesPage} {ReleaseYear} | {Rating}","metadata3_selected":"{EpisodeName}","metadata_extra_height":"40px"},"GENERIC-LIVE":{"metadata":"{ChannelNumber} {CallLetters} <or> {Name}","metadata2":"{EpisodeName} <or> {Name}","metadata3":"{Name}","metadata_selected":"{StartTimeToEndTime} <or> {ChannelNumber} {CallLetters}","metadata3_selected":"{Name}"},"GENERIC-DVR":{"metadata":"{TimeLeft} <or> {Duration}","metadata2":"{Name}","metadata3":"{Name}","metadata_selected":"{TimeLeft} <or> {Duration}","metadata3_selected":"{Name}"},"GENERIC-CATCHUP":{"metadata":"{FirstAired} <or> {StartDate} | {StartTime}","metadata2":"{Name}","metadata2_selected":"{Name}","metadata3":"{Name}","metadata_selected":"{FirstAired} <or> {StartDate} | {StartTime}","metadata3_selected":"{Name}"},"PPVEVENT-LIVE":{"metadata":"{PPVAirChannelTime_short}","metadata2":"{Name}","metadata3":"{Name}","metadata_selected":"{PPVAirChannelTime_short}","metadata3_selected":"{Name}"},"SERIES":{"metadata":"{ReleaseYear} | {Rating}","metadata2":"{Name}","metadata3":"{Name}","metadata_selected":"{ReleaseYear} | {Rating}","metadata2_selected":"{Name}","metadata3_selected":"{EpisodeName}"},"PACKAGE":{"metadata":"{PackageContentsCount}","metadata2":"{Name}","metadata3":"{Name}","metadata_selected":"{PackageContentsCount}","metadata2_selected":"{Name}"},"SVODPACKAGE":{"metadata":"{PackageContentsCount}","metadata2":"{Name}","metadata_selected":"{PackageContentsCount}","metadata2_selected":"{Name}"},"APP":{"metadata":"{Name}","metadata2":"{Name}","metadata3":"{NameDescription}","metadata_selected":"{Name}","metadata3_selected":"{NameDescription}"},"SERIES-NETFLIX":{"metadata":"{title}","metadata3":"{groupTitle}","metadataSettingsOverride":"$metadataSettingsOverride"},"PROGRAM-NETFLIX":{"metadata":"{title}","metadata3":"{groupTitle}","metadataSettingsOverride":"$metadataSettingsOverride"},"RESUMED-NETFLIX":{"metadata":"{title}","metadata3":"{groupTitle}","metadataSettingsOverride":"$metadataSettingsOverride"},"SIGNUP-NETFLIX":{"metadata":"{groupTitle}"},"PROFILES-NETFLIX":{"metadata":"{title}","metadata3":"{groupTitle}","metadataSettingsOverride":"$metadataSettingsOverride"},"STATIC-NETFLIX":{"metadata":"{groupTitle}"},"DEVICEAPP":{"metadata":"{Name}","metadata_selected":"{Name}"},"RECOMM":{"metadata1":"{Image}","metadata3":"{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}","metadata2":"{Name}"},"STORE":{"metadata":"{Name}","metadata2":"{Name}","metadata3":"{NameDescription}","metadata_selected":"{Name}","metadata3_selected":"{NameDescription}"},"PERSON":{"metadata":"{PersonName}","metadata2":"","metadata3":"","metadata_selected":"{RoleName}","metadata3_selected":""},"CHANNEL":{"metadata":"{ChannelNumber} {CallLetters}","metadata2":"{Name}","metadata3":"{CurrentEpisode}","metadata_selected":"{ChannelNumber} {CallLetters}","metadata2_selected":"{Name}","metadata3_selected":"{CurrentEpisode}"},"CHANNEL-LIVE":{"metadata":"{Number} {CallLetters}","metadata_selected":"{Number} {CallLetters}"},"contentRating":{"Rating_en":"{ContentRatingValue_RT_Critic} {Rating}","Rating_fr":"{ContentRatingValue_Cinoche_Critic} | {Rating}"},"PROGRAM-LASTWATCHED":{"metadataIcon":"{NetworkLogo}","metadata":"{ChannelNumber}","metadata3":"{StartTimeToEndTime}","metadata4":"{Name}","metadata6_selected":""},"CHANNEL-LASTWATCHED":{"metadataIcon":"{NetworkLogo}","metadata":"{ChannelNumber}","metadata3":"{StartTimeToEndTime}","metadata4":"{Name}","metadata6_selected":""},"EPISODE-LASTWATCHED":{"metadataIcon":"{NetworkLogo}","metadata":"{ChannelNumber}","metadata3":"{StartTimeToEndTime}","metadata4":"{Name}","metadata5":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} <or> {EpisodeName}","metadata6_selected":""},"GENERIC-LASTWATCHED":{"metadataIcon":"{NetworkLogo}","metadata":"{ChannelNumber}","metadata3":"{StartTimeToEndTime}","metadata4":"{Name} <or> {EpisodeName}","metadata6_selected":""},"GENERIC_SERIES-LIVE":{"metadata":"{FirstAired} <or> {StartDate} {StartTime}","metadata2":"{Name}","metadata3":"{Name}","metadata_selected":"{FirstAired} <or> {StartDate} {StartTime}","metadata3_selected":"{Name}"},"GENERIC_SERIES-CATCHUP":{"metadata":"{FirstAired} <or> {StartDate} {StartTime}","metadata2":"{Name}","metadata3":"{Name}","metadata_selected":"{FirstAired} <or> {StartDate} {StartTime}","metadata3_selected":"{Name}"},"GENERIC_SERIES-VOD":{"metadata1":"{Image}","metadata2":"{Name}","metadata3":"{ReleaseYear} | {Rating}"},"Native-APP":{"metadata":"{Name}","metadata2":"{Name}","metadata3":"{NameDescription}","metadata_selected":"{Name}","metadata3_selected":"{NameDescription}"}},"metadataByFeedType":{"CONTINUE":{"metadata":"{ReleaseYear} | {Rating}","metadata2":"{Name}","metadata3":"{Name}","metadata_selected":"{TimeLeftOrDuration} <or> {CurrentEpisode} <or> {groupTitle} <or> {ReleaseYear} | {Rating} <or> {TimeLeftOrDuration}","metadata3_selected":"{EpisodeName} <or> {Name} <or> {title}"},"PINS":{"metadata":"{ReleaseYear} | {Rating}","metadata2":"{Name}","metadata3":"{Name}","metadata_selected":"{ReleaseYear} | {Rating}","metadata3_selected":"{EpisodeName} <or> {Name}"},"PURCHASES":{"metadata":"{RentalTimeLeft_short} <or> {ReleaseYear} {Rating}","metadata_selected":"{RentalTimeLeft_short} <or> {ReleaseYear} {Rating}","metadata2":"{Name}"},"SIMILAR":{"metadata":"{ReleaseYear} | {Rating} <or> {Name}","metadata2":"{Name}","metadata3":"{ReleaseYear} | {Rating} <or> {Name}","metadata_selected":"{ReleaseYear} | {Rating} <or> {Name}","metadata3_selected":"{ReleaseYear} | {Rating} <or> {Name}"},"STACKEDCARD":{"metadata":"{Name}","metadata_selected":"{Name}"},"STACKEDCARDFORAPP":{"metadata_selected":"{Name}"},"NETFLIX":{"metadata":"{title}","metadata_selected":"{title}"},"DVRSWIMLANE":{"metadata1":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage}","metadata1_selected":"{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage}","metadata2_selected":"{DurationOrStateIndicator}","metadata2":"{DurationOrStateIndicator}","metadata3_selected":"{Name}","metadata4_selected":"{ReleaseYear} | {Rating} | {CallLetters} {ChannelNumber}","metadata5_selected":"{DvrSwimlaneDisplayStatusDescription}"},"DVRGROUPSWIMLANE":{"metadata3_selected":"{DVRSeriesTitle}","metadata4_selected":"{NumOfSeasons} | {NumOfEpisodes}","metadata5_selected":"{DisplayStatusDescription}"}},"metadataStyles":{"RECOMM":{"metadata1":{"width":94,"marginRight":20,"backgroundColor":"#282828","borderRadius":6,"opacity":0.85,"alignContent":"center","justifyContent":"center"},"metadata2":{"fontFamily":"Inter-Bold","fontSize":38,"color":"white","lineHeight":55,"textAlign":"left"},"metadata3":{"fontFamily":"Inter-SemiBold","fontSize":25,"lineHeight":38,"color":"#828282","textAlign":"left"},"metadataImageStyle":{"width":72,"height":30,"alignSelf":"center"},"metadataIconStyles":{"width":72,"height":30,"alignSelf":"center"},"metadataImageContainerStyle":{"width":94,"height":94,"marginRight":20,"backgroundColor":"#282828","borderRadius":6,"opacity":0.85,"alignContent":"center","justifyContent":"center"},"metadataIconContainerStyle":{"width":94,"height":94,"marginRight":20,"backgroundColor":"#282828","borderRadius":6,"opacity":0.85,"alignContent":"center","justifyContent":"center"},"metadataContainer1Styles":{"width":500,"flexDirection":"row","marginTop":5,"paddingLeft":10},"metadataContainer2Styles":{"flexDirection":"column"}}}}
+{
+  "skin": "clientV2.default",
+  "version": "1.0.0",
+  "theme": {
+    "fontColors": {
+      "light": "#EEEEEE",
+      "lightGrey": "#A7A7A7",
+      "darkGrey": "#6D6D6D",
+      "orange": "#FFA300",
+      "statusWarning": "#E7A230",
+      "statusError": "#E15554",
+      "badge": "#B22334"
+    },
+    "fontFamily": {
+      "regular": "Inter-Regular",
+      "semiBold": "Inter-SemiBold",
+      "bold": "Inter-Bold",
+      "icons": "MyFontRegular"
+    },
+    "fontSizes": {
+      "caption1": 23,
+      "body1": 29,
+      "body2": 25,
+      "heading1": 76,
+      "heading2": 57,
+      "heading3": 48,
+      "subTitle1": 38,
+      "subTitle2": 31
+    },
+    "lineHeights": {
+      "caption1": 38,
+      "body1": 50,
+      "body2": 38,
+      "heading1": 76,
+      "heading2": 72,
+      "heading3": 60,
+      "subTitle1": 55,
+      "subTitle2": 50
+    },
+    "backgroundColors": {
+      "primary1": "#053C69",
+      "primary2": "#3DA6FF",
+      "shade1": "#00030E",
+      "shade2": "#202124",
+      "shade3": "#282828",
+      "shade4": "#424242",
+      "shade5": "#A0A0A0",
+      "white": "#EEEEEE",
+      "black": "#000000"
+    },
+    "auxiliaryColors": {
+      "overlay1": "#rgba(0,03,14,0.9)",
+      "overlay2": "#rgba(0,03,14,0.65)",
+      "overlay3": "#rgba(0,03,14,0.2)",
+      "overlay4": "#rgba(0,03,14,0.4)",
+      "statusWarning": "#E7A230",
+      "statusError": "#B22334",
+      "statusSuccess": "#48A651"
+    }
+  },
+  "assets": {
+    "images": {
+      "logo": "../assets/images/logo.png",
+      "logo_short": "../assets/images/logo_short.jpg",
+      "search": "../assets/images/search.png",
+      "message": "../assets/images/message.png",
+      "onboarding": "../assets/images/onboarding_1280x752_landscape.jpg",
+      "settings": "../assets/images/settings.png",
+      "viewMore": "../assets/images/ViewMore.png",
+      "avatar": "../assets/images/avatar.png",
+      "splashImage": "logo.png",
+      "splashAnimation": "splash.json"
+    }
+  },
+  "components": [
+    {
+      "id": "LoginPage",
+      "config": { "$top": 8, "$skip": 0 },
+      "components": [
+        {
+          "id": "Logo",
+          "title": "${str_component_title}",
+          "config": {
+            "dataSource": { "uri": "res://drawable/default/MediaKindLogo.png" }
+          },
+          "style": { "backgroundColor": "#000000" }
+        },
+        {
+          "id": "SpinnerButton",
+          "title": "${str_component_title}",
+          "config": {
+            "dataSource": { "uri": "res://drawable/default/spinner.png" }
+          }
+        },
+        {
+          "id": "Instructions",
+          "style": {
+            "container": { "flex": 1, "flexDirection": "row" },
+            "logoContainer": { "width": 813 },
+            "logo": {
+              "width": 475,
+              "height": 77,
+              "marginTop": 469,
+              "marginLeft": 190
+            },
+            "instructionContainer": { "flex": 1 },
+            "t1": {
+              "fontSize": 57,
+              "color": "#EEEEEE",
+              "marginTop": 158,
+              "marginBottom": 31,
+              "fontFamily": "Inter-SemiBold"
+            },
+            "t2": { "fontSize": 31, "marginBottom": 11, "color": "#A7A7A7" },
+            "t3": { "fontSize": 48, "marginBottom": 11, "color": "#EEEEEE" },
+            "t4": { "paddingLeft": 64.5 },
+            "optionText": {
+              "fontSize": 31,
+              "marginBottom": 11,
+              "color": "#EEEEEE"
+            },
+            "codeContainer": {
+              "flexDirection": "row",
+              "marginTop": 51,
+              "marginBottom": 64
+            },
+            "codeBlock": {
+              "width": 130,
+              "height": 130,
+              "backgroundColor": "#202124",
+              "marginRight": 20,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "borderRadius": 4
+            },
+            "code": {
+              "fontSize": 76,
+              "color": "#EEEEEE",
+              "fontFamily": "Inter-SemiBold"
+            },
+            "codeInactive": {
+              "fontSize": 76,
+              "fontFamily": "Inter-SemiBold",
+              "color": "#6D6D6D"
+            },
+            "refreshBtn": { "width": 275, "height": 70 },
+            "refreshBtnTextStyle": { "fontFamily": "Inter-SemiBold" }
+          }
+        }
+      ]
+    },
+    {
+      "id": "BrowseGallery",
+      "config": {
+        "browserecommendations": {
+          "uri": "udl://subscriber/libraries/YouMightLikeByTasteId/",
+          "params": { "$top": 100, "$skip": 0 }
+        },
+        "browsemovies": {
+          "uri": "udl://discovery/libraryprograms/complete/",
+          "params": {
+            "showType": "Movie",
+            "pivotSource": "filters/movies/",
+            "baseFilters": "ShowType|Movie",
+            "$top": 100,
+            "$orderBy": "Popularity",
+            "$skip": 0
+          }
+        },
+        "browsetv": {
+          "uri": "udl://discovery/libraryprograms/complete/",
+          "params": {
+            "showType": "TVShow",
+            "pivotSource": "filters/tvshow/",
+            "baseFilters": "ShowType|TVShow",
+            "$top": 100,
+            "$orderBy": "Popularity",
+            "$skip": 0
+          }
+        },
+        "browsemoviesandtv": {
+          "Program": {
+            "uri": "udl://discovery/libraryprograms/complete/",
+            "params": {
+              "showType": "MovieAndTVShow",
+              "pivotSource": "filters/tvshow/",
+              "baseFilters": "ShowType|MovieAndTVShow",
+              "$top": 100,
+              "$orderBy": "Popularity",
+              "$skip": 0
+            }
+          },
+          "SvodPackage": {
+            "uri": "udl://discovery/subscriptionPackage/items/",
+            "params": { "$skip": 0, "$top": 100 }
+          }
+        },
+        "browsepackages": {
+          "uri": "udl://discovery/libraryprograms/collections/packages/",
+          "params": {
+            "pivotSource": "filters/collections",
+            "baseFilters": "Language|",
+            "$top": 100,
+            "$orderBy": "Popularity",
+            "$skip": 0
+          }
+        },
+        "browsepromotions": {
+          "discovery": {
+            "uri": "udl://discovery/categories/items/",
+            "params": {
+              "pivotSource": "",
+              "baseFilters": "Language|",
+              "$orderBy": "Popularity",
+              "$top": 100,
+              "$skip": 0
+            }
+          },
+          "subscriber": {
+            "uri": "udl://subscriber/library",
+            "params": { "$top": 100, "$skip": 0, "types": "Title" }
+          },
+          "SvodPackage": {
+            "uri": "udl://discovery/subscriptionPackage/items/",
+            "params": { "$skip": 0, "$top": 100 }
+          },
+          "catchup": {
+            "uri": "udl://live/feeds/catchup",
+            "params": { "$skip": 0, "$top": 100 }
+          }
+        },
+        "browsemixedrecommendations": {
+          "uri": "udl://subscriber/similarprograms/",
+          "params": {
+            "pivotSource": "",
+            "baseFilters": "Language|",
+            "$top": 100,
+            "$skip": 0,
+            "ShowType": "series"
+          }
+        },
+        "libraries": {
+          "uri": "udl://subscriber/library",
+          "params": { "$top": 100, "$skip": 0, "types": "PayPerView|Title" }
+        },
+        "continue": {
+          "uri": "udl://subscriber/library/Continue",
+          "params": { "$top": 16, "$skip": 0, "types": "PayPerView|Title" }
+        },
+        "favorites": {
+          "uri": "udl://subscriber/library/Pins",
+          "params": { "$top": 100, "$skip": 0 }
+        },
+        "restartTv": {
+          "uri": "udl://live/catchup/items/",
+          "params": {
+            "pivots": "",
+            "$top": 100,
+            "$skip": 0,
+            "$orderBy": "Popularity",
+            "baseFilters": "Language|en"
+          }
+        },
+        "browseSvodPackage": {
+          "uri": "udl://discovery/subscriptionPackage/items/",
+          "params": { "$skip": 0, "$top": 100 }
+        },
+        "browsepayperview": {
+          "uri": "udl://discovery/feeds/payperview",
+          "params": {
+            "$itemsPerRow": 16,
+            "baseFilters": "Language|",
+            "$top": 12,
+            "$skip": 0,
+            "client": "reach"
+          }
+        },
+        "browsetrending": {
+          "uri": "udl://live/feeds/trending",
+          "params": {
+            "$itemsPerRow": 16,
+            "baseFilters": "Language|",
+            "$top": 100,
+            "$skip": 0,
+            "client": "reach"
+          }
+        },
+        "browsedvrtvshows": {
+          "uri": "udl://dvrproxy/viewable-subscription-items-showtype/",
+          "params": {
+            "showType": "TVShow",
+            "pivotSource": "filters/dvr/tvshow",
+            "baseFilters": "ShowType|TVShow",
+            "$top": 100,
+            "recordingState": 1,
+            "$orderBy": "Popularity",
+            "$skip": 0
+          }
+        },
+        "browsedvrmovies": {
+          "uri": "udl://dvrproxy/viewable-subscription-items-showtype/",
+          "params": {
+            "showType": "Movie",
+            "pivotSource": "filters/dvr/Movie",
+            "baseFilters": "ShowType|Movie",
+            "$top": 100,
+            "recordingState": 1,
+            "$orderBy": "Popularity",
+            "$skip": 0
+          }
+        },
+        "browsesearch": {
+          "uri": "udl://search/view-all",
+          "params": { "$top": 100, "$skip": 0, "searchLive": true }
+        }
+      },
+      "style": {
+        "container": { "flex": 1, "flexDirection": "row" },
+        "backgroundImageStyle": {
+          "position": "relative",
+          "top": 120,
+          "height": 520,
+          "width": 918,
+          "flex": 1,
+          "shadowOpacity": 0.5
+        },
+        "gradientViewStyle": { "height": 519, "width": 920 },
+        "metadataViewStyle": { "flex": 0.65 },
+        "metadataInnerViewStyle": {
+          "flex": 1,
+          "paddingLeft": 93,
+          "paddingRight": 93,
+          "justifyContent": "flex-end",
+          "width": "85%"
+        },
+        "imageStyle": { "resizeMode": "contain" },
+        "contentRatingsContainer": { "marginTop": 30, "flexDirection": "row" },
+        "contentRatingsIcon": { "width": 30, "height": 30 },
+        "contentRatingText": { "marginLeft": 10 },
+        "ratingBlock": { "marginRight": 30, "flexDirection": "row" },
+        "metadataContainer": { "flexDirection": "row", "marginTop": 10 },
+        "ratingTextStyle": {
+          "fontFamily": "Inter-SemiBold",
+          "color": "#6D6D6D",
+          "fontSize": 25
+        },
+        "metadataTitle": {
+          "color": "#EEEEEE",
+          "fontFamily": "Inter-Bold",
+          "fontSize": 57,
+          "paddingTop": 12,
+          "lineHeight": 72,
+          "width": 650
+        },
+        "metadataLine2": {
+          "color": "#EEEEEE",
+          "fontFamily": "Inter-SemiBold",
+          "fontSize": 25,
+          "lineHeight": 38,
+          "width": 650
+        },
+        "fontIconStyle": {
+          "fontFamily": "MyFontRegular",
+          "color": "#EEEEEE",
+          "fontSize": 70,
+          "marginRight": 15,
+          "marginBottom": -15
+        },
+        "statusTextStyle": {
+          "color": "#E7A230",
+          "fontFamily": "Inter-Regular",
+          "fontSize": 25,
+          "marginTop": 30
+        },
+        "filterViewStyle": {
+          "position": "absolute",
+          "flexDirection": "row",
+          "flex": 1,
+          "top": 0,
+          "right": 0,
+          "alignItems": "center",
+          "alignContent": "flex-end",
+          "zIndex": 1000
+        },
+        "filterContainerStyle": {
+          "flexDirection": "row",
+          "alignItems": "center"
+        },
+        "buttonContainerStyle": { "height": 66, "width": 180, "marginTop": 30 },
+        "innerViewStyle1": { "flex": 1.5 },
+        "showcardViewStyle": {
+          "paddingTop": 10,
+          "paddingBottom": 10,
+          "flex": 2.3,
+          "marginTop": 120,
+          "flexDirection": "column"
+        },
+        "headerViewStyle": {
+          "flexDirection": "column",
+          "flex": 1,
+          "position": "absolute",
+          "height": 120,
+          "width": 1920
+        },
+        "headerInnerStyle": { "height": 120, "width": 1920 },
+        "headerTitleViewStyle": {
+          "flexDirection": "row",
+          "left": 89,
+          "flex": 2,
+          "alignItems": "center"
+        },
+        "headerUnderLine": {
+          "width": 1920,
+          "opacity": 0.4,
+          "height": 1,
+          "borderWidth": 0.4,
+          "borderColor": "#A0A0A0",
+          "backgroundColor": "#A0A0A0"
+        },
+        "headerTitleStyle": {
+          "color": "#EEEEEE",
+          "fontFamily": "Inter-SemiBold",
+          "fontSize": 38
+        },
+        "emptyMessageContainer": {
+          "flex": 1,
+          "justifyContent": "center",
+          "alignItems": "center"
+        },
+        "image": { "width": 250, "height": 260, "marginBottom": 29 },
+        "networkImage": { "width": 85, "height": 63, "resizeMode": "contain" },
+        "networkImageView": {
+          "justifyContent": "center",
+          "alignItems": "center",
+          "backgroundColor": "#282828",
+          "borderRadius": 3,
+          "height": 111,
+          "width": 111,
+          "padding": 25,
+          "marginBottom": 15
+        },
+        "subtitleEmptyMessage": {
+          "fontSize": 25,
+          "color": "#6D6D6D",
+          "marginTop": 17
+        }
+      },
+      "components": [
+        {
+          "id": "GradientView",
+          "config": {
+            "gradientType": "linear",
+            "startColor": { "red": 0, "green": 3, "blue": 14, "alpha": 50 },
+            "endColor": { "red": 0, "green": 0, "blue": 0, "alpha": 255 },
+            "start": { "x": 0, "y": 0.3 },
+            "end": { "x": 0, "y": 0.5 }
+          }
+        },
+        {
+          "id": "LazyListWrapper",
+          "config": {
+            "snapToInterval": 90,
+            "snapToAlignment": "start",
+            "horizontal": false,
+            "numColumns": 4,
+            "placeHolder": { "uri": "res://drawable/default/PlaceHolder.png" }
+          },
+          "style": {
+            "compositionContainer": {
+              "height": 390,
+              "width": 260,
+              "padding": 10
+            },
+            "listWrapperStyle": { "flex": 1 },
+            "flatListContainerStyle": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "BrowseCategory",
+      "config": {
+        "browsemovies": {
+          "uri": "udl://discovery/librariespivotcategories/items/",
+          "params": {
+            "pivotGroup": "Genre",
+            "$itemsPerRow": 16,
+            "pivotSource": "filters/movies/",
+            "baseFilters": "ShowType|Movie,Language|",
+            "$top": 12,
+            "$skip": 0,
+            "client": "reach"
+          }
+        },
+        "browsetv": {
+          "uri": "udl://discovery/librariespivotcategories/items/",
+          "params": {
+            "pivotGroup": "Genre",
+            "$itemsPerRow": 16,
+            "pivotSource": "filters/tvshow/",
+            "baseFilters": "ShowType|TVShow,Language|",
+            "$top": 12,
+            "$skip": 0,
+            "client": "reach"
+          }
+        },
+        "browsepayperview": {
+          "uri": "udl://discovery/feeds/payperview",
+          "params": {
+            "$itemsPerRow": 16,
+            "baseFilters": "Language|",
+            "$top": 12,
+            "$skip": 0,
+            "client": "reach"
+          }
+        },
+        "browsetrending": {
+          "uri": "udl://live/feeds/trending",
+          "params": {
+            "$itemsPerRow": 16,
+            "baseFilters": "Language|",
+            "$top": 100,
+            "$skip": 0,
+            "client": "reach"
+          }
+        },
+        "browsemoviesandtv": {
+          "uri": "udl://discovery/librariespivotcategories/items/",
+          "params": {
+            "pivotGroup": "Genre",
+            "$itemsPerRow": 16,
+            "pivotSource": "filters/movieandtvshow/",
+            "baseFilters": "ShowType|MovieAndTVShow,Language|",
+            "$top": 12,
+            "$skip": 0,
+            "client": "reach"
+          }
+        },
+        "browsepromotions": {
+          "uri": "udl://discovery/promotionalcategories/items/",
+          "params": {
+            "$itemsPerRow": 16,
+            "$top": 12,
+            "$skip": 0,
+            "client": "reach"
+          }
+        },
+        "browsepromotionsCategory": {
+          "uri": "udl://discovery/categories/items/",
+          "params": {
+            "$itemsPerRow": 16,
+            "$top": 12,
+            "$skip": 0,
+            "client": "reach"
+          }
+        },
+        "browserecommendations": {
+          "uri": "udl://subscriber/libraries/dynamicFeeds/YouMightLikeByTaste",
+          "params": { "atHome": true, "$top": 12, "$skip": 0 }
+        },
+        "browsemixedrecommendations": {
+          "uri": "udl://subscriber/libraries/dynamicFeeds/MixedRecommendations",
+          "params": { "$top": 12, "$skip": 0 }
+        },
+        "restartTv": {
+          "uri": "udl://live/catchup/pivotitems/",
+          "params": { "$top": 100, "$skip": 0, "$itemsPerRow": 9 }
+        },
+        "browseSvodPackage": {
+          "uri": "udl://discovery/subscriptionPackage/CategoryItems/",
+          "params": { "$skip": 0, "$top": 12, "$itemsPerRow": 16 }
+        },
+        "snapToInterval": 280,
+        "snapToAlignment": "start"
+      },
+      "style": {
+        "headerTitleStyle": {
+          "color": "#EEEEEE",
+          "fontFamily": "Inter-SemiBold",
+          "fontSize": 38
+        },
+        "emptyMessageContainer": {
+          "flex": 1,
+          "justifyContent": "center",
+          "alignItems": "center"
+        },
+        "image": { "width": 250, "height": 260, "marginBottom": 29 }
+      },
+      "components": [
+        {
+          "id": "SwimlaneContainer",
+          "style": {
+            "container": { "flex": 1 },
+            "mainContainer": { "flex": 1 },
+            "scrollView": { "flex": 1, "marginTop": 120, "paddingTop": 120 },
+            "backgroundImageStyle": { "flex": 1 },
+            "imageStyle": { "resizeMode": "stretch" }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Search",
+      "config": { "minQueryLength": 1, "$skip": 0, "$top": 50 }
+    },
+    {
+      "id": "Details",
+      "config": { "assetExpiryDaysThreshold": 14 },
+      "components": [
+        {
+          "id": "Showcard",
+          "style": {
+            "detailsBlock": { "height": 852, "flexDirection": "row" },
+            "secondBlock": {
+              "marginTop": 86,
+              "flexDirection": "column",
+              "flex": 1,
+              "height": 627
+            },
+            "flexRow": { "flexDirection": "row" },
+            "ctaBlock": { "flexDirection": "row" },
+            "favoriteBlock": { "width": 583, "marginTop": 69 },
+            "ctaButtonGroupBlock": { "marginTop": 69 },
+            "containerOpacity": {
+              "backgroundColor": "#00030E",
+              "opacity": 0.9,
+              "height": "100%",
+              "width": "100%"
+            },
+            "firstColumn": { "width": 583, "alignItems": "center" },
+            "imageContainer": {
+              "borderRadius": 4,
+              "overflow": "hidden",
+              "marginTop": 86,
+              "height": 627
+            },
+            "secondColumn": {
+              "width": 905,
+              "height": 627,
+              "justifyContent": "center"
+            },
+            "thirdColumn": {
+              "flex": 1,
+              "paddingRight": 90,
+              "alignItems": "flex-end"
+            },
+            "networkImageView": {
+              "justifyContent": "center",
+              "alignItems": "center",
+              "backgroundColor": "#282828",
+              "borderRadius": 3,
+              "height": 111,
+              "width": 111,
+              "padding": 25,
+              "marginBottom": 15
+            },
+            "networkImage": {
+              "height": 63,
+              "width": 85,
+              "resizeMode": "contain"
+            },
+            "marginRight20": { "marginRight": 20 },
+            "networkTitle": {
+              "fontFamily": "Inter-SemiBold",
+              "fontSize": 29,
+              "color": "#6D6D6D",
+              "paddingTop": 18
+            },
+            "metadataContainer": {
+              "flexDirection": "row",
+              "paddingBottom": 23
+            },
+            "title": {
+              "fontFamily": "Inter-Bold",
+              "fontSize": 57,
+              "color": "#EEEEEE",
+              "paddingBottom": 10
+            },
+            "metadataLine1": {
+              "fontFamily": "Inter-SemiBold",
+              "fontSize": 25,
+              "color": "#A7A7A7",
+              "marginBottom": 25
+            },
+            "description": {
+              "fontFamily": "Inter-Regular",
+              "fontSize": 25,
+              "color": "#A7A7A7",
+              "lineHeight": 38
+            },
+            "showcardImage": { "height": 628, "width": 419 },
+            "buttonContainerStyle": {
+              "flexDirection": "row",
+              "alignItems": "center",
+              "justifyContent": "center"
+            },
+            "buttonIconContainer": { "width": 70, "height": 70 },
+            "solidBackground": { "backgroundColor": "#424242" },
+            "focusedBackground": { "backgroundColor": "#053C69" },
+            "moreDetailsContainer": { "marginTop": 104 },
+            "contentRatingsContainer": {
+              "flexDirection": "row",
+              "marginBottom": 25
+            },
+            "contentRatingsIcon": { "width": 30, "height": 30 },
+            "contentRatingText": { "marginLeft": 10 },
+            "ratingBlock": { "marginRight": 30, "flexDirection": "row" },
+            "textStyle": { "fontFamily": "MyFontRegular", "color": "#EEEEEE" },
+            "progressBarContainer": { "height": 3 },
+            "progressInfoText": {
+              "fontFamily": "Inter-SemiBold",
+              "fontSize": 25,
+              "color": "#A7A7A7",
+              "paddingBottom": 35,
+              "lineHeight": 38,
+              "marginBottom": 20
+            },
+            "statusTextStyle": {
+              "fontSize": 25,
+              "fontFamily": "Inter-Regular",
+              "color": "#E7A230",
+              "marginBottom": 25
+            },
+            "fontIconStyle": {
+              "fontFamily": "MyFontRegular",
+              "color": "#A7A7A7",
+              "fontSize": 70,
+              "marginRight": 15,
+              "marginTop": -40,
+              "marginBottom": 10
+            },
+            "flexOne": {
+              "flex": 1,
+              "marginHorizontal": 20,
+              "marginVertical": 20
+            },
+            "ctaButtonStyle": { "height": 66, "fontFamily": "Inter-SemiBold" },
+            "ctaFontIconStyle": {
+              "fontFamily": "MyFontRegular",
+              "color": "#E15554"
+            },
+            "buttonContainer": {
+              "flexDirection": "row",
+              "alignItems": "center"
+            },
+            "modalContainer": {
+              "position": "absolute",
+              "top": 0,
+              "right": 0,
+              "zIndex": 2
+            },
+            "episodeBlockContainer": { "marginTop": 35.5 },
+            "episodeBlockTitle": {
+              "marginBottom": 20,
+              "fontSize": 29,
+              "fontFamily": "Inter-Bold",
+              "color": "#EEEEEE"
+            },
+            "episodeMetadata": {
+              "marginBottom": 20,
+              "fontSize": 25,
+              "fontFamily": "Inter-SemiBold",
+              "color": "#A7A7A7"
+            },
+            "badgeStyle": {
+              "fontFamily": "MyFontRegular",
+              "color": "#E15554",
+              "fontSize": 50,
+              "marginLeft": 20,
+              "marginTop": -10
+            },
+            "marginTop": { "marginTop": 8 },
+            "hourGlass": {
+              "width": 16,
+              "height": 22,
+              "marginTop": 26,
+              "marginLeft": 15
+            },
+            "descriptionText": {
+              "fontSize": 25,
+              "fontFamily": "Inter-Regular",
+              "color": "#A7A7A7",
+              "lineHeight": 38,
+              "marginBottom": 25
+            }
+          }
+        },
+        {
+          "id": "MoreInfoPanel",
+          "style": {
+            "bodyRoot": {
+              "paddingLeft": 54,
+              "paddingRight": 54,
+              "paddingTop": 34,
+              "paddingBottom": 34,
+              "backgroundColor": "#202124"
+            },
+            "statusTextStyles": {
+              "fontSize": 25,
+              "color": "#E7A230",
+              "marginTop": 13
+            },
+            "statusTextStyle": { "fontSize": 25, "color": "#E7A230" },
+            "headerContainer": {
+              "width": "100%",
+              "height": 185,
+              "backgroundColor": "#191b1f",
+              "padding": 50,
+              "justifyContent": "center"
+            },
+            "titleStyles": {},
+            "subTitleStyles": {},
+            "genreTextStyle": {
+              "fontSize": 25,
+              "fontFamily": "Inter-Bold",
+              "color": "#EEEEEE",
+              "marginBottom": 13,
+              "lineHeight": 38
+            },
+            "bodyTextStyle": {
+              "fontSize": 25,
+              "color": "#A7A7A7",
+              "lineHeight": 38,
+              "fontFamily": "Inter-Regular"
+            },
+            "ratingTextStyle": {
+              "fontSize": 25,
+              "fontFamily": "Inter-Bold",
+              "color": "#A7A7A7"
+            },
+            "row": { "paddingBottom": 30 },
+            "audioText": { "paddingBottom": 5 },
+            "ratingContainer": {
+              "flexDirection": "row",
+              "marginBottom": 24,
+              "marginTop": 10
+            },
+            "ratingIndicator": {
+              "width": 5,
+              "height": "100%",
+              "backgroundColor": "#A0A0A0",
+              "marginRight": 14
+            },
+            "separatorStyle": {
+              "width": "100%",
+              "height": 1,
+              "opacity": 0.3,
+              "backgroundColor": "#A0A0A0",
+              "marginBottom": 20
+            },
+            "entitlementRow": { "marginBottom": 20, "flexDirection": "row" },
+            "sourceIcon": {
+              "fontFamily": "MyFontRegular",
+              "fontSize": 50,
+              "color": "#A7A7A7",
+              "marginRight": 15,
+              "marginTop": -16,
+              "marginBottom": -4
+            },
+            "indicatorIconStyle": {
+              "fontFamily": "MyFontRegular",
+              "fontSize": 70,
+              "color": "#A7A7A7",
+              "marginRight": 15,
+              "marginTop": -12,
+              "marginBottom": -12
+            },
+            "networkImage": {
+              "height": 28,
+              "width": 67,
+              "resizeMode": "contain",
+              "marginRight": 20
+            },
+            "flexRow": { "flexDirection": "row" }
+          }
+        },
+        {
+          "id": "PlayVodPanel",
+          "style": {
+            "root": {
+              "paddingTop": 34,
+              "paddingLeft": 40,
+              "paddingRight": 40,
+              "paddingBottom": 34
+            },
+            "selectButtonContainer": { "width": "100%", "height": 100 }
+          }
+        },
+        {
+          "id": "PurchaseInformationPanel",
+          "style": {
+            "container": { "flexGrow": 1 },
+            "confirmButton": {
+              "height": 70,
+              "width": 533,
+              "marginHorizontal": 90,
+              "marginBottom": 30
+            },
+            "loaderButton": {
+              "height": 70,
+              "width": 300,
+              "marginHorizontal": 90,
+              "marginBottom": 30,
+              "alignSelf": "center"
+            },
+            "textStyle": { "fontFamily": "Inter-SemiBold" },
+            "statusTextStyle": {
+              "fontSize": 25,
+              "fontFamily": "Inter-Regular",
+              "color": "#E7A230",
+              "marginBottom": 25,
+              "marginLeft": 54,
+              "marginTop": 25
+            },
+            "selectButtonContainer": {
+              "width": "100%",
+              "height": 100,
+              "paddingLeft": 20,
+              "paddingRight": 20
+            }
+          }
+        },
+        {
+          "id": "PurchaseOptionsPanel",
+          "style": {
+            "scrollViewContainer": {
+              "paddingTop": 34,
+              "paddingLeft": 40,
+              "paddingRight": 40,
+              "marginBottom": 200
+            },
+            "selectButtonContainer": { "width": "100%", "height": 100 },
+            "viewContainer": { "flex": 1 },
+            "innerScrollViewContainerRentBuy": {
+              "height": 395,
+              "paddingTop": 15,
+              "paddingBottom": 15,
+              "paddingLeft": 40,
+              "paddingRight": 40
+            },
+            "innerScrollViewContainer": {
+              "height": 800,
+              "paddingTop": 15,
+              "paddingBottom": 15,
+              "paddingLeft": 40,
+              "paddingRight": 40
+            },
+            "textStyle": {
+              "fontFamily": "Inter-Bold",
+              "color": "#EEEEEE",
+              "fontSize": 31,
+              "marginLeft": 51,
+              "marginTop": 20
+            },
+            "subTextStyle": {
+              "color": "#EEEEEE",
+              "marginLeft": 51,
+              "marginTop": 20,
+              "marginBottom": 20
+            }
+          }
+        },
+        {
+          "id": "PurchaseNetworkSelectionPanel",
+          "style": {
+            "root": { "paddingTop": 37 },
+            "selectButtonContainer": {
+              "width": "100%",
+              "height": 100,
+              "paddingLeft": 20,
+              "paddingRight": 20
+            },
+            "scrollViewContainer": {
+              "paddingTop": 34,
+              "paddingLeft": 20,
+              "paddingRight": 20,
+              "marginBottom": 200
+            },
+            "statusTextStyle": {
+              "color": "#EEEEEE",
+              "fontSize": 25,
+              "marginLeft": 50,
+              "marginRight": 50,
+              "marginTop": 20,
+              "marginBottom": 40
+            }
+          }
+        },
+        {
+          "id": "RestartPanel",
+          "style": {
+            "root": {
+              "paddingTop": 34,
+              "paddingLeft": 40,
+              "paddingRight": 40,
+              "paddingBottom": 34
+            },
+            "selectButtonContainer": { "width": "100%", "height": 100 }
+          }
+        },
+        {
+          "id": "UpcomingPanel",
+          "style": {
+            "dayTitle": {
+              "flexDirection": "row",
+              "alignItems": "center",
+              "marginBottom": 30
+            },
+            "rowMarginTop": { "marginTop": 25 },
+            "dayText": {
+              "color": "#EEEEEE",
+              "fontFamily": "Inter-Bold",
+              "fontSize": 29
+            },
+            "secondaryText": {
+              "color": "#A7A7A7",
+              "fontFamily": "Inter-SemiBold",
+              "fontSize": 25,
+              "lineHeight": 38
+            },
+            "scheduleContainer": {
+              "paddingVertical": 0,
+              "flexDirection": "row"
+            },
+            "scheduleContentContainer": { "flex": 3 },
+            "scheduleImageContainer": {
+              "flex": 0.5,
+              "alignSelf": "center",
+              "flexDirection": "row",
+              "justifyContent": "flex-end",
+              "paddingLeft": 10
+            },
+            "scheduleImageStyle": {
+              "height": 50,
+              "width": 70,
+              "resizeMode": "contain",
+              "alignSelf": "center"
+            },
+            "timeText": { "fontSize": 23, "color": "#A7A7A7", "marginTop": 15 },
+            "divider": {
+              "width": "100%",
+              "height": 2,
+              "marginVertical": 27,
+              "backgroundColor": "#A0A0A0"
+            },
+            "focused": { "opacity": 0.5 },
+            "unfocused": { "opacity": 0.2 },
+            "root": {
+              "paddingTop": 34,
+              "paddingLeft": 54,
+              "paddingRight": 54,
+              "paddingBottom": 34
+            },
+            "flexRow": { "flexDirection": "row" }
+          }
+        },
+        {
+          "id": "Description",
+          "style": {
+            "root": { "flexDirection": "row", "alignItems": "flex-end" },
+            "descriptionText": {
+              "fontFamily": "Inter-Regular",
+              "fontSize": 25,
+              "color": "#A7A7A7",
+              "lineHeight": 38,
+              "marginBottom": 25
+            }
+          }
+        },
+        {
+          "id": "SubscribeChannel",
+          "style": {
+            "container": { "flex": 1 },
+            "networkImageView": {
+              "justifyContent": "center",
+              "alignItems": "center",
+              "backgroundColor": "#282828",
+              "borderRadius": 3,
+              "height": 111,
+              "width": 111,
+              "padding": 25,
+              "marginBottom": 15
+            },
+            "networkImage": {
+              "height": 80,
+              "width": 100,
+              "resizeMode": "contain"
+            },
+            "marginRight20": { "marginRight": 20 },
+            "thirdColumn": {
+              "paddingTop": 140,
+              "paddingLeft": 137,
+              "alignItems": "flex-start"
+            },
+            "networkTitle": {
+              "fontFamily": "${fontFamily.bold}",
+              "fontSize": "${fontSizes.body1}",
+              "color": "${fontColors.light}"
+            },
+            "backgroundImageStyle": { "flex": 1 },
+            "imageStyle": { "resizeMode": "stretch" },
+            "scheduleTitle": {
+              "lineHeight": "${lineHeights.body1}",
+              "fontFamily": "${fontFamily.bold}",
+              "fontSize": "${fontSizes.body1}",
+              "color": "${fontColors.light}"
+            },
+            "scheduleDescription": {
+              "width": "60%",
+              "lineHeight": "${lineHeights.body1}",
+              "fontFamily": "${fontFamily.semiBold}",
+              "fontSize": "${fontSizes.body2}",
+              "color": "${fontColors.light}"
+            },
+            "scheduleInfoContainer": {
+              "paddingTop": 50,
+              "paddingLeft": 137,
+              "flexDirection": "column"
+            },
+            "separatorStyle": {
+              "width": 150,
+              "height": 5,
+              "opacity": 0.3,
+              "backgroundColor": "${backgroundColors.shade5}",
+              "marginTop": 50,
+              "marginLeft": 137
+            },
+            "subscriptionStatusMessage": {
+              "marginLeft": 137,
+              "marginTop": 50,
+              "lineHeight": "${lineHeights.body1}",
+              "fontFamily": "${fontFamily.semiBold}",
+              "fontSize": "${fontSizes.body2}",
+              "color": "${fontColors.statusWarning}"
+            },
+            "ctaFontIconStyle": {
+              "fontFamily": "${fontFamily.icons}",
+              "color": "${fontColors.light}"
+            },
+            "buttonIconContainer": {
+              "marginLeft": 122,
+              "marginTop": 30,
+              "borderRadius": 0,
+              "width": 350,
+              "height": 60,
+              "overflow": "hidden",
+              "marginHorizontal": 90
+            },
+            "buttonTextStyle": { "fontFamily": "${fontFamily.bold}" }
+          }
+        }
+      ]
+    },
+    {
+      "id": "PersonDetails",
+      "components": [
+        {
+          "id": "Showcard",
+          "style": {
+            "detailsBlock": { "height": 626, "flexDirection": "row" },
+            "secondBlock": {
+              "flexDirection": "column",
+              "flex": 1,
+              "height": 627
+            },
+            "flexRow": { "flexDirection": "row" },
+            "firstColumn": { "width": 467, "alignItems": "center" },
+            "imageContainer": {
+              "borderRadius": 4,
+              "overflow": "hidden",
+              "marginTop": 60,
+              "height": 400
+            },
+            "secondColumn": { "flex": 1, "height": 476 },
+            "title": {
+              "fontFamily": "Inter-Bold",
+              "fontSize": 57,
+              "color": "#EEEEEE",
+              "paddingBottom": 8,
+              "marginTop": 60
+            },
+            "metadataLine1": {
+              "fontFamily": "Inter-SemiBold",
+              "fontSize": 25,
+              "color": "#A7A7A7"
+            },
+            "description": {
+              "fontFamily": "Inter-Regular",
+              "fontSize": 25,
+              "color": "#A7A7A7",
+              "lineHeight": 38
+            },
+            "showcardImage": { "height": 400, "width": 300 },
+            "textStyle": { "fontFamily": "MyFontRegular", "color": "#EEEEEE" },
+            "imageBackgroundContainer": {
+              "flex": 1,
+              "backgroundColor": "#00030E",
+              "opacity": 0.9
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SlideMenu",
+      "components": [
+        {
+          "id": "SideMenuPanel",
+          "style": {
+            "sideMenuContainer": { "backgroundColor": "transparent" },
+            "headerContainer": { "flex": 1, "flexDirection": "column" }
+          }
+        },
+        {
+          "id": "SideMenu",
+          "style": {
+            "sideMenuContainer": {
+              "width": 714,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+              "backgroundColor": "#202124",
+              "zIndex": 150,
+              "paddingTop": 0
+            },
+            "headerContainer": {
+              "height": 175,
+              "width": 714,
+              "paddingLeft": 54,
+              "paddingTop": 49,
+              "backgroundColor": "#rgba(0,03,14,0.2)"
+            },
+            "header1": {
+              "color": "#A7A7A7",
+              "fontSize": 25,
+              "fontFamily": "Inter-SemiBold"
+            },
+            "header2": {
+              "fontFamily": "Inter-Bold",
+              "color": "#EEEEEE",
+              "fontSize": 38
+            },
+            "header1Spacing": {
+              "marginTop": 18,
+              "paddingBottom": 13,
+              "paddingRight": 54
+            },
+            "headerContainerStyle": { "paddingRight": 54 }
+          }
+        }
+      ]
+    },
+    {
+      "id": "PackageDetails",
+      "components": [
+        {
+          "id": "Showcard",
+          "style": {
+            "containerOpacity": {
+              "flex": 1,
+              "backgroundColor": "#00030E",
+              "opacity": 0.9
+            },
+            "title": {
+              "fontFamily": "Inter-Bold",
+              "fontSize": 57,
+              "color": "#EEEEEE",
+              "paddingBottom": 30
+            },
+            "metadataLine1": {
+              "fontFamily": "Inter-SemiBold",
+              "fontSize": 25,
+              "color": "#A7A7A7",
+              "paddingBottom": 30
+            },
+            "description": {
+              "fontFamily": "Inter-Regular",
+              "fontSize": 25,
+              "color": "#A7A7A7",
+              "lineHeight": 38,
+              "textAlign": "justify",
+              "width": 800
+            },
+            "showcardImage": { "height": 330, "width": 587 },
+            "detailContainer": {
+              "flexDirection": "row",
+              "paddingTop": 60,
+              "paddingLeft": 88
+            },
+            "metadataViewStyle": { "paddingLeft": 76 },
+            "moreDetailsContainer": { "marginTop": 104 },
+            "imageBackgroundStyle": { "flex": 1 },
+            "bgImageStyle": { "resizeMode": "stretch" },
+            "textStyle": { "fontFamily": "MyFontRegular", "color": "#EEEEEE" },
+            "statusTextStyle": {
+              "fontSize": 25,
+              "color": "#E7A230",
+              "paddingBottom": 30
+            },
+            "fontIconStyle": {
+              "fontFamily": "MyFontRegular",
+              "color": "#A7A7A7",
+              "fontSize": 70,
+              "marginRight": 15,
+              "marginBottom": 23
+            },
+            "ctaButtonStyle": { "height": 66, "fontFamily": "Inter-SemiBold" },
+            "buttonContainer": {
+              "flexDirection": "row",
+              "alignItems": "center",
+              "marginTop": 28
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "PageContainer",
+      "style": {
+        "FullPage": { "backgroundColor": "#282828", "flex": 1 },
+        "TabPage": {
+          "backgroundColor": "#282828",
+          "flex": 1,
+          "paddingTop": 120
+        },
+        "overlay": { "backgroundColor": "#282828" }
+      }
+    },
+    {
+      "id": "EpisodeList",
+      "config": { "snapToInterval": 20 },
+      "style": {
+        "containerStyle": {
+          "flex": 1,
+          "flexDirection": "row",
+          "paddingTop": 72,
+          "paddingLeft": 90,
+          "paddingRight": 58,
+          "backgroundColor": "#00030E",
+          "opacity": 0.9
+        },
+        "firstBlock": { "width": 543 },
+        "titleBlock": { "marginBottom": 116 },
+        "seasonTitle": {
+          "fontFamily": "Inter-Bold",
+          "fontSize": 38,
+          "color": "#EEEEEE",
+          "marginBottom": 15
+        },
+        "seasonMetadata": {
+          "fontFamily": "Inter-SemiBold",
+          "fontSize": 25,
+          "color": "#A7A7A7"
+        },
+        "flexOne": { "flex": 1 },
+        "seasonScrollView": { "marginBottom": 30 },
+        "secondBlock": { "flex": 1 },
+        "seasonBlock": {
+          "height": 62,
+          "marginBottom": 43,
+          "alignSelf": "flex-start"
+        },
+        "seasonBlockSelectedHighlight": {
+          "borderBottomColor": "#053C69",
+          "borderBottomWidth": 4
+        },
+        "seasonText": {
+          "fontFamily": "Inter-Regular",
+          "color": "#6D6D6D",
+          "fontSize": 38
+        },
+        "seasonTextSelected": {
+          "fontFamily": "Inter-Bold",
+          "color": "#EEEEEE",
+          "fontSize": 38
+        },
+        "episodeItemContainer": {
+          "padding": 10,
+          "marginBottom": 20,
+          "borderRadius": 4
+        },
+        "selectedEpisode": { "backgroundColor": "#202124" },
+        "unSelectedEpisode": { "opacity": 0.8 },
+        "episodeItemImage": { "height": 237, "width": 419 },
+        "episodeItemShowcard": { "flexDirection": "row" },
+        "episodeItemCTA": { "marginLeft": 25 },
+        "episodeItemInfo": {
+          "height": 237,
+          "justifyContent": "center",
+          "flex": 1,
+          "paddingLeft": 25,
+          "paddingRight": 25
+        },
+        "episodeItemTitle": {
+          "fontFamily": "Inter-Bold",
+          "color": "#EEEEEE",
+          "fontSize": 31,
+          "lineHeight": 50
+        },
+        "episodeItemMetadata": {
+          "fontFamily": "Inter-SemiBold",
+          "color": "#A7A7A7",
+          "fontSize": 25,
+          "lineHeight": 38
+        },
+        "episodeItemDescription": {
+          "fontFamily": "Inter-Regular",
+          "color": "#6D6D6D",
+          "fontSize": 25,
+          "lineHeight": 38
+        },
+        "imageContainer": {
+          "borderRadius": 4,
+          "overflow": "hidden",
+          "height": 237
+        },
+        "textOnImage": {
+          "zIndex": 10,
+          "position": "absolute",
+          "right": 19,
+          "top": 16,
+          "fontFamily": "Inter-SemiBold",
+          "fontSize": 29,
+          "color": "#EEEEEE"
+        },
+        "ctaBtnContainer": { "flex": 1, "marginTop": 28 },
+        "buttonGroupContainer": { "flexDirection": "row", "flex": 1 },
+        "iconContainer": { "width": 100 },
+        "solidBackground": { "backgroundColor": "#424242" },
+        "focusedBackground": { "backgroundColor": "#053C69" },
+        "buttonIconContainer": { "width": 70, "height": 70 },
+        "ctaButtonStyle": { "height": 66, "fontFamily": "Inter-SemiBold" },
+        "ctaFontIconStyle": {
+          "fontFamily": "MyFontRegular",
+          "color": "#E15554"
+        },
+        "buttonContainer": {
+          "flexDirection": "row",
+          "alignItems": "center",
+          "marginTop": 28
+        },
+        "statusIcon": { "fontFamily": "MyFontRegular" },
+        "descriptionStyle": {
+          "color": "#6D6D6D",
+          "fontFamily": "Inter-Regular"
+        },
+        "statusTextStyle": {
+          "color": "#E7A230",
+          "fontFamily": "Inter-Regular",
+          "fontSize": 25
+        },
+        "metadataStyle": { "color": "#A7A7A7", "fontFamily": "Inter-SemiBold" },
+        "titleStyle": { "color": "#EEEEEE", "fontFamily": "Inter-Bold" },
+        "seasonNumberTextStyle": {
+          "fontFamily": "Inter-SemiBold",
+          "color": "#EEEEEE"
+        },
+        "networkImageStyle": {
+          "resizeMode": "contain",
+          "height": 64,
+          "width": 64
+        },
+        "separatorTextStyle": { "color": "#A7A7A7" },
+        "focusedUnderLine": { "backgroundColor": "#053C69" }
+      }
+    },
+    {
+      "id": "DVRConflict",
+      "style": {
+        "container": { "flexGrow": 1 },
+        "conflictListContainer": { "height": 120, "width": 624 },
+        "conflictItemContainer": {
+          "width": 591,
+          "height": 83,
+          "flexDirection": "row",
+          "justifyContent": "flex-start",
+          "marginLeft": 61
+        },
+        "conflictItemMetadataContainer": { "width": 422, "height": 83 },
+        "conflictItemMetadataLine1Container": { "flexDirection": "row" },
+        "conflictItemMetadataLine1": {
+          "width": 288,
+          "height": 50,
+          "fontSize": 29,
+          "fontFamily": "Inter-Regular",
+          "color": "#A7A7A7"
+        },
+        "conflictIcon": {
+          "fontSize": 20,
+          "fontFamily": "Inter-Bold",
+          "color": "#000"
+        },
+        "conflictIconContainer": {
+          "backgroundColor": "#E7A230",
+          "borderRadius": 15,
+          "width": 30,
+          "height": 30,
+          "alignItems": "center",
+          "justifyContent": "center"
+        },
+        "conflictItemMetadataLine2": {
+          "width": 422,
+          "height": 50,
+          "fontSize": 23,
+          "fontFamily": "Inter-Regular",
+          "color": "#A7A7A7"
+        },
+        "conflictItemActionButtonContainer": {
+          "width": 61,
+          "height": 61,
+          "marginLeft": 108
+        },
+        "conflictItemActionButtonTextStyle": {
+          "fontFamily": "MyFontRegular",
+          "color": "#A7A7A7",
+          "fontSize": 200
+        },
+        "conflicItemActionButtonStyleProp": {
+          "borderRadius": 29.5,
+          "width": 61,
+          "height": 61,
+          "overflow": "hidden",
+          "backgroundColor": "transparent"
+        },
+        "conflictItemActionButtonSolidBackground": {
+          "backgroundColor": "#202124"
+        },
+        "conflictItemActionButtonBorder": { "backgroundColor": "#202124" },
+        "buttonContainer": { "marginTop": 120, "width": 714, "marginLeft": 31 },
+        "saveButton": {
+          "height": 70,
+          "width": 654,
+          "backgroundColor": "#282828",
+          "marginBottom": 10
+        },
+        "cancelButton": {
+          "height": 70,
+          "width": 654,
+          "backgroundColor": "#282828",
+          "marginBottom": 90
+        },
+        "headerUnderLine": {
+          "width": 604,
+          "opacity": 0.4,
+          "height": 1,
+          "borderWidth": 0.4,
+          "borderColor": "#053C69",
+          "backgroundColor": "#A0A0A0",
+          "alignSelf": "center",
+          "marginLeft": 61
+        },
+        "showNotRecordedMessage": {
+          "fontSize": 25,
+          "fontFamily": "Inter-SemiBold",
+          "color": "#EEEEEE",
+          "marginBottom": 17,
+          "marginTop": 30.5,
+          "marginLeft": 61
+        },
+        "selectButtonContainer": {
+          "height": 120,
+          "width": 654,
+          "marginLeft": 31
+        },
+        "selectButtonTitle": {
+          "color": "#EEEEEE",
+          "fontFamily": "Inter-Regular"
+        },
+        "selectButtonContent": {
+          "color": "#6D6D6D",
+          "fontFamily": "Inter-Regular"
+        },
+        "selectButtonContentActive": {
+          "color": "#EEEEEE",
+          "opacity": 0.7,
+          "fontFamily": "Inter-Regular"
+        },
+        "selectButtonIcon": { "width": 16, "height": 26 },
+        "buttonTextStyle": {
+          "fontSize": 25,
+          "fontFamily": "Inter-SemiBold",
+          "color": "#EEEEEE"
+        }
+      },
+      "config": { "seriesPopup": { "containerWidth": 900, "buttonWidth": 759 } }
+    },
+    {
+      "id": "ProgressBar",
+      "style": {
+        "bookmarkActive": { "backgroundColor": "#E7A230" },
+        "bookmarkBuffer": { "backgroundColor": "#A0A0A0" },
+        "bookmarkBase": { "backgroundColor": "#424242" }
+      }
+    },
+    {
+      "id": "Header",
+      "components": [
+        {
+          "id": "Logo",
+          "config": {
+            "dataSource": { "uri": "res://drawable/default/MediaKindLogo.png" },
+            "newIcon": "profile_add"
+          },
+          "style": { "resizeMode": "contain", "width": 200, "height": 70 }
+        },
+        {
+          "id": "Profile",
+          "style": { "width": 80, "height": 80 },
+          "components": [
+            {
+              "id": "WhosWatching",
+              "style": {
+                "container": { "flex": 1 },
+                "titleContainer": {
+                  "marginTop": 233,
+                  "marginBottom": 176,
+                  "alignItems": "center",
+                  "justifyContent": "center"
+                },
+                "title": {
+                  "color": "#EEEEEE",
+                  "fontSize": 48,
+                  "fontFamily": "Inter-SemiBold"
+                },
+                "swimlaneContainer": { "flex": 1 },
+                "scrollViewContainer": {
+                  "alignItems": "center",
+                  "justifyContent": "center"
+                },
+                "profileIconContainer": { "height": 250 },
+                "circularImageContainerStyle": { "width": 250, "height": 250 },
+                "imageStyle": { "width": 200, "height": 200 },
+                "addProfileContainerStyle": { "width": 200, "height": 200 },
+                "addProfileIconColor": { "color": "#A0A0A0" },
+                "addProfileBackgroundColor": { "backgroundColor": "#424242" },
+                "addImageStyle": { "width": 62, "height": 62 },
+                "profileName": { "color": "#6D6D6D", "fontSize": 31 },
+                "profileNameSelected": {
+                  "color": "#EEEEEE",
+                  "fontSize": 38,
+                  "fontFamily": "Inter-SemiBold"
+                },
+                "circularImageTitle": {
+                  "alignItems": "center",
+                  "justifyContent": "center",
+                  "width": 250
+                },
+                "firstProfilePeeking": { "marginLeft": 88 }
+              }
+            },
+            {
+              "id": "ChooseProfile",
+              "style": {
+                "container": {
+                  "flex": 1,
+                  "alignItems": "center",
+                  "justifyContent": "center"
+                },
+                "titleContainer": {
+                  "marginTop": 233,
+                  "alignItems": "center",
+                  "justifyContent": "center"
+                },
+                "title": {
+                  "color": "#EEEEEE",
+                  "fontSize": 48,
+                  "fontFamily": "Inter-SemiBold",
+                  "marginBottom": 103
+                },
+                "swimlaneContainer": { "flex": 1 },
+                "scrollViewContainer": {
+                  "height": 450,
+                  "alignItems": "center",
+                  "justifyContent": "center"
+                },
+                "profileIconContainer": { "height": 250 },
+                "circularImageContainerStyle": { "width": 250, "height": 250 },
+                "addProfileContainerStyle": { "width": 200, "height": 200 },
+                "addProfileIconColor": { "color": "#A0A0A0" },
+                "addProfileBackgroundColor": { "backgroundColor": "#424242" },
+                "addImageStyle": { "width": 62, "height": 62 },
+                "imageStyle": { "width": 200, "height": 200 },
+                "iconStyle": {
+                  "fontFamily": "MyFontRegular",
+                  "color": "#EEEEEE",
+                  "fontSize": 150
+                },
+                "profileName": { "color": "#6D6D6D", "fontSize": 31 },
+                "profileNameSelected": {
+                  "color": "#EEEEEE",
+                  "fontSize": 38,
+                  "fontFamily": "Inter-SemiBold"
+                },
+                "doneButton": {
+                  "width": 215,
+                  "height": 66,
+                  "marginRight": 35,
+                  "fontFamily": "Inter-SemiBold"
+                },
+                "manageProfileButton": {
+                  "width": 283,
+                  "height": 66,
+                  "fontFamily": "Inter-SemiBold"
+                },
+                "buttonContainer": {
+                  "marginTop": 190,
+                  "flexDirection": "row",
+                  "alignItems": "center"
+                },
+                "circularImageTitle": {
+                  "alignItems": "center",
+                  "justifyContent": "center",
+                  "width": 250
+                },
+                "firstProfilePeeking": { "marginLeft": 88 },
+                "circularButtonContainer": {
+                  "alignSelf": "center",
+                  "marginTop": 40
+                },
+                "textStyle": {
+                  "fontFamily": "MyFontRegular",
+                  "color": "#EEEEEE"
+                },
+                "buttonIconContainer": {
+                  "borderRadius": 35,
+                  "width": 70,
+                  "height": 70,
+                  "overflow": "hidden",
+                  "backgroundColor": "transparent"
+                },
+                "solidBackground": { "backgroundColor": "#424242" }
+              },
+              "config": {
+                "dataSource": { "focusedOverlayIcon": "select" },
+                "newIcon": "add"
+              }
+            },
+            {
+              "id": "ToggleButton",
+              "style": {
+                "container": { "width": 1033, "height": 245 },
+                "imageStyle": { "width": 37, "height": 37 },
+                "titleText": { "color": "#EEEEEE" },
+                "valueText": { "color": "#EEEEEE" },
+                "focusedBackground": { "backgroundColor": "#053C69" }
+              }
+            }
+          ]
+        },
+        {
+          "id": "MainTopBar",
+          "config": {
+            "exitZoneButtonIcon": "store_exit",
+            "tizenLeftMarginLogo": -10,
+            "tizenLeftMarginSearch": 10
+          },
+          "style": {
+            "mainTopBarViewStyle": {
+              "flex": 1,
+              "flexDirection": "row",
+              "position": "absolute",
+              "top": 0,
+              "marginHorizontal": 90,
+              "marginTop": 38,
+              "marginBottom": 86
+            },
+            "logo": { "resizeMode": "contain", "width": 235, "height": 42 },
+            "profileViewStyle": { "width": 90, "marginRight": 64 },
+            "mfmenuViewStyle": { "flex": 2, "justifyContent": "center" },
+            "navButtonViewStyle": {
+              "flex": 1,
+              "height": 90,
+              "flexDirection": "row",
+              "alignItems": "center",
+              "justifyContent": "space-between"
+            },
+            "newProfileContainerSize": { "width": 90, "height": 90 },
+            "newProfileIconColor": { "color": "#A0A0A0" },
+            "newProfileBackground": { "backgroundColor": "#424242" }
+          },
+          "components": [
+            {
+              "id": "MFCircularImage",
+              "style": {
+                "circularImageContainerStyle": { "width": 90, "height": 90 },
+                "imageStyle": { "width": 70, "height": 70 }
+              }
+            },
+            {
+              "id": "MFMenu",
+              "config": {
+                "title": "You",
+                "defaultMenuItem": 0,
+                "numberOfCharacters": 12
+              },
+              "style": {
+                "container": {
+                  "justifyContent": "center",
+                  "paddingRight": 70,
+                  "alignItems": "center"
+                },
+                "compContainer": { "width": "100%", "height": 98 },
+                "hiddenTextStyle": { "opacity": 0 },
+                "textOverlay": { "opacity": 0, "fontSize": 38 },
+                "buttonBackground": { "backgroundColor": "transparent" },
+                "buttonSolidBackground": { "backgroundColor": "transparent" },
+                "titleTextActive": {
+                  "fontFamily": "Inter-Bold",
+                  "color": "#EEEEEE"
+                },
+                "titleText": {
+                  "fontFamily": "Inter-Regular",
+                  "color": "#A7A7A7"
+                },
+                "buttonBottomLineStyle": { "backgroundColor": "#053C69" }
+              }
+            },
+            {
+              "id": "MFButtonGroup",
+              "style": {
+                "textStyle": {
+                  "fontFamily": "MyFontRegular",
+                  "color": "#A7A7A7"
+                },
+                "buttonIconContainer": {
+                  "borderRadius": 35,
+                  "width": 70,
+                  "height": 70,
+                  "overflow": "hidden",
+                  "backgroundColor": "transparent"
+                }
+              },
+              "config": {
+                "dataSource": [
+                  {
+                    "id": "search",
+                    "buttonIconSource": {
+                      "uri": "res://drawable/default/Search.png"
+                    }
+                  },
+                  {
+                    "id": "settings",
+                    "buttonIconSource": {
+                      "uri": "res://drawable/default/Settings.png"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "Logo",
+              "config": {
+                "dataSource": {
+                  "uri": "res://drawable/default/MediaKindLogo.png"
+                }
+              },
+              "style": {
+                "imageStyle": {
+                  "resizeMode": "contain",
+                  "width": 235,
+                  "height": 42
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "TopBarWithTitle",
+          "style": {
+            "full": {
+              "display": "flex",
+              "flex": 1,
+              "flexDirection": "row",
+              "alignItems": "center",
+              "justifyContent": "space-between",
+              "backgroundColor": "#rgba(0,03,14,0.2)"
+            },
+            "logo": { "resizeMode": "contain", "width": 200, "height": 60 },
+            "headerUnderLine": {
+              "width": 1920,
+              "opacity": 0.4,
+              "height": 1,
+              "borderWidth": 0.4,
+              "borderColor": "#A0A0A0",
+              "backgroundColor": "#A0A0A0",
+              "alignSelf": "center"
+            },
+            "title": {
+              "color": "#EEEEEE",
+              "fontSize": 38,
+              "fontFamily": "Inter-SemiBold"
+            },
+            "titlePadding": { "paddingLeft": 88 },
+            "logoPadding": { "paddingRight": 92 },
+            "topBar": { "maxHeight": 132 },
+            "fullWidth": { "width": "100%" },
+            "fullScreen": { "width": "100%", "height": 118 }
+          }
+        }
+      ]
+    }
+  ],
+  "onScreenLanguages": [
+    { "title": "English (US)", "action": "en" },
+    { "title": "English (Canada)", "action": "en-ca" },
+    { "title": "Francais (Canada)", "action": "ca" }
+  ],
+  "config": {
+    "enableRTL": false,
+    "debounceTime": 500,
+    "protocol": "https",
+    "hostname": "reachclient.dev.mr.tv3cloud.com",
+    "currentLocale": { "full": "en-US", "short": "fr" },
+    "useLottieAnimationOnSplash": false,
+    "height16x9": 253,
+    "height2x3": 350,
+    "height4x3": 234,
+    "queryCacheTime": 3600000,
+    "queryStaleTime": 3600000,
+    "enableMarquee": false,
+    "metadataTemplate": "{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}",
+    "limitSwimlaneItemsTo": 16,
+    "maxProfileNameLength": 20,
+    "viewAllPeekValue": 50
+  },
+  "onscreenLanguage": [
+    { "onScreenName": "English (US)", "languageCode": "en-US", "isRTL": false },
+    {
+      "onScreenName": "Francais (Canada)",
+      "languageCode": "fr-CA",
+      "isRTL": false
+    },
+    { "onScreenName": "Arabic (Qatar)", "languageCode": "ar-QA", "isRTL": true }
+  ],
+  "metadataByItemType": {
+    "PROGRAM-LIVE": {
+      "metadata": "{ChannelNumber} {CallLetters} <or> {Name}",
+      "metadata2": "{EpisodeName} <or> {Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{ChannelNumber} {CallLetters} <or> {Name}",
+      "metadata3_selected": "{Name}"
+    },
+    "PROGRAM-UPCOMING": {
+      "metadata": "{StartDateDay} {StartTime} <or> {Name}",
+      "metadata2": "{EpisodeName} <or> {Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{ChannelNumber} {CallLetters} <or> {Name}",
+      "metadata3_selected": "{Name}"
+    },
+    "PROGRAM-VOD": {
+      "metadata": "{ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata_selected": "{ReleaseYear} | {Rating}",
+      "metadata2_selected": "{Name}"
+    },
+    "PROGRAM-DVR": {
+      "metadata": "{TimeLeft} <or> {Duration}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{TimeLeft} <or> {Duration}",
+      "metadata3_selected": "{Name}"
+    },
+    "PROGRAM-CATCHUP": {
+      "metadata": "{FirstAired} <or> {StartDate} | {StartTime}",
+      "metadata2": "{Name}",
+      "metadata2_selected": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{FirstAired} <or> {StartDate} | {StartTime}",
+      "metadata3_selected": "{Name}"
+    },
+    "PROGRAM-PACKAGE": {
+      "metadata": "{ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata2_selected": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{ReleaseYear} | {Rating}",
+      "metadata3_selected": "{Name}"
+    },
+    "EPISODE-LIVE": {
+      "metadata": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {ChannelNumber} {CallLetters}",
+      "metadata2": "{EpisodeName} <or> {Name}",
+      "metadata2_selected": "{EpisodeName} <or> {Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {StartTimeToEndTime} <or> {EpisodeNameOnSeriesPage} {ChannelNumber} {CallLetters}",
+      "metadata3_selected": "{EpisodeName} <or> {ChannelNumber} {CallLetters}",
+      "metadata_extra_height": "40px"
+    },
+    "EPISODE-UPCOMING": {
+      "metadata": "{StartDateDay} {StartTime} <or> {ReleaseYear} | {Rating}",
+      "metadata2": "{EpisodeName} <or> {Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {ChannelNumber} {CallLetters} <or> {ReleaseYear} | {Rating}",
+      "metadata3_selected": "{EpisodeName} <or> {ChannelNumber} {CallLetters}",
+      "metadata_extra_height": "24px"
+    },
+    "EPISODE-VOD": {
+      "metadata": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} <or> {ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} <or> {ReleaseYear} | {Rating}",
+      "metadata2_selected": "{Name}",
+      "metadata3_selected": "{EpisodeName}",
+      "metadata_extra_height": "40px"
+    },
+    "EPISODE-DVR": {
+      "metadata": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}",
+      "metadata2": "{Name}",
+      "metadata2_selected": "{Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}",
+      "metadata3_selected": "{EpisodeName}",
+      "metadata_extra_height": "40px"
+    },
+    "SINGLETIME-DVR": {
+      "metadata": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}",
+      "metadata2": "{Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {TimeLeft} <or> {EpisodeNameOnSeriesPage} {Duration}",
+      "metadata3_selected": "{EpisodeName}",
+      "metadata_extra_height": "40px"
+    },
+    "EPISODE-CATCHUP": {
+      "metadata": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} {FirstAired} <or> {EpisodeNameOnSeriesPage} {StartDate} | {StartTime}",
+      "metadata2": "{Name}",
+      "metadata2_selected": "{Name}",
+      "metadata3": "{EpisodeName}",
+      "metadata_selected": "{SeriesEpisodeNumber} {EpisodeName} {FirstAired} <or> {EpisodeNameOnSeriesPage} {StartDate} | {StartTime}",
+      "metadata3_selected": "{EpisodeName}",
+      "metadata_extra_height": "40px"
+    },
+    "EPISODE-PACKAGE": {
+      "metadata": "{EpisodeNameOnSeriesPage} {ReleaseYear} | {Rating}",
+      "metadata3": "{EpisodeName} <or> {Name}",
+      "metadata_selected": "{EpisodeNameOnSeriesPage} {ReleaseYear} | {Rating}",
+      "metadata3_selected": "{EpisodeName}",
+      "metadata_extra_height": "40px"
+    },
+    "GENERIC-LIVE": {
+      "metadata": "{ChannelNumber} {CallLetters} <or> {Name}",
+      "metadata2": "{EpisodeName} <or> {Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{StartTimeToEndTime} <or> {ChannelNumber} {CallLetters}",
+      "metadata3_selected": "{Name}"
+    },
+    "GENERIC-DVR": {
+      "metadata": "{TimeLeft} <or> {Duration}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{TimeLeft} <or> {Duration}",
+      "metadata3_selected": "{Name}"
+    },
+    "GENERIC-CATCHUP": {
+      "metadata": "{FirstAired} <or> {StartDate} | {StartTime}",
+      "metadata2": "{Name}",
+      "metadata2_selected": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{FirstAired} <or> {StartDate} | {StartTime}",
+      "metadata3_selected": "{Name}"
+    },
+    "PPVEVENT-LIVE": {
+      "metadata": "{PPVAirChannelTime_short}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{PPVAirChannelTime_short}",
+      "metadata3_selected": "{Name}"
+    },
+    "SERIES": {
+      "metadata": "{ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{ReleaseYear} | {Rating}",
+      "metadata2_selected": "{Name}",
+      "metadata3_selected": "{EpisodeName}"
+    },
+    "PACKAGE": {
+      "metadata": "{PackageContentsCount}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{PackageContentsCount}",
+      "metadata2_selected": "{Name}"
+    },
+    "SVODPACKAGE": {
+      "metadata": "{PackageContentsCount}",
+      "metadata2": "{Name}",
+      "metadata_selected": "{PackageContentsCount}",
+      "metadata2_selected": "{Name}"
+    },
+    "APP": {
+      "metadata": "{Name}",
+      "metadata2": "{Name}",
+      "metadata3": "{NameDescription}",
+      "metadata_selected": "{Name}",
+      "metadata3_selected": "{NameDescription}"
+    },
+    "SERIES-NETFLIX": {
+      "metadata": "{title}",
+      "metadata3": "{groupTitle}",
+      "metadataSettingsOverride": "$metadataSettingsOverride"
+    },
+    "PROGRAM-NETFLIX": {
+      "metadata": "{title}",
+      "metadata3": "{groupTitle}",
+      "metadataSettingsOverride": "$metadataSettingsOverride"
+    },
+    "RESUMED-NETFLIX": {
+      "metadata": "{title}",
+      "metadata3": "{groupTitle}",
+      "metadataSettingsOverride": "$metadataSettingsOverride"
+    },
+    "SIGNUP-NETFLIX": { "metadata": "{groupTitle}" },
+    "PROFILES-NETFLIX": {
+      "metadata": "{title}",
+      "metadata3": "{groupTitle}",
+      "metadataSettingsOverride": "$metadataSettingsOverride"
+    },
+    "STATIC-NETFLIX": { "metadata": "{groupTitle}" },
+    "DEVICEAPP": { "metadata": "{Name}", "metadata_selected": "{Name}" },
+    "RECOMM": {
+      "metadata1": "{Image}",
+      "metadata3": "{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}",
+      "metadata2": "{Name}"
+    },
+    "STORE": {
+      "metadata": "{Name}",
+      "metadata2": "{Name}",
+      "metadata3": "{NameDescription}",
+      "metadata_selected": "{Name}",
+      "metadata3_selected": "{NameDescription}"
+    },
+    "PERSON": {
+      "metadata": "{PersonName}",
+      "metadata2": "",
+      "metadata3": "",
+      "metadata_selected": "{RoleName}",
+      "metadata3_selected": ""
+    },
+    "CHANNEL": {
+      "metadata": "{ChannelNumber} {CallLetters}",
+      "metadata2": "{Name}",
+      "metadata3": "{CurrentEpisode}",
+      "metadata_selected": "{ChannelNumber} {CallLetters}",
+      "metadata2_selected": "{Name}",
+      "metadata3_selected": "{CurrentEpisode}"
+    },
+    "CHANNEL-LIVE": {
+      "metadata": "{Number} {CallLetters}",
+      "metadata_selected": "{Number} {CallLetters}"
+    },
+    "contentRating": {
+      "Rating_en": "{ContentRatingValue_RT_Critic} {Rating}",
+      "Rating_fr": "{ContentRatingValue_Cinoche_Critic} | {Rating}"
+    },
+    "PROGRAM-LASTWATCHED": {
+      "metadataIcon": "{NetworkLogo}",
+      "metadata": "{ChannelNumber}",
+      "metadata3": "{StartTimeToEndTime}",
+      "metadata4": "{Name}",
+      "metadata6_selected": ""
+    },
+    "CHANNEL-LASTWATCHED": {
+      "metadataIcon": "{NetworkLogo}",
+      "metadata": "{ChannelNumber}",
+      "metadata3": "{StartTimeToEndTime}",
+      "metadata4": "{Name}",
+      "metadata6_selected": ""
+    },
+    "EPISODE-LASTWATCHED": {
+      "metadataIcon": "{NetworkLogo}",
+      "metadata": "{ChannelNumber}",
+      "metadata3": "{StartTimeToEndTime}",
+      "metadata4": "{Name}",
+      "metadata5": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage} <or> {EpisodeName}",
+      "metadata6_selected": ""
+    },
+    "GENERIC-LASTWATCHED": {
+      "metadataIcon": "{NetworkLogo}",
+      "metadata": "{ChannelNumber}",
+      "metadata3": "{StartTimeToEndTime}",
+      "metadata4": "{Name} <or> {EpisodeName}",
+      "metadata6_selected": ""
+    },
+    "GENERIC_SERIES-LIVE": {
+      "metadata": "{FirstAired} <or> {StartDate} {StartTime}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{FirstAired} <or> {StartDate} {StartTime}",
+      "metadata3_selected": "{Name}"
+    },
+    "GENERIC_SERIES-CATCHUP": {
+      "metadata": "{FirstAired} <or> {StartDate} {StartTime}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{FirstAired} <or> {StartDate} {StartTime}",
+      "metadata3_selected": "{Name}"
+    },
+    "GENERIC_SERIES-VOD": {
+      "metadata1": "{Image}",
+      "metadata2": "{Name}",
+      "metadata3": "{ReleaseYear} | {Rating}"
+    },
+    "Native-APP": {
+      "metadata": "{Name}",
+      "metadata2": "{Name}",
+      "metadata3": "{NameDescription}",
+      "metadata_selected": "{Name}",
+      "metadata3_selected": "{NameDescription}"
+    }
+  },
+  "metadataByFeedType": {
+    "CONTINUE": {
+      "metadata": "{ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{TimeLeftOrDuration} <or> {CurrentEpisode} <or> {groupTitle} <or> {ReleaseYear} | {Rating} <or> {TimeLeftOrDuration}",
+      "metadata3_selected": "{EpisodeName} <or> {Name} <or> {title}"
+    },
+    "PINS": {
+      "metadata": "{ReleaseYear} | {Rating}",
+      "metadata2": "{Name}",
+      "metadata3": "{Name}",
+      "metadata_selected": "{ReleaseYear} | {Rating}",
+      "metadata3_selected": "{EpisodeName} <or> {Name}"
+    },
+    "PURCHASES": {
+      "metadata": "{RentalTimeLeft_short} <or> {ReleaseYear} {Rating}",
+      "metadata_selected": "{RentalTimeLeft_short} <or> {ReleaseYear} {Rating}",
+      "metadata2": "{Name}"
+    },
+    "SIMILAR": {
+      "metadata": "{ReleaseYear} | {Rating} <or> {Name}",
+      "metadata2": "{Name}",
+      "metadata3": "{ReleaseYear} | {Rating} <or> {Name}",
+      "metadata_selected": "{ReleaseYear} | {Rating} <or> {Name}",
+      "metadata3_selected": "{ReleaseYear} | {Rating} <or> {Name}"
+    },
+    "STACKEDCARD": { "metadata": "{Name}", "metadata_selected": "{Name}" },
+    "STACKEDCARDFORAPP": { "metadata_selected": "{Name}" },
+    "NETFLIX": { "metadata": "{title}", "metadata_selected": "{title}" },
+    "DVRSWIMLANE": {
+      "metadata1": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage}",
+      "metadata1_selected": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage}",
+      "metadata2_selected": "{DurationOrStateIndicator}",
+      "metadata2": "{DurationOrStateIndicator}",
+      "metadata3_selected": "{Name}",
+      "metadata4_selected": "{ReleaseYear} | {Rating} | {CallLetters} {ChannelNumber}",
+      "metadata5_selected": "{DvrSwimlaneDisplayStatusDescription}"
+    },
+    "DVRGROUPSWIMLANE": {
+      "metadata3_selected": "{DVRSeriesTitle}",
+      "metadata4_selected": "{NumOfSeasons} | {NumOfEpisodes}",
+      "metadata5_selected": "{DisplayStatusDescription}"
+    }
+  },
+  "metadataStyles": {
+    "RECOMM": {
+      "metadata1": {
+        "width": 94,
+        "marginRight": 20,
+        "backgroundColor": "#282828",
+        "borderRadius": 6,
+        "opacity": 0.85,
+        "alignContent": "center",
+        "justifyContent": "center"
+      },
+      "metadata2": {
+        "fontFamily": "Inter-Bold",
+        "fontSize": 38,
+        "color": "white",
+        "lineHeight": 55,
+        "textAlign": "left"
+      },
+      "metadata3": {
+        "fontFamily": "Inter-SemiBold",
+        "fontSize": 25,
+        "lineHeight": 38,
+        "color": "#828282",
+        "textAlign": "left"
+      },
+      "metadataImageStyle": {
+        "width": 72,
+        "height": 30,
+        "alignSelf": "center"
+      },
+      "metadataIconStyles": {
+        "width": 72,
+        "height": 30,
+        "alignSelf": "center"
+      },
+      "metadataImageContainerStyle": {
+        "width": 94,
+        "height": 94,
+        "marginRight": 20,
+        "backgroundColor": "#282828",
+        "borderRadius": 6,
+        "opacity": 0.85,
+        "alignContent": "center",
+        "justifyContent": "center"
+      },
+      "metadataIconContainerStyle": {
+        "width": 94,
+        "height": 94,
+        "marginRight": 20,
+        "backgroundColor": "#282828",
+        "borderRadius": 6,
+        "opacity": 0.85,
+        "alignContent": "center",
+        "justifyContent": "center"
+      },
+      "metadataContainer1Styles": {
+        "width": 500,
+        "flexDirection": "row",
+        "marginTop": 5,
+        "paddingLeft": 10
+      },
+      "metadataContainer2Styles": { "flexDirection": "column" }
+    }
+  }
+}
