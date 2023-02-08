@@ -26,9 +26,6 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
   const [feedDispatch, setFeedDispatch] = useState<any>();
   const [isFeedDispatchSet, updateIsFeedDispatchSet] = useState(false);
   const { feed } = props.route.params;
-  const [top, setTop] = useState(16);
-  const [skip, setSkip] = useState(0);
-
   const browsePageConfig: any = getUIdef("BrowseCategory")?.config;
   let requestedTime: Date | undefined;
 
@@ -72,13 +69,31 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
       return undefined;
     }
   };
+  const getBrowseFeedObject = (feed: any): any => {
+    let browseFeedObject;
+    const navigationTargetUri = feed.NavigationTargetUri?.split("?")[0];
+    if (feed?.ItemType === ItemShowType.SvodPackage) {
+      browseFeedObject = browsePageConfig[ItemShowType.browseSvodPackage];
+    } else {
+      browseFeedObject = browsePageConfig[navigationTargetUri];
+    }
+    return browseFeedObject;
+  };
+
   useEffect(() => {
     const browseFeed = browseFeedParams(props);
+    if (!browseFeed) {
+      console.warn("Something went wrong..");
+      updateIsFeedDispatchSet(false);
+      setFeedDispatch(undefined);
+    }
+
+    const feedDispatch = `${browseFeed.Uri}/?id=${browseFeed.Id}&$top=${
+      browseFeed.$top
+    }&storeId=${DefaultStore.Id}&$groups=${
+      GLOBALS.store!.rightsGroupIds
+    }&pivots=${browseFeed.pivots}`;
     updateIsFeedDispatchSet(true);
-    console.log("BrowsePageConfig", browseFeed);
-    const feedDispatch = browseFeed
-      ? `${browseFeed.Uri}/?id=${browseFeed.Id}&$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${browseFeed.pivots}`
-      : null;
     setFeedDispatch(feedDispatch);
   }, []);
   return (
@@ -109,6 +124,7 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
               <BrowseCategoryCarousel
                 feedDispatch={feedDispatch}
                 navigation={props.navigation}
+                itemsPerPage={getBrowseFeedObject(feed)?.params?.$top || 16}
               />
             ) : isFeedDispatchSet ? (
               <MFText

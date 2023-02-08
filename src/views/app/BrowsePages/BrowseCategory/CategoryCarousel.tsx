@@ -7,13 +7,17 @@ import MFLoader from "../../../../components/MFLoader";
 import MFSwimLane from "../../../../components/MFSwimLane";
 import { MFTabBarStyles } from "../../../../components/MFTabBar/MFTabBarStyles";
 import MFText from "../../../../components/MFText";
-import { appUIDefinition } from "../../../../config/constants";
+import {
+  appUIDefinition,
+  defaultQueryOptions,
+} from "../../../../config/constants";
 import { getScaledValue, SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { getUIdef } from "../../../../utils/uidefinition";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SourceType } from "../../../../utils/common";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
 import { massageDiscoveryFeed } from "../../../../utils/assetUtils";
+import { debounce2 } from "../../../../utils/app/app.utilities";
 
 const browsePageConfig: any = getUIdef("BrowseCategory")?.config;
 const scaledSnapToInterval = getScaledValue(browsePageConfig.snapToInterval);
@@ -24,78 +28,78 @@ const extraPadding = {
 interface BrowseCategoryCarouselProps {
   feedDispatch: any;
   navigation: NativeStackNavigationProp<any>;
+  itemsPerPage: number;
 }
 
 const BrowseCategoryCarousel: React.FunctionComponent<
   BrowseCategoryCarouselProps
 > = (props) => {
   const [swimLaneKey, setSwimLaneKey] = useState("");
+  const [page, setPage] = useState(1);
+  const [lastPageReached, setLastPageReached] = useState(false);
+  const [$skip, set$skip] = useState(0);
+  const [dataSource, setDatSource] = useState(Array());
+
   const updateSwimLaneKey = (key: string) => {
     setSwimLaneKey(key);
   };
 
-  const getFeedsList = async () => {
-    if (props.feedDispatch) {
-      const data = await getDataFromUDL(props.feedDispatch);
-      console.log("Got response data", data.data);
-      if (data) {
-        return filterData(data.data);
-      } else {
-        Alert.alert("Something went wrong.. ");
-        return null;
-      }
-    } else {
-      return null;
+  const getFeedsList = async ({ queryKey }: any) => {
+    const [, skip] = queryKey;
+
+    if (!props.feedDispatch) {
+      console.log("No data");
+      return undefined;
     }
+    const url = props.feedDispatch + `&$skip=${$skip}`;
+    const data = await getDataFromUDL(url);
+    console.log("Got response data", data.data);
+    return data;
   };
 
-  const filterData = (dataSource: any) => {
-    // if (!dataSource) {
-    //   Alert.alert("No data from UDL call");
-    //   return undefined;
-    // }
-    // if (!dataSource.Libraries && !dataSource.LibraryItems) {
-    //   Alert.alert("No data to showcase here");
-    //   return undefined;
-    // }
-    // let dataArray: any = [];
-    // let massagedData: any;
-    // const udlID = parseUdl(props.feedDispatch);
-    // if (udlID!.id.split("/")[0] === "discovery") {
-    //   massagedData = massageDiscoveryFeed(dataSource, SourceType.VOD);
-    // } else {
-    //   massagedData = massageSubscriberFeed(dataSource, "", SourceType.VOD);
-    // }
-
-    // dataArray = dataSource.Libraries.map((library) => ({
-    //   library: library,
-    //   libraryItem: massagedData.filter(
-    //     (e: any) => library.LibraryItems.indexOf(e.Id) !== -1
-    //   ),
-    // }));
-
-    // console.log("dataArray", dataArray, dataArray.length);
-    // if (dataArray.length > dataSource.Libraries.length) {
-    //   console.warn(
-    //     "Something is going wrong.. we're showcasing more items than we have somehow"
-    //   );
-    // }
-    return dataSource;
+  const filterData = (dataSet: any) => {
+    if (dataSet.length < props.itemsPerPage) {
+      setLastPageReached(true);
+    }
+    const dataArray = dataSource;
+    if (dataArray.length > 0) {
+      const newArray = dataArray.concat(dataSet);
+      setDatSource(newArray);
+    } else {
+      setDatSource(dataSet);
+    }
+    return dataSet;
   };
-  const { data, isLoading } = useQuery("getFeeds", getFeedsList, {
-    cacheTime: appUIDefinition.config.queryCacheTime,
-    staleTime: appUIDefinition.config.queryStaleTime,
-  });
 
-  useEffect(() => {}, []);
+  const handleEndReached = debounce2(() => {
+    if (!lastPageReached) {
+      setPage(page + 1);
+      set$skip(props.itemsPerPage * page);
+    }
+  }, 500);
+
+  const { data, isLoading, isPreviousData, isIdle } = useQuery(
+    [props.feedDispatch, $skip],
+    getFeedsList,
+    {
+      ...defaultQueryOptions,
+      keepPreviousData: true,
+    }
+  );
+
+  useEffect(() => {
+    if (data && !isIdle) {
+      return filterData(data.data);
+    }
+  }, [data]);
   return isLoading ? (
     <MFLoader />
   ) : (
     <SafeAreaView style={{ paddingBottom: 50 }}>
-      {data !== undefined ? (
-        data.length > 0 ? (
+      {dataSource !== undefined ? (
+        dataSource.length > 0 ? (
           <FlatList
-            data={data}
+            data={dataSource}
             keyExtractor={(x, i) => i.toString()}
             ItemSeparatorComponent={(x, i) => (
               <View
@@ -106,6 +110,10 @@ const BrowseCategoryCarousel: React.FunctionComponent<
                 }}
               />
             )}
+            snapToAlignment={browsePageConfig.snapToAlignment}
+            snapToInterval={scaledSnapToInterval}
+            onEndReachedThreshold={0.8}
+            onEndReached={handleEndReached}
             renderItem={({ item, index }) => {
               return (
                 <MFSwimLane
