@@ -203,13 +203,13 @@ const MFCard: React.FunctionComponent<MFCardProps> = React.forwardRef(
             },
           ])}
         >
-          {props.title.includes("View") && (
+          {(props.title.includes("View") || props.title.includes("All")) && (
             <MFText
               shouldRenderText
               displayText={view_all}
               textStyle={{
                 fontFamily: globalStyles.fontFamily.icons,
-                fontSize: 150,
+                fontSize: 180,
                 color: globalStyles.fontColors.light,
                 textAlign: "center",
                 textAlignVertical: "center",
@@ -221,7 +221,12 @@ const MFCard: React.FunctionComponent<MFCardProps> = React.forwardRef(
             displayText={props.title}
             textStyle={[
               styles.cardTitleText,
-              { marginTop: props.title.includes("View") ? 0 : 30 },
+              {
+                marginTop:
+                  props.title.includes("View") || props.title.includes("All")
+                    ? -20
+                    : 30,
+              },
             ]}
           />
         </View>
