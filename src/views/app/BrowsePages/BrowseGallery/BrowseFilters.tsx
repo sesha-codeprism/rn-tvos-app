@@ -22,7 +22,9 @@ import { AppImages } from "../../../../assets/images";
 import MFButton, {
   MFButtonVariant,
 } from "../../../../components/MFButton/MFButton";
+import MFText from "../../../../components/MFText";
 import { appUIDefinition } from "../../../../config/constants";
+import { AppStrings } from "../../../../config/strings";
 import { GLOBALS } from "../../../../utils/globals";
 
 type BrowseFilterProps = {
@@ -303,34 +305,34 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   const onFocusBar = () => {
     try {
       console.log("Browse filter bar is focussed: menuHasFocus-", menuHasFocus);
-    if (!menuHasFocus) {
-      console.log(
-        "Browse filter bar ==> menu is focussed: menuRef[focusedMenu]",
-        menuRef[focusedMenu]
-      );
-      menuRef[focusedMenu]?.current?.setNativeProps({
-        hasTVPreferredFocus: true,
-      });
-      setFocusedSubMenu(null);
-      setMenuHasFocus(true);
-    } else {
-      console.log(
-        "Browse filter menu ==> bar is focussed: subMenuFirstRef",
-        subMenuFirstRef
-      );
-      setMenuHasFocus(false);
-      // subMenuFirstRef.current?.current.viewConfig.validAttributes.hasTVPreferredFocus = true;
-      // @ts-ignore
-      subMenuList.length === 0
-        ? menuRef[focusedMenu]?.current?.setNativeProps({
-            hasTVPreferredFocus: true,
-          })
-        : subMenuFirstRef?.current?.setNativeProps({
-            hasTVPreferredFocus: true,
-          });
-    }
+      if (!menuHasFocus) {
+        console.log(
+          "Browse filter bar ==> menu is focussed: menuRef[focusedMenu]",
+          menuRef[focusedMenu]
+        );
+        menuRef[focusedMenu]?.current?.setNativeProps({
+          hasTVPreferredFocus: true,
+        });
+        setFocusedSubMenu(null);
+        setMenuHasFocus(true);
+      } else {
+        console.log(
+          "Browse filter menu ==> bar is focussed: subMenuFirstRef",
+          subMenuFirstRef
+        );
+        setMenuHasFocus(false);
+        // subMenuFirstRef.current?.current.viewConfig.validAttributes.hasTVPreferredFocus = true;
+        // @ts-ignore
+        subMenuList.length === 0
+          ? menuRef[focusedMenu]?.current?.setNativeProps({
+              hasTVPreferredFocus: true,
+            })
+          : subMenuFirstRef?.current?.setNativeProps({
+              hasTVPreferredFocus: true,
+            });
+      }
     } catch (error) {
-      console.log("Error",error)
+      console.log("Error", error);
     }
   };
   return (
@@ -453,8 +455,8 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                     console.log("TODO: Write logic for clear function");
                   }}
                 >
-                  <Text
-                    style={{
+                  <MFText
+                    textStyle={{
                       ...styles.MenuItemText,
                       color: "white",
                       textAlign: "center",
@@ -462,9 +464,9 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                       fontWeight: "600",
                       alignSelf: "center",
                     }}
-                  >
-                    Clear Focused
-                  </Text>
+                    shouldRenderText
+                    displayText={AppStrings.str_clear}
+                  />
                 </Pressable>
               );
             }}

@@ -116,6 +116,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       console.log("Requesting data for:", uri);
       const data = await getDataFromUDL(uri);
       if (data) {
+        console.log(data);
         /** we have data from backend, so use the data and setState */
         const massagedData = getMassagedData(uri, data);
         console.log("Setting feed data:", data, "for", uri);

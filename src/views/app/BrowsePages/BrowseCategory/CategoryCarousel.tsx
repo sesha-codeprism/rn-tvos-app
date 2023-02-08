@@ -122,6 +122,7 @@ const BrowseCategoryCarousel: React.FunctionComponent<
                   onPress={(event) => {
                     props.navigation.push(Routes.Details, { feed: event });
                   }}
+                  navigation={props.navigation}
                 />
               );
             }}

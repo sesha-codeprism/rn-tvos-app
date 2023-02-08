@@ -142,11 +142,11 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
                 props.navigation.push(Routes.Details, { feed: event });
               }}
               onFocus={() => {
-                console.log("MFSwimLane focused in search screen", index);
                 setTimeout(() => {
                   setSwimLaneFocused(true);
                 }, 500);
               }}
+              navigation={props.navigation}
             />
           );
         }}

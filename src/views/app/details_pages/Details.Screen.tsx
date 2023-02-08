@@ -1400,6 +1400,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             onPress={(event) => {
               props.navigation.push(Routes.Details, { feed: event });
             }}
+            navigation={props.navigation}
           />
         </SafeAreaView>
       )
@@ -1434,6 +1435,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             swimLaneKey={castnCrewSwimLaneKey}
             updateSwimLaneKey={setCastnCrewSwimlaneKey}
             cardStyle="3x4"
+            navigation={props.navigation}
           />
         </SafeAreaView>
       )

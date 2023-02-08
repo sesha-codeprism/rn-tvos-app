@@ -30,8 +30,8 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
       setLoading(true);
       const profileResponse = await getAllSubscriberProfiles();
       const profilesArray: Array<UserProfile> = profileResponse.data;
-      const defaultProfile = profilesArray.filter(
-        (profile) => profile.Name!.toLowerCase() === "default"
+      const defaultProfile = profilesArray.filter((profile) =>
+        profile.Name!.toLowerCase().includes("default")
       );
       const identityAssigned: boolean = isFeatureAssigned("identity") || false;
 
@@ -45,9 +45,9 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
           /** Checking if user has multiple profile */
           if (profiles.length > 1) {
             /** Checking for the last profile in Local Storage */
-            if (GLOBALS.store.userProfile) {
+            if (GLOBALS.store!.userProfile) {
               const userProfile = profiles.filter(
-                (profile) => profile.Id === GLOBALS.store.userProfile?.Id
+                (profile) => profile.Id === GLOBALS.store!.userProfile?.Id
               );
               if (userProfile && userProfile.length) {
                 /**  We were able to find the profile from Async store in GetProfiles data..
@@ -88,7 +88,7 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
              */
             currentContext.setUserProfile(profiles[0]);
             GLOBALS.userProfile = profiles[0];
-            GLOBALS.store.userProfile = GLOBALS.userProfile;
+            GLOBALS.store!.userProfile = GLOBALS.userProfile;
             updateStore(GLOBALS.store);
             setLoading(false);
             props.navigation.replace(Routes.Home);
