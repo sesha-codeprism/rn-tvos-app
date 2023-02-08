@@ -74,7 +74,13 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
       (evt.eventType === "down" || evt.eventType === "swipeDown") &&
       !swimLaneFocused
     ) {
-      firstCardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+      const cardRef =
+      firstCardRef.current?.focused ||
+      firstCardRef.current?.first ||
+      firstCardRef.current?.viewAll?.current ||
+      firstCardRef.current?.feedNotImplemented?.current;
+
+      cardRef?.setNativeProps({ hasTVPreferredFocus: true });
     }
   };
   useTVEventHandler(myTVEventHandler);

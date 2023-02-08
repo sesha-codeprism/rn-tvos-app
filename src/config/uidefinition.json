@@ -2814,7 +2814,6 @@
     "RECOMM": {
       "metadata1": {
         "width": 94,
-        "height": 94,
         "marginRight": 20,
         "backgroundColor": "#282828",
         "borderRadius": 6,
@@ -2868,7 +2867,6 @@
       },
       "metadataContainer1Styles": {
         "width": 500,
-        "height": 141,
         "flexDirection": "row",
         "marginTop": 5,
         "paddingLeft": 10

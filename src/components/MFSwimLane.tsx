@@ -194,7 +194,8 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           appendViewAll
           swimLaneKey={props.swimLaneKey}
           updateSwimLaneKey={props.updateSwimLaneKey}
-          railContainerStyles={{}}
+          railContainerStyles={{display: "flex", flex: 1, flexDirection: "column"}}
+          railTitleStyles={{flex: 1, flexDirection: "column", marginTop: 30}}
           libraryItems={props.data}
           customViewAllTitle={props.customViewAllTitle}
           feed={props.feed}
@@ -233,6 +234,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           onListFooterElementOnPress={props.onListFooterElementOnPress}
           onListFooterElementFocus={props.onListFooterElementFocus}
           onViewAllPressed={onTapViewAll}
+          flatListStyle={{display: "flex", flex: 1, flexDirection: "row"}}
         />
       </View>
     );

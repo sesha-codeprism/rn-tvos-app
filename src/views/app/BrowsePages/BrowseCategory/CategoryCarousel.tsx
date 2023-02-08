@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Alert, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useQuery } from "react-query";
@@ -29,6 +29,7 @@ interface BrowseCategoryCarouselProps {
 const BrowseCategoryCarousel: React.FunctionComponent<
   BrowseCategoryCarouselProps
 > = (props) => {
+  const flatListRef = useRef<FlatList>(null);
   const [swimLaneKey, setSwimLaneKey] = useState("");
   const updateSwimLaneKey = (key: string) => {
     setSwimLaneKey(key);
@@ -122,10 +123,17 @@ const BrowseCategoryCarousel: React.FunctionComponent<
                   onPress={(event) => {
                     props.navigation.push(Routes.Details, { feed: event });
                   }}
+                  onFocus={(event) => {
+                    flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: 200 });
+                  }}
+                  onListEmptyElementFocus={(event) => {
+                      flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: 200 });
+                  }}
                   navigation={props.navigation}
                 />
               );
             }}
+            ref={flatListRef}
           />
         ) : (
           <MFText
