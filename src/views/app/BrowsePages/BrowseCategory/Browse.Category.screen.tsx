@@ -13,6 +13,7 @@ import { DefaultStore } from "../../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../../utils/globals";
 import { MFTabBarStyles } from "../../../../components/MFTabBar/MFTabBarStyles";
 import MFLoader from "../../../../components/MFLoader";
+import { TopBarWithTitle } from "../../../../components/TopBarWithTitle";
 
 interface BrowseCategoryProps {
   navigation: NativeStackNavigationProp<any>;
@@ -99,13 +100,7 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
           locations={[0.2, 0.7, 0.8, 1]}
         >
           <View style={styles.topRow}>
-            <View style={styles.titleContainerStyles}>
-              <MFText
-                shouldRenderText
-                displayText={feed.Name}
-                textStyle={styles.titleTextStyle}
-              />
-            </View>
+            <TopBarWithTitle title={feed?.Name} />
           </View>
           <View style={styles.contentContainerStyles}>
             {feedDispatch !== null &&
@@ -145,8 +140,8 @@ export const styles = StyleSheet.create({
   topRow: {
     width: SCREEN_WIDTH,
     height: 120,
-    borderBottomColor: "#424242",
-    borderBottomWidth: 1,
+    // borderBottomColor: "#424242",
+    // borderBottomWidth: 1,
     flexDirection: "row",
   },
   contentContainerStyles: {
@@ -158,7 +153,7 @@ export const styles = StyleSheet.create({
   titleTextStyle: {
     color: "#EEEEEE",
     height: 55,
-    width: 261,
+    width: 500,
     fontFamily: "Inter-Regular",
     fontSize: 38,
     fontWeight: "600",

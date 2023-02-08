@@ -75,35 +75,51 @@
   "components": [
     {
       "id": "LoginPage",
-      "config": { "$top": 8, "$skip": 0 },
+      "config": {
+        "$top": 8,
+        "$skip": 0
+      },
       "components": [
         {
           "id": "Logo",
           "title": "${str_component_title}",
           "config": {
-            "dataSource": { "uri": "res://drawable/default/MediaKindLogo.png" }
+            "dataSource": {
+              "uri": "res://drawable/default/MediaKindLogo.png"
+            }
           },
-          "style": { "backgroundColor": "#000000" }
+          "style": {
+            "backgroundColor": "#000000"
+          }
         },
         {
           "id": "SpinnerButton",
           "title": "${str_component_title}",
           "config": {
-            "dataSource": { "uri": "res://drawable/default/spinner.png" }
+            "dataSource": {
+              "uri": "res://drawable/default/spinner.png"
+            }
           }
         },
         {
           "id": "Instructions",
           "style": {
-            "container": { "flex": 1, "flexDirection": "row" },
-            "logoContainer": { "width": 813 },
+            "container": {
+              "flex": 1,
+              "flexDirection": "row"
+            },
+            "logoContainer": {
+              "width": 813
+            },
             "logo": {
               "width": 475,
               "height": 77,
               "marginTop": 469,
               "marginLeft": 190
             },
-            "instructionContainer": { "flex": 1 },
+            "instructionContainer": {
+              "flex": 1
+            },
             "t1": {
               "fontSize": 57,
               "color": "#EEEEEE",
@@ -111,9 +127,19 @@
               "marginBottom": 31,
               "fontFamily": "Inter-SemiBold"
             },
-            "t2": { "fontSize": 31, "marginBottom": 11, "color": "#A7A7A7" },
-            "t3": { "fontSize": 48, "marginBottom": 11, "color": "#EEEEEE" },
-            "t4": { "paddingLeft": 64.5 },
+            "t2": {
+              "fontSize": 31,
+              "marginBottom": 11,
+              "color": "#A7A7A7"
+            },
+            "t3": {
+              "fontSize": 48,
+              "marginBottom": 11,
+              "color": "#EEEEEE"
+            },
+            "t4": {
+              "paddingLeft": 64.5
+            },
             "optionText": {
               "fontSize": 31,
               "marginBottom": 11,
@@ -143,8 +169,13 @@
               "fontFamily": "Inter-SemiBold",
               "color": "#6D6D6D"
             },
-            "refreshBtn": { "width": 275, "height": 70 },
-            "refreshBtnTextStyle": { "fontFamily": "Inter-SemiBold" }
+            "refreshBtn": {
+              "width": 275,
+              "height": 70
+            },
+            "refreshBtnTextStyle": {
+              "fontFamily": "Inter-SemiBold"
+            }
           }
         }
       ]
@@ -154,7 +185,10 @@
       "config": {
         "browserecommendations": {
           "uri": "udl://subscriber/libraries/YouMightLikeByTasteId/",
-          "params": { "$top": 100, "$skip": 0 }
+          "params": {
+            "$top": 100,
+            "$skip": 0
+          }
         },
         "browsemovies": {
           "uri": "udl://discovery/libraryprograms/complete/",
@@ -192,7 +226,10 @@
           },
           "SvodPackage": {
             "uri": "udl://discovery/subscriptionPackage/items/",
-            "params": { "$skip": 0, "$top": 100 }
+            "params": {
+              "$skip": 0,
+              "$top": 100
+            }
           }
         },
         "browsepackages": {
@@ -218,15 +255,25 @@
           },
           "subscriber": {
             "uri": "udl://subscriber/library",
-            "params": { "$top": 100, "$skip": 0, "types": "Title" }
+            "params": {
+              "$top": 100,
+              "$skip": 0,
+              "types": "Title"
+            }
           },
           "SvodPackage": {
             "uri": "udl://discovery/subscriptionPackage/items/",
-            "params": { "$skip": 0, "$top": 100 }
+            "params": {
+              "$skip": 0,
+              "$top": 100
+            }
           },
           "catchup": {
             "uri": "udl://live/feeds/catchup",
-            "params": { "$skip": 0, "$top": 100 }
+            "params": {
+              "$skip": 0,
+              "$top": 100
+            }
           }
         },
         "browsemixedrecommendations": {
@@ -241,15 +288,26 @@
         },
         "libraries": {
           "uri": "udl://subscriber/library",
-          "params": { "$top": 100, "$skip": 0, "types": "PayPerView|Title" }
+          "params": {
+            "$top": 100,
+            "$skip": 0,
+            "types": "PayPerView|Title"
+          }
         },
         "continue": {
           "uri": "udl://subscriber/library/Continue",
-          "params": { "$top": 16, "$skip": 0, "types": "PayPerView|Title" }
+          "params": {
+            "$top": 16,
+            "$skip": 0,
+            "types": "PayPerView|Title"
+          }
         },
         "favorites": {
           "uri": "udl://subscriber/library/Pins",
-          "params": { "$top": 100, "$skip": 0 }
+          "params": {
+            "$top": 100,
+            "$skip": 0
+          }
         },
         "restartTv": {
           "uri": "udl://live/catchup/items/",
@@ -263,7 +321,10 @@
         },
         "browseSvodPackage": {
           "uri": "udl://discovery/subscriptionPackage/items/",
-          "params": { "$skip": 0, "$top": 100 }
+          "params": {
+            "$skip": 0,
+            "$top": 100
+          }
         },
         "browsepayperview": {
           "uri": "udl://discovery/feeds/payperview",
@@ -311,11 +372,18 @@
         },
         "browsesearch": {
           "uri": "udl://search/view-all",
-          "params": { "$top": 100, "$skip": 0, "searchLive": true }
+          "params": {
+            "$top": 100,
+            "$skip": 0,
+            "searchLive": true
+          }
         }
       },
       "style": {
-        "container": { "flex": 1, "flexDirection": "row" },
+        "container": {
+          "flex": 1,
+          "flexDirection": "row"
+        },
         "backgroundImageStyle": {
           "position": "relative",
           "top": 120,
@@ -324,8 +392,13 @@
           "flex": 1,
           "shadowOpacity": 0.5
         },
-        "gradientViewStyle": { "height": 519, "width": 920 },
-        "metadataViewStyle": { "flex": 0.65 },
+        "gradientViewStyle": {
+          "height": 519,
+          "width": 920
+        },
+        "metadataViewStyle": {
+          "flex": 0.65
+        },
         "metadataInnerViewStyle": {
           "flex": 1,
           "paddingLeft": 93,
@@ -333,12 +406,28 @@
           "justifyContent": "flex-end",
           "width": "85%"
         },
-        "imageStyle": { "resizeMode": "contain" },
-        "contentRatingsContainer": { "marginTop": 30, "flexDirection": "row" },
-        "contentRatingsIcon": { "width": 30, "height": 30 },
-        "contentRatingText": { "marginLeft": 10 },
-        "ratingBlock": { "marginRight": 30, "flexDirection": "row" },
-        "metadataContainer": { "flexDirection": "row", "marginTop": 10 },
+        "imageStyle": {
+          "resizeMode": "contain"
+        },
+        "contentRatingsContainer": {
+          "marginTop": 30,
+          "flexDirection": "row"
+        },
+        "contentRatingsIcon": {
+          "width": 30,
+          "height": 30
+        },
+        "contentRatingText": {
+          "marginLeft": 10
+        },
+        "ratingBlock": {
+          "marginRight": 30,
+          "flexDirection": "row"
+        },
+        "metadataContainer": {
+          "flexDirection": "row",
+          "marginTop": 10
+        },
         "ratingTextStyle": {
           "fontFamily": "Inter-SemiBold",
           "color": "#6D6D6D",
@@ -386,8 +475,14 @@
           "flexDirection": "row",
           "alignItems": "center"
         },
-        "buttonContainerStyle": { "height": 66, "width": 180, "marginTop": 30 },
-        "innerViewStyle1": { "flex": 1.5 },
+        "buttonContainerStyle": {
+          "height": 66,
+          "width": 180,
+          "marginTop": 30
+        },
+        "innerViewStyle1": {
+          "flex": 1.5
+        },
         "showcardViewStyle": {
           "paddingTop": 10,
           "paddingBottom": 10,
@@ -402,7 +497,10 @@
           "height": 120,
           "width": 1920
         },
-        "headerInnerStyle": { "height": 120, "width": 1920 },
+        "headerInnerStyle": {
+          "height": 120,
+          "width": 1920
+        },
         "headerTitleViewStyle": {
           "flexDirection": "row",
           "left": 89,
@@ -427,8 +525,16 @@
           "justifyContent": "center",
           "alignItems": "center"
         },
-        "image": { "width": 250, "height": 260, "marginBottom": 29 },
-        "networkImage": { "width": 85, "height": 63, "resizeMode": "contain" },
+        "image": {
+          "width": 250,
+          "height": 260,
+          "marginBottom": 29
+        },
+        "networkImage": {
+          "width": 85,
+          "height": 63,
+          "resizeMode": "contain"
+        },
         "networkImageView": {
           "justifyContent": "center",
           "alignItems": "center",
@@ -450,10 +556,26 @@
           "id": "GradientView",
           "config": {
             "gradientType": "linear",
-            "startColor": { "red": 0, "green": 3, "blue": 14, "alpha": 50 },
-            "endColor": { "red": 0, "green": 0, "blue": 0, "alpha": 255 },
-            "start": { "x": 0, "y": 0.3 },
-            "end": { "x": 0, "y": 0.5 }
+            "startColor": {
+              "red": 0,
+              "green": 3,
+              "blue": 14,
+              "alpha": 50
+            },
+            "endColor": {
+              "red": 0,
+              "green": 0,
+              "blue": 0,
+              "alpha": 255
+            },
+            "start": {
+              "x": 0,
+              "y": 0.3
+            },
+            "end": {
+              "x": 0,
+              "y": 0.5
+            }
           }
         },
         {
@@ -463,7 +585,9 @@
             "snapToAlignment": "start",
             "horizontal": false,
             "numColumns": 4,
-            "placeHolder": { "uri": "res://drawable/default/PlaceHolder.png" }
+            "placeHolder": {
+              "uri": "res://drawable/default/PlaceHolder.png"
+            }
           },
           "style": {
             "compositionContainer": {
@@ -471,7 +595,9 @@
               "width": 260,
               "padding": 10
             },
-            "listWrapperStyle": { "flex": 1 },
+            "listWrapperStyle": {
+              "flex": 1
+            },
             "flatListContainerStyle": {}
           }
         }
@@ -556,19 +682,34 @@
         },
         "browserecommendations": {
           "uri": "udl://subscriber/libraries/dynamicFeeds/YouMightLikeByTaste",
-          "params": { "atHome": true, "$top": 12, "$skip": 0 }
+          "params": {
+            "atHome": true,
+            "$top": 12,
+            "$skip": 0
+          }
         },
         "browsemixedrecommendations": {
           "uri": "udl://subscriber/libraries/dynamicFeeds/MixedRecommendations",
-          "params": { "$top": 12, "$skip": 0 }
+          "params": {
+            "$top": 12,
+            "$skip": 0
+          }
         },
         "restartTv": {
           "uri": "udl://live/catchup/pivotitems/",
-          "params": { "$top": 100, "$skip": 0, "$itemsPerRow": 9 }
+          "params": {
+            "$top": 100,
+            "$skip": 0,
+            "$itemsPerRow": 9
+          }
         },
         "browseSvodPackage": {
           "uri": "udl://discovery/subscriptionPackage/CategoryItems/",
-          "params": { "$skip": 0, "$top": 12, "$itemsPerRow": 16 }
+          "params": {
+            "$skip": 0,
+            "$top": 12,
+            "$itemsPerRow": 16
+          }
         },
         "snapToInterval": 280,
         "snapToAlignment": "start"
@@ -584,50 +725,87 @@
           "justifyContent": "center",
           "alignItems": "center"
         },
-        "image": { "width": 250, "height": 260, "marginBottom": 29 }
+        "image": {
+          "width": 250,
+          "height": 260,
+          "marginBottom": 29
+        }
       },
       "components": [
         {
           "id": "SwimlaneContainer",
           "style": {
-            "container": { "flex": 1 },
-            "mainContainer": { "flex": 1 },
-            "scrollView": { "flex": 1, "marginTop": 120, "paddingTop": 120 },
-            "backgroundImageStyle": { "flex": 1 },
-            "imageStyle": { "resizeMode": "stretch" }
+            "container": {
+              "flex": 1
+            },
+            "mainContainer": {
+              "flex": 1
+            },
+            "scrollView": {
+              "flex": 1,
+              "marginTop": 120,
+              "paddingTop": 120
+            },
+            "backgroundImageStyle": {
+              "flex": 1
+            },
+            "imageStyle": {
+              "resizeMode": "stretch"
+            }
           }
         }
       ]
     },
     {
       "id": "Search",
-      "config": { "minQueryLength": 1, "$skip": 0, "$top": 50 }
+      "config": {
+        "minQueryLength": 1,
+        "$skip": 0,
+        "$top": 50
+      }
     },
     {
       "id": "Details",
-      "config": { "assetExpiryDaysThreshold": 14 },
+      "config": {
+        "assetExpiryDaysThreshold": 14
+      },
       "components": [
         {
           "id": "Showcard",
           "style": {
-            "detailsBlock": { "height": 852, "flexDirection": "row" },
+            "detailsBlock": {
+              "height": 852,
+              "flexDirection": "row"
+            },
             "secondBlock": {
               "marginTop": 86,
               "flexDirection": "column",
               "flex": 1,
               "height": 627
             },
-            "flexRow": { "flexDirection": "row" },
-            "ctaBlock": { "flexDirection": "row" },
-            "favoriteBlock": { "width": 583, "marginTop": 69 },
-            "ctaButtonGroupBlock": { "marginTop": 69 },
+            "flexRow": {
+              "flexDirection": "row"
+            },
+            "ctaBlock": {
+              "flexDirection": "row"
+            },
+            "favoriteBlock": {
+              "width": 583,
+              "marginTop": 69
+            },
+            "ctaButtonGroupBlock": {
+              "marginTop": 69
+            },
             "containerOpacity": {
               "backgroundColor": "#00030E",
               "opacity": 0.9,
               "height": "100%",
               "width": "100%"
             },
-            "firstColumn": { "width": 583, "alignItems": "center" },
+            "firstColumn": {
+              "width": 583,
+              "alignItems": "center"
+            },
             "imageContainer": {
               "borderRadius": 4,
               "overflow": "hidden",
@@ -659,7 +837,9 @@
               "width": 85,
               "resizeMode": "contain"
             },
-            "marginRight20": { "marginRight": 20 },
+            "marginRight20": {
+              "marginRight": 20
+            },
             "networkTitle": {
               "fontFamily": "Inter-SemiBold",
               "fontSize": 29,
@@ -688,25 +868,50 @@
               "color": "#A7A7A7",
               "lineHeight": 38
             },
-            "showcardImage": { "height": 628, "width": 419 },
+            "showcardImage": {
+              "height": 628,
+              "width": 419
+            },
             "buttonContainerStyle": {
               "flexDirection": "row",
               "alignItems": "center",
               "justifyContent": "center"
             },
-            "buttonIconContainer": { "width": 70, "height": 70 },
-            "solidBackground": { "backgroundColor": "#424242" },
-            "focusedBackground": { "backgroundColor": "#053C69" },
-            "moreDetailsContainer": { "marginTop": 104 },
+            "buttonIconContainer": {
+              "width": 70,
+              "height": 70
+            },
+            "solidBackground": {
+              "backgroundColor": "#424242"
+            },
+            "focusedBackground": {
+              "backgroundColor": "#053C69"
+            },
+            "moreDetailsContainer": {
+              "marginTop": 104
+            },
             "contentRatingsContainer": {
               "flexDirection": "row",
               "marginBottom": 25
             },
-            "contentRatingsIcon": { "width": 30, "height": 30 },
-            "contentRatingText": { "marginLeft": 10 },
-            "ratingBlock": { "marginRight": 30, "flexDirection": "row" },
-            "textStyle": { "fontFamily": "MyFontRegular", "color": "#EEEEEE" },
-            "progressBarContainer": { "height": 3 },
+            "contentRatingsIcon": {
+              "width": 30,
+              "height": 30
+            },
+            "contentRatingText": {
+              "marginLeft": 10
+            },
+            "ratingBlock": {
+              "marginRight": 30,
+              "flexDirection": "row"
+            },
+            "textStyle": {
+              "fontFamily": "MyFontRegular",
+              "color": "#EEEEEE"
+            },
+            "progressBarContainer": {
+              "height": 3
+            },
             "progressInfoText": {
               "fontFamily": "Inter-SemiBold",
               "fontSize": 25,
@@ -734,7 +939,10 @@
               "marginHorizontal": 20,
               "marginVertical": 20
             },
-            "ctaButtonStyle": { "height": 66, "fontFamily": "Inter-SemiBold" },
+            "ctaButtonStyle": {
+              "height": 66,
+              "fontFamily": "Inter-SemiBold"
+            },
             "ctaFontIconStyle": {
               "fontFamily": "MyFontRegular",
               "color": "#E15554"
@@ -749,7 +957,9 @@
               "right": 0,
               "zIndex": 2
             },
-            "episodeBlockContainer": { "marginTop": 35.5 },
+            "episodeBlockContainer": {
+              "marginTop": 35.5
+            },
             "episodeBlockTitle": {
               "marginBottom": 20,
               "fontSize": 29,
@@ -769,7 +979,9 @@
               "marginLeft": 20,
               "marginTop": -10
             },
-            "marginTop": { "marginTop": 8 },
+            "marginTop": {
+              "marginTop": 8
+            },
             "hourGlass": {
               "width": 16,
               "height": 22,
@@ -800,7 +1012,10 @@
               "color": "#E7A230",
               "marginTop": 13
             },
-            "statusTextStyle": { "fontSize": 25, "color": "#E7A230" },
+            "statusTextStyle": {
+              "fontSize": 25,
+              "color": "#E7A230"
+            },
             "headerContainer": {
               "width": "100%",
               "height": 185,
@@ -828,8 +1043,12 @@
               "fontFamily": "Inter-Bold",
               "color": "#A7A7A7"
             },
-            "row": { "paddingBottom": 30 },
-            "audioText": { "paddingBottom": 5 },
+            "row": {
+              "paddingBottom": 30
+            },
+            "audioText": {
+              "paddingBottom": 5
+            },
             "ratingContainer": {
               "flexDirection": "row",
               "marginBottom": 24,
@@ -848,7 +1067,10 @@
               "backgroundColor": "#A0A0A0",
               "marginBottom": 20
             },
-            "entitlementRow": { "marginBottom": 20, "flexDirection": "row" },
+            "entitlementRow": {
+              "marginBottom": 20,
+              "flexDirection": "row"
+            },
             "sourceIcon": {
               "fontFamily": "MyFontRegular",
               "fontSize": 50,
@@ -871,7 +1093,9 @@
               "resizeMode": "contain",
               "marginRight": 20
             },
-            "flexRow": { "flexDirection": "row" }
+            "flexRow": {
+              "flexDirection": "row"
+            }
           }
         },
         {
@@ -883,13 +1107,18 @@
               "paddingRight": 40,
               "paddingBottom": 34
             },
-            "selectButtonContainer": { "width": "100%", "height": 100 }
+            "selectButtonContainer": {
+              "width": "100%",
+              "height": 100
+            }
           }
         },
         {
           "id": "PurchaseInformationPanel",
           "style": {
-            "container": { "flexGrow": 1 },
+            "container": {
+              "flexGrow": 1
+            },
             "confirmButton": {
               "height": 70,
               "width": 533,
@@ -903,7 +1132,9 @@
               "marginBottom": 30,
               "alignSelf": "center"
             },
-            "textStyle": { "fontFamily": "Inter-SemiBold" },
+            "textStyle": {
+              "fontFamily": "Inter-SemiBold"
+            },
             "statusTextStyle": {
               "fontSize": 25,
               "fontFamily": "Inter-Regular",
@@ -929,8 +1160,13 @@
               "paddingRight": 40,
               "marginBottom": 200
             },
-            "selectButtonContainer": { "width": "100%", "height": 100 },
-            "viewContainer": { "flex": 1 },
+            "selectButtonContainer": {
+              "width": "100%",
+              "height": 100
+            },
+            "viewContainer": {
+              "flex": 1
+            },
             "innerScrollViewContainerRentBuy": {
               "height": 395,
               "paddingTop": 15,
@@ -963,7 +1199,9 @@
         {
           "id": "PurchaseNetworkSelectionPanel",
           "style": {
-            "root": { "paddingTop": 37 },
+            "root": {
+              "paddingTop": 37
+            },
             "selectButtonContainer": {
               "width": "100%",
               "height": 100,
@@ -995,7 +1233,10 @@
               "paddingRight": 40,
               "paddingBottom": 34
             },
-            "selectButtonContainer": { "width": "100%", "height": 100 }
+            "selectButtonContainer": {
+              "width": "100%",
+              "height": 100
+            }
           }
         },
         {
@@ -1006,7 +1247,9 @@
               "alignItems": "center",
               "marginBottom": 30
             },
-            "rowMarginTop": { "marginTop": 25 },
+            "rowMarginTop": {
+              "marginTop": 25
+            },
             "dayText": {
               "color": "#EEEEEE",
               "fontFamily": "Inter-Bold",
@@ -1022,7 +1265,9 @@
               "paddingVertical": 0,
               "flexDirection": "row"
             },
-            "scheduleContentContainer": { "flex": 3 },
+            "scheduleContentContainer": {
+              "flex": 3
+            },
             "scheduleImageContainer": {
               "flex": 0.5,
               "alignSelf": "center",
@@ -1036,28 +1281,41 @@
               "resizeMode": "contain",
               "alignSelf": "center"
             },
-            "timeText": { "fontSize": 23, "color": "#A7A7A7", "marginTop": 15 },
+            "timeText": {
+              "fontSize": 23,
+              "color": "#A7A7A7",
+              "marginTop": 15
+            },
             "divider": {
               "width": "100%",
               "height": 2,
               "marginVertical": 27,
               "backgroundColor": "#A0A0A0"
             },
-            "focused": { "opacity": 0.5 },
-            "unfocused": { "opacity": 0.2 },
+            "focused": {
+              "opacity": 0.5
+            },
+            "unfocused": {
+              "opacity": 0.2
+            },
             "root": {
               "paddingTop": 34,
               "paddingLeft": 54,
               "paddingRight": 54,
               "paddingBottom": 34
             },
-            "flexRow": { "flexDirection": "row" }
+            "flexRow": {
+              "flexDirection": "row"
+            }
           }
         },
         {
           "id": "Description",
           "style": {
-            "root": { "flexDirection": "row", "alignItems": "flex-end" },
+            "root": {
+              "flexDirection": "row",
+              "alignItems": "flex-end"
+            },
             "descriptionText": {
               "fontFamily": "Inter-Regular",
               "fontSize": 25,
@@ -1070,7 +1328,9 @@
         {
           "id": "SubscribeChannel",
           "style": {
-            "container": { "flex": 1 },
+            "container": {
+              "flex": 1
+            },
             "networkImageView": {
               "justifyContent": "center",
               "alignItems": "center",
@@ -1086,7 +1346,9 @@
               "width": 100,
               "resizeMode": "contain"
             },
-            "marginRight20": { "marginRight": 20 },
+            "marginRight20": {
+              "marginRight": 20
+            },
             "thirdColumn": {
               "paddingTop": 140,
               "paddingLeft": 137,
@@ -1097,8 +1359,12 @@
               "fontSize": "${fontSizes.body1}",
               "color": "${fontColors.light}"
             },
-            "backgroundImageStyle": { "flex": 1 },
-            "imageStyle": { "resizeMode": "stretch" },
+            "backgroundImageStyle": {
+              "flex": 1
+            },
+            "imageStyle": {
+              "resizeMode": "stretch"
+            },
             "scheduleTitle": {
               "lineHeight": "${lineHeights.body1}",
               "fontFamily": "${fontFamily.bold}",
@@ -1146,7 +1412,9 @@
               "overflow": "hidden",
               "marginHorizontal": 90
             },
-            "buttonTextStyle": { "fontFamily": "${fontFamily.bold}" }
+            "buttonTextStyle": {
+              "fontFamily": "${fontFamily.bold}"
+            }
           }
         }
       ]
@@ -1157,21 +1425,32 @@
         {
           "id": "Showcard",
           "style": {
-            "detailsBlock": { "height": 626, "flexDirection": "row" },
+            "detailsBlock": {
+              "height": 626,
+              "flexDirection": "row"
+            },
             "secondBlock": {
               "flexDirection": "column",
               "flex": 1,
               "height": 627
             },
-            "flexRow": { "flexDirection": "row" },
-            "firstColumn": { "width": 467, "alignItems": "center" },
+            "flexRow": {
+              "flexDirection": "row"
+            },
+            "firstColumn": {
+              "width": 467,
+              "alignItems": "center"
+            },
             "imageContainer": {
               "borderRadius": 4,
               "overflow": "hidden",
               "marginTop": 60,
               "height": 400
             },
-            "secondColumn": { "flex": 1, "height": 476 },
+            "secondColumn": {
+              "flex": 1,
+              "height": 476
+            },
             "title": {
               "fontFamily": "Inter-Bold",
               "fontSize": 57,
@@ -1190,8 +1469,14 @@
               "color": "#A7A7A7",
               "lineHeight": 38
             },
-            "showcardImage": { "height": 400, "width": 300 },
-            "textStyle": { "fontFamily": "MyFontRegular", "color": "#EEEEEE" },
+            "showcardImage": {
+              "height": 400,
+              "width": 300
+            },
+            "textStyle": {
+              "fontFamily": "MyFontRegular",
+              "color": "#EEEEEE"
+            },
             "imageBackgroundContainer": {
               "flex": 1,
               "backgroundColor": "#00030E",
@@ -1207,8 +1492,13 @@
         {
           "id": "SideMenuPanel",
           "style": {
-            "sideMenuContainer": { "backgroundColor": "transparent" },
-            "headerContainer": { "flex": 1, "flexDirection": "column" }
+            "sideMenuContainer": {
+              "backgroundColor": "transparent"
+            },
+            "headerContainer": {
+              "flex": 1,
+              "flexDirection": "column"
+            }
           }
         },
         {
@@ -1245,7 +1535,9 @@
               "paddingBottom": 13,
               "paddingRight": 54
             },
-            "headerContainerStyle": { "paddingRight": 54 }
+            "headerContainerStyle": {
+              "paddingRight": 54
+            }
           }
         }
       ]
@@ -1281,17 +1573,31 @@
               "textAlign": "justify",
               "width": 800
             },
-            "showcardImage": { "height": 330, "width": 587 },
+            "showcardImage": {
+              "height": 330,
+              "width": 587
+            },
             "detailContainer": {
               "flexDirection": "row",
               "paddingTop": 60,
               "paddingLeft": 88
             },
-            "metadataViewStyle": { "paddingLeft": 76 },
-            "moreDetailsContainer": { "marginTop": 104 },
-            "imageBackgroundStyle": { "flex": 1 },
-            "bgImageStyle": { "resizeMode": "stretch" },
-            "textStyle": { "fontFamily": "MyFontRegular", "color": "#EEEEEE" },
+            "metadataViewStyle": {
+              "paddingLeft": 76
+            },
+            "moreDetailsContainer": {
+              "marginTop": 104
+            },
+            "imageBackgroundStyle": {
+              "flex": 1
+            },
+            "bgImageStyle": {
+              "resizeMode": "stretch"
+            },
+            "textStyle": {
+              "fontFamily": "MyFontRegular",
+              "color": "#EEEEEE"
+            },
             "statusTextStyle": {
               "fontSize": 25,
               "color": "#E7A230",
@@ -1304,7 +1610,10 @@
               "marginRight": 15,
               "marginBottom": 23
             },
-            "ctaButtonStyle": { "height": 66, "fontFamily": "Inter-SemiBold" },
+            "ctaButtonStyle": {
+              "height": 66,
+              "fontFamily": "Inter-SemiBold"
+            },
             "buttonContainer": {
               "flexDirection": "row",
               "alignItems": "center",
@@ -1317,18 +1626,25 @@
     {
       "id": "PageContainer",
       "style": {
-        "FullPage": { "backgroundColor": "#282828", "flex": 1 },
+        "FullPage": {
+          "backgroundColor": "#282828",
+          "flex": 1
+        },
         "TabPage": {
           "backgroundColor": "#282828",
           "flex": 1,
           "paddingTop": 120
         },
-        "overlay": { "backgroundColor": "#282828" }
+        "overlay": {
+          "backgroundColor": "#282828"
+        }
       }
     },
     {
       "id": "EpisodeList",
-      "config": { "snapToInterval": 20 },
+      "config": {
+        "snapToInterval": 20
+      },
       "style": {
         "containerStyle": {
           "flex": 1,
@@ -1339,8 +1655,12 @@
           "backgroundColor": "#00030E",
           "opacity": 0.9
         },
-        "firstBlock": { "width": 510 },
-        "titleBlock": { "marginBottom": 116 },
+        "firstBlock": {
+          "width": 543
+        },
+        "titleBlock": {
+          "marginBottom": 116
+        },
         "seasonTitle": {
           "fontFamily": "Inter-Bold",
           "fontSize": 38,
@@ -1352,9 +1672,15 @@
           "fontSize": 25,
           "color": "#A7A7A7"
         },
-        "flexOne": { "flex": 1 },
-        "seasonScrollView": { "marginBottom": 30 },
-        "secondBlock": { "flex": 1 },
+        "flexOne": {
+          "flex": 1
+        },
+        "seasonScrollView": {
+          "marginBottom": 30
+        },
+        "secondBlock": {
+          "flex": 1
+        },
         "seasonBlock": {
           "height": 62,
           "marginBottom": 43,
@@ -1379,11 +1705,22 @@
           "marginBottom": 20,
           "borderRadius": 4
         },
-        "selectedEpisode": { "backgroundColor": "#202124" },
-        "unSelectedEpisode": { "opacity": 0.8 },
-        "episodeItemImage": { "height": 237, "width": 419 },
-        "episodeItemShowcard": { "flexDirection": "row" },
-        "episodeItemCTA": { "marginLeft": 25 },
+        "selectedEpisode": {
+          "backgroundColor": "#202124"
+        },
+        "unSelectedEpisode": {
+          "opacity": 0.8
+        },
+        "episodeItemImage": {
+          "height": 237,
+          "width": 419
+        },
+        "episodeItemShowcard": {
+          "flexDirection": "row"
+        },
+        "episodeItemCTA": {
+          "marginLeft": 25
+        },
         "episodeItemInfo": {
           "height": 237,
           "justifyContent": "center",
@@ -1423,13 +1760,31 @@
           "fontSize": 29,
           "color": "#EEEEEE"
         },
-        "ctaBtnContainer": { "flex": 1, "marginTop": 28 },
-        "buttonGroupContainer": { "flexDirection": "row", "flex": 1 },
-        "iconContainer": { "width": 100 },
-        "solidBackground": { "backgroundColor": "#424242" },
-        "focusedBackground": { "backgroundColor": "#053C69" },
-        "buttonIconContainer": { "width": 70, "height": 70 },
-        "ctaButtonStyle": { "height": 66, "fontFamily": "Inter-SemiBold" },
+        "ctaBtnContainer": {
+          "flex": 1,
+          "marginTop": 28
+        },
+        "buttonGroupContainer": {
+          "flexDirection": "row",
+          "flex": 1
+        },
+        "iconContainer": {
+          "width": 100
+        },
+        "solidBackground": {
+          "backgroundColor": "#424242"
+        },
+        "focusedBackground": {
+          "backgroundColor": "#053C69"
+        },
+        "buttonIconContainer": {
+          "width": 70,
+          "height": 70
+        },
+        "ctaButtonStyle": {
+          "height": 66,
+          "fontFamily": "Inter-SemiBold"
+        },
         "ctaFontIconStyle": {
           "fontFamily": "MyFontRegular",
           "color": "#E15554"
@@ -1439,7 +1794,9 @@
           "alignItems": "center",
           "marginTop": 28
         },
-        "statusIcon": { "fontFamily": "MyFontRegular" },
+        "statusIcon": {
+          "fontFamily": "MyFontRegular"
+        },
         "descriptionStyle": {
           "color": "#6D6D6D",
           "fontFamily": "Inter-Regular"
@@ -1449,8 +1806,14 @@
           "fontFamily": "Inter-Regular",
           "fontSize": 25
         },
-        "metadataStyle": { "color": "#A7A7A7", "fontFamily": "Inter-SemiBold" },
-        "titleStyle": { "color": "#EEEEEE", "fontFamily": "Inter-Bold" },
+        "metadataStyle": {
+          "color": "#A7A7A7",
+          "fontFamily": "Inter-SemiBold"
+        },
+        "titleStyle": {
+          "color": "#EEEEEE",
+          "fontFamily": "Inter-Bold"
+        },
         "seasonNumberTextStyle": {
           "fontFamily": "Inter-SemiBold",
           "color": "#EEEEEE"
@@ -1460,15 +1823,24 @@
           "height": 64,
           "width": 64
         },
-        "separatorTextStyle": { "color": "#A7A7A7" },
-        "focusedUnderLine": { "backgroundColor": "#053C69" }
+        "separatorTextStyle": {
+          "color": "#A7A7A7"
+        },
+        "focusedUnderLine": {
+          "backgroundColor": "#053C69"
+        }
       }
     },
     {
       "id": "DVRConflict",
       "style": {
-        "container": { "flexGrow": 1 },
-        "conflictListContainer": { "height": 120, "width": 624 },
+        "container": {
+          "flexGrow": 1
+        },
+        "conflictListContainer": {
+          "height": 120,
+          "width": 624
+        },
         "conflictItemContainer": {
           "width": 591,
           "height": 83,
@@ -1476,8 +1848,13 @@
           "justifyContent": "flex-start",
           "marginLeft": 61
         },
-        "conflictItemMetadataContainer": { "width": 422, "height": 83 },
-        "conflictItemMetadataLine1Container": { "flexDirection": "row" },
+        "conflictItemMetadataContainer": {
+          "width": 422,
+          "height": 83
+        },
+        "conflictItemMetadataLine1Container": {
+          "flexDirection": "row"
+        },
         "conflictItemMetadataLine1": {
           "width": 288,
           "height": 50,
@@ -1525,8 +1902,14 @@
         "conflictItemActionButtonSolidBackground": {
           "backgroundColor": "#202124"
         },
-        "conflictItemActionButtonBorder": { "backgroundColor": "#202124" },
-        "buttonContainer": { "marginTop": 120, "width": 714, "marginLeft": 31 },
+        "conflictItemActionButtonBorder": {
+          "backgroundColor": "#202124"
+        },
+        "buttonContainer": {
+          "marginTop": 120,
+          "width": 714,
+          "marginLeft": 31
+        },
         "saveButton": {
           "height": 70,
           "width": 654,
@@ -1575,35 +1958,497 @@
           "opacity": 0.7,
           "fontFamily": "Inter-Regular"
         },
-        "selectButtonIcon": { "width": 16, "height": 26 },
+        "selectButtonIcon": {
+          "width": 16,
+          "height": 26
+        },
         "buttonTextStyle": {
           "fontSize": 25,
           "fontFamily": "Inter-SemiBold",
           "color": "#EEEEEE"
         }
       },
-      "config": { "seriesPopup": { "containerWidth": 900, "buttonWidth": 759 } }
+      "config": {
+        "seriesPopup": {
+          "containerWidth": 900,
+          "buttonWidth": 759
+        }
+      }
     },
     {
       "id": "ProgressBar",
       "style": {
-        "bookmarkActive": { "backgroundColor": "#E7A230" },
-        "bookmarkBuffer": { "backgroundColor": "#A0A0A0" },
-        "bookmarkBase": { "backgroundColor": "#424242" }
+        "bookmarkActive": {
+          "backgroundColor": "#E7A230"
+        },
+        "bookmarkBuffer": {
+          "backgroundColor": "#A0A0A0"
+        },
+        "bookmarkBase": {
+          "backgroundColor": "#424242"
+        }
       }
+    },
+    {
+      "id": "Header",
+      "components": [
+        {
+          "id": "Logo",
+          "config": {
+            "dataSource": {
+              "uri": "res://drawable/default/MediaKindLogo.png"
+            },
+            "newIcon": "profile_add"
+          },
+          "style": {
+            "resizeMode": "contain",
+            "width": 200,
+            "height": 70
+          }
+        },
+        {
+          "id": "Profile",
+          "style": {
+            "width": 80,
+            "height": 80
+          },
+          "components": [
+            {
+              "id": "WhosWatching",
+              "style": {
+                "container": {
+                  "flex": 1
+                },
+                "titleContainer": {
+                  "marginTop": 233,
+                  "marginBottom": 176,
+                  "alignItems": "center",
+                  "justifyContent": "center"
+                },
+                "title": {
+                  "color": "#EEEEEE",
+                  "fontSize": 48,
+                  "fontFamily": "Inter-SemiBold"
+                },
+                "swimlaneContainer": {
+                  "flex": 1
+                },
+                "scrollViewContainer": {
+                  "alignItems": "center",
+                  "justifyContent": "center"
+                },
+                "profileIconContainer": {
+                  "height": 250
+                },
+                "circularImageContainerStyle": {
+                  "width": 250,
+                  "height": 250
+                },
+                "imageStyle": {
+                  "width": 200,
+                  "height": 200
+                },
+                "addProfileContainerStyle": {
+                  "width": 200,
+                  "height": 200
+                },
+                "addProfileIconColor": {
+                  "color": "#A0A0A0"
+                },
+                "addProfileBackgroundColor": {
+                  "backgroundColor": "#424242"
+                },
+                "addImageStyle": {
+                  "width": 62,
+                  "height": 62
+                },
+                "profileName": {
+                  "color": "#6D6D6D",
+                  "fontSize": 31
+                },
+                "profileNameSelected": {
+                  "color": "#EEEEEE",
+                  "fontSize": 38,
+                  "fontFamily": "Inter-SemiBold"
+                },
+                "circularImageTitle": {
+                  "alignItems": "center",
+                  "justifyContent": "center",
+                  "width": 250
+                },
+                "firstProfilePeeking": {
+                  "marginLeft": 88
+                }
+              }
+            },
+            {
+              "id": "ChooseProfile",
+              "style": {
+                "container": {
+                  "flex": 1,
+                  "alignItems": "center",
+                  "justifyContent": "center"
+                },
+                "titleContainer": {
+                  "marginTop": 233,
+                  "alignItems": "center",
+                  "justifyContent": "center"
+                },
+                "title": {
+                  "color": "#EEEEEE",
+                  "fontSize": 48,
+                  "fontFamily": "Inter-SemiBold",
+                  "marginBottom": 103
+                },
+                "swimlaneContainer": {
+                  "flex": 1
+                },
+                "scrollViewContainer": {
+                  "height": 450,
+                  "alignItems": "center",
+                  "justifyContent": "center"
+                },
+                "profileIconContainer": {
+                  "height": 250
+                },
+                "circularImageContainerStyle": {
+                  "width": 250,
+                  "height": 250
+                },
+                "addProfileContainerStyle": {
+                  "width": 200,
+                  "height": 200
+                },
+                "addProfileIconColor": {
+                  "color": "#A0A0A0"
+                },
+                "addProfileBackgroundColor": {
+                  "backgroundColor": "#424242"
+                },
+                "addImageStyle": {
+                  "width": 62,
+                  "height": 62
+                },
+                "imageStyle": {
+                  "width": 200,
+                  "height": 200
+                },
+                "iconStyle": {
+                  "fontFamily": "MyFontRegular",
+                  "color": "#EEEEEE",
+                  "fontSize": 150
+                },
+                "profileName": {
+                  "color": "#6D6D6D",
+                  "fontSize": 31
+                },
+                "profileNameSelected": {
+                  "color": "#EEEEEE",
+                  "fontSize": 38,
+                  "fontFamily": "Inter-SemiBold"
+                },
+                "doneButton": {
+                  "width": 215,
+                  "height": 66,
+                  "marginRight": 35,
+                  "fontFamily": "Inter-SemiBold"
+                },
+                "manageProfileButton": {
+                  "width": 283,
+                  "height": 66,
+                  "fontFamily": "Inter-SemiBold"
+                },
+                "buttonContainer": {
+                  "marginTop": 190,
+                  "flexDirection": "row",
+                  "alignItems": "center"
+                },
+                "circularImageTitle": {
+                  "alignItems": "center",
+                  "justifyContent": "center",
+                  "width": 250
+                },
+                "firstProfilePeeking": {
+                  "marginLeft": 88
+                },
+                "circularButtonContainer": {
+                  "alignSelf": "center",
+                  "marginTop": 40
+                },
+                "textStyle": {
+                  "fontFamily": "MyFontRegular",
+                  "color": "#EEEEEE"
+                },
+                "buttonIconContainer": {
+                  "borderRadius": 35,
+                  "width": 70,
+                  "height": 70,
+                  "overflow": "hidden",
+                  "backgroundColor": "transparent"
+                },
+                "solidBackground": {
+                  "backgroundColor": "#424242"
+                }
+              },
+              "config": {
+                "dataSource": {
+                  "focusedOverlayIcon": "select"
+                },
+                "newIcon": "add"
+              }
+            },
+            {
+              "id": "ToggleButton",
+              "style": {
+                "container": {
+                  "width": 1033,
+                  "height": 245
+                },
+                "imageStyle": {
+                  "width": 37,
+                  "height": 37
+                },
+                "titleText": {
+                  "color": "#EEEEEE"
+                },
+                "valueText": {
+                  "color": "#EEEEEE"
+                },
+                "focusedBackground": {
+                  "backgroundColor": "#053C69"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "MainTopBar",
+          "config": {
+            "exitZoneButtonIcon": "store_exit",
+            "tizenLeftMarginLogo": -10,
+            "tizenLeftMarginSearch": 10
+          },
+          "style": {
+            "mainTopBarViewStyle": {
+              "flex": 1,
+              "flexDirection": "row",
+              "position": "absolute",
+              "top": 0,
+              "marginHorizontal": 90,
+              "marginTop": 38,
+              "marginBottom": 86
+            },
+            "logo": {
+              "resizeMode": "contain",
+              "width": 235,
+              "height": 42
+            },
+            "profileViewStyle": {
+              "width": 90,
+              "marginRight": 64
+            },
+            "mfmenuViewStyle": {
+              "flex": 2,
+              "justifyContent": "center"
+            },
+            "navButtonViewStyle": {
+              "flex": 1,
+              "height": 90,
+              "flexDirection": "row",
+              "alignItems": "center",
+              "justifyContent": "space-between"
+            },
+            "newProfileContainerSize": {
+              "width": 90,
+              "height": 90
+            },
+            "newProfileIconColor": {
+              "color": "#A0A0A0"
+            },
+            "newProfileBackground": {
+              "backgroundColor": "#424242"
+            }
+          },
+          "components": [
+            {
+              "id": "MFCircularImage",
+              "style": {
+                "circularImageContainerStyle": {
+                  "width": 90,
+                  "height": 90
+                },
+                "imageStyle": {
+                  "width": 70,
+                  "height": 70
+                }
+              }
+            },
+            {
+              "id": "MFMenu",
+              "config": {
+                "title": "You",
+                "defaultMenuItem": 0,
+                "numberOfCharacters": 12
+              },
+              "style": {
+                "container": {
+                  "justifyContent": "center",
+                  "paddingRight": 70,
+                  "alignItems": "center"
+                },
+                "compContainer": {
+                  "width": "100%",
+                  "height": 98
+                },
+                "hiddenTextStyle": {
+                  "opacity": 0
+                },
+                "textOverlay": {
+                  "opacity": 0,
+                  "fontSize": 38
+                },
+                "buttonBackground": {
+                  "backgroundColor": "transparent"
+                },
+                "buttonSolidBackground": {
+                  "backgroundColor": "transparent"
+                },
+                "titleTextActive": {
+                  "fontFamily": "Inter-Bold",
+                  "color": "#EEEEEE"
+                },
+                "titleText": {
+                  "fontFamily": "Inter-Regular",
+                  "color": "#A7A7A7"
+                },
+                "buttonBottomLineStyle": {
+                  "backgroundColor": "#053C69"
+                }
+              }
+            },
+            {
+              "id": "MFButtonGroup",
+              "style": {
+                "textStyle": {
+                  "fontFamily": "MyFontRegular",
+                  "color": "#A7A7A7"
+                },
+                "buttonIconContainer": {
+                  "borderRadius": 35,
+                  "width": 70,
+                  "height": 70,
+                  "overflow": "hidden",
+                  "backgroundColor": "transparent"
+                }
+              },
+              "config": {
+                "dataSource": [
+                  {
+                    "id": "search",
+                    "buttonIconSource": {
+                      "uri": "res://drawable/default/Search.png"
+                    }
+                  },
+                  {
+                    "id": "settings",
+                    "buttonIconSource": {
+                      "uri": "res://drawable/default/Settings.png"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "Logo",
+              "config": {
+                "dataSource": {
+                  "uri": "res://drawable/default/MediaKindLogo.png"
+                }
+              },
+              "style": {
+                "imageStyle": {
+                  "resizeMode": "contain",
+                  "width": 235,
+                  "height": 42
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "TopBarWithTitle",
+          "style": {
+            "full": {
+              "display": "flex",
+              "flex": 1,
+              "flexDirection": "row",
+              "alignItems": "center",
+              "justifyContent": "space-between",
+              "backgroundColor": "#rgba(0,03,14,0.2)"
+            },
+            "logo": {
+              "resizeMode": "contain",
+              "width": 200,
+              "height": 60
+            },
+            "headerUnderLine": {
+              "width": 1920,
+              "opacity": 0.4,
+              "height": 1,
+              "borderWidth": 0.4,
+              "borderColor": "#A0A0A0",
+              "backgroundColor": "#A0A0A0",
+              "alignSelf": "center"
+            },
+            "title": {
+              "color": "#EEEEEE",
+              "fontSize": 38,
+              "fontFamily": "Inter-SemiBold"
+            },
+            "titlePadding": {
+              "paddingLeft": 88
+            },
+            "logoPadding": {
+              "paddingRight": 92
+            },
+            "topBar": {
+              "maxHeight": 132
+            },
+            "fullWidth": {
+              "width": "100%"
+            },
+            "fullScreen": {
+              "width": "100%",
+              "height": 118
+            }
+          }
+        }
+      ]
     }
   ],
   "onScreenLanguages": [
-    { "title": "English (US)", "action": "en" },
-    { "title": "English (Canada)", "action": "en-ca" },
-    { "title": "Francais (Canada)", "action": "ca" }
+    {
+      "title": "English (US)",
+      "action": "en"
+    },
+    {
+      "title": "English (Canada)",
+      "action": "en-ca"
+    },
+    {
+      "title": "Francais (Canada)",
+      "action": "ca"
+    }
   ],
   "config": {
     "enableRTL": false,
     "debounceTime": 500,
     "protocol": "https",
     "hostname": "reachclient.dev.mr.tv3cloud.com",
-    "currentLocale": { "full": "en-US", "short": "fr" },
+    "currentLocale": {
+      "full": "en-US",
+      "short": "fr"
+    },
     "useLottieAnimationOnSplash": false,
     "height16x9": 253,
     "height2x3": 350,
@@ -1617,13 +2462,21 @@
     "viewAllPeekValue": 50
   },
   "onscreenLanguage": [
-    { "onScreenName": "English (US)", "languageCode": "en-US", "isRTL": false },
+    {
+      "onScreenName": "English (US)",
+      "languageCode": "en-US",
+      "isRTL": false
+    },
     {
       "onScreenName": "Francais (Canada)",
       "languageCode": "fr-CA",
       "isRTL": false
     },
-    { "onScreenName": "Arabic (Qatar)", "languageCode": "ar-QA", "isRTL": true }
+    {
+      "onScreenName": "Arabic (Qatar)",
+      "languageCode": "ar-QA",
+      "isRTL": true
+    }
   ],
   "metadataByItemType": {
     "PROGRAM-LIVE": {
@@ -1800,14 +2653,21 @@
       "metadata3": "{groupTitle}",
       "metadataSettingsOverride": "$metadataSettingsOverride"
     },
-    "SIGNUP-NETFLIX": { "metadata": "{groupTitle}" },
+    "SIGNUP-NETFLIX": {
+      "metadata": "{groupTitle}"
+    },
     "PROFILES-NETFLIX": {
       "metadata": "{title}",
       "metadata3": "{groupTitle}",
       "metadataSettingsOverride": "$metadataSettingsOverride"
     },
-    "STATIC-NETFLIX": { "metadata": "{groupTitle}" },
-    "DEVICEAPP": { "metadata": "{Name}", "metadata_selected": "{Name}" },
+    "STATIC-NETFLIX": {
+      "metadata": "{groupTitle}"
+    },
+    "DEVICEAPP": {
+      "metadata": "{Name}",
+      "metadata_selected": "{Name}"
+    },
     "RECOMM": {
       "metadata1": "{Image}",
       "metadata3": "{ReleaseYear} {Ratings} {CallLetter} {ChannelNumber}",
@@ -1926,9 +2786,17 @@
       "metadata_selected": "{ReleaseYear} | {Rating} <or> {Name}",
       "metadata3_selected": "{ReleaseYear} | {Rating} <or> {Name}"
     },
-    "STACKEDCARD": { "metadata": "{Name}", "metadata_selected": "{Name}" },
-    "STACKEDCARDFORAPP": { "metadata_selected": "{Name}" },
-    "NETFLIX": { "metadata": "{title}", "metadata_selected": "{title}" },
+    "STACKEDCARD": {
+      "metadata": "{Name}",
+      "metadata_selected": "{Name}"
+    },
+    "STACKEDCARDFORAPP": {
+      "metadata_selected": "{Name}"
+    },
+    "NETFLIX": {
+      "metadata": "{title}",
+      "metadata_selected": "{title}"
+    },
     "DVRSWIMLANE": {
       "metadata1": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage}",
       "metadata1_selected": "{SeriesEpisodeNumber} {EpisodeNameOnSeriesPage}",
@@ -2007,7 +2875,9 @@
         "marginTop": 5,
         "paddingLeft": 10
       },
-      "metadataContainer2Styles": { "flexDirection": "column" }
+      "metadataContainer2Styles": {
+        "flexDirection": "column"
+      }
     }
   }
 }

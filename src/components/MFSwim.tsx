@@ -1,3 +1,4 @@
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import { FeedItem } from "../@types/HubsResponse";
@@ -28,20 +29,20 @@ interface MFSwimProps {
     | null
     | ((event: SubscriberFeed) => void)
     | undefined;
-  onViewAllPressed?: null | ((event: SubscriberFeed) => void) | undefined;
+  navigation: NativeStackNavigationProp<any>;
 }
 
 const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
   ({ ...props }, ref: any) => {
     const data = getAllFeedDataForFeed(props.feeds!);
     const [swimLaneKey, setSwimLaneKey] = useState("");
-    const [hubName, setHubName] =useState("");
+    const [hubName, setHubName] = useState("");
     const updateSwimLaneKey = (key: string) => {
       setSwimLaneKey(key);
     };
 
-    useEffect(() =>{
-     setHubName(props.feeds?.Name||  "")
+    useEffect(() => {
+      setHubName(props.feeds?.Name || "");
     });
 
     return (
@@ -73,7 +74,7 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
               onListEmptyElementPress={props.onListEmptyElementPress}
               onListFooterElementFocus={props.onListFooterElementFocus}
               onListFooterElementOnPress={props.onListFooterElementOnPress}
-              onViewAllPressed={props.onViewAllPressed}
+              navigation={props.navigation}
             />
           );
         }}
