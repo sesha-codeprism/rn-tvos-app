@@ -177,7 +177,17 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
     };
 
     const _onFocus = (index: number) => {
-      flatListRef.current?.scrollToIndex({ animated: true, index: index });
+      if(dataArray?.some((item:  any) => item?.viewAll)){
+        flatListRef.current?.scrollToIndex({ animated: true, index: index });
+      }else if(index === dataArray?.length - 1) {
+        flatListRef.current?.scrollToIndex({
+          animated: true,
+          index: index,
+          viewOffset: viewAllPeekValue,
+        });
+      }else {
+        flatListRef.current?.scrollToIndex({ animated: true, index: index });
+      }
       setFocusIndex(index);
       if (props.isCircular) {
         if (index > dataSource.length - 3) {
@@ -349,6 +359,9 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
             <View
               style={{
                 paddingRight: SCREEN_WIDTH,
+                display: "flex",
+                flex: 1,
+                flexDirection: "column"
               }}
             >
               <MFViewAllButton
@@ -360,7 +373,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                 imageStyle={HomeScreenStyles.landScapeCardImageStyles}
                 focusedStyle={HomeScreenStyles.focusedStyle}
                 onPress={props.onListFooterElementOnPress}
-                onFocus={props.onListFooterElementFocus}
+                onFocus={(event)=> props.onListFooterElementFocus && props.onListFooterElementFocus({...event, context: 'FeedNotImplemented'}) }
                 key={`${props.filmStripId}-flatlist`}
               />
             </View>
@@ -368,11 +381,12 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
         }
         <View
           style={{
-            width: 500,
-            height: 141,
+            display: "flex",
+            flex: 1,
+            flexDirection: "column"
           }}
         >
-          {currentFeed &&
+          {!(focusedIndex  === dataArray?.length - 1  && dataArray[dataArray?.length  - 1].viewAll) && currentFeed &&
             props.swimLaneKey?.trim().length! > 0 &&
             (props.swimLaneKey === props.title ||
               props.swimLaneKey === currentFeed?.title) && (
