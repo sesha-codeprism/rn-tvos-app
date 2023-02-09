@@ -2120,42 +2120,34 @@ export const massageProgramDataForUDP = (
             // Purchase Actions
             vod.PurchaseActions?.length > 0 &&
                 vod.PurchaseActions.map((purchaseAction: any) => {
-                    purchaseAction.VideoProfiles.map((videoProfile: any) => {
-                        if (
-                            Object.keys(
-                                config.playerConfig.supportedEncodings
-                            ).includes(videoProfile.Encoding)
-                        ) {
-                            if (
-                                Object.keys(purchaseAction).includes(
-                                    "ResourceType"
-                                ) &&
-                                purchaseAction.ResourceType === "Package" &&
-                                purchaseAction.Price !== 0
-                            ) {
-                                purchasePackageExists = true;
-                                purchasePackageActions.push(purchaseAction);
-                            } else if (
-                                Object.keys(purchaseAction).includes(
-                                    "ResourceType"
-                                ) &&
-                                purchaseAction.TransactionType ===
-                                transactionType.SUBSCRIBE
-                            ) {
-                                subscribeActions.push(purchaseAction);
-                            } else if (
-                                !Object.keys(purchaseAction).includes(
-                                    "ResourceType"
-                                ) &&
-                                purchaseAction?.ResourceType !==
-                                "Subscription" &&
-                                purchaseAction?.Price !== 0
-                            ) {
-                                purchaseActionsExists = true;
-                                purchaseActions.push(purchaseAction);
-                            }
-                        }
-                    });
+                    if (
+                        Object.keys(purchaseAction).includes(
+                            "ResourceType"
+                        ) &&
+                        purchaseAction.ResourceType === "Package" &&
+                        purchaseAction.Price !== 0
+                    ) {
+                        purchasePackageExists = true;
+                        purchasePackageActions.push(purchaseAction);
+                    } else if (
+                        Object.keys(purchaseAction).includes(
+                            "ResourceType"
+                        ) &&
+                        purchaseAction.TransactionType ===
+                        transactionType.SUBSCRIBE
+                    ) {
+                        subscribeActions.push(purchaseAction);
+                    } else if (
+                        !Object.keys(purchaseAction).includes(
+                            "ResourceType"
+                        ) &&
+                        purchaseAction?.ResourceType !==
+                        "Subscription" &&
+                        purchaseAction?.Price !== 0
+                    ) {
+                        purchaseActionsExists = true;
+                        purchaseActions.push(purchaseAction);
+                    }
 
                     // Combined Quality Levels
                     purchaseAction.QualityLevels &&
