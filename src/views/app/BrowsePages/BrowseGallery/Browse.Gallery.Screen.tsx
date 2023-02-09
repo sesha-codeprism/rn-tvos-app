@@ -48,6 +48,7 @@ import { Routes } from "../../../../config/navigation/RouterOutlet";
 import { browseType } from "../../../../utils/common";
 import { metadataSeparator } from "../../../../utils/Subscriber.utils";
 import { globalStyles } from "../../../../config/styles/GlobalStyles";
+import { debounce2 } from "../../../../utils/app/app.utilities";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -55,54 +56,31 @@ interface GalleryScreenProps {
 
 const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const feed: Feed = props.route.params.feed;
-  const didMountRef = useRef(false);
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
-  const [top, setTop] = useState(16);
-  const [skip, setSkip] = useState(0);
   const [openMenu, setOpenMenu] = useState(false);
   const [openSubMenu, setOpenSubMenu] = useState(false);
-  const [feedData, setFeedData] = useState<Array<any>>();
   const [filterState, setFilterState] = useState<any>();
   const browsePageConfig: any = getUIdef("BrowseGallery")?.config;
   const baseValues = getBaseValues(feed, browsePageConfig);
   const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
   const [browsePivots, setBrowsePivots] = useState(browseFeed.pivots);
   const [filterFocused, setFilterFocused] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [lastPageReached, setLastPageReached] = useState(false);
+  const [dataSource, setDataSource] = useState(Array<any>());
+  // Get the desired length per page from the config params(top value).
+  const lengthPerPage = browseFeed.$top;
 
-  // const menuRef = filterData.map(() => useRef<PressableProps>(null));
+  const [page, setCurrentPage] = useState(0);
   const barRef = useRef<TouchableOpacity>(null);
   const filterRef = useRef<PressableProps>(null);
   const cardRef = useRef<PressableProps>(null);
   const pivotsParam = "pivots=true";
   const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
 
-  // const filterRef = useEffect(() => {
-  //   if (didMountRef.current) {
-  //   } else didMountRef.current = true;
-  // });
-  // const backAction = () => {
-  //   if (openMenu) {
-  //     setOpenSubMenu(false);
-  //     setOpenMenu(false);
-  //     return true;
-  //   } else {
-  //     // Open !true. So something is happening. Removed some console.log
-  //   }
-  // };
-  // useEffect(() => {
-  //   if (openMenu) {
-  //     console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
-  //     TVMenuControl.enableTVMenuKey();
-  //     BackHandler.addEventListener("hardwareBackPress", backAction);
-  //   }
-  // }, []);
   UNSTABLE_usePreventRemove(openMenu, (data) => {
-    // openSubMenu ? setOpenSubMenu(false) : setOpenMenu(false);
     setOpenSubMenu(false);
     setOpenMenu(false);
   });
-
   const toggleMenu = () => {
     console.log("Pressed on the browse filter", openMenu);
     setOpenMenu(!openMenu);
@@ -110,17 +88,18 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   };
 
   //@ts-ignore
-  const fetchFeeds = async (requestPivots: any) => {
+  const fetchFeeds = async ({ queryKey }: any) => {
+    const [key, requestPivots, page] = queryKey;
     try {
-      const uri = `${browseFeed.Uri}?$top=${top}&skip=${skip}storeId=${DefaultStore.Id}&$groups=${GLOBALS.store.rightsGroupIds}&pivots=${requestPivots}`;
-      console.log("Requesting data for:", uri);
+      const $top = browseFeed.$top;
+      const skip = $top * page;
+      const uri = `${browseFeed.Uri}?$top=${$top}&$skip=${skip}&storeId=${
+        DefaultStore.Id
+      }&$groups=${GLOBALS.store!.rightsGroupIds}&pivots=${requestPivots}`;
       const data = await getDataFromUDL(uri);
       if (data) {
-        console.log(data);
         /** we have data from backend, so use the data and setState */
         const massagedData = getMassagedData(uri, data);
-        console.log("Setting feed data:", data, "for", uri);
-        // setFeedData(massagedData);
         return massagedData;
       } else {
         console.log("No data currently for", uri);
@@ -131,6 +110,20 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       console.log("Issue in getting feeds,actually..", e);
       return undefined;
     }
+  };
+
+  const filterData = (dataSet: any) => {
+    if (dataSet.length < lengthPerPage) {
+      setLastPageReached(true);
+    }
+    const dataArray = dataSource;
+    if (dataArray.length > 0) {
+      const newArray = dataArray.concat(dataSet);
+      setDataSource(newArray);
+    } else {
+      setDataSource(dataSet);
+    }
+    return dataSet;
   };
 
   const refreshFeedsByPivots = () => {
@@ -157,11 +150,17 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     setCurrentFeed(focusedFeed);
   };
 
-  const { data, isLoading } = useQuery(
-    ["browseFeed", browsePivots],
-    () => fetchFeeds(browsePivots),
+  const { data, isLoading, isIdle } = useQuery(
+    [`browseFeed-${browseFeed?.Uri}`, browsePivots, page],
+    fetchFeeds,
     defaultQueryOptions
   );
+
+  const handleEndReached = debounce2(() => {
+    if (!lastPageReached) {
+      setCurrentPage(page + 1);
+    }
+  }, 500);
 
   const pivotQuery = useQuery(
     "pivots",
@@ -182,6 +181,12 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       cacheTime: appUIDefinition.config.queryCacheTime,
     }
   );
+
+  useEffect(() => {
+    if (data && !isIdle) {
+      return filterData(data);
+    }
+  }, [data]);
 
   const handleFilterChange = (value: {
     key: string;
@@ -255,6 +260,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       <View style={styles.metadataContainer}>
         <Text numberOfLines={2} style={styles.metadataLine2}>
           {metadata?.join(metadataSeparator) || currentFeed?.metadataLine2}
+          {__DEV__ ? " " + dataSource.indexOf(currentFeed) : ""}
         </Text>
       </View>
     );
@@ -318,12 +324,12 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
           )}
         </View>
       </View>
-      {isLoading ? (
+      {isLoading && dataSource.length <= 0 ? (
         <MFLoader />
       ) : (
         <View style={styles.contentContainerStyles}>
           <>
-            {data ? (
+            {dataSource.length > 0 ? (
               <>
                 <View style={styles.currentFeedContainerStyles}>
                   {currentFeed && (
@@ -404,13 +410,14 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                     <MFGridView
                       //@ts-ignore
                       ref={cardRef}
-                      dataSource={data}
+                      dataSource={dataSource}
                       style={HomeScreenStyles.portraitCardStyles}
                       imageStyle={HomeScreenStyles.portraitCardImageStyles}
                       focusedStyle={HomeScreenStyles.focusedStyle}
                       onFocus={updateFeed}
                       autoFocusOnFirstCard
                       selectedId={currentFeed?.Id}
+                      onEndReached={handleEndReached}
                       onPress={(event) => {
                         props.navigation.push(Routes.Details, { feed: event });
                       }}

@@ -35,6 +35,8 @@ interface MFGridProps {
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
 
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
+  /** Handler for when Flatlist end is reached */
+  onEndReached?: null | (() => void) | undefined;
   autoFocusOnFirstCard?: boolean;
   selectedId: any;
 }
@@ -47,8 +49,11 @@ const MFGridView: React.FunctionComponent<MFGridProps> = React.forwardRef(
         numColumns={4}
         keyExtractor={(x, i) => i.toString()}
         hasTVPreferredFocus
+        onEndReached={props.onEndReached}
+        onEndReachedThreshold={0.8}
         renderItem={({ item, index }) => (
           <MFLibraryCard
+            //@ts-ignore
             ref={index === 0 ? ref : null}
             key={`Index${index}`}
             data={item}
@@ -61,7 +66,11 @@ const MFGridView: React.FunctionComponent<MFGridProps> = React.forwardRef(
             titlePlacement={props.titlePlacement}
             onFocus={(event) => {
               props.onFocus && props.onFocus(event);
-              console.log("item.Id === props.selectedId ",item.Id, props.selectedId )
+              console.log(
+                "item.Id === props.selectedId ",
+                item.Id,
+                props.selectedId
+              );
             }}
             onPress={(event) => {
               props.onPress && props.onPress(event);
@@ -69,12 +78,15 @@ const MFGridView: React.FunctionComponent<MFGridProps> = React.forwardRef(
             onBlur={(event) => {}}
             overlayComponent={
               <MFOverlay
-                //@ts-ignore
                 renderGradiant={true}
-                showProgress={true}
-                progress={20}
-                // displayTitle={item.title}
-                bottomText={item.runtime}
+                //@ts-ignore
+                showProgress={item.Bookmark! || false}
+                //@ts-ignore
+                progress={item.progress ? item.progress * 100 : 20}
+                bottomText={
+                  //@ts-ignore
+                  item.metadataLine3 || item.durationMinutesString || ""
+                }
               />
             }
             shouldRenderText
