@@ -49,6 +49,7 @@ import MFButton, {
 } from "../../../../components/MFButton/MFButton";
 import { styles } from "../../BrowsePages/BrowseCategory/Browse.Category.screen";
 import { DetailsSidePanel } from "../DetailSidePanel";
+import { AppImages } from "../../../../assets/images";
 
 interface EpisodeListProps {
   navigation: NativeStackNavigationProp<any>;
@@ -70,7 +71,6 @@ const scaledSnapToInterval = getScaledValue(lazyListConfig.snapToInterval);
 
 const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const navigationParams = props.route.params;
-  console.log(navigationParams);
   const { udpData, subscriberData, discoveryData } = navigationParams;
   const [currentSeason, setCurrentSeason] = useState<any>();
   const [seasonItemHeight, setSeasonItemHeight] = useState(1);
@@ -724,7 +724,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     const imageSource =
       getImageUri(episode?.CatalogInfo, "16x9/Poster") ||
       getImageUri(episode?.CatalogInfo, "16x9/KeyArt") ||
-      placeholder16x9Image;
+      AppImages.bgPlaceholder;
 
     const progressBarStyle: any = getUIdef("ProgressBar")?.style;
 
@@ -735,7 +735,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
           : globalStyles.backgroundColors.primary1,
     };
 
-    let networkImageSource = episode.channelLogoUr;
+    let networkImageSource = episode.channelLogoUri;
     if (!networkImageSource && episode?.networkInfo) {
       const { networkInfo } = episode;
       networkImageSource =
@@ -780,6 +780,8 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
               //@ts-ignore
               source={imageSource}
               style={episodeStyles.episodeItemImage}
+              fallback
+              defaultSource={AppImages.bgPlaceholder}
             />
             <View style={[episodeStyles.episodeItemInfo, { flexShrink: 1 }]}>
               <Text style={episodeStyles.episodeItemTitle}>{name}</Text>
@@ -812,6 +814,8 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
               //@ts-ignore
               source={imageSource}
               style={episodeStyles.episodeItemImage}
+              fallback
+              defaultSource={AppImages.bgPlaceholder}
             />
             <View style={[episodeStyles.episodeItemInfo, { flexShrink: 1 }]}>
               <Text style={episodeStyles.episodeItemTitle}>{name}</Text>

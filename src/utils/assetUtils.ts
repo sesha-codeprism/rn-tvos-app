@@ -693,7 +693,7 @@ export const massageDiscoveryFeedAsset = (
     item["image16x9KeyArtURL"] = getImageUri(item, "16x9/KeyArt");
     item["image2x3PosterURL"] = getImageUri(item, "2x3/Poster");
     item["image2x3KeyArtURL"] = getImageUri(item, "2x3/KeyArt");
-    item["genre"] = item.Genres?.length && item.Genres[0].Name;
+    item["genre"] = item?.Genres?.length && getGenreName(item.Genres)[0]?.Name;
     return item;
 };
 
@@ -2140,8 +2140,7 @@ export const massageProgramDataForUDP = (
                                     "ResourceType"
                                 ) &&
                                 purchaseAction.TransactionType ===
-                                transactionType.SUBSCRIBE &&
-                                purchaseAction.Price !== 0
+                                transactionType.SUBSCRIBE
                             ) {
                                 subscribeActions.push(purchaseAction);
                             } else if (
@@ -2174,10 +2173,12 @@ export const massageProgramDataForUDP = (
                     }
                 });
 
-            subscriptionPackages.push({
-                purchaseNetwork,
-                purchaseActions: subscribeActions,
-            });
+            if (subscribeActions.length > 0) {
+                subscriptionPackages.push({
+                    purchaseNetwork,
+                    purchaseActions: subscribeActions,
+                });
+            }
 
             // Collect Entitlements from CatalogInfo
             vodCatalogInfo = vod.CatalogInfo;
@@ -2193,6 +2194,7 @@ export const massageProgramDataForUDP = (
                         playAction["Tags"] = vod?.CatalogInfo?.Tags;
                         playAction["Bookmark"] = vod?.Bookmark;
                         playAction["CatalogInfo"] = vod?.CatalogInfo;
+                        playAction["Id"] = vod?.Id;
                         usablePlayActions.push(playAction);
                     }
 
@@ -2527,8 +2529,8 @@ export const massageProgramDataForUDP = (
 
     //CatchupEndUtc time
     const catchupEndUtc =
-        programUDPData?.currentCatchupSchedule?.CatchupEndUtc ||
-        programUDPData?.currentCatchupSchedule?.Schedule?.CatchupEndUtc;
+        programUDPData?.currentCatchupSchedule?.Channel?.LastCatchupEndUtc ||
+        programUDPData?.ChannelInfo?.Channel?.LastCatchupEndUtc;
     if (!expirationUTC && catchupEndUtc) {
         programUDPData["statusText"].push(timeLeft(catchupEndUtc));
         programUDPData["isExpiringSoon"] = isExpiringSoon(programUDPData);
@@ -2551,7 +2553,7 @@ export const massageProgramDataForUDP = (
                     AppStrings?.str_subscription_required
                 );
         }
-    } else if (purchaseActionsExists && subscriptionPackages?.length) {
+    } else if (purchaseActionsExists || subscriptionPackages?.length) {
         if (playOptions?.Schedules?.length || playOptions?.CatchupSchedules) {
             isChannelNotSubscribed(playOptions, channelMap) &&
                 !playActionsExists &&
@@ -2664,7 +2666,7 @@ export const massageProgramDataForUDP = (
         playOptions?.Bookmark || subscriberData?.Bookmark;
 
     programUDPData["genre"] = discoveryData?.Genres?.length
-        ? discoveryData?.Genres
+        ? getGenreName(discoveryData?.Genres)
         : [];
     programUDPData["description"] =
         subscriberData?.CatalogInfo?.Description ||
@@ -5712,8 +5714,8 @@ export const validateEntitlements = (
 export const getGenreName = (genres: Genre[]) => {
     genres = genres.filter((genre) => {
         genre.Name =
-            (global.lStrings?.str_genres &&
-                global.lStrings.str_genres[genre.Id]) ||
+            (AppStrings?.str_genres &&
+                AppStrings.str_genres[genre.Id]) ||
             genre.Name;
         return genre;
     });
@@ -6000,7 +6002,7 @@ export const massageSeriesDataForUDP = (
     ) {
         !playActionsExists &&
             seriesUDPData["statusText"].push(
-                global.lStrings?.str_subscription_required
+                AppStrings?.str_subscription_required
             );
     } else if (
         data?.playSource === sourceTypeString.LIVE &&
@@ -6008,7 +6010,7 @@ export const massageSeriesDataForUDP = (
     ) {
         !playActionsExists &&
             seriesUDPData["statusText"].push(
-                global.lStrings?.str_subscription_required
+                AppStrings?.str_subscription_required
             );
     }
 

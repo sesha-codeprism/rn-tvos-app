@@ -900,7 +900,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         )
       : massageProgramDataForUDP(
           playActionsData,
-          subscriberData,
+          feed,
           discoveryProgramData,
           GLOBALS.channelMap,
           discoverySchedulesData,
