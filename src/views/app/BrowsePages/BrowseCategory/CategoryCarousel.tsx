@@ -36,7 +36,7 @@ const BrowseCategoryCarousel: React.FunctionComponent<
 > = (props) => {
   const flatListRef = useRef<FlatList>(null);
   const [swimLaneKey, setSwimLaneKey] = useState("");
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [lastPageReached, setLastPageReached] = useState(false);
   const [$skip, set$skip] = useState(0);
   const [dataSource, setDatSource] = useState(Array());

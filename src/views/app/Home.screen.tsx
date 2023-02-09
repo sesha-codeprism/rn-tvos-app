@@ -23,8 +23,6 @@ import MFMarquee from "../../components/MFMarquee";
 import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
 import MFSwim from "../../components/MFSwim";
 import { Routes } from "../../config/navigation/RouterOutlet";
-import { Layout } from "../../utils/analytics/consts";
-import { ItemShowType } from "../../utils/common";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useAccount from "../../customHooks/useAccount";
 interface HomeScreenProps {
