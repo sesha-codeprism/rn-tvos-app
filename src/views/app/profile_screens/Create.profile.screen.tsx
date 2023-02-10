@@ -368,7 +368,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                   elevation: 5,
                   focusedBackgroundColor: "#053C69",
                   unFocusedBackgroundColor: "#424242",
-                  hoverColor: appUIDefinition.theme.colors.secondary,
+                  hoverColor: appUIDefinition.theme.backgroundColors.shade5,
                 },
               }}
             />
@@ -393,7 +393,7 @@ const CreateProfileScreen: React.FunctionComponent<CreateProfileProps> = (
                   elevation: 5,
                   focusedBackgroundColor: "#053C69",
                   unFocusedBackgroundColor: "#424242",
-                  hoverColor: appUIDefinition.theme.colors.secondary,
+                  hoverColor: appUIDefinition.theme.backgroundColors.shade5,
                 },
               }}
             />

@@ -169,7 +169,7 @@ const ChooseProfileScreen: React.FunctionComponent<ChooseProfileProps> = (
                 elevation: 5,
                 focusedBackgroundColor: "#053C69",
                 unFocusedBackgroundColor: "#424242",
-                hoverColor: appUIDefinition.theme.colors.secondary,
+                hoverColor: appUIDefinition.theme.backgroundColors.shade5,
               },
             }}
           />
@@ -185,7 +185,9 @@ const ChooseProfileScreen: React.FunctionComponent<ChooseProfileProps> = (
               fontWeight: "600",
             }}
             onPress={() => {
-              props.route.params.mode === "edit" ? props.navigation.pop() :   props.navigation.pop(2);
+              props.route.params.mode === "edit"
+                ? props.navigation.pop()
+                : props.navigation.pop(2);
             }}
             textLabel="Cancel"
             imageSource={0}
@@ -197,7 +199,7 @@ const ChooseProfileScreen: React.FunctionComponent<ChooseProfileProps> = (
                 elevation: 5,
                 focusedBackgroundColor: "#053C69",
                 unFocusedBackgroundColor: "#424242",
-                hoverColor: appUIDefinition.theme.colors.secondary,
+                hoverColor: appUIDefinition.theme.backgroundColors.shade5,
               },
             }}
           />

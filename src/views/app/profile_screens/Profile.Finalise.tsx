@@ -55,7 +55,7 @@ const ProfileFinalisationScreen: React.FunctionComponent<
   const listItemRefs: any = Array(3)
     .fill(0)
     .map(() => {
-     return useRef<PressableProps>(null);
+      return useRef<PressableProps>(null);
     });
   const doneButtonRef = useRef<PressableProps>(null);
   console.log("props coming", props.route.params);
@@ -411,7 +411,7 @@ const ProfileFinalisationScreen: React.FunctionComponent<
                 focusedBackgroundColor: "#053C69",
                 unFocusedBackgroundColor: "#424242",
                 hasTVPreferredFocus: true,
-                hoverColor: appUIDefinition.theme.colors.secondary,
+                hoverColor: appUIDefinition.theme.backgroundColors.shade5,
               },
             }}
             // hasTVPreferredFocus={true}
@@ -448,7 +448,7 @@ const ProfileFinalisationScreen: React.FunctionComponent<
                 elevation: 5,
                 focusedBackgroundColor: "#053C69",
                 unFocusedBackgroundColor: "#424242",
-                hoverColor: appUIDefinition.theme.colors.secondary,
+                hoverColor: appUIDefinition.theme.backgroundColors.shade5,
               },
             }}
           />
