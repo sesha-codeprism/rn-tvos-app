@@ -49,6 +49,7 @@ import { browseType } from "../../../../utils/common";
 import { metadataSeparator } from "../../../../utils/Subscriber.utils";
 import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { debounce2 } from "../../../../utils/app/app.utilities";
+import { current } from "@reduxjs/toolkit";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -59,7 +60,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const [openMenu, setOpenMenu] = useState(false);
   const [openSubMenu, setOpenSubMenu] = useState(false);
-  const [filterState, setFilterState] = useState<any>();
+  const [filterState, setFilterState] = useState<any>(null);
   const browsePageConfig: any = getUIdef("BrowseGallery")?.config;
   const baseValues = getBaseValues(feed, browsePageConfig);
   const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
@@ -93,10 +94,16 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     try {
       const $top = browseFeed.$top;
       const skip = $top * page;
+      let finalUri = "";
       const uri = `${browseFeed.Uri}?$top=${$top}&$skip=${skip}&storeId=${
         DefaultStore.Id
-      }&$groups=${GLOBALS.store!.rightsGroupIds}&pivots=${requestPivots}`;
-      const data = await getDataFromUDL(uri);
+      }&$groups=${GLOBALS.store!.rightsGroupIds}`;
+      if (browsePivots) {
+        finalUri = uri.concat(`&pivots=${requestPivots}`);
+      } else {
+        finalUri = uri;
+      }
+      const data = await getDataFromUDL(finalUri);
       if (data) {
         /** we have data from backend, so use the data and setState */
         const massagedData = getMassagedData(uri, data);
@@ -143,6 +150,8 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       },
       finalPivots
     );
+    setCurrentFeed(undefined);
+    setDataSource([]);
     setBrowsePivots(parsedPivots);
   };
 
@@ -170,7 +179,6 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
         const pivots = await getDataFromUDL(pivotURL);
         const firstFilter = createInitialFilterState(pivots.data, baseValues);
         setFilterState(firstFilter);
-        console.log("firstFilter", firstFilter);
         return pivots;
       } catch (e) {
         console.log("Some error in getting pivots", e);
@@ -188,12 +196,25 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     }
   }, [data]);
 
+  const handleFilterClear = () => {
+    setDataSource([]);
+    setFilterState(null);
+    setCurrentFeed(undefined);
+    const firstFilter = createInitialFilterState(
+      pivotQuery.data.data,
+      baseValues
+    );
+    setFilterState(firstFilter);
+    setBrowsePivots(browseFeed.pivots);
+    setLastPageReached(false);
+    setCurrentPage(0);
+  };
+
   const handleFilterChange = (value: {
     key: string;
     value: { Id: string; Name: string };
   }) => {
     let parseFilter = filterState;
-    console.log("Value", value, "parseFilter", parseFilter);
     /** Check if the array already has the data.. if Yes, delete it */
     if (parseFilter[value.key].selectedIds.includes(value.value.Id)) {
       parseFilter[value.key].selectedIds = [];
@@ -276,6 +297,11 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     }
   };
 
+  const imageSource: any =
+    currentFeed?.image16x9KeyArtURL ||
+    currentFeed?.image16x9PosterURL ||
+    AppImages.bgPlaceholder;
+
   return (
     <View style={styles.root}>
       <View style={styles.topRow}>
@@ -337,13 +363,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                       <View style={styles.posterImageContainerStyles}>
                         <FastImage
                           style={styles.posterImageStyle}
-                          source={{
-                            uri:
-                              currentFeed?.image16x9PosterURL != undefined
-                                ? currentFeed!.image16x9PosterURL.uri
-                                : AppImages.tvshowPlaceholder,
-                            priority: FastImage.priority.normal,
-                          }}
+                          source={imageSource}
                         >
                           <LinearGradient
                             colors={["transparent", "#00030E", "#00030E"]}
@@ -455,19 +475,12 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
           //@ts-ignore
           open={openMenu}
           filterData={pivotQuery?.data?.data}
-          // handleFilterChange={(value) => {
-          //   console.log("Value is", value);
-          // }}
-          // defaultPivots={baseValues}
           subMenuOpen={openSubMenu}
           filterState={filterState}
           setOpenSubMenu={() => {}}
           setOpenMenu={setOpenMenu}
           handleOnPress={handleFilterChange}
-          // filterState={filterValue!}
-          // onChange={function (filterState: FilterValue): void {
-          //   console.log("filterState", filterState);
-          // }}
+          handleFilterClear={handleFilterClear}
         />
       )}
     </View>

@@ -19,9 +19,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { AppImages } from "../../../../assets/images";
-import MFButton, {
-  MFButtonVariant,
-} from "../../../../components/MFButton/MFButton";
 import MFText from "../../../../components/MFText";
 import { appUIDefinition } from "../../../../config/constants";
 import { AppStrings } from "../../../../config/strings";
@@ -35,6 +32,7 @@ type BrowseFilterProps = {
   subMenuOpen: boolean;
   setOpenMenu: any;
   handleOnPress?: (value: any) => void;
+  handleFilterClear?: () => void;
 };
 const filterData = [
   {
@@ -405,10 +403,9 @@ const BrowseFilter = (props: BrowseFilterProps) => {
               height: 120,
               justifyContent: "flex-end",
             }}
-            ListFooterComponent={() => {
-              return (
+            ListFooterComponent={
+              props.filterState && (
                 <Pressable
-                  // @ts-ignore
                   ref={menuRef[menuList.length]}
                   style={
                     focusedMenu === menuList.length
@@ -435,7 +432,6 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                         ]
                   }
                   onFocus={() => {
-                    console.log("on Clear focus");
                     onFocusMenu("clear", menuList.length);
                     // menuRef[0]?.current?.setNativeProps({
                     //   hasTVPreferredFocus: true,
@@ -451,8 +447,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                   //   setClearFocused(false);
                   // }}
                   onPress={() => {
-                    //TODO: Write logic for clear function
-                    console.log("TODO: Write logic for clear function");
+                    props.handleFilterClear && props.handleFilterClear();
                   }}
                 >
                   <MFText
@@ -468,8 +463,8 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                     displayText={AppStrings.str_clear}
                   />
                 </Pressable>
-              );
-            }}
+              )
+            }
           />
           <TouchableOpacity style={styles.touchableBar} onFocus={onFocusBar} />
         </View>
@@ -506,7 +501,8 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                     setSelectedSubMenu(item.Name);
                   }}
                 >
-                  {props.filterState[selectedMenu.Id]?.selectedIds?.includes(
+                  {props.filterState &&
+                  props.filterState[selectedMenu.Id]?.selectedIds?.includes(
                     item.Id
                   ) ? (
                     <Image
