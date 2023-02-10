@@ -48,7 +48,6 @@ const MFGridView: React.FunctionComponent<MFGridProps> = React.forwardRef(
         data={props.dataSource}
         numColumns={4}
         keyExtractor={(x, i) => i.toString()}
-        hasTVPreferredFocus
         onEndReached={props.onEndReached}
         onEndReachedThreshold={0.8}
         renderItem={({ item, index }) => (
@@ -63,6 +62,7 @@ const MFGridView: React.FunctionComponent<MFGridProps> = React.forwardRef(
             title={""}
             layoutType={"LandScape"}
             showTitleOnlyOnFocus={false}
+            autoFocusOnFirstCard={index === 0}
             titlePlacement={props.titlePlacement}
             onFocus={(event) => {
               props.onFocus && props.onFocus(event);
