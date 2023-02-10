@@ -118,8 +118,9 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                   setFocus(false);
                 }}
                 onPress={() => {
-                 
-                  shouldRenderImage ? setShowPersonalizationPopup(true) : toggleShouldRenderImage(!shouldRenderImage);
+                  shouldRenderImage
+                    ? setShowPersonalizationPopup(true)
+                    : toggleShouldRenderImage(!shouldRenderImage);
                 }}
                 style={{ height: "100%" }}
               >
@@ -248,7 +249,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                 elevation: 5,
                 focusedBackgroundColor: "#053C69",
                 unFocusedBackgroundColor: "#424242",
-                hoverColor: appUIDefinition.theme.colors.secondary,
+                hoverColor: appUIDefinition.theme.backgroundColors.shade5,
               },
             }}
           />
@@ -280,7 +281,7 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                 elevation: 5,
                 focusedBackgroundColor: "#053C69",
                 unFocusedBackgroundColor: "#424242",
-                hoverColor: appUIDefinition.theme.colors.secondary,
+                hoverColor: appUIDefinition.theme.backgroundColors.shade5,
               },
             }}
           />
