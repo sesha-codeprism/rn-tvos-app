@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
-import { Alert, View } from "react-native";
+import React, { useRef } from "react";
+import { Alert, TouchableOpacity, View } from "react-native";
 import { Feed } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { layout2x3 } from "../config/constants";
@@ -51,6 +51,8 @@ interface MFSwimLaneProps {
 const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
   ({ ...props }, ref: any) => {
     const [page, setPage] = React.useState(0);
+    let innerNoItemsReturenedRef = useRef<TouchableOpacity>(null);
+    
     const _onBlur = () => {};
     const _onFocus = (event?: SubscriberFeed, index?: number) => {
       props.onFocus && event && props.onFocus(event);
@@ -212,7 +214,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
             /** List length <=0. UDL Call successful but no data items returned */
             <MFViewAllButton
               // @ts-ignore
-              ref={ref}
+              ref={innerNoItemsReturenedRef}
               displayStyles={Styles.railTitle}
               displayText={"No items returned"}
               style={
@@ -235,6 +237,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           onListFooterElementFocus={props.onListFooterElementFocus}
           onViewAllPressed={onTapViewAll}
           flatListStyle={{display: "flex", flex: 1, flexDirection: "row"}}
+          getNoItemReturenedRef={() =>  innerNoItemsReturenedRef}
         />
       </View>
     );

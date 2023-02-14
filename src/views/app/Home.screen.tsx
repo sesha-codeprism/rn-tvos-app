@@ -142,9 +142,12 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       firstSwimlaneRef.current?.focused ||
       firstSwimlaneRef.current?.first ||
       firstSwimlaneRef.current?.viewAll?.current ||
-      firstSwimlaneRef.current?.feedNotImplemented?.current;
+      firstSwimlaneRef.current?.feedNotImplemented?.current ||
+      firstSwimlaneRef.current?.NoItemsReturened?.current;
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
+
+  console.log('firstSwimlaneRef ', firstSwimlaneRef);
   return (
     <View style={HomeScreenStyles.container}>
       <ImageBackground

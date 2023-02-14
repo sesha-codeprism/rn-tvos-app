@@ -100,6 +100,7 @@ export interface MFFilmStripProps {
   feed: Feed;
   onViewAllPressed?: null | ((event: SubscriberFeed) => void) | undefined;
   filmStripId?: string;
+  getNoItemReturenedRef?: null| (() => any) |  undefined;
 }
 /**
  * Component that renders horizontal-scrolling collection of items
@@ -165,6 +166,9 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
       get feedNotImplemented() {
         return innerFeedNotImplementedRef;
       },
+      get NoItemsReturened(){
+        return props.getNoItemReturenedRef();
+      }
     }));
 
     const viewAllFocused = (index: number) => {
