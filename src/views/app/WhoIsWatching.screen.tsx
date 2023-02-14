@@ -60,7 +60,10 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
                 currentContext.setUserProfile(userProfile[0]);
                 GLOBALS.userProfile = userProfile[0];
                 setLoading(false);
-                props.navigation.replace(Routes.Home);
+                props.navigation.reset({
+                  index: 0,
+                  routes: [{name: Routes.Home}],
+                });
               } else {
                 /** The last selected profile is not available in getProfile data
                  * Navigating to who's watching page.
@@ -91,13 +94,19 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
             GLOBALS.store!.userProfile = GLOBALS.userProfile;
             updateStore(GLOBALS.store);
             setLoading(false);
-            props.navigation.replace(Routes.Home);
+            props.navigation.reset({
+              index: 0,
+              routes: [{name: Routes.Home}],
+            });
           }
         } else {
           currentContext.setUserProfile(defaultProfile[0]);
           GLOBALS.userProfile = defaultProfile[0];
           setLoading(false);
-          props.navigation.replace(Routes.Home);
+          props.navigation.reset({
+            index: 0,
+            routes: [{name: Routes.Home}],
+          });
         }
       } else {
         /**
@@ -107,7 +116,10 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
         currentContext.setUserProfile(defaultProfile[0]);
         GLOBALS.userProfile = defaultProfile[0];
         setLoading(false);
-        props.navigation.replace(Routes.Home);
+        props.navigation.reset({
+          index: 0,
+          routes: [{name: Routes.Home}],
+        });
       }
     } catch (error: any) {
       setLoading(false);
