@@ -5,6 +5,7 @@ import { FeedItem } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { layout2x3 } from "../config/constants";
 import { getAllFeedDataForFeed } from "../config/queries";
+import { GLOBALS } from "../utils/globals";
 import MFSwimLane from "./MFSwimLane";
 
 interface MFSwimProps {
@@ -37,7 +38,12 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
     const flatListRef = useRef<FlatList>(null);
     const [swimLaneKey, setSwimLaneKey] = useState("");
     const [hubName, setHubName] = useState("");
-    const data = getAllFeedDataForFeed(props.feeds!);
+    const data = getAllFeedDataForFeed(
+      props.feeds!,
+      GLOBALS.nowNextMap,
+      GLOBALS.currentSlots,
+      GLOBALS.channelMap
+    );
     const updateSwimLaneKey = (key: string) => {
       setSwimLaneKey(key);
     };
@@ -73,17 +79,35 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
               onListEmptyElementPress={props.onListEmptyElementPress}
               onListFooterElementOnPress={props.onListFooterElementOnPress}
               onFocus={(event) => {
-                flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: 200 }); props.onFocus  && props.onFocus(event);
+                flatListRef.current?.scrollToIndex({
+                  animated: true,
+                  index: index,
+                  viewOffset: 200,
+                });
+                props.onFocus && props.onFocus(event);
               }}
               onListEmptyElementFocus={(event) => {
-                  flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: 200 }); props.onListEmptyElementFocus && props.onListEmptyElementFocus(event);
+                flatListRef.current?.scrollToIndex({
+                  animated: true,
+                  index: index,
+                  viewOffset: 200,
+                });
+                props.onListEmptyElementFocus &&
+                  props.onListEmptyElementFocus(event);
               }}
               onListFooterElementFocus={(event) => {
                 //@ts-ignore
-                if(event && event.context === 'FeedNotImplemented'){
-                  flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: 200 }); props.onListEmptyElementFocus && props.onListEmptyElementFocus(event);
+                if (event && event.context === "FeedNotImplemented") {
+                  flatListRef.current?.scrollToIndex({
+                    animated: true,
+                    index: index,
+                    viewOffset: 200,
+                  });
+                  props.onListEmptyElementFocus &&
+                    props.onListEmptyElementFocus(event);
                 }
-                props.onListFooterElementFocus && props.onListFooterElementFocus(event);
+                props.onListFooterElementFocus &&
+                  props.onListFooterElementFocus(event);
               }}
               navigation={props.navigation}
             />

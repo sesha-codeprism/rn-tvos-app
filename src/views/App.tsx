@@ -7,6 +7,7 @@ import { UserProfile } from "../@types/UserProfile";
 import { GLOBALS } from "../utils/globals";
 import "react-native-gesture-handler";
 import { initializeAnalyticsService } from "../utils/analytics/analytics";
+import { initUdls } from "../../backend";
 
 interface AppProps {}
 
@@ -21,6 +22,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
 
   async function getLandingData() {
     initUIDef();
+    initUdls();
   }
 
   const duplexMessage = (message: any) => {
@@ -30,19 +32,18 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   };
 
   const addDuplexMessageHandler = (handler: any) => {
-    if(onDuplexMessageHandlers && onDuplexMessageHandlers.every((h: any) => h !== handler)) {
-      addOnDuplexMessageHandlers([
-        ...onDuplexMessageHandlers,
-        handler,
-      ]);
+    if (
+      onDuplexMessageHandlers &&
+      onDuplexMessageHandlers.every((h: any) => h !== handler)
+    ) {
+      addOnDuplexMessageHandlers([...onDuplexMessageHandlers, handler]);
     }
-  }
+  };
   const removeDuplexHandler = (handler: any) => {
-    addOnDuplexMessageHandlers([...onDuplexMessageHandlers].filter((h: any) => h !== handler));
-  }
-
-
-
+    addOnDuplexMessageHandlers(
+      [...onDuplexMessageHandlers].filter((h: any) => h !== handler)
+    );
+  };
 
   useEffect(() => {
     getLandingData();
@@ -53,7 +54,6 @@ const App: React.FunctionComponent<AppProps> = (props) => {
         `app-start-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
       );
     }
-    
   }, []);
 
   const updateProfile = (userProfile: UserProfile) => {
@@ -79,7 +79,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     shouldEnableRTL,
     onDuplexMessageHandlers, // the current list of message handlers from various components thoguhout the application
     addDuplexMessageHandler, // Add Duplex message handler function from any component
-    removeDuplexHandler,  // removes registered Duplex message handler function from any component
+    removeDuplexHandler, // removes registered Duplex message handler function from any component
     duplexMessage, // root application duplex message handler which dispatches the message to individual component specific message handlers.
   };
 

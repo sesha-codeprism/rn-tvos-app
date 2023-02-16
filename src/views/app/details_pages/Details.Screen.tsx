@@ -443,11 +443,23 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const getAllSubscriptionGroups = async () => {
-    const udlParams = "udl://dvrproxy/get-all-subscriptionGroups/";
-    const data = await getDataFromUDL(udlParams);
-    const massagedData = getMassagedData(udlParams, data);
-    setAllSubscriptionGroups(massagedData);
-    return massagedData;
+    const allSubscriptions = queryClient.getQueryData([
+      `get-AllSubscriptionsQuery`,
+    ]);
+
+    if (!allSubscriptions) {
+      /** This block execution means subscriber call hasn't ben done yet.. */
+      /** Make the api call now and store it in cache  */
+      const udlParams = "udl://dvrproxy/get-all-subscriptionGroups/";
+      const data = await getDataFromUDL(udlParams);
+      const massagedData = getMassagedData(udlParams, data);
+      setAllSubscriptionGroups(massagedData);
+      return massagedData;
+    } else {
+      /** Basically we got the response from cache where it has was stored in previous call */
+      /** Just return the cached data */
+      return allSubscriptions;
+    }
   };
 
   useEffect(() => {
@@ -475,7 +487,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       "udl://subscriber/similarprograms/",
       data
     );
-    setSimilarData(massagedData);
     return massagedData;
   };
 
@@ -775,8 +786,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       udlParam = "udl://discovery/programSchedules/" + params;
     }
     const data = await getDataFromUDL(udlParam);
-    setdiscoverySchedulesData(data.data);
-    return data;
+    return data.data;
   };
 
   const getDiscoveryProgramData = async (assetData: AssetData) => {
@@ -802,8 +812,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       data.data,
       assetTypeObject[assetData.contentTypeEnum]
     );
-    setdiscoveryProgramData(massagedData);
-
     return massagedData;
   };
 
@@ -818,8 +826,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }&id=${id}`;
     const udlParam = "udl://subscriber/programplayactions/" + params;
     const data = await getDataFromUDL(udlParam);
-    setplayActionsData(data.data);
-    return data;
+    return data.data;
   };
 
   const getProgramSubscriberData = async (assetData: AssetData) => {
@@ -865,9 +872,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const getUDPData = async () => {
     console.log("Fetching UDP data");
     if (
-      !similarDataQuery.data &&
-      !discoveryProgramDataQuery.data &&
-      !discoverySchedulesQuery.data &&
+      !similarItemsData &&
+      !discoveryProgramQueryData &&
+      !discoverySchedulesQueryData &&
       !playActionsQuery.data &&
       !subscriberDataQuery.data
     ) {
@@ -934,32 +941,66 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         `${genre.Name}${index === genres.length - 1 ? "" : metadataSeparator}`
     );
 
-  const similarDataQuery = useQuery(
+  const {
+    data: similarItemsData,
+    isLoading: isLoadingSimilarItems,
+    isFetching: isFetchingSimilarItems,
+  } = useQuery(
     [`get-similarItems-${assetData?.id}`, assetData],
     getSimilarItemsForFeed,
-    { ...defaultQueryOptions, refetchOnMount: "always" }
+    { ...defaultQueryOptions }
   );
 
-  const discoveryProgramDataQuery = useQuery(
+  useEffect(() => {
+    if (similarItemsData && !isFetchingSimilarItems) {
+      setSimilarData(similarItemsData);
+    }
+  }, [similarItemsData, isFetchingSimilarItems]);
+
+  const {
+    data: discoveryProgramQueryData,
+    isLoading: isLoadingDiscoveryProgramQueryData,
+    isFetching: isFetchingDiscoveryProgramQueryData,
+  } = useQuery(
     ["get-program-data", assetData?.id],
     () => getDiscoveryProgramData(assetData),
     {
       ...defaultQueryOptions,
-      refetchOnMount: "always",
     }
   );
 
-  const discoverySchedulesQuery = useQuery(
+  useEffect(() => {
+    if (discoveryProgramQueryData && !isFetchingDiscoveryProgramQueryData) {
+      setdiscoveryProgramData(discoveryProgramQueryData);
+    }
+  }, [discoveryProgramQueryData, isFetchingDiscoveryProgramQueryData]);
+
+  const {
+    data: discoverySchedulesQueryData,
+    isLoading: isLoadingDiscoverySchedulesQueryData,
+    isFetching: isFetchingDiscoverySchedulesQueryData,
+  } = useQuery(
     ["get-discoveryschedules", assetData?.id],
     () => getDiscoverySchedules(assetData),
-    { ...defaultQueryOptions, refetchOnMount: "always" }
+    { ...defaultQueryOptions }
   );
 
+  useEffect(() => {
+    if (discoverySchedulesQueryData && !isFetchingDiscoverySchedulesQueryData) {
+      setdiscoverySchedulesData(discoverySchedulesQueryData);
+    }
+  }, [discoverySchedulesQueryData, isFetchingDiscoverySchedulesQueryData]);
   const playActionsQuery = useQuery(
     ["get-playActiosn", assetData?.id],
     () => getPlayActions(assetData),
-    { ...defaultQueryOptions, refetchOnMount: "always" }
+    { ...defaultQueryOptions }
   );
+
+  useEffect(() => {
+    if (playActionsQuery.data && !playActionsQuery.isFetching) {
+      setplayActionsData(playActionsQuery.data);
+    }
+  }, [playActionsQuery.data, playActionsQuery.isFetching]);
 
   const subscriberDataQuery = useQuery(
     ["get-subscriber-data", assetData?.id],
@@ -982,7 +1023,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const getAllSubscriptionsQuery = useQuery(
     [`get-AllSubscriptionsQuery`],
     getAllSubscriptionGroups,
-    { ...defaultQueryOptions, refetchOnMount: "always" }
+    { ...defaultQueryOptions }
   );
 
   const { data, isLoading } = useQuery(

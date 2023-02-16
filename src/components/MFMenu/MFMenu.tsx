@@ -28,6 +28,7 @@ import FastImage from "react-native-fast-image";
 import { isFeatureAssigned } from "../../utils/helpers";
 import { GLOBALS } from "../../utils/globals";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { appQueryCache } from "../../config/queries";
 
 interface MFMenuProps {
   navigation: any;
@@ -47,7 +48,9 @@ const MFMenu = (props: MFMenuProps) => {
   const [focused, setFocused] = useState("");
   const testing = false;
   const _onPress = (event: GestureResponderEvent, index: number) => {
-    console.log("Some log");
+    if (__DEV__) {
+      console.log("Current globals", GLOBALS, "QueryCache", appQueryCache);
+    }
     props.onPress && props.onPress(index);
   };
   const _onFocus = (index: number) => {

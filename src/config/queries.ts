@@ -9,6 +9,7 @@ import { GLOBALS } from "../utils/globals";
 import { appUIDefinition, lang, pivots } from "./constants";
 
 export const queryClient = useQueryClient()
+export const appQueryCache = queryClient.getQueryCache();
 export interface QueryResponse {
     data: any;
     isError: boolean;
@@ -78,10 +79,15 @@ const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: bo
     }
 }
 
-export function getAllFeedDataForFeed(feed: FeedItem) {
+export function getAllFeedDataForFeed(feed: FeedItem, nowNextMap: any, currentSlots: any, channelRights: any1) {
     return useQueries(
         feed.Feeds.map(element => {
-            return {
+            return element.Uri.toLowerCase().includes('live') ? {
+                queryKey: ['feed', element.Uri],
+                queryFn: () => getUDLData(element.Uri),
+                staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime,
+                enabled: !!nowNextMap && currentSlots && !!channelRights
+            } : {
                 queryKey: ['feed', element.Uri],
                 queryFn: () => getUDLData(element.Uri),
                 staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime

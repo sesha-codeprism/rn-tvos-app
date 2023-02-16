@@ -51,6 +51,7 @@ import DetailsScreen from "../../views/app/details_pages/Details.Screen";
 import useCurrentSlots from "../../customHooks/useCurrentSlots";
 import EpisodeList from "../../views/app/details_pages/episode_list/EpisodeList";
 import useChannelRights from "../../customHooks/useChannelRights";
+import useLiveData from "../../customHooks/useLiveData";
 
 interface RouterOutletProps {}
 
@@ -293,8 +294,8 @@ interface RouterOutletProps {
 const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
   routerProps: RouterOutletProps
 ) => {
-  const slots = useCurrentSlots();
-  const channelRights = useChannelRights();
+  const { data: channeLMapInfo } = useChannelRights();
+  const { data } = useLiveData(channeLMapInfo);
   return (
     <NavigationContainer>
       <Stack.Navigator

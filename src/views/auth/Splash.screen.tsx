@@ -62,25 +62,27 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     }
   );
 
-  const onDuplexMessage = useCallback((message: any) => {
-    if (message?.type === NotificationType.DeviceDeleted) {
-      const { payload: { deviceId = "" } = {} } = message;
-      if (deviceId === GLOBALS.deviceInfo.deviceId) {
-        // logout
-        const resetStore = resetAuthData();
-        updateStore(resetStore);
-        resetCaches();
-        GLOBALS.rootNavigation.replace(Routes.ShortCode);
+  const onDuplexMessage = useCallback(
+    (message: any) => {
+      if (message?.type === NotificationType.DeviceDeleted) {
+        const { payload: { deviceId = "" } = {} } = message;
+        if (deviceId === GLOBALS.deviceInfo.deviceId) {
+          // logout
+          const resetStore = resetAuthData();
+          updateStore(resetStore);
+          resetCaches();
+          GLOBALS.rootNavigation.replace(Routes.ShortCode);
+        }
+      } else if (message?.type === NotificationType.dvrUpdated) {
+        console.log("DVR update notification received");
+        invalidateQueryBasedOnSpecificKeys(
+          "feed",
+          "udl://dvrproxy/viewable-subscription-items/"
+        );
       }
-    } else if (message?.type === NotificationType.dvrUpdated) {
-      console.log("DVR update notification received");
-      invalidateQueryBasedOnSpecificKeys(
-        "feed",
-        "udl://dvrproxy/viewable-subscription-items/"
-      );
-    }
-  }, [GLOBALS.deviceInfo.deviceId]);
-
+    },
+    [GLOBALS.deviceInfo.deviceId]
+  );
 
   useEffect(() => {
     setDeviceInfo();
@@ -88,7 +90,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
 
     () => {
       currentContext.removeDuplexHandler(onDuplexMessage);
-    }
+    };
   }, []);
 
   useEffect(() => {
@@ -126,8 +128,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         .then(async () => {
           setGlobalData(data?.data).then(async () => {
             await setNativeModuleData();
-            initUdls();
-            await setLiveData();
+            // await setLiveData();
             setDefaultStore(storeResults?.data?.data, data?.data);
             connectDuplex(currentContext.duplexMessage);
             setLoading(false);

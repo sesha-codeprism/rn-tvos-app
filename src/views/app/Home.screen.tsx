@@ -15,7 +15,7 @@ import { FeedItem } from "../../@types/HubsResponse";
 import MFMenu from "../../components/MFMenu/MFMenu";
 import MFLoader from "../../components/MFLoader";
 import { AppStrings } from "../../config/strings";
-import { getAllHubs } from "../../config/queries";
+import { appQueryCache, getAllHubs } from "../../config/queries";
 import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
@@ -147,7 +147,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
 
-  console.log('firstSwimlaneRef ', firstSwimlaneRef);
+  console.log("firstSwimlaneRef ", firstSwimlaneRef);
   return (
     <View style={HomeScreenStyles.container}>
       <ImageBackground

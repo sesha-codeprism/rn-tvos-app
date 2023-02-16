@@ -94,4 +94,4 @@ export const registerDVRProxyUdls = () => {
         { prefix: BASE + '/get-dvr-recorders/', getter: getDVRRecorders }
     ];
     return dvrProxyUdls;
-}
+} 
