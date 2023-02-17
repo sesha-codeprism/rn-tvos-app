@@ -53,6 +53,18 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         decelerationRate="fast"
+        getItemLayout={(data, index) => ({
+          length: 450,
+          offset: 450 * index,
+          index,
+        })}
+        style={{
+          flex: 1,
+        }}
+        snapToAlignment={"start"}
+        snapToInterval={0}
+        maxToRenderPerBatch={5}
+        windowSize={5}
         renderItem={({ item, index }) => {
           return (
             <MFSwimLane
@@ -73,16 +85,12 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
               onListEmptyElementPress={props.onListEmptyElementPress}
               onListFooterElementOnPress={props.onListFooterElementOnPress}
               onFocus={(event) => {
-                flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: 200 }); props.onFocus  && props.onFocus(event);
+                 props.onFocus  && props.onFocus(event);
               }}
               onListEmptyElementFocus={(event) => {
-                  flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: 200 }); props.onListEmptyElementFocus && props.onListEmptyElementFocus(event);
+                  props.onListEmptyElementFocus && props.onListEmptyElementFocus(event);
               }}
               onListFooterElementFocus={(event) => {
-                //@ts-ignore
-                if(event && event.context === 'FeedNotImplemented'){
-                  flatListRef.current?.scrollToIndex({ animated: true, index: index, viewOffset: 200 }); props.onListEmptyElementFocus && props.onListEmptyElementFocus(event);
-                }
                 props.onListFooterElementFocus && props.onListFooterElementFocus(event);
               }}
               navigation={props.navigation}

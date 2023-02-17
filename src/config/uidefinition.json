@@ -2867,6 +2867,7 @@
       },
       "metadataContainer1Styles": {
         "width": 500,
+        "height": 141,
         "flexDirection": "row",
         "marginTop": 5,
         "paddingLeft": 10

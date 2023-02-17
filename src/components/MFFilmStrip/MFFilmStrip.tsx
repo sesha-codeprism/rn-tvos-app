@@ -383,23 +383,25 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
             </View>
           )
         }
-        <View
-          style={{
-            display: "flex",
-            flex: 1,
-            flexDirection: "column"
-          }}
-        >
-          {!(focusedIndex  === dataArray?.length - 1  && dataArray[dataArray?.length  - 1].viewAll) && currentFeed &&
-            props.swimLaneKey?.trim().length! > 0 &&
-            (props.swimLaneKey === props.title ||
-              props.swimLaneKey === currentFeed?.title) && (
-              <MFMetaData
-                currentFeed={currentFeed}
-                key={`${props.filmStripId}-flatlist`}
-              />
-            )}
-        </View>
+        {
+          !(focusedIndex  === dataArray?.length - 1  && dataArray[dataArray?.length  - 1].viewAll) && currentFeed &&
+          props.swimLaneKey?.trim().length! > 0 &&
+          (props.swimLaneKey === props.title ||
+            props.swimLaneKey === currentFeed?.title) ? (
+              <View
+              style={{
+               width: 500,
+               height: 70,
+               paddingTop:5
+              }}
+            >
+                  <MFMetaData
+                    currentFeed={currentFeed}
+                    key={`${props.filmStripId}-flatlist`}
+                  />
+            </View>
+            ): <></>
+        }
       </View>
     );
   }
