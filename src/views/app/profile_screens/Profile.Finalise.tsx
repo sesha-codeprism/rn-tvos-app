@@ -124,8 +124,10 @@ const ProfileFinalisationScreen: React.FunctionComponent<
         currentContext.setUserProfile(GLOBALS.userProfile);
       }
       setLoading(false);
-      // props.navigation.pop(5);
-      props.navigation.replace(Routes.Home);
+      props.navigation.reset({
+        index: 0,
+        routes: [{name: Routes.Home}],
+      });
     } catch (error) {
       console.log("error saving profile", error);
       setLoading(false);

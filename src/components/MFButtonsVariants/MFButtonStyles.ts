@@ -74,14 +74,14 @@ const Styles = StyleSheet.create({
   railTitle: {
     color: "#A7A7A7",
     fontSize: 31,
-    marginVertical: 15,
+    marginBottom: 15,
+    marginTop: 35,
     fontFamily: "Inter-SemiBold",
     fontWeight: "600",
     lineHeight: 50
   },
   railCard: {
     width: 400,
-    height: 280,
     borderRadius: 5,
     marginRight: 30,
   },

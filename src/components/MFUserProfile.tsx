@@ -79,7 +79,10 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> =
           GLOBALS.store!.userProfile = GLOBALS.userProfile;
           updateStore(GLOBALS.store);
           currentContext.setUserProfile(GLOBALS.userProfile);
-          props.navigation.replace(Routes.Home);
+          props.navigation.reset({
+            index: 0,
+            routes: [{name: Routes.Home}],
+          });
         } else {
           console.log("No user profile");
           props.navigation.navigate(Routes.CreateProfile, {

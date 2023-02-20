@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   titleContainerStyles: {
-    flex: 0.8,
+    flex: 0.77,
     justifyContent: "center",
   },
   titleTextStyles: {
@@ -527,7 +527,7 @@ const styles = StyleSheet.create({
     backgroundColor: appUIDefinition.theme.backgroundColors.primary1,
   },
   filterButtonContainerStyle: {
-    flex: 0.2,
+    flex: 0.23,
     justifyContent: "center",
     alignItems: "center",
   },

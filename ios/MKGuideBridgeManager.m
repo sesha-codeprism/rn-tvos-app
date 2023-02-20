@@ -18,4 +18,7 @@ RCT_EXTERN_METHOD(setEnvironment:(NSDictionary)value)
 RCT_EXTERN_METHOD(setToken:(NSString)value)
 RCT_EXTERN_METHOD(setRefreshToken:(NSString)value)
 RCT_EXTERN_METHOD(clearCacheData)
+RCT_EXTERN_METHOD(setchannelMapRights:(NSDictionary)value)
+RCT_EXTERN_METHOD(setQualityforFilters:(NSArray)value)
+
 @end

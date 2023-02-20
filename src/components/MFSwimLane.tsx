@@ -162,7 +162,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
     };
 
     return (
-      <View style={{ flexDirection: "column" }}>
+      <View style={[{ flexDirection: "column" }]}>
         <MFFilmStrip
           // @ts-ignore
           ref={ref}
@@ -196,8 +196,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           appendViewAll
           swimLaneKey={props.swimLaneKey}
           updateSwimLaneKey={props.updateSwimLaneKey}
-          railContainerStyles={{display: "flex", flex: 1, flexDirection: "column"}}
-          railTitleStyles={{flex: 1, flexDirection: "column", marginTop: 30}}
+          railContainerStyles={{height:450}}
           libraryItems={props.data}
           customViewAllTitle={props.customViewAllTitle}
           feed={props.feed}

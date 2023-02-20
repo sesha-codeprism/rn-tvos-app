@@ -33,6 +33,8 @@ extension FullGuideComponent.MKFullGuideStorageManager {
   public func setEnvironment(value: Swift.Dictionary<Swift.String, Any>)
   public func setToken(value: Swift.String)
   public func setRefrestToken(value: Swift.String)
+  public func setQualityValues(value: [Swift.String])
+  public func setChannelMapRights(value: Swift.Dictionary<Swift.String, Any>)
 }
 @_hasMissingDesignatedInitializers public class LiveChannel : Swift.Codable {
   @objc deinit
@@ -41,4 +43,12 @@ extension FullGuideComponent.MKFullGuideStorageManager {
 }
 @_hasMissingDesignatedInitializers public class LiveStation : FullGuideComponent.LiveChannel {
   @objc deinit
+}
+public struct EPGFilterCellModel {
+}
+public struct EPGFilterDataSource {
+}
+public protocol confirmFilterProtocol {
+  func filtreGuideWith(quality: [FullGuideComponent.EPGFilterCellModel], filterBy: [FullGuideComponent.EPGFilterCellModel], Category: [FullGuideComponent.EPGFilterCellModel])
+  func cancelFilter()
 }
