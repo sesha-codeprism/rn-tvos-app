@@ -12,75 +12,79 @@ interface Props {
 }
 const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focused, setFocused] = useState<any>(0);
-  const isDevSettingEnabled = !!GLOBALS.bootstrapSelectors?.Features.find((f: any) => f === 'dev_settings');
-  const menu = isDevSettingEnabled ? [
-    {
-      title: AppStrings.str_settings_home_account_settings,
-      action: "accounts_screen",
-      icon: "",
-    },
-    {
-      title: AppStrings.str_settings_home_parental_controls,
-      action: "parental_controll",
-      icon: "",
-    },
-    {
-      title: AppStrings.str_settings_home_display,
-      action: "display",
-      icon: "",
-    },
-    {
-      title: AppStrings.str_settings_home_audio,
-      action: "audio",
-      icon: "",
-    },
-    {
-      title: AppStrings.str_settings_home_dvr,
-      action: "dvr_settings",
-      icon: "",
-    },
-    {
-      title: AppStrings.str_settings_home_system,
-      action: "system_settings",
-      icon: "",
-    },
-    {
-      title: "Developers",
-      action: "developer_settings",
-      icon: "",
-    },
-  ] : [
-    {
-      title: AppStrings.str_settings_account_label,
-      action: "accounts_screen",
-      icon: "",
-    },
-    {
-      title: AppStrings.str_settings_pcon_label,
-      action: "parental_controll",
-      icon: "",
-    },
-    {
-      title: AppStrings.str_settings_display_label,
-      action: "display",
-      icon: "",
-    },
-    {
-      title: AppStrings.str_playback_audio_title,
-      action: "audio",
-      icon: "",
-    },
-    {
-      title: AppStrings.str_menu_dvr,
-      action: "dvr_settings",
-      icon: "",
-    },
-    {
-      title: AppStrings.str_settings_system_tab_label,
-      action: "system_settings",
-      icon: "",
-    }
-  ];
+  const isDevSettingEnabled = !!GLOBALS.bootstrapSelectors?.Features.find(
+    (f: any) => f === "dev_settings"
+  );
+  const menu = isDevSettingEnabled
+    ? [
+        {
+          title: AppStrings.str_settings_home_account_settings,
+          action: "accounts_screen",
+          icon: "",
+        },
+        {
+          title: AppStrings.str_settings_home_parental_controls,
+          action: "parental_controll",
+          icon: "",
+        },
+        {
+          title: AppStrings.str_settings_home_display,
+          action: "display",
+          icon: "",
+        },
+        {
+          title: AppStrings.str_settings_home_audio,
+          action: "audio",
+          icon: "",
+        },
+        {
+          title: AppStrings.str_settings_home_dvr,
+          action: "dvr_settings",
+          icon: "",
+        },
+        {
+          title: AppStrings.str_settings_home_system,
+          action: "system_settings",
+          icon: "",
+        },
+        {
+          title: "Developers",
+          action: "developer_settings",
+          icon: "",
+        },
+      ]
+    : [
+        {
+          title: AppStrings.str_settings_account_label,
+          action: "accounts_screen",
+          icon: "",
+        },
+        {
+          title: AppStrings.str_settings_pcon_label,
+          action: "parental_controll",
+          icon: "",
+        },
+        {
+          title: AppStrings.str_settings_display_label,
+          action: "display",
+          icon: "",
+        },
+        {
+          title: AppStrings.str_playback_audio_title,
+          action: "audio",
+          icon: "",
+        },
+        {
+          title: AppStrings.str_menu_dvr,
+          action: "dvr_settings",
+          icon: "",
+        },
+        {
+          title: AppStrings.str_settings_system_tab_label,
+          action: "system_settings",
+          icon: "",
+        },
+      ];
 
   useEffect(() => {}, [AppStrings]);
   return (

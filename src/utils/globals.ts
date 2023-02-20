@@ -101,10 +101,14 @@ interface GLOBALSType {
   /** ChannelRights Info */
   channelRights: any;
   /** User account info  */
-  userAccountInfo: UserAccountInfo
+  userAccountInfo: UserAccountInfo;
+  allSubscriptionGroups: any;
+  viewableSubscriptions: any;
+  scheduledSubscriptions: any
   browseGalleryData?: BrowseGallery;
   currentSlots: any
   channelMap: any
+  recorders: any
   /** Current Now-Next Map updated every three hours time */
   nowNextMap: any;
   moviesAndTvShows?: TrendingItems[];

@@ -50,6 +50,8 @@ import MFButton, {
 import { styles } from "../../BrowsePages/BrowseCategory/Browse.Category.screen";
 import { DetailsSidePanel } from "../DetailSidePanel";
 import { AppImages } from "../../../../assets/images";
+import { Definition as DefinitionOfItem } from "../../../../utils/DVRUtils";
+import { EpisodeRecordOptionsProps } from "../EpsiodeRecordOptions";
 
 interface EpisodeListProps {
   navigation: NativeStackNavigationProp<any>;
@@ -74,12 +76,14 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const { udpData, subscriberData, discoveryData } = navigationParams;
   const [currentSeason, setCurrentSeason] = useState<any>();
   const [seasonItemHeight, setSeasonItemHeight] = useState(1);
-  const [currentEpisode, setCurrentEpisode] = useState<any>();
-  const [ctaList, setCTAList] = useState(Array<any>);
+  const [currentEpisode, setCurrentEpisode] = useState<any>(undefined);
+  const [ctaList, setCTAList] = useState<any>();
   const [currentSeasonEpisodes, setCurrentSeasonEpisodes] = useState(
     Array<any>
   );
   const [episodeDetailsData, setEpisodeDetailsData] = useState<any>();
+  const [sideMenuProps, setSideMenuProps] = useState<any>();
+  const [panelType, setPanelType] = useState<any>(undefined);
   const [open, setOpen] = useState(false);
 
   const metadataList: string[] = discoveryData?.ReleaseYear
@@ -113,13 +117,67 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   };
 
   const toggleSidePanel = () => {
+    setPanelType("MoreInfo");
     setOpen(open);
     drawerRef?.current?.open();
     // drawerRef.current.open();
   };
 
   const ctaButtonPress: any = {
-    [AppStrings?.str_details_program_record_button]: () => {},
+    [AppStrings?.str_details_program_record_button]: () => {
+      drawerRef?.current?.close();
+      setSideMenuProps(undefined);
+      setPanelType(undefined);
+      const { stationId } = navigationParams;
+
+      if (!episodeSchedules) {
+        console.warn("No Schedules");
+        return;
+      }
+      const schedules = episodeSchedules;
+      if (schedules && schedules.length) {
+        let schedule = schedules[0];
+        // Get the correct schedule, the one which is shown in UI
+        if (stationId && schedules && schedules.length) {
+          schedule =
+            schedules.find((s: any) => s?.StationId === stationId) || schedule;
+        }
+        const recordingOptions = {
+          Definition: DefinitionOfItem.SINGLE_PROGRAM,
+          Parameters: [
+            {
+              Key: "ProgramId",
+              Value: episodeDiscoveryData?.Id,
+            },
+          ],
+          Settings: {
+            StationId: schedule.StationId,
+            ChannelNumber: schedule.ChannelNumber as number,
+            StartUtc: schedule.StartUtc,
+            MaximumViewableShows: undefined,
+            EndLateSeconds: 0,
+            RecyclingDisabled: false,
+            ShowType: "FirstRunOnly",
+            AirtimeDomain: "Anytime",
+            ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId.toString(),
+            IsMultiChannel: false,
+          },
+        };
+        console.log(recordingOptions);
+        const params: EpisodeRecordOptionsProps = {
+          isNew: true,
+          programId: episodeDiscoveryData.Id,
+          seriesId: episodeDiscoveryData.SeriesId,
+          isGeneric: episodeDiscoveryData?.isGeneric,
+          programDiscoveryData: episodeDiscoveryData,
+          recordingOptions: recordingOptions,
+        };
+        setSideMenuProps(params);
+        setPanelType("EpisodeRecord");
+        setOpen(open);
+        drawerRef?.current?.open();
+      }
+    },
     [AppStrings?.str_details_cta_more_info]: toggleSidePanel,
     [AppStrings?.str_details_cta_play]: () => {},
     [AppStrings?.str_details_cta_trailer]: () => {},
@@ -198,62 +256,6 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     }
   };
 
-  const getAllViewableSubscriptions = async ({ queryKey }: any) => {
-    /** As a thumb rule, let all DVR calls be called without keys to enable cache-reuse */
-    const viewableSubscriptionGroups = queryClient.getQueryData([
-      "get-viewableSubscriptionGroupsQuery",
-    ]);
-    if (!viewableSubscriptionGroups) {
-      /** This block execution means subscriber call hasn't ben done yet.. */
-      /** Make the api call now and store it in cache  */
-      const udlParams = "udl://dvrproxy/viewable-subscription-items/";
-      const data = await getDataFromUDL(udlParams);
-      const massagedData = getMassagedData(udlParams, data);
-      return massagedData;
-    } else {
-      /** Basically we got the response from cache where it has was stored in previous call */
-      /** Just return the cached data */
-      return viewableSubscriptionGroups;
-    }
-  };
-
-  const getScheduledSubScriptions = async ({ queryKey }: any) => {
-    const scheduledSubscriptions = queryClient.getQueryData([
-      "get-ScheduledSubscriptionsQuery",
-    ]);
-    if (!scheduledSubscriptions) {
-      /** This block execution means subscriber call hasn't ben done yet.. */
-      /** Make the api call now and store it in cache  */
-      const udlParams = "udl://dvrproxy/get-scheduled-subscription-groups/";
-      const data = await getDataFromUDL(udlParams);
-      const massagedData = getMassagedData(udlParams, data);
-      return massagedData;
-    } else {
-      /** Basically we got the response from cache where it has was stored in previous call */
-      /** Just return the cached data */
-      return scheduledSubscriptions;
-    }
-  };
-
-  const getAllSubscriptionGroups = async ({ queryKey }: any) => {
-    const allSubscriptions = queryClient.getQueryData([
-      `get-AllSubscriptionsQuery`,
-    ]);
-
-    if (!allSubscriptions) {
-      /** This block execution means subscriber call hasn't ben done yet.. */
-      /** Make the api call now and store it in cache  */
-      const udlParams = "udl://dvrproxy/get-all-subscriptionGroups/";
-      const data = await getDataFromUDL(udlParams);
-      const massagedData = getMassagedData(udlParams, data);
-      return massagedData;
-    } else {
-      /** Basically we got the response from cache where it has was stored in previous call */
-      /** Just return the cached data */
-      return allSubscriptions;
-    }
-  };
-
   const getEpisodeDiscoveryData = async ({ queryKey }: any) => {
     const currentEpisode = queryKey[1];
     if (!currentEpisode) {
@@ -289,24 +291,6 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     return udlResponse.data;
   };
 
-  const getRecorders = async ({ queryKey }: any) => {
-    const dvrRecorders = queryClient.getQueryData([`get-dvr-recorders`]);
-
-    if (!dvrRecorders) {
-      /** This block execution means subscriber call hasn't ben done yet.. */
-      /** Make the api call now and store it in cache  */
-      const udlParams = "udl://dvrproxy/get-dvr-recorders/";
-      const data = await getDataFromUDL(udlParams);
-      //   const massagedData = getMassagedData(udlParams, data);
-      //   return massagedData;
-      return data.data;
-    } else {
-      /** Basically we got the response from cache where it has was stored in previous call */
-      /** Just return the cached data */
-      return dvrRecorders;
-    }
-  };
-
   const getEpisodeSchedules = async ({ queryKey }: any) => {
     const [, episodeInfo] = queryKey;
     if (!currentEpisode) {
@@ -324,7 +308,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     }`;
     const udlParam = "udl://discovery/programSchedules/" + params;
     const data = await getDataFromUDL(udlParam);
-    return data;
+    return data.data;
   };
 
   const { data: seasonPlayOptions, isLoading } = useQuery(
@@ -339,33 +323,9 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     defaultQueryOptions
   );
 
-  const { data: viewableSubscriptionGroups } = useQuery(
-    ["get-viewableSubscriptionGroupsQuery"],
-    getAllViewableSubscriptions,
-    defaultQueryOptions
-  );
-
-  const { data: scheduledSubScriptionGroups } = useQuery(
-    ["get-ScheduledSubscriptionsQuery"],
-    getScheduledSubScriptions,
-    defaultQueryOptions
-  );
-
-  const { data: allSubscriptionGroups } = useQuery(
-    ["get-AllSubscriptionsQuery"],
-    getAllSubscriptionGroups,
-    defaultQueryOptions
-  );
-
   const { data: episodeDiscoveryData } = useQuery(
     ["get-episode-discoveryData", currentEpisode],
     getEpisodeDiscoveryData,
-    defaultQueryOptions
-  );
-
-  const { data: dvrRecorders } = useQuery(
-    ["get-dvr-recorders"],
-    getRecorders,
     defaultQueryOptions
   );
 
@@ -383,110 +343,98 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (
-      !seasonPlayOptions &&
-      !episodeDiscoveryData &&
-      !allSubscriptionGroups &&
-      !viewableSubscriptionGroups &&
-      !scheduledSubScriptionGroups &&
-      !episodeSchedules &&
-      !dvrRecorders
-    ) {
+    if (seasonPlayOptions && episodeDiscoveryData && episodeSchedules) {
+      const {
+        discoveryData,
+        subscriberData,
+        stationId,
+        isSeriesRecordingBlocked,
+        isFromEPG,
+        StationIdFromEPG,
+        udpData,
+      } = navigationParams;
+      const hasFeatureIosCarrierBilling =
+        isFeatureAssigned("IOSCarrierBilling");
+      const allSubcriptionGroups = {
+        ...(GLOBALS.scheduledSubscriptions || {}),
+        SubscriptionGroups: [
+          ...((GLOBALS.scheduledSubscriptions &&
+            GLOBALS.scheduledSubscriptions.SubscriptionGroups) ||
+            []),
+          ...((GLOBALS.viewableSubscriptions &&
+            GLOBALS.viewableSubscriptions.SubscriptionGroups) ||
+            []),
+        ],
+      };
+      const userChannelRights = GLOBALS.channelRights;
+      if (seasonPlayOptions?.Episodes?.length) {
+        const selectedEpisode = currentEpisode;
+        let selectedEpisodeNumber = undefined;
+        let selectedEpisodeSeasonNumber = undefined;
+        if (selectedEpisode && selectedEpisode.CatalogInfo) {
+          selectedEpisodeNumber = selectedEpisode.CatalogInfo.EpisodeNumber;
+          selectedEpisodeSeasonNumber =
+            selectedEpisode.CatalogInfo.SeasonNumber;
+        }
+        //TODO: Find out what this is supposed to do..
+        // const liveSchedules = selectors.live.scheduleCache.get(state);
+
+        let filteredEpisodePlayOptions = undefined;
+        for (const episodePlayOptions of seasonPlayOptions.Episodes) {
+          const { EpisodeNumber, SeasonNumber } =
+            episodePlayOptions && episodePlayOptions?.CatalogInfo;
+          if (
+            selectedEpisodeNumber === EpisodeNumber &&
+            selectedEpisodeSeasonNumber === SeasonNumber
+          ) {
+            filteredEpisodePlayOptions = episodePlayOptions;
+            break;
+          }
+        }
+
+        const epData = massageProgramDataForUDP(
+          episodePlayOptions,
+          subscriberData,
+          episodeDiscoveryData,
+          GLOBALS.channelMap,
+          episodeSchedules,
+          GLOBALS.currentSlots,
+          allSubcriptionGroups,
+          GLOBALS.userAccountInfo,
+          [],
+          filteredEpisodePlayOptions,
+          GLOBALS.viewableSubscriptions,
+          GLOBALS.scheduledSubscriptions,
+          GLOBALS.recorders,
+          //TODO: networkIHD isn't supposed to be auto-undefined.. Implement this and pick up the current value
+          undefined,
+          isSeriesRecordingBlocked,
+          stationId,
+          undefined,
+          undefined,
+          userChannelRights,
+          isFromEPG,
+          StationIdFromEPG,
+          hasFeatureIosCarrierBilling
+        );
+        setEpisodeDetailsData(epData);
+        const { ctaButtons = undefined } = epData || {};
+
+        if (
+          currentEpisode?.ProgramId &&
+          [episodeDiscoveryData?.Id, episodePlayOptions?.ProgramId].every(
+            (id: string) => id === currentEpisode?.ProgramId
+          )
+        ) {
+          // set Initial cta buttons for the selected episode
+          setCTAList(ctaButtons);
+        }
+      }
+    } else {
       console.log("Haven't received full episode details yet..");
       return;
     }
-    const {
-      discoveryData,
-      subscriberData,
-      stationId,
-      isSeriesRecordingBlocked,
-      isFromEPG,
-      StationIdFromEPG,
-      udpData,
-    } = navigationParams;
-    const hasFeatureIosCarrierBilling = isFeatureAssigned("IOSCarrierBilling");
-    const allSubcriptionGroups = {
-      ...(scheduledSubScriptionGroups || {}),
-      SubscriptionGroups: [
-        ...((scheduledSubScriptionGroups &&
-          scheduledSubScriptionGroups.SubscriptionGroups) ||
-          []),
-        ...((viewableSubscriptionGroups &&
-          viewableSubscriptionGroups.SubscriptionGroups) ||
-          []),
-      ],
-    };
-    const userChannelRights = GLOBALS.channelRights;
-    if (seasonPlayOptions?.Episodes?.length) {
-      const selectedEpisode = currentEpisode;
-      let selectedEpisodeNumber = undefined;
-      let selectedEpisodeSeasonNumber = undefined;
-      if (selectedEpisode && selectedEpisode.CatalogInfo) {
-        selectedEpisodeNumber = selectedEpisode.CatalogInfo.EpisodeNumber;
-        selectedEpisodeSeasonNumber = selectedEpisode.CatalogInfo.SeasonNumber;
-      }
-      //TODO: Find out what this is supposed to do..
-      // const liveSchedules = selectors.live.scheduleCache.get(state);
-
-      let filteredEpisodePlayOptions = undefined;
-      for (const episodePlayOptions of seasonPlayOptions.Episodes) {
-        const { EpisodeNumber, SeasonNumber } =
-          episodePlayOptions && episodePlayOptions?.CatalogInfo;
-        if (
-          selectedEpisodeNumber === EpisodeNumber &&
-          selectedEpisodeSeasonNumber === SeasonNumber
-        ) {
-          filteredEpisodePlayOptions = episodePlayOptions;
-          break;
-        }
-      }
-
-      const epData = massageProgramDataForUDP(
-        episodePlayOptions,
-        subscriberData,
-        episodeDiscoveryData,
-        GLOBALS.channelMap,
-        episodeSchedules,
-        GLOBALS.currentSlots,
-        allSubcriptionGroups,
-        GLOBALS.userAccountInfo,
-        [],
-        filteredEpisodePlayOptions,
-        viewableSubscriptionGroups,
-        scheduledSubScriptionGroups,
-        dvrRecorders,
-        //TODO: networkIHD isn't supposed to be auto-undefined.. Implement this and pick up the current value
-        undefined,
-        isSeriesRecordingBlocked,
-        stationId,
-        undefined,
-        undefined,
-        userChannelRights,
-        isFromEPG,
-        StationIdFromEPG,
-        hasFeatureIosCarrierBilling
-      );
-      setEpisodeDetailsData(epData);
-      const { ctaButtons = undefined } = episodeDetailsData || {};
-
-      if (
-        currentEpisode?.ProgramId &&
-        [episodeDiscoveryData?.Id, episodePlayOptions?.ProgramId].every(
-          (id: string) => id === currentEpisode?.ProgramId
-        )
-      ) {
-        // set Initial cta buttons for the selected episode
-        setCTAList(ctaButtons);
-      }
-    }
-  }, [
-    seasonPlayOptions,
-    episodeDiscoveryData,
-    allSubscriptionGroups,
-    viewableSubscriptionGroups,
-    scheduledSubScriptionGroups,
-    dvrRecorders,
-  ]);
+  }, [seasonPlayOptions, episodeDiscoveryData, episodeSchedules]);
 
   const getEpisodesInChunks = (start: number, offset: number) => {
     if (seasonPlayOptions) {
@@ -651,7 +599,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   };
 
   const handleEpisodeItemFocus = (episode: any, index: number) => {
-    setCurrentEpisode(episode);
+    // setCurrentEpisode(episode);
     const { discoveryData } = navigationParams;
 
     discoveryData["currentEpisode"] = episode;
@@ -990,6 +938,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         overlay={false}
         opacity={1}
         open={open}
+        openPage={panelType}
         animatedWidth={SCREEN_WIDTH * 0.37}
         closeOnPressBack={false}
         navigation={props.navigation}
@@ -1001,6 +950,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
             navigationParams.udpData?.genre ||
             navigationParams.discoveryProgramData?.genre,
         }}
+        episodeRecordingProps={sideMenuProps}
       />
     </PageContainer>
   );

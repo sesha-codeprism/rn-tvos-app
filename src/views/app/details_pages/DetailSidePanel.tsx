@@ -7,10 +7,16 @@ import React, {
 } from "react";
 import { Animated, Dimensions, StyleSheet, Modal } from "react-native";
 import { GLOBALS } from "../../../utils/globals";
+import EpisodeRecordOptions, {
+  EpisodeRecordOptionsProps,
+} from "./EpsiodeRecordOptions";
 import MoreInfoPanel from "./MoreInfoPanel";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
+
+// export enum OpenPages = 'MoreInf0'
+export type OpenPages = "MoreInfo" | "EpisodeRecord";
 interface DetailsDrawerProps {
   open: boolean;
   drawerPercentage: number;
@@ -22,6 +28,7 @@ interface DetailsDrawerProps {
   closeOnPressBack?: boolean;
   navigation?: any;
   children?: any;
+  openPage: OpenPages;
   moreInfoProps: {
     udpData: any;
     networkInfo: any;
@@ -29,6 +36,7 @@ interface DetailsDrawerProps {
     episodeData?: any;
     episodeDetailsData?: any;
   };
+  episodeRecordingProps?: EpisodeRecordOptionsProps;
 }
 const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
   const [expanded, setExpanded] = useState(props.open);
@@ -109,6 +117,7 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
       <Modal
         animationType="none"
         transparent={true}
+        focusable
         visible={expanded}
         onRequestClose={() => {
           setExpanded(false);
@@ -137,13 +146,27 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
               },
             ]}
           >
-            <MoreInfoPanel
-              udpData={props.moreInfoProps.udpData}
-              networkInfo={props.moreInfoProps.networkInfo}
-              genres={props.moreInfoProps.genres}
-              episodeData={props.moreInfoProps.episodeData}
-              episodeDetailsData={props.moreInfoProps.episodeDetailsData}
-            />
+            {props.openPage === "MoreInfo" && (
+              <MoreInfoPanel
+                udpData={props.moreInfoProps.udpData}
+                networkInfo={props.moreInfoProps.networkInfo}
+                genres={props.moreInfoProps.genres}
+                episodeData={props.moreInfoProps.episodeData}
+                episodeDetailsData={props.moreInfoProps.episodeDetailsData}
+              />
+            )}
+            {props.openPage === "EpisodeRecord" && (
+              <EpisodeRecordOptions
+                isNew={props.episodeRecordingProps!.isNew}
+                programDiscoveryData={
+                  props.episodeRecordingProps!.programDiscoveryData
+                }
+                programId={props.episodeRecordingProps!.programId}
+                seriesId={props.episodeRecordingProps!.seriesId}
+                isGeneric={props.episodeRecordingProps!.isGeneric}
+                recordingOptions={props.episodeRecordingProps!.recordingOptions}
+              />
+            )}
           </Animated.View>
         </Animated.View>
       </Modal>

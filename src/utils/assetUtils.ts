@@ -14,6 +14,16 @@ import { replacePlaceHoldersInTemplatedString } from "./strings";
 import { generateType, getImageUri, isScheduleCurrent, metadataSeparator } from "./Subscriber.utils";
 import { getFontIcon } from "../config/strings";
 import * as _ from "lodash";
+import {
+    calculateProgramButtonAction,
+    DvrButtonAction,
+    calculateSeriesButtonAction,
+    DvrButtonActionType,
+    isDateWithinExpiryThreshold,
+    hasRecordingExpired,
+    validateEntitlements,
+} from '../utils/DVRUtils'
+
 
 
 export const assetExpiryDaysThreshold = 14;
@@ -27,14 +37,7 @@ const audioTagIndicator: any = {
     AudioDescription: "1",
     Dolby: "1",
 };
-export enum DvrButtonAction {
-    None,
-    Record,
-    Edit,
-    Promote,
-    ResolveConflicts,
-    Wait,
-}
+
 
 export enum DvrCapabilityType {
     NODVR = "NoDvr",
@@ -1257,7 +1260,7 @@ export const massageDVRFeed = (
     list: any,
     sourceType: SourceType = SourceType.DVR,
     type?: any,
-    channelMap?: any,
+    channelMap?: LiveChannelMap,
     requiredAll?: boolean,
     recordingBookmarks?: any
 ): any => {
@@ -1410,12 +1413,12 @@ export const massageDVRFeed = (
                         (item.SeriesId === bookmark.SeriesId &&
                             SubscriptionItem.ProgramId ===
                             bookmark.ProgramId) ||
-                        SubscriptionItem.ProgramId === bookmark.ProgramId
+                        SubscriptionItem.ProgramId === bookmark.ProgramId ||
+                        item?.ProgramId === bookmark.ProgramId
                     ) {
                         if (bookmark.TimeSeconds < bookmark.RuntimeSeconds) {
-                            item["progress"] = bookmark
-                                ? bookmark.TimeSeconds / bookmark.RuntimeSeconds
-                                : undefined;
+                            item["progress"] =
+                                bookmark.TimeSeconds / bookmark.RuntimeSeconds;
                             item["isWatched"] = false;
                         } else if (
                             bookmark.TimeSeconds >= bookmark.RuntimeSeconds
@@ -1903,7 +1906,8 @@ export const massageProgramDataForUDP = (
     channeRights?: any,
     isFromEPG?: boolean,
     StationIdFromEPG?: any,
-    hasFeatureIosCarrierBilling?: boolean
+    hasFeatureIosCarrierBilling?: boolean,
+    recordingBookmarks?: any
 ): any => {
     let programUDPData: any = {};
     let ipStatus = account?.ClientIpStatus || {};
@@ -2113,6 +2117,8 @@ export const massageProgramDataForUDP = (
     let isRentalPurchaseOrSubscribed = false;
     let isRent = false;
     let rentalWindowMassage = "";
+    let vodEntitlements: any = []; // TODO: to be deleted and combinedEntitlements to be refactored to host
+    //VOD, DVR and Catchup entitlements individually
     vods?.length > 0 &&
         vods.map((vod: any) => {
             // Networks
@@ -2174,9 +2180,10 @@ export const massageProgramDataForUDP = (
 
             // Collect Entitlements from CatalogInfo
             vodCatalogInfo = vod.CatalogInfo;
-            vod.CatalogInfo?.Entitlements?.length &&
+            if (vod.CatalogInfo?.Entitlements?.length) {
                 combinedEntitlements.push(...vod.CatalogInfo?.Entitlements);
-
+                vodEntitlements.push(...vod.CatalogInfo?.Entitlements);
+            }
             // Play Actions
             vod.PlayActions?.length > 0 &&
                 vod.PlayActions.map((playAction: any) => {
@@ -2191,8 +2198,10 @@ export const massageProgramDataForUDP = (
                     }
 
                     // Restrictions
-                    playAction.Restrictions?.length &&
+                    if (playAction.Restrictions?.length) {
                         combinedEntitlements.push(...playAction.Restrictions);
+                        vodEntitlements.push(...playAction.Restrictions);
+                    }
 
                     // Expiry attribute
                     if (
@@ -2427,6 +2436,7 @@ export const massageProgramDataForUDP = (
         combinedEntitlements
     );
     programUDPData["combinedEntitlements"] = combinedEntitlements;
+    programUDPData["vodEntitlements"] = vodEntitlements;
 
     programUDPData["isInHome"] = isInHome(combinedEntitlements, ipStatus);
     if (programUDPData["isInHome"] && combinedEntitlements) {
@@ -2708,6 +2718,13 @@ export const massageProgramDataForUDP = (
         programUDPData["ctaButtons"]
     );
 
+    if (
+        subscriptionItemForProgram?.ProgramDetails?.UniversalProgramId &&
+        recordingBookmarks?.length &&
+        isRecordingWatched(recordingBookmarks, playOptions?.ProgramId)
+    ) {
+        programUDPData["statusText"].unshift(AppStrings?.str_Watched);
+    }
     //Priority for subscription require
     let index = programUDPData["statusText"].indexOf(
         AppStrings?.str_subscription_required
@@ -3323,6 +3340,42 @@ export const getPPVService = (
         return service;
     }
     return undefined;
+};
+
+const getRecordButton = (
+    dvrPlayActions: DvrButtonAction,
+    isFromSeries?: boolean,
+    subscription?: any
+) => {
+    if (dvrPlayActions === DvrButtonAction.Record) {
+        return {
+            buttonType: "TextIcon",
+            buttonText: !isFromSeries
+                ? AppStrings?.str_details_program_record_button
+                : AppStrings?.str_details_series_record_button,
+            buttonAction: !isFromSeries
+                ? AppStrings?.str_details_program_record_button
+                : AppStrings?.str_details_series_record_button,
+            iconSource: !isFromSeries ? recordSingle : recordSeries,
+            subscription,
+        };
+    } else if (dvrPlayActions === DvrButtonAction.Edit) {
+        return {
+            buttonType: "TextIcon",
+            buttonText: AppStrings?.str_app_edit,
+            buttonAction: AppStrings?.str_app_edit,
+            iconSource: recordEdit,
+            subscription,
+        };
+    } else if (dvrPlayActions === DvrButtonAction.ResolveConflicts) {
+        return {
+            buttonType: "TextIcon",
+            buttonText: AppStrings?.str_dvr_resolve_conflict,
+            buttonAction: AppStrings?.str_dvr_resolve_conflict,
+            iconSource: recordEdit,
+            subscription,
+        };
+    }
 };
 
 export const getPPVInfo = (
@@ -5532,6 +5585,7 @@ export const checkIfAdultContentMaskingRequired = (
     return false;
 };
 
+
 export const getDurationSeconds = (subscriptionItem: any): number => {
     // calculates actual runtime seconds for all recordings
     // based on actual start and actual end time
@@ -5541,6 +5595,7 @@ export const getDurationSeconds = (subscriptionItem: any): number => {
         getEndTimeIgnoreState(subscriptionItem)
     );
 };
+
 
 export const calculateActualRuntimeSeconds = (
     actualStartUtc: Date,
@@ -5665,43 +5720,6 @@ export const getBookmark = (
     });
 };
 
-export const validateEntitlements = (
-    entitlements: string[],
-    recorderModels: any
-) => {
-    let hasLocalRecorder = false;
-    let hasPrivateRecorder = false;
-    let hasSharedRecorder = false;
-
-    recorderModels?.forEach((model: any) => {
-        if (model?.RecorderModel === RecorderModel.Local) {
-            hasLocalRecorder = true;
-        } else if (model?.RecorderModel === RecorderModel.Private) {
-            hasPrivateRecorder = true;
-        } else if (model?.RecorderModel === RecorderModel.Shared) {
-            hasSharedRecorder = true;
-        }
-    });
-
-    const blockedRecorders = _.invert(
-        _.map(entitlements, (entitlement: string) => entitlement.toLowerCase())
-    );
-
-    const blockedLocal = !!blockedRecorders.lb;
-    const blockedNetwork = !!blockedRecorders.nb;
-    const blockedShared =
-        !!blockedRecorders.sb || !!blockedRecorders.record_blocked;
-
-    const isAllowed =
-        (hasLocalRecorder && !blockedLocal) ||
-        (!hasLocalRecorder && hasPrivateRecorder && !blockedNetwork) ||
-        (!hasLocalRecorder &&
-            hasSharedRecorder &&
-            !blockedNetwork &&
-            !blockedShared);
-
-    return isAllowed;
-};
 
 export const getGenreName = (genres: Genre[]) => {
     genres = genres.filter((genre) => {
@@ -5735,7 +5753,8 @@ export const massageSeriesDataForUDP = (
     channelRights?: any,
     isFromEPG?: boolean,
     StationIdFromEPG?: any,
-    hasFeatureIosCarrierBilling?: boolean
+    hasFeatureIosCarrierBilling?: boolean,
+    recordingBookmarks?: any
 ): any => {
     const { str_seasons_count, str_single_season_count } =
         AppStrings || {};
@@ -5806,6 +5825,8 @@ export const massageSeriesDataForUDP = (
     let purchasePackageExists = false;
     purchaseNetwork =
         seriesSubscriberData?.PriorityEpisodeTitle?.CatalogInfo?.Network;
+    let vodEntitlements: any = [];
+
     seriesSubscriberData?.PriorityEpisodeTitle?.PurchaseActions?.length &&
         seriesSubscriberData.PriorityEpisodeTitle?.PurchaseActions?.map(
             (purchaseAction: any) => {
@@ -5852,6 +5873,11 @@ export const massageSeriesDataForUDP = (
 
     // Play Actions
     if (seriesSubscriberData?.PriorityEpisodeTitle?.PlayActions?.length) {
+        seriesSubscriberData.PriorityEpisodeTitle.CatalogInfo.Entitlements &&
+            vodEntitlements.push(
+                ...seriesSubscriberData.PriorityEpisodeTitle.CatalogInfo
+                    .Entitlements
+            );
         seriesSubscriberData?.PriorityEpisodeTitle?.PlayActions?.length > 0 &&
             seriesSubscriberData.PriorityEpisodeTitle?.PlayActions?.map(
                 (playAction: any) => {
@@ -5874,8 +5900,10 @@ export const massageSeriesDataForUDP = (
                     }
 
                     // Restrictions
-                    playAction.Restrictions?.length &&
+                    if (playAction.Restrictions?.length) {
                         combinedEntitlements.push(...playAction.Restrictions);
+                        vodEntitlements.push(...playAction.Restrictions);
+                    }
 
                     // Expiry attribute
                     expirationUTC =
@@ -5939,8 +5967,10 @@ export const massageSeriesDataForUDP = (
                     }
 
                     // Restrictions
-                    playAction.Restrictions?.length &&
+                    if (playAction.Restrictions?.length) {
                         combinedEntitlements.push(...playAction.Restrictions);
+                        vodEntitlements.push(...playAction.Restrictions);
+                    }
 
                     // Expiry attribute
                     expirationUTC =
@@ -6053,6 +6083,7 @@ export const massageSeriesDataForUDP = (
     const channelNumber = undefined;
 
     let dvrPlayActions = DvrButtonAction.None;
+    let dvrPlayActionsForProgram = DvrButtonAction.None;
     let hasCloudDvr = false;
     if (account) {
         hasCloudDvr = account.DvrCapability === DvrCapabilityType.CLOUDDVR;
@@ -6088,6 +6119,43 @@ export const massageSeriesDataForUDP = (
             hasCloudDvr,
             channelMap
         );
+
+        dvrPlayActionsForProgram = calculateProgramButtonAction(
+            subscriberPlayOptionsData?.ProgramId ||
+            seriesUDPData?.currentCatchupSchedule?.ProgramId,
+
+            subscriberPlayOptionsData?.Schedules[0]?.StartUtc ||
+            seriesUDPData?.currentCatchupSchedule?.StartUtc,
+            subscriberPlayOptionsData?.Schedules[0]?.StationId ||
+            seriesUDPData?.currentCatchupSchedule?.StationId,
+            subscriberPlayOptionsData?.Schedules[0]?.ChannelNumber ||
+            seriesUDPData?.currentCatchupSchedule?.ChannelNumber,
+            [],
+            [],
+            [subscriberPlayOptionsData?.Schedules[0]] || [
+                seriesUDPData?.currentCatchupSchedule,
+            ],
+            allSubcriptionGroups,
+            recordedSubscriptionGroups,
+            scheduledSubscriptionGroups,
+            recorders.recorders,
+            hasCloudDvr,
+            channelMap,
+            subscriberPlayOptionsData?.Schedules[0]?.EndUtc ||
+            seriesUDPData?.currentCatchupSchedule?.EndUtc
+        );
+
+        if (
+            (dvrPlayActions?.buttonAction === DvrButtonAction.Edit &&
+                dvrPlayActionsForProgram?.buttonAction ===
+                DvrButtonAction.Edit) ||
+            (dvrPlayActions?.buttonAction ===
+                DvrButtonAction.ResolveConflicts &&
+                dvrPlayActionsForProgram?.buttonAction ===
+                DvrButtonAction.ResolveConflicts)
+        ) {
+            dvrPlayActionsForProgram = DvrButtonAction.None;
+        }
     }
 
     seriesUDPData["PbrOverride"] = account?.PbrOverride;
@@ -6097,7 +6165,7 @@ export const massageSeriesDataForUDP = (
     let playDvr = false;
     let subscriptionGroupForProgram;
     let subscriptionItemForThisSeries;
-    if (data?.SeriesId || data?.SubscriptionItems) {
+    if (data) {
         const sg = recordedSubscriptionGroups?.SubscriptionGroups?.find(
             (sg: any) => sg?.SeriesDetails?.SeriesId == data?.SeriesId
         );
@@ -6145,8 +6213,9 @@ export const massageSeriesDataForUDP = (
                                 si.ProgramDetails &&
                                 (si.ItemState === DvrItemState.RECORDED ||
                                     si.ItemState === DvrItemState.RECORDING) &&
+                                data?.SeriesId &&
                                 si?.ProgramDetails?.UniversalSeriesId ===
-                                data?.SeriesDetails?.SeriesId
+                                data?.SeriesId
                         )
                 );
 
@@ -6156,8 +6225,8 @@ export const massageSeriesDataForUDP = (
                         si.ProgramDetails &&
                         (si.ItemState === DvrItemState.RECORDED ||
                             si.ItemState === DvrItemState.RECORDING) &&
-                        si?.ProgramDetails?.UniversalSeriesId ===
-                        data?.SeriesDetails?.SeriesId
+                        data?.SeriesId &&
+                        si?.ProgramDetails?.UniversalSeriesId === data?.SeriesId
                 );
             }
 
@@ -6203,6 +6272,7 @@ export const massageSeriesDataForUDP = (
         combinedEntitlements
     );
     seriesUDPData["combinedEntitlements"] = combinedEntitlements;
+    seriesUDPData["vodEntitlements"] = vodEntitlements;
 
     seriesUDPData["isInHome"] = isInHome(combinedEntitlements, ipStatus);
     if (seriesUDPData["isInHome"] && combinedEntitlements) {
@@ -6237,7 +6307,8 @@ export const massageSeriesDataForUDP = (
         channelRights,
         isFromEPG,
         StationIdFromEPG,
-        hasFeatureIosCarrierBilling
+        hasFeatureIosCarrierBilling,
+        dvrPlayActionsForProgram
     );
 
     if (seriesUDPData?.Bookmark) {
@@ -6347,6 +6418,16 @@ export const massageSeriesDataForUDP = (
         seriesUDPData["statusText"],
         seriesUDPData["ctaButtons"]
     );
+    if (
+        subscriptionItemForThisSeries?.ProgramDetails?.UniversalProgramId &&
+        recordingBookmarks?.length &&
+        isRecordingWatched(
+            recordingBookmarks,
+            subscriptionItemForThisSeries?.ProgramDetails?.UniversalProgramId
+        )
+    ) {
+        seriesUDPData["statusText"].unshift(AppStrings?.str_Watched);
+    }
 
     if (
         !seriesUDPData?.ChannelInfo &&

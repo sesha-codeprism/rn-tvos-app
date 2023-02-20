@@ -77,7 +77,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         console.log("DVR update notification received");
         invalidateQueryBasedOnSpecificKeys(
           "feed",
-          "udl://dvrproxy/viewable-subscription-items/"
+          "get-all-subscriptionGroups"
         );
       }
     },

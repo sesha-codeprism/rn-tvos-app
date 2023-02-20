@@ -2423,6 +2423,324 @@
               "height": 118
             }
           }
+        },
+        {
+          "id": "DvrManager",
+          "style": {
+            "container": {
+              "paddingTop": 40
+            },
+            "dvrMain": {
+              "display": "flex",
+              "flexDirection": "row"
+            },
+            "dvrView": {
+              "width": 420,
+              "height": "100%"
+            },
+            "dvrScrollView": {
+              "paddingLeft": 90
+            },
+            "dvrresultsView": {
+              "width": 1920,
+              "height": 950,
+              "marginLeft": 40,
+              "marginTop": 20
+            },
+            "dvrScheduleViewStyle": {
+              "alignItems": "flex-start",
+              "width": 1920,
+              "height": 950
+            },
+            "noResultsView": {
+              "width": 1460,
+              "height": 940,
+              "marginLeft": 10,
+              "marginTop": 20,
+              "paddingBottom": 30
+            },
+            "manageButton": {
+              "height": 70,
+              "width": 300,
+              "backgroundColor": "${theme.backgroundColors.shade3}",
+              "marginTop": 55,
+              "textAlign": "center"
+            },
+            "headerUnderLine": {
+              "width": 1920,
+              "opacity": 0.4,
+              "height": 1,
+              "borderWidth": 0.4,
+              "borderColor": "${theme.backgroundColors.shade5}",
+              "backgroundColor": "${theme.backgroundColors.shade5}",
+              "alignSelf": "center",
+              "marginTop": 30
+            },
+            "titlePadding": {
+              "paddingLeft": 88,
+              "paddingBottom": 20
+            },
+            "flexOne": {
+              "flex": 1
+            },
+            "title": {
+              "color": "${theme.fontColors.light}",
+              "fontSize": "${theme.fontSizes.subTitle1}",
+              "fontFamily": "${theme.fontFamily.semiBold}"
+            },
+            "filterViewStyle": {
+              "position": "absolute",
+              "flexDirection": "row",
+              "alignItems": "center",
+              "flex": 1,
+              "top": 0,
+              "right": 0,
+              "alignContent": "flex-end",
+              "zIndex": 1000
+            },
+            "dvrText": {
+              "fontFamily": "${theme.fontFamily.regular}",
+              "color": "${theme.fontColors.darkGrey}"
+            },
+            "dvrTextSelected": {
+              "fontFamily": "${theme.fontFamily.semiBold}",
+              "color": "${theme.fontColors.light}"
+            },
+            "backgroundPosterStyle": {
+              "backgroundColor": "${theme.backgroundColors.shade1}",
+              "opacity": 0.9
+            },
+            "dvrBlock": {
+              "height": 62,
+              "width": 300,
+              "marginTop": 40
+            },
+            "dvrResultDetails": {
+              "marginTop": 30
+            },
+            "dvrCloudSpace": {
+              "fontFamily": "${theme.fontFamily.regular}",
+              "color": "${theme.fontColors.darkGrey}",
+              "fontSize": "${theme.fontSizes.caption1}",
+              "marginTop": 410
+            },
+            "recorded": {
+              "fontFamily": "${theme.fontFamily.semiBold}",
+              "color": "${theme.fontColors.lightGrey}",
+              "fontSize": "${theme.fontSizes.body2}"
+            },
+            "dvrSpace": {
+              "marginTop": 20,
+              "flexDirection": "row"
+            },
+            "dvrSpaceRecorded": {
+              "flexDirection": "column"
+            },
+            "dvrSpaceScheduled": {
+              "marginTop": 20,
+              "flexDirection": "column",
+              "marginBottom": 25
+            },
+            "metadataSeparator": {
+              "marginLeft": 30
+            },
+            "progressBarContainer": {
+              "height": 6,
+              "width": 300,
+              "borderRadius": 9,
+              "marginTop": 20
+            },
+            "buttonContainerStyle": {
+              "height": 66,
+              "width": 180,
+              "marginTop": 30
+            },
+            "imageIcon": {
+              "marginTop": 130,
+              "height": 400,
+              "width": 600,
+              "resizeMode": "contain",
+              "marginLeft": 220
+            },
+            "label": {
+              "color": "${theme.fontColors.light}",
+              "fontSize": "${theme.fontSizes.subTitle1}",
+              "marginTop": 16,
+              "marginLeft": 185,
+              "fontFamily": "${theme.fontFamily.semiBold}"
+            },
+            "focusedUnderLine": {
+              "backgroundColor": "${theme.backgroundColors.primary1}"
+            },
+            "noResultContainer": {
+              "display": "flex",
+              "flexDirection": "row",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "width": "100%"
+            }
+          },
+          "config": {
+            "isSortByDateEnabled": true,
+            "soonToBeExpiredDays": 4,
+            "baseFilters": {
+              "pivots": "FilterBy|All,Category|All,SortBy|Date",
+              "orderBy": "Date"
+            }
+          }
+        },
+        {
+          "id": "EpisodeRecordOptions",
+          "style": {
+            "container": {
+              "flexGrow": 1,
+              "paddingVertical": 10
+            },
+            "selectButtonContainer": {
+              "width": "100%",
+              "height": 100,
+              "paddingHorizontal": 30
+            }
+          }
+        },
+        {
+          "id": "RecordingOptions",
+          "style": {
+            "container": {
+              "flexGrow": 1,
+              "paddingTop": 30
+            },
+            "conflictListContainer": {
+              "height": 120,
+              "width": 624
+            },
+            "conflictItemContainer": {
+              "width": 591,
+              "height": 83,
+              "flexDirection": "row",
+              "justifyContent": "flex-start",
+              "marginLeft": 61
+            },
+            "conflictItemMetadataContainer": {
+              "width": 422,
+              "height": 83
+            },
+            "conflictItemMetadataLine1Container": {
+              "flexDirection": "row"
+            },
+            "conflictItemMetadataLine1": {
+              "width": 288,
+              "height": 50,
+              "fontSize": "${theme.fontSizes.body1}",
+              "fontFamily": "${theme.fontFamily.regular}",
+              "color": "${theme.fontColors.lightGrey}"
+            },
+            "conflictIcon": {
+              "fontSize": 20,
+              "fontFamily": "${theme.fontFamily.bold}",
+              "color": "#000"
+            },
+            "buttonTextStyle": {
+              "fontSize": "${theme.fontSizes.body2}",
+              "fontFamily": "${theme.fontFamily.semiBold}",
+              "color": "${theme.fontColors.light}"
+            },
+            "conflictIconContainer": {
+              "backgroundColor": "${theme.fontColors.statusWarning}",
+              "borderRadius": 15,
+              "width": 30,
+              "height": 30,
+              "alignItems": "center",
+              "justifyContent": "center"
+            },
+            "conflictItemMetadataLine2": {
+              "width": 422,
+              "height": 50,
+              "fontSize": "${theme.fontSizes.caption1}",
+              "fontFamily": "${theme.fontFamily.regular}",
+              "color": "${theme.fontColors.lightGrey}"
+            },
+            "conflictItemActionButtonContainer": {
+              "width": 61,
+              "height": 61,
+              "marginLeft": 108
+            },
+            "conflictItemActionButtonTextStyle": {
+              "fontFamily": "${theme.fontFamily.icons}",
+              "color": "${theme.fontColors.light}"
+            },
+            "conflicItemActionButtonStyleProp": {
+              "borderRadius": 29.5,
+              "width": 61,
+              "height": 61,
+              "overflow": "hidden",
+              "backgroundColor": "transparent"
+            },
+            "conflictItemActionButtonSolidBackground": {
+              "backgroundColor": "${theme.backgroundColors.shade2}"
+            },
+            "conflictItemActionButtonBorder": {
+              "backgroundColor": "${theme.backgroundColors.shade2}"
+            },
+            "buttonContainer": {
+              "marginTop": 120,
+              "width": 714
+            },
+            "saveButton": {
+              "height": 70,
+              "width": 533,
+              "backgroundColor": "${theme.backgroundColors.shade3}",
+              "marginBottom": 10,
+              "marginHorizontal": 90
+            },
+            "cancelButton": {
+              "height": 70,
+              "width": 533,
+              "backgroundColor": "${theme.backgroundColors.shade3}",
+              "marginBottom": 90,
+              "marginHorizontal": 90
+            },
+            "headerUnderLine": {
+              "width": 604,
+              "opacity": 0.4,
+              "height": 1,
+              "borderWidth": 0.4,
+              "borderColor": "${theme.backgroundColors.shade5}",
+              "backgroundColor": "${theme.backgroundColors.shade5}",
+              "alignSelf": "center",
+              "marginLeft": 61
+            },
+            "showNotRecordedMessage": {
+              "fontSize": "${theme.fontSizes.body2}",
+              "fontFamily": "${theme.fontFamily.semiBold}",
+              "color": "${theme.fontColors.light}",
+              "marginBottom": 17,
+              "marginTop": 30.5,
+              "marginLeft": 61
+            },
+            "selectButtonContainer": {
+              "height": 120,
+              "width": 654,
+              "marginLeft": 31
+            },
+            "selectButtonTitle": {
+              "color": "${theme.fontColors.light}",
+              "fontFamily": "${theme.fontFamily.regular}"
+            },
+            "selectButtonContent": {
+              "color": "${theme.fontColors.darkGrey}",
+              "fontFamily": "${theme.fontFamily.regular}"
+            },
+            "selectButtonContentActive": {
+              "color": "${theme.fontColors.light}",
+              "opacity": 0.7,
+              "fontFamily": "${theme.fontFamily.regular}"
+            },
+            "selectButtonIcon": {
+              "width": 16,
+              "height": 26
+            }
+          }
         }
       ]
     }

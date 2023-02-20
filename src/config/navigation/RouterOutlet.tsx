@@ -48,10 +48,12 @@ import RouteFallBackScreen from "../../views/app/Route.Fallback.screen";
 import BrowseCategoryScreen from "../../views/app/BrowsePages/BrowseCategory/Browse.Category.screen";
 import TestScreen from "../../views/app/test.screen";
 import DetailsScreen from "../../views/app/details_pages/Details.Screen";
-import useCurrentSlots from "../../customHooks/useCurrentSlots";
 import EpisodeList from "../../views/app/details_pages/episode_list/EpisodeList";
 import useChannelRights from "../../customHooks/useChannelRights";
 import useLiveData from "../../customHooks/useLiveData";
+import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups";
+import useDVRRecorders from "../../customHooks/useRecorders";
+import { appQueryCache } from "../queries";
 
 interface RouterOutletProps {}
 
@@ -295,7 +297,10 @@ const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
   routerProps: RouterOutletProps
 ) => {
   const { data: channeLMapInfo } = useChannelRights();
-  const { data } = useLiveData(channeLMapInfo);
+  const { data: liveData } = useLiveData(channeLMapInfo);
+  const subscriptionGroupQuery = useAllSubscriptionGroups();
+  const { data: recorders } = useDVRRecorders();
+  appQueryCache.add(subscriptionGroupQuery);
   return (
     <NavigationContainer>
       <Stack.Navigator

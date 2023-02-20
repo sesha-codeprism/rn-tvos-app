@@ -28,7 +28,6 @@ import {
   massageProgramDataForUDP,
   massageSeriesDataForUDP,
   SubscriptionPackages,
-  validateEntitlements,
   getEpisodeInfo,
   massageDiscoveryFeed,
 } from "../../../utils/assetUtils";
@@ -72,6 +71,7 @@ import { Routes } from "../../../config/navigation/RouterOutlet";
 import { SCREEN_WIDTH } from "../../../utils/dimensions";
 const { width, height } = Dimensions.get("window");
 import MFProgressBar from "../../../components/MFProgressBar";
+import { validateEntitlements } from "../../../utils/DVRUtils";
 
 interface AssetData {
   id: string;
@@ -135,11 +135,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [open, setOpen] = useState(false);
   const [similarItemsSwimLaneKey, setSimilarItemsSwimLaneKey] = useState("");
   const [castnCrewSwimLaneKey, setCastnCrewSwimlaneKey] = useState("");
-  const [viewableSubscriptionGroups, setViewableSubscriptionGroups] =
-    useState<any>();
-  const [scheduledSubScriptionGroups, setScheduledSubScriptionGroups] =
-    useState<any>();
-  const [allSubscriptionGroups, setAllSubscriptionGroups] = useState<any>();
   const [isItemPinned, setIsItemPinned] = useState(false);
 
   let scrollViewRef: any = React.createRef<ScrollView>();
@@ -328,8 +323,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       const { combinedEntitlements = [] } = udpDataAsset || {};
       const isRecordingBlocked = !validateEntitlements(
         combinedEntitlements,
-        //TODO: Make api call and set this value
-        []
+        GLOBALS.recorders.recorders
       );
       props.navigation.push(Routes.EpisodeList, {
         discoveryData: discoveryProgramData,
@@ -426,41 +420,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     };
   };
   let assetData: AssetData = updateAssetData();
-  const getAllViewableSubscriptions = async () => {
-    const udlParams = "udl://dvrproxy/viewable-subscription-items/";
-    const data = await getDataFromUDL(udlParams);
-    const massagedData = getMassagedData(udlParams, data);
-    setViewableSubscriptionGroups(massagedData);
-    return massagedData;
-  };
-
-  const getScheduledSubscriptionGroups = async () => {
-    const udlParams = "udl://dvrproxy/get-scheduled-subscription-groups/";
-    const data = await getDataFromUDL(udlParams);
-    const massagedData = getMassagedData(udlParams, data);
-    setScheduledSubScriptionGroups(massagedData);
-    return massagedData;
-  };
-
-  const getAllSubscriptionGroups = async () => {
-    const allSubscriptions = queryClient.getQueryData([
-      `get-AllSubscriptionsQuery`,
-    ]);
-
-    if (!allSubscriptions) {
-      /** This block execution means subscriber call hasn't ben done yet.. */
-      /** Make the api call now and store it in cache  */
-      const udlParams = "udl://dvrproxy/get-all-subscriptionGroups/";
-      const data = await getDataFromUDL(udlParams);
-      const massagedData = getMassagedData(udlParams, data);
-      setAllSubscriptionGroups(massagedData);
-      return massagedData;
-    } else {
-      /** Basically we got the response from cache where it has was stored in previous call */
-      /** Just return the cached data */
-      return allSubscriptions;
-    }
-  };
 
   useEffect(() => {
     const status = getItemPinnedStatus();
@@ -532,13 +491,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           avatarSource={undefined}
           onFocus={() => {
             setIsFavoriteButtonFocused(true);
-            // if (__DEV__) {
-            //   setTimeout(() => {
-            //     ctaButtonRef.current.setNativeProps({
-            //       hasTVPreferredFocus: true,
-            //     });
-            //   }, 2000);
-            // }
           }}
           onPress={handleFavoritePress}
           variant={MFButtonVariant.FontIcon}
@@ -586,35 +538,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             }
           }}
         />
-        {/* <MFButton
-          ref={listAddButtonRef}
-          focusable
-          iconSource={0}
-          imageSource={0}
-          avatarSource={undefined}
-          variant={MFButtonVariant.FontIcon}
-          fontIconSource={listAdd}
-          fontIconTextStyle={StyleSheet.flatten([
-            styles.textStyle,
-            { fontSize: 70, textAlign: "center", alignSelf: "center" },
-          ])}
-          style={[
-            styles.buttonIconContainer,
-            styles.solidBackground,
-            {
-              borderRadius: 35,
-              alignItems: "center",
-              alignContent: "center",
-              justifyContent: "center",
-              marginLeft: 30,
-            },
-          ]}
-          focusedStyle={styles.focusedBackground}
-          fontIconProps={{
-            iconPlacement: "Left",
-            shouldRenderImage: true,
-          }}
-        /> */}
       </View>
     );
   };
@@ -893,11 +816,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.channelMap,
           feed,
           GLOBALS.currentSlots,
-          allSubscriptionGroups,
+          GLOBALS.allSubscriptionGroups,
+          GLOBALS.viewableSubscriptions,
+          GLOBALS.scheduledSubscriptions,
           GLOBALS.userAccountInfo,
-          undefined,
-          GLOBALS.userAccountInfo,
-          undefined,
+          GLOBALS.recorders,
           playActionsData,
           undefined,
           undefined,
@@ -912,13 +835,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.channelMap,
           discoverySchedulesData,
           undefined,
-          allSubscriptionGroups,
+          GLOBALS.allSubscriptionGroups,
           GLOBALS.userAccountInfo,
           subscriberData,
           undefined,
-          viewableSubscriptionGroups,
-          scheduledSubScriptionGroups,
-          undefined,
+          GLOBALS.viewableSubscriptions,
+          GLOBALS.scheduledSubscriptions,
+          GLOBALS.recorders,
           undefined,
           undefined,
           undefined,
@@ -1008,23 +931,23 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
 
-  const viewableSubscriptionGroupsQuery = useQuery(
-    ["get-viewableSubscriptionGroupsQuery"],
-    getAllViewableSubscriptions,
-    { ...defaultQueryOptions, refetchOnMount: "always" }
-  );
+  // const viewableSubscriptionGroupsQuery = useQuery(
+  //   ["get-viewableSubscriptionGroupsQuery"],
+  //   getAllViewableSubscriptions,
+  //   { ...defaultQueryOptions, refetchOnMount: "always" }
+  // );
 
-  const getScheduledSubscriptionsQuery = useQuery(
-    [`get-ScheduledSubscriptionsQuery`],
-    getScheduledSubscriptionGroups,
-    { ...defaultQueryOptions, refetchOnMount: "always" }
-  );
+  // const getScheduledSubscriptionsQuery = useQuery(
+  //   [`get-ScheduledSubscriptionsQuery`],
+  //   getScheduledSubscriptionGroups,
+  //   { ...defaultQueryOptions, refetchOnMount: "always" }
+  // );
 
-  const getAllSubscriptionsQuery = useQuery(
-    [`get-AllSubscriptionsQuery`],
-    getAllSubscriptionGroups,
-    { ...defaultQueryOptions }
-  );
+  // const getAllSubscriptionsQuery = useQuery(
+  //   [`get-AllSubscriptionsQuery`],
+  //   getAllSubscriptionGroups,
+  //   { ...defaultQueryOptions }
+  // );
 
   const { data, isLoading } = useQuery(
     ["get-UDP-data", assetData?.id],
@@ -1086,7 +1009,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   fontIconSource={cta.iconSource}
                   fontIconTextStyle={StyleSheet.flatten([
                     styles.textStyle,
-                    { fontSize: 90 },
+                    {
+                      fontSize: 90,
+                      color: cta.buttonText?.includes("Record")
+                        ? g.fontColors.badge
+                        : "white",
+                    },
                   ])}
                   onPress={ctaButtonPress[cta.buttonAction]}
                   textStyle={{
