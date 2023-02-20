@@ -54,8 +54,11 @@ import useLiveData from "../../customHooks/useLiveData";
 import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups";
 import useDVRRecorders from "../../customHooks/useRecorders";
 import { appQueryCache } from "../queries";
+import { Settings as SettingsRN } from "react-native";
 
-interface RouterOutletProps {}
+interface RouterOutletProps {
+  initialState?: any;
+}
 
 export const Routes = {
   Splash: "splash",
@@ -81,7 +84,7 @@ export const Routes = {
   Rating: "ratings",
   UnratedContent: "unrated_content",
   AdultLock: "adult_lock",
-  Diaplay: "display",
+  Display: "display",
   OnScreenLanguage: "on_screen_language",
   ClosedCaption: "closed_caption",
   PurchaseLock: "purchase_lock",
@@ -112,7 +115,13 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
   props
 ) => {
   return (
-    <NavigationContainer independent={true}>
+    <NavigationContainer
+      independent={true}
+      initialState={props.initialState}
+      onStateChange={(state) =>
+        SettingsRN.set({ SETTINGS_NAVIGATION_HISTORY: JSON.stringify(state) })
+      }
+    >
       <Stack.Navigator
         initialRouteName={Routes.Settings}
         screenOptions={{
@@ -143,7 +152,7 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           component={UnratedContentScreen}
         />
         <Stack.Screen name={Routes.AdultLock} component={AdultLockScreen} />
-        <Stack.Screen name={Routes.Diaplay} component={DiaplayScreen} />
+        <Stack.Screen name={Routes.Display} component={DiaplayScreen} />
         <Stack.Screen
           name={Routes.OnScreenLanguage}
           component={OnScreenLanguageScreen}

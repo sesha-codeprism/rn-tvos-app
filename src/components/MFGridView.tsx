@@ -66,11 +66,6 @@ const MFGridView: React.FunctionComponent<MFGridProps> = React.forwardRef(
             titlePlacement={props.titlePlacement}
             onFocus={(event) => {
               props.onFocus && props.onFocus(event);
-              console.log(
-                "item.Id === props.selectedId ",
-                item.Id,
-                props.selectedId
-              );
             }}
             onPress={(event) => {
               props.onPress && props.onPress(event);

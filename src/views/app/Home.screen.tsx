@@ -20,11 +20,12 @@ import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import MFMarquee from "../../components/MFMarquee";
-import { MFDrawer } from "../../components/MFSideMenu/MFDrawer";
+import { MFDrawer } from "../../components/MFSideMenu/SettingsContainer";
 import MFSwim from "../../components/MFSwim";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useAccount from "../../customHooks/useAccount";
+import MFEventEmitter from "../../utils/MFEventEmitter";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -38,6 +39,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const [open, setOpen] = useState(false);
   const firstSwimlaneRef = useRef<TouchableOpacity>(null);
+  const setttingsRef = useRef(null);
   const drawerRef: React.MutableRefObject<any> = useRef();
   const accountInfo = useAccount();
 
@@ -135,6 +137,10 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     }
   }, []);
 
+  const setSetttingsRef =  (ref:any) =>{
+    setttingsRef.current = ref;
+  }
+
   setHubsData();
   const setCardFocus = () => {
     // @ts-ignore
@@ -179,8 +185,8 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                   }}
                   setCardFocus={setCardFocus}
                   onPressSettings={() => {
-                    setOpen(open);
-                    drawerRef.current.open();
+                    MFEventEmitter.emit("openSettings",{
+                      onClose: () => setttingsRef.current && setttingsRef?.current?.setNativeProps({ hasTVPreferredFocus: true }), drawerPercentage: 0.35 });
                     if (currentFeed) {
                       // service?.addNavEventOnCurPageOpenOrClose(
                       //   {
@@ -195,6 +201,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                       // );
                     }
                   }}
+                  setSetttingsRef={setSetttingsRef}
                 />
                 <View style={HomeScreenStyles.posterViewContainerStyles}>
                   {currentFeed && appUIDefinition.config.enableMarquee && (
@@ -236,18 +243,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
           </ImageBackground>
         </ImageBackground>
       </ImageBackground>
-      <MFDrawer
-        ref={drawerRef}
-        drawerPercentage={37}
-        animationTime={200}
-        overlay={false}
-        opacity={1}
-        open={open}
-        animatedWidth={width * 0.37}
-        closeOnPressBack={false}
-        navigation={props.navigation}
-        drawerContent={false}
-      />
+
     </View>
   );
 };

@@ -7,6 +7,8 @@ import { UserProfile } from "../@types/UserProfile";
 import { GLOBALS } from "../utils/globals";
 import "react-native-gesture-handler";
 import { initializeAnalyticsService } from "../utils/analytics/analytics";
+import { SCREEN_WIDTH } from "../utils/dimensions";
+import { MFDrawerContainer } from "./MFDrawersContainer";
 import { initUdls } from "../../backend";
 
 interface AppProps {}
@@ -86,6 +88,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalContext.Provider value={appSettings}>
+        <MFDrawerContainer />
         <RouterOutlet
           isAuthorized={
             GLOBALS.store?.accessToken !== null &&

@@ -1,5 +1,8 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/dimensions";
+import { GLOBALS } from "../utils/globals";
+import MFEventEmitter from "../utils/MFEventEmitter";
 interface MFPopupProps {
   buttons?: Buttons[];
   title?: string;
@@ -15,12 +18,12 @@ const defaultProps = {
   buttons: [
     {
       title: "OK",
-      onPress: () => {},
+      onPress: () => { },
       style: null,
     },
     {
       title: "CANCEL",
-      onPress: () => {},
+      onPress: () => { },
       style: null,
     },
   ],
@@ -29,9 +32,27 @@ const defaultProps = {
 };
 const MFPopup = (props: MFPopupProps) => {
   const [focused, setFocused] = useState(0);
-  const _onFocus = () => {};
+  const _onFocus = () => { };
   return (
-    <View style={styles.root}>
+    <Modal
+      style={[{
+        position: "absolute",
+        // right: 0,
+        top: 0,
+        width: SCREEN_WIDTH,
+        backgroundColor: "green",
+      }, GLOBALS.enableRTL ? { left: 0 } : { right: 0 }]}
+      animationType="fade"
+      transparent={true}
+      visible={true}
+      onRequestClose={() => {
+        MFEventEmitter.emit("closePopup", null);
+      }}
+      onDismiss={() => {
+        MFEventEmitter.emit("closePopup", null);
+      }}
+      presentationStyle={"overFullScreen"}
+    >
       <View style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.text}>
@@ -41,9 +62,9 @@ const MFPopup = (props: MFPopupProps) => {
             <FlatList data={props.buttons && props.buttons.length
               ? props.buttons
               : defaultProps.buttons}
-              keyExtractor={(item, index)=> `${props.popupId}-${item.title}-${index}`}
+              keyExtractor={(item, index) => `${props.popupId}-${item.title}-${index}`}
               key={props.popupId}
-              renderItem={({item, index}) => {
+              renderItem={({ item, index }) => {
                 return (
                   <Pressable
                     onFocus={() => {
@@ -51,84 +72,41 @@ const MFPopup = (props: MFPopupProps) => {
                     }}
                     key={`${props.popupId}-${item.title}-${index}`}
                     isTVSelectable={true}
-                    hasTVPreferredFocus={index === 0 ? true: false}
+                    hasTVPreferredFocus={index === 0 ? true : false}
                     style={
                       focused === index
                         ? [
-                            styles.buttonInactive,
-                            {
-                              ...styles.focusedStyle,
-                              backgroundColor: "#053C69",
-                            },
-                          ]
-                        : styles.buttonInactive
-                    }
-                    onPress={
-                      item.onPress
-                        ? item.onPress
-                        : () => {
-                            console.log("action is not defined for this button");
-                          }
-                    }
-                  >
-                    <Text style={styles.buttonText}>{item.title}</Text>
-                  </Pressable>
-                );
-              }} />
-            {/* {(props.buttons && props.buttons.length
-              ? props.buttons
-              : defaultProps.buttons
-            ).map((item, index) => {
-              return (
-                <Pressable
-                  onFocus={() => {
-                    setFocused(index);
-                  }}
-                  key={index}
-                  hasTVPreferredFocus={index === 0 ? true: false}
-                  style={
-                    focused === index
-                      ? [
                           styles.buttonInactive,
                           {
                             ...styles.focusedStyle,
                             backgroundColor: "#053C69",
                           },
                         ]
-                      : styles.buttonInactive
-                  }
-                  onPress={
-                    item.onPress
-                      ? item.onPress
-                      : () => {
-                          console.log("action is not defined for this button");
-                        }
-                  }
-                >
-                  <Text style={styles.buttonText}>{item.title}</Text>
-                </Pressable>
-              );
-            })} */}
+                        : styles.buttonInactive
+                    }
+                    onPress={ (params: any)=> {
+                        item.onPress
+                        ? item.onPress(params)
+                        : console.log("action is not defined for this button");
+                      }
+                    }
+                  >
+                    <Text style={styles.buttonText}>{item.title}</Text>
+                  </Pressable>
+                );
+              }} />
           </View>
         </View>
       </View>
-    </View>
+    </Modal>
   );
 };
 
 export default MFPopup;
 
 const styles = StyleSheet.create({
-  root: {
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    backgroundColor: "#00030E",
-    justifyContent:'center',
-    alignItems: "center",
-    alignSelf: "center",
-  },
   container: {
+    marginTop: 200,
     height: 682,
     width: 700,
     borderRadius: 10,

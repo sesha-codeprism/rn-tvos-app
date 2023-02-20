@@ -57,6 +57,7 @@ interface GalleryScreenProps {
 
 const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const feed: Feed = props.route.params.feed;
+  const isTesting = true;
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const [openMenu, setOpenMenu] = useState(false);
   const [openSubMenu, setOpenSubMenu] = useState(false);
@@ -156,6 +157,10 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   };
 
   const updateFeed = (focusedFeed: SubscriberFeed) => {
+    // GLOBALS.testString = focusedFeed?.CatalogInfo?.Name || focusedFeed?.title;
+    GLOBALS.panelOpen =
+      focusedFeed.CatalogInfo?.Name.includes("R") ||
+      focusedFeed?.title.includes("R");
     setCurrentFeed(focusedFeed);
   };
 

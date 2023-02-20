@@ -111,6 +111,8 @@ interface GLOBALSType {
   recorders: any
   /** Current Now-Next Map updated every three hours time */
   nowNextMap: any;
+  // testString: string;
+  panelOpen: boolean;
   moviesAndTvShows?: TrendingItems[];
   /** Async store data */
   store: {
