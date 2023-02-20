@@ -68,5 +68,15 @@ public class MKGuideBridgeManager: NSObject {
     MKFullGuideStorageManager.shared.clearCacheData()
   }
 
+  @objc func setchannelMapRights(_ value: Dictionary<String, Any>) {
+    print("setchannelMapRights in swift = \(value)")
+    MKFullGuideStorageManager.shared.setChannelMapRights(value: value)
+  }
+
+  @objc func setQualityforFilters(_ value: [String]) {
+    print("setQualityforFilters in swift = \(value)")
+    MKFullGuideStorageManager.shared.setQualityValues(value: value)
+  }
+
 }
 
