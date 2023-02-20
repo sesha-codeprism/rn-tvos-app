@@ -1,7 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import MFPopup from "../../../components/MFPopup";
 import { GLOBALS, resetAuthData } from "../../../utils/globals";
 import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
 import { getStore, updateStore } from "../../../utils/helpers";
@@ -9,6 +8,7 @@ import { Routes } from "../../../config/navigation/RouterOutlet";
 import { resetCaches } from "../../../config/queries";
 import { AppStrings } from "../../../config/strings";
 import { deleteDevice } from "../../../../backend/subscriber/subscriber";
+import MFEventEmitter from "../../../utils/MFEventEmitter";
 
 interface AccountSettingsProps {
   navigation: NativeStackNavigationProp<any>;
@@ -17,7 +17,6 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
   props
 ) => {
   const [focussed, setFocussed] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
   const [isTesting, setTesting] = useState(false);
   useEffect(() => {}, [props.navigation]);
 
@@ -66,7 +65,29 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
                 : styles.signoutButton
             }
             onPress={() => {
-              setShowAlert(true);
+              MFEventEmitter.emit("openPopup", {
+                buttons: [
+                  {
+                    title: "Yes",
+                    onPress: () => {
+                      console.log("signout pressed");
+                      // Assumes close popup on each action, whether Yes or No or Cancel
+                      MFEventEmitter.emit("closePopup", null);
+                      MFEventEmitter.emit("closeSettings", null);
+                      logUserOut();
+
+                    },
+                  },
+                  {
+                    title: "Cancel",
+                    onPress: () => {
+                    // Assumes close popup on each action, whether Yes or No or Cancel
+                    MFEventEmitter.emit("closePopup", null);
+                    },
+                  },
+                ],
+                description: "Are you sure that you want to sign out?"
+              });
             }}
           >
             <Text style={[styles.titleText, { fontSize: 29 }]}>
@@ -75,27 +96,6 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
           </Pressable>
         </View>
       </SideMenuLayout>
-      {showAlert && (
-        <MFPopup
-          buttons={[
-            {
-              title: "Yes",
-              onPress: () => {
-                setShowAlert(false);
-                console.log("signout pressed");
-                logUserOut();
-              },
-            },
-            {
-              title: "Cancel",
-              onPress: () => {
-                setShowAlert(false);
-              },
-            },
-          ]}
-          description={"Are you sure that you want to sign out?"}
-        />
-      )}
     </>
   );
 };
