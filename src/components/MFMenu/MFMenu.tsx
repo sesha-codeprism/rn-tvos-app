@@ -38,6 +38,7 @@ interface MFMenuProps {
   onFocus?: null | ((event: number) => void) | undefined;
   onPressSettings?: any;
   setCardFocus?: any;
+  setSetttingsRef?: (ref: any) => void;
 }
 
 const MFMenu = (props: MFMenuProps) => {
@@ -235,6 +236,7 @@ const MFMenu = (props: MFMenuProps) => {
                   }
                 >
                   <MFButton
+                    ref={props.setSetttingsRef}
                     variant={MFButtonVariant.Icon}
                     avatarSource={{}}
                     imageSource={{}}
