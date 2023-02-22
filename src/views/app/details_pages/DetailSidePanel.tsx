@@ -1,19 +1,38 @@
+import { NavigationContext } from "@react-navigation/native";
 import React, {
   forwardRef,
   Ref,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState,
 } from "react";
-import { Animated, Dimensions, StyleSheet, Modal } from "react-native";
+import {
+  Animated,
+  Dimensions,
+  StyleSheet,
+  Modal,
+  View,
+  BackHandler,
+} from "react-native";
+import DetailsNavigator, {
+  DetailRoutes,
+} from "../../../config/navigation/DetailsNavigator";
 import { GLOBALS } from "../../../utils/globals";
+import { Empty } from "../../MFDrawersContainer";
 import EpisodeRecordOptions, {
   EpisodeRecordOptionsProps,
-} from "./EpsiodeRecordOptions";
-import MoreInfoPanel from "./MoreInfoPanel";
+} from "./details_panels/EpsiodeRecordOptions";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
+
+// export const enum DetailRoutes {
+//   Empty,
+//   Popup,
+//   MoreInfo,
+//   EpisodeRecordOptions,
+// }
 
 // export enum OpenPages = 'MoreInf0'
 export type OpenPages = "MoreInfo" | "EpisodeRecord";
@@ -28,19 +47,40 @@ interface DetailsDrawerProps {
   closeOnPressBack?: boolean;
   navigation?: any;
   children?: any;
-  openPage: OpenPages;
-  moreInfoProps: {
-    udpData: any;
-    networkInfo: any;
-    genres: any;
-    episodeData?: any;
-    episodeDetailsData?: any;
-  };
-  episodeRecordingProps?: EpisodeRecordOptionsProps;
+  route: any;
+  screenProps: any;
+  // openPage: typeof DetailRoutes;
+  // moreInfoProps: {
+  //   udpData: any;
+  //   networkInfo: any;
+  //   genres: any;
+  //   episodeData?: any;
+  //   episodeDetailsData?: any;
+  // };
+  // episodeRecordingProps?: EpisodeRecordOptionsProps;
 }
+
 const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
   const [expanded, setExpanded] = useState(props.open);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    const backAction = () => {
+      if (!open) {
+        console.log("Back action in SidePanel");
+        return true;
+      } else {
+        return false;
+      }
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   const leftOffset = new Animated.Value(
     GLOBALS.enableRTL
       ? -(SCREEN_WIDTH * (props.drawerPercentage / 100))
@@ -49,19 +89,35 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
 
   useEffect(() => {
     expanded ? openDrawer() : closeDrawer();
+    if (expanded) {
+    }
   }, [expanded]);
   useImperativeHandle(ref, () => ({
     openDrawer,
     closeDrawer,
     open,
     close,
+    pushRoute,
+    popRoute,
+    resetRoutes,
   }));
+
+  const pushRoute = (route: typeof DetailRoutes, props: any) => {};
+  const popRoute = () => {
+    // componentStack.current?.pop();
+  };
+
+  const resetRoutes = () => {
+    // componentStack.current = [{ route: DetailRoutes.Empty, props: {} }];
+  };
   const open = () => {
     setExpanded(true);
   };
   const close = () => {
     setExpanded(false);
   };
+
+  const componentMount = () => {};
   const openDrawer = () => {
     const { animationTime, opacity, drawerPercentage } = props;
     const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
@@ -146,7 +202,7 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
               },
             ]}
           >
-            {props.openPage === "MoreInfo" && (
+            {/* {props.openPage === "MoreInfo" && (
               <MoreInfoPanel
                 udpData={props.moreInfoProps.udpData}
                 networkInfo={props.moreInfoProps.networkInfo}
@@ -166,7 +222,11 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
                 isGeneric={props.episodeRecordingProps!.isGeneric}
                 recordingOptions={props.episodeRecordingProps!.recordingOptions}
               />
-            )}
+            )} */}
+            <DetailsNavigator
+              initialScreen={props.route}
+              props={props.screenProps}
+            />
           </Animated.View>
         </Animated.View>
       </Modal>

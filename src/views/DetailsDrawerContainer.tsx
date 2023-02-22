@@ -1,8 +1,11 @@
-import React, { forwardRef, Ref, useEffect, useRef, useState } from "react";
-import { View } from "react-native";
+import React, { Ref, useEffect, useRef, useState } from "react";
+import { Dimensions, Modal, StyleSheet, View } from "react-native";
+
 import MFPopup from "../components/MFPopup";
-import Settings from "../components/MFSideMenu/SettingsContainer";
 import MFEventEmitter from "../utils/MFEventEmitter";
+import EpisodeRecordOptions from "./app/details_pages/details_panels/EpsiodeRecordOptions";
+import MoreInfoPanel from "./app/details_pages/details_panels/MoreInfoPanel";
+import DetailsContainer from "./DetailsModal";
 
 export const Empty = (props: any) => {
   return <View style={{ height: 1, backgroundColor: "black" }}></View>;
@@ -10,43 +13,21 @@ export const Empty = (props: any) => {
 
 const enum Routes {
   Empty,
-  Settings,
   Popup,
+  MoreInfo,
   EpisodeRecordOptions,
 }
 const ComponentLoader = {
-  [Routes.Settings]: Settings,
-  [Routes.Popup]: MFPopup,
   [Routes.Empty]: Empty,
+  [Routes.Popup]: MFPopup,
+  [Routes.MoreInfo]: MoreInfoPanel,
+  [Routes.EpisodeRecordOptions]: EpisodeRecordOptions,
 };
 
-interface MFDrawerContainer {}
-
-const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
+const MFDetailsDrawerContainer = (props: any, ref: Ref<any>) => {
   const [currentComponent, setComponentt] = useState(Routes.Empty);
 
   const componentStack = useRef([{ route: Routes.Empty, props: {} }]);
-
-  const openSettings = (props: any) => {
-    //  add to component stack
-    componentStack.current?.push({ route: Routes.Settings, props: props });
-    setComponentt(Routes.Settings);
-  };
-
-  const closeSettings = (params: any) => {
-    // remove from componnent stack
-    const props =
-      componentStack.current[componentStack?.current?.length - 1]?.props;
-    //@ts-ignore
-    if (props && props?.onClose) {
-      //@ts-ignore
-      props?.onClose?.();
-    }
-    componentStack.current?.pop();
-    setComponentt(
-      componentStack.current[componentStack?.current?.length - 1]?.route
-    );
-  };
 
   const openEpisodeRecordOptions = (props: any) => {
     componentStack.current?.push({
@@ -70,11 +51,32 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     );
   };
 
+  const openMoreInfo = (props: any) => {
+    componentStack.current?.push({ route: Routes.MoreInfo, props: props });
+    setComponentt(Routes.MoreInfo);
+  };
+
+  const closeModal = (params: any) => {
+    console.log("Closing off the modal");
+    // remove from componnent stack
+    const props =
+      componentStack.current[componentStack?.current?.length - 1]?.props;
+    //@ts-ignore
+    if (props && props?.onClose) {
+      //@ts-ignore
+      props?.onClose?.();
+    }
+    componentStack.current?.pop();
+    setComponentt(
+      componentStack.current[componentStack?.current?.length - 1]?.route
+    );
+  };
+
   useEffect(() => {
-    MFEventEmitter.on("openSettings", openSettings);
-    MFEventEmitter.on("closeSettings", closeSettings);
+    MFEventEmitter.on("openMoreInfo", openMoreInfo);
     MFEventEmitter.on("openPopup", openPopup);
     MFEventEmitter.on("closePopup", closePopup);
+    MFEventEmitter.on("closeModal", closeModal);
     MFEventEmitter.on("openEpisodeRecordOptions", openEpisodeRecordOptions);
   }, []);
 
@@ -84,12 +86,18 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
       componentStack.current[componentStack?.current?.length - 1]?.props;
     //@ts-ignore
     return <Component {...props}>/</Component>;
-  } else if (currentComponent === Routes.Settings) {
-    const Component = ComponentLoader[Routes.Settings];
+  } else if (currentComponent === Routes.MoreInfo) {
+    console.log("Running this..");
+    const Component = ComponentLoader[Routes.MoreInfo];
     const props =
       componentStack.current[componentStack?.current?.length - 1]?.props;
+    console.log("props", props, componentStack.current);
     //@ts-ignore
-    return <Component {...props}>/</Component>;
+    return (
+      <DetailsContainer>
+        {/* <Component {...props}></Component> */}
+      </DetailsContainer>
+    );
   } else if (currentComponent === Routes.Popup) {
     const Component = ComponentLoader[Routes.Popup];
     const props =
@@ -105,4 +113,4 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
   }
 };
 
-export const MFDrawerContainer = DrawerContainer;
+export default MFDetailsDrawerContainer;

@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
 import AnimatedLottieView from "lottie-react-native";
-import { View, StyleSheet, Image, Dimensions } from "react-native";
+import { View, StyleSheet, Image, Dimensions, Settings } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { processBootStrap } from "../../../backend/authentication/authentication";
@@ -85,6 +85,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   );
 
   useEffect(() => {
+    Settings.set({ SETTINGS_NAVIGATION_HISTORY: undefined });
     setDeviceInfo();
     currentContext.addDuplexMessageHandler(onDuplexMessage);
 

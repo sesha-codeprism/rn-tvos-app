@@ -112,8 +112,9 @@ interface GLOBALSType {
   /** Current Now-Next Map updated every three hours time */
   nowNextMap: any;
   // testString: string;
-  panelOpen: boolean;
+  drawerPanelOpen: boolean;
   moviesAndTvShows?: TrendingItems[];
+  recordingData: any
   /** Async store data */
   store: {
     accessToken: string | null;

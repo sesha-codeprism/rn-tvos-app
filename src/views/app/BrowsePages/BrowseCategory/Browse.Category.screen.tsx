@@ -88,11 +88,11 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
       setFeedDispatch(undefined);
     }
 
-    const feedDispatch = `${browseFeed.Uri}/?id=${browseFeed.Id}&$top=${
-      browseFeed.$top
+    const feedDispatch = `${browseFeed?.Uri}/?id=${browseFeed?.Id}&$top=${
+      browseFeed?.$top
     }&storeId=${DefaultStore.Id}&$groups=${
       GLOBALS.store!.rightsGroupIds
-    }&pivots=${browseFeed.pivots}`;
+    }&pivots=${browseFeed?.pivots}`;
     updateIsFeedDispatchSet(true);
     setFeedDispatch(feedDispatch);
   }, []);

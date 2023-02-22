@@ -26,9 +26,9 @@ const AudioLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
       setSelectedLang(item);
       console.log("props.route.params.type", props.route.params.type);
       if (props.route.params.type === "primary") {
-        GLOBALS.store.settings.audio.audioLanguages.primary = item;
+        GLOBALS.store!.settings.audio.audioLanguages.primary = item;
       } else {
-        GLOBALS.store.settings.audio.audioLanguages.secondary = item;
+        GLOBALS.store!.settings.audio.audioLanguages.secondary = item;
       }
       updateStore(GLOBALS.store);
     } catch (error) {
@@ -38,12 +38,12 @@ const AudioLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const getValues = () => {
     const selectedValue =
       props.route.params.type === "primary"
-        ? GLOBALS.store.settings.audio.audioLanguages.primary
-        : GLOBALS.store.settings.audio.audioLanguages.secondary;
+        ? GLOBALS.store!.settings.audio.audioLanguages.primary
+        : GLOBALS.store!.settings.audio.audioLanguages.secondary;
     setSelectedLang(selectedValue);
   };
   useEffect(() => {
-    const langList = GLOBALS.store.settings.audio.audioLanguages.tracks;
+    const langList = GLOBALS.store!.settings.audio.audioLanguages.tracks;
     setList(langList);
     // console.log("lang list", langList);
 

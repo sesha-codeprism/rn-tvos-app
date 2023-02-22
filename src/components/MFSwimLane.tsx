@@ -52,7 +52,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
   ({ ...props }, ref: any) => {
     const [page, setPage] = React.useState(0);
     let innerNoItemsReturenedRef = useRef<TouchableOpacity>(null);
-    
+
     const _onBlur = () => {};
     const _onFocus = (event?: SubscriberFeed, index?: number) => {
       props.onFocus && event && props.onFocus(event);
@@ -96,7 +96,8 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
       const browseObject = () => {
         if (
           navigationTargetUri === "browsepromotions" ||
-          navigationTargetUri === "browsepayperview"
+          navigationTargetUri === "browsepayperview" ||
+          navigationTargetUri === "libraries"
         ) {
           updateRoute("BrowseGallery", payload);
           return;
@@ -196,7 +197,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           appendViewAll
           swimLaneKey={props.swimLaneKey}
           updateSwimLaneKey={props.updateSwimLaneKey}
-          railContainerStyles={{height:450}}
+          railContainerStyles={{ height: 450 }}
           libraryItems={props.data}
           customViewAllTitle={props.customViewAllTitle}
           feed={props.feed}
@@ -235,8 +236,8 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           onListFooterElementOnPress={props.onListFooterElementOnPress}
           onListFooterElementFocus={props.onListFooterElementFocus}
           onViewAllPressed={onTapViewAll}
-          flatListStyle={{display: "flex", flex: 1, flexDirection: "row"}}
-          getNoItemReturenedRef={() =>  innerNoItemsReturenedRef}
+          flatListStyle={{ display: "flex", flex: 1, flexDirection: "row" }}
+          getNoItemReturenedRef={() => innerNoItemsReturenedRef}
         />
       </View>
     );

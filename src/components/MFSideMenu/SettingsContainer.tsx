@@ -1,13 +1,19 @@
-import React, {
-  forwardRef,
-  Ref,
-  useEffect,
-  useState,
-} from "react";
-import { Dimensions, StyleSheet, Modal, ActivityIndicator, Settings as SettingsRN } from "react-native";
+import React, { forwardRef, Ref, useEffect, useState } from "react";
+import {
+  Dimensions,
+  StyleSheet,
+  Modal,
+  ActivityIndicator,
+  Settings as SettingsRN,
+} from "react-native";
 import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
 import { GLOBALS } from "../../utils/globals";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+} from "react-native-reanimated";
 import MFEventEmitter from "../../utils/MFEventEmitter";
 import { Empty } from "../../views/MFDrawersContainer";
 
@@ -25,16 +31,15 @@ const SettingsContainer = (props: SettingsContainerProps) => {
   useEffect(() => {
     const restoreState = async () => {
       try {
-          // Only restore state
-          const savedStateString = SettingsRN.get("SETTINGS_NAVIGATION_HISTORY");
-          const state = savedStateString
-            ? JSON.parse(savedStateString)
-            : undefined;
+        // Only restore state
+        const savedStateString = SettingsRN.get("SETTINGS_NAVIGATION_HISTORY");
+        const state = savedStateString
+          ? JSON.parse(savedStateString)
+          : undefined;
 
-          if (state !== undefined) {
-            setInitialState(state);
-          }
-        
+        if (state !== undefined) {
+          setInitialState(state);
+        }
       } finally {
         setIsReady(true);
       }
@@ -45,20 +50,21 @@ const SettingsContainer = (props: SettingsContainerProps) => {
     }
   }, [isReady]);
 
-
   useEffect(() => {
-    if(isReady) {
+    if (isReady) {
       openDrawer();
     }
-  }, [isReady])
+  }, [isReady]);
 
   const openDrawer = () => {
-    offset.value = withTiming(SCREEN_WIDTH - (SCREEN_WIDTH * props.drawerPercentage), {
-      duration: 10,
-      easing: Easing.out(Easing.ease),
-    });
+    offset.value = withTiming(
+      SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
+      {
+        duration: 10,
+        easing: Easing.out(Easing.ease),
+      }
+    );
   };
-
 
   const closeDrawer = () => {
     offset.value = withTiming(0, {
@@ -75,7 +81,7 @@ const SettingsContainer = (props: SettingsContainerProps) => {
   });
 
   if (!isReady) {
-    return <Empty/>;
+    return <Empty />;
   }
 
   const renderPush = () => {
@@ -93,15 +99,9 @@ const SettingsContainer = (props: SettingsContainerProps) => {
         }}
         presentationStyle={"overFullScreen"}
       >
-
-          <Animated.View
-            style={[
-              styles.container,
-              animatedStyles,
-            ]}
-          >
-            <SettingsNavigator isAuthorized={true} initialState={initialState} />
-          </Animated.View>
+        <Animated.View style={[styles.container, animatedStyles]}>
+          <SettingsNavigator isAuthorized={true} initialState={initialState} />
+        </Animated.View>
       </Modal>
     );
   };

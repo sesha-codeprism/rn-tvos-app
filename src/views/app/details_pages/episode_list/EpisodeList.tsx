@@ -51,7 +51,8 @@ import { styles } from "../../BrowsePages/BrowseCategory/Browse.Category.screen"
 import { DetailsSidePanel } from "../DetailSidePanel";
 import { AppImages } from "../../../../assets/images";
 import { Definition as DefinitionOfItem } from "../../../../utils/DVRUtils";
-import { EpisodeRecordOptionsProps } from "../EpsiodeRecordOptions";
+import { EpisodeRecordOptionsProps } from "../details_panels/EpsiodeRecordOptions";
+import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
 
 interface EpisodeListProps {
   navigation: NativeStackNavigationProp<any>;
@@ -82,9 +83,9 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     Array<any>
   );
   const [episodeDetailsData, setEpisodeDetailsData] = useState<any>();
-  const [sideMenuProps, setSideMenuProps] = useState<any>();
-  const [panelType, setPanelType] = useState<any>(undefined);
   const [open, setOpen] = useState(false);
+  const [route, setRoute] = useState(DetailRoutes.MoreInfo);
+  const [screenProps, setScreenProps] = useState<any>();
 
   const metadataList: string[] = discoveryData?.ReleaseYear
     ? [discoveryData?.ReleaseYear]
@@ -117,7 +118,14 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   };
 
   const toggleSidePanel = () => {
-    setPanelType("MoreInfo");
+    setScreenProps({
+      udpData: navigationParams.udpData,
+      networkInfo: navigationParams.udpData.networkInfo,
+      genres:
+        navigationParams.udpData?.genre ||
+        navigationParams.discoveryProgramData?.genre,
+    });
+    setRoute(DetailRoutes.MoreInfo);
     setOpen(open);
     drawerRef?.current?.open();
     // drawerRef.current.open();
@@ -126,8 +134,6 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const ctaButtonPress: any = {
     [AppStrings?.str_details_program_record_button]: () => {
       drawerRef?.current?.close();
-      setSideMenuProps(undefined);
-      setPanelType(undefined);
       const { stationId } = navigationParams;
 
       if (!episodeSchedules) {
@@ -172,8 +178,10 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
           programDiscoveryData: episodeDiscoveryData,
           recordingOptions: recordingOptions,
         };
-        setSideMenuProps(params);
-        setPanelType("EpisodeRecord");
+        // setSideMenuProps(params);
+        // setPanelType("EpisodeRecord");
+        setRoute(DetailRoutes.EpisodeRecordOptions);
+        setScreenProps(params);
         setOpen(open);
         drawerRef?.current?.open();
       }
@@ -818,12 +826,18 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
                       onFocus={() => {
                         setOpen(false);
                         drawerRef.current.close();
+                        drawerRef.current.resetRoutes();
                       }}
                       variant={MFButtonVariant.FontIcon}
                       fontIconSource={cta.iconSource}
                       fontIconTextStyle={StyleSheet.flatten([
-                        episodeStyles.ctaFontIconStyle,
-                        { fontSize: 90 },
+                        episodeStyles.textStyle,
+                        {
+                          fontSize: 90,
+                          color: cta.buttonText?.includes("Record")
+                            ? globalStyles.fontColors.badge
+                            : "white",
+                        },
                       ])}
                       onPress={ctaButtonPress[cta.buttonAction]}
                       textStyle={{
@@ -938,19 +952,12 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         overlay={false}
         opacity={1}
         open={open}
-        openPage={panelType}
         animatedWidth={SCREEN_WIDTH * 0.37}
         closeOnPressBack={false}
         navigation={props.navigation}
         drawerContent={false}
-        moreInfoProps={{
-          udpData: navigationParams.udpData,
-          networkInfo: navigationParams.udpData.networkInfo,
-          genres:
-            navigationParams.udpData?.genre ||
-            navigationParams.discoveryProgramData?.genre,
-        }}
-        episodeRecordingProps={sideMenuProps}
+        route={route}
+        screenProps={screenProps}
       />
     </PageContainer>
   );
@@ -1082,6 +1089,10 @@ const episodeStyles: any = StyleSheet.create(
       },
       iconContainer: {
         width: 100,
+      },
+      textStyle: {
+        fontFamily: globalStyles.fontFamily.icons,
+        color: globalStyles.fontColors.light,
       },
       ctaButtonStyle: {
         height: 66,

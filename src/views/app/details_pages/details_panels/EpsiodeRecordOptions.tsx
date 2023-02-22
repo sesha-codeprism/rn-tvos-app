@@ -7,11 +7,11 @@ import {
   View,
   Pressable,
 } from "react-native";
-import { AppImages } from "../../../assets/images";
-import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
-import { AppStrings } from "../../../config/strings";
-import MFSettingsStyles from "../../../config/styles/MFSettingsStyles";
-import { getUIdef } from "../../../utils/uidefinition";
+import { AppImages } from "../../../../assets/images";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
+import { AppStrings } from "../../../../config/strings";
+import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
+import { getUIdef } from "../../../../utils/uidefinition";
 
 export interface EpisodeRecordOptionsProps {
   isNew: boolean;

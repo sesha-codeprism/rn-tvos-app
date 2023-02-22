@@ -50,6 +50,7 @@ import { metadataSeparator } from "../../../../utils/Subscriber.utils";
 import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { debounce2 } from "../../../../utils/app/app.utilities";
 import { current } from "@reduxjs/toolkit";
+import { PageContainer } from "../../../../components/PageContainer";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -308,187 +309,191 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     AppImages.bgPlaceholder;
 
   return (
-    <View style={styles.root}>
-      <View style={styles.topRow}>
-        <View style={styles.titleContainerStyles}>
-          <MFText
-            shouldRenderText
-            displayText={feed.Name}
-            textStyle={styles.titleTextStyles}
-          />
-        </View>
-        <View style={styles.filterButtonContainerStyle}>
-          {pivotQuery.data && (
-            <MFButton
-              ref={filterRef}
-              variant={MFButtonVariant.Icon}
-              iconSource={AppImages["filter"]}
-              imageSource={0}
-              avatarSource={undefined}
-              iconStyles={{
-                height: 28,
-                width: 28,
-                marginRight: 20,
-              }}
-              textLabel="Filter"
-              textStyle={styles.filterButtonLabelStyle}
-              style={styles.filterButtonBackgroundStyles}
-              focusedStyle={styles.filterButtonFocusedStyle}
-              onFocus={() => {
-                console.log("Filter focused");
-              }}
-              onPress={toggleMenu}
-              iconButtonStyles={{
-                shouldRenderImage: true,
-                iconPlacement: "Left",
-              }}
-              containedButtonProps={{
-                containedButtonStyle: {
-                  focusedBackgroundColor:
-                    appUIDefinition.theme.backgroundColors.primary1,
-                  enabled: true,
-                  hoverColor: appUIDefinition.theme.backgroundColors.primary1,
-                  elevation: 5,
-                },
-              }}
+    <PageContainer type="FullPage">
+      <View style={styles.root}>
+        <View style={styles.topRow}>
+          <View style={styles.titleContainerStyles}>
+            <MFText
+              shouldRenderText
+              displayText={feed.Name}
+              textStyle={styles.titleTextStyles}
             />
-          )}
-        </View>
-      </View>
-      {isLoading && dataSource.length <= 0 ? (
-        <MFLoader />
-      ) : (
-        <View style={styles.contentContainerStyles}>
-          <>
-            {dataSource.length > 0 ? (
-              <>
-                <View style={styles.currentFeedContainerStyles}>
-                  {currentFeed && (
-                    <>
-                      <View style={styles.posterImageContainerStyles}>
-                        <FastImage
-                          style={styles.posterImageStyle}
-                          source={imageSource}
-                        >
-                          <LinearGradient
-                            colors={["transparent", "#00030E", "#00030E"]}
-                            start={{ x: 0, y: 0.8 }}
-                            end={{ x: 0, y: 1 }}
-                            style={{
-                              flex: 1,
-                            }}
-                          />
-                        </FastImage>
-                      </View>
-                      <View style={styles.metadataContainerStyles}>
-                        {currentFeed?.CatalogInfo &&
-                          currentFeed.CatalogInfo.Network && (
-                            <View style={styles.networkLogoContainerStyle}>
-                              <FastImage
-                                source={{
-                                  uri: getNetworkInfo(currentFeed)
-                                    .tenFootLargeURL.uri,
-                                }}
-                                style={styles.networkLogoStyles}
-                              />
-                            </View>
-                          )}
-                        <MFText
-                          shouldRenderText
-                          displayText={currentFeed!.title}
-                          textStyle={styles.titleTextStyle}
-                          adjustsFontSizeToFit={false}
-                          numberOfLines={3}
-                        />
-                        {renderMetadata()}
-                        {renderRatingValues()}
-                      </View>
-                    </>
-                  )}
-                </View>
-                <View style={styles.gridViewContainerStyles}>
-                  <TouchableOpacity
-                    ref={barRef}
-                    style={{
-                      backgroundColor: "transparent",
-                      width: "100%",
-                      height: 5,
-                      // position: "absolute",
-                    }}
-                    onFocus={onFocusBar}
-                  />
-                  <LinearGradient
-                    colors={[
-                      "transparent",
-                      "#00030E",
-                      "#00030E",
-                      "#00030E",
-                      "#00030E",
-                      "#00030E",
-                    ]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0.1, y: 0 }}
-                    style={{
-                      flex: 1,
-                    }}
-                  >
-                    <MFGridView
-                      //@ts-ignore
-                      ref={cardRef}
-                      dataSource={dataSource}
-                      style={HomeScreenStyles.portraitCardStyles}
-                      imageStyle={HomeScreenStyles.portraitCardImageStyles}
-                      focusedStyle={HomeScreenStyles.focusedStyle}
-                      onFocus={updateFeed}
-                      autoFocusOnFirstCard
-                      selectedId={currentFeed?.Id}
-                      onEndReached={handleEndReached}
-                      onPress={(event) => {
-                        props.navigation.push(Routes.Details, { feed: event });
-                      }}
-                    />
-                  </LinearGradient>
-                </View>
-              </>
-            ) : (
-              <View
-                style={{
-                  height: "100%",
-                  width: "100%",
-                  alignContent: "center",
-                  alignItems: "center",
-                  justifyContent: "center",
+          </View>
+          <View style={styles.filterButtonContainerStyle}>
+            {pivotQuery.data && (
+              <MFButton
+                ref={filterRef}
+                variant={MFButtonVariant.Icon}
+                iconSource={AppImages["filter"]}
+                imageSource={0}
+                avatarSource={undefined}
+                iconStyles={{
+                  height: 28,
+                  width: 28,
+                  marginRight: 20,
                 }}
-              >
-                <MFText
-                  shouldRenderText
-                  displayText={`Couldn't fetch data for ${browseFeed.Uri}`}
-                  textStyle={[
-                    MFTabBarStyles.tabBarItemText,
-                    { color: "white", marginTop: 5 },
-                  ]}
-                />
-              </View>
+                textLabel="Filter"
+                textStyle={styles.filterButtonLabelStyle}
+                style={styles.filterButtonBackgroundStyles}
+                focusedStyle={styles.filterButtonFocusedStyle}
+                onFocus={() => {
+                  console.log("Filter focused");
+                }}
+                onPress={toggleMenu}
+                iconButtonStyles={{
+                  shouldRenderImage: true,
+                  iconPlacement: "Left",
+                }}
+                containedButtonProps={{
+                  containedButtonStyle: {
+                    focusedBackgroundColor:
+                      appUIDefinition.theme.backgroundColors.primary1,
+                    enabled: true,
+                    hoverColor: appUIDefinition.theme.backgroundColors.primary1,
+                    elevation: 5,
+                  },
+                }}
+              />
             )}
-          </>
+          </View>
         </View>
-      )}
-      {pivotQuery.isLoading ? (
-        <View />
-      ) : (
-        <BrowseFilter
-          //@ts-ignore
-          open={openMenu}
-          filterData={pivotQuery?.data?.data}
-          subMenuOpen={openSubMenu}
-          filterState={filterState}
-          setOpenSubMenu={() => {}}
-          setOpenMenu={setOpenMenu}
-          handleOnPress={handleFilterChange}
-          handleFilterClear={handleFilterClear}
-        />
-      )}
-    </View>
+        {isLoading && dataSource.length <= 0 ? (
+          <MFLoader />
+        ) : (
+          <View style={styles.contentContainerStyles}>
+            <>
+              {dataSource.length > 0 ? (
+                <>
+                  <View style={styles.currentFeedContainerStyles}>
+                    {currentFeed && (
+                      <>
+                        <View style={styles.posterImageContainerStyles}>
+                          <FastImage
+                            style={styles.posterImageStyle}
+                            source={imageSource}
+                          >
+                            <LinearGradient
+                              colors={["transparent", "#00030E", "#00030E"]}
+                              start={{ x: 0, y: 0.8 }}
+                              end={{ x: 0, y: 1 }}
+                              style={{
+                                flex: 1,
+                              }}
+                            />
+                          </FastImage>
+                        </View>
+                        <View style={styles.metadataContainerStyles}>
+                          {currentFeed?.CatalogInfo &&
+                            currentFeed.CatalogInfo.Network && (
+                              <View style={styles.networkLogoContainerStyle}>
+                                <FastImage
+                                  source={{
+                                    uri: getNetworkInfo(currentFeed)
+                                      .tenFootLargeURL.uri,
+                                  }}
+                                  style={styles.networkLogoStyles}
+                                />
+                              </View>
+                            )}
+                          <MFText
+                            shouldRenderText
+                            displayText={currentFeed!.title}
+                            textStyle={styles.titleTextStyle}
+                            adjustsFontSizeToFit={false}
+                            numberOfLines={3}
+                          />
+                          {renderMetadata()}
+                          {renderRatingValues()}
+                        </View>
+                      </>
+                    )}
+                  </View>
+                  <View style={styles.gridViewContainerStyles}>
+                    <TouchableOpacity
+                      ref={barRef}
+                      style={{
+                        backgroundColor: "transparent",
+                        width: "100%",
+                        height: 5,
+                        // position: "absolute",
+                      }}
+                      onFocus={onFocusBar}
+                    />
+                    <LinearGradient
+                      colors={[
+                        "transparent",
+                        "#00030E",
+                        "#00030E",
+                        "#00030E",
+                        "#00030E",
+                        "#00030E",
+                      ]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 0.1, y: 0 }}
+                      style={{
+                        flex: 1,
+                      }}
+                    >
+                      <MFGridView
+                        //@ts-ignore
+                        ref={cardRef}
+                        dataSource={dataSource}
+                        style={HomeScreenStyles.portraitCardStyles}
+                        imageStyle={HomeScreenStyles.portraitCardImageStyles}
+                        focusedStyle={HomeScreenStyles.focusedStyle}
+                        onFocus={updateFeed}
+                        autoFocusOnFirstCard
+                        selectedId={currentFeed?.Id}
+                        onEndReached={handleEndReached}
+                        onPress={(event) => {
+                          props.navigation.push(Routes.Details, {
+                            feed: event,
+                          });
+                        }}
+                      />
+                    </LinearGradient>
+                  </View>
+                </>
+              ) : (
+                <View
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    alignContent: "center",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <MFText
+                    shouldRenderText
+                    displayText={`Couldn't fetch data for ${browseFeed.Uri}`}
+                    textStyle={[
+                      MFTabBarStyles.tabBarItemText,
+                      { color: "white", marginTop: 5 },
+                    ]}
+                  />
+                </View>
+              )}
+            </>
+          </View>
+        )}
+        {pivotQuery.isLoading ? (
+          <View />
+        ) : (
+          <BrowseFilter
+            //@ts-ignore
+            open={openMenu}
+            filterData={pivotQuery?.data?.data}
+            subMenuOpen={openSubMenu}
+            filterState={filterState}
+            setOpenSubMenu={() => {}}
+            setOpenMenu={setOpenMenu}
+            handleOnPress={handleFilterChange}
+            handleFilterClear={handleFilterClear}
+          />
+        )}
+      </View>
+    </PageContainer>
   );
 };
 

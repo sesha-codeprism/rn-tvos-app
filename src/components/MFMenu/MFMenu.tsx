@@ -258,6 +258,7 @@ const MFMenu = (props: MFMenuProps) => {
                     }}
                     onFocus={() => {
                       setFocused("settings");
+                      GLOBALS.drawerPanelOpen = false;
                     }}
                   />
                 </View>

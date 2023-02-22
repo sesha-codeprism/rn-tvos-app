@@ -2,6 +2,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
+  BackHandler,
   Dimensions,
   Image,
   ImageBackground,
@@ -47,7 +48,7 @@ import {
   pbr,
   sourceTypeString,
 } from "../../../utils/analytics/consts";
-import { Genre, SourceType } from "../../../utils/common";
+import { Genre, ItemShowType, SourceType } from "../../../utils/common";
 import { useQuery } from "react-query";
 import { defaultQueryOptions } from "../../../config/constants";
 import { DefaultStore } from "../../../utils/DiscoveryUtils";
@@ -71,7 +72,11 @@ import { Routes } from "../../../config/navigation/RouterOutlet";
 import { SCREEN_WIDTH } from "../../../utils/dimensions";
 const { width, height } = Dimensions.get("window");
 import MFProgressBar from "../../../components/MFProgressBar";
-import { validateEntitlements } from "../../../utils/DVRUtils";
+import {
+  Definition as DefinationOfItem,
+  validateEntitlements,
+} from "../../../utils/DVRUtils";
+import { DetailRoutes } from "../../../config/navigation/DetailsNavigator";
 
 interface AssetData {
   id: string;
@@ -136,6 +141,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [similarItemsSwimLaneKey, setSimilarItemsSwimLaneKey] = useState("");
   const [castnCrewSwimLaneKey, setCastnCrewSwimlaneKey] = useState("");
   const [isItemPinned, setIsItemPinned] = useState(false);
+  const [route, setRoute] = useState(DetailRoutes.MoreInfo);
+  const [screenProps, setScreenProps] = useState<any>();
 
   let scrollViewRef: any = React.createRef<ScrollView>();
   //@ts-ignore
@@ -189,12 +196,216 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const toggleSidePanel = () => {
-    setOpen(open);
+    setScreenProps({
+      udpData: udpDataAsset,
+      networkInfo: networkInfo,
+      genres: udpDataAsset?.genre || discoveryProgramData?.genre,
+    });
+    setRoute(DetailRoutes.MoreInfo);
+    // drawerRef?.current.pushRoute(DetailRoutes.MoreInfo, {
+    //   udpData: udpDataAsset,
+    //   networkInfo: networkInfo,
+    //   genres: udpDataAsset?.genre || discoveryProgramData?.genre,
+    // });
+    setOpen(true);
     drawerRef?.current?.open();
+
     // drawerRef.current.open();
   };
   const openNewRecording = () => {
-    featureNotImplementedAlert();
+    //TODO: We have a check for PCON. Need to implement
+    const contentType = assetData.assetType?.contentType;
+    let { ChannelInfo: { channel: currentChannel = undefined } = {} } =
+      feed || {};
+    if (
+      contentType === ContentType.PROGRAM ||
+      contentType === ContentType.GENERIC
+    ) {
+      let schedule = discoverySchedulesData?.[0];
+
+      // Get the correct schedule, the one which is shown in UI
+      if (
+        currentChannel &&
+        discoverySchedulesData &&
+        discoverySchedulesData.length
+      ) {
+        schedule = discoverySchedulesData.find(
+          (s: any) =>
+            s?.ChannelNumber === currentChannel?.Number ||
+            s?.ChannelNumber == currentChannel?.number
+        );
+      }
+      if (schedule) {
+        if (data) {
+          const {
+            Schedule: {
+              channelId: StationIdFromEPGSchedule = "",
+              contentType: ContentTypeFromEPGSchedule = "",
+            } = {},
+            currentCatchupSchedule,
+            currentCatchupSchedule: { ShowType = undefined } = {},
+            ChannelInfo,
+            currentSchedule,
+            ShowType: ShowTypeSingleProgram = undefined,
+            channel: { id: StationIdFromEPGChannel = "" } = {},
+          } = data;
+
+          if (
+            StationIdFromEPGSchedule &&
+            ContentTypeFromEPGSchedule === ItemShowType.Movie
+          ) {
+            const actualSelectedChannel =
+              GLOBALS.channelMap?.findChannelByStationId(
+                StationIdFromEPGSchedule
+              );
+            if (actualSelectedChannel) {
+              // assign the selected schedule
+              const selectedSchedule = discoverySchedulesData?.find(
+                (s: any) =>
+                  s?.ChannelNumber === actualSelectedChannel?.channel?.Number
+              );
+              if (selectedSchedule) {
+                // overwrite
+                schedule = selectedSchedule;
+              }
+            }
+          }
+
+          if (StationIdFromEPGChannel) {
+            let actualSelectedChannel =
+              GLOBALS.channelMap?.findChannelByStationId(
+                StationIdFromEPGChannel
+              );
+            if (actualSelectedChannel) {
+              // assign the selected schedule
+              const selectedSchedule = discoverySchedulesData?.find(
+                (s: any) =>
+                  s?.ChannelNumber === actualSelectedChannel?.channel?.Number
+              );
+              if (selectedSchedule) {
+                // overwrite
+                schedule = selectedSchedule;
+              }
+            }
+          }
+
+          if (ChannelInfo || currentSchedule) {
+            const stationId =
+              ChannelInfo?.channel?.StationId ||
+              currentSchedule?.StationId ||
+              schedule.StationId;
+
+            const channel = discoverySchedulesData?.find(
+              (x: any) => x.StationId === stationId
+            );
+            const { StationId, ChannelNumber, StartUtc } = channel;
+            GLOBALS.recordingData = {
+              Definition: DefinationOfItem.SINGLE_PROGRAM,
+              Parameters: [
+                {
+                  Key: "ProgramId",
+                  Value: schedule?.ProgramId,
+                },
+              ],
+              Settings: {
+                StationId: StationId,
+                ChannelNumber: ChannelNumber as number,
+                StartUtc: StartUtc,
+                EndLateSeconds: 0,
+                RecyclingDisabled: false,
+                ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+                IsMultiChannel: false,
+              },
+            };
+            // this.props.setRecordingData();
+          } else if (
+            ShowType === ItemShowType.Movie ||
+            ShowTypeSingleProgram === ItemShowType.Movie
+          ) {
+            const { StationId, ChannelNumber, CatchupStartUtc, StartUtc } =
+              StationIdFromEPGSchedule
+                ? schedule || currentCatchupSchedule
+                : currentCatchupSchedule || schedule;
+            if (ChannelNumber) {
+              GLOBALS.recordingData = {
+                Definition: DefinationOfItem.SINGLE_PROGRAM,
+                Parameters: [
+                  {
+                    Key: "ProgramId",
+                    Value: schedule?.ProgramId,
+                  },
+                ],
+                Settings: {
+                  StationId: StationId,
+                  ChannelNumber: ChannelNumber as number,
+                  StartUtc: CatchupStartUtc || StartUtc,
+                  EndLateSeconds: 0,
+                  RecyclingDisabled: false,
+                  ChannelMapId:
+                    GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+                  IsMultiChannel: false,
+                },
+              };
+            }
+          } else if (schedule) {
+            const { StationId, ChannelNumber, StartUtc } = schedule;
+            if (ChannelNumber) {
+              GLOBALS.recordingData = {
+                Definition: DefinationOfItem.SINGLE_PROGRAM,
+                Parameters: [
+                  {
+                    Key: "ProgramId",
+                    Value: schedule?.ProgramId,
+                  },
+                ],
+                Settings: {
+                  StationId: StationId,
+                  ChannelNumber: ChannelNumber as number,
+                  StartUtc: StartUtc,
+                  EndLateSeconds: 0,
+                  RecyclingDisabled: false,
+                  ChannelMapId:
+                    GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+                  IsMultiChannel: false,
+                },
+              };
+              // this.props.setRecordingData();
+            }
+          }
+        }
+        let params = undefined;
+        let panelName = undefined;
+        if (contentType === ContentType.GENERIC || schedule?.IsGeneric) {
+          params = {
+            isNew: true,
+            isSeries: false,
+            title: udpDataAsset.title,
+            schedules: discoverySchedulesData,
+            programId: schedule?.ProgramId,
+            isGeneric: true,
+            // onDvrItemSelected: this.setFocusBack,
+            isPopupModal: true,
+          };
+          // panelName = SideMenuRoutes.DvrEpisodeRecordingOptions;
+        } else {
+          params = {
+            isNew: true,
+            programId: schedule?.ProgramId,
+            seriesId: schedule?.SeriesId,
+            title: schedule?.Name || "",
+            // onDvrItemSelected: this.setFocusBack,
+            isPopupModal: true,
+          };
+          setRoute(DetailRoutes.RecordingOptions);
+          setScreenProps(params);
+          drawerRef.current?.open();
+          // panelName = SideMenuRoutes.DvrRecordingOptions;
+        }
+        // this.props.openPanel(true, panelName, params);
+      }
+    } else {
+      //TODO: Series recording.. need to specifically handle entire series recording
+    }
   };
 
   const startResolveConflict = () => {
@@ -204,6 +415,23 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const openEditRecordingsPanel = (data: any) => {
     featureNotImplementedAlert();
   };
+
+  useEffect(() => {
+    const backAction = () => {
+      if (!open) {
+        console.log("Back action");
+        return true;
+      } else {
+        return false;
+      }
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const handlePlayDvr = () => {};
   const ctaButtonPress = {
@@ -421,7 +649,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
   let assetData: AssetData = updateAssetData();
 
+  const handleBackPress = () => {
+    return true;
+  };
+
   useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", handleBackPress);
     const status = getItemPinnedStatus();
     console.log("status", status);
     setIsItemPinned(status);
@@ -447,6 +680,20 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       data
     );
     return massagedData;
+  };
+
+  const channelByStationId = (channels: any[], Schedule: any) => {
+    let index;
+    const channel = channels.find((element: any, defaultIndex: any) => {
+      if (element.StationId == Schedule?.channelId) {
+        index = defaultIndex;
+        return element;
+      }
+    });
+    return {
+      channel,
+      channelIndex: index,
+    };
   };
 
   const handleFavoritePress = async () => {
@@ -554,7 +801,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       //TODO: Re-implement this once the live api calls are written
       // const { Schedule = undefined } = feed || {};
       // const channelFromEPG = channelByStationId(
-      //   this.props.channelMap.Channels,
+      //   GLOBALS.channelMap.Channels,
       //   Schedule
       // );
       // if (channelFromEPG) {
@@ -1003,6 +1250,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   onFocus={() => {
                     setOpen(false);
                     drawerRef.current.close();
+                    drawerRef.current.resetRoutes();
                     setCTAButtonFocusState(cta.buttonText);
                   }}
                   variant={MFButtonVariant.FontIcon}
@@ -1653,14 +1901,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         opacity={1}
         open={open}
         animatedWidth={width * 0.37}
+        // openPage="MoreInfo"
         closeOnPressBack={false}
         navigation={props.navigation}
         drawerContent={false}
-        moreInfoProps={{
-          udpData: udpDataAsset,
-          networkInfo: networkInfo,
-          genres: udpDataAsset?.genre || discoveryProgramData?.genre,
-        }}
+        route={route}
+        screenProps={screenProps} // moreInfoProps={}
       />
     </PageContainer>
   );
@@ -1669,37 +1915,22 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 const styles: any = StyleSheet.create(
   getUIdef("Details.Showcard")?.style ||
     scaleAttributes({
-      detailsBlock: {
-        height: 852,
-        flexDirection: "row",
-      },
+      detailsBlock: { height: 852, flexDirection: "row" },
       secondBlock: {
         marginTop: 86,
         flexDirection: "column",
         flex: 1,
         height: 627,
       },
-      flexRow: {
-        flexDirection: "row",
-      },
-      ctaBlock: {
-        flexDirection: "row",
-      },
-      favoriteBlock: {
-        width: 583,
-        marginTop: 69,
-      },
-      ctaButtonGroupBlock: {
-        marginTop: 69,
-      },
+      flexRow: { flexDirection: "row" },
+      ctaBlock: { flexDirection: "row" },
+      favoriteBlock: { width: 583, marginTop: 69 },
+      ctaButtonGroupBlock: { marginTop: 69 },
       containerOpacity: {
-        backgroundColor: g.backgroundColors.shade1,
+        backgroundColor: "#00030E",
         opacity: 0.9,
       },
-      firstColumn: {
-        width: 583,
-        alignItems: "center",
-      },
+      firstColumn: { width: 583, alignItems: "center" },
       imageContainer: {
         borderRadius: 4,
         overflow: "hidden",
@@ -1719,7 +1950,7 @@ const styles: any = StyleSheet.create(
       networkImageView: {
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: g.backgroundColors.shade3,
+        backgroundColor: "#282828",
         borderRadius: 3,
         height: 111,
         width: 111,
@@ -1731,123 +1962,85 @@ const styles: any = StyleSheet.create(
         width: 85,
         resizeMode: "contain",
       },
-      marginRight20: {
-        marginRight: 20,
-      },
+      marginRight20: { marginRight: 20 },
       networkTitle: {
-        fontFamily: g.fontFamily.semiBold,
-        fontSize: g.fontSizes.body1,
-        color: g.fontColors.darkGrey,
+        fontFamily: "Inter-SemiBold",
+        fontSize: 29,
+        color: "#6D6D6D",
+        paddingTop: 18,
       },
       metadataContainer: {
         flexDirection: "row",
         paddingBottom: 23,
       },
       title: {
-        fontFamily: g.fontFamily.bold,
-        fontSize: g.fontSizes.heading2,
-        color: g.fontColors.light,
+        fontFamily: "Inter-Bold",
+        fontSize: 57,
+        color: "#EEEEEE",
         paddingBottom: 10,
       },
-      hourGlass: {
-        width: 16,
-        height: 22,
-        marginTop: 26,
-        marginLeft: 15,
-      },
       metadataLine1: {
-        fontFamily: g.fontFamily.semiBold,
-        fontSize: g.fontSizes.body2,
-        color: g.fontColors.lightGrey,
+        fontFamily: "Inter-SemiBold",
+        fontSize: 25,
+        color: "#A7A7A7",
         marginBottom: 25,
       },
       description: {
-        fontFamily: g.fontFamily.regular,
-        fontSize: g.fontSizes.body2,
-        color: g.fontColors.lightGrey,
-        lineHeight: g.lineHeights.body2,
+        fontFamily: "Inter-Regular",
+        fontSize: 25,
+        color: "#A7A7A7",
+        lineHeight: 38,
       },
-      showcardImage: {
-        height: 628,
-        width: 419,
-      },
+      showcardImage: { height: 628, width: 419 },
       buttonContainerStyle: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
       },
-      buttonIconContainer: {
-        borderRadius: 35,
-        width: 70,
-        height: 70,
-        overflow: "hidden",
-        backgroundColor: g.backgroundColors.shade4,
-      },
-      solidBackground: {
-        backgroundColor: g.backgroundColors.shade4,
-      },
-      moreDetailsContainer: {
-        marginTop: 130,
-      },
+      buttonIconContainer: { width: 70, height: 70 },
+      solidBackground: { backgroundColor: "#424242" },
+      focusedBackground: { backgroundColor: "#053C69" },
+      moreDetailsContainer: { marginTop: 104 },
       contentRatingsContainer: {
         flexDirection: "row",
         marginBottom: 25,
       },
-      contentRatingsIcon: {
-        width: 30,
-        height: 30,
-      },
-      contentRatingText: {
-        marginLeft: 10,
-      },
-      ratingBlock: {
-        marginRight: 30,
-        flexDirection: "row",
-      },
-      textStyle: {
-        fontFamily: g.fontFamily.icons,
-        color: g.fontColors.light,
-      },
-      progressBarContainer: {
-        height: 3,
-      },
+      contentRatingsIcon: { width: 30, height: 30 },
+      contentRatingText: { marginLeft: 10 },
+      ratingBlock: { marginRight: 30, flexDirection: "row" },
+      textStyle: { fontFamily: "MyFontRegular", color: "#EEEEEE" },
+      progressBarContainer: { height: 3 },
       progressInfoText: {
-        fontFamily: g.fontFamily.semiBold,
-        fontSize: g.fontSizes.body2,
-        color: g.fontColors.lightGrey,
-        paddingBottom: 30,
-        lineHeight: g.lineHeights.body2,
+        fontFamily: "Inter-SemiBold",
+        fontSize: 25,
+        color: "#A7A7A7",
+        paddingBottom: 35,
+        lineHeight: 38,
         marginBottom: 20,
       },
       statusTextStyle: {
-        fontSize: g.fontSizes.body2,
-        fontFamily: g.fontFamily.regular,
-        color: g.fontColors.statusWarning,
+        fontSize: 25,
+        fontFamily: "Inter-Regular",
+        color: "#E7A230",
         marginBottom: 25,
       },
       fontIconStyle: {
-        fontFamily: g.fontFamily.icons,
+        fontFamily: "MyFontRegular",
+        color: "#A7A7A7",
         fontSize: 70,
-        color: g.fontColors.lightGrey,
         marginRight: 15,
         marginTop: -40,
         marginBottom: 10,
       },
-      flexOne: {
-        flex: 1,
-      },
-      ctaButtonStyle: {
-        height: 66,
-        fontFamily: g.fontFamily.semiBold,
-      },
+      flexOne: { flex: 1 },
+      ctaButtonStyle: { height: 66, fontFamily: "Inter-SemiBold" },
       ctaFontIconStyle: {
-        fontFamily: g.fontFamily.icons,
-        color: g.fontColors.statusError,
+        fontFamily: "MyFontRegular",
+        color: "#E15554",
       },
       buttonContainer: {
         flexDirection: "row",
         alignItems: "center",
-        marginRight: 40,
       },
       modalContainer: {
         position: "absolute",
@@ -1855,37 +2048,32 @@ const styles: any = StyleSheet.create(
         right: 0,
         zIndex: 2,
       },
-      episodeBlockContainer: {
-        marginTop: 35.5,
-      },
+      episodeBlockContainer: { marginTop: 35.5 },
       episodeBlockTitle: {
         marginBottom: 20,
-        fontSize: g.fontSizes.body1,
-        fontFamily: g.fontFamily.bold,
-        color: g.fontColors.light,
+        fontSize: 29,
+        fontFamily: "Inter-Bold",
+        color: "#EEEEEE",
       },
       episodeMetadata: {
         marginBottom: 20,
-        fontSize: g.fontSizes.body2,
-        fontFamily: g.fontFamily.semiBold,
-        color: g.fontColors.lightGrey,
+        fontSize: 25,
+        fontFamily: "Inter-SemiBold",
+        color: "#A7A7A7",
       },
       badgeStyle: {
-        fontFamily: g.fontFamily.icons,
-        color: g.fontColors.badge,
+        fontFamily: "MyFontRegular",
+        color: "#E15554",
         fontSize: 50,
         marginLeft: 20,
         marginTop: -10,
       },
-      marginTop: {
-        marginTop: 8,
-      },
-      descriptionText: {
-        fontSize: g.fontSizes.body2,
-        fontFamily: g.fontFamily.regular,
-        color: g.fontColors.lightGrey,
-        lineHeight: g.lineHeights.body2,
-        marginBottom: 25,
+      marginTop: { marginTop: 8 },
+      hourGlass: {
+        width: 16,
+        height: 22,
+        marginTop: 26,
+        marginLeft: 15,
       },
     })
 );

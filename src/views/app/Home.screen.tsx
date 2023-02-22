@@ -20,7 +20,6 @@ import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import MFMarquee from "../../components/MFMarquee";
-import { MFDrawer } from "../../components/MFSideMenu/SettingsContainer";
 import MFSwim from "../../components/MFSwim";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -135,11 +134,12 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
         `app-end-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
       );
     }
+    // throw new Error("Some test error");
   }, []);
 
-  const setSetttingsRef =  (ref:any) =>{
+  const setSetttingsRef = (ref: any) => {
     setttingsRef.current = ref;
-  }
+  };
 
   setHubsData();
   const setCardFocus = () => {
@@ -185,8 +185,15 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                   }}
                   setCardFocus={setCardFocus}
                   onPressSettings={() => {
-                    MFEventEmitter.emit("openSettings",{
-                      onClose: () => setttingsRef.current && setttingsRef?.current?.setNativeProps({ hasTVPreferredFocus: true }), drawerPercentage: 0.35 });
+                    MFEventEmitter.emit("openSettings", {
+                      onClose: () =>
+                        setttingsRef.current &&
+                        setttingsRef?.current?.setNativeProps({
+                          hasTVPreferredFocus: true,
+                        }),
+                      drawerPercentage: 0.35,
+                    });
+                    GLOBALS.drawerPanelOpen = true;
                     if (currentFeed) {
                       // service?.addNavEventOnCurPageOpenOrClose(
                       //   {
@@ -243,7 +250,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
           </ImageBackground>
         </ImageBackground>
       </ImageBackground>
-
     </View>
   );
 };

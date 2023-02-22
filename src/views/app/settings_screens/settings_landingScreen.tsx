@@ -11,6 +11,7 @@ interface Props {
   navigation?: NativeStackNavigationProp<any>;
 }
 const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
+  console.log("id", props.navigation.getState());
   const [focused, setFocused] = useState<any>(0);
   const isDevSettingEnabled = !!GLOBALS.bootstrapSelectors?.Features.find(
     (f: any) => f === "dev_settings"
@@ -86,9 +87,19 @@ const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
         },
       ];
 
-  useEffect(() => {}, [AppStrings]);
+  useEffect(() => {
+    // props.navigation.replace("display", { NAME: "ID", ABX: { ID: "123" } });
+  }, [AppStrings]);
+
+  // useEffect(() => {
+  //   if (GLOBALS.drawerPanelOpen) {
+  //     console.log("triggered");
+  //     const num = Math.floor(Math.random() * 6);
+  //     props.navigation.replace(menu[num].action);
+  //   }
+  // }, [GLOBALS.drawerPanelOpen]);
   return (
-    <SideMenuLayout subTitle={AppStrings.str_settings_home_heading}>
+    <SideMenuLayout title={AppStrings.str_settings_home_heading}>
       <FlatList
         data={menu}
         keyExtractor={(item) => item.title}

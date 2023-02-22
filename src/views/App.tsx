@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useEffect, useState } from "react";
 import RouterOutlet from "../config/navigation/RouterOutlet";
 import { GlobalContext } from "../contexts/globalContext";
@@ -7,9 +8,10 @@ import { UserProfile } from "../@types/UserProfile";
 import { GLOBALS } from "../utils/globals";
 import "react-native-gesture-handler";
 import { initializeAnalyticsService } from "../utils/analytics/analytics";
-import { SCREEN_WIDTH } from "../utils/dimensions";
 import { MFDrawerContainer } from "./MFDrawersContainer";
 import { initUdls } from "../../backend";
+import ErrorBoundary from "react-native-error-boundary";
+import ErrorFallbackComponent from "../components/ErroFallBackComponent";
 
 interface AppProps {}
 
@@ -72,6 +74,10 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     shouldEnableRTL(rtlStatus);
   };
 
+  const errorHandler = (error: Error, stackTrace: string) => {
+    console.error("Something went wrong", error, "with stacktrace", stackTrace);
+  };
+
   const appSettings = {
     userProfile,
     setUserProfile,
@@ -86,17 +92,22 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   };
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <GlobalContext.Provider value={appSettings}>
-        <MFDrawerContainer />
-        <RouterOutlet
-          isAuthorized={
-            GLOBALS.store?.accessToken !== null &&
-            GLOBALS.store?.refreshToken !== null
-          }
-        />
-      </GlobalContext.Provider>
-    </QueryClientProvider>
+    <ErrorBoundary
+      onError={errorHandler}
+      FallbackComponent={ErrorFallbackComponent}
+    >
+      <QueryClientProvider client={queryClient}>
+        <GlobalContext.Provider value={appSettings}>
+          <MFDrawerContainer />
+          <RouterOutlet
+            isAuthorized={
+              GLOBALS.store?.accessToken !== null &&
+              GLOBALS.store?.refreshToken !== null
+            }
+          />
+        </GlobalContext.Provider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 
