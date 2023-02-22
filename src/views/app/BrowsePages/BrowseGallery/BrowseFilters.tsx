@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
@@ -28,210 +29,14 @@ type BrowseFilterProps = {
   open: boolean;
   filterData: any;
   filterState: any;
+  defaultFilterState: any;
   setOpenSubMenu: (open: boolean) => void;
   subMenuOpen: boolean;
   setOpenMenu: any;
   handleOnPress?: (value: any) => void;
   handleFilterClear?: () => void;
+  route?: any;
 };
-const filterData = [
-  {
-    Id: "Genre",
-    Name: "Genre",
-    Pivots: [
-      {
-        Id: "Genre|2006",
-        Name: "Action",
-      },
-      {
-        Id: "Genre|2681",
-        Name: "Comedy",
-      },
-      {
-        Id: "Genre|2107",
-        Name: "Crime",
-      },
-      {
-        Id: "Genre|2700",
-        Name: "Documentary",
-      },
-      {
-        Id: "Genre|2715",
-        Name: "Drama",
-      },
-      {
-        Id: "Genre|2003",
-        Name: "Family",
-      },
-      {
-        Id: "Genre|2729",
-        Name: "Fantasy",
-      },
-      {
-        Id: "Genre|2500",
-        Name: "Holidays",
-      },
-      {
-        Id: "Genre|2771",
-        Name: "Horror",
-      },
-      {
-        Id: "Genre|2822",
-        Name: "Mystery",
-      },
-      {
-        Id: "Genre|2888",
-        Name: "Sci-Fi",
-      },
-      {
-        Id: "Genre|2005",
-        Name: "Sports",
-      },
-      {
-        Id: "Genre|2921",
-        Name: "Thriller",
-      },
-      {
-        Id: "Genre|2013",
-        Name: "Western",
-      },
-    ],
-  },
-  {
-    Id: "ShowType",
-    Name: "ShowType",
-    Pivots: [
-      {
-        Id: "ShowType|Movie",
-        Name: "Movie",
-      },
-      {
-        Id: "ShowType|TVShow",
-        Name: "TVShow",
-      },
-      {
-        Id: "ShowType|Live",
-        Name: "Live",
-      },
-      {
-        Id: "ShowType|Station",
-        Name: "Station",
-      },
-    ],
-  },
-  {
-    Id: "Price",
-    Name: "Price",
-    Pivots: [
-      {
-        Id: "Price|Free",
-        Name: "Free",
-      },
-    ],
-  },
-  {
-    Id: "Language",
-    Name: "Language",
-    Pivots: [
-      {
-        Id: "Language|en",
-        Name: "English",
-      },
-      {
-        Id: "Language|fr",
-        Name: "French",
-      },
-    ],
-  },
-  {
-    Id: "SortBy",
-    Name: "Sort by",
-    Pivots: [
-      {
-        Id: "orderBy|Popularity",
-        Name: "Popular",
-      },
-      {
-        Id: "orderBy|Name",
-        Name: "A-Z",
-      },
-      {
-        Id: "orderBy|ReleaseYear",
-        Name: "Release year",
-      },
-      {
-        Id: "orderBy|LicenseWindowStartUtc",
-        Name: "Date added",
-      },
-      {
-        Id: "orderBy|Rating_fr",
-        Name: "Cinoche.com",
-        Language: "fr",
-      },
-      {
-        Id: "orderBy|Rating_en",
-        Name: "Rotten Tomatoes",
-        Language: "en",
-      },
-    ],
-  },
-  {
-    Id: "Restrictions",
-    Name: "Restrictions",
-    Pivots: [
-      {
-        Id: "Restrictions|Downloadable",
-        Name: "Downloadable",
-      },
-    ],
-  },
-  {
-    Id: "QualityLevel",
-    Name: "QualityLevel",
-    Pivots: [
-      {
-        Id: "QualityLevel|HD",
-        Name: "HD",
-      },
-      {
-        Id: "QualityLevel|UHD",
-        Name: "UHD",
-      },
-    ],
-  },
-  {
-    Id: "LicenseWindow",
-    Name: "LicenseWindow",
-    Pivots: [
-      {
-        Id: "LicenseWindow|New",
-        Name: "New",
-      },
-      {
-        Id: "LicenseWindow|LastChance",
-        Name: "Last Chance",
-      },
-    ],
-  },
-  {
-    Id: "OfferType",
-    Name: "OfferType",
-    Pivots: [
-      {
-        Id: "OfferType|Free",
-        Name: "Free",
-      },
-      {
-        Id: "OfferType|Rent",
-        Name: "Rent",
-      },
-      {
-        Id: "OfferType|Purchase",
-        Name: "Purchase",
-      },
-    ],
-  },
-];
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const { width, height } = Dimensions.get("screen");
 const BrowseFilter = (props: BrowseFilterProps) => {
@@ -239,17 +44,18 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   const fullCloseOffset = Dimensions.get("screen").width * 0.5;
   const fullOpenOffset = 0;
   const [menuList, setMenuList] = useState<Array<any>>([]);
-  const [expanded, setExpanded] = useState(props.open);
+  const [expanded, setExpanded] = useState(true);
   const [subMenuList, setSubMenuList] = useState<Array<any>>([]);
   const [focusedMenu, setFocusedMenu] = useState(0);
   const [focusedSubMenu, setFocusedSubMenu] = useState<any>(-1);
   const [selectedMenu, setSelectedMenu] = useState<any>();
   const [selectedSubMenu, setSelectedSubMenu] = useState("");
   const [clearFocused, setClearFocused] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(true);
   const menuRef = Array(20)
     .fill(0)
     .map(() => useRef<PressableProps>(null));
-  const subMenuFirstRef = useRef<PressableProps>(null);
+  const subMenuFirstRef = useRef<TouchableOpacity>(null);
   const [menuHasFocus, setMenuHasFocus] = useState(true);
   const offset = useSharedValue(fullCloseOffset);
   const animatedStyles = useAnimatedStyle(() => {
@@ -266,11 +72,12 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   });
 
   useEffect(() => {
-    console.log(props.filterState);
-    const menu = filterData.map((item, index) => {
-      return { Id: item.Id, Name: item.Name };
-    });
-    //@ts-ignore
+    console.log("props in useEffect", props);
+    const menu = props.filterData.map(
+      (item: { Id: any; Name: any }, index: any) => {
+        return { Id: item.Id, Name: item.Name };
+      }
+    );
     setMenuList(menu);
     console.log("props.open in useEffect", props.open);
     props.open ? open() : close();
@@ -278,7 +85,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
 
   const open = () => {
     console.log("browse filter is open");
-    offset.value = props.open ? fullOpenOffset : fullCloseOffset;
+    offset.value = openDrawer ? fullOpenOffset : fullCloseOffset;
     // if (!props.open) {
     //   props.setOpenSubMenu(false);
     // }
@@ -294,7 +101,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
     console.log("onFocusMenu:index", index);
     setFocusedMenu(index);
     if (name !== "clear") {
-      const subMenu = filterData.find((item) => {
+      const subMenu = props.filterData.find((item: any) => {
         return item.Name === name.Name;
       })?.Pivots;
       setSubMenuList(subMenu ? subMenu : []);
@@ -302,25 +109,28 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   };
   const onFocusBar = () => {
     try {
-      console.log("Browse filter bar is focussed: menuHasFocus-", menuHasFocus);
+      console.log("Browse filter bar is focussed: menuHasFocus-", menuHasFocus, focusedMenu);
       if (!menuHasFocus) {
         console.log(
           "Browse filter bar ==> menu is focussed: menuRef[focusedMenu]",
-          menuRef[focusedMenu]
+          focusedMenu, menuHasFocus
         );
+         // @ts-ignore
         menuRef[focusedMenu]?.current?.setNativeProps({
           hasTVPreferredFocus: true,
         });
         setFocusedSubMenu(null);
         setMenuHasFocus(true);
+        // setFocusedMenu(focusedMenu);
       } else {
         console.log(
           "Browse filter menu ==> bar is focussed: subMenuFirstRef",
           subMenuFirstRef
         );
         setMenuHasFocus(false);
+        // setFocusedSubMenu(0)
         // subMenuFirstRef.current?.current.viewConfig.validAttributes.hasTVPreferredFocus = true;
-        // @ts-ignore
+       // @ts-ignore
         subMenuList.length === 0
           ? menuRef[focusedMenu]?.current?.setNativeProps({
               hasTVPreferredFocus: true,
@@ -332,6 +142,24 @@ const BrowseFilter = (props: BrowseFilterProps) => {
     } catch (error) {
       console.log("Error", error);
     }
+  };
+
+  const checkDefaultState = () => {
+    props.filterState !== props.defaultFilterState;
+    let filters = [];
+    let defaultFilters = [];
+    for (let key in props.filterState) {
+      if (!_.isEmpty(props.filterState[key].selectedIds)) {
+        filters.push(props.filterState[key].selectedIds[0]);
+      }
+    }
+    for (let key in props.defaultFilterState) {
+      if (!_.isEmpty(props.defaultFilterState[key].selectedIds)) {
+        defaultFilters.push(props.defaultFilterState[key].selectedIds[0]);
+      }
+    }
+    // console.log("filters", JSON.stringify(filters), "defaultFilters", JSON.stringify(defaultFilters), JSON.stringify(filters) === JSON.stringify(defaultFilters));
+    return JSON.stringify(filters) === JSON.stringify(defaultFilters)
   };
   return (
     <Modal
@@ -347,7 +175,9 @@ const BrowseFilter = (props: BrowseFilterProps) => {
       onDismiss={() => {
         console.log("Modal dismissed", props.open);
       }}
+      accessible={true}
       presentationStyle={"overFullScreen"}
+
     >
       <Animated.View style={[styles.container, animatedStyles]}>
         <View style={styles.innerContainer}>
@@ -359,7 +189,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                 <Pressable
                   // @ts-ignore
                   ref={menuRef[index]}
-                  hasTVPreferredFocus={index === 0}
+                  // hasTVPreferredFocus={index === focusedMenu && !menuHasFocus}
                   key={index}
                   style={
                     focusedMenu === index
@@ -373,7 +203,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                     clearFocused ? setClearFocused(false) : null;
                     setSelectedMenu(item);
                     onFocusMenu(item, index);
-                    // setFocusedSubMenu(null)
+                    setFocusedSubMenu(-1)
                   }}
                   onPress={() => {
                     setSelectedMenu(item);
@@ -404,8 +234,10 @@ const BrowseFilter = (props: BrowseFilterProps) => {
               justifyContent: "flex-end",
             }}
             ListFooterComponent={
-              props.filterState && (
+              props.filterState &&
+              !checkDefaultState() && (
                 <Pressable
+                // @ts-ignore
                   ref={menuRef[menuList.length]}
                   style={
                     focusedMenu === menuList.length
@@ -433,19 +265,12 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                   }
                   onFocus={() => {
                     onFocusMenu("clear", menuList.length);
-                    // menuRef[0]?.current?.setNativeProps({
-                    //   hasTVPreferredFocus: true,
-                    // });
                     // setClearFocused(true);
                     // setSubMenuList([]);
                     // setFocusedMenu(menuList.length);
 
                     // setFocusedSubMenu(null)
                   }}
-                  // onBlur={() => {
-                  //   console.log("Not on Clear focus");
-                  //   setClearFocused(false);
-                  // }}
                   onPress={() => {
                     props.handleFilterClear && props.handleFilterClear();
                   }}
@@ -477,7 +302,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                 <Pressable
                   // @ts-ignore
                   ref={index === 0 ? subMenuFirstRef : null}
-                  // hasTVPreferredFocus={i === 0}
+                  // hasTVPreferredFocus={index === 0 && menuHasFocus}
                   key={index}
                   style={
                     focusedSubMenu === index
@@ -522,7 +347,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
           />
         </View>
       </Animated.View>
-    </Modal>
+      </Modal>
   );
 };
 

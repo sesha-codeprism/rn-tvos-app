@@ -20,6 +20,7 @@ import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import MFMarquee from "../../components/MFMarquee";
+import { MFDrawer } from "../../components/MFSideMenu/SettingsContainer";
 import MFSwim from "../../components/MFSwim";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -193,7 +194,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                         }),
                       drawerPercentage: 0.35,
                     });
-                    GLOBALS.drawerPanelOpen = true;
                     if (currentFeed) {
                       // service?.addNavEventOnCurPageOpenOrClose(
                       //   {

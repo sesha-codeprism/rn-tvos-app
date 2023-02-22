@@ -50,14 +50,11 @@ import TestScreen from "../../views/app/test.screen";
 import DetailsScreen from "../../views/app/details_pages/Details.Screen";
 import EpisodeList from "../../views/app/details_pages/episode_list/EpisodeList";
 import useChannelRights from "../../customHooks/useChannelRights";
-import useLiveData from "../../customHooks/useLiveData";
-import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups";
-import useDVRRecorders from "../../customHooks/useRecorders";
-import { appQueryCache } from "../queries";
+// import BrowseFilter from "../../views/app/BrowsePages/BrowseGallery/BrowseFilters";
 import { Settings as SettingsRN } from "react-native";
 
 interface RouterOutletProps {
-  initialState?: any;
+  initialState: any;
 }
 
 export const Routes = {
@@ -108,6 +105,7 @@ export const Routes = {
   Details: "details",
   FallBack: "fallBack",
   EpisodeList: "EpisodeList",
+  // BrowseFilters: "BrowseFilters",
 };
 
 const Stack = createNativeStackNavigator();
@@ -287,6 +285,17 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
           animation: "none",
         }}
       />
+      {/* <Stack.Screen
+        name={Routes.BrowseFilters}
+        component={BrowseFilter}
+        options={{
+          animation: "none",
+          // presentation: "transparentModal",
+          // cardOverlayEnabled: true
+        //  contentStyle: { backgroundColor: 'transparent' }
+        }}
+
+      /> */}
       <Stack.Screen
         name={Routes.BrowseCategory}
         component={BrowseCategoryScreen}

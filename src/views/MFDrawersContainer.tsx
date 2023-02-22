@@ -12,7 +12,6 @@ const enum Routes {
   Empty,
   Settings,
   Popup,
-  EpisodeRecordOptions,
 }
 const ComponentLoader = {
   [Routes.Settings]: Settings,
@@ -37,23 +36,13 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     // remove from componnent stack
     const props =
       componentStack.current[componentStack?.current?.length - 1]?.props;
-    //@ts-ignore
     if (props && props?.onClose) {
-      //@ts-ignore
       props?.onClose?.();
     }
     componentStack.current?.pop();
     setComponentt(
       componentStack.current[componentStack?.current?.length - 1]?.route
     );
-  };
-
-  const openEpisodeRecordOptions = (props: any) => {
-    componentStack.current?.push({
-      route: Routes.EpisodeRecordOptions,
-      props: props,
-    });
-    setComponentt(Routes.EpisodeRecordOptions);
   };
 
   const openPopup = (props: any) => {
@@ -75,7 +64,6 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     MFEventEmitter.on("closeSettings", closeSettings);
     MFEventEmitter.on("openPopup", openPopup);
     MFEventEmitter.on("closePopup", closePopup);
-    MFEventEmitter.on("openEpisodeRecordOptions", openEpisodeRecordOptions);
   }, []);
 
   if (currentComponent === Routes.Empty) {
