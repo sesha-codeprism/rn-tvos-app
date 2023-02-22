@@ -24,7 +24,7 @@ export const createInitialFilterState = (
     // Pivots are contained in single string e.globals. "showType|Movie,genre|Action" separate each pivot into an array element.
     const tokenizedPivots = defaultPivots?.split(",");
     // Convert the previously tokenized value into a state-compatible object. ["showType|Movie"] -> { showType: selectedIds: ["showType|Movie"] }
-    return config.reduce((prev, curr) => {
+    return config?.reduce((prev, curr) => {
         const id = curr.Id;
         const selectedIds = [];
         // OrderBy element is provided separately in default values.

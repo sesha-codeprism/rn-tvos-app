@@ -50,6 +50,8 @@ import { metadataSeparator } from "../../../../utils/Subscriber.utils";
 import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { debounce2 } from "../../../../utils/app/app.utilities";
 import { current } from "@reduxjs/toolkit";
+import _ from "lodash";
+import { AppStrings } from "../../../../config/strings";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -61,6 +63,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [openSubMenu, setOpenSubMenu] = useState(false);
   const [filterState, setFilterState] = useState<any>(null);
+  const [defaultFilterState, setDefaultFilterState] = useState<any>(null);
   const browsePageConfig: any = getUIdef("BrowseGallery")?.config;
   const baseValues = getBaseValues(feed, browsePageConfig);
   const browseFeed = getBrowseFeed(feed, baseValues, {}, 0, browsePageConfig);
@@ -78,15 +81,11 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const pivotsParam = "pivots=true";
   const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
 
-  UNSTABLE_usePreventRemove(openMenu, (data) => {
-    setOpenSubMenu(false);
-    setOpenMenu(false);
-  });
-  const toggleMenu = () => {
-    console.log("Pressed on the browse filter", openMenu);
-    setOpenMenu(!openMenu);
-    setOpenSubMenu(!openSubMenu);
-  };
+  // UNSTABLE_usePreventRemove(openMenu, (data) => {
+  //   setOpenSubMenu(false);
+  //   setOpenMenu(false);
+  // });
+  
 
   //@ts-ignore
   const fetchFeeds = async ({ queryKey }: any) => {
@@ -159,7 +158,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     setCurrentFeed(focusedFeed);
   };
 
-  const { data, isLoading, isIdle } = useQuery(
+  const { data, isLoading, isIdle, isFetched } = useQuery(
     [`browseFeed-${browseFeed?.Uri}`, browsePivots, page],
     fetchFeeds,
     defaultQueryOptions
@@ -191,7 +190,13 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   );
 
   useEffect(() => {
-    if (data && !isIdle) {
+    console.log("pivotQuery?.data?.data", pivotQuery?.data?.data);
+    if (data && isFetched) {
+      const firstFilter = createInitialFilterState(
+        pivotQuery?.data?.data,
+        baseValues
+      );
+      setDefaultFilterState(firstFilter);
       return filterData(data);
     }
   }, [data]);
@@ -201,7 +206,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     setFilterState(null);
     setCurrentFeed(undefined);
     const firstFilter = createInitialFilterState(
-      pivotQuery.data.data,
+      pivotQuery?.data?.data,
       baseValues
     );
     setFilterState(firstFilter);
@@ -286,7 +291,22 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       </View>
     );
   };
-
+  const toggleMenu = () => {
+    console.log("Pressed on the browse filter", openMenu);
+    setOpenMenu(!openMenu);
+    setOpenSubMenu(!openSubMenu);
+    // props.navigation.navigate(Routes.BrowseFilters,{
+    //   open:openMenu,
+    //       filterData: pivotQuery?.data?.data,
+    //       subMenuOpen: openSubMenu,
+    //       filterState: filterState,
+    //       setOpenSubMenu: () => {},
+    //       setOpenMenu: setOpenMenu,
+    //       handleOnPress: handleFilterChange,
+    //       handleFilterClear: handleFilterClear,
+    //       defaultFilterState: defaultFilterState,
+    // })
+  };
   const onFocusBar = () => {
     if (!filterFocused) {
       setFilterFocused(true);
@@ -295,6 +315,45 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       setFilterFocused(false);
       cardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
     }
+  };
+  const getFilterCount = () => {
+    let filters = [];
+    const defaultFilters: string[] = [];
+    for (let key in filterState) {
+      if (!_.isEmpty(filterState[key].selectedIds)) {
+        filters.push(filterState[key].selectedIds[0]);
+      }
+    }
+    for (let key in defaultFilterState) {
+      if (!_.isEmpty(defaultFilterState[key].selectedIds)) {
+        // defaultFilters.push(defaultFilterState[key].selectedIds[0]);
+        filters.splice(filters.indexOf(defaultFilterState[key].selectedIds[0]),1);
+      }
+    }
+    return filters.length;
+  };
+  const renderNoResults = () => {
+    return (
+      <View style={styles.noSearchResultContainer}>
+        <FastImage
+          style={{ height: 260, width: 250 }}
+          source={AppImages.noSearchResult}
+        />
+        <MFText
+          textStyle={styles.noSeasrchResultTitle}
+          displayText={"No Match Found"}
+          shouldRenderText={true}
+        />
+        <MFText
+          textStyle={styles.noSeasrchResultText}
+          displayText={`${
+            AppStrings.str_search_no_result_key ||
+            "Try changing the filters or clear filters to see all"
+          } "${feed.Name}"`}
+          shouldRenderText={true}
+        />
+      </View>
+    );
   };
 
   const imageSource: any =
@@ -348,6 +407,11 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
               }}
             />
           )}
+          {getFilterCount() > 0 ? (
+            <View style={styles.filterCountContainer}>
+              <Text style={styles.filterCountText}>{getFilterCount()}</Text>
+            </View>
+          ): null}
         </View>
       </View>
       {isLoading && dataSource.length <= 0 ? (
@@ -355,7 +419,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       ) : (
         <View style={styles.contentContainerStyles}>
           <>
-            {dataSource.length > 0 ? (
+            {dataSource.length > 0 && isFetched ? (
               <>
                 <View style={styles.currentFeedContainerStyles}>
                   {currentFeed && (
@@ -455,14 +519,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                   justifyContent: "center",
                 }}
               >
-                <MFText
-                  shouldRenderText
-                  displayText={`Couldn't fetch data for ${browseFeed.Uri}`}
-                  textStyle={[
-                    MFTabBarStyles.tabBarItemText,
-                    { color: "white", marginTop: 5 },
-                  ]}
-                />
+                {renderNoResults()}
               </View>
             )}
           </>
@@ -481,6 +538,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
           setOpenMenu={setOpenMenu}
           handleOnPress={handleFilterChange}
           handleFilterClear={handleFilterClear}
+          defaultFilterState={defaultFilterState}
         />
       )}
     </View>
@@ -557,6 +615,7 @@ const styles = StyleSheet.create({
     height: 62,
     backgroundColor: "#424242",
     borderRadius: 6,
+    marginRight: 70,
   },
   contentContainerStyles: {
     flexDirection: "row",
@@ -623,6 +682,49 @@ const styles = StyleSheet.create({
   },
   ratingBlock: {
     flexDirection: "row",
+  },
+  filterCountContainer: {
+    width: 38,
+    height: 38,
+    backgroundColor: globalStyles.auxiliaryColors.statusError,
+    borderRadius: 20,
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    position: "absolute",
+    top: 10,
+    right: 140,
+  },
+  filterCountText: {
+    color: "#EEEEEE",
+    fontSize: 23,
+    fontWeight: "600",
+    lineHeight: 38,
+  },
+  noSearchResultContainer: {
+    alignContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 100,
+    backgroundColor: "#00030E",
+    height: "100%",
+  },
+  noSeasrchResultTitle: {
+    fontSize: 38,
+    fontWeight: "600",
+    letterSpacing: 0,
+    lineHeight: 55,
+    color: "#EEEEEE",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  noSeasrchResultText: {
+    fontSize: 25,
+    letterSpacing: 0,
+    lineHeight: 38,
+    color: "#A7A7A7",
+    textAlign: "center",
+    marginTop: 10,
   },
 });
 export default GalleryScreen;
