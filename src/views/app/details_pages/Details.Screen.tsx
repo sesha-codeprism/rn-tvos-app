@@ -1422,7 +1422,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     const feedItem = { Name: "Cast and Crew" };
     return (
       roles && (
-        <SafeAreaView style={{ marginTop: -150 }}>
+        <SafeAreaView style={{ marginTop: -70 }}>
           <MFSwimLane
             ref={castAndCrewRef}
             //@ts-ignore
@@ -1660,12 +1660,18 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                 accessible={true}
                 activeOpacity={0.3}
                 onFocus={onFocusBar}
-                style={{
+                style={similarData && similarData.length ?({
                   backgroundColor: "transparent",
                   height: 20,
                   width: SCREEN_WIDTH,
                   marginTop: 50,
-                }}
+                }):({
+                  backgroundColor: "transparent",
+                  height: 20,
+                  width: SCREEN_WIDTH,
+                  marginTop: 50,
+                  marginBottom:60
+                })}
               ></TouchableOpacity>
               {similarData && renderMoreLikeThis()}
               {/* Cast and Crew */}
