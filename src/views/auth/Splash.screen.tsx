@@ -26,6 +26,7 @@ import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
 import { GlobalContext } from "../../contexts/globalContext";
 import {
+  appQueryCache,
   invalidateQueryBasedOnSpecificKeys,
   resetCaches,
 } from "../../config/queries";
@@ -79,6 +80,9 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
           "feed",
           "get-all-subscriptionGroups"
         );
+        // setTimeout(() => {
+        //   appQueryCache.find("get-UDP-data")?.invalidate();
+        // }, 1000);
       }
     },
     [GLOBALS.deviceInfo.deviceId]

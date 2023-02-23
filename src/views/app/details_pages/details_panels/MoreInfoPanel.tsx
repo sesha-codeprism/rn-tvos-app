@@ -68,19 +68,6 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
     genres = [],
     networkInfo = [],
   } = props.route.params;
-  console.log(props.route.params);
-  useEffect(() => {
-    const backAction = () => {
-      console.log("Back action");
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => backHandler.remove();
-  }, []);
 
   const getMetadataString = () => {
     const {

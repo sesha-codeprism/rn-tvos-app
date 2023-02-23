@@ -5,6 +5,7 @@ import DetailsLanding from "../../views/app/details_pages/details_panels/Details
 import EpisodeRecordOptions from "../../views/app/details_pages/details_panels/EpsiodeRecordOptions";
 import MoreInfoPanel from "../../views/app/details_pages/details_panels/MoreInfoPanel";
 import RecordingOptions from "../../views/app/details_pages/details_panels/RecordingOptions";
+import SelectOptionsPanel from "../../views/app/details_pages/details_panels/SelectOptionsPanels";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ export const DetailRoutes = {
   MoreInfo: "MoreInfo",
   EpisodeRecordOptions: "EpisodeRecordOptions",
   RecordingOptions: "RecordingOptions",
+  SelectOptions: "SelectOptions",
 };
 
 export const DetailsNavigator: React.FunctionComponent<
@@ -56,6 +58,10 @@ export const DetailsNavigator: React.FunctionComponent<
           //@ts-ignore
           component={EpisodeRecordOptions}
           initialParams={props.props}
+        />
+        <Stack.Screen
+          name={DetailRoutes.SelectOptions}
+          component={SelectOptionsPanel}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -52,6 +52,10 @@ import EpisodeList from "../../views/app/details_pages/episode_list/EpisodeList"
 import useChannelRights from "../../customHooks/useChannelRights";
 // import BrowseFilter from "../../views/app/BrowsePages/BrowseGallery/BrowseFilters";
 import { Settings as SettingsRN } from "react-native";
+import useLiveData from "../../customHooks/useLiveData";
+import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups";
+import useDVRRecorders from "../../customHooks/useRecorders";
+import { appQueryCache } from "../queries";
 
 interface RouterOutletProps {
   initialState: any;
@@ -316,9 +320,10 @@ const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
 ) => {
   const { data: channeLMapInfo } = useChannelRights();
   const { data: liveData } = useLiveData(channeLMapInfo);
-  const subscriptionGroupQuery = useAllSubscriptionGroups();
   const { data: recorders } = useDVRRecorders();
-  appQueryCache.add(subscriptionGroupQuery);
+  const subscriptionGroupQuery = useAllSubscriptionGroups(GLOBALS);
+
+  // appQueryCache.add(subscriptionGroupQuery);
   return (
     <NavigationContainer>
       <Stack.Navigator

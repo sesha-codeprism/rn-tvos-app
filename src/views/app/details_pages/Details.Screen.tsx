@@ -65,7 +65,7 @@ import { ButtonVariantProps } from "../../../components/MFButtonGroup/MFButtonGr
 import { BookmarkType as udlBookMark } from "../../../utils/Subscriber.utils";
 import { DetailsSidePanel } from "./DetailSidePanel";
 import { isFeatureAssigned } from "../../../utils/helpers";
-import { queryClient } from "../../../config/queries";
+import { appQueryCache, queryClient } from "../../../config/queries";
 import { pinItem, unpinItem } from "../../../../backend/subscriber/subscriber";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Routes } from "../../../config/navigation/RouterOutlet";
@@ -143,6 +143,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [isItemPinned, setIsItemPinned] = useState(false);
   const [route, setRoute] = useState(DetailRoutes.MoreInfo);
   const [screenProps, setScreenProps] = useState<any>();
+  const [state, currentState] = useState("");
 
   let scrollViewRef: any = React.createRef<ScrollView>();
   //@ts-ignore
@@ -236,19 +237,26 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         );
       }
       if (schedule) {
-        if (data) {
+        if (feed) {
           const {
+            //@ts-ignore
             Schedule: {
               channelId: StationIdFromEPGSchedule = "",
               contentType: ContentTypeFromEPGSchedule = "",
             } = {},
+            //@ts-ignore
             currentCatchupSchedule,
+            //@ts-ignore
             currentCatchupSchedule: { ShowType = undefined } = {},
+            //@ts-ignore
             ChannelInfo,
+            //@ts-ignore
             currentSchedule,
+            //@ts-ignore
             ShowType: ShowTypeSingleProgram = undefined,
+            //@ts-ignore
             channel: { id: StationIdFromEPGChannel = "" } = {},
-          } = data;
+          } = feed;
 
           if (
             StationIdFromEPGSchedule &&
@@ -387,6 +395,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             isPopupModal: true,
           };
           // panelName = SideMenuRoutes.DvrEpisodeRecordingOptions;
+          setRoute(DetailRoutes.EpisodeRecordOptions);
+          setScreenProps(params);
+          drawerRef.current?.open();
         } else {
           params = {
             isNew: true,
@@ -415,23 +426,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const openEditRecordingsPanel = (data: any) => {
     featureNotImplementedAlert();
   };
-
-  useEffect(() => {
-    const backAction = () => {
-      if (!open) {
-        console.log("Back action");
-        return true;
-      } else {
-        return false;
-      }
-    };
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => backHandler.remove();
-  }, []);
 
   const handlePlayDvr = () => {};
   const ctaButtonPress = {
@@ -1155,6 +1149,10 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     { ...defaultQueryOptions }
   );
 
+  const closeModal = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     if (discoverySchedulesQueryData && !isFetchingDiscoverySchedulesQueryData) {
       setdiscoverySchedulesData(discoverySchedulesQueryData);
@@ -1196,7 +1194,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   //   { ...defaultQueryOptions }
   // );
 
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     ["get-UDP-data", assetData?.id],
     () => getUDPData(),
     {
@@ -1209,6 +1207,17 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         !!subscriberData,
     }
   );
+  useEffect(() => {
+    appQueryCache.subscribe((event) => {
+      console.log(event);
+      if (event?.type === "queryUpdated") {
+        if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
+          refetch();
+          currentState("Updated");
+        }
+      }
+    });
+  }, []);
 
   const getRestrictionsForVod = (
     usablePlayActions: any,
@@ -1906,6 +1915,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         navigation={props.navigation}
         drawerContent={false}
         route={route}
+        closeModal={closeModal}
         screenProps={screenProps} // moreInfoProps={}
       />
     </PageContainer>

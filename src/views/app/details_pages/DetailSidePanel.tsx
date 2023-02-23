@@ -1,10 +1,8 @@
-import { NavigationContext } from "@react-navigation/native";
 import React, {
   forwardRef,
   Ref,
   useEffect,
   useImperativeHandle,
-  useRef,
   useState,
 } from "react";
 import {
@@ -12,18 +10,12 @@ import {
   Dimensions,
   StyleSheet,
   Modal,
-  View,
   BackHandler,
 } from "react-native";
 import DetailsNavigator, {
   DetailRoutes,
 } from "../../../config/navigation/DetailsNavigator";
 import { GLOBALS } from "../../../utils/globals";
-import { Empty } from "../../MFDrawersContainer";
-import EpisodeRecordOptions, {
-  EpisodeRecordOptionsProps,
-} from "./details_panels/EpsiodeRecordOptions";
-
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
@@ -49,6 +41,7 @@ interface DetailsDrawerProps {
   children?: any;
   route: any;
   screenProps: any;
+  closeModal: () => void;
   // openPage: typeof DetailRoutes;
   // moreInfoProps: {
   //   udpData: any;
@@ -63,23 +56,6 @@ interface DetailsDrawerProps {
 const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
   const [expanded, setExpanded] = useState(props.open);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
-
-  useEffect(() => {
-    const backAction = () => {
-      if (!open) {
-        console.log("Back action in SidePanel");
-        return true;
-      } else {
-        return false;
-      }
-    };
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => backHandler.remove();
-  }, []);
 
   const leftOffset = new Animated.Value(
     GLOBALS.enableRTL
@@ -103,9 +79,7 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
   }));
 
   const pushRoute = (route: typeof DetailRoutes, props: any) => {};
-  const popRoute = () => {
-    // componentStack.current?.pop();
-  };
+  const popRoute = () => {};
 
   const resetRoutes = () => {
     // componentStack.current = [{ route: DetailRoutes.Empty, props: {} }];
@@ -165,6 +139,8 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
         useNativeDriver: true,
       }),
     ]).start();
+    setExpanded(false);
+    props.closeModal();
   };
   const renderPush = () => {
     const { drawerPercentage } = props;
@@ -182,6 +158,8 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
         }}
         style={[styles.main, GLOBALS.enableRTL ? { left: 0 } : { right: 0 }]}
         onDismiss={() => {
+          setExpanded(false);
+          closeDrawer();
           console.log("Modal dismissed", expanded);
         }}
         presentationStyle={"overFullScreen"}
@@ -202,30 +180,9 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
               },
             ]}
           >
-            {/* {props.openPage === "MoreInfo" && (
-              <MoreInfoPanel
-                udpData={props.moreInfoProps.udpData}
-                networkInfo={props.moreInfoProps.networkInfo}
-                genres={props.moreInfoProps.genres}
-                episodeData={props.moreInfoProps.episodeData}
-                episodeDetailsData={props.moreInfoProps.episodeDetailsData}
-              />
-            )}
-            {props.openPage === "EpisodeRecord" && (
-              <EpisodeRecordOptions
-                isNew={props.episodeRecordingProps!.isNew}
-                programDiscoveryData={
-                  props.episodeRecordingProps!.programDiscoveryData
-                }
-                programId={props.episodeRecordingProps!.programId}
-                seriesId={props.episodeRecordingProps!.seriesId}
-                isGeneric={props.episodeRecordingProps!.isGeneric}
-                recordingOptions={props.episodeRecordingProps!.recordingOptions}
-              />
-            )} */}
             <DetailsNavigator
               initialScreen={props.route}
-              props={props.screenProps}
+              props={{ ...props.screenProps, closePanel: closeDrawer }}
             />
           </Animated.View>
         </Animated.View>

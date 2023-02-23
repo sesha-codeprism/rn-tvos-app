@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useEffect, useState } from "react";
 import RouterOutlet from "../config/navigation/RouterOutlet";
 import { GlobalContext } from "../contexts/globalContext";
@@ -12,11 +11,12 @@ import { MFDrawerContainer } from "./MFDrawersContainer";
 import { initUdls } from "../../backend";
 import ErrorBoundary from "react-native-error-boundary";
 import ErrorFallbackComponent from "../components/ErroFallBackComponent";
+import { queryClient } from "../config/queries";
 
 interface AppProps {}
 
 const App: React.FunctionComponent<AppProps> = (props) => {
-  const queryClient = new QueryClient();
+  // const queryClient = new QueryClient();
   const [userProfile, setUserProfile] = useState({});
   const [onScreenLanguage, setOnScreenLanguage] = useState(
     GLOBALS.store?.settings?.display?.onScreenLanguage

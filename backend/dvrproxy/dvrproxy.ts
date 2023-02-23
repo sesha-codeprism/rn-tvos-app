@@ -4,7 +4,7 @@ import { massageDVRFeed } from "../../src/utils/assetUtils";
 import { SourceType } from "../../src/utils/common";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { GLOBALS } from "../../src/utils/globals";
-import { GET } from "../utils/common/cloud";
+import { GET, POST } from "../utils/common/cloud";
 import { parseUri } from "../utils/url/urlUtil";
 
 
@@ -97,6 +97,21 @@ export const getDVRRecorders = async (id: string, params: any) => {
         },
     })
     return response;
+}
+
+export const saveRecordingToBackend = async (subcriptionsParams: any) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return
+    }
+    const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscriptions`
+    const response = await POST({
+        url: url,
+        params: subcriptionsParams,
+        headers: {
+            Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+        },
+    });
+    return response
 }
 
 

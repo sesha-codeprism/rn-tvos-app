@@ -4424,14 +4424,54 @@
     {
       "id": "EpisodeRecordOptions",
       "style": {
-        "container": {
-          "flexGrow": 1,
-          "paddingVertical": 10
-        },
         "selectButtonContainer": {
           "width": "100%",
-          "height": 100,
-          "paddingHorizontal": 30
+          "height": 120,
+          "justifyContent": "space-between",
+          "alignContent": "center",
+          "alignItems": "center",
+          "padding": 30,
+          "display": "flex",
+          "flexDirection": "row"
+        },
+        "focusedselectButtonContainer": {
+          "backgroundColor": "#053C69",
+          "borderRadius": 6,
+          "shadowColor": "#0000006b",
+          "shadowOffset": {
+            "width": 6,
+            "height": 8
+          },
+          "shadowOpacity": 0.42,
+          "shadowRadius": 4.65,
+          "elevation": 8
+        },
+        "contentContainer": {
+          "flex": 0.8,
+          "flexDirection": "column",
+          "alignContent": "center"
+        },
+        "chevronContainer": { "flex": 0.2 },
+        "chevronStyles": {
+          "fontFamily": "MyFontRegular",
+          "fontSize": 70,
+          "textAlign": "center",
+          "color": "${theme.fontColors.lightGrey}",
+          "marginBottom": 8
+        },
+        "focusedText": {
+          "color": "${theme.fontColors.light}"
+        },
+        "selectButtonTitle": {
+          "color": "${theme.fontColors.lightGrey}",
+          "fontFamily": "Inter-Regular",
+          "fontSize": 29,
+          "paddingVertical": 10
+        },
+        "selectButtonContent": {
+          "color": "${theme.fontColors.lightGrey}",
+          "fontFamily": "Inter-Regular",
+          "fontSize": 23
         }
       }
     },
@@ -4662,14 +4702,8 @@
     {
       "id": "RecordingOptions",
       "style": {
-        "container": {
-          "flexGrow": 1,
-          "paddingTop": 30
-        },
-        "conflictListContainer": {
-          "height": 120,
-          "width": 624
-        },
+        "container": { "flexGrow": 1, "paddingTop": 30 },
+        "conflictListContainer": { "height": 120, "width": 624 },
         "conflictItemContainer": {
           "width": 591,
           "height": 83,
@@ -4677,32 +4711,27 @@
           "justifyContent": "flex-start",
           "marginLeft": 61
         },
-        "conflictItemMetadataContainer": {
-          "width": 422,
-          "height": 83
-        },
-        "conflictItemMetadataLine1Container": {
-          "flexDirection": "row"
-        },
+        "conflictItemMetadataContainer": { "width": 422, "height": 83 },
+        "conflictItemMetadataLine1Container": { "flexDirection": "row" },
         "conflictItemMetadataLine1": {
           "width": 288,
           "height": 50,
-          "fontSize": "${theme.fontSizes.body1}",
-          "fontFamily": "${theme.fontFamily.regular}",
-          "color": "${theme.fontColors.lightGrey}"
+          "fontSize": 29,
+          "fontFamily": "Inter-Regular",
+          "color": "#A7A7A7"
         },
         "conflictIcon": {
           "fontSize": 20,
-          "fontFamily": "${theme.fontFamily.bold}",
+          "fontFamily": "Inter-Bold",
           "color": "#000"
         },
         "buttonTextStyle": {
-          "fontSize": "${theme.fontSizes.body2}",
-          "fontFamily": "${theme.fontFamily.semiBold}",
-          "color": "${theme.fontColors.light}"
+          "fontSize": 25,
+          "fontFamily": "Inter-SemiBold",
+          "color": "#EEEEEE"
         },
         "conflictIconContainer": {
-          "backgroundColor": "${theme.fontColors.statusWarning}",
+          "backgroundColor": "#E7A230",
           "borderRadius": 15,
           "width": 30,
           "height": 30,
@@ -4712,9 +4741,9 @@
         "conflictItemMetadataLine2": {
           "width": 422,
           "height": 50,
-          "fontSize": "${theme.fontSizes.caption1}",
-          "fontFamily": "${theme.fontFamily.regular}",
-          "color": "${theme.fontColors.lightGrey}"
+          "fontSize": 23,
+          "fontFamily": "Inter-Regular",
+          "color": "#A7A7A7"
         },
         "conflictItemActionButtonContainer": {
           "width": 61,
@@ -4722,8 +4751,8 @@
           "marginLeft": 108
         },
         "conflictItemActionButtonTextStyle": {
-          "fontFamily": "${theme.fontFamily.icons}",
-          "color": "${theme.fontColors.light}"
+          "fontFamily": "MyFontRegular",
+          "color": "#EEEEEE"
         },
         "conflicItemActionButtonStyleProp": {
           "borderRadius": 29.5,
@@ -4733,26 +4762,22 @@
           "backgroundColor": "transparent"
         },
         "conflictItemActionButtonSolidBackground": {
-          "backgroundColor": "${theme.backgroundColors.shade2}"
+          "backgroundColor": "#202124"
         },
-        "conflictItemActionButtonBorder": {
-          "backgroundColor": "${theme.backgroundColors.shade2}"
-        },
-        "buttonContainer": {
-          "marginTop": 120,
-          "width": 714
-        },
+        "conflictItemActionButtonBorder": { "backgroundColor": "#202124" },
+        "buttonContainer": { "marginTop": 120, "width": 714 },
         "saveButton": {
           "height": 70,
           "width": 533,
-          "backgroundColor": "${theme.backgroundColors.shade3}",
+          "backgroundColor": "#282828",
           "marginBottom": 10,
-          "marginHorizontal": 90
+          "marginHorizontal": 90,
+          "zIndex": 1200
         },
         "cancelButton": {
           "height": 70,
           "width": 533,
-          "backgroundColor": "${theme.backgroundColors.shade3}",
+          "backgroundColor": "#282828",
           "marginBottom": 90,
           "marginHorizontal": 90
         },
@@ -4761,41 +4786,74 @@
           "opacity": 0.4,
           "height": 1,
           "borderWidth": 0.4,
-          "borderColor": "${theme.backgroundColors.shade5}",
-          "backgroundColor": "${theme.backgroundColors.shade5}",
+          "borderColor": "#A0A0A0",
+          "backgroundColor": "#A0A0A0",
           "alignSelf": "center",
           "marginLeft": 61
         },
         "showNotRecordedMessage": {
-          "fontSize": "${theme.fontSizes.body2}",
-          "fontFamily": "${theme.fontFamily.semiBold}",
-          "color": "${theme.fontColors.light}",
+          "fontSize": 25,
+          "fontFamily": "Inter-SemiBold",
+          "color": "#EEEEEE",
           "marginBottom": 17,
           "marginTop": 30.5,
           "marginLeft": 61
         },
         "selectButtonContainer": {
+          "width": "100%",
           "height": 120,
-          "width": 654,
-          "marginLeft": 31
+          "justifyContent": "space-between",
+          "alignContent": "center",
+          "alignItems": "center",
+          "padding": 30,
+          "display": "flex",
+          "flexDirection": "row"
+        },
+        "focusedselectButtonContainer": {
+          "backgroundColor": "#053C69",
+          "borderRadius": 6,
+          "shadowColor": "#0000006b",
+          "shadowOffset": {
+            "width": 6,
+            "height": 8
+          },
+          "shadowOpacity": 0.42,
+          "shadowRadius": 4.65,
+          "elevation": 8
+        },
+        "contentContainer": {
+          "flex": 0.8,
+          "flexDirection": "column",
+          "alignContent": "center"
+        },
+        "chevronContainer": { "flex": 0.2 },
+        "chevronStyles": {
+          "fontFamily": "MyFontRegular",
+          "fontSize": 70,
+          "textAlign": "center",
+          "color": "${theme.fontColors.lightGrey}",
+          "marginBottom": 8
+        },
+        "focusedText": {
+          "color": "${theme.fontColors.light}"
         },
         "selectButtonTitle": {
-          "color": "${theme.fontColors.light}",
-          "fontFamily": "${theme.fontFamily.regular}"
+          "color": "${theme.fontColors.lightGrey}",
+          "fontFamily": "Inter-Regular",
+          "fontSize": 29,
+          "paddingVertical": 10
         },
         "selectButtonContent": {
-          "color": "${theme.fontColors.darkGrey}",
-          "fontFamily": "${theme.fontFamily.regular}"
+          "color": "${theme.fontColors.lightGrey}",
+          "fontFamily": "Inter-Regular",
+          "fontSize": 23
         },
         "selectButtonContentActive": {
-          "color": "${theme.fontColors.light}",
+          "color": "#EEEEEE",
           "opacity": 0.7,
-          "fontFamily": "${theme.fontFamily.regular}"
+          "fontFamily": "Inter-Regular"
         },
-        "selectButtonIcon": {
-          "width": 16,
-          "height": 26
-        }
+        "selectButtonIcon": { "width": 16, "height": 26 }
       }
     },
     {

@@ -1,4 +1,4 @@
-import { useQueries, useQuery, useQueryClient } from "react-query";
+import { QueryClient, useQueries, useQuery, useQueryClient } from "react-query";
 import { getDataFromUDL, getMassagedData } from "../../backend";
 import { getAllSubscriberProfiles } from "../../backend/subscriber/subscriber";
 import { parseUdl, UdlProviders } from "../../backend/udl/provider";
@@ -7,7 +7,7 @@ import { DefaultStore } from "../utils/DiscoveryUtils";
 import { GLOBALS } from "../utils/globals";
 import { appUIDefinition, lang, pivots } from "./constants";
 
-export const queryClient = useQueryClient()
+export const queryClient = new QueryClient()
 export const appQueryCache = queryClient.getQueryCache();
 export interface QueryResponse {
     data: any;
