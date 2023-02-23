@@ -1834,8 +1834,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         setIsCTAButtonFocused(false);
       } else {
         /** if no  swimlane exists  focus on the first  button */
-        if (buttonRefObject[ctaButtonFocusState].current) {
-          buttonRefObject[ctaButtonFocusState].current?.setNativeProps({
+        if (buttonRefObject[ctaButtonFocusState]?.current) {
+          buttonRefObject[ctaButtonFocusState]?.current?.setNativeProps({
             hasTVPreferredFocus: true,
           });
           setIsCTAButtonFocused(true);
