@@ -143,7 +143,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [isItemPinned, setIsItemPinned] = useState(false);
   const [route, setRoute] = useState(DetailRoutes.MoreInfo);
   const [screenProps, setScreenProps] = useState<any>();
-  const [state, currentState] = useState("");
+  const [state, currentState] = useState(false);
 
   let scrollViewRef: any = React.createRef<ScrollView>();
   //@ts-ignore
@@ -222,15 +222,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       contentType === ContentType.PROGRAM ||
       contentType === ContentType.GENERIC
     ) {
-      let schedule = discoverySchedulesData?.[0];
+      let schedule = playActionsData.Schedules?.[0];
 
       // Get the correct schedule, the one which is shown in UI
       if (
         currentChannel &&
-        discoverySchedulesData &&
-        discoverySchedulesData.length
+        playActionsData.Schedules &&
+        playActionsData.Schedules.length
       ) {
-        schedule = discoverySchedulesData.find(
+        schedule = playActionsData.Schedules.find(
           (s: any) =>
             s?.ChannelNumber === currentChannel?.Number ||
             s?.ChannelNumber == currentChannel?.number
@@ -268,7 +268,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               );
             if (actualSelectedChannel) {
               // assign the selected schedule
-              const selectedSchedule = discoverySchedulesData?.find(
+              const selectedSchedule = playActionsData.Schedules?.find(
                 (s: any) =>
                   s?.ChannelNumber === actualSelectedChannel?.channel?.Number
               );
@@ -286,7 +286,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               );
             if (actualSelectedChannel) {
               // assign the selected schedule
-              const selectedSchedule = discoverySchedulesData?.find(
+              const selectedSchedule = playActionsData.Schedules?.find(
                 (s: any) =>
                   s?.ChannelNumber === actualSelectedChannel?.channel?.Number
               );
@@ -303,7 +303,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               currentSchedule?.StationId ||
               schedule.StationId;
 
-            const channel = discoverySchedulesData?.find(
+            const channel = playActionsData.Schedules?.find(
               (x: any) => x.StationId === stationId
             );
             const { StationId, ChannelNumber, StartUtc } = channel;
@@ -1095,6 +1095,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         );
     console.log("UDP data", udpData);
     setUDPDataAsset(udpData);
+    currentState(!state);
     return udpData;
   };
 
@@ -1212,8 +1213,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       console.log(event);
       if (event?.type === "queryUpdated") {
         if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
-          refetch();
-          currentState("Updated");
+          // const recordButton = udpDataAsset.ctaButtons.filter(
+          //   (e: any) =>
+          //     (e.buttonText = AppStrings?.str_details_program_record_button)
+          // )[0];
+
+          setTimeout(() => {
+            refetch();
+          }, 1000);
         }
       }
     });
