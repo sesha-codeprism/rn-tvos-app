@@ -178,12 +178,15 @@ export const setLiveData = async () => {
 }
 
 export const setNativeModuleData = async () => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             NativeModules.MKGuideBridgeManager.setToken(GLOBALS.store?.accessToken);
             NativeModules.MKGuideBridgeManager.setRefreshToken(GLOBALS.store?.refreshToken);
             NativeModules.MKGuideBridgeManager.setChannelmapId(GLOBALS.bootstrapSelectors?.ChannelMapId);
             NativeModules.MKGuideBridgeManager.setEnvironment(GLOBALS.bootstrapSelectors?.ServiceMap.Services);
+            NativeModules.MKGuideBridgeManager.setQualityforFilters(["HD", "SD", "4k"]);
+            const channelRights = await getChannelRights();
+            NativeModules.MKGuideBridgeManager.setchannelMapRights(channelRights?.data);
             resolve()
         } catch (e) {
             reject(e);

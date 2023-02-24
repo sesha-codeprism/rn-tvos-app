@@ -747,8 +747,34 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       assetId = seriesId;
       assetType = itemTypeString[assetTypeObject.SERIES];
     } else {
-      assetId = assetData.Id;
+      assetId = assetData.id;
       assetType = itemTypeString[assetData.contentTypeEnum];
+    }
+
+    const {
+      CatchupEndUtc,
+      CatchupStartUtc,
+      EndUtc,
+      StartUtc,
+      ProgramId,
+      SeriesId,
+      ShowType,
+    } = udpDataAsset?.ChannelInfo?.Schedule || {};
+    const convertedStartDate =
+      (StartUtc && new Date(StartUtc)) ||
+      (CatchupStartUtc && new Date(CatchupStartUtc));
+    const convertedEndDate =
+      (EndUtc && new Date(EndUtc)) ||
+      (CatchupEndUtc && new Date(CatchupEndUtc));
+    const now = Date.now();
+    if (now >= convertedStartDate && now <= convertedEndDate) {
+      if (ShowType === "TVShow") {
+        assetId = SeriesId;
+        assetType = "Series";
+      } else {
+        assetId = ProgramId;
+        assetType = "Program";
+      }
     }
 
     if (isItemPinned) {
