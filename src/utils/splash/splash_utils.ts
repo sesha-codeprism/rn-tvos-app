@@ -48,7 +48,6 @@ export const connectDuplex = (onDuplexMessage: (any) => void) => {
     const GUID = generateGUID();
     const duplexEndpoint = `${addPrefixToUrl(GLOBALS.bootstrapSelectors?.ServiceMap.Services.duplex, GLOBALS.bootstrapSelectors?.ServiceMap.Prefixes[config.prefixType])}?sessionId=${GUID}`;
     duplex.initialize(duplexEndpoint, null, onDuplexMessage);
-
 }
 /** 
  * Function to decide if user is logging in with same account 

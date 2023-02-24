@@ -228,7 +228,7 @@ export class DuplexManager {
 
     try {
       this.connection.sendMessage(message);
-      console.warn("DuplexConnection: sending message: " + message);
+      console.log("DuplexConnection: sending message: " + message);
       return true;
     } catch (error) {
       console.error(`failed to send message ${message} ${error} `);

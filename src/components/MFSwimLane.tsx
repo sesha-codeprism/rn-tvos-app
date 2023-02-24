@@ -196,7 +196,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           appendViewAll
           swimLaneKey={props.swimLaneKey}
           updateSwimLaneKey={props.updateSwimLaneKey}
-          railContainerStyles={props.cardStyle === "3x4" ? {height:550}: {height:450}}
+          railContainerStyles={(props.cardStyle === "3x4"|| props.cardStyle === "2x3") ? {height:550}: {height:450}}
           libraryItems={props.data}
           customViewAllTitle={props.customViewAllTitle}
           feed={props.feed}

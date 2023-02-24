@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   View,
   ImageBackground,
@@ -15,17 +15,17 @@ import { FeedItem } from "../../@types/HubsResponse";
 import MFMenu from "../../components/MFMenu/MFMenu";
 import MFLoader from "../../components/MFLoader";
 import { AppStrings } from "../../config/strings";
-import { getAllHubs } from "../../config/queries";
+import { getAllHubs, invalidateQueryBasedOnSpecificKeys } from "../../config/queries";
 import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import MFMarquee from "../../components/MFMarquee";
-import { MFDrawer } from "../../components/MFSideMenu/SettingsContainer";
 import MFSwim from "../../components/MFSwim";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useAccount from "../../customHooks/useAccount";
 import MFEventEmitter from "../../utils/MFEventEmitter";
+import { GlobalContext } from "../../contexts/globalContext";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -42,7 +42,8 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const setttingsRef = useRef(null);
   const drawerRef: React.MutableRefObject<any> = useRef();
   const accountInfo = useAccount();
-
+  const currentContext = useContext(GlobalContext);
+  
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;
   // const data = undefined;
@@ -123,6 +124,16 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     }
   };
 
+  const onDuplexMessage = (message: any) => {
+    console.log('Received message in Home screen => ', message);
+    if(message?.type === "unpin" || message?.type === "pin"){
+      const account = message.continuationToken?.split('|')?.[1]?.split(';')?.[0];
+      if(account === GLOBALS.userAccountInfo?.Id){
+        invalidateQueryBasedOnSpecificKeys("feed", "udl://subscriber/library/Pins")
+      }
+    }
+  }
+
   useEffect(() => {
     if (!open) {
       console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
@@ -134,6 +145,11 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       console.log(
         `app-end-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
       );
+    }
+    //register duplex handler
+    currentContext.addDuplexMessageHandler(onDuplexMessage);
+    () => {
+      currentContext.removeDuplexHandler(onDuplexMessage);
     }
   }, []);
 
