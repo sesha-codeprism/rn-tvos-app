@@ -1,5 +1,5 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Alert,
   BackHandler,
@@ -50,7 +50,10 @@ import {
 } from "../../../utils/analytics/consts";
 import { Genre, ItemShowType, SourceType } from "../../../utils/common";
 import { useQuery } from "react-query";
-import { defaultQueryOptions } from "../../../config/constants";
+import {
+  appUIDefinition,
+  defaultQueryOptions,
+} from "../../../config/constants";
 import { DefaultStore } from "../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../utils/globals";
 import { getDataFromUDL, getMassagedData } from "../../../../backend";
@@ -65,8 +68,13 @@ import { ButtonVariantProps } from "../../../components/MFButtonGroup/MFButtonGr
 import { BookmarkType as udlBookMark } from "../../../utils/Subscriber.utils";
 import { DetailsSidePanel } from "./DetailSidePanel";
 import { isFeatureAssigned } from "../../../utils/helpers";
-import { appQueryCache, queryClient } from "../../../config/queries";
 import { pinItem, unpinItem } from "../../../../backend/subscriber/subscriber";
+import {
+  invalidateQueryBasedOnSpecificKeys,
+  queryClient,
+  appQueryCache,
+} from "../../../config/queries";
+import { getSubscriberPins } from "../../../../backend/subscriber/subscriber";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import { SCREEN_WIDTH } from "../../../utils/dimensions";
@@ -77,6 +85,9 @@ import {
   validateEntitlements,
 } from "../../../utils/DVRUtils";
 import { DetailRoutes } from "../../../config/navigation/DetailsNavigator";
+import { GlobalContext } from "../../../contexts/globalContext";
+import { DuplexManager } from "../../../modules/duplex/DuplexManager";
+import NotificationType from "../../../@types/NotificationType";
 
 interface AssetData {
   id: string;
@@ -145,6 +156,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [screenProps, setScreenProps] = useState<any>();
   const [state, currentState] = useState(false);
 
+  const currentContext = useContext(GlobalContext);
+
   let scrollViewRef: any = React.createRef<ScrollView>();
   //@ts-ignore
   const favoriteSelected = getFontIcon("favorite_selected");
@@ -180,6 +193,17 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const listAddButtonRef: React.RefObject<any> = React.createRef();
   const buttonFocuszoneRef: React.RefObject<any> = React.createRef();
   let networkInfo: any;
+
+  const pinnedItemsResponse = useQuery(
+    ["feed", "udl://subscriber/library/Pins"],
+    getSubscriberPins,
+    {
+      staleTime: appUIDefinition.config.queryStaleTime,
+      cacheTime: appUIDefinition.config.queryCacheTime,
+    }
+  );
+
+  const duplexManager: DuplexManager = DuplexManager.getInstance();
 
   const isSeries = (assetData: AssetData) =>
     assetData.assetType.contentType === ContentType.SERIES ||
@@ -647,11 +671,36 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     return true;
   };
 
-  useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", handleBackPress);
+  const onDuplexMessage = (message: any) => {
     const status = getItemPinnedStatus();
     console.log("status", status);
     setIsItemPinned(status);
+  };
+
+  useEffect(() => {
+    if (
+      !pinnedItemsResponse.isFetching &&
+      pinnedItemsResponse.isFetched &&
+      pinnedItemsResponse.isSuccess &&
+      pinnedItemsResponse.data
+    ) {
+      const status = getItemPinnedStatus();
+      console.log("status", status);
+      setIsItemPinned(status);
+    }
+  }, [
+    pinnedItemsResponse.isFetched,
+    pinnedItemsResponse.data,
+    pinnedItemsResponse.dataUpdatedAt,
+    pinnedItemsResponse.isSuccess,
+    pinnedItemsResponse.isFetching,
+  ]);
+
+  useEffect(() => {
+    currentContext.addDuplexMessageHandler(onDuplexMessage);
+    () => {
+      currentContext.removeDuplexHandler(onDuplexMessage);
+    };
   }, []);
 
   const getSimilarItemsForFeed = async ({ queryKey }: any) => {
@@ -698,15 +747,24 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       assetId = seriesId;
       assetType = itemTypeString[assetTypeObject.SERIES];
     } else {
-      assetId = assetData.id;
+      assetId = assetData.Id;
       assetType = itemTypeString[assetData.contentTypeEnum];
     }
 
     if (isItemPinned) {
       //@ts-ignore
       const resp = await unpinItem(assetId, assetType);
-      if (resp.status === 201) {
+      if (resp.status >= 200 && resp.status <= 300) {
         setIsItemPinned(false);
+        duplexManager.sendOrEnqueueMessage(NotificationType.unpin, {
+          id: assetId,
+          isPinned: false,
+          itemType: assetId,
+        });
+        invalidateQueryBasedOnSpecificKeys(
+          "feed",
+          "udl://subscriber/library/Pins"
+        );
       } else {
         Alert.alert("Something went wrong");
       }
@@ -715,6 +773,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       const resp = await pinItem(assetId, assetType);
       if (resp.status >= 200 && resp.status <= 300) {
         setIsItemPinned(true);
+        duplexManager.sendOrEnqueueMessage(NotificationType.pin, {
+          id: assetId,
+          isPinned: true,
+          itemType: assetId,
+        });
+        invalidateQueryBasedOnSpecificKeys(
+          "feed",
+          "udl://subscriber/library/Pins"
+        );
       } else {
         Alert.alert("Something went wrong");
       }
@@ -1016,6 +1083,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       "feed",
       "udl://subscriber/library/Pins",
     ]);
+    ///@ts-ignore
     const pinnedItem = getPinnedItem(pinnedItems, feed);
     if (pinnedItem) {
       return true;
@@ -1028,8 +1096,10 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     if (!pinnedItems) {
       return undefined;
     }
+    const Id = getItemId(feed);
     return pinnedItems?.find((element: any) => {
-      return element.Id === feed.Id;
+      const elementId = getItemId(element);
+      return elementId === Id;
     });
   };
 
@@ -1655,7 +1725,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     const feedItem = { Name: "Cast and Crew" };
     return (
       roles && (
-        <SafeAreaView style={{ marginTop: -150 }}>
+        <SafeAreaView style={{ marginTop: -70 }}>
           <MFSwimLane
             ref={castAndCrewRef}
             //@ts-ignore
@@ -1893,12 +1963,22 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                 accessible={true}
                 activeOpacity={0.3}
                 onFocus={onFocusBar}
-                style={{
-                  backgroundColor: "transparent",
-                  height: 20,
-                  width: SCREEN_WIDTH,
-                  marginTop: 50,
-                }}
+                style={
+                  similarData && similarData.length
+                    ? {
+                        backgroundColor: "transparent",
+                        height: 20,
+                        width: SCREEN_WIDTH,
+                        marginTop: 50,
+                      }
+                    : {
+                        backgroundColor: "transparent",
+                        height: 20,
+                        width: SCREEN_WIDTH,
+                        marginTop: 50,
+                        marginBottom: 60,
+                      }
+                }
               ></TouchableOpacity>
               {similarData && renderMoreLikeThis()}
               {/* Cast and Crew */}

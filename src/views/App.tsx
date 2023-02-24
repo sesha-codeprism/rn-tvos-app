@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import RouterOutlet from "../config/navigation/RouterOutlet";
 import { GlobalContext } from "../contexts/globalContext";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -22,7 +22,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     GLOBALS.store?.settings?.display?.onScreenLanguage
   );
   const [enableRTL, shouldEnableRTL] = useState(GLOBALS.enableRTL);
-  const [onDuplexMessageHandlers, addOnDuplexMessageHandlers] = useState([]);
+  const duplexMessageHandleStack = useRef([() => {}]);
 
   async function getLandingData() {
     initUIDef();
@@ -30,23 +30,26 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   }
 
   const duplexMessage = (message: any) => {
-    onDuplexMessageHandlers?.forEach((fn: any) => {
+    duplexMessageHandleStack.current?.forEach((fn: any) => {
       fn?.(message);
     });
   };
 
   const addDuplexMessageHandler = (handler: any) => {
     if (
-      onDuplexMessageHandlers &&
-      onDuplexMessageHandlers.every((h: any) => h !== handler)
+      duplexMessageHandleStack.current &&
+      duplexMessageHandleStack.current?.every((h: any) => h !== handler)
     ) {
-      addOnDuplexMessageHandlers([...onDuplexMessageHandlers, handler]);
+      duplexMessageHandleStack.current?.push(handler);
     }
   };
   const removeDuplexHandler = (handler: any) => {
-    addOnDuplexMessageHandlers(
-      [...onDuplexMessageHandlers].filter((h: any) => h !== handler)
+    const indexOfHandler = duplexMessageHandleStack.current?.findIndex(
+      (h: any) => h == handler
     );
+    if (indexOfHandler > -1) {
+      duplexMessageHandleStack.current?.splice(indexOfHandler, 1);
+    }
   };
 
   useEffect(() => {
@@ -85,7 +88,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     setOnScreenLanguage,
     enableRTL,
     shouldEnableRTL,
-    onDuplexMessageHandlers, // the current list of message handlers from various components thoguhout the application
+    onDuplexMessageHandlers: duplexMessage.current, // the current list of message handlers from various components thoguhout the application
     addDuplexMessageHandler, // Add Duplex message handler function from any component
     removeDuplexHandler, // removes registered Duplex message handler function from any component
     duplexMessage, // root application duplex message handler which dispatches the message to individual component specific message handlers.
