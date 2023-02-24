@@ -6,8 +6,9 @@ import { GLOBALS } from '../utils/globals';
 import { buildNowNextMap, getChannelMap } from '../utils/live/LiveUtils';
 import useChannelRights from './useChannelRights';
 
-const intervalTimer = 10800000; // 3*(1000*60 * 60)
+// const intervalTimer = 10800000; // 3*(1000*60 * 60)
 
+const intervalTimer = 1800000; //30*(1000*60)
 const getLiveData = async (channelRightsInfo: any) => {
     try {
         return new Promise(async (resolve, reject) => {
