@@ -7,21 +7,26 @@ import { UserProfile } from "../@types/UserProfile";
 import { GLOBALS } from "../utils/globals";
 import "react-native-gesture-handler";
 import { initializeAnalyticsService } from "../utils/analytics/analytics";
-import  {MFDrawerContainer}  from "./MFDrawersContainer";
+import { MFDrawerContainer } from "./MFDrawersContainer";
+import { initUdls } from "../../backend";
+import ErrorBoundary from "react-native-error-boundary";
+import ErrorFallbackComponent from "../components/ErroFallBackComponent";
+import { queryClient } from "../config/queries";
 
 interface AppProps {}
 
 const App: React.FunctionComponent<AppProps> = (props) => {
-  const queryClient = new QueryClient();
+  // const queryClient = new QueryClient();
   const [userProfile, setUserProfile] = useState({});
   const [onScreenLanguage, setOnScreenLanguage] = useState(
     GLOBALS.store?.settings?.display?.onScreenLanguage
   );
   const [enableRTL, shouldEnableRTL] = useState(GLOBALS.enableRTL);
-  const duplexMessageHandleStack = useRef([()=> {}]);
+  const duplexMessageHandleStack = useRef([() => {}]);
 
   async function getLandingData() {
     initUIDef();
+    initUdls();
   }
 
   const duplexMessage = (message: any) => {
@@ -31,17 +36,21 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   };
 
   const addDuplexMessageHandler = (handler: any) => {
-    if(duplexMessageHandleStack.current && duplexMessageHandleStack.current?.every((h: any) => h !== handler)) {
+    if (
+      duplexMessageHandleStack.current &&
+      duplexMessageHandleStack.current?.every((h: any) => h !== handler)
+    ) {
       duplexMessageHandleStack.current?.push(handler);
     }
-  }
+  };
   const removeDuplexHandler = (handler: any) => {
-    const indexOfHandler =  duplexMessageHandleStack.current?.findIndex((h: any) => h == handler);
-    if(indexOfHandler > -1){
-      duplexMessageHandleStack.current?.splice(indexOfHandler,1)
+    const indexOfHandler = duplexMessageHandleStack.current?.findIndex(
+      (h: any) => h == handler
+    );
+    if (indexOfHandler > -1) {
+      duplexMessageHandleStack.current?.splice(indexOfHandler, 1);
     }
-  }
-
+  };
 
   useEffect(() => {
     getLandingData();
@@ -52,7 +61,6 @@ const App: React.FunctionComponent<AppProps> = (props) => {
         `app-start-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
       );
     }
-    
   }, []);
 
   const updateProfile = (userProfile: UserProfile) => {
@@ -69,6 +77,10 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     shouldEnableRTL(rtlStatus);
   };
 
+  const errorHandler = (error: Error, stackTrace: string) => {
+    console.error("Something went wrong", error, "with stacktrace", stackTrace);
+  };
+
   const appSettings = {
     userProfile,
     setUserProfile,
@@ -78,22 +90,27 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     shouldEnableRTL,
     onDuplexMessageHandlers: duplexMessage.current, // the current list of message handlers from various components thoguhout the application
     addDuplexMessageHandler, // Add Duplex message handler function from any component
-    removeDuplexHandler,  // removes registered Duplex message handler function from any component
+    removeDuplexHandler, // removes registered Duplex message handler function from any component
     duplexMessage, // root application duplex message handler which dispatches the message to individual component specific message handlers.
   };
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <GlobalContext.Provider value={appSettings}>
-        <MFDrawerContainer></MFDrawerContainer>
-        <RouterOutlet
-          isAuthorized={
-            GLOBALS.store?.accessToken !== null &&
-            GLOBALS.store?.refreshToken !== null
-          }
-        />
-      </GlobalContext.Provider>
-    </QueryClientProvider>
+    <ErrorBoundary
+      onError={errorHandler}
+      FallbackComponent={ErrorFallbackComponent}
+    >
+      <QueryClientProvider client={queryClient}>
+        <GlobalContext.Provider value={appSettings}>
+          <MFDrawerContainer />
+          <RouterOutlet
+            isAuthorized={
+              GLOBALS.store?.accessToken !== null &&
+              GLOBALS.store?.refreshToken !== null
+            }
+          />
+        </GlobalContext.Provider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 

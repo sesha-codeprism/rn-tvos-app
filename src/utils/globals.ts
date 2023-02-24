@@ -98,14 +98,23 @@ interface GLOBALSType {
   rootNavigation: any;
   /** Should the UI be RTL */
   enableRTL: boolean;
-  /** User account info  */
   /** ChannelRights Info */
   channelRights: any;
-  userAccountInfo: UserAccountInfo
+  /** User account info  */
+  userAccountInfo: UserAccountInfo;
+  allSubscriptionGroups: any;
+  viewableSubscriptions: any;
+  scheduledSubscriptions: any
   browseGalleryData?: BrowseGallery;
   currentSlots: any
   channelMap: any
+  recorders: any
+  /** Current Now-Next Map updated every three hours time */
+  nowNextMap: any;
+  // testString: string;
+  drawerPanelOpen: boolean;
   moviesAndTvShows?: TrendingItems[];
+  recordingData: any
   /** Async store data */
   store: {
     accessToken: string | null;

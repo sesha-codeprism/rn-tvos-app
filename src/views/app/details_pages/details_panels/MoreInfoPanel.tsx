@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Animated,
+  BackHandler,
   Image,
   ScrollView,
   StyleSheet,
@@ -8,17 +9,17 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { AppStrings, getFontIcon } from "../../../config/strings";
-import { format, sortInorder } from "../../../utils/assetUtils";
+import { AppStrings, getFontIcon } from "../../../../config/strings";
+import { format, sortInorder } from "../../../../utils/assetUtils";
 import {
   chooseRating,
   metadataSeparator,
-} from "../../../utils/Subscriber.utils";
-import { globalStyles as globals } from "../../../config/styles/GlobalStyles";
-import { getUIdef, scaleAttributes } from "../../../utils/uidefinition";
-import { fontIconsObject } from "../../../utils/analytics/consts";
-import HeaderComponent from "../../../components/HeaderComponent";
-import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
+} from "../../../../utils/Subscriber.utils";
+import { globalStyles as globals } from "../../../../config/styles/GlobalStyles";
+import { getUIdef, scaleAttributes } from "../../../../utils/uidefinition";
+import { fontIconsObject } from "../../../../utils/analytics/consts";
+import HeaderComponent from "../../../../components/HeaderComponent";
+import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 
 export type State = {
   opacity: Animated.Value;
@@ -49,21 +50,32 @@ const upcomingIcon = getFontIcon("badge_upcoming");
 const ppvIcon = getFontIcon("source_ppv");
 
 interface MoreInfoProps {
-  udpData: any;
-  networkInfo: any;
-  genres: any;
-  episodeData?: EpisodeData;
-  episodeDetailsData?: any;
+  navigation?: any;
+  route?: any;
+
+  // udpData: any;
+  // networkInfo: any;
+  // genres: any;
+  // episodeData?: EpisodeData;
+  // episodeDetailsData?: any;
 }
 
 const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
+  const {
+    episodeData = {},
+    episodeDetailsData = {},
+    udpData = {},
+    genres = [],
+    networkInfo = [],
+  } = props.route.params;
+
   const getMetadataString = () => {
     const {
       ReleaseYear = "",
       Rating = "",
       seasonsCount = "",
       durationMinutesString = "",
-    } = props.udpData;
+    } = udpData;
     const metadataString = [];
     if (durationMinutesString) {
       metadataString.push(durationMinutesString);
@@ -101,12 +113,12 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
     return episodeName && episodeNumber && seasonNumber;
   };
 
-  const headingLine1 = hasCompleteEpisodeData(props.episodeData! || {})
-    ? getEpisodeTitleString(props.episodeData!)
-    : props.udpData.title || props.udpData.Name || props.udpData.Title;
+  const headingLine1 = hasCompleteEpisodeData(episodeData! || {})
+    ? getEpisodeTitleString(episodeData!)
+    : udpData.title || udpData.Name || udpData.Title;
 
-  const headingLine2 = hasCompleteEpisodeData(props.episodeData! || {})
-    ? props.udpData.title || props.udpData.Title
+  const headingLine2 = hasCompleteEpisodeData(episodeData! || {})
+    ? udpData.title || udpData.Title
     : getMetadataString();
 
   const getGenreText = (genres?: Genre[]) =>
@@ -116,13 +128,13 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
         `${genre.Name}${index === genres.length - 1 ? "" : metadataSeparator}`
     );
 
-  const {
-    episodeData = {},
-    episodeDetailsData = {},
-    udpData = {},
-    genres = [],
-    networkInfo = [],
-  } = props || {};
+  // const {
+  //   episodeData = {},
+  //   episodeDetailsData = {},
+  //   udpData = {},
+  //   genres = [],
+  //   networkInfo = [],
+  // } = props || {};
   const {
     statusText,
     description,
@@ -166,8 +178,10 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
   };
 
   let statusTextList = statusText;
-  if (Object.keys(episodeDetailsData).length) {
-    statusTextList = episodeDetailsData?.statusText;
+  if (episodeDetailsData) {
+    if (Object.keys(episodeDetailsData).length) {
+      statusTextList = episodeDetailsData?.statusText;
+    }
   }
 
   let ratings = episodeDetailsData?.Rating || Rating || chooseRating(Ratings);
@@ -244,7 +258,7 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
 
   return (
     <SideMenuLayout
-      title={props.udpData?.title}
+      title={udpData?.title}
       subTitle={getMetadataString()}
       contentContainerStyle={{
         padding: 0,
@@ -372,7 +386,7 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
   );
 };
 
-const styles = StyleSheet.create(
+const styles: any = StyleSheet.create(
   getUIdef("Details.MoreInfoPanel")?.style ||
     scaleAttributes({
       bodyRoot: {

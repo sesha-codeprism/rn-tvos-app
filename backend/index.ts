@@ -39,10 +39,12 @@ export const getMassagedData = (uri: string, data: any) => {
         const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
         return massagedData;
       }
-    } else if (udlID!.id.split("/")[0] === 'dvrproxy') {
-      const massagedData = massageDVRFeed(data.data, SourceType.DVR, "", undefined, false);
-      return massagedData;
-    } else {
+    }
+    // else if (udlID!.id.split("/")[0] === 'dvrproxy') {
+    //   const massagedData = massageDVRFeed(data.data, SourceType.DVR, "", undefined, false);
+    //   return massagedData;
+    // } 
+    else {
       return data
     }
   } else {

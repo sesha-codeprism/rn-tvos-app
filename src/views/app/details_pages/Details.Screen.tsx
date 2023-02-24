@@ -2,6 +2,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Alert,
+  BackHandler,
   Dimensions,
   Image,
   ImageBackground,
@@ -28,7 +29,6 @@ import {
   massageProgramDataForUDP,
   massageSeriesDataForUDP,
   SubscriptionPackages,
-  validateEntitlements,
   getEpisodeInfo,
   massageDiscoveryFeed,
 } from "../../../utils/assetUtils";
@@ -48,9 +48,12 @@ import {
   pbr,
   sourceTypeString,
 } from "../../../utils/analytics/consts";
-import { Genre, SourceType } from "../../../utils/common";
+import { Genre, ItemShowType, SourceType } from "../../../utils/common";
 import { useQuery } from "react-query";
-import { appUIDefinition, defaultQueryOptions } from "../../../config/constants";
+import {
+  appUIDefinition,
+  defaultQueryOptions,
+} from "../../../config/constants";
 import { DefaultStore } from "../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../utils/globals";
 import { getDataFromUDL, getMassagedData } from "../../../../backend";
@@ -65,13 +68,23 @@ import { ButtonVariantProps } from "../../../components/MFButtonGroup/MFButtonGr
 import { BookmarkType as udlBookMark } from "../../../utils/Subscriber.utils";
 import { DetailsSidePanel } from "./DetailSidePanel";
 import { isFeatureAssigned } from "../../../utils/helpers";
-import { invalidateQueryBasedOnSpecificKeys, queryClient } from "../../../config/queries";
-import { getSubscriberPins, pinItem, unpinItem } from "../../../../backend/subscriber/subscriber";
+import { pinItem, unpinItem } from "../../../../backend/subscriber/subscriber";
+import {
+  invalidateQueryBasedOnSpecificKeys,
+  queryClient,
+  appQueryCache,
+} from "../../../config/queries";
+import { getSubscriberPins } from "../../../../backend/subscriber/subscriber";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import { SCREEN_WIDTH } from "../../../utils/dimensions";
 const { width, height } = Dimensions.get("window");
 import MFProgressBar from "../../../components/MFProgressBar";
+import {
+  Definition as DefinationOfItem,
+  validateEntitlements,
+} from "../../../utils/DVRUtils";
+import { DetailRoutes } from "../../../config/navigation/DetailsNavigator";
 import { GlobalContext } from "../../../contexts/globalContext";
 import { DuplexManager } from "../../../modules/duplex/DuplexManager";
 import NotificationType from "../../../@types/NotificationType";
@@ -138,12 +151,10 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [open, setOpen] = useState(false);
   const [similarItemsSwimLaneKey, setSimilarItemsSwimLaneKey] = useState("");
   const [castnCrewSwimLaneKey, setCastnCrewSwimlaneKey] = useState("");
-  const [viewableSubscriptionGroups, setViewableSubscriptionGroups] =
-    useState<any>();
-  const [scheduledSubScriptionGroups, setScheduledSubScriptionGroups] =
-    useState<any>();
-  const [allSubscriptionGroups, setAllSubscriptionGroups] = useState<any>();
   const [isItemPinned, setIsItemPinned] = useState(false);
+  const [route, setRoute] = useState(DetailRoutes.MoreInfo);
+  const [screenProps, setScreenProps] = useState<any>();
+  const [state, currentState] = useState(false);
 
   const currentContext = useContext(GlobalContext);
 
@@ -183,15 +194,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const buttonFocuszoneRef: React.RefObject<any> = React.createRef();
   let networkInfo: any;
 
-  const pinnedItemsResponse = useQuery([
-                                          "feed",
-                                          "udl://subscriber/library/Pins",
-                                        ], 
-                                        getSubscriberPins, 
-                                        {
-                                          staleTime: appUIDefinition.config.queryStaleTime, 
-                                          cacheTime: appUIDefinition.config.queryCacheTime
-                                        });
+  const pinnedItemsResponse = useQuery(
+    ["feed", "udl://subscriber/library/Pins"],
+    getSubscriberPins,
+    {
+      staleTime: appUIDefinition.config.queryStaleTime,
+      cacheTime: appUIDefinition.config.queryCacheTime,
+    }
+  );
 
   const duplexManager: DuplexManager = DuplexManager.getInstance();
 
@@ -211,12 +221,226 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const toggleSidePanel = () => {
-    setOpen(open);
+    setScreenProps({
+      udpData: udpDataAsset,
+      networkInfo: networkInfo,
+      genres: udpDataAsset?.genre || discoveryProgramData?.genre,
+    });
+    setRoute(DetailRoutes.MoreInfo);
+    // drawerRef?.current.pushRoute(DetailRoutes.MoreInfo, {
+    //   udpData: udpDataAsset,
+    //   networkInfo: networkInfo,
+    //   genres: udpDataAsset?.genre || discoveryProgramData?.genre,
+    // });
+    setOpen(true);
     drawerRef?.current?.open();
+
     // drawerRef.current.open();
   };
   const openNewRecording = () => {
-    featureNotImplementedAlert();
+    //TODO: We have a check for PCON. Need to implement
+    const contentType = assetData.assetType?.contentType;
+    let { ChannelInfo: { channel: currentChannel = undefined } = {} } =
+      feed || {};
+    if (
+      contentType === ContentType.PROGRAM ||
+      contentType === ContentType.GENERIC
+    ) {
+      let schedule = playActionsData.Schedules?.[0];
+
+      // Get the correct schedule, the one which is shown in UI
+      if (
+        currentChannel &&
+        playActionsData.Schedules &&
+        playActionsData.Schedules.length
+      ) {
+        schedule = playActionsData.Schedules.find(
+          (s: any) =>
+            s?.ChannelNumber === currentChannel?.Number ||
+            s?.ChannelNumber == currentChannel?.number
+        );
+      }
+      if (schedule) {
+        if (feed) {
+          const {
+            //@ts-ignore
+            Schedule: {
+              channelId: StationIdFromEPGSchedule = "",
+              contentType: ContentTypeFromEPGSchedule = "",
+            } = {},
+            //@ts-ignore
+            currentCatchupSchedule,
+            //@ts-ignore
+            currentCatchupSchedule: { ShowType = undefined } = {},
+            //@ts-ignore
+            ChannelInfo,
+            //@ts-ignore
+            currentSchedule,
+            //@ts-ignore
+            ShowType: ShowTypeSingleProgram = undefined,
+            //@ts-ignore
+            channel: { id: StationIdFromEPGChannel = "" } = {},
+          } = feed;
+
+          if (
+            StationIdFromEPGSchedule &&
+            ContentTypeFromEPGSchedule === ItemShowType.Movie
+          ) {
+            const actualSelectedChannel =
+              GLOBALS.channelMap?.findChannelByStationId(
+                StationIdFromEPGSchedule
+              );
+            if (actualSelectedChannel) {
+              // assign the selected schedule
+              const selectedSchedule = playActionsData.Schedules?.find(
+                (s: any) =>
+                  s?.ChannelNumber === actualSelectedChannel?.channel?.Number
+              );
+              if (selectedSchedule) {
+                // overwrite
+                schedule = selectedSchedule;
+              }
+            }
+          }
+
+          if (StationIdFromEPGChannel) {
+            let actualSelectedChannel =
+              GLOBALS.channelMap?.findChannelByStationId(
+                StationIdFromEPGChannel
+              );
+            if (actualSelectedChannel) {
+              // assign the selected schedule
+              const selectedSchedule = playActionsData.Schedules?.find(
+                (s: any) =>
+                  s?.ChannelNumber === actualSelectedChannel?.channel?.Number
+              );
+              if (selectedSchedule) {
+                // overwrite
+                schedule = selectedSchedule;
+              }
+            }
+          }
+
+          if (ChannelInfo || currentSchedule) {
+            const stationId =
+              ChannelInfo?.channel?.StationId ||
+              currentSchedule?.StationId ||
+              schedule.StationId;
+
+            const channel = playActionsData.Schedules?.find(
+              (x: any) => x.StationId === stationId
+            );
+            const { StationId, ChannelNumber, StartUtc } = channel;
+            GLOBALS.recordingData = {
+              Definition: DefinationOfItem.SINGLE_PROGRAM,
+              Parameters: [
+                {
+                  Key: "ProgramId",
+                  Value: schedule?.ProgramId,
+                },
+              ],
+              Settings: {
+                StationId: StationId,
+                ChannelNumber: ChannelNumber as number,
+                StartUtc: StartUtc,
+                EndLateSeconds: 0,
+                RecyclingDisabled: false,
+                ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+                IsMultiChannel: false,
+              },
+            };
+            // this.props.setRecordingData();
+          } else if (
+            ShowType === ItemShowType.Movie ||
+            ShowTypeSingleProgram === ItemShowType.Movie
+          ) {
+            const { StationId, ChannelNumber, CatchupStartUtc, StartUtc } =
+              StationIdFromEPGSchedule
+                ? schedule || currentCatchupSchedule
+                : currentCatchupSchedule || schedule;
+            if (ChannelNumber) {
+              GLOBALS.recordingData = {
+                Definition: DefinationOfItem.SINGLE_PROGRAM,
+                Parameters: [
+                  {
+                    Key: "ProgramId",
+                    Value: schedule?.ProgramId,
+                  },
+                ],
+                Settings: {
+                  StationId: StationId,
+                  ChannelNumber: ChannelNumber as number,
+                  StartUtc: CatchupStartUtc || StartUtc,
+                  EndLateSeconds: 0,
+                  RecyclingDisabled: false,
+                  ChannelMapId:
+                    GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+                  IsMultiChannel: false,
+                },
+              };
+            }
+          } else if (schedule) {
+            const { StationId, ChannelNumber, StartUtc } = schedule;
+            if (ChannelNumber) {
+              GLOBALS.recordingData = {
+                Definition: DefinationOfItem.SINGLE_PROGRAM,
+                Parameters: [
+                  {
+                    Key: "ProgramId",
+                    Value: schedule?.ProgramId,
+                  },
+                ],
+                Settings: {
+                  StationId: StationId,
+                  ChannelNumber: ChannelNumber as number,
+                  StartUtc: StartUtc,
+                  EndLateSeconds: 0,
+                  RecyclingDisabled: false,
+                  ChannelMapId:
+                    GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+                  IsMultiChannel: false,
+                },
+              };
+              // this.props.setRecordingData();
+            }
+          }
+        }
+        let params = undefined;
+        let panelName = undefined;
+        if (contentType === ContentType.GENERIC || schedule?.IsGeneric) {
+          params = {
+            isNew: true,
+            isSeries: false,
+            title: udpDataAsset.title,
+            schedules: discoverySchedulesData,
+            programId: schedule?.ProgramId,
+            isGeneric: true,
+            // onDvrItemSelected: this.setFocusBack,
+            isPopupModal: true,
+          };
+          // panelName = SideMenuRoutes.DvrEpisodeRecordingOptions;
+          setRoute(DetailRoutes.EpisodeRecordOptions);
+          setScreenProps(params);
+          drawerRef.current?.open();
+        } else {
+          params = {
+            isNew: true,
+            programId: schedule?.ProgramId,
+            seriesId: schedule?.SeriesId,
+            title: schedule?.Name || "",
+            // onDvrItemSelected: this.setFocusBack,
+            isPopupModal: true,
+          };
+          setRoute(DetailRoutes.RecordingOptions);
+          setScreenProps(params);
+          drawerRef.current?.open();
+          // panelName = SideMenuRoutes.DvrRecordingOptions;
+        }
+        // this.props.openPanel(true, panelName, params);
+      }
+    } else {
+      //TODO: Series recording.. need to specifically handle entire series recording
+    }
   };
 
   const startResolveConflict = () => {
@@ -345,8 +569,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       const { combinedEntitlements = [] } = udpDataAsset || {};
       const isRecordingBlocked = !validateEntitlements(
         combinedEntitlements,
-        //TODO: Make api call and set this value
-        []
+        GLOBALS.recorders.recorders
       );
       props.navigation.push(Routes.EpisodeList, {
         discoveryData: discoveryProgramData,
@@ -443,52 +666,41 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     };
   };
   let assetData: AssetData = updateAssetData();
-  const getAllViewableSubscriptions = async () => {
-    const udlParams = "udl://dvrproxy/viewable-subscription-items/";
-    const data = await getDataFromUDL(udlParams);
-    const massagedData = getMassagedData(udlParams, data);
-    setViewableSubscriptionGroups(massagedData);
-    return massagedData;
-  };
 
-  const getScheduledSubscriptionGroups = async () => {
-    const udlParams = "udl://dvrproxy/get-scheduled-subscription-groups/";
-    const data = await getDataFromUDL(udlParams);
-    const massagedData = getMassagedData(udlParams, data);
-    setScheduledSubScriptionGroups(massagedData);
-    return massagedData;
+  const handleBackPress = () => {
+    return true;
   };
-
-  const getAllSubscriptionGroups = async () => {
-    const udlParams = "udl://dvrproxy/get-all-subscriptionGroups/";
-    const data = await getDataFromUDL(udlParams);
-    const massagedData = getMassagedData(udlParams, data);
-    setAllSubscriptionGroups(massagedData);
-    return massagedData;
-  };
-
 
   const onDuplexMessage = (message: any) => {
     const status = getItemPinnedStatus();
     console.log("status", status);
     setIsItemPinned(status);
-  }
+  };
 
-  useEffect(() =>{
-
-    if(!pinnedItemsResponse.isFetching && pinnedItemsResponse.isFetched &&  pinnedItemsResponse.isSuccess && pinnedItemsResponse.data){
-        const status = getItemPinnedStatus();
-        console.log("status", status);
-        setIsItemPinned(status);
+  useEffect(() => {
+    if (
+      !pinnedItemsResponse.isFetching &&
+      pinnedItemsResponse.isFetched &&
+      pinnedItemsResponse.isSuccess &&
+      pinnedItemsResponse.data
+    ) {
+      const status = getItemPinnedStatus();
+      console.log("status", status);
+      setIsItemPinned(status);
     }
-
-  }, [pinnedItemsResponse.isFetched, pinnedItemsResponse.data, pinnedItemsResponse.dataUpdatedAt, pinnedItemsResponse.isSuccess, pinnedItemsResponse.isFetching]);
+  }, [
+    pinnedItemsResponse.isFetched,
+    pinnedItemsResponse.data,
+    pinnedItemsResponse.dataUpdatedAt,
+    pinnedItemsResponse.isSuccess,
+    pinnedItemsResponse.isFetching,
+  ]);
 
   useEffect(() => {
     currentContext.addDuplexMessageHandler(onDuplexMessage);
     () => {
       currentContext.removeDuplexHandler(onDuplexMessage);
-    }
+    };
   }, []);
 
   const getSimilarItemsForFeed = async ({ queryKey }: any) => {
@@ -510,8 +722,21 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       "udl://subscriber/similarprograms/",
       data
     );
-    setSimilarData(massagedData);
     return massagedData;
+  };
+
+  const channelByStationId = (channels: any[], Schedule: any) => {
+    let index;
+    const channel = channels.find((element: any, defaultIndex: any) => {
+      if (element.StationId == Schedule?.channelId) {
+        index = defaultIndex;
+        return element;
+      }
+    });
+    return {
+      channel,
+      channelIndex: index,
+    };
   };
 
   const handleFavoritePress = async () => {
@@ -525,36 +750,47 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       assetId = assetData.id;
       assetType = itemTypeString[assetData.contentTypeEnum];
     }
-    
-    const {CatchupEndUtc, CatchupStartUtc, EndUtc, StartUtc, ProgramId, SeriesId, ShowType} = udpDataAsset?.ChannelInfo?.Schedule || {}
+
+    const {
+      CatchupEndUtc,
+      CatchupStartUtc,
+      EndUtc,
+      StartUtc,
+      ProgramId,
+      SeriesId,
+      ShowType,
+    } = udpDataAsset?.ChannelInfo?.Schedule || {};
     const convertedStartDate =
-    (StartUtc && new Date(StartUtc)) ||
-    (CatchupStartUtc && new Date(CatchupStartUtc));
+      (StartUtc && new Date(StartUtc)) ||
+      (CatchupStartUtc && new Date(CatchupStartUtc));
     const convertedEndDate =
       (EndUtc && new Date(EndUtc)) ||
       (CatchupEndUtc && new Date(CatchupEndUtc));
     const now = Date.now();
-    if(now >= convertedStartDate && now <= convertedEndDate){
-      if(ShowType === "TVShow"){
+    if (now >= convertedStartDate && now <= convertedEndDate) {
+      if (ShowType === "TVShow") {
         assetId = SeriesId;
-        assetType =  'Series';
-      }else {
+        assetType = "Series";
+      } else {
         assetId = ProgramId;
-        assetType =  'Program';
+        assetType = "Program";
       }
     }
 
-    
     if (isItemPinned) {
       //@ts-ignore
       const resp = await unpinItem(assetId, assetType);
       if (resp.status >= 200 && resp.status <= 300) {
         setIsItemPinned(false);
-        duplexManager.sendOrEnqueueMessage(
-              NotificationType.unpin,
-              { id: assetId, isPinned: false, itemType: assetId }
+        duplexManager.sendOrEnqueueMessage(NotificationType.unpin, {
+          id: assetId,
+          isPinned: false,
+          itemType: assetId,
+        });
+        invalidateQueryBasedOnSpecificKeys(
+          "feed",
+          "udl://subscriber/library/Pins"
         );
-        invalidateQueryBasedOnSpecificKeys("feed", "udl://subscriber/library/Pins")
       } else {
         Alert.alert("Something went wrong");
       }
@@ -563,11 +799,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       const resp = await pinItem(assetId, assetType);
       if (resp.status >= 200 && resp.status <= 300) {
         setIsItemPinned(true);
-        duplexManager.sendOrEnqueueMessage(
-          NotificationType.pin,
-          { id: assetId, isPinned: true, itemType: assetId }
-    );
-        invalidateQueryBasedOnSpecificKeys("feed", "udl://subscriber/library/Pins")
+        duplexManager.sendOrEnqueueMessage(NotificationType.pin, {
+          id: assetId,
+          isPinned: true,
+          itemType: assetId,
+        });
+        invalidateQueryBasedOnSpecificKeys(
+          "feed",
+          "udl://subscriber/library/Pins"
+        );
       } else {
         Alert.alert("Something went wrong");
       }
@@ -585,13 +825,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           avatarSource={undefined}
           onFocus={() => {
             setIsFavoriteButtonFocused(true);
-            // if (__DEV__) {
-            //   setTimeout(() => {
-            //     ctaButtonRef.current.setNativeProps({
-            //       hasTVPreferredFocus: true,
-            //     });
-            //   }, 2000);
-            // }
           }}
           onPress={handleFavoritePress}
           variant={MFButtonVariant.FontIcon}
@@ -639,35 +872,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             }
           }}
         />
-        {/* <MFButton
-          ref={listAddButtonRef}
-          focusable
-          iconSource={0}
-          imageSource={0}
-          avatarSource={undefined}
-          variant={MFButtonVariant.FontIcon}
-          fontIconSource={listAdd}
-          fontIconTextStyle={StyleSheet.flatten([
-            styles.textStyle,
-            { fontSize: 70, textAlign: "center", alignSelf: "center" },
-          ])}
-          style={[
-            styles.buttonIconContainer,
-            styles.solidBackground,
-            {
-              borderRadius: 35,
-              alignItems: "center",
-              alignContent: "center",
-              justifyContent: "center",
-              marginLeft: 30,
-            },
-          ]}
-          focusedStyle={styles.focusedBackground}
-          fontIconProps={{
-            iconPlacement: "Left",
-            shouldRenderImage: true,
-          }}
-        /> */}
       </View>
     );
   };
@@ -684,7 +888,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       //TODO: Re-implement this once the live api calls are written
       // const { Schedule = undefined } = feed || {};
       // const channelFromEPG = channelByStationId(
-      //   this.props.channelMap.Channels,
+      //   GLOBALS.channelMap.Channels,
       //   Schedule
       // );
       // if (channelFromEPG) {
@@ -839,8 +1043,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       udlParam = "udl://discovery/programSchedules/" + params;
     }
     const data = await getDataFromUDL(udlParam);
-    setdiscoverySchedulesData(data.data);
-    return data;
+    return data.data;
   };
 
   const getDiscoveryProgramData = async (assetData: AssetData) => {
@@ -866,8 +1069,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       data.data,
       assetTypeObject[assetData.contentTypeEnum]
     );
-    setdiscoveryProgramData(massagedData);
-
     return massagedData;
   };
 
@@ -882,8 +1083,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }&id=${id}`;
     const udlParam = "udl://subscriber/programplayactions/" + params;
     const data = await getDataFromUDL(udlParam);
-    setplayActionsData(data.data);
-    return data;
+    return data.data;
   };
 
   const getProgramSubscriberData = async (assetData: AssetData) => {
@@ -905,26 +1105,24 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const getItemPinnedStatus = () => {
-
-      const pinnedItems = queryClient.getQueryData([
-        "feed",
-        "udl://subscriber/library/Pins",
-      ]);
-      ///@ts-ignore
-      const pinnedItem = getPinnedItem(pinnedItems, feed);
-      if (pinnedItem) {
-        return true;
-      } else {
-        return false;
-      }
-
+    const pinnedItems = queryClient.getQueryData([
+      "feed",
+      "udl://subscriber/library/Pins",
+    ]);
+    ///@ts-ignore
+    const pinnedItem = getPinnedItem(pinnedItems, feed);
+    if (pinnedItem) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const getPinnedItem = (pinnedItems: Array<any>, feed: any) => {
     if (!pinnedItems) {
       return undefined;
     }
-    const Id =  getItemId(feed);
+    const Id = getItemId(feed);
     return pinnedItems?.find((element: any) => {
       const elementId = getItemId(element);
       return elementId === Id;
@@ -934,9 +1132,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const getUDPData = async () => {
     console.log("Fetching UDP data");
     if (
-      !similarDataQuery.data &&
-      !discoveryProgramDataQuery.data &&
-      !discoverySchedulesQuery.data &&
+      !similarItemsData &&
+      !discoveryProgramQueryData &&
+      !discoverySchedulesQueryData &&
       !playActionsQuery.data &&
       !subscriberDataQuery.data
     ) {
@@ -955,11 +1153,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.channelMap,
           feed,
           GLOBALS.currentSlots,
-          allSubscriptionGroups,
+          GLOBALS.allSubscriptionGroups,
+          GLOBALS.viewableSubscriptions,
+          GLOBALS.scheduledSubscriptions,
           GLOBALS.userAccountInfo,
-          undefined,
-          GLOBALS.userAccountInfo,
-          undefined,
+          GLOBALS.recorders,
           playActionsData,
           undefined,
           undefined,
@@ -974,13 +1172,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.channelMap,
           discoverySchedulesData,
           undefined,
-          allSubscriptionGroups,
+          GLOBALS.allSubscriptionGroups,
           GLOBALS.userAccountInfo,
           subscriberData,
           undefined,
-          viewableSubscriptionGroups,
-          scheduledSubScriptionGroups,
-          undefined,
+          GLOBALS.viewableSubscriptions,
+          GLOBALS.scheduledSubscriptions,
+          GLOBALS.recorders,
           undefined,
           undefined,
           undefined,
@@ -993,6 +1191,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         );
     console.log("UDP data", udpData);
     setUDPDataAsset(udpData);
+    currentState(!state);
     return udpData;
   };
 
@@ -1003,32 +1202,70 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         `${genre.Name}${index === genres.length - 1 ? "" : metadataSeparator}`
     );
 
-  const similarDataQuery = useQuery(
+  const {
+    data: similarItemsData,
+    isLoading: isLoadingSimilarItems,
+    isFetching: isFetchingSimilarItems,
+  } = useQuery(
     [`get-similarItems-${assetData?.id}`, assetData],
     getSimilarItemsForFeed,
-    { ...defaultQueryOptions, refetchOnMount: "always" }
+    { ...defaultQueryOptions }
   );
 
-  const discoveryProgramDataQuery = useQuery(
+  useEffect(() => {
+    if (similarItemsData && !isFetchingSimilarItems) {
+      setSimilarData(similarItemsData);
+    }
+  }, [similarItemsData, isFetchingSimilarItems]);
+
+  const {
+    data: discoveryProgramQueryData,
+    isLoading: isLoadingDiscoveryProgramQueryData,
+    isFetching: isFetchingDiscoveryProgramQueryData,
+  } = useQuery(
     ["get-program-data", assetData?.id],
     () => getDiscoveryProgramData(assetData),
     {
       ...defaultQueryOptions,
-      refetchOnMount: "always",
     }
   );
 
-  const discoverySchedulesQuery = useQuery(
+  useEffect(() => {
+    if (discoveryProgramQueryData && !isFetchingDiscoveryProgramQueryData) {
+      setdiscoveryProgramData(discoveryProgramQueryData);
+    }
+  }, [discoveryProgramQueryData, isFetchingDiscoveryProgramQueryData]);
+
+  const {
+    data: discoverySchedulesQueryData,
+    isLoading: isLoadingDiscoverySchedulesQueryData,
+    isFetching: isFetchingDiscoverySchedulesQueryData,
+  } = useQuery(
     ["get-discoveryschedules", assetData?.id],
     () => getDiscoverySchedules(assetData),
-    { ...defaultQueryOptions, refetchOnMount: "always" }
+    { ...defaultQueryOptions }
   );
 
+  const closeModal = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    if (discoverySchedulesQueryData && !isFetchingDiscoverySchedulesQueryData) {
+      setdiscoverySchedulesData(discoverySchedulesQueryData);
+    }
+  }, [discoverySchedulesQueryData, isFetchingDiscoverySchedulesQueryData]);
   const playActionsQuery = useQuery(
     ["get-playActiosn", assetData?.id],
     () => getPlayActions(assetData),
-    { ...defaultQueryOptions, refetchOnMount: "always" }
+    { ...defaultQueryOptions }
   );
+
+  useEffect(() => {
+    if (playActionsQuery.data && !playActionsQuery.isFetching) {
+      setplayActionsData(playActionsQuery.data);
+    }
+  }, [playActionsQuery.data, playActionsQuery.isFetching]);
 
   const subscriberDataQuery = useQuery(
     ["get-subscriber-data", assetData?.id],
@@ -1036,25 +1273,25 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
 
-  const viewableSubscriptionGroupsQuery = useQuery(
-    ["get-viewableSubscriptionGroupsQuery"],
-    getAllViewableSubscriptions,
-    { ...defaultQueryOptions, refetchOnMount: "always" }
-  );
+  // const viewableSubscriptionGroupsQuery = useQuery(
+  //   ["get-viewableSubscriptionGroupsQuery"],
+  //   getAllViewableSubscriptions,
+  //   { ...defaultQueryOptions, refetchOnMount: "always" }
+  // );
 
-  const getScheduledSubscriptionsQuery = useQuery(
-    [`get-ScheduledSubscriptionsQuery`],
-    getScheduledSubscriptionGroups,
-    { ...defaultQueryOptions, refetchOnMount: "always" }
-  );
+  // const getScheduledSubscriptionsQuery = useQuery(
+  //   [`get-ScheduledSubscriptionsQuery`],
+  //   getScheduledSubscriptionGroups,
+  //   { ...defaultQueryOptions, refetchOnMount: "always" }
+  // );
 
-  const getAllSubscriptionsQuery = useQuery(
-    [`get-AllSubscriptionsQuery`],
-    getAllSubscriptionGroups,
-    { ...defaultQueryOptions, refetchOnMount: "always" }
-  );
+  // const getAllSubscriptionsQuery = useQuery(
+  //   [`get-AllSubscriptionsQuery`],
+  //   getAllSubscriptionGroups,
+  //   { ...defaultQueryOptions }
+  // );
 
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     ["get-UDP-data", assetData?.id],
     () => getUDPData(),
     {
@@ -1067,6 +1304,23 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         !!subscriberData,
     }
   );
+  useEffect(() => {
+    appQueryCache.subscribe((event) => {
+      console.log(event);
+      if (event?.type === "queryUpdated") {
+        if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
+          // const recordButton = udpDataAsset.ctaButtons.filter(
+          //   (e: any) =>
+          //     (e.buttonText = AppStrings?.str_details_program_record_button)
+          // )[0];
+
+          setTimeout(() => {
+            refetch();
+          }, 1000);
+        }
+      }
+    });
+  }, []);
 
   const getRestrictionsForVod = (
     usablePlayActions: any,
@@ -1108,13 +1362,19 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   onFocus={() => {
                     setOpen(false);
                     drawerRef.current.close();
+                    drawerRef.current.resetRoutes();
                     setCTAButtonFocusState(cta.buttonText);
                   }}
                   variant={MFButtonVariant.FontIcon}
                   fontIconSource={cta.iconSource}
                   fontIconTextStyle={StyleSheet.flatten([
                     styles.textStyle,
-                    { fontSize: 90 },
+                    {
+                      fontSize: 90,
+                      color: cta.buttonText?.includes("Record")
+                        ? g.fontColors.badge
+                        : "white",
+                    },
                   ])}
                   onPress={ctaButtonPress[cta.buttonAction]}
                   textStyle={{
@@ -1677,8 +1937,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         setIsCTAButtonFocused(false);
       } else {
         /** if no  swimlane exists  focus on the first  button */
-        if (buttonRefObject[ctaButtonFocusState].current) {
-          buttonRefObject[ctaButtonFocusState].current?.setNativeProps({
+        if (buttonRefObject[ctaButtonFocusState]?.current) {
+          buttonRefObject[ctaButtonFocusState]?.current?.setNativeProps({
             hasTVPreferredFocus: true,
           });
           setIsCTAButtonFocused(true);
@@ -1729,18 +1989,22 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                 accessible={true}
                 activeOpacity={0.3}
                 onFocus={onFocusBar}
-                style={similarData && similarData.length ?({
-                  backgroundColor: "transparent",
-                  height: 20,
-                  width: SCREEN_WIDTH,
-                  marginTop: 50,
-                }):({
-                  backgroundColor: "transparent",
-                  height: 20,
-                  width: SCREEN_WIDTH,
-                  marginTop: 50,
-                  marginBottom:60
-                })}
+                style={
+                  similarData && similarData.length
+                    ? {
+                        backgroundColor: "transparent",
+                        height: 20,
+                        width: SCREEN_WIDTH,
+                        marginTop: 50,
+                      }
+                    : {
+                        backgroundColor: "transparent",
+                        height: 20,
+                        width: SCREEN_WIDTH,
+                        marginTop: 50,
+                        marginBottom: 60,
+                      }
+                }
               ></TouchableOpacity>
               {similarData && renderMoreLikeThis()}
               {/* Cast and Crew */}
@@ -1759,14 +2023,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         opacity={1}
         open={open}
         animatedWidth={width * 0.37}
+        // openPage="MoreInfo"
         closeOnPressBack={false}
         navigation={props.navigation}
         drawerContent={false}
-        moreInfoProps={{
-          udpData: udpDataAsset,
-          networkInfo: networkInfo,
-          genres: udpDataAsset?.genre || discoveryProgramData?.genre,
-        }}
+        route={route}
+        closeModal={closeModal}
+        screenProps={screenProps} // moreInfoProps={}
       />
     </PageContainer>
   );
@@ -1775,37 +2038,22 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 const styles: any = StyleSheet.create(
   getUIdef("Details.Showcard")?.style ||
     scaleAttributes({
-      detailsBlock: {
-        height: 852,
-        flexDirection: "row",
-      },
+      detailsBlock: { height: 852, flexDirection: "row" },
       secondBlock: {
         marginTop: 86,
         flexDirection: "column",
         flex: 1,
         height: 627,
       },
-      flexRow: {
-        flexDirection: "row",
-      },
-      ctaBlock: {
-        flexDirection: "row",
-      },
-      favoriteBlock: {
-        width: 583,
-        marginTop: 69,
-      },
-      ctaButtonGroupBlock: {
-        marginTop: 69,
-      },
+      flexRow: { flexDirection: "row" },
+      ctaBlock: { flexDirection: "row" },
+      favoriteBlock: { width: 583, marginTop: 69 },
+      ctaButtonGroupBlock: { marginTop: 69 },
       containerOpacity: {
-        backgroundColor: g.backgroundColors.shade1,
+        backgroundColor: "#00030E",
         opacity: 0.9,
       },
-      firstColumn: {
-        width: 583,
-        alignItems: "center",
-      },
+      firstColumn: { width: 583, alignItems: "center" },
       imageContainer: {
         borderRadius: 4,
         overflow: "hidden",
@@ -1825,7 +2073,7 @@ const styles: any = StyleSheet.create(
       networkImageView: {
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: g.backgroundColors.shade3,
+        backgroundColor: "#282828",
         borderRadius: 3,
         height: 111,
         width: 111,
@@ -1837,123 +2085,85 @@ const styles: any = StyleSheet.create(
         width: 85,
         resizeMode: "contain",
       },
-      marginRight20: {
-        marginRight: 20,
-      },
+      marginRight20: { marginRight: 20 },
       networkTitle: {
-        fontFamily: g.fontFamily.semiBold,
-        fontSize: g.fontSizes.body1,
-        color: g.fontColors.darkGrey,
+        fontFamily: "Inter-SemiBold",
+        fontSize: 29,
+        color: "#6D6D6D",
+        paddingTop: 18,
       },
       metadataContainer: {
         flexDirection: "row",
         paddingBottom: 23,
       },
       title: {
-        fontFamily: g.fontFamily.bold,
-        fontSize: g.fontSizes.heading2,
-        color: g.fontColors.light,
+        fontFamily: "Inter-Bold",
+        fontSize: 57,
+        color: "#EEEEEE",
         paddingBottom: 10,
       },
-      hourGlass: {
-        width: 16,
-        height: 22,
-        marginTop: 26,
-        marginLeft: 15,
-      },
       metadataLine1: {
-        fontFamily: g.fontFamily.semiBold,
-        fontSize: g.fontSizes.body2,
-        color: g.fontColors.lightGrey,
+        fontFamily: "Inter-SemiBold",
+        fontSize: 25,
+        color: "#A7A7A7",
         marginBottom: 25,
       },
       description: {
-        fontFamily: g.fontFamily.regular,
-        fontSize: g.fontSizes.body2,
-        color: g.fontColors.lightGrey,
-        lineHeight: g.lineHeights.body2,
+        fontFamily: "Inter-Regular",
+        fontSize: 25,
+        color: "#A7A7A7",
+        lineHeight: 38,
       },
-      showcardImage: {
-        height: 628,
-        width: 419,
-      },
+      showcardImage: { height: 628, width: 419 },
       buttonContainerStyle: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
       },
-      buttonIconContainer: {
-        borderRadius: 35,
-        width: 70,
-        height: 70,
-        overflow: "hidden",
-        backgroundColor: g.backgroundColors.shade4,
-      },
-      solidBackground: {
-        backgroundColor: g.backgroundColors.shade4,
-      },
-      moreDetailsContainer: {
-        marginTop: 130,
-      },
+      buttonIconContainer: { width: 70, height: 70 },
+      solidBackground: { backgroundColor: "#424242" },
+      focusedBackground: { backgroundColor: "#053C69" },
+      moreDetailsContainer: { marginTop: 104 },
       contentRatingsContainer: {
         flexDirection: "row",
         marginBottom: 25,
       },
-      contentRatingsIcon: {
-        width: 30,
-        height: 30,
-      },
-      contentRatingText: {
-        marginLeft: 10,
-      },
-      ratingBlock: {
-        marginRight: 30,
-        flexDirection: "row",
-      },
-      textStyle: {
-        fontFamily: g.fontFamily.icons,
-        color: g.fontColors.light,
-      },
-      progressBarContainer: {
-        height: 3,
-      },
+      contentRatingsIcon: { width: 30, height: 30 },
+      contentRatingText: { marginLeft: 10 },
+      ratingBlock: { marginRight: 30, flexDirection: "row" },
+      textStyle: { fontFamily: "MyFontRegular", color: "#EEEEEE" },
+      progressBarContainer: { height: 3 },
       progressInfoText: {
-        fontFamily: g.fontFamily.semiBold,
-        fontSize: g.fontSizes.body2,
-        color: g.fontColors.lightGrey,
-        paddingBottom: 30,
-        lineHeight: g.lineHeights.body2,
+        fontFamily: "Inter-SemiBold",
+        fontSize: 25,
+        color: "#A7A7A7",
+        paddingBottom: 35,
+        lineHeight: 38,
         marginBottom: 20,
       },
       statusTextStyle: {
-        fontSize: g.fontSizes.body2,
-        fontFamily: g.fontFamily.regular,
-        color: g.fontColors.statusWarning,
+        fontSize: 25,
+        fontFamily: "Inter-Regular",
+        color: "#E7A230",
         marginBottom: 25,
       },
       fontIconStyle: {
-        fontFamily: g.fontFamily.icons,
+        fontFamily: "MyFontRegular",
+        color: "#A7A7A7",
         fontSize: 70,
-        color: g.fontColors.lightGrey,
         marginRight: 15,
         marginTop: -40,
         marginBottom: 10,
       },
-      flexOne: {
-        flex: 1,
-      },
-      ctaButtonStyle: {
-        height: 66,
-        fontFamily: g.fontFamily.semiBold,
-      },
+      flexOne: { flex: 1 },
+      ctaButtonStyle: { height: 66, fontFamily: "Inter-SemiBold" },
       ctaFontIconStyle: {
-        fontFamily: g.fontFamily.icons,
-        color: g.fontColors.statusError,
+        fontFamily: "MyFontRegular",
+        color: "#E15554",
       },
       buttonContainer: {
         flexDirection: "row",
         alignItems: "center",
-        marginRight: 40,
       },
       modalContainer: {
         position: "absolute",
@@ -1961,37 +2171,32 @@ const styles: any = StyleSheet.create(
         right: 0,
         zIndex: 2,
       },
-      episodeBlockContainer: {
-        marginTop: 35.5,
-      },
+      episodeBlockContainer: { marginTop: 35.5 },
       episodeBlockTitle: {
         marginBottom: 20,
-        fontSize: g.fontSizes.body1,
-        fontFamily: g.fontFamily.bold,
-        color: g.fontColors.light,
+        fontSize: 29,
+        fontFamily: "Inter-Bold",
+        color: "#EEEEEE",
       },
       episodeMetadata: {
         marginBottom: 20,
-        fontSize: g.fontSizes.body2,
-        fontFamily: g.fontFamily.semiBold,
-        color: g.fontColors.lightGrey,
+        fontSize: 25,
+        fontFamily: "Inter-SemiBold",
+        color: "#A7A7A7",
       },
       badgeStyle: {
-        fontFamily: g.fontFamily.icons,
-        color: g.fontColors.badge,
+        fontFamily: "MyFontRegular",
+        color: "#E15554",
         fontSize: 50,
         marginLeft: 20,
         marginTop: -10,
       },
-      marginTop: {
-        marginTop: 8,
-      },
-      descriptionText: {
-        fontSize: g.fontSizes.body2,
-        fontFamily: g.fontFamily.regular,
-        color: g.fontColors.lightGrey,
-        lineHeight: g.lineHeights.body2,
-        marginBottom: 25,
+      marginTop: { marginTop: 8 },
+      hourGlass: {
+        width: 16,
+        height: 22,
+        marginTop: 26,
+        marginLeft: 15,
       },
     })
 );

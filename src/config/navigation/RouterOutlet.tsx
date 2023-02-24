@@ -48,14 +48,17 @@ import RouteFallBackScreen from "../../views/app/Route.Fallback.screen";
 import BrowseCategoryScreen from "../../views/app/BrowsePages/BrowseCategory/Browse.Category.screen";
 import TestScreen from "../../views/app/test.screen";
 import DetailsScreen from "../../views/app/details_pages/Details.Screen";
-import useCurrentSlots from "../../customHooks/useCurrentSlots";
 import EpisodeList from "../../views/app/details_pages/episode_list/EpisodeList";
 import useChannelRights from "../../customHooks/useChannelRights";
 // import BrowseFilter from "../../views/app/BrowsePages/BrowseGallery/BrowseFilters";
 import { Settings as SettingsRN } from "react-native";
+import useLiveData from "../../customHooks/useLiveData";
+import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups";
+import useDVRRecorders from "../../customHooks/useRecorders";
+import { appQueryCache } from "../queries";
 
 interface RouterOutletProps {
-  initialState:any;
+  initialState: any;
 }
 
 export const Routes = {
@@ -114,11 +117,13 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
   props
 ) => {
   return (
-    <NavigationContainer independent={true}
+    <NavigationContainer
+      independent={true}
       initialState={props.initialState}
       onStateChange={(state) =>
-        SettingsRN.set({"SETTINGS_NAVIGATION_HISTORY": JSON.stringify(state)})
-      }>
+        SettingsRN.set({ SETTINGS_NAVIGATION_HISTORY: JSON.stringify(state) })
+      }
+    >
       <Stack.Navigator
         initialRouteName={Routes.Settings}
         screenOptions={{
@@ -313,8 +318,12 @@ interface RouterOutletProps {
 const RouterOutlet: React.FunctionComponent<RouterOutletProps> = (
   routerProps: RouterOutletProps
 ) => {
-  const slots = useCurrentSlots();
-  const channelRights = useChannelRights();
+  const { data: channeLMapInfo } = useChannelRights();
+  const { data: liveData } = useLiveData(channeLMapInfo);
+  const { data: recorders } = useDVRRecorders();
+  const subscriptionGroupQuery = useAllSubscriptionGroups(GLOBALS);
+
+  // appQueryCache.add(subscriptionGroupQuery);
   return (
     <NavigationContainer>
       <Stack.Navigator

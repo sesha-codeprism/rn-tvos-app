@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
 import AnimatedLottieView from "lottie-react-native";
-import { View, StyleSheet, Image, Dimensions } from "react-native";
+import { View, StyleSheet, Image, Dimensions, Settings } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { processBootStrap } from "../../../backend/authentication/authentication";
@@ -26,6 +26,7 @@ import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
 import { GlobalContext } from "../../contexts/globalContext";
 import {
+  appQueryCache,
   invalidateQueryBasedOnSpecificKeys,
   resetCaches,
 } from "../../config/queries";
@@ -62,33 +63,39 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     }
   );
 
-  const onDuplexMessage = useCallback((message: any) => {
-    if (message?.type === NotificationType.DeviceDeleted) {
-      const { payload: { deviceId = "" } = {} } = message;
-      if (deviceId === GLOBALS.deviceInfo.deviceId) {
-        // logout
-        const resetStore = resetAuthData();
-        updateStore(resetStore);
-        resetCaches();
-        GLOBALS.rootNavigation.replace(Routes.ShortCode);
+  const onDuplexMessage = useCallback(
+    (message: any) => {
+      if (message?.type === NotificationType.DeviceDeleted) {
+        const { payload: { deviceId = "" } = {} } = message;
+        if (deviceId === GLOBALS.deviceInfo.deviceId) {
+          // logout
+          const resetStore = resetAuthData();
+          updateStore(resetStore);
+          resetCaches();
+          GLOBALS.rootNavigation.replace(Routes.ShortCode);
+        }
+      } else if (message?.type === NotificationType.dvrUpdated) {
+        console.log("DVR update notification received");
+        invalidateQueryBasedOnSpecificKeys(
+          "feed",
+          "get-all-subscriptionGroups"
+        );
+        // setTimeout(() => {
+        //   appQueryCache.find("get-UDP-data")?.invalidate();
+        // }, 1000);
       }
-    } else if (message?.type === NotificationType.dvrUpdated) {
-      console.log("DVR update notification received");
-      invalidateQueryBasedOnSpecificKeys(
-        "feed",
-        "udl://dvrproxy/viewable-subscription-items/"
-      );
-    }
-  }, [GLOBALS.deviceInfo.deviceId]);
-
+    },
+    [GLOBALS.deviceInfo.deviceId]
+  );
 
   useEffect(() => {
+    Settings.set({ SETTINGS_NAVIGATION_HISTORY: undefined });
     setDeviceInfo();
     currentContext.addDuplexMessageHandler(onDuplexMessage);
 
     () => {
       currentContext.removeDuplexHandler(onDuplexMessage);
-    }
+    };
   }, []);
 
   useEffect(() => {
@@ -126,8 +133,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         .then(async () => {
           setGlobalData(data?.data).then(async () => {
             await setNativeModuleData();
-            initUdls();
-            await setLiveData();
+            // await setLiveData();
             setDefaultStore(storeResults?.data?.data, data?.data);
             connectDuplex(currentContext.duplexMessage);
             setLoading(false);

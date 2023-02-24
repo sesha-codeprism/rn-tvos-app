@@ -5,12 +5,29 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import { Animated, Dimensions, StyleSheet, Modal } from "react-native";
+import {
+  Animated,
+  Dimensions,
+  StyleSheet,
+  Modal,
+  BackHandler,
+} from "react-native";
+import DetailsNavigator, {
+  DetailRoutes,
+} from "../../../config/navigation/DetailsNavigator";
 import { GLOBALS } from "../../../utils/globals";
-import MoreInfoPanel from "./MoreInfoPanel";
-
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
+
+// export const enum DetailRoutes {
+//   Empty,
+//   Popup,
+//   MoreInfo,
+//   EpisodeRecordOptions,
+// }
+
+// export enum OpenPages = 'MoreInf0'
+export type OpenPages = "MoreInfo" | "EpisodeRecord";
 interface DetailsDrawerProps {
   open: boolean;
   drawerPercentage: number;
@@ -22,17 +39,24 @@ interface DetailsDrawerProps {
   closeOnPressBack?: boolean;
   navigation?: any;
   children?: any;
-  moreInfoProps: {
-    udpData: any;
-    networkInfo: any;
-    genres: any;
-    episodeData?: any;
-    episodeDetailsData?: any;
-  };
+  route: any;
+  screenProps: any;
+  closeModal: () => void;
+  // openPage: typeof DetailRoutes;
+  // moreInfoProps: {
+  //   udpData: any;
+  //   networkInfo: any;
+  //   genres: any;
+  //   episodeData?: any;
+  //   episodeDetailsData?: any;
+  // };
+  // episodeRecordingProps?: EpisodeRecordOptionsProps;
 }
+
 const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
   const [expanded, setExpanded] = useState(props.open);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
+
   const leftOffset = new Animated.Value(
     GLOBALS.enableRTL
       ? -(SCREEN_WIDTH * (props.drawerPercentage / 100))
@@ -41,19 +65,33 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
 
   useEffect(() => {
     expanded ? openDrawer() : closeDrawer();
+    if (expanded) {
+    }
   }, [expanded]);
   useImperativeHandle(ref, () => ({
     openDrawer,
     closeDrawer,
     open,
     close,
+    pushRoute,
+    popRoute,
+    resetRoutes,
   }));
+
+  const pushRoute = (route: typeof DetailRoutes, props: any) => {};
+  const popRoute = () => {};
+
+  const resetRoutes = () => {
+    // componentStack.current = [{ route: DetailRoutes.Empty, props: {} }];
+  };
   const open = () => {
     setExpanded(true);
   };
   const close = () => {
     setExpanded(false);
   };
+
+  const componentMount = () => {};
   const openDrawer = () => {
     const { animationTime, opacity, drawerPercentage } = props;
     const DRAWER_WIDTH = SCREEN_WIDTH * (drawerPercentage / 100);
@@ -101,6 +139,8 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
         useNativeDriver: true,
       }),
     ]).start();
+    setExpanded(false);
+    props.closeModal();
   };
   const renderPush = () => {
     const { drawerPercentage } = props;
@@ -109,6 +149,7 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
       <Modal
         animationType="none"
         transparent={true}
+        focusable
         visible={expanded}
         onRequestClose={() => {
           setExpanded(false);
@@ -117,6 +158,8 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
         }}
         style={[styles.main, GLOBALS.enableRTL ? { left: 0 } : { right: 0 }]}
         onDismiss={() => {
+          setExpanded(false);
+          closeDrawer();
           console.log("Modal dismissed", expanded);
         }}
         presentationStyle={"overFullScreen"}
@@ -137,12 +180,9 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
               },
             ]}
           >
-            <MoreInfoPanel
-              udpData={props.moreInfoProps.udpData}
-              networkInfo={props.moreInfoProps.networkInfo}
-              genres={props.moreInfoProps.genres}
-              episodeData={props.moreInfoProps.episodeData}
-              episodeDetailsData={props.moreInfoProps.episodeDetailsData}
+            <DetailsNavigator
+              initialScreen={props.route}
+              props={{ ...props.screenProps, closePanel: closeDrawer }}
             />
           </Animated.View>
         </Animated.View>

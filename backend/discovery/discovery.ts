@@ -65,7 +65,6 @@ export const getMovies = async (id?: string, params?: any) => {
       GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery ||
       "https://appgw-client-a.dev.mr.tv3cloud.com/S1/discovery"
     ) + "/v4/feeds/movies/items";
-  console.log("UDL: getMovies", id, params, url);
   const response = await GET({
     url: url,
     params: {
@@ -98,7 +97,6 @@ export const getTVShows = async (id?: string, params?: any) => {
     ) +
     versionString +
     "feeds/tvshows/items";
-  console.log("UDL: getTVShows", id, params, url);
   const response = await GET({
     url: url,
     params: {
@@ -115,7 +113,6 @@ export const getTVShows = async (id?: string, params?: any) => {
 };
 const getPackages = async (id: string, params: Object) => {
   const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
-  console.log("UDL: getPackages", id, params);
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/packages/items";
   const response = await GET({
@@ -262,7 +259,6 @@ export const getDiscoveryCategoryItems = async (id: string, params: any) => {
 };
 
 export const getDiscoveryFeedItems = async (id: string, params: any) => {
-  console.log("Params in getDiscoveryFeedItems", params)
   const { isTrending } = params || false;
   const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v4/feeds/${params.id}/items`;
   const response = await GET({

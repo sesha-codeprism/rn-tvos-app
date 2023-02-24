@@ -62,7 +62,7 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
                 setLoading(false);
                 props.navigation.reset({
                   index: 0,
-                  routes: [{name: Routes.Home}],
+                  routes: [{ name: Routes.Home }],
                 });
               } else {
                 /** The last selected profile is not available in getProfile data
@@ -96,7 +96,7 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
             setLoading(false);
             props.navigation.reset({
               index: 0,
-              routes: [{name: Routes.Home}],
+              routes: [{ name: Routes.Home }],
             });
           }
         } else {
@@ -105,7 +105,7 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
           setLoading(false);
           props.navigation.reset({
             index: 0,
-            routes: [{name: Routes.Home}],
+            routes: [{ name: Routes.Home }],
           });
         }
       } else {
@@ -118,7 +118,7 @@ const WhoIsWatchingScreen: React.FunctionComponent<Props> = (props: Props) => {
         setLoading(false);
         props.navigation.reset({
           index: 0,
-          routes: [{name: Routes.Home}],
+          routes: [{ name: Routes.Home }],
         });
       }
     } catch (error: any) {

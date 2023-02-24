@@ -15,7 +15,10 @@ import { FeedItem } from "../../@types/HubsResponse";
 import MFMenu from "../../components/MFMenu/MFMenu";
 import MFLoader from "../../components/MFLoader";
 import { AppStrings } from "../../config/strings";
-import { getAllHubs, invalidateQueryBasedOnSpecificKeys } from "../../config/queries";
+import {
+  getAllHubs,
+  invalidateQueryBasedOnSpecificKeys,
+} from "../../config/queries";
 import { AppImages } from "../../assets/images";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/dimensions";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
@@ -43,7 +46,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const drawerRef: React.MutableRefObject<any> = useRef();
   const accountInfo = useAccount();
   const currentContext = useContext(GlobalContext);
-  
+
   let feedTimeOut: any = null;
   let hubTimeOut: any = null;
   // const data = undefined;
@@ -125,14 +128,19 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   };
 
   const onDuplexMessage = (message: any) => {
-    console.log('Received message in Home screen => ', message);
-    if(message?.type === "unpin" || message?.type === "pin"){
-      const account = message.continuationToken?.split('|')?.[1]?.split(';')?.[0];
-      if(account === GLOBALS.userAccountInfo?.Id){
-        invalidateQueryBasedOnSpecificKeys("feed", "udl://subscriber/library/Pins")
+    console.log("Received message in Home screen => ", message);
+    if (message?.type === "unpin" || message?.type === "pin") {
+      const account = message.continuationToken
+        ?.split("|")?.[1]
+        ?.split(";")?.[0];
+      if (account === GLOBALS.userAccountInfo?.Id) {
+        invalidateQueryBasedOnSpecificKeys(
+          "feed",
+          "udl://subscriber/library/Pins"
+        );
       }
     }
-  }
+  };
 
   useEffect(() => {
     if (!open) {
@@ -150,12 +158,12 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     currentContext.addDuplexMessageHandler(onDuplexMessage);
     () => {
       currentContext.removeDuplexHandler(onDuplexMessage);
-    }
+    };
   }, []);
 
-  const setSetttingsRef =  (ref:any) =>{
+  const setSetttingsRef = (ref: any) => {
     setttingsRef.current = ref;
-  }
+  };
 
   setHubsData();
   const setCardFocus = () => {
@@ -169,7 +177,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
 
-  console.log('firstSwimlaneRef ', firstSwimlaneRef);
+  console.log("firstSwimlaneRef ", firstSwimlaneRef);
   return (
     <View style={HomeScreenStyles.container}>
       <ImageBackground
@@ -201,8 +209,14 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                   }}
                   setCardFocus={setCardFocus}
                   onPressSettings={() => {
-                    MFEventEmitter.emit("openSettings",{
-                      onClose: () => setttingsRef.current && setttingsRef?.current?.setNativeProps({ hasTVPreferredFocus: true }), drawerPercentage: 0.35 });
+                    MFEventEmitter.emit("openSettings", {
+                      onClose: () =>
+                        setttingsRef.current &&
+                        setttingsRef?.current?.setNativeProps({
+                          hasTVPreferredFocus: true,
+                        }),
+                      drawerPercentage: 0.35,
+                    });
                     if (currentFeed) {
                       // service?.addNavEventOnCurPageOpenOrClose(
                       //   {
@@ -259,7 +273,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
           </ImageBackground>
         </ImageBackground>
       </ImageBackground>
-
     </View>
   );
 };

@@ -3,7 +3,7 @@ import { ServiceMap } from "../../@types/BootStrapResponse";
 import { isPlayable } from "../assetUtils";
 import { QualityLevelValue, RestrictionsType, SourceType } from "../common";
 import { validCatchupStationIds } from "../restart/RestartUtils";
-import { IChannel, ServiceCollection, IService, ChannelEquivalencesMap, ChannelMapInfo, IJsonObject, ChannelIndex, QualityRights, ServiceGroup, LiveChannelMapInfo, ChannelMapLiveRights, ServiceType, IChannelCache, ServiceCollectionsMap, ServiceItem, QualityLevels, IApplicationData, IAppService, NowNextScheduleMap, NowNextSchedule, LiveSchedule } from "./live";
+import { IChannel, ServiceCollection, IService, ChannelEquivalencesMap, ChannelMapInfo, IJsonObject, ChannelIndex, QualityRights, ServiceGroup, LiveChannelMapInfo, ChannelMapLiveRights, ServiceType, IChannelCache, ServiceCollectionsMap, ServiceItem, QualityLevels, IApplicationData, IAppService, NowNextScheduleMap, NowNextSchedule, LiveSchedule, ISearchFilters } from "./live";
 import { LiveChannelLocaleMap } from "./LiveChannelLocalMap";
 import { LiveChannelStore } from "./LiveChannelStore";
 import * as strUtils from "../../utils/strUtils";
@@ -1339,3 +1339,59 @@ export function createLiveShowcardModel(channel: IChannel, channelMap: LiveChann
 
     return liveShowcardModel;
 }
+
+export const updateVariant = (channelMap: LiveChannelMap, nowNextScheduleMap: NowNextScheduleMap, filterSearchItems: ISearchFilters, idx: number = 0, lastIndex: number = 0, genre: string) => {
+    const genrePivot = filterSearchItems?.Genres || [];
+
+    var playableChannels: IChannel[] = channelMap.filterChannels(
+        (channel) => !!channel.IsTif || (channel.isSubscribed && channel.isPermitted && channelMap.getService(channel) != null)
+    );
+
+    //Genre based content
+    let genrePlayableChannelsMap: IChannel[] = []
+    const keys = Object.keys(nowNextScheduleMap);
+    if (genre) {
+        playableChannels.map((channel) => {
+            if (keys.includes(channel.StationId)) {
+                genrePlayableChannelsMap?.push(channel);
+            }
+        })
+    } else {
+        genrePlayableChannelsMap = playableChannels
+    }
+
+    const qualityFilter: string = "";
+    let idxmax: number = 16 + idx; // batch
+    let list = [];
+    if (genrePlayableChannelsMap?.length) {
+        for (; idx < Math.min(genrePlayableChannelsMap?.length, idxmax); idx++) {
+            let ch = genrePlayableChannelsMap[idx];
+
+            let newChannelModel = createLiveShowcardModel(ch, channelMap, nowNextScheduleMap, "live/feeds/playableChannels/", { $top: 16 });
+
+            if (!newChannelModel) {
+                continue;
+            }
+
+            let uniqueId;
+            if (newChannelModel.$type === "EPISODE-LIVE") {
+                uniqueId = "series-" + newChannelModel.Schedule.SeriesId;
+            } else if (!!ch.IsTif) {
+                uniqueId = "channel-" + newChannelModel.ChannelInfo.channel.Number.toString();
+            } else {
+                uniqueId = "station-" + ch.StationId;
+            }
+            newChannelModel["DynamicId"] = uniqueId;
+            var entitlements = newChannelModel['Entitlements'] || [];
+            var entitlementsOk: boolean =
+                (false || isPlayable(entitlements));
+            var isAgeLocked: boolean = false;
+
+            list.push(newChannelModel);
+        }
+    }
+
+
+    return list;
+
+};

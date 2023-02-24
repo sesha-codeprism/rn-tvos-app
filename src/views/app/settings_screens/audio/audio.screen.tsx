@@ -21,7 +21,7 @@ const AudioScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [list, setList] = useState<any[]>([]);
   const formatList = () => {
-    const { descriptiveAudio, audioLanguages } = GLOBALS.store.settings.audio;
+    const { descriptiveAudio, audioLanguages } = GLOBALS.store!.settings.audio;
     // console.log("format list called", GLOBALS.store.settings.display);
     const listItem = [
       {

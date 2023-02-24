@@ -9,7 +9,7 @@ import DateUtils from "../../src/utils/dateUtils";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { GLOBALS } from "../../src/utils/globals";
 import { getIdFromURI } from "../../src/utils/helpers";
-import { buildNowNextMap, createLiveShowcardModel, getChannelMap, makeSlabUrl } from "../../src/utils/live/LiveUtils";
+import { buildNowNextMap, createLiveShowcardModel, getChannelMap, makeSlabUrl, updateVariant } from "../../src/utils/live/LiveUtils";
 import { getDiscoveryFeedItems } from "../discovery/discovery";
 import { GET } from "../utils/common/cloud";
 import { parseUri } from "../utils/url/urlUtil";
@@ -85,15 +85,30 @@ const getMyChannels = async (id: string, params?: any) => {
   })
 }
 
-const getPlayableChannels = async () => {
-  const currentSlots = GLOBALS.currentSlots;
-  if (!currentSlots) {
-    console.warn("No current slots");
+const getPlayableChannels = async (id: string, params: any) => {
+  const { genre } = params;
+  if (!GLOBALS.nowNextMap) {
+    console.warn("No current information to showcase");
     return undefined
   }
+  const nowNextScheduleMap = GLOBALS.nowNextMap;
+  let filterdNowNextScheduleMap: any = {};
 
-  const massagedData = massageLiveFeed(currentSlots, SourceType.LIVE);
-  return massagedData
+  //Genre based content
+  if (genre) {
+    const filteredKeys = Object.keys(nowNextScheduleMap).filter((key) => nowNextScheduleMap[key].now);
+    filteredKeys.map((key: any) => filterdNowNextScheduleMap[key] = nowNextScheduleMap[key])
+  } else {
+    filterdNowNextScheduleMap = nowNextScheduleMap
+  }
+  //TODO: Removing this code for now.. check and re-enable it lateron..
+  // if (!filterdNowNextScheduleMap || !filterSearchItems || !nowNextScheduleMap) {
+  //   return;
+  // }
+  //@ts-ignore
+  const variantData = updateVariant(GLOBALS.channelMap, filterdNowNextScheduleMap, {}, 0, 0, genre);
+  return massageLiveFeed(variantData, SourceType.LIVE);
+
 
 }
 
@@ -114,7 +129,7 @@ export const getPlayableMovieChannels = async (id: string, params?: any) => {
 
 export const gethubRestartTvShowcards = async (id: string, params: any) => {
   const day = new Date().toISOString().split("T")[0];
-  const channelMapId = GLOBALS.bootstrapSelectors?.ChannelMapId;
+  const channelMapId = GLOBALS.userAccountInfo?.ChannelMapId;
   const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.scheduleCache || '') + `catchup-data-${day}/channelmap-hub-Popularity-${channelMapId}.gz`;
   const response = await GET({
     url: uri,

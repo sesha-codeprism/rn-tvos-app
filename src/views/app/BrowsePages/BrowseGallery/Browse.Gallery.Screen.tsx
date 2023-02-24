@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  BackHandler,
   PressableProps,
   StyleSheet,
   Text,
   TouchableOpacity,
-  TVMenuControl,
   View,
 } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
@@ -29,10 +27,8 @@ import {
   getNetworkInfo,
   removeTrailingSlash,
 } from "../../../../utils/assetUtils";
-import { getResolvedMetadata } from "../../../../components/MFMetadata/MFMetadataUtils";
 import LinearGradient from "react-native-linear-gradient";
 import { getUIdef } from "../../../../utils/uidefinition";
-import { UNSTABLE_usePreventRemove } from "@react-navigation/native";
 import BrowseFilter from "./BrowseFilters";
 import { useQuery } from "react-query";
 import { getDataFromUDL, getMassagedData } from "../../../../../backend";
@@ -43,13 +39,11 @@ import {
   getBaseValues,
   createInitialFilterState,
 } from "./BrowseUtils/BrowseUtils";
-import { MFTabBarStyles } from "../../../../components/MFTabBar/MFTabBarStyles";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
 import { browseType } from "../../../../utils/common";
 import { metadataSeparator } from "../../../../utils/Subscriber.utils";
 import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { debounce2 } from "../../../../utils/app/app.utilities";
-import { current } from "@reduxjs/toolkit";
 import _ from "lodash";
 import { AppStrings } from "../../../../config/strings";
 interface GalleryScreenProps {
@@ -85,7 +79,6 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   //   setOpenSubMenu(false);
   //   setOpenMenu(false);
   // });
-  
 
   //@ts-ignore
   const fetchFeeds = async ({ queryKey }: any) => {
@@ -327,7 +320,10 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     for (let key in defaultFilterState) {
       if (!_.isEmpty(defaultFilterState[key].selectedIds)) {
         // defaultFilters.push(defaultFilterState[key].selectedIds[0]);
-        filters.splice(filters.indexOf(defaultFilterState[key].selectedIds[0]),1);
+        filters.splice(
+          filters.indexOf(defaultFilterState[key].selectedIds[0]),
+          1
+        );
       }
     }
     return filters.length;
@@ -411,7 +407,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
             <View style={styles.filterCountContainer}>
               <Text style={styles.filterCountText}>{getFilterCount()}</Text>
             </View>
-          ): null}
+          ) : null}
         </View>
       </View>
       {isLoading && dataSource.length <= 0 ? (

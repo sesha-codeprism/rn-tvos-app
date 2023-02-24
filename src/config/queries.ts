@@ -1,14 +1,14 @@
-import { useQueries, useQuery, useQueryClient } from "react-query";
+import { QueryClient, useQueries, useQuery, useQueryClient } from "react-query";
 import { getDataFromUDL, getMassagedData } from "../../backend";
 import { getAllSubscriberProfiles } from "../../backend/subscriber/subscriber";
 import { parseUdl, UdlProviders } from "../../backend/udl/provider";
 import { FeedItem, HubsResponse } from "../@types/HubsResponse";
-import useCurrentSlots from "../customHooks/useCurrentSlots";
 import { DefaultStore } from "../utils/DiscoveryUtils";
 import { GLOBALS } from "../utils/globals";
 import { appUIDefinition, lang, pivots } from "./constants";
 
-export const queryClient = useQueryClient()
+export const queryClient = new QueryClient()
+export const appQueryCache = queryClient.getQueryCache();
 export interface QueryResponse {
     data: any;
     isError: boolean;
@@ -18,7 +18,6 @@ export interface QueryResponse {
     isSuccess: boolean;
 }
 
-// export const slots = useCurrentSlots();
 
 export const getHubs = async () => {
     const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
@@ -78,10 +77,21 @@ const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: bo
     }
 }
 
-export function getAllFeedDataForFeed(feed: FeedItem) {
+export function getAllFeedDataForFeed(feed: FeedItem, nowNextMap: any, currentSlots: any, channelRights: any) {
     return useQueries(
         feed.Feeds.map(element => {
-            return {
+            return element.Uri.toLowerCase().includes('live') ? {
+                queryKey: ['feed', element.Uri],
+                queryFn: () => getUDLData(element.Uri),
+                staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime,
+                enabled: !!nowNextMap && currentSlots && !!channelRights
+            } : element.Uri.toLowerCase().includes('dvr') ? {
+                queryKey: ['feed', element.Uri],
+                queryFn: () => getUDLData(element.Uri),
+                staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime,
+                enabled: !!GLOBALS.allSubscriptionGroups
+
+            } : {
                 queryKey: ['feed', element.Uri],
                 queryFn: () => getUDLData(element.Uri),
                 staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime

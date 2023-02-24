@@ -30,7 +30,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
 
   const formatList = () => {
     try {
-      const values = GLOBALS.store.settings.parentalControll;
+      const values = GLOBALS.store!.settings.parentalControll;
       const listItem = [
         {
           title: AppStrings.str_settings_content_locks,
@@ -105,8 +105,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
                           : item.title ===
                             AppStrings.str_settings_content_purchase_locks
                           ? "purchase"
-                          : item.title ===
-                            AppStrings.str_settings_adult_locks
+                          : item.title === AppStrings.str_settings_adult_locks
                           ? "adult"
                           : "",
                       action: PinActionTypes["VERIFY"],
