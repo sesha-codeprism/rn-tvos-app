@@ -2,6 +2,13 @@ import { massageDiscoveryFeed, massageDVRFeed, massageSubscriberFeed } from "../
 import { SourceType } from "../src/utils/common";
 import { registerUdls, parseUdl, getList, UdlProviders } from "./udl/provider";
 
+export const enum UDLType {
+  Subscriber = 'subscriber',
+  Discovery = 'discovery',
+  DVRProxy = 'dvrproxy',
+  Live = "live"
+}
+
 export const initUdls = () => {
   registerUdls();
 };

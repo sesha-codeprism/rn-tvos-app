@@ -27,7 +27,7 @@ export const setOnScreenLanguage = (onScreenLanguage: any) => {
     AppStrings = stringLocales[onScreenLanguage]
 }
 
-export const getFontIcon = (iconKey: keyof typeof mkIcons): string => {
+export const getFontIcon = (iconKey: string): string => {
     // Source: MK-IconCodes.json
     const iconCode =
         (AppStrings.str_locale_id &&

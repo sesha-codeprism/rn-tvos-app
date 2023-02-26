@@ -56,6 +56,7 @@ import useLiveData from "../../customHooks/useLiveData";
 import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups";
 import useDVRRecorders from "../../customHooks/useRecorders";
 import { appQueryCache } from "../queries";
+import PackageDetailsScreen from "../../views/app/details_pages/package_details/PackageDetails.screen";
 
 interface RouterOutletProps {
   initialState: any;
@@ -110,6 +111,7 @@ export const Routes = {
   FallBack: "fallBack",
   EpisodeList: "EpisodeList",
   // BrowseFilters: "BrowseFilters",
+  PackageDetails: "PackageDetails",
 };
 
 const Stack = createNativeStackNavigator();
@@ -307,6 +309,10 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
       <Stack.Screen name={Routes.Test} component={TestScreen} />
       <Stack.Screen name={Routes.EpisodeList} component={EpisodeList} />
       <Stack.Screen name={Routes.FallBack} component={RouteFallBackScreen} />
+      <Stack.Screen
+        name={Routes.PackageDetails}
+        component={PackageDetailsScreen}
+      />
     </Stack.Navigator>
   );
 };

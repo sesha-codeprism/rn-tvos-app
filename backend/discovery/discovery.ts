@@ -128,11 +128,30 @@ const getPackages = async (id: string, params: Object) => {
   });
   return response;
 };
+
+export const getPackageDetails = async (id: string, params: any) => {
+  const { accessToken }
+    = GLOBALS.store!;
+  const { packageId, $groups, $lang, storeId } = params;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || "") + `/v3/packages/${params.id}`;
+  const response = await GET({
+    url: url,
+    params: {
+      $groups: $groups || GLOBALS.store?.rightsGroupIds,
+      $lang: $lang || lang,
+      storeId: storeId || DefaultStore.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`
+    },
+  }); ``
+  return response;
+}
 const getmoviesandtvshowsByLicenseWindow = async (
   id: string,
   params: Object
 ) => {
-  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
+  const pivots = `Language| ${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'} `;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "moviesandtvshows/items";
   const response = await GET({
@@ -150,7 +169,7 @@ const getmoviesandtvshowsByLicenseWindow = async (
 };
 
 const getMoviesAndTV = async (id: string, params: any) => {
-  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
+  const pivots = `Language | ${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'} `;
   const { orderBy } = params;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") +
@@ -178,7 +197,7 @@ const discoverSubscriptions = async (
   $skip: number = 0,
   $top: number = 10
 ) => {
-  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
+  const pivots = `Language | ${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'} `;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/subscriptions/items";
   const response = await GET({
@@ -196,7 +215,7 @@ const discoverSubscriptions = async (
 };
 
 const getPayPerView = async () => {
-  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
+  const pivots = `Language | ${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'} `;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/payperview/items";
   const response = await GET({
@@ -214,7 +233,7 @@ const getPayPerView = async () => {
 };
 
 export const getStoresList = async () => {
-  const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
+  const pivots = `Language | ${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'} `;
   const rightIds = GLOBALS.store?.rightsGroupIds;
   const STORE_TYPE = "HubsAndFeeds";
   const defaultMainStore = "HubsAndFeeds-Main";
@@ -235,19 +254,19 @@ export const getStoresList = async () => {
 };
 
 export const getFeedByID = async (id: string) => {
-  const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + `/v3/programs/${id}`;
+  const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + `/ v3 / programs / ${id} `;
   const response = await GET({
     url: uri,
 
     headers: {
-      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
+      Authorization: `OAUTH2 access_token = "${GLOBALS.store?.accessToken}"`,
     },
   });
   return response;
 };
 
 export const getDiscoveryCategoryItems = async (id: string, params: any) => {
-  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v4/categories/${params.id}/items`;
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL} v4 / categories / ${params.id} /items`;
   const response = await GET({
     url: url,
     params: params,
@@ -455,6 +474,45 @@ export const getDiscoveryCollectionItems = async (id: string, params: any) => {
   }
 }
 
+export const getPackageTitles = async (id: string, params: any) => {
+  const { accessToken } = GLOBALS.store!;
+  const { $skip, $top, $lang, $groups, storeId, packageId } = params;
+  const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + `/v3/packages/${packageId}/titles`;
+  const response = await GET({
+    url: uri,
+    params: {
+      $skip: $skip || 0,
+      $top: $top || 25,
+      $lang: $lang || lang,
+      $groups: $groups || GLOBALS.store?.rightsGroupIds,
+      storeId: storeId || DefaultStore.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  });
+  return response;
+}
+export const getSubscriptionPackageItems = async (id: string, params: any) => {
+  const { accessToken } = GLOBALS.store!;
+  const { $skip, $top, $lang, $groups, storeId, packageId, categoryId } = params;
+  const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + packageId && categoryId ? `/v3/subscription-packages/${packageId}/categories/${categoryId}/items` : `/v3/packages/${packageId}/titles`;
+  const response = await GET({
+    url: uri,
+    params: {
+      $skip: $skip || 0,
+      $top: $top || 25,
+      $lang: $lang || lang,
+      $groups: $groups || GLOBALS.store?.rightsGroupIds,
+      storeId: storeId || DefaultStore.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  });
+  return response;
+}
+
 export const registerDiscoveryUdls = () => {
   const BASE = "discovery";
 
@@ -501,7 +559,10 @@ export const registerDiscoveryUdls = () => {
     },
     { prefix: BASE + '/programSchedules/', getter: getDiscoveryProgramSchedules },
     { prefix: BASE + '/seriesSchedules/', getter: getDiscoverySeriesSchedules },
-    { prefix: BASE + '/libraryprograms/collections/packages/', getter: getDiscoveryCollectionItems }
+    { prefix: BASE + '/libraryprograms/collections/packages/', getter: getDiscoveryCollectionItems },
+    { prefix: BASE + '/getpackageDetails/', getter: getPackageDetails },
+    { prefix: BASE + "/getPackageTitles/", getter: getPackageTitles },
+    { prefix: BASE + '/getSubscriptionPackageItems/', getter: getSubscriptionPackageItems }
   ];
   return discoveryUdls;
 };

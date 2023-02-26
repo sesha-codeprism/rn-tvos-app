@@ -299,6 +299,7 @@ export const getAllSubscriberProfiles = async () => {
   return response;
 };
 
+
 export const createUserProfile = async (
   name: string,
   image: any,
@@ -564,6 +565,21 @@ export const getUserAccount = async (id: string, params: any) => {
   return response;
 }
 
+export const getPackageActions = async (id: string, params: any) => {
+  const { storeID, packageId } = params;
+  const { accessToken } = GLOBALS.store!;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || '') + `v4/packages/${packageId}/actions?`;
+  const response = await GET({
+    url: url,
+    params: {
+      storeId: storeID || DefaultStore.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  });
+  return response
+}
 
 
 
@@ -607,7 +623,8 @@ export const registerSubscriberUdls = (params?: any) => {
     },
     { prefix: BASE + "/getSeasonPlayOptions/", getter: getSeasonPlayOptions },
     { prefix: BASE + "/getSeriesPlayOptions", getter: getSeriesPlayOptions },
-    { prefix: BASE + "/account/", getter: getUserAccount }
+    { prefix: BASE + "/account/", getter: getUserAccount },
+    { prefix: BASE + "/getPackageActions/", getter: getPackageActions }
   ];
   return subscriberUdls;
 };

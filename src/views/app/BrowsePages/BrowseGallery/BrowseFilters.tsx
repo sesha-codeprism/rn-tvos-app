@@ -73,7 +73,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
 
   useEffect(() => {
     console.log("props in useEffect", props);
-    const menu = props.filterData.map(
+    const menu = props.filterData?.map(
       (item: { Id: any; Name: any }, index: any) => {
         return { Id: item.Id, Name: item.Name };
       }
@@ -109,13 +109,18 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   };
   const onFocusBar = () => {
     try {
-      console.log("Browse filter bar is focussed: menuHasFocus-", menuHasFocus, focusedMenu);
+      console.log(
+        "Browse filter bar is focussed: menuHasFocus-",
+        menuHasFocus,
+        focusedMenu
+      );
       if (!menuHasFocus) {
         console.log(
           "Browse filter bar ==> menu is focussed: menuRef[focusedMenu]",
-          focusedMenu, menuHasFocus
+          focusedMenu,
+          menuHasFocus
         );
-         // @ts-ignore
+        // @ts-ignore
         menuRef[focusedMenu]?.current?.setNativeProps({
           hasTVPreferredFocus: true,
         });
@@ -295,7 +300,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
         </View>
         <View style={styles.subMenuContainer}>
           <FlatList
-            data={focusedMenu === menuList.length ? [] : subMenuList}
+            data={focusedMenu === menuList?.length ? [] : subMenuList}
             keyExtractor={(item) => item.Id}
             renderItem={({ item, index }) => {
               return (

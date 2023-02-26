@@ -29,6 +29,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import useAccount from "../../customHooks/useAccount";
 import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
+import { ItemType } from "../../utils/common";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -254,9 +255,15 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                       feeds={feeds}
                       onFocus={onFeedFocus}
                       onPress={(event) => {
-                        props.navigation.navigate(Routes.Details, {
-                          feed: event,
-                        });
+                        if (event.ItemType === ItemType.PACKAGE) {
+                          props.navigation.navigate(Routes.PackageDetails, {
+                            feed: event,
+                          });
+                        } else {
+                          props.navigation.navigate(Routes.Details, {
+                            feed: event,
+                          });
+                        }
                       }}
                       onListEmptyElementFocus={clearCurrentHub}
                       onListFooterElementFocus={clearCurrentHub}

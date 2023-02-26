@@ -14,7 +14,7 @@ export const PageContainerWithBackgroundImage: React.FC<
 > = ({ children, type, imageUrl }) => {
   return (
     <View style={styles[type]}>
-      <Image source={{ uri: imageUrl }} style={fullScreen} />
+      <Image source={imageUrl} style={fullScreen} />
       <View style={[fullScreen, styles.overlay]} />
       {children}
     </View>
@@ -44,7 +44,10 @@ const styles = StyleSheet.create(
         paddingTop: 120,
       },
       overlay: {
-        backgroundColor: g.auxiliaryColors.overlay4,
+        backgroundColor: g.backgroundColors.shade4,
+        opacity: 0.9,
+        height: "100%",
+        width: "100%",
       },
     })
 );

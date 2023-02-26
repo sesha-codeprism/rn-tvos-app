@@ -258,7 +258,7 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
 
   return (
     <SideMenuLayout
-      title={udpData?.title}
+      title={udpData?.title || udpData?.Name}
       subTitle={getMetadataString()}
       contentContainerStyle={{
         padding: 0,

@@ -136,6 +136,28 @@
       "style": {
         "container": {
           "flex": 1,
+          "paddingTop": 120
+        },
+        "overlay": {
+          "backgroundColor": "#00030E",
+          "opacity": 0.9,
+          "height": "100%",
+          "width": "100%"
+        }
+      }
+    },
+    {
+      "id": "EpisodeList",
+      "config": {
+        "snapToInterval": 20
+      },
+      "style": {
+        "containerStyle": {
+          "flex": 1,
+          "flexDirection": "row",
+          "paddingTop": 72,
+          "paddingLeft": 90,
+          "paddingRight": 58,
           "backgroundColor": "${theme.backgroundColors.shade1}",
           "alignItems": "center",
           "justifyContent": "center"
