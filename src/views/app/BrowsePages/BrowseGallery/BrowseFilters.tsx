@@ -424,7 +424,7 @@ const styles = StyleSheet.create({
     height: "85%",
     width: 30,
     position: "absolute",
-    backgroundColor: __DEV__ ? "red" : "transparent",
+    backgroundColor: "transparent",
     right: 0,
     top: 50,
   },

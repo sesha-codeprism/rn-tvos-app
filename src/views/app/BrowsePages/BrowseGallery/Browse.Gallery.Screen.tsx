@@ -573,11 +573,11 @@ const styles = StyleSheet.create({
     marginLeft: 88,
   },
   filterButtonFocusedStyle: {
-    transform: [
-      {
-        scale: 1.1,
-      },
-    ],
+    // transform: [
+    //   {
+    //     scale: 1.1,
+    //   },
+    // ],
     backgroundColor: appUIDefinition.theme.backgroundColors.primary1,
   },
   filterButtonContainerStyle: {
@@ -611,7 +611,7 @@ const styles = StyleSheet.create({
     height: 62,
     backgroundColor: "#424242",
     borderRadius: 6,
-    marginRight: 70,
+    marginRight: 20,
   },
   contentContainerStyles: {
     flexDirection: "row",
