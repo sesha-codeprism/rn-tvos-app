@@ -133,7 +133,7 @@ export const getPackageDetails = async (id: string, params: any) => {
   const { accessToken }
     = GLOBALS.store!;
   const { packageId, $groups, $lang, storeId } = params;
-  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || "") + `/v3/packages/${params.id}`;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || "") + `/v3/packages/${packageId}`;
   const response = await GET({
     url: url,
     params: {
