@@ -197,10 +197,10 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                   // hasTVPreferredFocus={index === focusedMenu && !menuHasFocus}
                   key={index}
                   style={
-                    focusedMenu === index
+                    focusedMenu === index  
                       ? [
                           styles.menuItem,
-                          { borderRadius: 6, backgroundColor: "#063961" },
+                          { borderRadius: 6, backgroundColor: menuHasFocus && focusedSubMenu === -1?  "#063961" : "#424242"},
                         ]
                       : styles.menuItem
                   }
