@@ -635,6 +635,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     } else {
     }
   };
+  console.log(ctaList);
 
   const extractKey = (item: any) => item.Id;
 
@@ -958,6 +959,9 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         drawerContent={false}
         route={route}
         screenProps={screenProps}
+        closeModal={() => {
+          setOpen(false);
+        }}
       />
     </PageContainer>
   );
