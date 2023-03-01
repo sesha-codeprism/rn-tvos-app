@@ -491,7 +491,8 @@
           "paddingTop": 120
         },
         "overlay": {
-          "backgroundColor": "${theme.auxiliaryColors.overlay4}"
+          "backgroundColor": "${theme.backgroundColors.shade1}",
+          "opacity": 0.9
         }
       }
     },

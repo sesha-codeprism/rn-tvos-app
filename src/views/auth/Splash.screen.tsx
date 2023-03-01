@@ -8,7 +8,7 @@ import DeviceInfo from "react-native-device-info";
 import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { processBootStrap } from "../../../backend/authentication/authentication";
 import { Routes } from "../../config/navigation/RouterOutlet";
-import { appUIDefinition } from "../../config/constants";
+import { appUIDefinition, disableAllWarnings } from "../../config/constants";
 import { setDefaultStore } from "../../utils/DiscoveryUtils";
 import {
   connectDuplex,
@@ -37,6 +37,12 @@ import NotificationType from "../../@types/NotificationType";
 import { massageSubscriberFeed } from "../../utils/assetUtils";
 import { AppStrings } from "../../config/strings";
 
+import { LogBox } from "react-native";
+// LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+
+if (disableAllWarnings) {
+  LogBox.ignoreAllLogs(); //Ignore all log notifications
+}
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
 }

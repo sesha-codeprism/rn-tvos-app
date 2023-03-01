@@ -124,7 +124,7 @@ export class DuplexConnection {
     console.log(`sent message ${message} to webSocket`);
   }
 
-  public setOnMessageHandler(onDuplexMessage?: any) : void {
+  public setOnMessageHandler(onDuplexMessage?: any): void {
     this.onDuplexMessage = onDuplexMessage;
   }
   private getHeartbeatInterval(): number {
@@ -192,7 +192,7 @@ export class DuplexConnection {
 
   private onWebSocketMessage(ev: WebSocketMessageEvent): void {
     console.log(`received message - ${ev.data}`);
-   
+
 
     this.restartHeartbeat();
 
@@ -379,7 +379,7 @@ export class DuplexConnection {
     try {
       const headers = {
         Cookie: `access-token=${GLOBALS.store.accessToken}`,
-        Origin: `${appUIDefinition.config.protocol}://${appUIDefinition.config.hostname}`,
+        Origin: GLOBALS.store?.MFGlobalsConfig.url,
       };
       console.log("Sending headers", headers);
 
