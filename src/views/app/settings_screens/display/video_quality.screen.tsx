@@ -49,7 +49,10 @@ const VideoQualityScreen: React.FunctionComponent<Props> = (props: any) => {
     getValues();
   }, []);
   return (
-    <SideMenuLayout title="Diaplay" subTitle="On Screen Language">
+    <SideMenuLayout
+      title={AppStrings.str_settings_home_display}
+      subTitle="On Screen Language"
+    >
       <FlatList
         data={list}
         keyExtractor={(item) => item.localizedText}

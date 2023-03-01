@@ -13,6 +13,7 @@ import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
+import { AppStrings } from "../../../../config/strings";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -55,14 +56,17 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
     //   updateStore(GLOBALS.store);
   };
   const getValues = () => {
-    setSelectedItem(GLOBALS.store.settings.display.onScreenLanguage);
+    setSelectedItem(GLOBALS.store!.settings.display.onScreenLanguage);
   };
   useEffect(() => {
     getValues();
   }, []);
 
   return (
-    <SideMenuLayout title="Diaplay" subTitle="On Screen Language">
+    <SideMenuLayout
+      title={AppStrings.str_settings_home_dvr}
+      subTitle={"Stop Recording"}
+    >
       <FlatList
         data={list}
         keyExtractor={(item) => item.title}

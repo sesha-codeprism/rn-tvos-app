@@ -290,7 +290,10 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
   };
 
   return (
-    <SideMenuLayout title="Parental Controls" subTitle={subTitle}>
+    <SideMenuLayout
+      title={AppStrings.str_settings_parental_controls}
+      subTitle={subTitle}
+    >
       <Text style={styles.inputLebelText}>{label}</Text>
       <View style={styles.inputContainer}>
         {(actionType === "create" ||

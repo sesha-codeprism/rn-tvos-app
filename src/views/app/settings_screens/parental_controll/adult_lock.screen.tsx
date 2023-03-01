@@ -15,6 +15,7 @@ import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
 import { PinActionTypes } from "./parental_controll.screen";
+import { AppStrings } from "../../../../config/strings";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -62,7 +63,7 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
   // };
   const getData = () => {
     try {
-      const selectedLocks = GLOBALS.store.settings.parentalControll.adultLock;
+      const selectedLocks = GLOBALS.store!.settings.parentalControll.adultLock;
       setSelected({ ...selectedLocks });
     } catch (error) {}
   };
@@ -71,8 +72,8 @@ const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {
   }, []);
   return (
     <SideMenuLayout
-      title="Parental Controls"
-      subTitle="Adult Locks"
+      title={AppStrings.str_settings_home_parental_controls}
+      subTitle={AppStrings.str_settings_adult_locks}
       contentContainerStyle={styles.contentContainer}
     >
       <View>
