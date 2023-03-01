@@ -167,7 +167,7 @@
   "str_exit_app_title": "Exit Mediakind",
   "str_settings_parental_controls": "Parental Controls",
   "str_settings_content_locks": "Content Locks",
-  "str_settings_content_purchase_locks": "Purchase Locking",
+  "str_settings_content_purchase_locks": "Purchase Lock",
   "str_settings_content_enable_purchase_locks": "Enable Purchase Lock",
   "str_settings_content_disable_purchase_locks": "Disable Purchase Lock",
   "str_settings_content_purchase_locks_description": "Locking will apply to the current device only. When locked, you'll be prompted to enter your 4-digit PIN.",

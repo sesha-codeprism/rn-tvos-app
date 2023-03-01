@@ -57,6 +57,7 @@ import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups
 import useDVRRecorders from "../../customHooks/useRecorders";
 import { appQueryCache } from "../queries";
 import PackageDetailsScreen from "../../views/app/details_pages/package_details/PackageDetails.screen";
+import DVRManagerScreen from "../../views/app/dvr_manager/dvr_manager.screen";
 
 interface RouterOutletProps {
   initialState: any;
@@ -112,6 +113,7 @@ export const Routes = {
   EpisodeList: "EpisodeList",
   // BrowseFilters: "BrowseFilters",
   PackageDetails: "PackageDetails",
+  DvrManager: "DvrManager"
 };
 
 const Stack = createNativeStackNavigator();
@@ -291,17 +293,10 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
           animation: "none",
         }}
       />
-      {/* <Stack.Screen
-        name={Routes.BrowseFilters}
-        component={BrowseFilter}
-        options={{
-          animation: "none",
-          // presentation: "transparentModal",
-          // cardOverlayEnabled: true
-        //  contentStyle: { backgroundColor: 'transparent' }
-        }}
-
-      /> */}
+      <Stack.Screen
+        name={Routes.DvrManager}
+        component={DVRManagerScreen}
+      />
       <Stack.Screen
         name={Routes.BrowseCategory}
         component={BrowseCategoryScreen}

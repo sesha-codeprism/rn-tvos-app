@@ -63,8 +63,18 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
         NavigationTarget.SHOW_FEED_ALWAYS ||
       (props.feed?.NavigationTargetVisibility ===
         NavigationTarget.CLIENT_DEFINED &&
-        props.data?.length >= props.limitSwimlaneItemsTo!);
-
+        props.data?.length >= props.limitSwimlaneItemsTo!) ||
+      props.feed.NavigationTargetUri === "dvr";
+    // console.log(
+    //   "props.feed",
+    //   props.feed,
+    //   "show viewALL",
+    //   showViewAll,
+    //   "props.renderViewAll",
+    //   props.renderViewAll,
+    //   "props.feed?.NavigationTargetVisibility",
+    //   props.feed?.NavigationTargetVisibility
+    // );
     const updateRoute = (route: string, params: any) => {
       console.log("UpdateRoute", route, params);
       if (!route && !params) {
@@ -102,6 +112,9 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           updateRoute("BrowseGallery", payload);
           return;
           // props.navigation.navigate(Routes.BrowseGallery, payload);
+        }
+        if (navigationTargetUri === "dvr") {
+          updateRoute("DvrManager", payload);
         }
         if (feed.Layout === Layout.Category || feed.HasSubcategories === true) {
           updateRoute("BrowseCategory", payload);
