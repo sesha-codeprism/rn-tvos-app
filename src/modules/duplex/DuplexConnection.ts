@@ -378,7 +378,7 @@ export class DuplexConnection {
 
     try {
       const headers = {
-        Cookie: `access-token=${GLOBALS.store.accessToken}`,
+        Cookie: `access-token=${GLOBALS.store!.accessToken}`,
         Origin: GLOBALS.store?.MFGlobalsConfig.url,
       };
       console.log("Sending headers", headers);

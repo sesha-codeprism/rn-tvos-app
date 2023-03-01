@@ -27,7 +27,7 @@ export const registerUdls = () => {
 };
 
 export const parseUdl = (uri: string) => {
-  if (!uri || typeof uri !== "string" || !uri.startsWith("udl://")) {
+  if (!uri || typeof uri !== "string") {
     return;
   }
   let parts = getUrlParts(uri);
