@@ -51,7 +51,7 @@ interface SearchResultObject {
 }
 const searchHeight = height * 0.3;
 const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
-  const searchPageConfig: any = getUIdef("Search")?.config;
+  const searchPageConfig: any = getUIdef("SearchResult")?.config;
 
   const [searchString, setSearchString] = useState("");
   const [searchResult, setSearchResult] = useState<
@@ -75,10 +75,10 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
       !swimLaneFocused
     ) {
       const cardRef =
-      firstCardRef.current?.focused ||
-      firstCardRef.current?.first ||
-      firstCardRef.current?.viewAll?.current ||
-      firstCardRef.current?.feedNotImplemented?.current;
+        firstCardRef.current?.focused ||
+        firstCardRef.current?.first ||
+        firstCardRef.current?.viewAll?.current ||
+        firstCardRef.current?.feedNotImplemented?.current;
 
       cardRef?.setNativeProps({ hasTVPreferredFocus: true });
     }
