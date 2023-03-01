@@ -10,6 +10,8 @@ import {
   View,
   ViewStyle,
   TouchableOpacity,
+  Image,
+  ImageBackground,
 } from "react-native";
 import FastImage, { ImageStyle } from "react-native-fast-image";
 import { MFThemeObject } from "../@types/MFTheme";
@@ -261,24 +263,23 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
           style={StyleSheet.flatten([
             props.imageStyle,
             {
-              backgroundColor:
-                getRenderImageURI(props.cardStyle) === undefined
-                  ? globalStyles.backgroundColors.shade2
-                  : "transparent",
+              backgroundColor: "transparent",
             },
           ])}
           key={`${props.libraryCardId}-to-v-1`}
         >
-          <FastImage
-            style={[props.imageStyle]}
+          <ImageBackground
             source={
               getRenderImageURI(props.cardStyle)
-                ? { uri: getRenderImageURI(props.cardStyle) }
+                ? {
+                    uri: getRenderImageURI(props.cardStyle),
+                    cache: "default",
+                  }
                 : AppImages.bgPlaceholder
             }
-            fallback
             defaultSource={AppImages.bgPlaceholder}
-            key={`${props.libraryCardId}-to-v-1-f-1`}
+            //@ts-ignore
+            style={props.imageStyle}
           >
             {props.overlayComponent}
             {getRenderImageURI(props.cardStyle) === undefined && !focused && (
@@ -329,10 +330,12 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
               key={`${props.libraryCardId}-to-v-1-f-1-v-2`}
             >
               {props.titlePlacement != TitlePlacement.beneath ? (
-                <TitleAndSubtitle key={`${props.libraryCardId}-to-v-1-f-1-v-2-title`}/>
+                <TitleAndSubtitle
+                  key={`${props.libraryCardId}-to-v-1-f-1-v-2-title`}
+                />
               ) : undefined}
             </View>
-          </FastImage>
+          </ImageBackground>
           {props.titlePlacement === TitlePlacement.beneath ? (
             props.showTitleOnlyOnFocus ? (
               <Animated.View
@@ -349,11 +352,18 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
                 ]}
                 key={`${props.libraryCardId}-to-v-1-ao-1`}
               >
-                <TitleAndSubtitle  key={`${props.libraryCardId}-to-v-1-ao-1-title`}/>
+                <TitleAndSubtitle
+                  key={`${props.libraryCardId}-to-v-1-ao-1-title`}
+                />
               </Animated.View>
             ) : (
-              <View style={[styles.cardContentContainer]}  key={`${props.libraryCardId}-to-v-1-v-1`}>
-                <TitleAndSubtitle  key={`${props.libraryCardId}-to-v-1-v-1-title`}/>
+              <View
+                style={[styles.cardContentContainer]}
+                key={`${props.libraryCardId}-to-v-1-v-1`}
+              >
+                <TitleAndSubtitle
+                  key={`${props.libraryCardId}-to-v-1-v-1-title`}
+                />
               </View>
             )
           ) : undefined}

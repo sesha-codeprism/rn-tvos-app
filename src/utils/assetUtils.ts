@@ -1464,6 +1464,9 @@ export const massageLiveFeed = (
         }
 
         const { Schedule } = item;
+        // if (!Schedule) {
+        //     Schedule = item;
+        // }
         const {
             Name = undefined,
             ShowType = undefined,

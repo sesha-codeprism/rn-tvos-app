@@ -672,9 +672,17 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const onDuplexMessage = (message: any) => {
-    const status = getItemPinnedStatus();
-    console.log("status", status);
-    setIsItemPinned(status);
+    if (message) {
+      console.log("Details onMessage", message);
+      switch (message.type) {
+        case NotificationType.pin:
+        case NotificationType.unpin:
+          const status = getItemPinnedStatus();
+          console.log("status", status);
+          setIsItemPinned(status);
+          break;
+      }
+    }
   };
 
   useEffect(() => {

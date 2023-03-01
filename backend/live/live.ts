@@ -1,10 +1,10 @@
 import { find } from "lodash";
 import { NativeModules } from "react-native";
-import { mapQueryStatusFilter } from "react-query/types/core/utils";
 import { config } from "../../src/config/config";
 import { lang } from "../../src/config/constants";
 import { findChannelByStationId, massageLiveFeed } from "../../src/utils/assetUtils";
 import { SourceType } from "../../src/utils/common";
+import { convertISOStringToTimeStamp } from "../../src/utils/dataUtils";
 import DateUtils from "../../src/utils/dateUtils";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { GLOBALS } from "../../src/utils/globals";
@@ -32,57 +32,45 @@ const getCatchUp = async (id: string, params: Object) => {
 };
 
 const getMyChannels = async (id: string, params?: any) => {
-  return new Promise(async (resolve, reject) => {
-
-    if (!GLOBALS.currentSlots) {
-      console.warn("No current slots")
-      return undefined
-    }
-
-    const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || '') + '/my-stations';
-    const channelResponse = await GET({
-      url: url,
-      headers: {
-        Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      },
-    });
-    const sourceType = SourceType.LIVE;
-    //TODO: filterSearchItems & genrePivot should be re-written
-    const filterSearchItems = undefined;
-    const genrePivot: any = [];
-    const myStationsList: any = [];
-    const skip = 0, top = 16;
-    return NativeModules.MKGuideBridgeManager.getChannelMapInfo(async (result: any) => {
-      const channelRights = await getChannelRights();
-      const memoizedChannelMap = getChannelMap(result, channelRights?.data, DefaultStore.Id, "en-US");
-      const nowNextSchedules = buildNowNextMap(GLOBALS.currentSlots, memoizedChannelMap);
-      const myStationsSlice = channelResponse.data.Stations.slice(skip, skip + top);
-      myStationsSlice.map((station: any) => nowNextSchedules[station.StationId]?.now)
-      myStationsSlice.forEach((station: any) => {
-        const stationId: string = station?.StationId
-        const channelInfo = findChannelByStationId(stationId, undefined, false, memoizedChannelMap);
-        if (channelInfo && channelInfo.channel) {
-          const myStationModel = createLiveShowcardModel(channelInfo.channel, memoizedChannelMap, nowNextSchedules, "myStations", { $top: 16 });
-          const genresList = myStationModel?.Genres;
-          if (genresList && genrePivot.length > 0) {
-            const localizedGenres = genresList.map(function (g: any) {
-              return {
-                Name: (find(genrePivot, function (p) {
-                  return p.Id.indexOf(g.Id) > -1
-                }) || g).Name,
-                Id: g.Id
-              }
-            });
-            myStationModel["Genres"] = localizedGenres;
+  if (!GLOBALS.currentSlots && !GLOBALS.channelMap) {
+    console.log("Required data not available to get channels");
+    return undefined;
+  }
+  const sourceType = SourceType.LIVE;
+  const genrePivot: any = [];
+  const myStationsList: any = [];
+  const skip = 0, top = 16;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || '') + '/my-stations';
+  const channelResponse = await GET({
+    url: url,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+    },
+  });
+  const myStationsSlice = channelResponse.data.Stations.slice(skip, skip + top);
+  myStationsSlice.map((station: any) => GLOBALS.nowNextMap[station.StationId]?.now)
+  myStationsSlice.forEach((station: any) => {
+    const stationId: string = station?.StationId
+    const channelInfo = findChannelByStationId(stationId, undefined, false, GLOBALS.channelMap);
+    if (channelInfo && channelInfo.channel) {
+      const myStationModel = createLiveShowcardModel(channelInfo.channel, GLOBALS.channelMap, GLOBALS.nowNextMap, "myStations", { $top: 16 });
+      const genresList = myStationModel?.Genres;
+      if (genresList && genrePivot.length > 0) {
+        const localizedGenres = genresList.map(function (g: any) {
+          return {
+            Name: (find(genrePivot, function (p) {
+              return p.Id.indexOf(g.Id) > -1
+            }) || g).Name,
+            Id: g.Id
           }
-          myStationsList.push(myStationModel);
-        }
-      });
-      const massagedData = massageLiveFeed(myStationsList, sourceType, "onNow")
-      resolve(massagedData);
-      return massagedData;
-    })
-  })
+        });
+        myStationModel["Genres"] = localizedGenres;
+      }
+      myStationsList.push(myStationModel);
+    }
+  });
+  const massagedData = massageLiveFeed(myStationsList, sourceType, "onNow")
+  return massagedData;
 }
 
 const getPlayableChannels = async (id: string, params: any) => {
@@ -124,7 +112,6 @@ export const getPlayableMovieChannels = async (id: string, params?: any) => {
   }) : currentSlots;
   const massagedData = massageLiveFeed(genreFilteredSchedules, SourceType.LIVE);
   return massagedData
-
 }
 
 export const gethubRestartTvShowcards = async (id: string, params: any) => {
@@ -137,7 +124,39 @@ export const gethubRestartTvShowcards = async (id: string, params: any) => {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
     },
   });
-  const massagedData = massageLiveFeed(response.data, SourceType.LIVE);
+  const type: SourceType = SourceType.CATCHUP;
+  const nowMilliseconds = new Date().getTime();
+  const recentlyAiredItems = find(response.data, function (slot: any) {
+    const slotStartTimeMilliseconds = convertISOStringToTimeStamp(
+      slot.StartTime
+    );
+    const slotEndTimeMilliseconds = convertISOStringToTimeStamp(
+      slot.EndTime
+    );
+    return (
+      slotStartTimeMilliseconds <= nowMilliseconds &&
+      nowMilliseconds < slotEndTimeMilliseconds
+    );
+  });
+  const validCatchupStations: string[] = GLOBALS.channelMap?.getValidCatchupStationIds();
+  const newItems = recentlyAiredItems?.Schedules?.filter((item: any) => {
+    if (
+      item.StationId &&
+      validCatchupStations?.includes(item.StationId)
+    ) {
+      item["channel"] =
+        (item.StationId &&
+          findChannelByStationId(
+            item.StationId,
+            undefined,
+            undefined,
+            GLOBALS.channelMap
+          ).channel) ||
+        undefined;
+      return item;
+    }
+  });
+  const massagedData = massageLiveFeed(newItems || [], type);
   return massagedData
 }
 
@@ -160,64 +179,52 @@ export const getChannelRights = async (id?: string, params?: any) => {
 }
 
 export const getLiveTrends = async (id: string, params: any) => {
-  return new Promise(async (resolve, reject) => {
-
-    if (!GLOBALS.currentSlots) {
-      console.warn("No current slots")
-      return undefined
-    }
-    const sourceType = SourceType.LIVE;
-    //TODO: filterSearchItems & genrePivot should be re-written
-    console.log("ID", id);
-    const genrePivot: any = [];
-    const params = {
-      id: getIdFromURI(id) || 'trending',
-      $top: config.defaultFeedItemsCount,
-      $skip: config.defaultSkip,
-      $groups: GLOBALS.store?.rightsGroupIds,
-      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
-      storeId: DefaultStore.Id,
-      isTrending: true
-    };
-    return NativeModules.MKGuideBridgeManager.getChannelMapInfo(async (result: any) => {
-      const channelRights = await getChannelRights();
-      const memoizedChannelMap = getChannelMap(result, channelRights?.data, DefaultStore.Id, "en-US");
-      const nowNextScheduleMap = buildNowNextMap(GLOBALS.currentSlots, memoizedChannelMap);
-      const trendingStationIds = await getDiscoveryFeedItems("", params);
-      if (!nowNextScheduleMap || !trendingStationIds) {
-        return;
-      }
-      const newTrendingList: any = [];
-      const stationIds = trendingStationIds;
-      for (let stationId of stationIds) {
-        stationId = stationId.StationId
-        const channelInfo = findChannelByStationId(stationId, undefined, false, memoizedChannelMap);
-        if (channelInfo && channelInfo.channel) {
-          const newTrendingModel = createLiveShowcardModel(channelInfo.channel, memoizedChannelMap, nowNextScheduleMap, "trending", { $top: 16 });
-          const genresList = newTrendingModel?.Genres;
-          if (genresList && genrePivot.length > 0) {
-            const localizedGenres = genresList.map(function (g: any) {
-              return {
-                Name: (find(genrePivot, function (p) {
-                  return p.Id.indexOf(g.Id) > -1
-                }) || g).Name,
-                Id: g.Id
-              }
-            });
-            newTrendingModel["Genres"] = localizedGenres;
+  if (!GLOBALS.currentSlots && !GLOBALS.channelMap) {
+    console.log("Required information not available");
+    return undefined;
+  }
+  const sourceType = SourceType.LIVE;
+  //TODO: filterSearchItems & genrePivot should be re-written
+  console.log("ID", id);
+  const genrePivot: any = [];
+  const paramsObject = {
+    id: getIdFromURI(id) || 'trending',
+    $top: config.defaultFeedItemsCount,
+    $skip: config.defaultSkip,
+    $groups: GLOBALS.store?.rightsGroupIds,
+    //@ts-ignore
+    $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+    storeId: DefaultStore.Id,
+    isTrending: true
+  };
+  const trendingStationIds = await getDiscoveryFeedItems("", paramsObject);
+  if (!GLOBALS.nowNextMap || !trendingStationIds) {
+    return;
+  }
+  const newTrendingList: any = [];
+  const stationIds = trendingStationIds;
+  for (let stationId of stationIds) {
+    stationId = stationId.StationId
+    const channelInfo = findChannelByStationId(stationId, undefined, false, GLOBALS.channelMap);
+    if (channelInfo && channelInfo.channel) {
+      const newTrendingModel = createLiveShowcardModel(channelInfo.channel, GLOBALS.channelMap, GLOBALS.nowNextMap, "trending", { $top: 16 });
+      const genresList = newTrendingModel?.Genres;
+      if (genresList && genrePivot.length > 0) {
+        const localizedGenres = genresList.map(function (g: any) {
+          return {
+            Name: (find(genrePivot, function (p) {
+              return p.Id.indexOf(g.Id) > -1
+            }) || g).Name,
+            Id: g.Id
           }
-
-          newTrendingList.push(newTrendingModel);
-        }
+        });
+        newTrendingModel["Genres"] = localizedGenres;
       }
-      console.log("newTrendingList", newTrendingList)
-      const massagedData = massageLiveFeed(newTrendingList, sourceType)
-      console.log("After massaging", massagedData, "is returned")
-      resolve(massagedData)
-      return massagedData;
-    })
-  })
-
+      newTrendingList.push(newTrendingModel);
+    }
+  }
+  const massagedData = massageLiveFeed(newTrendingList, sourceType)
+  return massagedData;
 }
 
 const getFavoriteChannels = async (params?: any) => {
