@@ -21,7 +21,7 @@ const getLiveData = async (channelRightsInfo: any) => {
                     NativeModules.MKGuideBridgeManager.getChannelMapInfo((channelMap: any) => {
                         const memoizedChannelMap = getChannelMap(channelMap, channelRightsInfo, DefaultStore.Id, "en-US");
                         GLOBALS.channelMap = memoizedChannelMap;
-                        const nowNextSchedules = buildNowNextMap(GLOBALS.currentSlots, memoizedChannelMap);
+                        const nowNextSchedules = buildNowNextMap(parsedSlots, memoizedChannelMap);
                         GLOBALS.nowNextMap = nowNextSchedules;
                         const finalLiveData = { slots: parsedSlots, channelMap: memoizedChannelMap, nowNextSchedules: nowNextSchedules }
                         console.log("Finally done..", finalLiveData)

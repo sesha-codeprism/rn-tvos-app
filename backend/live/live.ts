@@ -107,7 +107,7 @@ const getPlayableChannels = async (id: string, params: any) => {
   // }
   //@ts-ignore
   const variantData = updateVariant(GLOBALS.channelMap, filterdNowNextScheduleMap, {}, 0, 0, genre);
-  return massageLiveFeed(variantData, SourceType.LIVE);
+  return massageLiveFeed(variantData, SourceType.LIVE, "onNow");
 
 
 }
