@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { fossLicense } from "../../../../config/constants";
+import { AppStrings } from "../../../../config/strings";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
 
 interface Props {
@@ -12,8 +13,8 @@ const license = fossLicense;
 const FossLicenseScreen: React.FunctionComponent<Props> = (props: any) => {
   return (
     <SideMenuLayout
-      title="Settings"
-      subTitle="FOSS License"
+      title={AppStrings.str_settings_home_system}
+      subTitle={AppStrings.str_settings_foss_license}
       contentContainerStyle={{ height: "100%" }}
     >
       {/* <ScrollView style={{width: '100%', height: '100%'}} nestedScrollEnabled> */}

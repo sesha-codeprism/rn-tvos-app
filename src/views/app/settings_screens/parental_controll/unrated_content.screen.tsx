@@ -13,6 +13,7 @@ import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
+import { AppStrings } from "../../../../config/strings";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -68,7 +69,10 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
   }, []);
 
   return (
-    <SideMenuLayout title="Content Locks" subTitle="Unrated Content">
+    <SideMenuLayout
+      title={AppStrings.str_settings_content_locks}
+      subTitle={AppStrings.str_settings_unrated_content}
+    >
       <View style={styles.contentTitleContainer}>
         <Text style={styles.contentTitle}>Lock unrated content</Text>
       </View>

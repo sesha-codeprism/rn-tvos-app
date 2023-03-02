@@ -15,6 +15,7 @@ import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
 import { PinActionTypes } from "./parental_controll.screen";
+import { AppStrings } from "../../../../config/strings";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -70,12 +71,12 @@ const PurchaseLockScreen: React.FunctionComponent<Props> = (props: any) => {
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [GLOBALS.store.settings.parentalControll.purchaseLock]);
+  }, [GLOBALS.store!.settings.parentalControll.purchaseLock]);
 
   return (
     <SideMenuLayout
-      title="Parental Controls"
-      subTitle="Purchase Locks"
+      title={AppStrings.str_settings_parental_controls}
+      subTitle={AppStrings.str_settings_content_purchase_locks}
       contentContainerStyle={styles.contentContainer}
     >
       <FlatList
@@ -151,7 +152,7 @@ const PurchaseLockScreen: React.FunctionComponent<Props> = (props: any) => {
                 props.navigation.navigate(Routes.PinLock, {
                   screenName: "Purchase Lock",
                   pinType: "purchase",
-                  action:  PinActionTypes['UPDATE'],
+                  action: PinActionTypes["UPDATE"],
                   label: "Enter the Changed PIN",
                   screenTarget: Routes.PurchaseLock,
                 });

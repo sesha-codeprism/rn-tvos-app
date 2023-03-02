@@ -73,12 +73,12 @@ const ContentLockScreen: React.FunctionComponent<Props> = (props: any) => {
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [GLOBALS.store.settings.parentalControll.contentLock]);
+  }, [GLOBALS.store!.settings.parentalControll.contentLock]);
 
   return (
     <SideMenuLayout
-      title="Parental Controls"
-      subTitle="Content Locks"
+      title={AppStrings.str_settings_parental_controls}
+      subTitle={AppStrings.str_settings_content_locks}
       contentContainerStyle={styles.contentContainer}
     >
       <FlatList

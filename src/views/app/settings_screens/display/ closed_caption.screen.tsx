@@ -13,6 +13,7 @@ import { AppImages } from "../../../../assets/images";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
+import { AppStrings } from "../../../../config/strings";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -31,18 +32,21 @@ const ClosedCaptionScreen: React.FunctionComponent<Props> = (props: any) => {
   const [closedCaption, setClosedCaption] = useState<any>("");
   const onPress = (item: string) => {
     setClosedCaption(item);
-    GLOBALS.store.settings.display.closedCaption = item;
+    GLOBALS.store!.settings.display.closedCaption = item;
     updateStore(GLOBALS.store);
   };
   const getValues = () => {
-    setClosedCaption(GLOBALS.store.settings.display.closedCaption);
+    setClosedCaption(GLOBALS.store!.settings.display.closedCaption);
   };
   useEffect(() => {
     getValues();
   }, []);
 
   return (
-    <SideMenuLayout title="Display" subTitle="Closed Captions">
+    <SideMenuLayout
+      title={AppStrings.str_settings_home_display}
+      subTitle={AppStrings.str_settings_display_closed_captions}
+    >
       <FlatList
         data={list}
         keyExtractor={(item) => item.title}

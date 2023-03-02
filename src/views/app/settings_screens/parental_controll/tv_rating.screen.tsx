@@ -45,7 +45,10 @@ const TvRatingScreen: React.FunctionComponent<Props> = (props: any) => {
     }
   };
   return (
-    <SideMenuLayout title="Parental Controls" subTitle="TV Ratings">
+    <SideMenuLayout
+      title={AppStrings.str_settings_parental_controls}
+      subTitle="TV Ratings"
+    >
       <View style={styles.contentTitleContainer}>
         <Text style={styles.contentTitle}>
           Please select the TV Ratings which you like to lock. All ratings above

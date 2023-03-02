@@ -43,13 +43,13 @@ const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
   };
   const getSelectedItems = () => {
     try {
-      console.log(" GLOBALS.store.settings in get", GLOBALS.store);
+      console.log(" GLOBALS.store!.settings in get", GLOBALS.store);
       const selectedlist =
-        GLOBALS.store.settings.parentalControll.contentLock &&
-        GLOBALS.store.settings.parentalControll.contentLock[
+        GLOBALS.store!.settings.parentalControll.contentLock &&
+        GLOBALS.store!.settings.parentalControll.contentLock[
           props.route.params.action
         ]
-          ? GLOBALS.store.settings.parentalControll.contentLock[
+          ? GLOBALS.store!.settings.parentalControll.contentLock[
               props.route.params.action
             ]
           : [];
@@ -77,30 +77,30 @@ const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
         (item: any, index: any) => item.age > data.age
       );
       setSelectedItems([...unselected]);
-      console.log("GLOBALS.store.settings", GLOBALS.store);
-      GLOBALS.store.settings.parentalControll.contentLock &&
-      GLOBALS.store.settings.parentalControll.contentLock[
+      console.log("GLOBALS.store!.settings", GLOBALS.store);
+      GLOBALS.store!.settings.parentalControll.contentLock &&
+      GLOBALS.store!.settings.parentalControll.contentLock[
         props.route.params.action
       ]
-        ? (GLOBALS.store.settings.parentalControll.contentLock[
+        ? (GLOBALS.store!.settings.parentalControll.contentLock[
             props.route.params.action
           ] = [...unselected])
-        : (GLOBALS.store.settings.parentalControll.contentLock = {
-            ...GLOBALS.store.settings.parentalControll.contentLock,
+        : (GLOBALS.store!.settings.parentalControll.contentLock = {
+            ...GLOBALS.store!.settings.parentalControll.contentLock,
             [props.route.params.action]: [...unselected],
           });
       updateStore(GLOBALS.store);
     } else {
       setSelectedItems([...selectedList]);
-      GLOBALS.store.settings.parentalControll.contentLock &&
-      GLOBALS.store.settings.parentalControll.contentLock[
+      GLOBALS.store!.settings.parentalControll.contentLock &&
+      GLOBALS.store!.settings.parentalControll.contentLock[
         props.route.params.action
       ]
-        ? (GLOBALS.store.settings.parentalControll.contentLock[
+        ? (GLOBALS.store!.settings.parentalControll.contentLock[
             props.route.params.action
           ] = [...selectedList])
-        : (GLOBALS.store.settings.parentalControll.contentLock = {
-            ...GLOBALS.store.settings.parentalControll.contentLock,
+        : (GLOBALS.store!.settings.parentalControll.contentLock = {
+            ...GLOBALS.store!.settings.parentalControll.contentLock,
             [props.route.params.action]: [...selectedList],
           });
       updateStore(GLOBALS.store);
@@ -108,7 +108,7 @@ const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
   };
   return (
     <SideMenuLayout
-      title="Parental Controls"
+      title={AppStrings.str_settings_parental_controls}
       subTitle={props.route.params.title}
     >
       <View style={styles.contentTitleContainer}>

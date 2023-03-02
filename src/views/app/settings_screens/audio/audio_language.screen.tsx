@@ -52,7 +52,7 @@ const AudioLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
 
   return (
     <SideMenuLayout
-      title="Audio"
+      title={AppStrings.str_settings_home_audio}
       subTitle={`${
         props.route.params.type === "primary" ? "Primary" : "Secondary"
       } Audio Language`}

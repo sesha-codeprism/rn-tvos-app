@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
+import { AppStrings } from "../../../../config/strings";
 import { GLOBALS } from "../../../../utils/globals";
 
 interface Props {
@@ -29,7 +30,9 @@ const SystemInformationScreen: React.FunctionComponent<Props> = (
       },
       {
         title: "Device ID",
-        description: bootstrap?.DeviceId ? bootstrap?.DeviceId.toString() : "NA",
+        description: bootstrap?.DeviceId
+          ? bootstrap?.DeviceId.toString()
+          : "NA",
       },
       {
         title: "Experience Group",
@@ -75,7 +78,10 @@ const SystemInformationScreen: React.FunctionComponent<Props> = (
     return unsubscribe;
   }, []);
   return (
-    <SideMenuLayout title="Settings" subTitle="Display">
+    <SideMenuLayout
+      title={AppStrings.str_settings_home_system}
+      subTitle={AppStrings.str_settings_system_information}
+    >
       <FlatList
         style={styles.container}
         data={list}
