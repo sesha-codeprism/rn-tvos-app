@@ -3714,7 +3714,8 @@ export const getCTAButtons = (
     channelRights?: any,
     isFromEPG?: boolean,
     StationIdFromEPG?: any,
-    hasFeatureIosCarrierBilling?: boolean
+    hasFeatureIosCarrierBilling?: boolean,
+    dvrPlayActionsForProgram?: any
 ): any => {
     const { episodes, assetType } = seriesUDPData || {};
     const isLive = isFromSeries
@@ -3852,7 +3853,7 @@ export const getCTAButtons = (
             programUDPData["ChannelInfo"] = {
                 Schedule: schedule,
                 Channel: channel,
-                Service: channelMap?.getService(channel) || '',
+                Service: channelMap.getService(channel),
             };
         }
 
@@ -3888,8 +3889,8 @@ export const getCTAButtons = (
     //VOD CTA Button Logic
     let playAction = undefined;
     if (
-        playActions?.length > 0
-        // (programUDPData?.isInHome || seriesUDPData?.isInHome)
+        playActions?.length > 0 &&
+        (programUDPData?.isInHome || seriesUDPData?.isInHome)
     ) {
         if (!sourceType) {
             sourceType = SourceType.VOD;
@@ -3941,7 +3942,11 @@ export const getCTAButtons = (
             ) {
                 ctaButtonGroup.push({
                     buttonType: "TextIcon",
-                    buttonText: `${AppStrings?.str_details_cta_play} ${programSubscriberData?.assetType?.sourceType || ""
+                    buttonText: config?.playButtonConfig?.hasOwnProperty(
+                        AppStrings?.str_locale_id
+                    )
+                        ? `${AppStrings?.str_details_cta_play}`
+                        : `${AppStrings?.str_details_cta_play} ${programSubscriberData?.assetType?.sourceType || ""
                         }`,
                     buttonAction: AppStrings?.str_details_cta_play,
                     iconSource: playIcon,
@@ -4013,7 +4018,10 @@ export const getCTAButtons = (
             }
         }
         //Package CTA Button Logic
-        if (programSubscriberData?.purchasePackageExists) {
+        if (
+            programSubscriberData?.purchasePackageExists ||
+            seriesUDPData?.purchasePackageExists
+        ) {
             ctaButtonGroup.push({
                 buttonType: "TextIcon",
                 buttonText: AppStrings?.str_details_cta_package,
@@ -4034,7 +4042,7 @@ export const getCTAButtons = (
     }
 
     //PlayDVR CTA button Logic
-    if (playDvr && !ppvInfo.hasPPV) {
+    if (playDvr) {
         sourceIndicators["IsDVR"] = true;
         if (
             (programUDPData?.Bookmark || seriesUDPData?.Bookmark) &&
@@ -4263,12 +4271,12 @@ export const getCTAButtons = (
             }
         };
 
-        !playExists &&
-            (isFromSeries
-                ? seriesData?.playSource !== sourceTypeString.UPCOMING
-                : programSubscriberData?.playSource !==
-                sourceTypeString.UPCOMING) &&
-            getStatusText(seriesUDPData.statusText);
+        // !playExists &&
+        //     (isFromSeries
+        //         ? seriesData?.playSource !== sourceTypeString.UPCOMING
+        //         : programSubscriberData?.playSource !==
+        //           sourceTypeString.UPCOMING) &&
+        //     getStatusText(seriesUDPData.statusText);
 
         if (!seriesUDPData?.IsGeneric || seriesUDPData?.episodes?.length > 0) {
             ctaButtonGroup.push({
@@ -4321,10 +4329,40 @@ export const getCTAButtons = (
         );
     }
 
+    let isRecordSingleProgarm = false;
+    if (
+        dvrPlayActionsForProgram &&
+        dvrPlayActionsForProgram?.buttonAction !== DvrButtonAction.None &&
+        !ppvInfo.hasPPV &&
+        isFromSeries
+    ) {
+        const recordButton =
+            dvrPlayActionsForProgram?.buttonAction &&
+            getRecordButton(
+                dvrPlayActionsForProgram.buttonAction,
+                false,
+                dvrPlayActionsForProgram.subscription
+            );
+
+        if (recordButton) {
+            if (!sourceType) {
+                sourceType = SourceType.DVR;
+            }
+            ctaButtonGroup.push(recordButton);
+        }
+        if (
+            recordButton &&
+            recordButton.buttonText ===
+            AppStrings?.str_details_program_record_button
+        ) {
+            isRecordSingleProgarm = true;
+        }
+    }
     if (
         dvrPlayActions &&
         dvrPlayActions?.buttonAction !== DvrButtonAction.None &&
-        !ppvInfo.hasPPV
+        !ppvInfo.hasPPV &&
+        !isRecordSingleProgarm
     ) {
         const recordButton =
             dvrPlayActions?.buttonAction &&
@@ -4365,14 +4403,24 @@ export const getCTAButtons = (
 
     if (isFromSeries && ppvInfo.hasPPV) {
         seriesUDPData.statusText = ppvInfo.StatusMessage;
+        !ppvInfo?.isPurchased &&
+            !ppvInfo?.isFree &&
+            seriesUDPData.statusText.push(
+                AppStrings?.str_purchase_blocked
+            );
     } else if (ppvInfo.hasPPV) {
         programUDPData.statusText.push(ppvInfo.StatusMessage);
+        !ppvInfo?.isPurchased &&
+            !ppvInfo?.isFree &&
+            programUDPData.statusText.push(
+                AppStrings?.str_purchase_blocked
+            );
     }
 
     ctaButtonGroup.push({
         buttonType: "TextIcon",
-        buttonText: AppStrings?.str_details_cta_more_info || "ABC",
-        buttonAction: AppStrings?.str_details_cta_more_info || "ABNC",
+        buttonText: AppStrings?.str_details_cta_more_info,
+        buttonAction: AppStrings?.str_details_cta_more_info,
         iconSource: moreInfoIcon,
     });
 
@@ -6095,6 +6143,24 @@ export const massageSeriesDataForUDP = (
         combinedEntitlements,
         recorders?.recorders
     );
+
+    let selectedSchedule = subscriberPlayOptionsData?.Schedules[0];
+
+    if (
+        StationIdFromEPG &&
+        subscriberPlayOptionsData?.Schedules &&
+        subscriberPlayOptionsData?.Schedules.length
+    ) {
+        selectedSchedule =
+            subscriberPlayOptionsData?.Schedules.find((s) => {
+                return (
+                    s?.StationId === StationIdFromEPG &&
+                    s?.ProgramId === data?.Schedule?.ProgramId &&
+                    s?.StartUtc === data?.Schedule?.StartUtc
+                );
+            }) || selectedSchedule;
+    }
+
     if (
         hasCloudDvr &&
         seriesSubscriberData &&
@@ -6127,24 +6193,22 @@ export const massageSeriesDataForUDP = (
             subscriberPlayOptionsData?.ProgramId ||
             seriesUDPData?.currentCatchupSchedule?.ProgramId,
 
-            subscriberPlayOptionsData?.Schedules[0]?.StartUtc ||
+            selectedSchedule?.StartUtc ||
             seriesUDPData?.currentCatchupSchedule?.StartUtc,
-            subscriberPlayOptionsData?.Schedules[0]?.StationId ||
+            selectedSchedule?.StationId ||
             seriesUDPData?.currentCatchupSchedule?.StationId,
-            subscriberPlayOptionsData?.Schedules[0]?.ChannelNumber ||
+            selectedSchedule?.ChannelNumber ||
             seriesUDPData?.currentCatchupSchedule?.ChannelNumber,
             [],
             [],
-            [subscriberPlayOptionsData?.Schedules[0]] || [
-                seriesUDPData?.currentCatchupSchedule,
-            ],
+            [selectedSchedule] || [seriesUDPData?.currentCatchupSchedule],
             allSubcriptionGroups,
             recordedSubscriptionGroups,
             scheduledSubscriptionGroups,
             recorders.recorders,
             hasCloudDvr,
             channelMap,
-            subscriberPlayOptionsData?.Schedules[0]?.EndUtc ||
+            selectedSchedule?.EndUtc ||
             seriesUDPData?.currentCatchupSchedule?.EndUtc
         );
 
@@ -6331,8 +6395,8 @@ export const massageSeriesDataForUDP = (
     seriesUDPData["ppvInfo"] = ppvInfo;
     //CatchupEndUtc time
     const catchupEndUtc =
-        seriesUDPData?.currentCatchupSchedule?.Channel?.LastCatchupEndUtc ||
-        seriesUDPData?.ChannelInfo?.Channel?.LastCatchupEndUtc;
+        seriesUDPData?.currentCatchupSchedule?.Schedule?.CatchupEndUtc ||
+        seriesUDPData?.ChannelInfo?.Schedule?.CatchupEndUtc;
     if (
         !expirationUTC &&
         seriesUDPData?.SourceIndicators?.IsRestart &&
