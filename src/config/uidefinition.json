@@ -499,7 +499,6 @@
       "id": "Modal",
       "style": {
         "row": {
-          // marginTop: 250
         },
         "container": {
           "backgroundColor": "${theme.auxiliaryColors.overlay1}",
@@ -4669,6 +4668,7 @@
       "style": {
         "container": {
           "paddingTop": 40
+        
         },
         "dvrMain": {
           "display": "flex",
@@ -4676,7 +4676,8 @@
         },
         "dvrView": {
           "width": 420,
-          "height": "100%"
+          "height": "100%",
+          "marginLeft": 50
         },
         "dvrScrollView": {
           "paddingLeft": 90
