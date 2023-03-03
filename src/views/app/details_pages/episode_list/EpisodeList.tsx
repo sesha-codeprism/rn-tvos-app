@@ -128,7 +128,6 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     setRoute(DetailRoutes.MoreInfo);
     setOpen(open);
     drawerRef?.current?.open();
-    // drawerRef.current.open();
   };
 
   const ctaButtonPress: any = {
@@ -169,7 +168,6 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
             IsMultiChannel: false,
           },
         };
-        console.log(recordingOptions);
         const params: EpisodeRecordOptionsProps = {
           isNew: true,
           programId: episodeDiscoveryData.Id,
@@ -178,8 +176,6 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
           programDiscoveryData: episodeDiscoveryData,
           recordingOptions: recordingOptions,
         };
-        // setSideMenuProps(params);
-        // setPanelType("EpisodeRecord");
         setRoute(DetailRoutes.EpisodeRecordOptions);
         setScreenProps(params);
         setOpen(open);
@@ -613,30 +609,11 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     discoveryData["currentEpisode"] = episode;
 
     setCurrentEpisode(episode);
-
-    // this.focusedEpisodeId = episode?.ProgramId;
-
-    // this.props.getEpisodePlayOptionsData({
-    //   assetType: AssetType.Program,
-    //   programId: episode?.ProgramId,
-    // });
-
-    // this.props.getEpisodeDiscoveryData({
-    //   id: episode?.ProgramId,
-    // });
-
-    // this.props.getProgramScheduleData({
-    //   id: episode?.ProgramId,
-    //   $skip: 0,
-    //   $top: 1000,
-    // });
     if (episode?.index === skip - 2) {
       getMoreEpisodes();
     } else {
     }
   };
-  console.log(ctaList);
-
   const extractKey = (item: any) => item.Id;
 
   const renderSeasons = () => {
@@ -882,7 +859,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
           props.route.params.discoveryData?.image2x3PosterURL ||
           props.route?.image16x9KeyArtURL ||
           props.route?.image16x9PosterURL ||
-          backgroundImageUri
+          AppImages.landing_background
         }
         style={episodeStyles.flexOne}
         imageStyle={{ resizeMode: "stretch" }}

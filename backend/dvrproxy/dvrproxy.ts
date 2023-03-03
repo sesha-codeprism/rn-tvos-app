@@ -24,26 +24,6 @@ export const getViewableSubscriptionStems = async (uri: string, params: any) => 
     const type: SourceType = SourceType.DVR;
     //@ts-ignore
     return massageDVRFeed(subscriptionGroups.viewableSubscriptions, type, "", channelMap)
-
-    // const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr}v1/subscription-groups/`;
-    // const paramsObject = {
-    //     "$type-filter": "all",
-    //     "$state-filter": "viewable",
-    //     "$orderby": "startdate",
-    //     "$lang": lang,
-    //     "storeId": DefaultStore.Id
-    // }
-    // const response = await GET({
-    //     url,
-    //     params: paramsObject,
-    //     headers: {
-    //         Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-    //     },
-    // })
-    // let data = response.data;
-    // const viewableItems = data.SubscriptionGroups.filter((element: any) => element.SubscriptionItems.length > 0);
-    // data.SubscriptionGroups = viewableItems;
-    // return { data: data };
 }
 
 export const getScheduledSubscriptionGroups = async (uri: string, params: any) => {

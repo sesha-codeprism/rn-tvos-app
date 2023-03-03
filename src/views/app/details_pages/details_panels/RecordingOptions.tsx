@@ -23,6 +23,7 @@ import { groupBy, uniq, uniqBy, values } from "lodash";
 import { DvrItemState } from "../../../../utils/common";
 import { getTimeStringFromISOString } from "../../../../utils/dataUtils";
 import {
+  Alert,
   FlatList,
   Pressable,
   ScrollView,
@@ -529,6 +530,7 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
 
   const handleSelection = (selection: any) => {
     console.log(selection.key);
+    console.log(selection.key === RecordingOptionsEnum.ShowType);
     switch (selection.key) {
       case RecordingOptionsEnum.KeepUntil:
         props.navigation.navigate(DetailRoutes.SelectOptions, {
@@ -542,6 +544,13 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
           title: props.route.params.title,
           subTitle: selection.title,
           options: stopRecordingOptions(),
+        });
+        break;
+      case RecordingOptionsEnum.ShowType:
+        props.navigation.navigate(DetailRoutes.SelectOptions, {
+          title: props.route.params.title,
+          subTitle: selection.title,
+          options: getShowTypeOptions(),
         });
         break;
     }
@@ -697,7 +706,11 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
   return (
     <SideMenuLayout
       title={props.route.params.title || "Some title"}
-      subTitle={AppStrings.str_dvr_recording.only_this_episode}
+      subTitle={
+        props.route.params.isSeries
+          ? AppStrings.str_dvr_recording.entire_series
+          : AppStrings.str_dvr_recording.only_this_episode
+      }
       isTitleInverted
     >
       <>

@@ -260,7 +260,15 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                       feeds={feeds}
                       onFocus={onFeedFocus}
                       onPress={(event) => {
-                        if (event.ItemType === ItemType.PACKAGE) {
+                        console.log(event);
+                        //@ts-ignore
+                        if (event.Schedule) {
+                          //@ts-ignore
+                          event["isFromEPG"] = true;
+                          props.navigation.navigate(Routes.Details, {
+                            feed: event,
+                          });
+                        } else if (event.ItemType === ItemType.PACKAGE) {
                           props.navigation.navigate(Routes.PackageDetails, {
                             feed: event,
                           });

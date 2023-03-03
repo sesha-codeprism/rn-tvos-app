@@ -82,6 +82,7 @@ const { width, height } = Dimensions.get("window");
 import MFProgressBar from "../../../components/MFProgressBar";
 import {
   Definition as DefinationOfItem,
+  DvrGroupShowType,
   validateEntitlements,
 } from "../../../utils/DVRUtils";
 import { DetailRoutes } from "../../../config/navigation/DetailsNavigator";
@@ -406,7 +407,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           }
         }
         let params = undefined;
-        let panelName = undefined;
         if (contentType === ContentType.GENERIC || schedule?.IsGeneric) {
           params = {
             isNew: true,
@@ -415,10 +415,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             schedules: discoverySchedulesData,
             programId: schedule?.ProgramId,
             isGeneric: true,
-            // onDvrItemSelected: this.setFocusBack,
             isPopupModal: true,
           };
-          // panelName = SideMenuRoutes.DvrEpisodeRecordingOptions;
           setRoute(DetailRoutes.EpisodeRecordOptions);
           setScreenProps(params);
           drawerRef.current?.open();
@@ -428,18 +426,128 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             programId: schedule?.ProgramId,
             seriesId: schedule?.SeriesId,
             title: schedule?.Name || "",
-            // onDvrItemSelected: this.setFocusBack,
             isPopupModal: true,
           };
           setRoute(DetailRoutes.RecordingOptions);
           setScreenProps(params);
           drawerRef.current?.open();
-          // panelName = SideMenuRoutes.DvrRecordingOptions;
         }
-        // this.props.openPanel(true, panelName, params);
       }
     } else {
-      //TODO: Series recording.. need to specifically handle entire series recording
+      let schedule = discoverySchedulesData[0];
+
+      // Get the correct schedule, the one which is shown in UI
+      const { Schedule: { channelId: StationIdFromEPGSchedule = "" } = {} } =
+        feed || {};
+      let ChannelNumber: any;
+      if (StationIdFromEPGSchedule) {
+        const actualSelectedChannel =
+          GLOBALS.channelMap?.findChannelByStationId(StationIdFromEPGSchedule);
+
+        ({ channel: { Number: ChannelNumber = undefined } = {} } =
+          actualSelectedChannel || {});
+      }
+
+      if (
+        (ChannelNumber || currentChannel) &&
+        discoverySchedulesData &&
+        discoverySchedulesData.length
+      ) {
+        schedule = discoverySchedulesData.find(
+          (scheduleEntry: any) =>
+            scheduleEntry?.ChannelNumber ===
+            (ChannelNumber || currentChannel?.Number || currentChannel?.number)
+        );
+      }
+      if (feed?.isFromEPG && StationIdFromEPGSchedule) {
+        const currentSchedule = discoverySchedulesData.find(
+          (scheduleEntry: any) => {
+            return (
+              scheduleEntry?.ProgramId === feed?.Schedule?.ProgramId &&
+              scheduleEntry?.StationId === StationIdFromEPGSchedule &&
+              scheduleEntry?.StartUtc === feed?.Schedule.StartUtc
+            );
+          }
+        );
+        if (currentSchedule) {
+          schedule = currentSchedule;
+        }
+      }
+
+      if (!schedule && feed?.Schedule) {
+        schedule = feed?.Schedule;
+      }
+      if (
+        udpDataAsset.ctaButtons.some(
+          (cta: any) =>
+            cta.buttonText === AppStrings?.str_details_program_record_button
+        )
+      ) {
+        if (schedule) {
+          GLOBALS.recordingData = {
+            Definition: DefinationOfItem.SINGLE_PROGRAM,
+            Parameters: [
+              {
+                Key: "ProgramId",
+                Value: schedule?.ProgramId,
+              },
+            ],
+            Settings: {
+              StationId: schedule?.StationId,
+              ChannelNumber: schedule?.ChannelNumber,
+              StartUtc: schedule?.StartUtc,
+              MaximumViewableShows: undefined,
+              EndLateSeconds: 0,
+              RecyclingDisabled: false,
+              ShowType: "FirstRunOnly",
+              AirtimeDomain: "Anytime",
+              ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+              IsMultiChannel: false,
+            },
+          };
+          setRoute(DetailRoutes.EpisodeRecordOptions);
+          setScreenProps({
+            programId: schedule?.ProgramId,
+            seriesId: schedule?.SeriesId,
+            isNew: true,
+            isPopupModal: true,
+          });
+          drawerRef.current?.open();
+        }
+      } else {
+        if (schedule) {
+          GLOBALS.recordingData = {
+            Definition: DefinationOfItem.SERIES,
+            Parameters: [
+              {
+                Key: "TVSeriesId",
+                Value: schedule?.SeriesId,
+              },
+            ],
+            Settings: {
+              StationId: schedule?.StationId,
+              ChannelNumber: schedule?.ChannelNumber,
+              StartUtc: schedule?.StartUtc,
+              MaximumViewableShows: undefined,
+              EndLateSeconds: 0,
+              RecyclingDisabled: false,
+              ShowType: DvrGroupShowType.Any,
+              AirtimeDomain: "Anytime",
+              ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+              IsMultiChannel: false,
+            },
+          };
+          setRoute(DetailRoutes.RecordingOptions);
+          setScreenProps({
+            title: udpDataAsset.title,
+            isNew: true,
+            schedules: discoverySchedulesData,
+            isSeries: true,
+            isPopupModal: true,
+          });
+          drawerRef.current?.open();
+        }
+      }
     }
   };
 

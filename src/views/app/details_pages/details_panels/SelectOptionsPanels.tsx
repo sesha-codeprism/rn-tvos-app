@@ -30,6 +30,11 @@ const SelectOptionsPanel: React.FunctionComponent<SelectOptionsPanelProps> = (
         (e: any) => e.key === currentData.Settings.EndLateSeconds
       );
       setSelectedItem(currentSelected[0].title);
+    } else if (subTitle.toLowerCase().includes("show")) {
+      const currentSelected = options.filter(
+        (e: any) => e.key === currentData.Settings.ShowType
+      );
+      setSelectedItem(currentSelected[0].title);
     }
   };
 
@@ -59,8 +64,18 @@ const SelectOptionsPanel: React.FunctionComponent<SelectOptionsPanelProps> = (
           EndLateSeconds: element.key,
         },
       };
-
       setSelectedItem(element.title);
+    } else if (subTitle.toLowerCase().includes("show")) {
+      if (GLOBALS.recordingData) {
+        GLOBALS.recordingData = {
+          ...currentData,
+          Settings: {
+            ...currentData.Settings,
+            ShowType: element.key,
+          },
+        };
+        setSelectedItem(element.title);
+      }
     }
   };
 
