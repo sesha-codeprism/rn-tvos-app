@@ -4689,7 +4689,9 @@
         },
         "dvrMain": {
           "display": "flex",
-          "flexDirection": "row"
+          "flexDirection": "row",
+          "width": "100%",
+          "height":"100%"
         },
         "dvrView": {
           "width": 420,

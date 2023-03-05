@@ -46,6 +46,7 @@ interface MFSwimLaneProps {
   flatListStyle?: any;
   autoFocusOnFirstCard?: boolean;
   navigation: NativeStackNavigationProp<any>;
+  onLongPress?:any;
 }
 
 const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
@@ -220,6 +221,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           feed={props.feed}
           cardStyle={props.cardStyle}
           onPress={props.onPress}
+          onLongPress={props.onLongPress}
           onBlur={(event) => {
             _onBlur();
           }}
