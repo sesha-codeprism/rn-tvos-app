@@ -568,7 +568,7 @@ export const getUserAccount = async (id: string, params: any) => {
 export const getPackageActions = async (id: string, params: any) => {
   const { storeID, packageId } = params;
   const { accessToken } = GLOBALS.store!;
-  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || '') + `v4/packages/${packageId}/actions?`;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || '') + `/v4/packages/${packageId}/actions?`;
   const response = await GET({
     url: url,
     params: {

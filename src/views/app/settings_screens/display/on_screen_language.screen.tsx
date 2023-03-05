@@ -17,7 +17,7 @@ import {
   appUIDefinition,
   onscreenLanguageList,
 } from "../../../../config/constants";
-import { setOnScreenLanguage } from "../../../../config/strings";
+import { AppStrings, setOnScreenLanguage } from "../../../../config/strings";
 import { GlobalContext } from "../../../../contexts/globalContext";
 import { OnscreenLanguage } from "../../../../@types/UIDefinition";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
@@ -37,10 +37,10 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
     const lannguageObject = {
       title: item.onScreenName,
       languageCode: item.languageCode,
-      enableRTL:  item.isRTL
+      enableRTL: item.isRTL,
     };
-    GLOBALS.store.settings.display.onScreenLanguage = lannguageObject;
-    GLOBALS.store.onScreenLanguage = lannguageObject;
+    GLOBALS.store!.settings.display.onScreenLanguage = lannguageObject;
+    GLOBALS.store!.onScreenLanguage = lannguageObject;
     updateStore(GLOBALS.store);
     setOnScreenLanguage(item.languageCode);
     GLOBALS.enableRTL = item.isRTL;
@@ -48,7 +48,7 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
     // currentContext.shouldEnableRTL(item.isRTL);
   };
   const getValues = () => {
-    setSelectedLang(GLOBALS.store.settings.display.onScreenLanguage.title);
+    setSelectedLang(GLOBALS.store!.settings.display.onScreenLanguage.title);
   };
   useEffect(() => {
     console.log("onscreenLanguageList", onscreenLanguageList);
@@ -56,7 +56,10 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   }, []);
 
   return (
-    <SideMenuLayout title="Diaplay" subTitle="On Screen Language">
+    <SideMenuLayout
+      title={AppStrings.str_settings_home_display}
+      subTitle={AppStrings.str_settings_display_on_screen_language}
+    >
       <FlatList
         data={onscreenLanguageList}
         keyExtractor={(x, i) => i.toString()}

@@ -1,5 +1,5 @@
 const GlobalsConfig = (function () {
-	let url = 'https://reachclient.dev.mr.tv3cloud.com';
+	let url = 'https://reachclient.dev.mr.tv3cloud.com/';
 	let stsUrl = '';
 
 

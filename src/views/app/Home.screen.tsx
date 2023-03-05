@@ -179,6 +179,11 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   };
 
   console.log("firstSwimlaneRef ", firstSwimlaneRef);
+  // console.log(
+  //   GLOBALS.nowNextMap.now
+  //     .map((e: any) => e.ProgramId !== undefined)
+  //     .filter((val: any) => val !== false).length
+  // );
   return (
     <View style={HomeScreenStyles.container}>
       <ImageBackground

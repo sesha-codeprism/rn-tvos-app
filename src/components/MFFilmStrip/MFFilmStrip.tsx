@@ -100,7 +100,7 @@ export interface MFFilmStripProps {
   feed: Feed;
   onViewAllPressed?: null | ((event: SubscriberFeed) => void) | undefined;
   filmStripId?: string;
-  getNoItemReturenedRef?: null| (() => any) |  undefined;
+  getNoItemReturenedRef?: null | (() => any) | undefined;
 }
 /**
  * Component that renders horizontal-scrolling collection of items
@@ -166,9 +166,9 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
       get feedNotImplemented() {
         return innerFeedNotImplementedRef;
       },
-      get NoItemsReturened(){
+      get NoItemsReturened() {
         return props.getNoItemReturenedRef();
-      }
+      },
     }));
 
     const viewAllFocused = (index: number) => {
@@ -181,15 +181,15 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
     };
 
     const _onFocus = (index: number) => {
-      if(dataArray?.some((item:  any) => item?.viewAll)){
+      if (dataArray?.some((item: any) => item?.viewAll)) {
         flatListRef.current?.scrollToIndex({ animated: true, index: index });
-      }else if(index === dataArray?.length - 1) {
+      } else if (index === dataArray?.length - 1) {
         flatListRef.current?.scrollToIndex({
           animated: true,
           index: index,
           viewOffset: viewAllPeekValue,
         });
-      }else {
+      } else {
         flatListRef.current?.scrollToIndex({ animated: true, index: index });
       }
       setFocusIndex(index);
@@ -330,9 +330,9 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                       overlayComponent={
                         <MFOverlay
                           renderGradiant={true}
-                          showProgress={item.Bookmark! || false}
+                          showProgress={item.Bookmark! || item.progress}
                           progress={item.progress ? item.progress * 100 : 20}
-                          // displayTitle={item.title}
+                          displayTitle={item.episodeInfo && item.episodeInfo}
                           bottomText={
                             item.metadataLine3 ||
                             item.durationMinutesString ||
@@ -365,7 +365,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                 paddingRight: SCREEN_WIDTH,
                 display: "flex",
                 flex: 1,
-                flexDirection: "column"
+                flexDirection: "column",
               }}
             >
               <MFViewAllButton
@@ -377,31 +377,41 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                 imageStyle={HomeScreenStyles.landScapeCardImageStyles}
                 focusedStyle={HomeScreenStyles.focusedStyle}
                 onPress={props.onListFooterElementOnPress}
-                onFocus={(event)=> props.onListFooterElementFocus && props.onListFooterElementFocus({...event, context: 'FeedNotImplemented'}) }
+                onFocus={(event) =>
+                  props.onListFooterElementFocus &&
+                  props.onListFooterElementFocus({
+                    ...event,
+                    context: "FeedNotImplemented",
+                  })
+                }
                 key={`${props.filmStripId}-flatlist`}
               />
             </View>
           )
         }
-        {
-          !(focusedIndex  === dataArray?.length - 1  && dataArray[dataArray?.length  - 1].viewAll) && currentFeed &&
-          props.swimLaneKey?.trim().length! > 0 &&
-          (props.swimLaneKey === props.title ||
-            props.swimLaneKey === currentFeed?.title) ? (
-              <View
-              style={{
-               width: 500,
-               height: 70,
-               paddingTop:5
-              }}
-            >
-                  <MFMetaData
-                    currentFeed={currentFeed}
-                    key={`${props.filmStripId}-flatlist`}
-                  />
-            </View>
-            ): <></>
-        }
+        {!(
+          focusedIndex === dataArray?.length - 1 &&
+          dataArray[dataArray?.length - 1].viewAll
+        ) &&
+        currentFeed &&
+        props.swimLaneKey?.trim().length! > 0 &&
+        (props.swimLaneKey === props.title ||
+          props.swimLaneKey === currentFeed?.title) ? (
+          <View
+            style={{
+              width: 500,
+              height: 70,
+              paddingTop: 5,
+            }}
+          >
+            <MFMetaData
+              currentFeed={currentFeed}
+              key={`${props.filmStripId}-flatlist`}
+            />
+          </View>
+        ) : (
+          <></>
+        )}
       </View>
     );
   }

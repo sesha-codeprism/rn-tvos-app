@@ -404,7 +404,7 @@ export const findImage = (
 };
 
 const getConstructedImageUri = (item: feedType, aspectRatio: aspectRatio) => {
-  const serviceMap = GLOBALS?.bootstrapSelectors?.ServiceMap.Services!;
+  const serviceMap = GLOBALS.bootstrapSelectors?.ServiceMap.Services!;
   const imgBase = serviceMap.image;
   const imgType = item.ItemType ? item.ItemType : "person";
 

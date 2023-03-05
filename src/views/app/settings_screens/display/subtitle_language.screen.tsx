@@ -27,9 +27,9 @@ const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
       setSelectedLang(item);
       console.log("props.route.params.type", props.route.params.type);
       if (props.route.params.type === "primary") {
-        GLOBALS.store.settings.display.subtitleConfig.primary = item;
+        GLOBALS.store!.settings.display.subtitleConfig.primary = item;
       } else {
-        GLOBALS.store.settings.display.subtitleConfig.secondary = item;
+        GLOBALS.store!.settings.display.subtitleConfig.secondary = item;
       }
       updateStore(GLOBALS.store);
     } catch (error) {
@@ -39,12 +39,12 @@ const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const getValues = () => {
     const selectedValue =
       props.route.params.type === "primary"
-        ? GLOBALS.store.settings.display.subtitleConfig.primary
-        : GLOBALS.store.settings.display.subtitleConfig.secondary;
+        ? GLOBALS.store!.settings.display.subtitleConfig.primary
+        : GLOBALS.store!.settings.display.subtitleConfig.secondary;
     setSelectedLang(selectedValue);
   };
   useEffect(() => {
-    const langList = GLOBALS.store.settings.display.subtitleConfig.tracks;
+    const langList = GLOBALS.store!.settings.display.subtitleConfig.tracks;
     props.route.params.type === "secondary"
       ? setList([...["None"], ...langList])
       : setList(langList);
@@ -55,7 +55,7 @@ const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
 
   return (
     <SideMenuLayout
-      title="Diaplay"
+      title={AppStrings.str_settings_home_display}
       subTitle={`${
         props.route.params.type === "primary" ? "Primary" : "Secondary"
       } Subtitle Language`}

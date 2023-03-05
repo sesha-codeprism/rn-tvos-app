@@ -491,7 +491,8 @@
           "paddingTop": 120
         },
         "overlay": {
-          "backgroundColor": "${theme.auxiliaryColors.overlay4}"
+          "backgroundColor": "${theme.backgroundColors.shade1}",
+          "opacity": 0.9
         }
       }
     },
@@ -2337,6 +2338,13 @@
             "progressBarContainer": {
               "height": 3
             },
+            "descriptionText": {
+              "fontSize": "${theme.fontSizes.body2}",
+              "fontFamily": "${theme.fontFamily.regular}",
+              "color": "${theme.fontColors.lightGrey}",
+              "lineHeight": "${theme.lineHeights.body2}",
+              "marginBottom": 25
+            },
             "progressInfoText": {
               "fontFamily": "${theme.fontFamily.semiBold}",
               "fontSize": "${theme.fontSizes.body2}",
@@ -2420,7 +2428,8 @@
               "paddingLeft": 54,
               "paddingRight": 54,
               "paddingTop": 34,
-              "paddingBottom": 34
+              "paddingBottom": 34,
+              "backgroundColor": "${theme.backgroundColors.shade2}"
             },
             "statusTextStyles": {
               "fontSize": "${theme.fontSizes.body2}",
@@ -2977,11 +2986,12 @@
     {
       "id": "SearchResult",
       "config": {
-        "$top": 8,
         "$skip": 0,
+        "$top": 50,
         "searchLive": true,
         "trending$top": 8,
-        "trending$skip": 0
+        "trending$skip": 0,
+        "minQueryLength": 1
       },
       "style": {
         "imageIcon": {
@@ -3790,16 +3800,22 @@
         },
         "seasonBlock": {
           "height": 62,
-          "width": 300,
-          "marginBottom": 43
+          "marginBottom": 43,
+          "alignSelf": "flex-start"
+        },
+        "seasonBlockSelectedHighlight": {
+          "borderBottomColor": "${theme.backgroundColors.primary1}",
+          "borderBottomWidth": 4
         },
         "seasonText": {
           "fontFamily": "${theme.fontFamily.regular}",
-          "color": "${theme.fontColors.darkGrey}"
+          "color": "${theme.fontColors.darkGrey}",
+          "fontSize": "${theme.fontSizes.subTitle1}"
         },
         "seasonTextSelected": {
           "fontFamily": "${theme.fontFamily.bold}",
-          "color": "${theme.fontColors.light}"
+          "color": "${theme.fontColors.light}",
+          "fontSize": "${theme.fontSizes.subTitle1}"
         },
         "episodeItemContainer": {
           "padding": 10,
@@ -3904,7 +3920,8 @@
         },
         "statusTextStyle": {
           "color": "${theme.fontColors.statusWarning}",
-          "fontFamily": "${theme.fontFamily.regular}"
+          "fontFamily": "${theme.fontFamily.regular}",
+          "fontSize": "${theme.fontSizes.body2}"
         },
         "metadataStyle": {
           "color": "${theme.fontColors.lightGrey}",
