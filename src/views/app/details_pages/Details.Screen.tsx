@@ -510,6 +510,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             programId: schedule?.ProgramId,
             seriesId: schedule?.SeriesId,
             isNew: true,
+            schedules: discoverySchedulesData,
             isPopupModal: true,
           });
           drawerRef.current?.open();

@@ -168,12 +168,13 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
             IsMultiChannel: false,
           },
         };
-        const params: EpisodeRecordOptionsProps = {
+        const params = {
           isNew: true,
           programId: episodeDiscoveryData.Id,
           seriesId: episodeDiscoveryData.SeriesId,
           isGeneric: episodeDiscoveryData?.isGeneric,
           programDiscoveryData: episodeDiscoveryData,
+          schedules: schedules,
           recordingOptions: recordingOptions,
         };
         setRoute(DetailRoutes.EpisodeRecordOptions);
