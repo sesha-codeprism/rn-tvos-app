@@ -44,6 +44,10 @@ const AppImages: { [key: string]: Source | any } = {
   rightArrowWhite: require(`${imagesDirectory}/right_arrow_white.png`),
   noSearchResult: require(`${imagesDirectory}/no_search_result.png`),
   bgPlaceholder: require(`${imagesDirectory}/bg_placeholder.png`),
+  Play_ic: require(`${imagesDirectory}/Play_ic.png`),
+  Delete_ic: require(`${imagesDirectory}/Delete_ic.png`),
+  More_info_ic: require(`${imagesDirectory}/More_info_ic.png`),
+  Save_ic: require(`${imagesDirectory}/Save_ic.png`),
 };
 
 export { AppImages };

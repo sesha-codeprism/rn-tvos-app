@@ -8,6 +8,10 @@ import {
   Pressable,
   Alert,
   FlatList,
+  useTVEventHandler,
+  Dimensions,
+  TVMenuControl,
+  BackHandler,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { PageContainer } from "../../../components/PageContainer";
@@ -36,6 +40,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import BrowseFilter from "../BrowsePages/BrowseGallery/BrowseFilters";
+import { SidePanel } from "./SidePannel";
 
 interface DvrManagerProps {
   navigation: NativeStackNavigationProp<any>;
@@ -88,10 +93,14 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   const [filterData, setFilterData] = useState<any>([]);
   const [openFilterMenu, setOpenFilterMenu] = useState(false);
   const [defaultFilterState, setDefaultFilterState] = useState<any>([]);
+  const [openSidePannel, setOpenSidePannel] = useState(false);
+  const [focusedCard, setFocusedCard] = useState<any>(null);
 
+  const { width, height } = Dimensions.get("window");
   const offset = useSharedValue(420);
   const opacity = useSharedValue(1);
   const firstCardRef = useRef<TouchableOpacity>(null);
+  const firstScheduledCardRef = useRef<TouchableOpacity>(null);
   const updateSwimLaneKey = (key: string) => {
     setSwimLaneKey(key);
   };
@@ -99,29 +108,74 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   const menuRef = dvrMenuItems.map(() => {
     return useRef<PressableProps>(null);
   });
+  const drawerRef: React.MutableRefObject<any> = useRef();
 
+  const myTVEventHandler = (evt: any) => {
+    evt.eventType === "longSelect"
+      ? console.log(
+          "evt.eventType",
+          evt,
+          "openSidePannel",
+          openSidePannel,
+          "isMenuFocused",
+          isMenuFocused,
+          "swimLaneFocused",
+          swimLaneFocused
+        )
+      : null;
+    if (
+      evt.eventType === "longSelect" &&
+      !isMenuFocused &&
+      swimLaneFocused &&
+      !openSidePannel
+    ) {
+      console.log(
+        "Drawer is opening as long pressed",
+        "openSidePannel",
+        openSidePannel,
+        "isMenuFocused",
+        isMenuFocused,
+        "swimLaneFocused",
+        swimLaneFocused
+      ); // Alert.alert("Long pressed called ");
+      setOpenSidePannel(true);
+      drawerRef?.current?.open();
+    }
+  };
+  useTVEventHandler(myTVEventHandler);
   const processData = (data: any[]) => {
     const newData: any[] = [];
     for (let i = 0; i < data.length; i++) {
-      for (let j = 0; j < data[i].SubscriptionItems.length; j++) {
-        let obj: any = {};
-        if (_.isEmpty(obj)) {
-          obj[data[i].SubscriptionItems[j].ProgramDetails.ShowType] = [
-            data[i].SubscriptionItems[j],
-          ];
-        } else {
-          obj[data[i].SubscriptionItems[j].ProgramDetails.ShowType] = obj[
-            data[i].SubscriptionItems[j].ProgramDetails.ShowType
-          ].push(data[i].SubscriptionItems[j]);
-        }
-      }
+      let obj: any = {};
+      obj[data[i].SubscriptionItems[0].ProgramDetails.ShowType] = [data[i]];
+      // for (let j = 0; j < data[i].SubscriptionItems.length; j++) {
+      //   let obj: any = {};
+      //   console.log('objects inside l1', obj, _.isEmpty(obj))
+      //   if (_.isEmpty(obj)) {
+      // obj[data[i].SubscriptionItems[j].ProgramDetails.ShowType] = [
+      //   data[i].SubscriptionItems[j],
+      // ];
+      //   } else {
+      //     obj[data[i].SubscriptionItems[j].ProgramDetails.ShowType] = obj[
+      //       data[i].SubscriptionItems[j].ProgramDetails.ShowType
+      //     ].push(data[i].SubscriptionItems[j]);
+      //   }
+      // }
     }
     // data.forEach((item, index)=>{
     //   item.SubscriptionItems[0].ProgramDetails.ShowType
     // })
-    setDataToRender(newData);
+    console.log("setDataToRender", newData);
+    // setDataToRender(newData);
+  };
+  const backAction = () => {
+    console.log("Capturing hadware back presses on profile screen");
+    Alert.alert("Back button pressed");
+    return null;
   };
   useEffect(() => {
+    console.log("viewableRecordings", viewableRecordings);
+    processData(viewableRecordings);
     if (channelMap && viewableRecordings) {
       const viewableFilter = buildFilterDataSource(
         GLOBALS.viewableSubscriptions?.SubscriptionGroups,
@@ -143,9 +197,28 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
 
       setScheduledFilters(scheduledFilter);
     }
+    TVMenuControl.enableTVMenuKey();
+    BackHandler.addEventListener("hardwareBackPress", backAction);
   }, []);
+
   const renderScheduled = () => {
-    return <View></View>;
+    return (
+      <View>
+        <TouchableOpacity
+          delayLongPress={3000}
+          onPress={() => {
+            Alert.alert("On press trigerred");
+          }}
+          ref={firstScheduledCardRef}
+          style={{ width: 200, height: 100, backgroundColor: "green" }}
+          onLongPress={() => {
+            Alert.alert("Button long pressed");
+          }}
+        >
+          <Text style={{ color: "white", fontWeight: "600" }}>Long press</Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   const renderRecorded = () => {
@@ -177,8 +250,12 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
               onPress={(event) => {
                 console.log("event", event);
               }}
-              onLongPress={()=>{Alert.alert('card long press working')}}
-              onFocus={() => {
+              onLongPress={() => {
+                Alert.alert("card long press working");
+              }}
+              onFocus={(event) => {
+                console.log("onFocus event for card ", event);
+                setFocusedCard(event);
                 setTimeout(() => {
                   setSwimLaneFocused(true);
                 }, 500);
@@ -223,11 +300,6 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
       duration: 400,
       easing: Easing.out(Easing.ease),
     });
-    // Animated.timing(scheduleViewAnimation, {
-    //   toValue: { x: getScaledValue(230), y: 0 },
-    //   useNativeDriver: true,
-    //   duration: 300,
-    // }).start();
   };
   const _moveLeft = () => {
     offset.value = withTiming(0, {
@@ -238,11 +310,6 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
       duration: 400,
       easing: Easing.out(Easing.ease),
     });
-    // Animated.timing(scheduleViewAnimation, {
-    //   toValue: { x: getScaledValue(0), y: 0 },
-    //   useNativeDriver: true,
-    //   duration: 300,
-    // }).start();
   };
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -250,16 +317,6 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
       opacity: opacity.value,
     };
   });
-  // const handledOnScroll = ({ nativeEvent }: any) => {
-  //   if (nativeEvent.contentOffset.x > 10 && nativeEvent.contentOffset.x < 50) {
-  //     _moveLeft();
-  //   } else if (
-  //     nativeEvent.contentOffset.x > 50 &&
-  //     nativeEvent.contentOffset.x < 100
-  //   ) {
-  //     _moveRight();
-  //   }
-  // };
   const onFocusBar = () => {
     console.log("bar focussed");
     if (!isMenuFocused) {
@@ -278,6 +335,14 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
       firstCardRef.current?.first.setNativeProps({ hasTVPreferredFocus: true });
       setSwimLaneFocused(true);
       setIsMenuFocused(false);
+    } else if (!swimLaneFocused && currentDvrMenu === DvrMenuItems.Scheduled) {
+      _moveLeft();
+      console.log("firstCardRef.current", firstCardRef.current);
+      firstScheduledCardRef.current?.setNativeProps({
+        hasTVPreferredFocus: true,
+      });
+      setSwimLaneFocused(true);
+      setIsMenuFocused(false);
     } else {
       _moveRight();
       setSwimLaneFocused(false);
@@ -291,17 +356,11 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   const toggleMenu = () => {
     console.log("Pressed on the browse filter", openFilterMenu);
     setOpenFilterMenu(!openFilterMenu);
-    // props.navigation.navigate(Routes.BrowseFilters,{
-    //   open:openMenu,
-    //       filterData: pivotQuery?.data?.data,
-    //       subMenuOpen: openSubMenu,
-    //       filterState: filterState,
-    //       setOpenSubMenu: () => {},
-    //       setOpenMenu: setOpenMenu,
-    //       handleOnPress: handleFilterChange,
-    //       handleFilterClear: handleFilterClear,
-    //       defaultFilterState: defaultFilterState,
-    // })
+  };
+  const closeModal = () => {
+    console.log("close modal called on dvr manager");
+    setOpenSidePannel(false);
+    drawerRef.current.close();
   };
   const handleFilterChange = (value: {
     key: string;
@@ -416,7 +475,6 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
                   textStyle={styles.filterButtonLabelStyle}
                   style={styles.filterButtonBackgroundStyles}
                   focusedStyle={styles.filterButtonFocusedStyle}
-                  
                   onFocus={() => {
                     console.log("Filter focused");
                   }}
@@ -461,7 +519,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
               </Animated.View>
               <Pressable
                 onFocus={onFocusSideBar}
-                style={{ height: "100%", width: 20, backgroundColor: "red" }}
+                style={{ height: "100%", width: 20 }}
               />
               <View style={{ width: "100%", height: "100%" }}>
                 {currentDvrMenu === DvrMenuItems.Recorded
@@ -470,17 +528,35 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
               </View>
             </View>
           </View>
-          <BrowseFilter
-            //@ts-ignore
-            open={openFilterMenu}
-            filterData={filterData}
-            subMenuOpen={true}
-            filterState={filterState}
-            setOpenSubMenu={() => {}}
-            setOpenMenu={setOpenFilterMenu}
-            handleOnPress={handleFilterChange}
-            handleFilterClear={handleFilterClear}
-            defaultFilterState={defaultFilterState}
+          {!openSidePannel && (
+            <BrowseFilter
+              //@ts-ignore
+              open={openFilterMenu}
+              filterData={filterData}
+              subMenuOpen={true}
+              filterState={filterState}
+              setOpenSubMenu={() => {}}
+              setOpenMenu={setOpenFilterMenu}
+              handleOnPress={handleFilterChange}
+              handleFilterClear={handleFilterClear}
+              defaultFilterState={defaultFilterState}
+            />
+          )}
+          <SidePanel
+            ref={drawerRef}
+            drawerPercentage={37}
+            animationTime={200}
+            overlay={false}
+            opacity={1}
+            open={openSidePannel}
+            animatedWidth={width * 0.37}
+            // openPage="MoreInfo"
+            closeOnPressBack={false}
+            navigation={props.navigation}
+            drawerContent={focusedCard}
+            // route={route}
+            closeModal={closeModal}
+            // screenProps={screenProps} // moreInfoProps={}
           />
         </View>
       </ImageBackground>
