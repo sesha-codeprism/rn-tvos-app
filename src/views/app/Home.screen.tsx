@@ -70,6 +70,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       }
     }, debounceTime);
   };
+  console.log(AppStrings);
 
   const setHubsData = async () => {
     if (data && hubs.length <= 0) {

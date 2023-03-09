@@ -845,7 +845,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const channelByStationId = (channels: any[], Schedule: any) => {
     let index;
     const channel = channels.find((element: any, defaultIndex: any) => {
-      if (element.StationId == Schedule?.channelId) {
+      if (element.StationId == Schedule?.StationId) {
         index = defaultIndex;
         return element;
       }
@@ -1002,16 +1002,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         ChannelInfo?.channel || udpDataAsset?.ChannelInfo?.Channel;
       networkInfo = (channelInfo && [channelInfo]) || udpDataAsset?.networkInfo;
     } else {
-      //TODO: Re-implement this once the live api calls are written
-      // const { Schedule = undefined } = feed || {};
-      // const channelFromEPG = channelByStationId(
-      //   GLOBALS.channelMap.Channels,
-      //   Schedule
-      // );
-      // if (channelFromEPG) {
-      //   channel = channelFromEPG.channel;
-      //   networkInfo = [channel];
-      // }
+      const { Schedule = undefined } = feed || {};
+      const channelFromEPG = channelByStationId(
+        GLOBALS.channelMap.Channels,
+        Schedule
+      );
+      if (channelFromEPG) {
+        channel = channelFromEPG.channel;
+        networkInfo = [channel];
+      }
     }
 
     if (!networkInfo || !networkInfo.length) {
@@ -1043,7 +1042,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         firstNetwork.tenFootSmallURL ||
         firstNetwork.twoFootSmallURL ||
         firstNetwork.oneFootSmallURL ||
-        AppStrings.placeholder;
+        AppImages.placeholder;
     }
 
     const renderNetworkLogos = () => {
@@ -1061,10 +1060,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             networkData?.tenFootSmallURL ||
             networkData?.twoFootSmallURL ||
             networkData?.oneFootSmallURL ||
-            AppStrings.placeholder;
+            AppImages.placeholder;
           items.push(
             <Image
-              key={`Index${i}`}
               source={networkSource}
               style={[styles.networkImage, styles.marginRight20]}
             />
@@ -1239,6 +1237,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     if (!pinnedItems) {
       return undefined;
     }
+    console.log(pinnedItems);
     const Id = getItemId(feed);
     return pinnedItems?.find((element: any) => {
       const elementId = getItemId(element);
@@ -1258,10 +1257,21 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       console.warn("Data has not been initialised");
       return undefined;
     }
-    const assetType =
-      //@ts-ignore
-      assetTypeObject[feed?.assetType?.contentType] ||
-      assetTypeObject[ContentType.PROGRAM];
+
+    const allSubcriptionGroups = {
+      ...(GLOBALS.scheduledSubscriptionGroup || {}),
+      SubscriptionGroups: [
+        ...((GLOBALS.scheduledSubscriptionGroup &&
+          GLOBALS.scheduledSubscriptionGroup.SubscriptionGroups) ||
+          []),
+        ...((GLOBALS.viewableSubscriptions &&
+          GLOBALS.viewableSubscriptions.SubscriptionGroups) ||
+          []),
+      ],
+    };
+    const { startTime = 0, endTime = 0 } = feed?.Schedule || feed!;
+    const startDateFromEPG = new Date(startTime * 1000);
+    const endDateFromEPG = new Date(endTime * 1000);
     const udpData = isSeries(assetData)
       ? massageSeriesDataForUDP(
           subscriberData,
@@ -1270,16 +1280,18 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.channelMap,
           feed,
           GLOBALS.currentSlots,
-          GLOBALS.allSubscriptionGroups,
+          allSubcriptionGroups,
           GLOBALS.viewableSubscriptions,
           GLOBALS.scheduledSubscriptions,
           GLOBALS.userAccountInfo,
           GLOBALS.recorders,
           playActionsData,
           undefined,
-          undefined,
-          false,
-          undefined,
+          startDateFromEPG,
+          endDateFromEPG,
+          GLOBALS.channelRights,
+          feed?.isFromEPG || false,
+          feed?.Schedule?.channel.StationId,
           isFeatureAssigned("IOSCarrierBilling")
         )
       : massageProgramDataForUDP(
@@ -1288,8 +1300,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           discoveryProgramData,
           GLOBALS.channelMap,
           discoverySchedulesData,
-          undefined,
-          GLOBALS.allSubscriptionGroups,
+          GLOBALS.currentSlots,
+          allSubcriptionGroups,
           GLOBALS.userAccountInfo,
           subscriberData,
           undefined,
@@ -1299,11 +1311,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           undefined,
           undefined,
           undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
+          startDateFromEPG,
+          endDateFromEPG,
+          GLOBALS.channelRights,
+          feed?.isFromEPG || false,
+          feed?.Schedule?.channel.StationId,
           isFeatureAssigned("IOSCarrierBilling")
         );
     console.log("UDP data", udpData);
@@ -1794,6 +1806,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }
     // PPV
 
+    console.log(
+      "Progress",
+      progressDataSource.TimeSeconds / progressDataSource.RuntimeSeconds
+    );
+
     return (
       <View style={styles.episodeBlockContainer}>
         <View style={styles.flexRow}>
@@ -1820,7 +1837,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           <MFProgressBar
             backgroundColor={"#424242"}
             foregroundColor={"#E7A230"}
-            toValue={progressDataSource.TimeSeconds}
+            toValue={
+              (progressDataSource.TimeSeconds /
+                progressDataSource.RuntimeSeconds) *
+              100
+            }
             maxHeight={15}
             maxWidth={350}
           />

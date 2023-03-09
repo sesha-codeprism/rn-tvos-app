@@ -2291,6 +2291,17 @@ export const showDvrErrorDetails = (
 };
 
 
+export const getDurationSeconds = (subscriptionItem: any): number => {
+    // calculates actual runtime seconds for all recordings
+    // based on actual start and actual end time
+    // includes endLateSeconds setting
+    return calculateActualRuntimeSeconds(
+        getStartTimeIgnoreState(subscriptionItem),
+        getEndTimeIgnoreState(subscriptionItem)
+    );
+};
+
+
 export const calculateActualRuntimeSeconds = (
     actualStartUtc: Date,
     actualEndUtc: Date

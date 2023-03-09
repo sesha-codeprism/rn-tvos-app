@@ -24,10 +24,11 @@ import {
   format,
   isExpiringSoon,
   massageDiscoveryFeedAsset,
+  massageEpisodePlayOption,
   massageProgramDataForUDP,
   massageSeasonPlayOptionData,
 } from "../../../../utils/assetUtils";
-import { AppStrings } from "../../../../config/strings";
+import { AppStrings, getFontIcon } from "../../../../config/strings";
 import {
   assetTypeObject,
   placeholder16x9Image,
@@ -53,6 +54,7 @@ import { AppImages } from "../../../../assets/images";
 import { Definition as DefinitionOfItem } from "../../../../utils/DVRUtils";
 import { EpisodeRecordOptionsProps } from "../details_panels/EpsiodeRecordOptions";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
+import MFOverlay from "../../../../components/MFOverlay";
 
 interface EpisodeListProps {
   navigation: NativeStackNavigationProp<any>;
@@ -230,12 +232,23 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       `?seriesID=${seriesID}&seasonID=${seasonID}`;
 
     const udlResponse = await getDataFromUDL(urlParam);
+    const allSubcriptionGroups = {
+      ...(GLOBALS.scheduledSubscriptions || {}),
+      SubscriptionGroups: [
+        ...((GLOBALS.scheduledSubscriptions &&
+          GLOBALS.scheduledSubscriptions.SubscriptionGroups) ||
+          []),
+        ...((GLOBALS.viewableSubscriptions &&
+          GLOBALS.viewableSubscriptions.SubscriptionGroups) ||
+          []),
+      ],
+    };
     const massagedSeasonResponse = massageSeasonPlayOptionData(
       udlResponse.data,
       GLOBALS.channelMap,
       stationId,
-      undefined,
-      GLOBALS.bootstrapSelectors,
+      allSubcriptionGroups,
+      GLOBALS.userAccountInfo,
       undefined
     );
     return massagedSeasonResponse;
@@ -293,7 +306,8 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     const urlParam =
       "udl://subscriber/programplayactions/" + `?id=${episodeId}`;
     const udlResponse = await getDataFromUDL(urlParam);
-    return udlResponse.data;
+    const resp = massageEpisodePlayOption(udlResponse.data);
+    return resp;
   };
 
   const getEpisodeSchedules = async ({ queryKey }: any) => {
@@ -639,6 +653,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
 
   const renderEpisodeListItem = (episodeItem: any) => {
     const { item: episode, index } = episodeItem;
+    console.log(episode, episode.dvrItemsState);
     const { Description = "" } = episode?.CatalogInfo;
     const name =
       episode?.CatalogInfo?.EpisodeName || episode?.CatalogInfo?.Name;
@@ -717,11 +732,61 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
               style={episodeStyles.episodeItemImage}
               fallback
               defaultSource={AppImages.bgPlaceholder}
-            />
+            >
+              {episode.episodeInfo && (
+                <MFOverlay
+                  renderGradiant={true}
+                  displayTitle={episode.episodeInfo}
+                  displayTitleStyles={[
+                    episodeStyles.seasonNumberTextStyle,
+                    { fontSize: 29, margin: 14 },
+                  ]}
+                  showProgress={episode.Bookmark! || episode.progress}
+                  progress={
+                    episode?.Bookmark?.TimeSeconds &&
+                    episode?.Bookmark?.RuntimeSeconds &&
+                    (episode?.Bookmark?.TimeSeconds /
+                      episode?.Bookmark?.RuntimeSeconds) *
+                      100
+                  }
+                />
+              )}
+            </FastImage>
             <View style={[episodeStyles.episodeItemInfo, { flexShrink: 1 }]}>
-              <Text style={episodeStyles.episodeItemTitle}>{name}</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={episodeStyles.episodeItemTitle}>{name}</Text>
+                {episode.dvrItemsState && (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={[
+                        episodeStyles.statusIcon,
+                        iconStyle,
+                        { fontSize: 50, marginRight: 5 },
+                      ]}
+                    >
+                      {getFontIcon("pin_digit")}
+                    </Text>
+                    <Text style={episodeStyles.episodeItemMetadata}>
+                      {episode.dvrItemsState}
+                    </Text>
+                  </View>
+                )}
+              </View>
               <Text style={episodeStyles.episodeItemMetadata}>
-                {episode.metadata} {index} - {currentSeasonEpisodes.length - 1}
+                {episode.metadata}
               </Text>
               <Text
                 style={episodeStyles.episodeItemDescription}
@@ -751,9 +816,59 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
               style={episodeStyles.episodeItemImage}
               fallback
               defaultSource={AppImages.bgPlaceholder}
-            />
+            >
+              {episode.episodeInfo && (
+                <MFOverlay
+                  renderGradiant={true}
+                  displayTitle={episode.episodeInfo}
+                  displayTitleStyles={[
+                    episodeStyles.seasonNumberTextStyle,
+                    { fontSize: 29, margin: 14 },
+                  ]}
+                  showProgress={episode.Bookmark! || episode.progress}
+                  progress={
+                    episode?.Bookmark?.TimeSeconds &&
+                    episode?.Bookmark?.RuntimeSeconds &&
+                    (episode?.Bookmark?.TimeSeconds /
+                      episode?.Bookmark?.RuntimeSeconds) *
+                      100
+                  }
+                />
+              )}
+            </FastImage>
             <View style={[episodeStyles.episodeItemInfo, { flexShrink: 1 }]}>
-              <Text style={episodeStyles.episodeItemTitle}>{name}</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={episodeStyles.episodeItemTitle}>{name}</Text>
+                {episode.dvrItemsState && (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={[
+                        episodeStyles.statusIcon,
+                        iconStyle,
+                        { fontSize: 50, marginRight: 5 },
+                      ]}
+                    >
+                      {getFontIcon("pin_digit")}
+                    </Text>
+                    <Text style={episodeStyles.episodeItemMetadata}>
+                      {episode.dvrItemsState}
+                    </Text>
+                  </View>
+                )}
+              </View>
               <Text style={episodeStyles.episodeItemMetadata}>
                 {episode.metadata}
               </Text>
