@@ -89,7 +89,7 @@ export const getAllFeedDataForFeed = (feed: FeedItem, nowNextMap: any, currentSl
                 queryKey: ['dvr', element.Uri],
                 queryFn: () => getUDLData(element.Uri),
                 staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime,
-                enabled: !!GLOBALS.allSubscriptionGroups
+                enabled: !!GLOBALS.allSubscriptionGroups && !!GLOBALS.viewableSubscriptions && !!GLOBALS.scheduledSubscriptions
             } : {
                 queryKey: ['feed', element.Uri],
                 queryFn: () => getUDLData(element.Uri),

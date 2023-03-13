@@ -2561,6 +2561,30 @@ export const massageProgramDataForUDP = (
     return programUDPData;
 };
 
+export function isCatchupEnabled(
+    entitlements: string[]
+    // account: any
+): boolean {
+    // if (account.pbrOverride) {
+    //     return true;
+    // }
+
+    let catchupEnable: boolean = includes(
+        entitlements || [],
+        pbr.RestrictionsType.CT
+    );
+    let catchupBlocked: boolean =
+        includes(entitlements || [], pbr.RestrictionsType.CU) ||
+        includes(entitlements || [], pbr.RestrictionsType.CATCHUP_BLOCKED);
+
+    if (!catchupEnable && !catchupBlocked) {
+        return false;
+    }
+
+    return catchupEnable || !catchupBlocked;
+}
+
+
 export const massageSeasonPlayOptionData = (
     seasonPlayOptions: any,
     channelMap: LiveChannelMap,

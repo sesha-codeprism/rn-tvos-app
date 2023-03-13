@@ -431,7 +431,7 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
           recordingOptions.push({
             key: RecordingOptionsEnum.ChannelAndTime,
             title: AppStrings?.str_dvr_recording.chanel_and_time,
-            value: `${channel?.ChannelNumber} ${
+            value: `${channel?.Number} ${
               channel?.CallLetters
             }${metadataSeparator}${getTimeStringFromISOString(
               StartUtc as string
@@ -516,8 +516,11 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
   };
 
   const handleSelection = (selection: any) => {
-    console.log(selection.key);
-    console.log(selection.key === RecordingOptionsEnum.ShowType);
+    const currentChannnel = recordingOptions?.find(
+      (options: any) => options?.key === RecordingOptionsEnum.Channel
+    );
+    const { channelNumber, AnyTimeAnyChannel } = currentChannnel || {};
+    console.log(channelNumber, AnyTimeAnyChannel, currentChannnel);
     switch (selection.key) {
       case RecordingOptionsEnum.KeepUntil:
         props.navigation.navigate(DetailRoutes.SelectOptions, {
@@ -544,6 +547,23 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
           title: props.route.params.title,
           subTitle: selection.title,
           options: getTimeOptions(),
+        });
+        break;
+      case RecordingOptionsEnum.Channel:
+        props.navigation.navigate(DetailRoutes.SelectOptions, {
+          title: props.route.params.title,
+          subTitle: AppStrings?.str_dvr_recording.channel,
+          options: getChannelOptions(),
+          initialValue: AnyTimeAnyChannel
+            ? DVRAnyTimeAnyChannel
+            : channelNumber,
+        });
+        break;
+      case RecordingOptionsEnum.ChannelAndTime:
+        props.navigation.navigate(DetailRoutes.ChannelAndTime, {
+          title: props.route.params.title,
+          subTitle: selection.title,
+          programId: props.route.params.programId,
         });
         break;
     }

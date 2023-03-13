@@ -120,12 +120,27 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   };
 
   const toggleSidePanel = () => {
+    const { CatalogInfo } = currentEpisode;
+
     setScreenProps({
       udpData: navigationParams.udpData,
       networkInfo: navigationParams.udpData.networkInfo,
       genres:
         navigationParams.udpData?.genre ||
         navigationParams.discoveryProgramData?.genre,
+      episodeData: {
+        seasonNumber:
+          CatalogInfo?.SeasonNumber || episodeDiscoveryData?.SeasonNumber,
+        episodeNumber:
+          CatalogInfo?.EpisodeNumber || episodeDiscoveryData?.EpisodeNumber,
+        episodeName:
+          CatalogInfo?.EpisodeName ||
+          episodeDiscoveryData?.EpisodeName ||
+          CatalogInfo?.Name,
+        episodeDescription:
+          CatalogInfo?.Description || episodeDiscoveryData?.Description,
+      },
+      episodeDetailsData: episodeDetailsData,
     });
     setRoute(DetailRoutes.MoreInfo);
     setOpen(open);
@@ -251,6 +266,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       GLOBALS.userAccountInfo,
       undefined
     );
+    console.log("massagedSeasonResponse", massagedSeasonResponse);
     return massagedSeasonResponse;
   };
 
@@ -570,6 +586,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   };
 
   const renderSeasonItem = (season: any) => {
+    console.log(season);
     const { Name, EpisodesCount, index, SeasonNumber } = season;
     const seasonTranslation =
       format(
@@ -638,7 +655,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     ) {
       return;
     }
-
+    console.log(subscriberData);
     return subscriberData?.CatalogInfo?.Seasons?.map(
       (season: any, index: number) => {
         season["index"] = index;
@@ -653,7 +670,6 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
 
   const renderEpisodeListItem = (episodeItem: any) => {
     const { item: episode, index } = episodeItem;
-    console.log(episode, episode.dvrItemsState);
     const { Description = "" } = episode?.CatalogInfo;
     const name =
       episode?.CatalogInfo?.EpisodeName || episode?.CatalogInfo?.Name;

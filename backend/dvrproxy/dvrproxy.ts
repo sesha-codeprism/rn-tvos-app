@@ -13,7 +13,7 @@ export const DVRPROXY_URL = GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr;
 
 
 export const getViewableSubscriptionStems = async (uri: string, params: any) => {
-    const subscriptionGroups = queryClient.getQueryData(['feed', 'get-all-subscriptionGroups']);
+    const subscriptionGroups = queryClient.getQueryData(['dvr', 'get-all-subscriptionGroups']);
     console.log("subscriptionGroups", subscriptionGroups)
     if (!subscriptionGroups) {
         console.error("No subscriptionGroups");

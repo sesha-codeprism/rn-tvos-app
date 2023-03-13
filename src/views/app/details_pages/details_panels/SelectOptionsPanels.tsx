@@ -43,6 +43,7 @@ const SelectOptionsPanel: React.FunctionComponent<SelectOptionsPanelProps> = (
   }, []);
 
   const handleOnPress = (index: number) => {
+    console.log(options[index]);
     let currentData = GLOBALS.recordingData;
     const element = options[index];
     if (subTitle.toLowerCase().includes("keep")) {

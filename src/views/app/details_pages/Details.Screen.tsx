@@ -195,15 +195,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const buttonFocuszoneRef: React.RefObject<any> = React.createRef();
   let networkInfo: any;
 
-  const pinnedItemsResponse = useQuery(
-    ["feed", "udl://subscriber/library/Pins"],
-    getSubscriberPins,
-    {
-      staleTime: appUIDefinition.config.queryStaleTime,
-      cacheTime: appUIDefinition.config.queryCacheTime,
-    }
-  );
-
   const duplexManager: DuplexManager = DuplexManager.getInstance();
 
   const isSeries = (assetData: AssetData) =>
@@ -793,25 +784,36 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       }
     }
   };
+  const getPinnedItemResponse = async () => {
+    const udlParam = "udl://subscriber/library/Pins";
+    const resp = await getDataFromUDL(udlParam);
+    return resp.data;
+  };
 
-  useEffect(() => {
-    if (
-      !pinnedItemsResponse.isFetching &&
-      pinnedItemsResponse.isFetched &&
-      pinnedItemsResponse.isSuccess &&
-      pinnedItemsResponse.data
-    ) {
-      const status = getItemPinnedStatus();
-      console.log("status", status);
-      setIsItemPinned(status);
-    }
-  }, [
-    pinnedItemsResponse.isFetched,
-    pinnedItemsResponse.data,
-    pinnedItemsResponse.dataUpdatedAt,
-    pinnedItemsResponse.isSuccess,
-    pinnedItemsResponse.isFetching,
-  ]);
+  const pinnedItemsResponse = useQuery(
+    ["feed", "udl://subscriber/library/Pins"],
+    getPinnedItemResponse,
+    defaultQueryOptions
+  );
+
+  // useEffect(() => {
+  //   if (
+  //     !pinnedItemsResponse.isFetching &&
+  //     pinnedItemsResponse.isFetched &&
+  //     pinnedItemsResponse.isSuccess &&
+  //     pinnedItemsResponse.data
+  //   ) {
+  //     const status = getItemPinnedStatus();
+  //     console.log("status", status);
+  //     setIsItemPinned(status);
+  //   }
+  // }, [
+  //   pinnedItemsResponse.isFetched,
+  //   pinnedItemsResponse.data,
+  //   pinnedItemsResponse.dataUpdatedAt,
+  //   pinnedItemsResponse.isSuccess,
+  //   pinnedItemsResponse.isFetching,
+  // ]);
 
   useEffect(() => {
     currentContext.addDuplexMessageHandler(onDuplexMessage);
@@ -1192,8 +1194,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       console.log("No asset data to make api call..");
       return undefined;
     }
-    const id = getItemId(feed);
-    const params = `?catchup=false&storeId=${DefaultStore.Id}&groups=${
+    const id =
+      isSeries(assetData) || feed?.isFromEPG
+        ? feed?.Schedule?.ProgramId || feed?.ProgramId || feed?.Id
+        : feed?.Id;
+    const params = `?catchup=true&storeId=${DefaultStore.Id}&groups=${
       GLOBALS.store!.rightsGroupIds
     }&id=${id}`;
     const udlParam = "udl://subscriber/programplayactions/" + params;
@@ -1219,11 +1224,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     return data;
   };
 
-  const getItemPinnedStatus = () => {
-    const pinnedItems = queryClient.getQueryData([
+  const getItemPinnedStatus = async () => {
+    let pinnedItems = queryClient.getQueryData([
       "feed",
       "udl://subscriber/library/Pins",
     ]);
+    if (!pinnedItems) {
+      console.log("No current pinnedItems in cache..");
+      pinnedItems = await getPinnedItemResponse();
+    }
     ///@ts-ignore
     const pinnedItem = getPinnedItem(pinnedItems, feed);
     if (pinnedItem) {
@@ -1385,7 +1394,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }
   }, [discoverySchedulesQueryData, isFetchingDiscoverySchedulesQueryData]);
   const playActionsQuery = useQuery(
-    ["get-playActiosn", assetData?.id],
+    ["get-playActions", assetData?.id],
     () => getPlayActions(assetData),
     { ...defaultQueryOptions }
   );
@@ -1401,24 +1410,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     () => getProgramSubscriberData(assetData),
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
-
-  // const viewableSubscriptionGroupsQuery = useQuery(
-  //   ["get-viewableSubscriptionGroupsQuery"],
-  //   getAllViewableSubscriptions,
-  //   { ...defaultQueryOptions, refetchOnMount: "always" }
-  // );
-
-  // const getScheduledSubscriptionsQuery = useQuery(
-  //   [`get-ScheduledSubscriptionsQuery`],
-  //   getScheduledSubscriptionGroups,
-  //   { ...defaultQueryOptions, refetchOnMount: "always" }
-  // );
-
-  // const getAllSubscriptionsQuery = useQuery(
-  //   [`get-AllSubscriptionsQuery`],
-  //   getAllSubscriptionGroups,
-  //   { ...defaultQueryOptions }
-  // );
 
   const { data, isLoading, refetch } = useQuery(
     ["get-UDP-data", assetData?.id],

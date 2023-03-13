@@ -128,7 +128,7 @@ const getBookmarks = async (uri: string, params: any) => {
   return response;
 };
 
-export const  getSubscriberPins = async (params?: any) => {
+export const getSubscriberPins = async (params?: any) => {
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || "") +
     "/v4/libraries/Pins";
@@ -576,6 +576,7 @@ export const getPackageActions = async (id: string, params: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
   return response

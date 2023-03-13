@@ -52,12 +52,6 @@ const ppvIcon = getFontIcon("source_ppv");
 interface MoreInfoProps {
   navigation?: any;
   route?: any;
-
-  // udpData: any;
-  // networkInfo: any;
-  // genres: any;
-  // episodeData?: EpisodeData;
-  // episodeDetailsData?: any;
 }
 
 const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
@@ -128,13 +122,6 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
         `${genre.Name}${index === genres.length - 1 ? "" : metadataSeparator}`
     );
 
-  // const {
-  //   episodeData = {},
-  //   episodeDetailsData = {},
-  //   udpData = {},
-  //   genres = [],
-  //   networkInfo = [],
-  // } = props || {};
   const {
     statusText,
     description,
@@ -258,13 +245,13 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
 
   return (
     <SideMenuLayout
-      title={udpData?.title || udpData?.Name}
-      subTitle={getMetadataString()}
+      title={headingLine1}
+      subTitle={headingLine2}
       contentContainerStyle={{
         padding: 0,
         width: "100%",
         paddintTop: 0,
-        height: "80%",
+        height: "100%",
       }}
       isTitleInverted={false}
     >
