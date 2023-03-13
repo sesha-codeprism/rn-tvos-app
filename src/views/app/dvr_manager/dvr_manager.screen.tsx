@@ -28,7 +28,7 @@ import { AppImages } from "../../../assets/images";
 import { appUIDefinition } from "../../../config/constants";
 import { GLOBALS } from "../../../utils/globals";
 import { buildFilterDataSource } from "../../../utils/DVRUtils";
-import { massageDVRFeed } from "../../../utils/assetUtils";
+import { isExpiringSoon, massageDVRFeed } from "../../../utils/assetUtils";
 import MFSwimLane from "../../../components/MFSwimLane";
 import { Routes } from "../../../config/navigation/RouterOutlet";
 import _ from "lodash";
@@ -41,6 +41,12 @@ import Animated, {
 } from "react-native-reanimated";
 import BrowseFilter from "../BrowsePages/BrowseGallery/BrowseFilters";
 import { SidePanel } from "./SidePannel";
+import { getImageUri } from "../../../utils/Subscriber.utils";
+import {
+  RecordStatus,
+  sourceTypeString,
+} from "../../../utils/analytics/consts";
+import FastImage from "react-native-fast-image";
 
 interface DvrManagerProps {
   navigation: NativeStackNavigationProp<any>;
@@ -64,6 +70,8 @@ const dvrMenuItems = [
     Name: AppStrings.str_dvr_scheduled,
   },
 ];
+const { width, height } = Dimensions.get("window");
+
 const DVRManagerScreen = (props: DvrManagerProps) => {
   const [currentDvrMenu, setCurrentDvrMenu] = useState(DvrMenuItems.Recorded);
   const [selectedAsset, setSelectedAsset] = useState();
@@ -95,8 +103,12 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   const [defaultFilterState, setDefaultFilterState] = useState<any>([]);
   const [openSidePannel, setOpenSidePannel] = useState(false);
   const [focusedCard, setFocusedCard] = useState<any>(null);
-
-  const { width, height } = Dimensions.get("window");
+  const [currentScheduledItem, setCurrentScheduledItem] = useState<any>({
+    id: undefined,
+  });
+  const navigationParams = props.route.params;
+  const lazyListConfig: any = getUIdef("EpisodeList.LazyListWrapper")?.config;
+  const scaledSnapToInterval = getScaledValue(lazyListConfig.snapToInterval);
   const offset = useSharedValue(420);
   const opacity = useSharedValue(1);
   const firstCardRef = useRef<TouchableOpacity>(null);
@@ -111,33 +123,33 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   const drawerRef: React.MutableRefObject<any> = useRef();
 
   const myTVEventHandler = (evt: any) => {
-    evt.eventType === "longSelect"
-      ? console.log(
-          "evt.eventType",
-          evt,
-          "openSidePannel",
-          openSidePannel,
-          "isMenuFocused",
-          isMenuFocused,
-          "swimLaneFocused",
-          swimLaneFocused
-        )
-      : null;
+    // evt.eventType === "longSelect"
+    //   ? console.log(
+    //       "evt.eventType",
+    //       evt,
+    //       "openSidePannel",
+    //       openSidePannel,
+    //       "isMenuFocused",
+    //       isMenuFocused,
+    //       "swimLaneFocused",
+    //       swimLaneFocused
+    //     )
+    //   : null;
     if (
       evt.eventType === "longSelect" &&
       !isMenuFocused &&
       swimLaneFocused &&
       !openSidePannel
     ) {
-      console.log(
-        "Drawer is opening as long pressed",
-        "openSidePannel",
-        openSidePannel,
-        "isMenuFocused",
-        isMenuFocused,
-        "swimLaneFocused",
-        swimLaneFocused
-      ); // Alert.alert("Long pressed called ");
+      // console.log(
+      //   "Drawer is opening as long pressed",
+      //   "openSidePannel",
+      //   openSidePannel,
+      //   "isMenuFocused",
+      //   isMenuFocused,
+      //   "swimLaneFocused",
+      //   swimLaneFocused
+      // ); // Alert.alert("Long pressed called ");
       setOpenSidePannel(true);
       drawerRef?.current?.open();
     }
@@ -148,6 +160,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     for (let i = 0; i < data.length; i++) {
       let obj: any = {};
       obj[data[i].SubscriptionItems[0].ProgramDetails.ShowType] = [data[i]];
+      // if()
       // for (let j = 0; j < data[i].SubscriptionItems.length; j++) {
       //   let obj: any = {};
       //   console.log('objects inside l1', obj, _.isEmpty(obj))
@@ -174,7 +187,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     return null;
   };
   useEffect(() => {
-    console.log("viewableRecordings", viewableRecordings);
+    console.log("scheduledRecordings", scheduledRecordings);
     processData(viewableRecordings);
     if (channelMap && viewableRecordings) {
       const viewableFilter = buildFilterDataSource(
@@ -200,23 +213,223 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     TVMenuControl.enableTVMenuKey();
     BackHandler.addEventListener("hardwareBackPress", backAction);
   }, []);
-
+  const handleScheduledItemFocus = (episode: any, index: any) => {};
   const renderScheduled = () => {
     return (
-      <View>
-        <TouchableOpacity
-          delayLongPress={3000}
-          onPress={() => {
-            Alert.alert("On press trigerred");
-          }}
-          ref={firstScheduledCardRef}
-          style={{ width: 200, height: 100, backgroundColor: "green" }}
-          onLongPress={() => {
-            Alert.alert("Button long pressed");
-          }}
-        >
-          <Text style={{ color: "white", fontWeight: "600" }}>Long press</Text>
-        </TouchableOpacity>
+      <View style={styles.secondBlock}>
+        <FlatList
+          snapToInterval={scaledSnapToInterval}
+          snapToAlignment={lazyListConfig.snapToAlignment || "start"}
+          horizontal={lazyListConfig.horizontal || false}
+          // ref={setFlatListRef}
+          data={scheduledRecordings}
+          keyExtractor={(i) => i.Id}
+          renderItem={renderScheduledItem}
+        />
+      </View>
+    );
+  };
+  const renderScheduledItem = (data: any) => {
+    console.log("data inside scheduled item", data);
+    const { item, index } = data;
+    // const { Description = "" } = item?.CatalogInfo;
+    const name = item?.title || item?.SeriesDetails.Title;
+
+    let selectedStyle: any = styles.unSelectedEpisode;
+    let isSelectedEpisode = false;
+    if (item.ProgramId === currentScheduledItem?.ProgramId) {
+      selectedStyle = styles.selectedEpisode;
+      isSelectedEpisode = true;
+    }
+    const handleEpisodeFocus = () => {
+      handleScheduledItemFocus(item, index);
+    };
+
+    const statusText = item?.statusText || "";
+    // const statusText = item?.statusText || "";
+    const imageSource =
+      getImageUri(item?.SeriesDetails, "16x9/Poster") ||
+      getImageUri(item?.SeriesDetails, "16x9/KeyArt") ||
+      AppImages.bgPlaceholder;
+
+    const progressBarStyle: any = getUIdef("ProgressBar")?.style;
+
+    const iconStyle = {
+      color:
+        item?.dvrItemsState !== RecordStatus.SCHEDULED
+          ? globalStyles.auxiliaryColors.statusError
+          : globalStyles.backgroundColors.primary1,
+    };
+
+    let networkImageSource = item.channelLogoUri;
+    if (!networkImageSource && item?.networkInfo) {
+      const { networkInfo } = item;
+      networkImageSource =
+        networkInfo?.tenFootLargeURL ||
+        networkInfo?.twoFootLargeURL ||
+        networkInfo?.oneFootLargeURL ||
+        networkInfo?.tenFootSmallURL ||
+        networkInfo?.twoFootSmallURL ||
+        networkInfo?.oneFootSmallURL;
+    }
+    const { udpData: { ChannelInfo: { Schedule = undefined } = {} } = {} } =
+      navigationParams;
+
+    if (
+      item?.ProgramId === Schedule?.ProgramId &&
+      Schedule?.playSource === sourceTypeString.UPCOMING
+    ) {
+      item["Bookmark"] = undefined;
+    }
+    const shouldShowExpiringIcon = isExpiringSoon(item);
+    return (
+      <View
+        style={[styles.episodeItemContainer, selectedStyle]}
+        key={`ListItem_${index}`}
+        // ref={
+        //   index === 0
+        //     ? firstEpisodeRef
+        //     : index === currentSeasonEpisodes.length - 1
+        //     ? lastEpisodeRef
+        //     : undefined
+        // }
+      >
+        {currentScheduledItem && currentScheduledItem?.Id === item?.Id ? (
+          // ctaList &&
+          // ctaList?.length
+          <View
+            // ref={index === 0 ? firstEpisodeRef : undefined}
+            style={styles.episodeItemShowcard}
+          >
+            <FastImage
+              //@ts-ignore
+              source={imageSource}
+              style={styles.episodeItemImage}
+              fallback
+              defaultSource={AppImages.bgPlaceholder}
+            />
+            <View style={[styles.episodeItemInfo, { flexShrink: 1 }]}>
+              <Text style={styles.episodeItemTitle}>{name}</Text>
+              <Text style={styles.episodeItemMetadata}>
+                {item.metadataLine2}
+              </Text>
+              {/* <Text style={styles.episodeItemDescription} numberOfLines={2}>
+                {Description}
+              </Text> */}
+              {item?.Id === item?.Id && (
+                <Text style={styles.statusTextStyle} numberOfLines={2}>
+                  {statusText}
+                </Text>
+              )}
+            </View>
+          </View>
+        ) : (
+          <Pressable
+            onFocus={handleEpisodeFocus}
+            onPress={() => {}}
+            disabled={currentScheduledItem.Id === item?.Id}
+            focusable={currentScheduledItem.Id !== item?.Id}
+            // ref={index === 0 ? firstEpisodeRef : undefined}
+            style={styles.episodeItemShowcard}
+          >
+            <FastImage
+              //@ts-ignore
+              source={imageSource}
+              style={styles.episodeItemImage}
+              fallback
+              defaultSource={AppImages.bgPlaceholder}
+            />
+            <View style={[styles.episodeItemInfo, { flexShrink: 1 }]}>
+              <Text style={styles.episodeItemTitle}>{name}</Text>
+              <Text style={styles.episodeItemMetadata}>{item.metadata}</Text>
+              {/* <Text style={styles.episodeItemDescription} numberOfLines={2}>
+                {Description}
+              </Text> */}
+              {currentScheduledItem.Id === item?.ProgramId && (
+                <Text style={styles.statusTextStyle} numberOfLines={2}>
+                  {statusText}
+                </Text>
+              )}
+            </View>
+          </Pressable>
+        )}
+        {/* <View style={styles.buttonContainer}>
+            {isSelectedEpisode && (
+              <ScrollView
+                horizontal
+                snapToAlignment={"start"}
+                snapToInterval={snapToInterval}
+              >
+                {ctaList?.length > 0 &&
+                  ctaList?.map((cta: any, index: number) => {
+                    let fontIconStyle: {
+                      [key: string]: any;
+                    };
+                    if (
+                      cta?.buttonAction ===
+                      AppStrings?.str_details_program_record_button
+                    ) {
+                      fontIconStyle = styles.ctaFontIconStyle;
+                    }
+                    return (
+                      <MFButton
+                        key={`ctaBtn_${cta.buttonText}_${index}`}
+                        ref={
+                          index === 0
+                            ? firstButtonRef
+                            : (buttonRefObject as any)[cta.buttonText]
+                        }
+                        focusable
+                        iconSource={0}
+                        hasTVPreferredFocus={index === 0}
+                        imageSource={0}
+                        avatarSource={undefined}
+                        onFocus={() => {
+                          setOpen(false);
+                          drawerRef.current.close();
+                          drawerRef.current.resetRoutes();
+                        }}
+                        variant={MFButtonVariant.FontIcon}
+                        fontIconSource={cta.iconSource}
+                        fontIconTextStyle={StyleSheet.flatten([
+                          styles.textStyle,
+                          {
+                            fontSize: 90,
+                            color: cta.buttonText?.includes("Record")
+                              ? globalStyles.fontColors.badge
+                              : "white",
+                          },
+                        ])}
+                        onPress={ctaButtonPress[cta.buttonAction]}
+                        textStyle={{
+                          color: "#EEEEEE",
+                          fontFamily: "Inter-SemiBold",
+                          fontSize: 25,
+                          fontWeight: "600",
+                          textAlign: "center",
+                          marginLeft: 21,
+                        }}
+                        textLabel={cta.buttonText}
+                        style={{
+                          height: 62,
+                          alignSelf: "center",
+                          padding: 12,
+                          backgroundColor: "#424242",
+                          borderRadius: 6,
+                          paddingHorizontal: 35,
+                          zIndex: 100,
+                        }}
+                        focusedStyle={styles.focusedUnderLine}
+                        fontIconProps={{
+                          iconPlacement: "Left",
+                          shouldRenderImage: true,
+                        }}
+                      />
+                    );
+                  })}
+              </ScrollView>
+            )}
+          </View> */}
       </View>
     );
   };
@@ -727,6 +940,65 @@ const styles = StyleSheet.create({
     width: 200,
     borderBottomWidth: 5,
     borderBottomColor: "#053C69",
+  },
+  episodeItemContainer: {
+    padding: 10,
+    marginBottom: 20,
+    borderRadius: 4,
+  },
+  selectedEpisode: {
+    backgroundColor: globalStyles.backgroundColors.shade2,
+  },
+  unSelectedEpisode: {
+    opacity: 0.8,
+  },
+  episodeItemImage: {
+    height: 237,
+    width: 419,
+  },
+  episodeItemShowcard: {
+    flexDirection: "row",
+  },
+  episodeItemCTA: {
+    marginLeft: 25,
+  },
+  episodeItemInfo: {
+    height: 237,
+    justifyContent: "center",
+    flex: 1,
+    paddingLeft: 25,
+    paddingRight: 25,
+  },
+  episodeItemTitle: {
+    fontFamily: globalStyles.fontFamily.bold,
+    color: globalStyles.fontColors.light,
+    fontSize: 31,
+    lineHeight: 50,
+  },
+  episodeItemMetadata: {
+    fontFamily: globalStyles.fontFamily.semiBold,
+    color: globalStyles.fontColors.lightGrey,
+    fontSize: 25,
+    lineHeight: 38,
+  },
+  episodeItemDescription: {
+    fontFamily: globalStyles.fontFamily.regular,
+    color: globalStyles.fontColors.darkGrey,
+    fontSize: 25,
+    lineHeight: 38,
+  },
+  imageContainer: {
+    borderRadius: 4,
+    overflow: "hidden",
+    height: 237,
+  },
+  statusTextStyle: {
+    color: globalStyles.fontColors.statusWarning,
+    fontFamily: globalStyles.fontFamily.regular,
+    fontSize: globalStyles.fontSizes.body2,
+  },
+  secondBlock: {
+    flex: 1,
   },
 });
 export default DVRManagerScreen;
