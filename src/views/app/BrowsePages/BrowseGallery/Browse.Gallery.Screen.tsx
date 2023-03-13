@@ -318,7 +318,12 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       }
     }
     for (let key in defaultFilterState) {
-      if (!_.isEmpty(defaultFilterState[key].selectedIds)) {
+      if (
+        !_.isEmpty(defaultFilterState[key].selectedIds) &&
+        filterState &&
+        defaultFilterState[key].selectedIds[0] ===
+          filterState[key]?.selectedIds[0]
+      ) {
         // defaultFilters.push(defaultFilterState[key].selectedIds[0]);
         filters.splice(
           filters.indexOf(defaultFilterState[key].selectedIds[0]),
