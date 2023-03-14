@@ -8,6 +8,7 @@ const getChannelRights = async () => {
     try {
         const udl = 'udl://live/channelRights/';
         const response = await getDataFromUDL(udl);
+        GLOBALS.channelRights = response?.data;
         return response?.data;
     } catch (e) {
         console.error("Cannot get channelrights due to", e);

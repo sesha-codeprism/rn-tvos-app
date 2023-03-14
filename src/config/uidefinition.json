@@ -147,200 +147,6 @@
       }
     },
     {
-      "id": "EpisodeList",
-      "config": {
-        "snapToInterval": 20
-      },
-      "style": {
-        "containerStyle": {
-          "flex": 1,
-          "flexDirection": "row",
-          "paddingTop": 72,
-          "paddingLeft": 90,
-          "paddingRight": 58,
-          "backgroundColor": "${theme.backgroundColors.shade1}",
-          "opacity": 0.9
-        },
-        "firstBlock": {
-          "width": 543
-        },
-        "titleBlock": {
-          "marginBottom": 116
-        },
-        "seasonTitle": {
-          "fontFamily": "${theme.fontFamily.bold}",
-          "fontSize": "${theme.fontSizes.subTitle1}",
-          "color": "${theme.fontColors.light}",
-          "marginBottom": 15
-        },
-        "seasonMetadata": {
-          "fontFamily": "${theme.fontFamily.semiBold}",
-          "fontSize": "${theme.fontSizes.body2}",
-          "color": "${theme.fontColors.lightGrey}"
-        },
-        "flexOne": {
-          "flex": 1
-        },
-        "seasonScrollView": {
-          "marginBottom": 30
-        },
-        "secondBlock": {
-          "flex": 1
-        },
-        "seasonBlock": {
-          "height": 62,
-          "width": 250,
-          "marginBottom": 43
-        },
-        "seasonBlockSelected": {
-          "height": 62,
-          "width": 250,
-          "marginBottom": 43,
-          "borderBottomColor": "${theme.backgroundColors.primary1}",
-          "borderBottomWidth": 4
-        },
-        "seasonText": {
-          "fontFamily": "${theme.fontFamily.regular}",
-          "color": "${theme.fontColors.darkGrey}",
-          "fontSize": "${theme.fontSizes.subTitle1}"
-        },
-        "seasonTextSelected": {
-          "fontFamily": "${theme.fontFamily.bold}",
-          "color": "${theme.fontColors.light}",
-          "fontSize": "${theme.fontSizes.subTitle1}"
-        },
-        "episodeItemContainer": {
-          "padding": 10,
-          "marginBottom": 20,
-          "borderRadius": 4
-        },
-        "selectedEpisode": {
-          "backgroundColor": "${theme.backgroundColors.shade2}"
-        },
-        "unSelectedEpisode": {
-          "opacity": 0.8
-        },
-        "episodeItemImage": {
-          "height": 237,
-          "width": 419
-        },
-        "episodeItemShowcard": {
-          "flexDirection": "row"
-        },
-        "episodeItemCTA": {
-          "marginLeft": 25
-        },
-        "episodeItemInfo": {
-          "height": 237,
-          "justifyContent": "center",
-          "flex": 1,
-          "paddingLeft": 25,
-          "paddingRight": 25
-        },
-        "episodeItemTitle": {
-          "fontFamily": "${theme.fontFamily.bold}",
-          "color": "${theme.fontColors.light}",
-          "fontSize": "${theme.fontSizes.subTitle2}",
-          "lineHeight": "${theme.lineHeights.subTitle2}"
-        },
-        "episodeItemMetadata": {
-          "fontFamily": "${theme.fontFamily.semiBold}",
-          "color": "${theme.fontColors.lightGrey}",
-          "fontSize": "${theme.fontSizes.body2}",
-          "lineHeight": "${theme.lineHeights.body2}"
-        },
-        "episodeItemDescription": {
-          "fontFamily": "${theme.fontFamily.regular}",
-          "color": "${theme.fontColors.darkGrey}",
-          "fontSize": "${theme.fontSizes.body2}",
-          "lineHeight": "${theme.lineHeights.body2}"
-        },
-        "imageContainer": {
-          "borderRadius": 4,
-          "overflow": "hidden",
-          "height": 237
-        },
-        "textOnImage": {
-          "zIndex": 10,
-          "position": "absolute",
-          "right": 19,
-          "top": 16,
-          "fontFamily": "${theme.fontFamily.semiBold}",
-          "fontSize": "${theme.fontSizes.body1}",
-          "color": "${theme.fontColors.light}"
-        },
-        "ctaBtnContainer": {
-          "flex": 1,
-          "marginTop": 28
-        },
-        "buttonGroupContainer": {
-          "flexDirection": "row",
-          "flex": 1
-        },
-        "iconContainer": {
-          "width": 100
-        },
-        "solidBackground": {
-          "backgroundColor": "${theme.backgroundColors.shade4}"
-        },
-        "focusedBackground": {
-          "backgroundColor": "${theme.backgroundColors.primary1}"
-        },
-        "buttonIconContainer": {
-          "width": 70,
-          "height": 70
-        },
-        "ctaButtonStyle": {
-          "height": 66,
-          "fontFamily": "${theme.fontFamily.semiBold}"
-        },
-        "ctaFontIconStyle": {
-          "fontFamily": "${theme.fontFamily.icons}",
-          "color": "${theme.fontColors.statusError}"
-        },
-        "buttonContainer": {
-          "flexDirection": "row",
-          "alignItems": "center",
-          "marginTop": 28
-        },
-        "statusIcon": {
-          "fontFamily": "${theme.fontFamily.icons}"
-        },
-        "descriptionStyle": {
-          "color": "${theme.fontColors.darkGrey}",
-          "fontFamily": "${theme.fontFamily.regular}"
-        },
-        "statusTextStyle": {
-          "color": "${theme.fontColors.statusWarning}",
-          "fontFamily": "${theme.fontFamily.regular}",
-          "fontSize": "${theme.fontSizes.body2}"
-        },
-        "metadataStyle": {
-          "color": "${theme.fontColors.lightGrey}",
-          "fontFamily": "${theme.fontFamily.semiBold}"
-        },
-        "titleStyle": {
-          "color": "${theme.fontColors.light}",
-          "fontFamily": "${theme.fontFamily.bold}"
-        },
-        "seasonNumberTextStyle": {
-          "fontFamily": "${theme.fontFamily.semiBold}",
-          "color": "${theme.fontColors.light}"
-        },
-        "networkImageStyle": {
-          "resizeMode": "contain",
-          "height": 64,
-          "width": 64
-        },
-        "separatorTextStyle": {
-          "color": "${theme.fontColors.lightGrey}"
-        },
-        "focusedUnderLine": {
-          "backgroundColor": "${theme.backgroundColors.primary1}"
-        }
-      }
-    },
-    {
       "id": "MetadataSeparator",
       "style": {
         "container": {
@@ -2430,7 +2236,9 @@
               "paddingRight": 54,
               "paddingTop": 34,
               "paddingBottom": 34,
-              "backgroundColor": "${theme.backgroundColors.shade2}"
+              "backgroundColor": "${theme.backgroundColors.shade2}",
+              "height": "100%",
+              "width": "100%"
             },
             "statusTextStyles": {
               "fontSize": "${theme.fontSizes.body2}",
@@ -3940,6 +3748,10 @@
           "resizeMode": "contain",
           "height": 64,
           "width": 64
+        },
+        "textStyle": {
+          "fontFamily": "${theme.fontFamily.icons}",
+          "color": "${theme.fontColors.light}"
         },
         "separatorTextStyle": {
           "color": "${theme.fontColors.lightGrey}"

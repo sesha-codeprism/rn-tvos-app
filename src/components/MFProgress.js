@@ -1,179 +1,166 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Animated, Easing, View, I18nManager } from 'react-native';
+import React from "react";
+import PropTypes from "prop-types";
 
-const INDETERMINATE_WIDTH_FACTOR = 0.3;
-const BAR_WIDTH_ZERO_POSITION =
-  INDETERMINATE_WIDTH_FACTOR / (1 + INDETERMINATE_WIDTH_FACTOR);
+import { View, Animated, Easing } from "react-native";
 
-export default class ProgressBar extends Component {
-  static propTypes = {
-    animated: PropTypes.bool,
-    borderColor: PropTypes.string,
-    borderRadius: PropTypes.number,
-    borderWidth: PropTypes.number,
-    children: PropTypes.node,
-    color: PropTypes.string,
-    height: PropTypes.number,
-    indeterminate: PropTypes.bool,
-    indeterminateAnimationDuration: PropTypes.number,
-    onLayout: PropTypes.func,
-    progress: PropTypes.number,
-    style: PropTypes.any,
-    unfilledColor: PropTypes.string,
-    width: PropTypes.number,
-    useNativeDriver: PropTypes.bool,
-    animationConfig: PropTypes.object,
-    animationType: PropTypes.oneOf(['decay', 'timing', 'spring']),
-  };
-
-  static defaultProps = {
-    animated: true,
-    borderRadius: 4,
-    borderWidth: 1,
-    color: 'rgba(0, 122, 255, 1)',
-    height: 6,
-    indeterminate: false,
-    indeterminateAnimationDuration: 1000,
-    progress: 0,
-    width: 150,
-    useNativeDriver: false,
-    animationConfig: { bounciness: 0 },
-    animationType: 'spring',
-  };
-
+class ProgressBar extends React.Component {
   constructor(props) {
     super(props);
-    const progress = Math.min(Math.max(props.progress, 0), 1);
+
     this.state = {
-      width: 0,
-      progress: new Animated.Value(
-        props.indeterminate ? INDETERMINATE_WIDTH_FACTOR : progress
-      ),
-      animationValue: new Animated.Value(BAR_WIDTH_ZERO_POSITION),
+      progress: props.value,
     };
+
+    this.widthAnimation = new Animated.Value(0);
+    this.backgroundAnimation = new Animated.Value(0);
+    this.backgroundInterpolationValue = null;
   }
 
   componentDidMount() {
-    if (this.props.indeterminate) {
-      this.animate();
+    if (this.state.progress > 0) {
+      this.animateWidth();
+    }
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.value !== this.state.progress) {
+      if (props.value >= 0 && props.value <= this.props.maxValue) {
+        this.setState({ progress: props.value }, () => {
+          if (this.state.progress === this.props.maxValue) {
+            // Callback after complete the progress
+            const callback = this.props.onComplete;
+            if (callback) {
+              setTimeout(callback, this.props.barAnimationDuration);
+            }
+          }
+        });
+      }
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.indeterminate !== this.props.indeterminate) {
-      if (this.props.indeterminate) {
-        this.animate();
-      } else {
-        Animated.spring(this.state.animationValue, {
-          toValue: BAR_WIDTH_ZERO_POSITION,
-          useNativeDriver: this.props.useNativeDriver,
-        }).start();
-      }
-    }
-    if (
-      prevProps.indeterminate !== this.props.indeterminate ||
-      prevProps.progress !== this.props.progress
-    ) {
-      const progress = this.props.indeterminate
-        ? INDETERMINATE_WIDTH_FACTOR
-        : Math.min(Math.max(this.props.progress, 0), 1);
+    if (this.props.value !== prevProps.value) {
+      this.animateWidth();
 
-      if (this.props.animated) {
-        const { animationType, animationConfig } = this.props;
-        Animated[animationType](this.state.progress, {
-          ...animationConfig,
-          toValue: progress,
-          useNativeDriver: this.props.useNativeDriver,
-        }).start();
-      } else {
-        this.state.progress.setValue(progress);
+      if (this.props.backgroundColorOnComplete) {
+        if (this.props.value === this.props.maxValue) {
+          this.animateBackground();
+        }
       }
     }
   }
 
-  handleLayout = event => {
-    if (!this.props.width) {
-      this.setState({ width: event.nativeEvent.layout.width });
-    }
-    if (this.props.onLayout) {
-      this.props.onLayout(event);
-    }
-  };
+  animateWidth() {
+    const toValue =
+      (this.props.width * this.state.progress) / 100 -
+      this.props.borderWidth * 2;
 
-  animate() {
-    this.state.animationValue.setValue(0);
-    Animated.timing(this.state.animationValue, {
+    Animated.timing(this.widthAnimation, {
+      easing: Easing[this.props.barEasing],
+      toValue: toValue > 0 ? toValue : 0,
+      duration: this.props.barAnimationDuration,
+    }).start();
+  }
+
+  animateBackground() {
+    Animated.timing(this.backgroundAnimation, {
       toValue: 1,
-      duration: this.props.indeterminateAnimationDuration,
-      easing: Easing.linear,
-      isInteraction: false,
-      useNativeDriver: this.props.useNativeDriver,
-    }).start(endState => {
-      if (endState.finished) {
-        this.animate();
-      }
-    });
+      duration: this.props.backgroundAnimationDuration,
+    }).start();
   }
 
   render() {
-    const {
-      borderColor,
-      borderRadius,
-      borderWidth,
-      children,
-      color,
-      height,
-      style,
-      unfilledColor,
-      width,
-      ...restProps
-    } = this.props;
-
-    const innerWidth = Math.max(0, width || this.state.width) - borderWidth * 2;
-    const containerStyle = {
-      width,
-      borderWidth,
-      borderColor: borderColor || color,
-      borderRadius,
-      overflow: 'hidden',
-      backgroundColor: unfilledColor,
-    };
-    const progressStyle = {
-      backgroundColor: color,
-      height,
-      transform: [
-        {
-          translateX: this.state.animationValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [innerWidth * -INDETERMINATE_WIDTH_FACTOR, innerWidth],
-          }),
-        },
-        {
-          translateX: this.state.progress.interpolate({
-            inputRange: [0, 1],
-            outputRange: [innerWidth / (I18nManager.isRTL ? 2 : -2), 0],
-          }),
-        },
-        {
-          // Interpolation a temp workaround for https://github.com/facebook/react-native/issues/6278
-          scaleX: this.state.progress.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0.0001, 1],
-          }),
-        },
-      ],
-    };
+    if (this.props.backgroundColorOnComplete) {
+      this.backgroundInterpolationValue = this.backgroundAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [
+          this.props.backgroundColor,
+          this.props.backgroundColorOnComplete,
+        ],
+      });
+    }
 
     return (
       <View
-        style={[containerStyle, style]}
-        onLayout={this.handleLayout}
-        {...restProps}
+        style={{
+          width: this.props.width,
+          height: this.props.height,
+          borderWidth: this.props.borderWidth,
+          borderColor: this.props.borderColor,
+          borderRadius: this.props.borderRadius,
+          backgroundColor: this.props.underlyingColor,
+        }}
       >
-        <Animated.View style={progressStyle} />
-        {children}
+        <Animated.View
+          style={{
+            height: this.props.height - this.props.borderWidth * 2,
+            width: this.widthAnimation,
+            backgroundColor:
+              this.backgroundInterpolationValue || this.props.backgroundColor,
+            borderRadius: this.props.borderRadius,
+          }}
+        />
       </View>
     );
   }
 }
+
+ProgressBar.propTypes = {
+  /**
+   * Bar values
+   */
+  value: PropTypes.number,
+  maxValue: PropTypes.number,
+
+  /**
+   * Animations
+   */
+  barEasing: PropTypes.oneOf([
+    "bounce",
+    "cubic",
+    "ease",
+    "sin",
+    "linear",
+    "quad",
+  ]),
+  barAnimationDuration: PropTypes.number,
+  backgroundAnimationDuration: PropTypes.number,
+
+  /**
+   * StyleSheet props
+   */
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number,
+  backgroundColor: PropTypes.string,
+  backgroundColorOnComplete: PropTypes.string,
+  borderWidth: PropTypes.number,
+  borderColor: PropTypes.string,
+  borderRadius: PropTypes.number,
+
+  /**
+   * Callbacks
+   */
+  onComplete: PropTypes.func,
+};
+
+ProgressBar.defaultProps = {
+  value: 0,
+  maxValue: 100,
+
+  barEasing: "linear",
+  barAnimationDuration: 500,
+  backgroundAnimationDuration: 2500,
+
+  height: 15,
+
+  backgroundColor: "#148cF0",
+  backgroundColorOnComplete: null,
+
+  borderWidth: 1,
+  borderColor: "#C8CCCE",
+  borderRadius: 6,
+
+  onComplete: null,
+};
+
+export default ProgressBar;

@@ -23,9 +23,11 @@ const GuideScreen: React.FunctionComponent<GuideScreenProps> = (props) => {
     console.log("program = ", event.nativeEvent.program);
     const feed = massageLiveFeed(
       [event.nativeEvent.program],
-      SourceType.LIVE
+      SourceType.LIVE,
+      "onNow"
     )[0];
     feed["isFromEPG"] = true;
+    console.log("feed", feed);
     props.navigation.push(Routes.Details, { feed: feed });
   };
   return (

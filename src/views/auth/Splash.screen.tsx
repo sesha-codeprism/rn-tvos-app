@@ -28,6 +28,7 @@ import { GlobalContext } from "../../contexts/globalContext";
 import {
   appQueryCache,
   invalidateQueryBasedOnSpecificKeys,
+  queryClient,
   resetCaches,
 } from "../../config/queries";
 import { useQuery } from "react-query";
@@ -82,10 +83,13 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         }
       } else if (message?.type === NotificationType.dvrUpdated) {
         console.log("DVR update notification received");
-        invalidateQueryBasedOnSpecificKeys(
-          "feed",
-          "get-all-subscriptionGroups"
-        );
+        // queryClient.invalidateQueries(["dvr"]);
+        queryClient.invalidateQueries({ queryKey: ["dvr"] });
+
+        // invalidateQueryBasedOnSpecificKeys(
+        //   "feed",
+        //   "get-all-subscriptionGroups"
+        // );
         // setTimeout(() => {
         //   appQueryCache.find("get-UDP-data")?.invalidate();
         // }, 1000);

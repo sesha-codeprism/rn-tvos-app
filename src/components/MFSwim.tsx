@@ -4,7 +4,7 @@ import { FlatList } from "react-native";
 import { FeedItem } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { layout2x3 } from "../config/constants";
-import { getAllFeedDataForFeed } from "../config/queries";
+import { appQueryCache, getAllFeedDataForFeed } from "../config/queries";
 import { GLOBALS } from "../utils/globals";
 import MFSwimLane from "./MFSwimLane";
 
@@ -38,6 +38,7 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
     const flatListRef = useRef<FlatList>(null);
     const [swimLaneKey, setSwimLaneKey] = useState("");
     const [hubName, setHubName] = useState("");
+    const [mount, setMount] = useState(false);
     const data = getAllFeedDataForFeed(
       props.feeds!,
       GLOBALS.nowNextMap,
@@ -50,6 +51,15 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
 
     useEffect(() => {
       setHubName(props.feeds?.Name || "");
+    });
+
+    appQueryCache.subscribe((event) => {
+      if (event?.type === "queryUpdated") {
+        if (event.query.queryHash.includes("get-live-data")) {
+          console.log("Need to reset updates");
+          setMount(!mount);
+        }
+      }
     });
 
     return (

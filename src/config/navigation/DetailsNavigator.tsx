@@ -1,11 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import DetailsLanding from "../../views/app/details_pages/details_panels/DetailsLanding";
+import ChannelAndTime from "../../views/app/details_pages/details_panels/ChannelAndTimePanel";
 import EpisodeRecordOptions from "../../views/app/details_pages/details_panels/EpsiodeRecordOptions";
 import MoreInfoPanel from "../../views/app/details_pages/details_panels/MoreInfoPanel";
 import RecordingOptions from "../../views/app/details_pages/details_panels/RecordingOptions";
 import SelectOptionsPanel from "../../views/app/details_pages/details_panels/SelectOptionsPanels";
+import WaysToWatchPanel from "../../views/app/details_pages/details_panels/WaysToWatchPanel";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,9 @@ export const DetailRoutes = {
   EpisodeRecordOptions: "EpisodeRecordOptions",
   RecordingOptions: "RecordingOptions",
   SelectOptions: "SelectOptions",
+  ChannelAndTime: "ChannelAndTime",
+  ChannelSelection: "ChannelSelection",
+  WaysToWatch: "WaysToWatch",
 };
 
 export const DetailsNavigator: React.FunctionComponent<
@@ -36,12 +40,6 @@ export const DetailsNavigator: React.FunctionComponent<
           gestureEnabled: false,
         }}
       >
-        <Stack.Screen
-          name={DetailRoutes.DetailsLanding}
-          component={DetailsLanding}
-          initialParams={props.props}
-        />
-
         <Stack.Screen
           name={DetailRoutes.MoreInfo}
           //@ts-ignore
@@ -62,6 +60,15 @@ export const DetailsNavigator: React.FunctionComponent<
         <Stack.Screen
           name={DetailRoutes.SelectOptions}
           component={SelectOptionsPanel}
+        />
+        <Stack.Screen
+          name={DetailRoutes.ChannelAndTime}
+          component={ChannelAndTime}
+        />
+        <Stack.Screen
+          name={DetailRoutes.WaysToWatch}
+          component={WaysToWatchPanel}
+          initialParams={props.props}
         />
       </Stack.Navigator>
     </NavigationContainer>
