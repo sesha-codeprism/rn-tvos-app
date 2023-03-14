@@ -957,7 +957,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             <Image
               key={`Index${i}`}
               source={networkSource}
-              style={[styles.networkImage, styles.marginRight20]}
+              style={styles.networkImage}
             />
           );
         }
@@ -967,7 +967,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
     return (
       <View style={styles.thirdColumn}>
-        <View>
           {imageSource ? (
             <View style={styles.networkImageView}>
               <Image source={imageSource} style={styles.networkImage} />
@@ -976,7 +975,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           <Text style={styles.networkTitle}>
             {firstNetwork?.name || firstNetwork?.Name}
           </Text>
-        </View>
         <View style={{ flexDirection: "row" }}>{renderNetworkLogos()}</View>
       </View>
     );
