@@ -26,6 +26,7 @@ const SideMenuLayout: React.FunctionComponent<Props> = (props) => {
           value={props.title}
           //@ts-ignore
           style={{
+            //@ts-ignore
             textStyle: props.isTitleInverted
               ? props.subTitleStyles
               : props.titleStyles,
