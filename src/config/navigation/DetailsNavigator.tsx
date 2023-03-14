@@ -6,6 +6,7 @@ import EpisodeRecordOptions from "../../views/app/details_pages/details_panels/E
 import MoreInfoPanel from "../../views/app/details_pages/details_panels/MoreInfoPanel";
 import RecordingOptions from "../../views/app/details_pages/details_panels/RecordingOptions";
 import SelectOptionsPanel from "../../views/app/details_pages/details_panels/SelectOptionsPanels";
+import WaysToWatchPanel from "../../views/app/details_pages/details_panels/WaysToWatchPanel";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ export const DetailRoutes = {
   SelectOptions: "SelectOptions",
   ChannelAndTime: "ChannelAndTime",
   ChannelSelection: "ChannelSelection",
+  WaysToWatch: "WaysToWatch",
 };
 
 export const DetailsNavigator: React.FunctionComponent<
@@ -62,6 +64,11 @@ export const DetailsNavigator: React.FunctionComponent<
         <Stack.Screen
           name={DetailRoutes.ChannelAndTime}
           component={ChannelAndTime}
+        />
+        <Stack.Screen
+          name={DetailRoutes.WaysToWatch}
+          component={WaysToWatchPanel}
+          initialParams={props.props}
         />
       </Stack.Navigator>
     </NavigationContainer>

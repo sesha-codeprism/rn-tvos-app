@@ -32,11 +32,14 @@ import {
   getEpisodeInfo,
   massageDiscoveryFeed,
 } from "../../../utils/assetUtils";
-import { metadataSeparator } from "../../../utils/Subscriber.utils";
+import {
+  isScheduleCurrent,
+  metadataSeparator,
+} from "../../../utils/Subscriber.utils";
 import { getUIdef, scaleAttributes } from "../../../utils/uidefinition";
 import { globalStyles as g } from "../../../config/styles/GlobalStyles";
 import { PageContainer } from "../../../components/PageContainer";
-import { getItemId } from "../../../utils/dataUtils";
+import { format, getItemId } from "../../../utils/dataUtils";
 import { AppStrings, getFontIcon } from "../../../config/strings";
 import {
   assetTypeObject,
@@ -690,6 +693,46 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     },
     [AppStrings?.str_details_cta_waystowatch]: () => {
       featureNotImplementedAlert();
+      // const { Schedule } = feed;
+
+      // const episodeNumber = Schedule?.EpisodeNumber;
+      // const seasonNumber = Schedule?.SeasonNumber;
+
+      // const title = `${
+      //   episodeNumber && seasonNumber
+      //     ? `${format(
+      //         AppStrings?.str_seasonNumber_episodeNumber || "S{0} E{0}",
+      //         seasonNumber.toString(),
+      //         episodeNumber.toString()
+      //       )}${metadataSeparator}`
+      //     : ""
+      // }${udpDataAsset?.title}`;
+
+      // const { CatchupSchedules = [], Schedules = undefined } =
+      //   playActionsData || {};
+
+      // let catchupSchedules = [];
+      // for (const cs of CatchupSchedules) {
+      //   if (isScheduleCurrent(cs)) {
+      //     catchupSchedules.push(cs);
+      //   }
+      // }
+      // udpDataAsset["Ratings"] = discoveryProgramData?.Ratings || [];
+      // setRoute(DetailRoutes.WaysToWatch);
+      // const waysToWatchProps = {
+      //   title,
+      //   subscriberPlayOptionsData: playActionsData,
+      //   schedules: discoverySchedulesData,
+      //   waysToWatch: udpDataAsset.waysToWatchSchedules,
+      //   channelMap: GLOBALS.channelMap,
+      //   catchupSchedules,
+      //   udpData: udpDataAsset,
+      //   networkIHD: undefined,
+      //   account: GLOBALS.userAccountInfo,
+      // };
+      // console.log("waysToWatchProps", waysToWatchProps);
+      // setScreenProps(waysToWatchProps);
+      // drawerRef?.current?.open();
     },
     [AppStrings?.str_details_program_record_button]: openNewRecording,
     [AppStrings?.str_details_series_record_button]: openNewRecording,
@@ -2152,13 +2195,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         opacity={1}
         open={open}
         animatedWidth={width * 0.37}
-        // openPage="MoreInfo"
         closeOnPressBack={false}
         navigation={props.navigation}
         drawerContent={false}
         route={route}
         closeModal={closeModal}
-        screenProps={screenProps} // moreInfoProps={}
+        screenProps={screenProps}
       />
     </PageContainer>
   );

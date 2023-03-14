@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {
-  Alert,
   FlatList,
   ImageBackground,
   Pressable,
@@ -31,7 +30,6 @@ import {
 import { AppStrings, getFontIcon } from "../../../../config/strings";
 import {
   assetTypeObject,
-  placeholder16x9Image,
   RecordStatus,
   sourceTypeString,
 } from "../../../../utils/analytics/consts";
@@ -39,22 +37,19 @@ import { getImageUri } from "../../../../utils/Subscriber.utils";
 import FastImage from "react-native-fast-image";
 import { useQuery } from "react-query";
 import { defaultQueryOptions } from "../../../../config/constants";
-import { getDataFromUDL, getMassagedData } from "../../../../../backend";
+import { getDataFromUDL } from "../../../../../backend";
 import { GLOBALS } from "../../../../utils/globals";
-import { queryClient } from "../../../../config/queries";
 import { DefaultStore } from "../../../../utils/DiscoveryUtils";
 import { isFeatureAssigned } from "../../../../utils/helpers";
-import { current } from "@reduxjs/toolkit";
 import MFButton, {
   MFButtonVariant,
 } from "../../../../components/MFButton/MFButton";
-import { styles } from "../../BrowsePages/BrowseCategory/Browse.Category.screen";
 import { DetailsSidePanel } from "../DetailSidePanel";
 import { AppImages } from "../../../../assets/images";
 import { Definition as DefinitionOfItem } from "../../../../utils/DVRUtils";
-import { EpisodeRecordOptionsProps } from "../details_panels/EpsiodeRecordOptions";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
 import MFOverlay from "../../../../components/MFOverlay";
+import { appQueryCache } from "../../../../config/queries";
 
 interface EpisodeListProps {
   navigation: NativeStackNavigationProp<any>;
@@ -88,6 +83,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState(DetailRoutes.MoreInfo);
   const [screenProps, setScreenProps] = useState<any>();
+  const [mount, setMount] = useState(false);
 
   const metadataList: string[] = discoveryData?.ReleaseYear
     ? [discoveryData?.ReleaseYear]
@@ -469,7 +465,22 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       console.log("Haven't received full episode details yet..");
       return;
     }
-  }, [seasonPlayOptions, episodeDiscoveryData, episodeSchedules]);
+    // Adding mount as a dependency to make the CTA useEffect re-fire after "DVR updated" duplex message is obtained
+  }, [seasonPlayOptions, episodeDiscoveryData, episodeSchedules, mount]);
+
+  useEffect(() => {
+    appQueryCache.subscribe((event) => {
+      console.log(event);
+      if (event?.type === "queryUpdated") {
+        if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
+          setTimeout(() => {
+            // A simple reset function to trigger the useEffect that calculates the CTA buttons
+            setMount(!mount);
+          }, 1000);
+        }
+      }
+    });
+  }, []);
 
   const getEpisodesInChunks = (start: number, offset: number) => {
     if (seasonPlayOptions) {
