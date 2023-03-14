@@ -39,11 +39,11 @@ const VideoQualityScreen: React.FunctionComponent<Props> = (props: any) => {
   const [selectedQyality, setSelectedQyality] = useState<any>({});
   const onPress = (item: any) => {
     setSelectedQyality(item);
-    GLOBALS.store.settings.display.bitrates10ft = item;
+    GLOBALS.store!.settings.display.bitrates10ft = item;
     updateStore(GLOBALS.store);
   };
   const getValues = () => {
-    setSelectedQyality(GLOBALS.store.settings.display.bitrates10ft);
+    setSelectedQyality(GLOBALS.store!.settings.display.bitrates10ft);
   };
   useEffect(() => {
     getValues();
@@ -51,7 +51,7 @@ const VideoQualityScreen: React.FunctionComponent<Props> = (props: any) => {
   return (
     <SideMenuLayout
       title={AppStrings.str_settings_home_display}
-      subTitle="On Screen Language"
+      subTitle={AppStrings.str_settings_display_video_quality}
     >
       <FlatList
         data={list}

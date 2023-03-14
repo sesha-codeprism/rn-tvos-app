@@ -1691,7 +1691,9 @@
               "paddingRight": 54,
               "paddingTop": 34,
               "paddingBottom": 34,
-              "backgroundColor": "#202124"
+              "backgroundColor": "#202124",
+              "height": "100%",
+              "width": "100%"
             },
             "statusTextStyles": {
               "fontSize": 25,

@@ -1,5 +1,6 @@
 import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 import React from "react";
+import AutoScrollingText from "../AutoSizingText";
 interface Props {
   title?: string;
   titleStyles?: StyleProp<TextStyle>;
@@ -13,13 +14,27 @@ const SideMenuLayout: React.FunctionComponent<Props> = (props) => {
   return (
     <View style={styles.root} pointerEvents="box-none">
       <View style={styles.headerContainer}>
-        <Text
+        {/* <Text
           style={
             props.isTitleInverted ? props.subTitleStyles : props.titleStyles
           }
         >
           {props.title}
-        </Text>
+        </Text> */}
+        <AutoScrollingText
+          //@ts-ignore
+          value={props.title}
+          //@ts-ignore
+          style={{
+            textStyle: props.isTitleInverted
+              ? props.subTitleStyles
+              : props.titleStyles,
+          }}
+          duration={5000}
+          isLeftToRight={false}
+          isHorizontal
+          isTopToBottom={false}
+        ></AutoScrollingText>
         {props.subTitle ? (
           <Text
             style={

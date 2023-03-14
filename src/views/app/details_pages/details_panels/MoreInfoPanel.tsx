@@ -255,7 +255,12 @@ const MoreInfoPanel: React.FunctionComponent<MoreInfoProps> = (props) => {
       }}
       isTitleInverted={false}
     >
-      <ScrollView style={styles.bodyRoot}>
+      <ScrollView
+        style={styles.bodyRoot}
+        scrollEnabled
+        showsVerticalScrollIndicator
+        persistentScrollbar
+      >
         {!!(statusTextList && statusTextList.length) && (
           <TouchableWithoutFeedback>
             <View style={styles.row}>
@@ -381,6 +386,8 @@ const styles: any = StyleSheet.create(
         paddingRight: 54,
         paddingTop: 34,
         paddingBottom: 34,
+        height: "100%",
+        width: "100%",
       },
       statusTextStyles: {
         fontSize: globals.fontSizes.body2,

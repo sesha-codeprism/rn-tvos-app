@@ -2236,7 +2236,9 @@
               "paddingRight": 54,
               "paddingTop": 34,
               "paddingBottom": 34,
-              "backgroundColor": "${theme.backgroundColors.shade2}"
+              "backgroundColor": "${theme.backgroundColors.shade2}",
+              "height": "100%",
+              "width": "100%"
             },
             "statusTextStyles": {
               "fontSize": "${theme.fontSizes.body2}",
