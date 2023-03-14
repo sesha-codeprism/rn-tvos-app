@@ -1330,6 +1330,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (ctaButtonRef) {
+      ctaButtonRef.current?.setNativeProps({
+        hasTVPreferredFocus: true,
+      });
+    }
+    setIsCTAButtonFocused(true);
+  }, [udpDataAsset?.ctaButtons?.length])
+
   const getRestrictionsForVod = (
     usablePlayActions: any,
     isTrailer: boolean
