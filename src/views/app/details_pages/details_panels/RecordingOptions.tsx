@@ -12,30 +12,18 @@ import { getUIdef } from "../../../../utils/uidefinition";
 import {
   DvrGroupShowType,
   filterLiveSchedules,
-  showDvrErrorDetails,
-  DvrItemErrorCode,
-  DvrResponseState,
   Definition as DefinitionString,
 } from "../../../../utils/DVRUtils";
-import { appQueryCache, queryClient } from "../../../../config/queries";
+import { queryClient } from "../../../../config/queries";
 import { DvrCapabilityType, format } from "../../../../utils/assetUtils";
 import { groupBy, uniq, uniqBy, values } from "lodash";
 import { DvrItemState } from "../../../../utils/common";
 import { getTimeStringFromISOString } from "../../../../utils/dataUtils";
-import {
-  FlatList,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import MFButton, {
   MFButtonVariant,
 } from "../../../../components/MFButton/MFButton";
 import { globalStyles } from "../../../../config/styles/GlobalStyles";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { SCREEN_HEIGHT } from "../../../../utils/dimensions";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
 import { saveRecordingToBackend } from "../../../../../backend/dvrproxy/dvrproxy";
 
@@ -316,8 +304,8 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
             );
             if (channel) {
               return {
-                key: channel.ChannelNumber,
-                title: `${channel.ChannelNumber} ${channel.Name}`,
+                key: channel.Number,
+                title: `${channel.Number} ${channel.Name}`,
               };
             }
           })
@@ -415,8 +403,8 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
             recordingOptions.push({
               key: RecordingOptionsEnum.Channel,
               title: AppStrings?.str_dvr_recording.channel,
-              value: `${channel?.ChannelNumber} ${channel?.Name}`,
-              channelNumber: channel?.ChannelNumber,
+              value: `${channel?.Number} ${channel?.Name}`,
+              channelNumber: channel?.Number,
               AnyTimeAnyChannel: isAnyTimeAnyChannel || IsMultiChannel,
             });
 
@@ -443,7 +431,7 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
           recordingOptions.push({
             key: RecordingOptionsEnum.ChannelAndTime,
             title: AppStrings?.str_dvr_recording.chanel_and_time,
-            value: `${channel?.ChannelNumber} ${
+            value: `${channel?.Number} ${
               channel?.CallLetters
             }${metadataSeparator}${getTimeStringFromISOString(
               StartUtc as string
@@ -509,7 +497,7 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
   const getChannelByNumber = (channelNumber: number) => {
     if (GLOBALS.channelMap.Channels?.length) {
       return GLOBALS.channelMap.Channels.find(
-        (channel: any) => channel.ChannelNumber === channelNumber
+        (channel: any) => channel.Number === channelNumber
       );
     }
   };
@@ -528,7 +516,11 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
   };
 
   const handleSelection = (selection: any) => {
-    console.log(selection.key);
+    const currentChannnel = recordingOptions?.find(
+      (options: any) => options?.key === RecordingOptionsEnum.Channel
+    );
+    const { channelNumber, AnyTimeAnyChannel } = currentChannnel || {};
+    console.log(channelNumber, AnyTimeAnyChannel, currentChannnel);
     switch (selection.key) {
       case RecordingOptionsEnum.KeepUntil:
         props.navigation.navigate(DetailRoutes.SelectOptions, {
@@ -542,6 +534,36 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
           title: props.route.params.title,
           subTitle: selection.title,
           options: stopRecordingOptions(),
+        });
+        break;
+      case RecordingOptionsEnum.ShowType:
+        props.navigation.navigate(DetailRoutes.SelectOptions, {
+          title: props.route.params.title,
+          subTitle: selection.title,
+          options: getShowTypeOptions(),
+        });
+      case RecordingOptionsEnum.Time:
+        props.navigation.navigate(DetailRoutes.SelectOptions, {
+          title: props.route.params.title,
+          subTitle: selection.title,
+          options: getTimeOptions(),
+        });
+        break;
+      case RecordingOptionsEnum.Channel:
+        props.navigation.navigate(DetailRoutes.SelectOptions, {
+          title: props.route.params.title,
+          subTitle: AppStrings?.str_dvr_recording.channel,
+          options: getChannelOptions(),
+          initialValue: AnyTimeAnyChannel
+            ? DVRAnyTimeAnyChannel
+            : channelNumber,
+        });
+        break;
+      case RecordingOptionsEnum.ChannelAndTime:
+        props.navigation.navigate(DetailRoutes.ChannelAndTime, {
+          title: props.route.params.title,
+          subTitle: selection.title,
+          programId: props.route.params.programId,
         });
         break;
     }
@@ -697,7 +719,11 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
   return (
     <SideMenuLayout
       title={props.route.params.title || "Some title"}
-      subTitle={AppStrings.str_dvr_recording.only_this_episode}
+      subTitle={
+        props.route.params.isSeries
+          ? AppStrings.str_dvr_recording.entire_series
+          : AppStrings.str_dvr_recording.only_this_episode
+      }
       isTitleInverted
     >
       <>

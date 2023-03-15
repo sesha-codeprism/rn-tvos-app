@@ -5,6 +5,9 @@ import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
 import { AppStrings } from "../../../../config/strings";
 import { getUIdef } from "../../../../utils/uidefinition";
+import { Definition } from "../../../../utils/common";
+import { DvrGroupShowType } from "../../../../utils/DVRUtils";
+import { GLOBALS } from "../../../../utils/globals";
 
 export interface EpisodeRecordOptionsProps {
   isNew: boolean;
@@ -50,15 +53,125 @@ const EpisodeRecordOptions: React.FunctionComponent<
 
   const handleOnPress = (index: number) => {
     const selectedItem = options[index];
-    if (selectedItem.type === EpisodeRecordingOptionsEnum.Episode) {
-      //@ts-ignore
-      props.navigation.navigate(
-        DetailRoutes.RecordingOptions,
-        //@ts-ignore
-        props.route.params
-      );
+    const type = selectedItem.type;
+    let programID;
+    let schedule;
+    let key;
+    let isSeries = true;
+    let titleString;
+    let schedulesArray;
+    let definition;
+    let showType;
+    let airTimeDomain;
+    let isSubscriptionItem = false;
+
+    const {
+      seriesId,
+      programId,
+      schedules,
+      isGeneric,
+      title,
+      isNew,
+      SubscriptionGroup,
+    } = props.route.params;
+
+    if (type === EpisodeRecordingOptionsEnum.Episode) {
+      programID = programId;
+      schedulesArray = schedules;
+      key = "ProgramId";
+      isSeries = false;
+      titleString = title;
+      definition = Definition.SINGLE_PROGRAM;
+      const { SubscriptionItems = [] } = GLOBALS.recordingData || [];
+      const [item] = SubscriptionItems;
+      isSubscriptionItem =
+        SubscriptionItems.length > 0 ? true : item?.IsGeneric ? true : false;
     } else {
-      Alert.alert("Series recording not implemented");
+      if (seriesId) {
+        schedulesArray = schedules;
+        programID = seriesId;
+      } else {
+        programID = programId;
+        schedulesArray = schedules;
+      }
+      key = seriesId ? "TVSeriesId" : "ProgramId";
+      titleString = title;
+      definition = isGeneric ? Definition.GENERIC_PROGRAM : Definition.SERIES;
+      const showTypeOfNonGeneric = seriesId ? DvrGroupShowType.Any : "AnyTime";
+      showType = isGeneric ? "Any" : showTypeOfNonGeneric;
+      airTimeDomain = "Anytime";
+    }
+
+    if (schedulesArray && schedulesArray.length > 0) {
+      schedule = schedulesArray[0];
+      // overwrite with current schedule if exists
+      const channelNumber = GLOBALS.recordingData?.Settings?.ChannelNumber;
+      const startUtc = GLOBALS.recordingData?.Settings?.StartUtc;
+      if (channelNumber) {
+        const selectedSchedule = schedulesArray?.find(
+          (s: any) =>
+            s?.ChannelNumber === channelNumber && s?.StartUtc === startUtc
+        );
+        if (selectedSchedule) {
+          // overwrite
+          schedule = selectedSchedule;
+        }
+      }
+    }
+
+    if (schedule) {
+      if (isNew) {
+        GLOBALS.recordingData = {
+          Definition: definition,
+          Parameters: [
+            {
+              Key: key as string,
+              Value: programID,
+            },
+          ],
+          Settings: {
+            StationId: schedule.StationId,
+            ChannelNumber: schedule.ChannelNumber,
+            StartUtc: schedule.StartUtc,
+            MaximumViewableShows: undefined,
+            EndLateSeconds: 0,
+            RecyclingDisabled: false,
+            ShowType: showType,
+            AirtimeDomain: airTimeDomain,
+            ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId.toString(),
+            IsMultiChannel: false,
+          },
+        };
+      } else {
+        if (isSeries) {
+          // this.props.setRecordingData(this.props.params.);
+          GLOBALS.recordingData = SubscriptionGroup;
+        } else {
+          const selectedEpisode = SubscriptionGroup.SubscriptionItems.find(
+            (item: any) => {
+              return programId == item.ProgramId;
+            }
+          );
+          GLOBALS.recordingData = {
+            ...SubscriptionGroup,
+            Settings: {
+              ...SubscriptionGroup.Settings,
+              EndLateSeconds: selectedEpisode?.Settings?.EndLateSeconds,
+              RecyclingDisabled: selectedEpisode?.Settings?.RecyclingDisabled,
+            },
+          };
+        }
+      }
+      props.navigation.navigate(DetailRoutes.RecordingOptions, {
+        title: titleString,
+        isNew: isNew,
+        isSeries,
+        schedules: schedulesArray,
+        programId: programID,
+        isGeneric: isGeneric,
+        isSubscriptionItem,
+        isPopupModal: true,
+      });
     }
   };
 

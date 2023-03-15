@@ -14,6 +14,7 @@ import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { AppStrings } from "../../../../config/strings";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
+import { MFSelectCheckedBox, MFSelectUnCheckedBox } from "../../../../components/MFSelectBox";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -81,15 +82,9 @@ const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
             >
               <View style={styles.icContainer}>
                 {selectedLang === item ? (
-                  <Image
-                    source={AppImages.checked_circle}
-                    style={styles.icCircle}
-                  />
+                  <MFSelectCheckedBox />
                 ) : (
-                  <Image
-                    source={AppImages.unchecked_circle}
-                    style={styles.icCircle}
-                  />
+                  <MFSelectUnCheckedBox />
                 )}
               </View>
               <View style={styles.listContent}>

@@ -3,7 +3,6 @@ import renderer from "react-test-renderer";
 import { configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import MFFilmStrip from "../../src/components/MFFilmStrip/MFFilmStrip";
-import MFViewAllButton from "../../src/components/MFFilmStrip/ViewAllComponent";
 
 configure({ adapter: new Adapter() });
 
@@ -13,7 +12,7 @@ test("MFFilmStripTest", () => {
       limitItemsTo={10}
       title={"Test Render title"}
       appendViewAll
-      viewAllPlacement={"Prepend"} 
+      viewAllPlacement={"Prepend"}
     />
   );
   const filmStripComponent = component.root.findByType(MFFilmStrip);

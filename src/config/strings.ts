@@ -20,7 +20,7 @@ export const stringLocales = {
 
 }
 
-let AppStrings: StringsObject = enUS;
+let AppStrings: StringsObject = enCA;
 
 export const setOnScreenLanguage = (onScreenLanguage: any) => {
     //@ts=ignore

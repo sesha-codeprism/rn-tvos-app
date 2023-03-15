@@ -249,7 +249,9 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
       pinCode[1] !== "" &&
       pinCode[2] !== "" &&
       pinCode[3] !== ""
-        ? await onSubmit(actionType)
+        ? setTimeout(async () => {
+            await onSubmit(actionType);
+          }, 500)
         : null;
       console.log("pincode", pinCode);
     } else {
@@ -269,7 +271,9 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
       pinCode[1] !== "" &&
       pinCode[2] !== "" &&
       pinCode[3] !== ""
-        ? await onSubmit(PinActionTypes["CONFIRM"])
+        ? setTimeout(async () => {
+            await onSubmit(PinActionTypes["CONFIRM"]);
+          }, 500)
         : null;
       console.log("pinconfirm code", pinCode);
     }

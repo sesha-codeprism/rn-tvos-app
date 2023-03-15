@@ -77,20 +77,19 @@ const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: bo
     }
 }
 
-export function getAllFeedDataForFeed(feed: FeedItem, nowNextMap: any, currentSlots: any, channelRights: any) {
+export const getAllFeedDataForFeed = (feed: FeedItem, nowNextMap: any, currentSlots: any, channelRights: any) => {
     return useQueries(
         feed.Feeds.map(element => {
             return element.Uri.toLowerCase().includes('live') ? {
-                queryKey: ['feed', element.Uri],
+                queryKey: ['live', element.Uri],
                 queryFn: () => getUDLData(element.Uri),
                 staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime,
                 enabled: !!nowNextMap && currentSlots && !!channelRights
             } : element.Uri.toLowerCase().includes('dvr') ? {
-                queryKey: ['feed', element.Uri],
+                queryKey: ['dvr', element.Uri],
                 queryFn: () => getUDLData(element.Uri),
                 staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime,
-                enabled: !!GLOBALS.allSubscriptionGroups
-
+                enabled: !!GLOBALS.allSubscriptionGroups && !!GLOBALS.viewableSubscriptions && !!GLOBALS.scheduledSubscriptions
             } : {
                 queryKey: ['feed', element.Uri],
                 queryFn: () => getUDLData(element.Uri),

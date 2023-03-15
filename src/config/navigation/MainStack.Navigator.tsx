@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import { GLOBALS } from "../../utils/globals";
-import { getStore } from "../../utils/helpers";
+import { getStore, updateStore } from "../../utils/helpers";
 import GuideScreen from "../../views/app/Guide.screen";
 import HomeScreen from "../../views/app/Home.screen";
 import ChooseProfileScreen from "../../views/app/profile_screens/Choose.profile";
@@ -32,8 +32,8 @@ export const AppNavigator: React.FunctionComponent = (props) => {
       GLOBALS.store = JSON.parse(store);
       console.log("Settings store successful", GLOBALS.store);
       const isLoggedIn =
-        GLOBALS.store.accessToken !== null &&
-        GLOBALS.store.refreshToken !== null;
+        GLOBALS.store!.accessToken !== null &&
+        GLOBALS.store!.refreshToken !== null;
       setIsSignedIn(isLoggedIn);
     }
   };

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
+import React, { useImperativeHandle, useRef, useState } from "react";
 import {
   FlatList,
   StyleProp,

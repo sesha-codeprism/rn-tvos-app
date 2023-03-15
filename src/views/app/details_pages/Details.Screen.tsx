@@ -32,11 +32,14 @@ import {
   getEpisodeInfo,
   massageDiscoveryFeed,
 } from "../../../utils/assetUtils";
-import { metadataSeparator } from "../../../utils/Subscriber.utils";
+import {
+  isScheduleCurrent,
+  metadataSeparator,
+} from "../../../utils/Subscriber.utils";
 import { getUIdef, scaleAttributes } from "../../../utils/uidefinition";
 import { globalStyles as g } from "../../../config/styles/GlobalStyles";
 import { PageContainer } from "../../../components/PageContainer";
-import { getItemId } from "../../../utils/dataUtils";
+import { format, getItemId } from "../../../utils/dataUtils";
 import { AppStrings, getFontIcon } from "../../../config/strings";
 import {
   assetTypeObject,
@@ -82,6 +85,7 @@ const { width, height } = Dimensions.get("window");
 import MFProgressBar from "../../../components/MFProgressBar";
 import {
   Definition as DefinationOfItem,
+  DvrGroupShowType,
   validateEntitlements,
 } from "../../../utils/DVRUtils";
 import { DetailRoutes } from "../../../config/navigation/DetailsNavigator";
@@ -193,15 +197,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const listAddButtonRef: React.RefObject<any> = React.createRef();
   const buttonFocuszoneRef: React.RefObject<any> = React.createRef();
   let networkInfo: any;
-
-  const pinnedItemsResponse = useQuery(
-    ["feed", "udl://subscriber/library/Pins"],
-    getSubscriberPins,
-    {
-      staleTime: appUIDefinition.config.queryStaleTime,
-      cacheTime: appUIDefinition.config.queryCacheTime,
-    }
-  );
 
   const duplexManager: DuplexManager = DuplexManager.getInstance();
 
@@ -406,7 +401,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           }
         }
         let params = undefined;
-        let panelName = undefined;
         if (contentType === ContentType.GENERIC || schedule?.IsGeneric) {
           params = {
             isNew: true,
@@ -415,10 +409,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             schedules: discoverySchedulesData,
             programId: schedule?.ProgramId,
             isGeneric: true,
-            // onDvrItemSelected: this.setFocusBack,
             isPopupModal: true,
           };
-          // panelName = SideMenuRoutes.DvrEpisodeRecordingOptions;
           setRoute(DetailRoutes.EpisodeRecordOptions);
           setScreenProps(params);
           drawerRef.current?.open();
@@ -428,18 +420,129 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             programId: schedule?.ProgramId,
             seriesId: schedule?.SeriesId,
             title: schedule?.Name || "",
-            // onDvrItemSelected: this.setFocusBack,
             isPopupModal: true,
           };
           setRoute(DetailRoutes.RecordingOptions);
           setScreenProps(params);
           drawerRef.current?.open();
-          // panelName = SideMenuRoutes.DvrRecordingOptions;
         }
-        // this.props.openPanel(true, panelName, params);
       }
     } else {
-      //TODO: Series recording.. need to specifically handle entire series recording
+      let schedule = discoverySchedulesData[0];
+
+      // Get the correct schedule, the one which is shown in UI
+      const { Schedule: { channelId: StationIdFromEPGSchedule = "" } = {} } =
+        feed || {};
+      let ChannelNumber: any;
+      if (StationIdFromEPGSchedule) {
+        const actualSelectedChannel =
+          GLOBALS.channelMap?.findChannelByStationId(StationIdFromEPGSchedule);
+
+        ({ channel: { Number: ChannelNumber = undefined } = {} } =
+          actualSelectedChannel || {});
+      }
+
+      if (
+        (ChannelNumber || currentChannel) &&
+        discoverySchedulesData &&
+        discoverySchedulesData.length
+      ) {
+        schedule = discoverySchedulesData.find(
+          (scheduleEntry: any) =>
+            scheduleEntry?.ChannelNumber ===
+            (ChannelNumber || currentChannel?.Number || currentChannel?.number)
+        );
+      }
+      if (feed?.isFromEPG && StationIdFromEPGSchedule) {
+        const currentSchedule = discoverySchedulesData.find(
+          (scheduleEntry: any) => {
+            return (
+              scheduleEntry?.ProgramId === feed?.Schedule?.ProgramId &&
+              scheduleEntry?.StationId === StationIdFromEPGSchedule &&
+              scheduleEntry?.StartUtc === feed?.Schedule.StartUtc
+            );
+          }
+        );
+        if (currentSchedule) {
+          schedule = currentSchedule;
+        }
+      }
+
+      if (!schedule && feed?.Schedule) {
+        schedule = feed?.Schedule;
+      }
+      if (
+        udpDataAsset.ctaButtons.some(
+          (cta: any) =>
+            cta.buttonText === AppStrings?.str_details_program_record_button
+        )
+      ) {
+        if (schedule) {
+          GLOBALS.recordingData = {
+            Definition: DefinationOfItem.SINGLE_PROGRAM,
+            Parameters: [
+              {
+                Key: "ProgramId",
+                Value: schedule?.ProgramId,
+              },
+            ],
+            Settings: {
+              StationId: schedule?.StationId,
+              ChannelNumber: schedule?.ChannelNumber,
+              StartUtc: schedule?.StartUtc,
+              MaximumViewableShows: undefined,
+              EndLateSeconds: 0,
+              RecyclingDisabled: false,
+              ShowType: "FirstRunOnly",
+              AirtimeDomain: "Anytime",
+              ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+              IsMultiChannel: false,
+            },
+          };
+          setRoute(DetailRoutes.EpisodeRecordOptions);
+          setScreenProps({
+            programId: schedule?.ProgramId,
+            seriesId: schedule?.SeriesId,
+            isNew: true,
+            schedules: discoverySchedulesData,
+            isPopupModal: true,
+          });
+          drawerRef.current?.open();
+        }
+      } else {
+        if (schedule) {
+          GLOBALS.recordingData = {
+            Definition: DefinationOfItem.SERIES,
+            Parameters: [
+              {
+                Key: "TVSeriesId",
+                Value: schedule?.SeriesId,
+              },
+            ],
+            Settings: {
+              StationId: schedule?.StationId,
+              ChannelNumber: schedule?.ChannelNumber,
+              StartUtc: schedule?.StartUtc,
+              MaximumViewableShows: undefined,
+              EndLateSeconds: 0,
+              RecyclingDisabled: false,
+              ShowType: DvrGroupShowType.Any,
+              AirtimeDomain: "Anytime",
+              ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+              IsMultiChannel: false,
+            },
+          };
+          setRoute(DetailRoutes.RecordingOptions);
+          setScreenProps({
+            title: udpDataAsset.title,
+            isNew: true,
+            schedules: discoverySchedulesData,
+            isSeries: true,
+            isPopupModal: true,
+          });
+          drawerRef.current?.open();
+        }
+      }
     }
   };
 
@@ -590,6 +693,46 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     },
     [AppStrings?.str_details_cta_waystowatch]: () => {
       featureNotImplementedAlert();
+      // const { Schedule } = feed;
+
+      // const episodeNumber = Schedule?.EpisodeNumber;
+      // const seasonNumber = Schedule?.SeasonNumber;
+
+      // const title = `${
+      //   episodeNumber && seasonNumber
+      //     ? `${format(
+      //         AppStrings?.str_seasonNumber_episodeNumber || "S{0} E{0}",
+      //         seasonNumber.toString(),
+      //         episodeNumber.toString()
+      //       )}${metadataSeparator}`
+      //     : ""
+      // }${udpDataAsset?.title}`;
+
+      // const { CatchupSchedules = [], Schedules = undefined } =
+      //   playActionsData || {};
+
+      // let catchupSchedules = [];
+      // for (const cs of CatchupSchedules) {
+      //   if (isScheduleCurrent(cs)) {
+      //     catchupSchedules.push(cs);
+      //   }
+      // }
+      // udpDataAsset["Ratings"] = discoveryProgramData?.Ratings || [];
+      // setRoute(DetailRoutes.WaysToWatch);
+      // const waysToWatchProps = {
+      //   title,
+      //   subscriberPlayOptionsData: playActionsData,
+      //   schedules: discoverySchedulesData,
+      //   waysToWatch: udpDataAsset.waysToWatchSchedules,
+      //   channelMap: GLOBALS.channelMap,
+      //   catchupSchedules,
+      //   udpData: udpDataAsset,
+      //   networkIHD: undefined,
+      //   account: GLOBALS.userAccountInfo,
+      // };
+      // console.log("waysToWatchProps", waysToWatchProps);
+      // setScreenProps(waysToWatchProps);
+      // drawerRef?.current?.open();
     },
     [AppStrings?.str_details_program_record_button]: openNewRecording,
     [AppStrings?.str_details_series_record_button]: openNewRecording,
@@ -684,25 +827,36 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       }
     }
   };
+  const getPinnedItemResponse = async () => {
+    const udlParam = "udl://subscriber/library/Pins";
+    const resp = await getDataFromUDL(udlParam);
+    return resp.data;
+  };
 
-  useEffect(() => {
-    if (
-      !pinnedItemsResponse.isFetching &&
-      pinnedItemsResponse.isFetched &&
-      pinnedItemsResponse.isSuccess &&
-      pinnedItemsResponse.data
-    ) {
-      const status = getItemPinnedStatus();
-      console.log("status", status);
-      setIsItemPinned(status);
-    }
-  }, [
-    pinnedItemsResponse.isFetched,
-    pinnedItemsResponse.data,
-    pinnedItemsResponse.dataUpdatedAt,
-    pinnedItemsResponse.isSuccess,
-    pinnedItemsResponse.isFetching,
-  ]);
+  const pinnedItemsResponse = useQuery(
+    ["feed", "udl://subscriber/library/Pins"],
+    getPinnedItemResponse,
+    defaultQueryOptions
+  );
+
+  // useEffect(() => {
+  //   if (
+  //     !pinnedItemsResponse.isFetching &&
+  //     pinnedItemsResponse.isFetched &&
+  //     pinnedItemsResponse.isSuccess &&
+  //     pinnedItemsResponse.data
+  //   ) {
+  //     const status = getItemPinnedStatus();
+  //     console.log("status", status);
+  //     setIsItemPinned(status);
+  //   }
+  // }, [
+  //   pinnedItemsResponse.isFetched,
+  //   pinnedItemsResponse.data,
+  //   pinnedItemsResponse.dataUpdatedAt,
+  //   pinnedItemsResponse.isSuccess,
+  //   pinnedItemsResponse.isFetching,
+  // ]);
 
   useEffect(() => {
     currentContext.addDuplexMessageHandler(onDuplexMessage);
@@ -736,7 +890,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const channelByStationId = (channels: any[], Schedule: any) => {
     let index;
     const channel = channels.find((element: any, defaultIndex: any) => {
-      if (element.StationId == Schedule?.channelId) {
+      if (element.StationId == Schedule?.StationId) {
         index = defaultIndex;
         return element;
       }
@@ -893,16 +1047,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         ChannelInfo?.channel || udpDataAsset?.ChannelInfo?.Channel;
       networkInfo = (channelInfo && [channelInfo]) || udpDataAsset?.networkInfo;
     } else {
-      //TODO: Re-implement this once the live api calls are written
-      // const { Schedule = undefined } = feed || {};
-      // const channelFromEPG = channelByStationId(
-      //   GLOBALS.channelMap.Channels,
-      //   Schedule
-      // );
-      // if (channelFromEPG) {
-      //   channel = channelFromEPG.channel;
-      //   networkInfo = [channel];
-      // }
+      const { Schedule = undefined } = feed || {};
+      const channelFromEPG = channelByStationId(
+        GLOBALS.channelMap.Channels,
+        Schedule
+      );
+      if (channelFromEPG) {
+        channel = channelFromEPG.channel;
+        networkInfo = [channel];
+      }
     }
 
     if (!networkInfo || !networkInfo.length) {
@@ -934,7 +1087,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         firstNetwork.tenFootSmallURL ||
         firstNetwork.twoFootSmallURL ||
         firstNetwork.oneFootSmallURL ||
-        AppStrings.placeholder;
+        AppImages.placeholder;
     }
 
     const renderNetworkLogos = () => {
@@ -952,12 +1105,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             networkData?.tenFootSmallURL ||
             networkData?.twoFootSmallURL ||
             networkData?.oneFootSmallURL ||
-            AppStrings.placeholder;
+            AppImages.placeholder;
           items.push(
             <Image
-              key={`Index${i}`}
               source={networkSource}
-              style={[styles.networkImage, styles.marginRight20]}
+              style={styles.networkImage}
             />
           );
         }
@@ -967,7 +1119,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
     return (
       <View style={styles.thirdColumn}>
-        <View>
           {imageSource ? (
             <View style={styles.networkImageView}>
               <Image source={imageSource} style={styles.networkImage} />
@@ -976,7 +1127,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           <Text style={styles.networkTitle}>
             {firstNetwork?.name || firstNetwork?.Name}
           </Text>
-        </View>
         <View style={{ flexDirection: "row" }}>{renderNetworkLogos()}</View>
       </View>
     );
@@ -1085,8 +1235,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       console.log("No asset data to make api call..");
       return undefined;
     }
-    const id = getItemId(feed);
-    const params = `?catchup=false&storeId=${DefaultStore.Id}&groups=${
+    const id =
+      isSeries(assetData) || feed?.isFromEPG
+        ? feed?.Schedule?.ProgramId || feed?.ProgramId || feed?.Id
+        : feed?.Id;
+    const params = `?catchup=true&storeId=${DefaultStore.Id}&groups=${
       GLOBALS.store!.rightsGroupIds
     }&id=${id}`;
     const udlParam = "udl://subscriber/programplayactions/" + params;
@@ -1112,11 +1265,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     return data;
   };
 
-  const getItemPinnedStatus = () => {
-    const pinnedItems = queryClient.getQueryData([
+  const getItemPinnedStatus = async () => {
+    let pinnedItems = queryClient.getQueryData([
       "feed",
       "udl://subscriber/library/Pins",
     ]);
+    if (!pinnedItems) {
+      console.log("No current pinnedItems in cache..");
+      pinnedItems = await getPinnedItemResponse();
+    }
     ///@ts-ignore
     const pinnedItem = getPinnedItem(pinnedItems, feed);
     if (pinnedItem) {
@@ -1130,6 +1287,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     if (!pinnedItems) {
       return undefined;
     }
+    console.log(pinnedItems);
     const Id = getItemId(feed);
     return pinnedItems?.find((element: any) => {
       const elementId = getItemId(element);
@@ -1149,10 +1307,21 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       console.warn("Data has not been initialised");
       return undefined;
     }
-    const assetType =
-      //@ts-ignore
-      assetTypeObject[feed?.assetType?.contentType] ||
-      assetTypeObject[ContentType.PROGRAM];
+
+    const allSubcriptionGroups = {
+      ...(GLOBALS.scheduledSubscriptionGroup || {}),
+      SubscriptionGroups: [
+        ...((GLOBALS.scheduledSubscriptionGroup &&
+          GLOBALS.scheduledSubscriptionGroup.SubscriptionGroups) ||
+          []),
+        ...((GLOBALS.viewableSubscriptions &&
+          GLOBALS.viewableSubscriptions.SubscriptionGroups) ||
+          []),
+      ],
+    };
+    const { startTime = 0, endTime = 0 } = feed?.Schedule || feed!;
+    const startDateFromEPG = new Date(startTime * 1000);
+    const endDateFromEPG = new Date(endTime * 1000);
     const udpData = isSeries(assetData)
       ? massageSeriesDataForUDP(
           subscriberData,
@@ -1161,16 +1330,18 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.channelMap,
           feed,
           GLOBALS.currentSlots,
-          GLOBALS.allSubscriptionGroups,
+          allSubcriptionGroups,
           GLOBALS.viewableSubscriptions,
           GLOBALS.scheduledSubscriptions,
           GLOBALS.userAccountInfo,
           GLOBALS.recorders,
           playActionsData,
           undefined,
-          undefined,
-          false,
-          undefined,
+          startDateFromEPG,
+          endDateFromEPG,
+          GLOBALS.channelRights,
+          feed?.isFromEPG || false,
+          feed?.Schedule?.channel.StationId,
           isFeatureAssigned("IOSCarrierBilling")
         )
       : massageProgramDataForUDP(
@@ -1179,8 +1350,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           discoveryProgramData,
           GLOBALS.channelMap,
           discoverySchedulesData,
-          undefined,
-          GLOBALS.allSubscriptionGroups,
+          GLOBALS.currentSlots,
+          allSubcriptionGroups,
           GLOBALS.userAccountInfo,
           subscriberData,
           undefined,
@@ -1190,11 +1361,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           undefined,
           undefined,
           undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
+          startDateFromEPG,
+          endDateFromEPG,
+          GLOBALS.channelRights,
+          feed?.isFromEPG || false,
+          feed?.Schedule?.channel.StationId,
           isFeatureAssigned("IOSCarrierBilling")
         );
     console.log("UDP data", udpData);
@@ -1264,7 +1435,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }
   }, [discoverySchedulesQueryData, isFetchingDiscoverySchedulesQueryData]);
   const playActionsQuery = useQuery(
-    ["get-playActiosn", assetData?.id],
+    ["get-playActions", assetData?.id],
     () => getPlayActions(assetData),
     { ...defaultQueryOptions }
   );
@@ -1280,24 +1451,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     () => getProgramSubscriberData(assetData),
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
-
-  // const viewableSubscriptionGroupsQuery = useQuery(
-  //   ["get-viewableSubscriptionGroupsQuery"],
-  //   getAllViewableSubscriptions,
-  //   { ...defaultQueryOptions, refetchOnMount: "always" }
-  // );
-
-  // const getScheduledSubscriptionsQuery = useQuery(
-  //   [`get-ScheduledSubscriptionsQuery`],
-  //   getScheduledSubscriptionGroups,
-  //   { ...defaultQueryOptions, refetchOnMount: "always" }
-  // );
-
-  // const getAllSubscriptionsQuery = useQuery(
-  //   [`get-AllSubscriptionsQuery`],
-  //   getAllSubscriptionGroups,
-  //   { ...defaultQueryOptions }
-  // );
 
   const { data, isLoading, refetch } = useQuery(
     ["get-UDP-data", assetData?.id],
@@ -1329,6 +1482,15 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (ctaButtonRef) {
+      ctaButtonRef.current?.setNativeProps({
+        hasTVPreferredFocus: true,
+      });
+    }
+    setIsCTAButtonFocused(true);
+  }, [udpDataAsset?.ctaButtons?.length])
 
   const getRestrictionsForVod = (
     usablePlayActions: any,
@@ -1685,6 +1847,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }
     // PPV
 
+    console.log(
+      "Progress",
+      progressDataSource.TimeSeconds / progressDataSource.RuntimeSeconds
+    );
+
     return (
       <View style={styles.episodeBlockContainer}>
         <View style={styles.flexRow}>
@@ -1711,7 +1878,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           <MFProgressBar
             backgroundColor={"#424242"}
             foregroundColor={"#E7A230"}
-            toValue={progressDataSource.TimeSeconds}
+            toValue={
+              (progressDataSource.TimeSeconds /
+                progressDataSource.RuntimeSeconds) *
+              100
+            }
             maxHeight={15}
             maxWidth={350}
           />
@@ -2031,13 +2202,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         opacity={1}
         open={open}
         animatedWidth={width * 0.37}
-        // openPage="MoreInfo"
         closeOnPressBack={false}
         navigation={props.navigation}
         drawerContent={false}
         route={route}
         closeModal={closeModal}
-        screenProps={screenProps} // moreInfoProps={}
+        screenProps={screenProps}
       />
     </PageContainer>
   );

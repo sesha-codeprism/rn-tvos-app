@@ -59,7 +59,7 @@ const useAllSubscriptionGroups = (globals: any) => {
         return { allSubscriptions: response, viewableSubscriptions: viewableSubscriptions, scheduledSubscriptions: scheduledSubscriptions }
     }
     const subscrptionGroups =
-        useQuery(['feed', 'get-all-subscriptionGroups'], getAllSubscriptionGroups, { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors })
+        useQuery(['dvr', 'get-all-subscriptionGroups'], getAllSubscriptionGroups, { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors })
     useEffect(() => {
         if (!subscrptionGroups.data) {
             return;

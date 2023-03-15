@@ -14,6 +14,10 @@ import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
 import { AppStrings } from "../../../../config/strings";
+import {
+  MFSelectCheckedBox,
+  MFSelectUnCheckedBox,
+} from "../../../../components/MFSelectBox";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -68,15 +72,9 @@ const ClosedCaptionScreen: React.FunctionComponent<Props> = (props: any) => {
             >
               <View style={styles.icContainer}>
                 {closedCaption === item.action ? (
-                  <Image
-                    source={AppImages.checked_circle}
-                    style={styles.icCircle}
-                  />
+                  <MFSelectCheckedBox />
                 ) : (
-                  <Image
-                    source={AppImages.unchecked_circle}
-                    style={styles.icCircle}
-                  />
+                  <MFSelectUnCheckedBox />
                 )}
               </View>
               <View style={styles.listContent}>

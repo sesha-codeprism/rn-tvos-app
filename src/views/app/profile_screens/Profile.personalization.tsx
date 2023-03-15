@@ -217,9 +217,10 @@ const ProfilePersonalizationScreen: React.FunctionComponent<
                   item: null,
                 });
               } else if (
-                shouldRenderImage &&
+                // shouldRenderImage &&
                 props.route.params.mode === "edit"
               ) {
+                console.log(' props.route.params.mode',  props.route.params.mode, shouldRenderImage);
                 GLOBALS.editUserProfile.AdditionalFields = {
                   optOutPersonalDataUse: shouldRenderImage ? "false" : "true",
                 };
