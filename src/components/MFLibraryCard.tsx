@@ -62,6 +62,7 @@ export interface MFLibraryCardProps {
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
   autoFocusOnFirstCard?: boolean;
   libraryCardId?: string;
+  onLongPress?: any;
 }
 
 const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
@@ -71,7 +72,13 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
     const textFadeAnim = useRef(new Animated.Value(1)).current;
     const translateAnim = useRef(new Animated.Value(0)).current;
     const _onPress = (event: GestureResponderEvent) => {
+      console.log('onPress called');
       props.onPress && props.onPress(props.data);
+    };
+    const _onLongPress = (event: GestureResponderEvent) => {
+      console.log('onLongPress called');
+
+      props.onLongPress && props.onLongPress(props.data);
     };
     const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
       setFocused(true);
@@ -257,6 +264,8 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
         onPress={_onPress}
         onFocus={_onFocus}
         onBlur={_onBlur}
+        onLongPress={_onLongPress}
+        delayLongPress={3000}
         key={`${props.libraryCardId}-to`}
       >
         <View

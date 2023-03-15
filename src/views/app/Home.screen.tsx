@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   BackHandler,
   TVMenuControl,
+  Alert,
+  useTVEventHandler,
 } from "react-native";
 import { appUIDefinition, debounceTime } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -43,6 +45,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const [hubs, setHubs] = useState(Array<FeedItem>());
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const [open, setOpen] = useState(false);
+  // const [showExitPopup, setShowExitPopup] = useState(false);
   const firstSwimlaneRef = useRef<TouchableOpacity>(null);
   const setttingsRef = useRef(null);
   const drawerRef: React.MutableRefObject<any> = useRef();
@@ -68,6 +71,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     feedTimeOut = setTimeout(async () => {
       if (event != null) {
         setCurrentFeed(event);
+        console.log('CurrentFeed in Home screen', event);
       }
     }, debounceTime);
   };
@@ -88,8 +92,9 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
           } else {
             /** If user created profile is chosen to login, replace with profile name */
             if (GLOBALS.store!.userProfile.Name!.length > 10) {
+              console.log('GLOBALS.store!.userProfile.Name', GLOBALS.store!.userProfile.Name);
               replace_hub[0].Name =
-                GLOBALS.store!.userProfile.Name!.substring(0, 9) + "..." ||
+                (GLOBALS.store!.userProfile.Name! || GLOBALS.userProfile?.Name).substring(0, 9) + "..." ||
                 AppStrings.str_hub_name_you;
             } else {
               replace_hub[0].Name =
@@ -119,14 +124,50 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const clearCurrentHub = (event: SubscriberFeed) => {
     setCurrentFeed(undefined);
   };
-
   const backAction = () => {
+    TVMenuControl.disableTVMenuKey();
+    console.log(
+      `'back pressed on home screen'canGoBack:${props.navigation.canGoBack()},getId: ${props.navigation.getId()}, getState:${
+        props.navigation.getState().routes[0].name === "home"
+      }`
+    );
     if (open) {
       setOpen(false);
       drawerRef.current.close();
       return true;
-    } else {
-      // Open !true. So something is happening. Removed some console.log
+    } else if (
+      !props.navigation.canGoBack() &&
+      props.navigation.getState().routes[0].name === "home"
+    ) {
+      console.log("Trying to close the app now");
+      // Open !true. So we are showing the exit popup
+      // setShowExitPopup(true);
+      // BackHandler.exitApp();
+      // TVMenuControl.disableTVMenuKey();
+      // MFEventEmitter.emit("openPopup", {
+      //   buttons: [
+      //     {
+      //       title: "Exit",
+      //       onPress: () => {
+      //         // Assumes close popup on each action, whether Yes or No or Cancel
+      //         // BackHandler.exitApp()
+      //         MFEventEmitter.emit("closePopup", null);
+            
+      //       },
+      //     },
+      //     {
+      //       title: "Cancel",
+      //       onPress: () => {
+
+      //       // Assumes close popup on each action, whether Yes or No or Cancel
+      //       setShowExitPopup(false);
+      //       MFEventEmitter.emit("closePopup", null);
+      //       },
+      //     },
+      //   ],
+      //   description: AppStrings.str_exit_app_description,
+      //   title: AppStrings.str_exit_app_title
+      // })
     }
   };
 
@@ -150,6 +191,12 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
       TVMenuControl.enableTVMenuKey();
       BackHandler.addEventListener("hardwareBackPress", backAction);
+    }
+    if (
+      !props.navigation.canGoBack() &&
+      props.navigation.getState().routes[0].name === "home"
+    ) {
+      TVMenuControl.disableTVMenuKey()
     }
     if (__DEV__) {
       const date = new Date();

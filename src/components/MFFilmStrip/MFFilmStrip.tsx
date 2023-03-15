@@ -101,6 +101,7 @@ export interface MFFilmStripProps {
   onViewAllPressed?: null | ((event: SubscriberFeed) => void) | undefined;
   filmStripId?: string;
   getNoItemReturenedRef?: null | (() => any) | undefined;
+  onLongPress?: any;
 }
 /**
  * Component that renders horizontal-scrolling collection of items
@@ -353,6 +354,9 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                         props.onPress && props.onPress(event);
                       }}
                       onBlur={(event) => {}}
+                      onLongPress={(event) => {
+                        props.onLongPress && props.onLongPress(event);
+                      }}
                     />
                   );
                 }

@@ -1,8 +1,16 @@
-import { FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/dimensions";
 import { GLOBALS } from "../utils/globals";
 import MFEventEmitter from "../utils/MFEventEmitter";
+import { AppStrings } from "../config/strings";
 interface MFPopupProps {
   buttons?: Buttons[];
   title?: string;
@@ -18,12 +26,12 @@ const defaultProps = {
   buttons: [
     {
       title: "OK",
-      onPress: () => { },
+      onPress: () => {},
       style: null,
     },
     {
       title: "CANCEL",
-      onPress: () => { },
+      onPress: () => {},
       style: null,
     },
   ],
@@ -32,16 +40,19 @@ const defaultProps = {
 };
 const MFPopup = (props: MFPopupProps) => {
   const [focused, setFocused] = useState(0);
-  const _onFocus = () => { };
+  const _onFocus = () => {};
   return (
     <Modal
-      style={[{
-        position: "absolute",
-        // right: 0,
-        top: 0,
-        width: SCREEN_WIDTH,
-        backgroundColor: "green",
-      }, GLOBALS.enableRTL ? { left: 0 } : { right: 0 }]}
+      style={[
+        {
+          position: "absolute",
+          // right: 0,
+          top: 0,
+          width: SCREEN_WIDTH,
+          backgroundColor: "green",
+        },
+        GLOBALS.enableRTL ? { left: 0 } : { right: 0 },
+      ]}
       animationType="fade"
       transparent={true}
       visible={true}
@@ -55,14 +66,33 @@ const MFPopup = (props: MFPopupProps) => {
     >
       <View style={styles.container}>
         <View style={styles.content}>
+          {props.title && (
+            <Text
+              style={{
+                color: "#EEEEEE",
+                fontSize: 48,
+                fontWeight: "bold",
+                letterSpacing: 0,
+                lineHeight: 60,
+                textAlign: "center",
+              }}
+            >
+              {props.title}
+            </Text>
+          )}
           <Text style={styles.text}>
             {props.description ? props.description : "Are you sure ?"}
           </Text>
           <View style={{ width: "100%" }}>
-            <FlatList data={props.buttons && props.buttons.length
-              ? props.buttons
-              : defaultProps.buttons}
-              keyExtractor={(item, index) => `${props.popupId}-${item.title}-${index}`}
+            <FlatList
+              data={
+                props.buttons && props.buttons.length
+                  ? props.buttons
+                  : defaultProps.buttons
+              }
+              keyExtractor={(item, index) =>
+                `${props.popupId}-${item.title}-${index}`
+              }
               key={props.popupId}
               renderItem={({ item, index }) => {
                 return (
@@ -76,25 +106,25 @@ const MFPopup = (props: MFPopupProps) => {
                     style={
                       focused === index
                         ? [
-                          styles.buttonInactive,
-                          {
-                            ...styles.focusedStyle,
-                            backgroundColor: "#053C69",
-                          },
-                        ]
+                            styles.buttonInactive,
+                            {
+                              ...styles.focusedStyle,
+                              backgroundColor: "#053C69",
+                            },
+                          ]
                         : styles.buttonInactive
                     }
-                    onPress={ (params: any)=> {
-                        item.onPress
+                    onPress={(params: any) => {
+                      item.onPress
                         ? item.onPress(params)
                         : console.log("action is not defined for this button");
-                      }
-                    }
+                    }}
                   >
                     <Text style={styles.buttonText}>{item.title}</Text>
                   </Pressable>
                 );
-              }} />
+              }}
+            />
           </View>
         </View>
       </View>
@@ -108,7 +138,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 200,
     height: 682,
-    width: 700,
+    width: 900,
     borderRadius: 10,
     backgroundColor: "#202124",
     justifyContent: "space-between",
@@ -118,7 +148,7 @@ const styles = StyleSheet.create({
     // position: "absolute",
   },
   content: {
-    width: 596,
+    width: 744,
     height: "100%",
     alignItems: "center",
     alignSelf: "center",

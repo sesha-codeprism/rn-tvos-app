@@ -21,6 +21,10 @@ import { AppStrings, setOnScreenLanguage } from "../../../../config/strings";
 import { GlobalContext } from "../../../../contexts/globalContext";
 import { OnscreenLanguage } from "../../../../@types/UIDefinition";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
+import {
+  MFSelectCheckedBox,
+  MFSelectUnCheckedBox,
+} from "../../../../components/MFSelectBox";
 
 interface Props {
   navigation: NativeStackNavigationProp<any>;
@@ -81,15 +85,9 @@ const OnScreenLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
             >
               <View style={styles.icContainer}>
                 {selectedLang === item.onScreenName ? (
-                  <Image
-                    source={AppImages.checked_circle}
-                    style={styles.icCircle}
-                  />
+                  <MFSelectCheckedBox />
                 ) : (
-                  <Image
-                    source={AppImages.unchecked_circle}
-                    style={styles.icCircle}
-                  />
+                  <MFSelectUnCheckedBox />
                 )}
               </View>
               <View style={styles.listContent}>

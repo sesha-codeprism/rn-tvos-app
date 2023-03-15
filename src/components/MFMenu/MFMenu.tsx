@@ -254,6 +254,7 @@ const MFMenu = (props: MFMenuProps) => {
                     onPress={() => {
                       // props.navigation.toggleDrawer();
                       props.onPressSettings();
+                      setFocused("");
                       console.log("setting pressed", props.navigation);
                     }}
                     onFocus={() => {

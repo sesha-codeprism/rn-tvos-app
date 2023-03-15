@@ -43,7 +43,11 @@ const BrowseFilter = (props: BrowseFilterProps) => {
   const halfOpenOffset = Dimensions.get("screen").width * 0.25;
   const fullCloseOffset = Dimensions.get("screen").width * 0.5;
   const fullOpenOffset = 0;
-  const [menuList, setMenuList] = useState<Array<any>>([]);
+  const [menuList, setMenuList] = useState<Array<any>>(
+    props.filterData?.map((item: { Id: any; Name: any }, index: any) => {
+      return { Id: item.Id, Name: item.Name };
+    })
+  );
   const [expanded, setExpanded] = useState(true);
   const [subMenuList, setSubMenuList] = useState<Array<any>>([]);
   const [focusedMenu, setFocusedMenu] = useState(0);
@@ -135,7 +139,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
         setMenuHasFocus(false);
         // setFocusedSubMenu(0)
         // subMenuFirstRef.current?.current.viewConfig.validAttributes.hasTVPreferredFocus = true;
-       // @ts-ignore
+        // @ts-ignore
         subMenuList.length === 0
           ? menuRef[focusedMenu]?.current?.setNativeProps({
               hasTVPreferredFocus: true,
@@ -164,7 +168,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
       }
     }
     // console.log("filters", JSON.stringify(filters), "defaultFilters", JSON.stringify(defaultFilters), JSON.stringify(filters) === JSON.stringify(defaultFilters));
-    return JSON.stringify(filters) === JSON.stringify(defaultFilters)
+    return JSON.stringify(filters) === JSON.stringify(defaultFilters);
   };
   return (
     <Modal
@@ -182,120 +186,127 @@ const BrowseFilter = (props: BrowseFilterProps) => {
       }}
       accessible={true}
       presentationStyle={"overFullScreen"}
-
     >
       <Animated.View style={[styles.container, animatedStyles]}>
         <View style={styles.innerContainer}>
-          <FlatList
-            data={menuList}
-            keyExtractor={(item) => item.Id}
-            renderItem={({ item, index }) => {
-              return (
-                <Pressable
-                  // @ts-ignore
-                  ref={menuRef[index]}
-                  // hasTVPreferredFocus={index === focusedMenu && !menuHasFocus}
-                  key={index}
-                  style={
-                    focusedMenu === index  
-                      ? [
-                          styles.menuItem,
-                          { borderRadius: 6, backgroundColor: menuHasFocus && focusedSubMenu === -1?  "#063961" : "#424242"},
-                        ]
-                      : styles.menuItem
-                  }
-                  onFocus={() => {
-                    clearFocused ? setClearFocused(false) : null;
-                    setSelectedMenu(item);
-                    onFocusMenu(item, index);
-                    setFocusedSubMenu(-1)
-                  }}
-                  onPress={() => {
-                    setSelectedMenu(item);
-                    props.setOpenSubMenu(true);
-                  }}
-                >
-                  <Text
+          {menuList && menuList.length && (
+            <FlatList
+              data={menuList}
+              keyExtractor={(item) => item.Id}
+              renderItem={({ item, index }) => {
+                return (
+                  <Pressable
+                    // @ts-ignore
+                    ref={menuRef[index]}
+                    // hasTVPreferredFocus={index === focusedMenu && !menuHasFocus}
+                    key={index}
                     style={
                       focusedMenu === index
-                        ? { ...styles.MenuItemText, color: "white" }
-                        : styles.MenuItemText
+                        ? [
+                            styles.menuItem,
+                            {
+                              borderRadius: 6,
+                              backgroundColor:
+                                menuHasFocus && focusedSubMenu === -1
+                                  ? "#063961"
+                                  : "#424242",
+                            },
+                          ]
+                        : styles.menuItem
                     }
-                  >
-                    {item.Name}
-                  </Text>
-                  {focusedMenu === index && (
-                    <Image
-                      source={AppImages.rightArrowWhite}
-                      style={{ width: 14, height: 24 }}
-                    />
-                  )}
-                </Pressable>
-              );
-            }}
-            ListFooterComponentStyle={{
-              width: "100%",
-              height: 120,
-              justifyContent: "flex-end",
-            }}
-            ListFooterComponent={
-              props.filterState &&
-              !checkDefaultState() && (
-                <Pressable
-                // @ts-ignore
-                  ref={menuRef[menuList.length]}
-                  style={
-                    focusedMenu === menuList.length
-                      ? [
-                          styles.menuItem,
-                          {
-                            // marginTop: 10,
-                            borderRadius: 6,
-                            height: 62,
-                            backgroundColor: "#063961",
-                            alignContent: "center",
-                            justifyContent: "center",
-                          },
-                        ]
-                      : [
-                          styles.menuItem,
-                          {
-                            // marginTop: 10,
-                            backgroundColor: "#3A3A3B",
-                            height: 62,
-                            alignContent: "center",
-                            justifyContent: "center",
-                          },
-                        ]
-                  }
-                  onFocus={() => {
-                    onFocusMenu("clear", menuList.length);
-                    // setClearFocused(true);
-                    // setSubMenuList([]);
-                    // setFocusedMenu(menuList.length);
-
-                    // setFocusedSubMenu(null)
-                  }}
-                  onPress={() => {
-                    props.handleFilterClear && props.handleFilterClear();
-                  }}
-                >
-                  <MFText
-                    textStyle={{
-                      ...styles.MenuItemText,
-                      color: "white",
-                      textAlign: "center",
-                      fontSize: 25,
-                      fontWeight: "600",
-                      alignSelf: "center",
+                    onFocus={() => {
+                      clearFocused ? setClearFocused(false) : null;
+                      setSelectedMenu(item);
+                      onFocusMenu(item, index);
+                      setFocusedSubMenu(-1);
                     }}
-                    shouldRenderText
-                    displayText={AppStrings.str_clear}
-                  />
-                </Pressable>
-              )
-            }
-          />
+                    onPress={() => {
+                      setSelectedMenu(item);
+                      props.setOpenSubMenu(true);
+                    }}
+                  >
+                    <Text
+                      style={
+                        focusedMenu === index
+                          ? { ...styles.MenuItemText, color: "white" }
+                          : styles.MenuItemText
+                      }
+                    >
+                      {item.Name}
+                    </Text>
+                    {focusedMenu === index && (
+                      <Image
+                        source={AppImages.rightArrowWhite}
+                        style={{ width: 14, height: 24 }}
+                      />
+                    )}
+                  </Pressable>
+                );
+              }}
+              ListFooterComponentStyle={{
+                width: "100%",
+                height: 120,
+                justifyContent: "flex-end",
+              }}
+              ListFooterComponent={
+                props.filterState &&
+                !checkDefaultState() && (
+                  <Pressable
+                    // @ts-ignore
+                    ref={menuRef[menuList.length]}
+                    style={
+                      focusedMenu === menuList.length
+                        ? [
+                            styles.menuItem,
+                            {
+                              // marginTop: 10,
+                              borderRadius: 6,
+                              height: 62,
+                              backgroundColor: "#063961",
+                              alignContent: "center",
+                              justifyContent: "center",
+                            },
+                          ]
+                        : [
+                            styles.menuItem,
+                            {
+                              // marginTop: 10,
+                              backgroundColor: "#3A3A3B",
+                              height: 62,
+                              alignContent: "center",
+                              justifyContent: "center",
+                            },
+                          ]
+                    }
+                    onFocus={() => {
+                      onFocusMenu("clear",  menuList.length);
+                      // setClearFocused(true);
+                      // setSubMenuList([]);
+                      // setFocusedMenu(menuList.length);
+
+                      // setFocusedSubMenu(null)
+                    }}
+                    onPress={() => {
+                      props.handleFilterClear && props.handleFilterClear();
+                    }}
+                  >
+                    <MFText
+                      textStyle={{
+                        ...styles.MenuItemText,
+                        color: "white",
+                        textAlign: "center",
+                        fontSize: 25,
+                        fontWeight: "600",
+                        alignSelf: "center",
+                      }}
+                      shouldRenderText
+                      displayText={AppStrings.str_clear}
+                    />
+                  </Pressable>
+                )
+              }
+            />
+          )}
           <TouchableOpacity style={styles.touchableBar} onFocus={onFocusBar} />
         </View>
         <View style={styles.subMenuContainer}>
@@ -352,7 +363,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
           />
         </View>
       </Animated.View>
-      </Modal>
+    </Modal>
   );
 };
 

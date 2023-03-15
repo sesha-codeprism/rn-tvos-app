@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  BackHandler,
   PressableProps,
   StyleSheet,
   Text,
   TouchableOpacity,
+  TVMenuControl,
   View,
 } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../utils/dimensions";
@@ -181,9 +183,19 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       cacheTime: appUIDefinition.config.queryCacheTime,
     }
   );
-
+  // const backAction: any = ()=>{
+  //   console.log("currentFeed",currentFeed,dataSource)
+  // if(currentFeed?.Id === dataSource[0].Id){
+  //   props.navigation.goBack()
+  // } else {
+  //   cardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+  // }
+  // }
   useEffect(() => {
     console.log("pivotQuery?.data?.data", pivotQuery?.data?.data);
+    if (!pivotQuery.data) {
+      cardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+    }
     if (data && isFetched) {
       const firstFilter = createInitialFilterState(
         pivotQuery?.data?.data,
@@ -192,6 +204,9 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       setDefaultFilterState(firstFilter);
       return filterData(data);
     }
+    // TVMenuControl.enableTVMenuKey();
+    // // props.navigation.addListener('beforeRemove',backAction);
+    // BackHandler.addEventListener("hardwareBackPress", backAction);
   }, [data]);
 
   const handleFilterClear = () => {

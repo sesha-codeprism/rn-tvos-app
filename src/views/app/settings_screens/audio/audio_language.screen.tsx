@@ -14,6 +14,10 @@ import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { AppStrings } from "../../../../config/strings";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
+import {
+  MFSelectCheckedBox,
+  MFSelectUnCheckedBox,
+} from "../../../../components/MFSelectBox";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -21,6 +25,7 @@ const AudioLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedLang, setSelectedLang] = useState<any>("");
   const [list, setList] = useState<string[]>([]);
+  const primary = GLOBALS.store!.settings.audio.audioLanguages.primary;
   const onPress = (item: string) => {
     try {
       setSelectedLang(item);
@@ -44,6 +49,7 @@ const AudioLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   };
   useEffect(() => {
     const langList = GLOBALS.store!.settings.audio.audioLanguages.tracks;
+
     setList(langList);
     // console.log("lang list", langList);
 
@@ -78,15 +84,9 @@ const AudioLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
             >
               <View style={styles.icContainer}>
                 {selectedLang === item ? (
-                  <Image
-                    source={AppImages.checked_circle}
-                    style={styles.icCircle}
-                  />
+                  <MFSelectCheckedBox />
                 ) : (
-                  <Image
-                    source={AppImages.unchecked_circle}
-                    style={styles.icCircle}
-                  />
+                  <MFSelectUnCheckedBox />
                 )}
               </View>
               <View style={styles.listContent}>
@@ -96,7 +96,9 @@ const AudioLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
                     { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
                   ]}
                 >
-                  {AppStrings.ISO[item]}
+                  {item === primary
+                    ? `${AppStrings.ISO[item]} - Primary`
+                    : AppStrings.ISO[item]}
                 </Text>
               </View>
             </Pressable>
