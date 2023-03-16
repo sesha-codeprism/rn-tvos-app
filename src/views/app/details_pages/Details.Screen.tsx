@@ -551,7 +551,125 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const openEditRecordingsPanel = (data: any) => {
-    featureNotImplementedAlert();
+    console.log("Data in edit", data);
+    const currentSubscriptionData = udpDataAsset.ctaButtons.find(
+      (e: any) => e.buttonText === AppStrings?.str_app_edit
+    );
+
+    let isSeries = false;
+    let isGeneric = false;
+    let programId;
+    if (currentSubscriptionData) {
+      const {
+        subscription: { SubscriptionGroup, SubscriptionItem } = {
+          SubscriptionGroup: null,
+          SubscriptionItem: null,
+        },
+      } = currentSubscriptionData;
+      if (SubscriptionGroup && SubscriptionItem) {
+        const { Definition, SeriesId } = SubscriptionGroup;
+        const { ProgramId, IsGeneric } = SubscriptionItem;
+        if (Definition === DefinationOfItem.SINGLE_PROGRAM) {
+          isSeries = false;
+          programId = ProgramId;
+          isGeneric = !!IsGeneric;
+        } else if (Definition === DefinationOfItem.SERIES) {
+          isSeries = true;
+          programId = SeriesId;
+          isGeneric = !!IsGeneric;
+        } else {
+          isSeries = !!SeriesId;
+          isGeneric = true;
+          programId = isSeries ? SeriesId : ProgramId;
+        }
+
+        GLOBALS.recordingData =
+          currentSubscriptionData?.subscription?.SubscriptionGroup;
+        // this.props?.setRecordingData(data.subscription.SubscriptionGroup);
+        let params = undefined;
+        let panelName = undefined;
+        if (isGeneric && !isSeries) {
+          params = {
+            isNew: false,
+            isSeries,
+            title: udpDataAsset.title,
+            programId: programId,
+            isGeneric,
+            isPopupModal: true,
+            isSubscriptionItem: true,
+          };
+          setScreenProps(params);
+          if (Definition === DefinationOfItem.SINGLE_PROGRAM) {
+            // panelName = SideMenuRoutes.DvrRecordingOptions;
+            setRoute(DetailRoutes.RecordingOptions);
+          } else {
+            // panelName = SideMenuRoutes.DvrEpisodeRecordingOptions;
+            setRoute(DetailRoutes.EpisodeRecordOptions);
+          }
+        } else {
+          if (Definition === ItemShowType.SingleProgram) {
+            params = {
+              isNew: false,
+              isSeries,
+              programId: programId,
+              title: udpDataAsset.title,
+              isGeneric,
+              isPopupModal: true,
+              isSubscriptionItem: true,
+              // onDvrItemSelected: this.setFocusBack,
+              // onUpdate: this.onDVRUpdated,
+            };
+            setScreenProps(params);
+            setRoute(DetailRoutes.RecordingOptions);
+            // panelName = SideMenuRoutes.DvrRecordingOptions;
+          } else {
+            if (
+              udpDataAsset.ctaButtons.some(
+                (cta: any) =>
+                  cta.buttonText ===
+                  AppStrings?.str_details_series_record_button
+              )
+            ) {
+              params = {
+                isNew: false,
+                programId: programId,
+                isGeneric,
+                title: udpDataAsset.title,
+                isPopupModal: true,
+                SubscriptionGroup,
+                isSubscriptionItem: true,
+                // onDvrItemSelected: this.setFocusBack,
+              };
+              setScreenProps(params);
+              setScreenProps(DetailRoutes.RecordingOptions);
+              // panelName = SideMenuRoutes.DvrRecordingOptions;
+            } else {
+              programId = SubscriptionItem?.ProgramId;
+              if (
+                feed?.Schedule?.ProgramId &&
+                programId !== feed?.Schedule?.ProgramId
+              ) {
+                programId = feed?.Schedule?.ProgramId;
+              }
+
+              params = {
+                isNew: false,
+                seriesId: SeriesId,
+                programId: programId,
+                title: udpDataAsset.title,
+                isPopupModal: true,
+                SubscriptionGroup,
+              };
+              setScreenProps(params);
+              setRoute(DetailRoutes.EpisodeRecordOptions);
+              // panelName = SideMenuRoutes.DvrEpisodeRecordingOptions;
+            }
+          }
+        }
+        // this.props.openPanel(true, panelName, params);
+        drawerRef.current.open();
+      }
+    }
   };
 
   const handlePlayDvr = () => {};
@@ -1107,10 +1225,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             networkData?.oneFootSmallURL ||
             AppImages.placeholder;
           items.push(
-            <Image
-              source={networkSource}
-              style={styles.networkImage}
-            />
+            <Image source={networkSource} style={styles.networkImage} />
           );
         }
       }
@@ -1119,14 +1234,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
     return (
       <View style={styles.thirdColumn}>
-          {imageSource ? (
-            <View style={styles.networkImageView}>
-              <Image source={imageSource} style={styles.networkImage} />
-            </View>
-          ) : null}
-          <Text style={styles.networkTitle}>
-            {firstNetwork?.name || firstNetwork?.Name}
-          </Text>
+        {imageSource ? (
+          <View style={styles.networkImageView}>
+            <Image source={imageSource} style={styles.networkImage} />
+          </View>
+        ) : null}
+        <Text style={styles.networkTitle}>
+          {firstNetwork?.name || firstNetwork?.Name}
+        </Text>
         <View style={{ flexDirection: "row" }}>{renderNetworkLogos()}</View>
       </View>
     );
@@ -1490,7 +1605,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       });
     }
     setIsCTAButtonFocused(true);
-  }, [udpDataAsset?.ctaButtons?.length])
+  }, [udpDataAsset?.ctaButtons?.length]);
 
   const getRestrictionsForVod = (
     usablePlayActions: any,

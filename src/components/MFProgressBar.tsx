@@ -1,11 +1,22 @@
 import React from "react";
 import { StyleSheet, View, Dimensions, Animated } from "react-native";
+import { BookmarkType } from "../utils/analytics/consts";
+
+export interface Bookmark {
+  BookmarkType: BookmarkType;
+  Id: string;
+  ProgramId: string;
+  RuntimeSeconds: number;
+  TimeSeconds: number;
+}
+
 interface MFProgressBarProps {
   backgroundColor: string;
   foregroundColor: string;
   toValue: number;
   maxHeight: number;
   maxWidth: number;
+  Bookmark?: any;
 }
 
 const MFProgressBar: React.FunctionComponent<MFProgressBarProps> = (props) => {

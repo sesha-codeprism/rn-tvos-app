@@ -685,7 +685,7 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
               style={styles.saveButton}
               textStyle={{
                 height: 38,
-                width: 100,
+                width: 250,
                 color: "#EEEEEE",
                 fontFamily: "Inter",
                 fontSize: 25,
@@ -693,6 +693,9 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
                 letterSpacing: 0,
                 lineHeight: 38,
                 textAlign: "center",
+              }}
+              onPress={() => {
+                console.log("Save changes pressed");
               }}
               avatarSource={undefined}
               textLabel={AppStrings?.str_dvr_btn_save_changes}

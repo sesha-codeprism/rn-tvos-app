@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MFText from "./MFText";
 import {
   Animated,
@@ -21,6 +21,10 @@ import { AppImages } from "../assets/images";
 import { Value } from "react-native-reanimated";
 import { SCREEN_HEIGHT } from "../utils/dimensions";
 import { globalStyles } from "../config/styles/GlobalStyles";
+import { sourceTypeString } from "../utils/analytics/consts";
+import dateUtils from "../utils/dateUtils";
+import MFOverlay from "./MFOverlay";
+import { queryClient } from "../config/queries";
 const MFTheme: MFThemeObject = require("../config/theme/theme.json");
 
 export enum AspectRatios {
@@ -71,15 +75,37 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const textFadeAnim = useRef(new Animated.Value(1)).current;
     const translateAnim = useRef(new Animated.Value(0)).current;
+
+    const getStartTime = () => {
+      const schedule = props.data?.Schedule,
+        startUtc = schedule?.StartUtc;
+      return dateUtils.convertISOStringToTimeStamp(startUtc);
+    };
+
+    const getEndTime = () => {
+      const schedule = props.data?.Schedule,
+        endUtc = schedule?.EndUtc;
+      return dateUtils.convertISOStringToTimeStamp(endUtc);
+    };
+    let progressUpdateInterval: any;
+    let clearIntervalTimeout: any;
+    let progressBookmarkTimeout: any;
+    const [startTime, setStarTime] = useState(getStartTime());
+    const [endTime, setEndTime] = useState(getEndTime());
+    const [progress, setProgress] = useState<any>(undefined);
+    // const [progressUpdateInterval, setProgressUpdateInterval] = useState(0);
+    // const [clearIntervalTimeout, setClearIntervalTimeout] = useState(0);
+    // const [progressBookmarkTimeout, setProgressBookmarkTimeout] = useState(0);
     const _onPress = (event: GestureResponderEvent) => {
-      console.log('onPress called');
+      console.log("onPress called");
       props.onPress && props.onPress(props.data);
     };
     const _onLongPress = (event: GestureResponderEvent) => {
-      console.log('onLongPress called');
+      console.log("onLongPress called");
 
       props.onLongPress && props.onLongPress(props.data);
     };
+
     const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
       setFocused(true);
       Animated.timing(fadeAnim, {
@@ -100,6 +126,10 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
       }).start();
       props.onFocus && props.onFocus(props.data);
     };
+
+    // if (props.data?.assetType.sourceType === sourceTypeString["LIVE"]) {
+    //   console.log("Title", props.data?.title, "Progress", progress);
+    // }
 
     const _onBlur = (event: NativeSyntheticEvent<TargetedEvent>) => {
       fadeAnim.stopAnimation();
@@ -122,6 +152,85 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
         duration: 250,
       }).start();
       props.onBlur && props.onBlur(event);
+    };
+
+    useEffect(() => {
+      if (props.data?.assetType?.sourceType === sourceTypeString["LIVE"]) {
+        processBookmark();
+      }
+    }, []);
+
+    const startUpdateTimer = () => {
+      stopUpdateTimer();
+      progressUpdateInterval = setInterval(() => {
+        recalculateBookmark();
+      }, 5000);
+    };
+
+    const stopUpdateTimer = () => {
+      if (progressUpdateInterval) {
+        clearInterval(progressUpdateInterval);
+      }
+    };
+
+    const startClearIntervalTimer = (timeToEnd: number) => {
+      stopClearIntervalTimer();
+      clearIntervalTimeout = setTimeout(() => {
+        stopUpdateTimer();
+        console.log("Invalidating the live queries");
+        queryClient.invalidateQueries({ queryKey: ["live"] });
+      }, timeToEnd);
+      setStarTime(getStartTime());
+    };
+
+    const stopClearIntervalTimer = () => {
+      if (clearIntervalTimeout) {
+        clearTimeout(clearIntervalTimeout);
+      }
+    };
+
+    const startProgressBookmarkTimer = (timeToStart: number) => {
+      stopProgressBookmarkTimer();
+      progressBookmarkTimeout = setTimeout(() => {
+        processBookmark();
+      }, timeToStart);
+      setStarTime(getStartTime());
+    };
+
+    const stopProgressBookmarkTimer = () => {
+      if (progressBookmarkTimeout) {
+        clearTimeout(progressBookmarkTimeout);
+      }
+    };
+
+    const recalculateBookmark = () => {
+      const runtimeSeconds = (endTime - startTime) / 1000;
+      const bookmarkSeconds = (Date.now() - startTime) / 1000;
+      setProgress(bookmarkSeconds / runtimeSeconds);
+    };
+
+    const processBookmark = () => {
+      if (Date.now() - endTime > 0) {
+        return;
+      }
+
+      const timeToStart = startTime - Date.now();
+      console.log("timeToStart", timeToStart);
+      if (timeToStart > 0) {
+        console.log("timeToStart is true");
+        stopUpdateTimer();
+        recalculateBookmark();
+        startProgressBookmarkTimer(timeToStart);
+      } else {
+        const timeToEnd = endTime - Date.now();
+        console.log("timeToEnd", timeToEnd);
+        if (timeToEnd > 0) {
+          recalculateBookmark();
+          startUpdateTimer();
+          startClearIntervalTimer(timeToEnd);
+          console.log("timeToStart is true");
+        }
+      }
     };
 
     const getRenderImageURI = (renderType: any) => {
@@ -290,7 +399,28 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
             //@ts-ignore
             style={props.imageStyle}
           >
-            {props.overlayComponent}
+            <MFOverlay
+              renderGradiant={true}
+              //@ts-ignore
+              showProgress={
+                props.data.Bookmark! ||
+                props.data.progress ||
+                progress !== undefined
+              }
+              //@ts-ignore
+              progress={progress && progress * 100}
+              //@ts-ignore
+              displayTitle={props.data.episodeInfo && props.data.episodeInfo}
+              bottomText={
+                //@ts-ignore
+                props.data.metadataLine3 ||
+                //@ts-ignore
+                props.data.durationMinutesString ||
+                ""
+              }
+              // showRec={true}
+              // recType={"series"}
+            />
             {getRenderImageURI(props.cardStyle) === undefined && !focused && (
               <Animated.View
                 style={{

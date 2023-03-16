@@ -4,7 +4,7 @@ import { massageDVRFeed } from "../../src/utils/assetUtils";
 import { SourceType } from "../../src/utils/common";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { GLOBALS } from "../../src/utils/globals";
-import { GET, POST } from "../utils/common/cloud";
+import { GET, POST, PUT } from "../utils/common/cloud";
 import { parseUri } from "../utils/url/urlUtil";
 
 
@@ -91,6 +91,22 @@ export const saveRecordingToBackend = async (subcriptionsParams: any) => {
         },
     });
     return response
+}
+
+
+export const updateRecordingInBackend = async (subscriptionId: string, subscriptionSettings: any) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return;
+    }
+    const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscriptions/${subscriptionId}/settings`;
+    const response = await PUT({
+        url: url,
+        params: subscriptionSettings,
+        headers: {
+            Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+        }
+    });
+    return response;
 }
 
 
