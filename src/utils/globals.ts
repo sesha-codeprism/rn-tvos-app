@@ -144,7 +144,7 @@ interface GLOBALSType {
       };
       dvr: {
         stopRecording: string | null
-      }
+      };
     };
   } | null;
   [key: string]: any;

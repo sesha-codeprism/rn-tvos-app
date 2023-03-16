@@ -338,7 +338,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                 StationId: StationId,
                 ChannelNumber: ChannelNumber as number,
                 StartUtc: StartUtc,
-                EndLateSeconds: 0,
+                EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
                 RecyclingDisabled: false,
                 ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
                 IsMultiChannel: false,
@@ -366,7 +366,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   StationId: StationId,
                   ChannelNumber: ChannelNumber as number,
                   StartUtc: CatchupStartUtc || StartUtc,
-                  EndLateSeconds: 0,
+                  EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
                   RecyclingDisabled: false,
                   ChannelMapId:
                     GLOBALS.userAccountInfo.ChannelMapId?.toString(),
@@ -389,7 +389,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   StationId: StationId,
                   ChannelNumber: ChannelNumber as number,
                   StartUtc: StartUtc,
-                  EndLateSeconds: 0,
+                  EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
                   RecyclingDisabled: false,
                   ChannelMapId:
                     GLOBALS.userAccountInfo.ChannelMapId?.toString(),

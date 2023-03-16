@@ -3,6 +3,7 @@ import { config } from "../config/config";
 import { AppStrings } from "../config/strings";
 import { Genre, RecorderModel } from "./analytics/consts";
 import { DvrItemState, FilterValue, ItemShowType } from "./common";
+import { format } from "./dataUtils";
 import { LiveChannelMap } from "./live/LiveUtils";
 import { getUIdef } from "./uidefinition";
 const dvrConfig = getUIdef("DvrManager")?.config;
@@ -2352,3 +2353,54 @@ export const getEndTimeIgnoreState = (subscriptionItem: any): Date => {
 
     return endTime;
 };
+
+export const getStopRecordingOptions = () => {
+    return [
+      {
+        title: AppStrings?.str_dvr_recording.stop_recording_at_scheduled_time,
+        key: 0,
+      },
+      {
+        title: format(
+          AppStrings?.str_dvr_recording.stop_recording_after_minutes,
+          "5"
+        ),
+        key: 300, // seconds
+      },
+      {
+        title: format(
+          AppStrings?.str_dvr_recording.stop_recording_after_minutes,
+          "15"
+        ),
+        key: 900, // seconds
+      },
+      {
+        title: format(
+          AppStrings?.str_dvr_recording.stop_recording_after_minutes,
+          "30"
+        ),
+        key: 1800, // seconds
+      },
+      {
+        title: format(
+          AppStrings?.str_dvr_recording.stop_recording_after_hours,
+          "1"
+        ),
+        key: 3600,
+      },
+      {
+        title: format(
+          AppStrings?.str_dvr_recording.stop_recording_after_hours,
+          "2"
+        ),
+        key: 7200,
+      },
+      {
+        title: format(
+          AppStrings?.str_dvr_recording.stop_recording_after_hours,
+          "3"
+        ),
+        key: 10800,
+      },
+    ];
+  };

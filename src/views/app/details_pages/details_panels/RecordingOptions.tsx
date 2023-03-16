@@ -13,6 +13,7 @@ import {
   DvrGroupShowType,
   filterLiveSchedules,
   Definition as DefinitionString,
+  getStopRecordingOptions,
 } from "../../../../utils/DVRUtils";
 import { queryClient } from "../../../../config/queries";
 import { DvrCapabilityType, format } from "../../../../utils/assetUtils";
@@ -154,57 +155,6 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
     }
 
     return Promise.resolve();
-  };
-
-  const getStopRecordingOptions = () => {
-    return [
-      {
-        title: AppStrings?.str_dvr_recording.stop_recording_at_scheduled_time,
-        key: 0,
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_minutes,
-          "5"
-        ),
-        key: 300, // seconds
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_minutes,
-          "15"
-        ),
-        key: 900, // seconds
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_minutes,
-          "30"
-        ),
-        key: 1800, // seconds
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_hours,
-          "1"
-        ),
-        key: 3600,
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_hours,
-          "2"
-        ),
-        key: 7200,
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_hours,
-          "3"
-        ),
-        key: 10800,
-      },
-    ];
   };
 
   const keepUntilOptions = () => [

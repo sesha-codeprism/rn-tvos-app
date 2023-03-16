@@ -15,46 +15,10 @@ import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
 import { AppStrings } from "../../../../config/strings";
 import { MFSelectCheckedBox, MFSelectUnCheckedBox } from "../../../../components/MFSelectBox";
+import { getStopRecordingOptions } from "../../../../utils/DVRUtils";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const list = [
-  {
-    title: "At scheduled end time",
-    action: "",
-    value: 0,
-  },
-  {
-    title: "5 min after",
-    action: "",
-    value: 300,
-  },
-  {
-    title: "15 min after",
-    action: "",
-    value: 900,
-  },
-  {
-    title: "30 min after",
-    action: "",
-    value: 1800,
-  },
-  {
-    title: "1 hr after",
-    action: "",
-    value: 3600,
-  },
-  {
-    title: "2 hrs after",
-    action: "",
-    value: 7200,
-  },
-  {
-    title: "3 hrs after",
-    action: "",
-    value: 10800,
-  },
-];
 const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedItem, setSelectedItem] = useState<any>("");
@@ -76,7 +40,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
       subTitle={"Stop Recording"}
     >
       <FlatList
-        data={list}
+        data={getStopRecordingOptions()}
         keyExtractor={(item) => item.title}
         renderItem={({ item, index }) => {
           return (
@@ -85,7 +49,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
                 setFocussed(index);
               }}
               onPress={() => {
-                onPress(item.value);
+                onPress(item.key);
               }}
               style={
                 index === focussed
@@ -95,7 +59,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
               key={index}
             >
               <View style={styles.icContainer}>
-                {selectedItem === item.title ? (
+                {selectedItem === item.key ? (
                   <MFSelectCheckedBox />
                 ) : (
                   <MFSelectUnCheckedBox />
