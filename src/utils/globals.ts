@@ -142,6 +142,9 @@ interface GLOBALSType {
         };
         descriptiveAudio: string;
       };
+      dvr: {
+        stopRecording: string | null
+      }
     };
   } | null;
   [key: string]: any;
@@ -174,6 +177,11 @@ export const GLOBALS: GLOBALSType = {
     lastPageReached: false,
     itemFeed: [],
     filterData: {},
+  },
+  settings: {
+    dvr: {
+      stopRecording: ''
+    }
   },
   moviesAndTvShows: [],
   store: null,
@@ -222,6 +230,9 @@ export const deleteUserSettings = () => {
           tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
         },
         descriptiveAudio: "",
+      },
+      dvr: {
+        stopRecording: ''
       },
     },
 

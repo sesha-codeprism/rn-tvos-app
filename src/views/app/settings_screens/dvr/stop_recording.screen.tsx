@@ -22,30 +22,37 @@ const list = [
   {
     title: "At scheduled end time",
     action: "",
+    value: 0,
   },
   {
     title: "5 min after",
     action: "",
+    value: 300,
   },
   {
     title: "15 min after",
     action: "",
+    value: 900,
   },
   {
     title: "30 min after",
     action: "",
+    value: 1800,
   },
   {
     title: "1 hr after",
     action: "",
+    value: 3600,
   },
   {
     title: "2 hrs after",
     action: "",
+    value: 7200,
   },
   {
     title: "3 hrs after",
     action: "",
+    value: 10800,
   },
 ];
 const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
@@ -53,11 +60,11 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
   const [selectedItem, setSelectedItem] = useState<any>("");
   const onPress = (item: string) => {
     setSelectedItem(item);
-    //   GLOBALS.store.settings.display.onScrreenLanguage = item;
-    //   updateStore(GLOBALS.store);
+    GLOBALS.store!.settings.dvr ? GLOBALS.store!.settings.dvr.stopRecording = item : GLOBALS.store!.settings.dvr = {stopRecording: item}
+    updateStore(GLOBALS.store);
   };
   const getValues = () => {
-    setSelectedItem(GLOBALS.store!.settings.display.onScreenLanguage);
+    setSelectedItem(GLOBALS.store!.settings.dvr?.stopRecording);
   };
   useEffect(() => {
     getValues();
@@ -78,7 +85,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
                 setFocussed(index);
               }}
               onPress={() => {
-                onPress(item.title);
+                onPress(item.value);
               }}
               style={
                 index === focussed
