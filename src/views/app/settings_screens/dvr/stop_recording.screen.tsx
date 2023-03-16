@@ -15,49 +15,20 @@ import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
 import { AppStrings } from "../../../../config/strings";
 import { MFSelectCheckedBox, MFSelectUnCheckedBox } from "../../../../components/MFSelectBox";
+import { getStopRecordingOptions } from "../../../../utils/DVRUtils";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const list = [
-  {
-    title: "At scheduled end time",
-    action: "",
-  },
-  {
-    title: "5 min after",
-    action: "",
-  },
-  {
-    title: "15 min after",
-    action: "",
-  },
-  {
-    title: "30 min after",
-    action: "",
-  },
-  {
-    title: "1 hr after",
-    action: "",
-  },
-  {
-    title: "2 hrs after",
-    action: "",
-  },
-  {
-    title: "3 hrs after",
-    action: "",
-  },
-];
 const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedItem, setSelectedItem] = useState<any>("");
   const onPress = (item: string) => {
     setSelectedItem(item);
-    //   GLOBALS.store.settings.display.onScrreenLanguage = item;
-    //   updateStore(GLOBALS.store);
+    GLOBALS.store!.settings.dvr ? GLOBALS.store!.settings.dvr.stopRecording = item : GLOBALS.store!.settings.dvr = {stopRecording: item}
+    updateStore(GLOBALS.store);
   };
   const getValues = () => {
-    setSelectedItem(GLOBALS.store!.settings.display.onScreenLanguage);
+    setSelectedItem(GLOBALS.store!.settings.dvr?.stopRecording);
   };
   useEffect(() => {
     getValues();
@@ -69,7 +40,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
       subTitle={"Stop Recording"}
     >
       <FlatList
-        data={list}
+        data={getStopRecordingOptions()}
         keyExtractor={(item) => item.title}
         renderItem={({ item, index }) => {
           return (
@@ -78,7 +49,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
                 setFocussed(index);
               }}
               onPress={() => {
-                onPress(item.title);
+                onPress(item.key);
               }}
               style={
                 index === focussed
@@ -88,7 +59,7 @@ const StopRecordingScreen: React.FunctionComponent<Props> = (props: any) => {
               key={index}
             >
               <View style={styles.icContainer}>
-                {selectedItem === item.title ? (
+                {selectedItem === item.key ? (
                   <MFSelectCheckedBox />
                 ) : (
                   <MFSelectUnCheckedBox />

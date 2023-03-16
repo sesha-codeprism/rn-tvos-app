@@ -173,7 +173,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
             ChannelNumber: schedule.ChannelNumber as number,
             StartUtc: schedule.StartUtc,
             MaximumViewableShows: undefined,
-            EndLateSeconds: 0,
+            EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
             RecyclingDisabled: false,
             ShowType: "FirstRunOnly",
             AirtimeDomain: "Anytime",
