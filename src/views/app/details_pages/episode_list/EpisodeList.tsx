@@ -1127,7 +1127,7 @@ const episodeStyles: any = StyleSheet.create(
       },
       seasonBlock: {
         height: 62,
-        width: 225,
+        width: 300,
         marginBottom: 43,
         alignContent: "center",
         alignItems: "center",
