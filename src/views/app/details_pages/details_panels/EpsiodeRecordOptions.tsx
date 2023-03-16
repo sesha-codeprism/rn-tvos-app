@@ -134,7 +134,7 @@ const EpisodeRecordOptions: React.FunctionComponent<
             ChannelNumber: schedule.ChannelNumber,
             StartUtc: schedule.StartUtc,
             MaximumViewableShows: undefined,
-            EndLateSeconds: 0,
+            EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
             RecyclingDisabled: false,
             ShowType: showType,
             AirtimeDomain: airTimeDomain,
