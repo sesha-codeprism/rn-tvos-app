@@ -182,7 +182,7 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
           >
             <DetailsNavigator
               initialScreen={props.route}
-              props={{ ...props.screenProps, closePanel: closeDrawer }}
+              props={{ ...props.screenProps }}
             />
           </Animated.View>
         </Animated.View>

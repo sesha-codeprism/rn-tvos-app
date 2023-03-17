@@ -102,6 +102,7 @@ interface GLOBALSType {
   channelRights: any;
   /** User account info  */
   userAccountInfo: UserAccountInfo;
+  rawSubscriptionGroupsResponse: any;
   allSubscriptionGroups: any;
   viewableSubscriptions: any;
   scheduledSubscriptions: any

@@ -39,7 +39,7 @@ import {
 import { getUIdef, scaleAttributes } from "../../../utils/uidefinition";
 import { globalStyles as g } from "../../../config/styles/GlobalStyles";
 import { PageContainer } from "../../../components/PageContainer";
-import { format, getItemId } from "../../../utils/dataUtils";
+import { getItemId, format } from "../../../utils/dataUtils";
 import { AppStrings, getFontIcon } from "../../../config/strings";
 import {
   assetTypeObject,
@@ -51,7 +51,7 @@ import {
   pbr,
   sourceTypeString,
 } from "../../../utils/analytics/consts";
-import { Genre, ItemShowType, SourceType } from "../../../utils/common";
+import { Definition, Genre, ItemShowType, SourceType } from "../../../utils/common";
 import { useQuery } from "react-query";
 import {
   appUIDefinition,
@@ -92,6 +92,10 @@ import { DetailRoutes } from "../../../config/navigation/DetailsNavigator";
 import { GlobalContext } from "../../../contexts/globalContext";
 import { DuplexManager } from "../../../modules/duplex/DuplexManager";
 import NotificationType from "../../../@types/NotificationType";
+import { ConflictResolutionContext } from "../../../contexts/conflictResolutionContext";
+import MFEventEmitter from "../../../utils/MFEventEmitter";
+import { cancelRecordingFromConflictPopup, forceResolveConflict } from "../../../../backend/dvrproxy/dvrproxy";
+import { findConflictedGroupBySeriesOrProgramId, getScheduledItems } from "../../../utils/ConflictUtils";
 
 interface AssetData {
   id: string;
@@ -135,6 +139,7 @@ interface DetailsState {
 const fontSize = { fontSize: 25 };
 
 const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
+  const conflictContext = useContext(ConflictResolutionContext);
   const feed: Feed = props.route.params.feed;
   const drawerRef: React.MutableRefObject<any> = useRef();
 
@@ -216,21 +221,24 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const toggleSidePanel = () => {
+    
     setScreenProps({
       udpData: udpDataAsset,
       networkInfo: networkInfo,
       genres: udpDataAsset?.genre || discoveryProgramData?.genre,
     });
     setRoute(DetailRoutes.MoreInfo);
-    // drawerRef?.current.pushRoute(DetailRoutes.MoreInfo, {
-    //   udpData: udpDataAsset,
-    //   networkInfo: networkInfo,
-    //   genres: udpDataAsset?.genre || discoveryProgramData?.genre,
-    // });
+    drawerRef?.current.pushRoute(DetailRoutes.MoreInfo, {
+      udpData: udpDataAsset,
+      networkInfo: networkInfo,
+      genres: udpDataAsset?.genre || discoveryProgramData?.genre,
+    });
     setOpen(true);
     drawerRef?.current?.open();
 
-    // drawerRef.current.open();
+
+    
+
   };
   const openNewRecording = () => {
     //TODO: We have a check for PCON. Need to implement
@@ -547,7 +555,91 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const startResolveConflict = () => {
-    featureNotImplementedAlert();
+    //if no conflict:
+    let id  = getItemId(feed);
+    const subs = GLOBALS.rawSubscriptionGroupsResponse ;
+    let conflictedSubscriptionGroup: any|undefined = findConflictedGroupBySeriesOrProgramId(id, subs?.SubscriptionGroups);
+    const [{ Definition: definition }] = conflictedSubscriptionGroup || {};
+    const conflictedItems = conflictedSubscriptionGroup?.[0]?.SubscriptionItems?.filter((si: any) =>  si.ItemState  === 'Conflicts');
+    if(conflictedSubscriptionGroup && conflictedItems && conflictedItems.length){
+      // determine if series conflict
+    if(definition === Definition.SINGLE_PROGRAM || definition === Definition.SINGLE_TIME){
+        MFEventEmitter.emit("openPopup", {
+          buttons: [
+            {
+              title: AppStrings?.str_dvr_resolve_conflict_auto,
+              onPress: async () => {
+                await forceResolveConflict(conflictedSubscriptionGroup);
+                MFEventEmitter.emit("closePopup",undefined);
+              },
+            },
+            {
+              title: AppStrings?.str_dvr_resolve_conflict_manual,
+              onPress: () => {
+                conflictContext.ProgramId = id;
+                conflictContext.isEpisode = true;
+                MFEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
+              },
+            },
+            {
+              title: AppStrings?.str_dvr_donot_record,
+              onPress: async () => {
+                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  false, false) ;
+                MFEventEmitter.emit("closePopup",undefined);
+              },
+            }
+          ],
+          description: AppStrings?.str_dvr_conflict_popup_warning_program
+        });
+      }else {
+        MFEventEmitter.emit("openPopup", {
+          buttons: [
+            {
+              title: AppStrings?.str_dvr_series_conflict_modal_record_all,
+              onPress: async () => {
+                await forceResolveConflict(conflictedSubscriptionGroup);
+                MFEventEmitter.emit("closePopup",undefined);
+              },
+            },
+            {
+              title: AppStrings?.str_dvr_series_modal_recod_no_conflict,
+              onPress: async () => {
+                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  true, true) ;
+                MFEventEmitter.emit("closePopup",undefined);
+              },
+            },
+            {
+              title: AppStrings?.str_dvr_series_conflict_modal_chose_show,
+              onPress: () => {
+                conflictContext.ProgramId = id;
+                conflictContext.isEpisode = true;
+                MFEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
+              },
+            },
+            {
+              title: AppStrings?.str_dvr_donot_record,
+              onPress: async () => {
+                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup, true, false);
+                MFEventEmitter.emit("closePopup",undefined);
+              },
+            }
+          ],
+          description: AppStrings?.str_dvr_conflict_popup_warning_series
+        });
+      }
+    }else {
+      MFEventEmitter.emit("openPopup", {
+        buttons: [
+          {
+            title: "OK",
+            onPress: async () => {
+              MFEventEmitter.emit("closePopup", undefined);
+            },
+          }
+        ],
+        description: AppStrings?.str_dvr_no_conflict_exists
+      });
+    }
   };
 
   const openEditRecordingsPanel = (data: any) => {
@@ -1465,16 +1557,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         !!subscriberData,
     }
   );
+  
   useEffect(() => {
     appQueryCache.subscribe((event) => {
       console.log(event);
       if (event?.type === "queryUpdated") {
         if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
-          // const recordButton = udpDataAsset.ctaButtons.filter(
-          //   (e: any) =>
-          //     (e.buttonText = AppStrings?.str_details_program_record_button)
-          // )[0];
-
           setTimeout(() => {
             refetch();
           }, 1000);
