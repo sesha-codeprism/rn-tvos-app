@@ -13,7 +13,7 @@ import ErrorBoundary from "react-native-error-boundary";
 import ErrorFallbackComponent from "../components/ErroFallBackComponent";
 import { queryClient } from "../config/queries";
 
-interface AppProps {}
+interface AppProps { }
 
 const App: React.FunctionComponent<AppProps> = (props) => {
   // const queryClient = new QueryClient();
@@ -22,7 +22,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     GLOBALS.store?.settings?.display?.onScreenLanguage
   );
   const [enableRTL, shouldEnableRTL] = useState(GLOBALS.enableRTL);
-  const duplexMessageHandleStack = useRef([() => {}]);
+  const duplexMessageHandleStack = useRef([() => { }]);
 
   async function getLandingData() {
     initUIDef();
@@ -95,22 +95,24 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   };
 
   return (
-    <ErrorBoundary
-      onError={errorHandler}
-      FallbackComponent={ErrorFallbackComponent}
-    >
-      <QueryClientProvider client={queryClient}>
-        <GlobalContext.Provider value={appSettings}>
-          <MFDrawerContainer />
+
+    <QueryClientProvider client={queryClient}>
+      <GlobalContext.Provider value={appSettings}>
+        <MFDrawerContainer />
+        <ErrorBoundary
+          onError={errorHandler}
+          FallbackComponent={ErrorFallbackComponent}
+        >
           <RouterOutlet
             isAuthorized={
               GLOBALS.store?.accessToken !== null &&
               GLOBALS.store?.refreshToken !== null
             }
           />
-        </GlobalContext.Provider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+        </ErrorBoundary>
+      </GlobalContext.Provider>
+    </QueryClientProvider>
+
   );
 };
 

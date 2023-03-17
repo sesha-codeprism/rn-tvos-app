@@ -442,13 +442,22 @@ export const getProgramSubscriberData = async (item: string, params: any) => {
 }
 
 export const getSeriesSubscriberData = async (item: string, params: any) => {
-  const { id } = params;
+  const { id , storeId } = params;
   const { accessToken } = GLOBALS.store!;
+  const isCatchUp = (isFeatureAssigned("catchupEnvironment") && isFeatureAssigned("catchup")) || false;
+  const types = ["Title"];
+  if (GLOBALS.userAccountInfo && GLOBALS.userAccountInfo.DvrCapability === "CloudDvr") {
+    types.push("Recording");
+  }
   const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v4/series/${id}`
   try {
     const response = await GET({
       url: url,
-      params: params,
+      params: {
+        storeId: storeId,
+        types: types.join(","),
+        catchup: isCatchUp
+      },
       headers: {
         Authorization: `OAUTH2 access_token="${accessToken}"`,
         'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id

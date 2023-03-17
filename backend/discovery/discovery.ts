@@ -214,7 +214,7 @@ const discoverSubscriptions = async (
   return response;
 };
 
-const getPayPerView = async () => {
+const getPayPerView = async (id: string, params: any) => {  
   const pivots = `Language | ${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'} `;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/payperview/items";
@@ -225,8 +225,8 @@ const getPayPerView = async () => {
       storeId: DefaultStore.Id,
       $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
-      $top: 16,
-      $skip: 0,
+      $top: params?.$top || 16,
+      $skip: params?.$skip || 0,
     },
   });
   return response;

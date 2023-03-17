@@ -68,6 +68,8 @@ const snapToInterval: number =
   episodeListConfig?.snapToInterval || getScaledValue(20);
 const lazyListConfig: any = getUIdef("EpisodeList.LazyListWrapper")?.config;
 const scaledSnapToInterval = getScaledValue(lazyListConfig.snapToInterval);
+let skip = 0;
+let top = 10;
 
 const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const navigationParams = props.route.params;
@@ -173,7 +175,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
             ChannelNumber: schedule.ChannelNumber as number,
             StartUtc: schedule.StartUtc,
             MaximumViewableShows: undefined,
-            EndLateSeconds: 0,
+            EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
             RecyclingDisabled: false,
             ShowType: "FirstRunOnly",
             AirtimeDomain: "Anytime",
@@ -215,9 +217,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
 
   let firstButtonRef = React.createRef();
   let buttonFocuszoneRef = React.createRef();
-  let selectedButtonRef = React.createRef();
-  let skip = 0;
-  let top = 10;
+  let selectedButtonRef = React.createRef();  
 
   const setFlatListRef = (ref: any) => {
     episodeFlatList = ref;
@@ -1127,7 +1127,7 @@ const episodeStyles: any = StyleSheet.create(
       },
       seasonBlock: {
         height: 62,
-        width: 225,
+        width: 300,
         marginBottom: 43,
         alignContent: "center",
         alignItems: "center",

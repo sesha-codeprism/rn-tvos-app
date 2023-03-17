@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import { getFontIcon } from "../config/strings";
 import { globalStyles } from "../config/styles/GlobalStyles";
 import { SCREEN_WIDTH } from "../utils/dimensions";
+import MFEventEmitter from "../utils/MFEventEmitter";
 import MFButton, { MFButtonVariant } from "./MFButton/MFButton";
 import { TopBarWithTitle } from "./TopBarWithTitle";
 
@@ -51,7 +52,7 @@ const ErrorFallbackComponent = (props: Props) => (
           styles.button,
           { backgroundColor: globalStyles.backgroundColors.primary1 },
         ]}
-        onPress={props.resetError}
+        onPress={() => MFEventEmitter.emit('closeAll',  undefined)}
         iconButtonStyles={{
           shouldRenderImage: true,
           iconPlacement: "Left",

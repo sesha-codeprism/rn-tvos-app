@@ -1,7 +1,8 @@
 import { lang } from "../../src/config/constants";
 import { appQueryCache, queryClient } from "../../src/config/queries";
 import { massageDVRFeed } from "../../src/utils/assetUtils";
-import { SourceType } from "../../src/utils/common";
+import { Definition, SourceType } from "../../src/utils/common";
+import { findConflictedGroupBySeriesOrProgramId } from "../../src/utils/ConflictUtils";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { GLOBALS } from "../../src/utils/globals";
 import { GET, POST, PUT } from "../utils/common/cloud";
@@ -44,7 +45,7 @@ export const getScheduledSubscriptionGroups = async (uri: string, params: any) =
     return response;
 }
 
-export const getAllSubscriptionGroups = async (uri: string, params: any) => {
+export const getAllSubscriptionGroups = async (params: any) => {
     const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr}v1/subscription-groups/`;
     const paramsObject = {
         "$type-filter": params?.type || "all",
@@ -77,6 +78,129 @@ export const getDVRRecorders = async (id: string, params: any) => {
     })
     return response;
 }
+
+export const getConflicts = async (conflictId: string) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return
+    }
+    const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscription-items/${conflictId}/conflicts`
+    const response = await GET({
+        url: url,
+        params: {
+            storeId: DefaultStore.Id
+        },
+        headers: {
+            Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+        },
+    });
+    return response
+}
+
+export const submitSolutionForConflicts = async (conflictId: string, solution: string[]) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return
+    }
+    const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscription-items/${conflictId}/conflict-solution`;
+
+    const response = await PUT({
+      url: url,
+      params: {
+        ...{
+            "ScheduledSubscriptionItemIds": solution
+        }
+      },
+      headers: {
+        Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+      },
+    });
+    return response;
+  };
+
+  export  const forceResolveConflict = async (subscriptionGroup:any) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return
+    }
+    const [{ Definition: defination,  Id, SubscriptionItems}] = subscriptionGroup || {};
+    if(defination === Definition.SERIES || defination === Definition.GENERIC_PROGRAM){
+        const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscriptions/${Id}/force-resolve-conflicts`;
+        const response = await POST({
+            url: url,
+            headers: {
+              Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+            },
+          });
+          return response;
+    }else if(defination === Definition.SINGLE_PROGRAM || defination === Definition.SINGLE_TIME){
+        //const [{SubscriptionId},...rest] = SubscriptionItems;
+        const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscriptions/${Id}/force-resolve-conflicts`;
+        const response = await POST({
+            url: url,
+            headers: {
+              Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+            },
+          });
+          return response;
+    }
+  }
+
+  export const cancelRecordingFromConflictPopup = async (subscriptionGroup: any, ifSeries: boolean, ifSeriesNonConflicted: boolean) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return
+    }
+    let params = null;
+    let url = null;
+    const [{ Definition: defination,  Id, SubscriptionItems}] = subscriptionGroup || {};
+    if(ifSeries && defination === Definition.SERIES || defination === Definition.GENERIC_PROGRAM){
+        if(!ifSeriesNonConflicted){
+            params =  {"SubscriptionIds":[Id],"SubscriptionItemIds":[]};  // cancels whole series
+            url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
+            const response = await POST({
+                url: url,
+                params,
+                headers: {
+                  Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                },
+              });
+              return response;
+        }else {
+            params =  {"SubscriptionIds":[Id],"SubscriptionItemIds":SubscriptionItems?.filter((si: any) => si.ItemState === 'Conflicts')?.map((si: any) => si?.Id)};  // cancels conflicted items
+            url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
+            const response = await POST({
+                url: url,
+                params,
+                headers: {
+                  Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                },
+              });
+              return response;
+        }
+    }else if(defination === Definition.SINGLE_PROGRAM || defination === Definition.SINGLE_TIME){
+        if(SubscriptionItems.length > 0){
+            params =  {"SubscriptionIds":[Id],"SubscriptionItemIds": [SubscriptionItems.map((si: any) => si?.Id)]};// cancel recording for programs
+            url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
+            const response = await POST({
+                url: url,
+                params,
+                headers: {
+                  Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                },
+              });
+              return response;
+        }else if(SubscriptionItems.length === 0){
+            params =  {"SubscriptionIds":[Id],"SubscriptionItemIds":[]};
+            url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
+            const response = await POST({
+                url: url,
+                params,
+                headers: {
+                  Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                },
+              });
+              return response;
+        }
+    }
+}
+
 
 export const saveRecordingToBackend = async (subcriptionsParams: any) => {
     if (!GLOBALS.bootstrapSelectors) {

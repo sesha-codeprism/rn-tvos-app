@@ -1,38 +1,40 @@
-import React, { forwardRef, Ref, useEffect, useState } from "react";
+import React, { forwardRef, Ref, useContext, useEffect, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
   Modal,
-  ActivityIndicator,
   Settings as SettingsRN,
 } from "react-native";
-import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
-import { GLOBALS } from "../../utils/globals";
+import { GLOBALS } from "../../../../utils/globals";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import MFEventEmitter from "../../utils/MFEventEmitter";
-import { Empty } from "../../views/MFDrawersContainer";
+import MFEventEmitter from "../../../../utils/MFEventEmitter";
+import { Empty } from "../../../../views/MFDrawersContainer";
+import ConflictResolution from "./ConflictResolution";
+import { ConflictResolutionContext } from "../../../../contexts/conflictResolutionContext";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-interface SettingsContainerProps {
+
+interface ConflictsContainerProps {
   drawerPercentage: number;
   navigation?: any;
 }
-const SettingsContainer = (props: SettingsContainerProps) => {
-  const offset = useSharedValue(GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage) ;
+const ConflictsContainer = (props: ConflictsContainerProps) => {
+  const offset = useSharedValue(0);
   const [isReady, setIsReady] = React.useState(false);
   const [initialState, setInitialState] = React.useState();
+  const conflictContext = useContext(ConflictResolutionContext);
 
   useEffect(() => {
     const restoreState = async () => {
       try {
         // Only restore state
-        const savedStateString = SettingsRN.get("SETTINGS_NAVIGATION_HISTORY");
+        const savedStateString = SettingsRN.get("CONFLICTS_PANEL_STATE");
         const state = savedStateString
           ? JSON.parse(savedStateString)
           : undefined;
@@ -58,7 +60,7 @@ const SettingsContainer = (props: SettingsContainerProps) => {
 
   const openDrawer = () => {
     offset.value = withTiming(
-      GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
+      SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
       {
         duration: 10,
         easing: Easing.out(Easing.ease),
@@ -71,7 +73,7 @@ const SettingsContainer = (props: SettingsContainerProps) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    MFEventEmitter.emit("closeSettings", null);
+    MFEventEmitter.emit("closeConflictResolution", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {
@@ -85,8 +87,10 @@ const SettingsContainer = (props: SettingsContainerProps) => {
   }
 
   const renderPush = () => {
+    conflictContext.panelState= initialState;
     return (
       <Modal
+        animationType="fade"
         transparent={true}
         visible={true}
         onRequestClose={() => {
@@ -99,15 +103,15 @@ const SettingsContainer = (props: SettingsContainerProps) => {
         presentationStyle={"overFullScreen"}
       >
         <Animated.View style={[styles.container, animatedStyles]}>
-          <SettingsNavigator isAuthorized={true} initialState={initialState} />
+          <ConflictResolution {...props}/>
         </Animated.View>
       </Modal>
     );
   };
   return renderPush();
 };
-const Settings = SettingsContainer;
-export default Settings;
+const ConflictResolutionPanel = ConflictsContainer;
+export default ConflictResolutionPanel;
 
 const styles = StyleSheet.create({
   main: {

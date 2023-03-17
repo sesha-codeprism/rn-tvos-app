@@ -73,6 +73,29 @@ export function getItemId(data: any) {
     return id;
 }
 
+export function getEpisodeId(data: any) {
+    if (!data) {
+        return undefined;
+    }
+
+    let id = data?.CatalogInfo?.UniversalProgramId;
+    if (data?.assetType?.sourceType === sourceTypeString.LIVE) {
+        id =
+            data?.Schedule?.ProgramId ||
+            data?.ProgramId;
+    } else if (!id && data?.ShowType === ItemShowType.Movie) {
+        id = data?.Schedule?.ProgramId || data?.ProgramId;
+    } else if (
+        data?.ProgramId
+    ) {
+        id =
+            data?.ProgramId
+    }
+
+    id = id || data?.Id;
+    return id;
+}
+
 export function convertISOStringToTimeStamp(date: string): number {
     if (!date) {
         return 0;

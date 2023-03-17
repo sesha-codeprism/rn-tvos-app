@@ -25,6 +25,8 @@ const useAllSubscriptionGroups = (globals: any) => {
         const data = await getDataFromUDL(udlParams);
         const groups = cloneDeep(data.data);
 
+        GLOBALS.rawSubscriptionGroupsResponse = cloneDeep(groups);
+        console.log('GLOBALS.rawSubscriptionGroupsResponse  >>>>>>>> 1. ', GLOBALS.rawSubscriptionGroupsResponse );
         // Map to contain IDs of empty groups. Not sure why backend sends this but need to handle this..
         const objFilter: any = {};
         // Generating a list of usable groups i.e., removing all empty groups (believed to be deleted recordings)
@@ -38,6 +40,7 @@ const useAllSubscriptionGroups = (globals: any) => {
                 //     objFilter[id] = id;
                 return SubscriptionItems.length > 0;
             });
+        console.log('GLOBALS.rawSubscriptionGroupsResponse  >>>>>>>> 2. ', GLOBALS.rawSubscriptionGroupsResponse );
         // Deep cloning to prevent unexpected changes to list
         const usableGroups = cloneDeep(feedContentlist)
         const response: SubscriptionGroupsResponse = groups;
@@ -46,16 +49,21 @@ const useAllSubscriptionGroups = (globals: any) => {
         const viewGroups = cloneDeep(data.data);
         const viewableFilter = cloneDeep(feedContentlist);
         const viewableSubscriptions: SubscriptionGroupsResponse = viewGroups;
+        console.log('GLOBALS.rawSubscriptionGroupsResponse  >>>>>>>> 3. ', GLOBALS.rawSubscriptionGroupsResponse );
         viewableSubscriptions.SubscriptionGroups = [...viewableFilter].filter((element) => element.SubscriptionItems[0]?.ItemState === DvrItemState.RECORDED || element.SubscriptionItems[0]?.ItemState === DvrItemState.RECORDING);
+        console.log('GLOBALS.rawSubscriptionGroupsResponse  >>>>>>>> 4. ', GLOBALS.rawSubscriptionGroupsResponse );
         // Deep cloning original list to filter out Scheduled recordings..
         const scheduleGroups = cloneDeep(data.data)
         const scheduledFilter = cloneDeep(feedContentlist);
         const scheduledSubscriptions: SubscriptionGroupsResponse = scheduleGroups;
-        scheduledSubscriptions.SubscriptionGroups = [...scheduledFilter].filter((element) => element.SubscriptionItems[0]?.ItemState === DvrItemState.SCHEDULED)
+        console.log('GLOBALS.rawSubscriptionGroupsResponse  >>>>>>>> 5. ', GLOBALS.rawSubscriptionGroupsResponse );
+        scheduledSubscriptions.SubscriptionGroups = [...scheduledFilter].filter((element) => element.SubscriptionItems[0]?.ItemState === DvrItemState.SCHEDULED);
+        console.log('GLOBALS.rawSubscriptionGroupsResponse  >>>>>>>> 6. ', GLOBALS.rawSubscriptionGroupsResponse );
         GLOBALS.allSubscriptionGroups = response;
         GLOBALS.viewableSubscriptions = viewableSubscriptions;
-        GLOBALS.scheduledSubscriptions = scheduledSubscriptions
-        return { allSubscriptions: response, viewableSubscriptions: viewableSubscriptions, scheduledSubscriptions: scheduledSubscriptions }
+        GLOBALS.scheduledSubscriptions = scheduledSubscriptions;
+        console.log('GLOBALS.rawSubscriptionGroupsResponse  >>>>>>>> 7. ', GLOBALS.rawSubscriptionGroupsResponse );
+        return { allSubscriptions: GLOBALS.rawSubscriptionGroupsResponse, viewableSubscriptions: undefined, scheduledSubscriptions: scheduledSubscriptions }
     }
     const subscrptionGroups =
         useQuery(['dvr', 'get-all-subscriptionGroups'], getAllSubscriptionGroups, { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors })
