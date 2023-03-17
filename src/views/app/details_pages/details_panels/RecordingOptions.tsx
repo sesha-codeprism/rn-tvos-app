@@ -27,7 +27,7 @@ import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
 import { saveRecordingToBackend } from "../../../../../backend/dvrproxy/dvrproxy";
 
-enum RecordingOptionsEnum {
+export enum RecordingOptionsEnum {
   ShowType,
   KeepAtMost,
   ChannelAndTime,
@@ -542,6 +542,7 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
           subTitle: selection.title,
           options: getShowTypeOptions(),
         });
+        break;
       case RecordingOptionsEnum.Time:
         props.navigation.navigate(DetailRoutes.SelectOptions, {
           title: props.route.params.title,
@@ -554,10 +555,15 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
           title: props.route.params.title,
           subTitle: AppStrings?.str_dvr_recording.channel,
           options: getChannelOptions(),
+          recordingOptions: recordingOptions,
           initialValue: AnyTimeAnyChannel
             ? DVRAnyTimeAnyChannel
             : channelNumber,
         });
+        const currentChannel = recordingOptions?.find(
+          (options: any) => options?.key === RecordingOptionsEnum.Channel
+        );
+        console.log(currentChannel);
         break;
       case RecordingOptionsEnum.ChannelAndTime:
         props.navigation.navigate(DetailRoutes.ChannelAndTime, {
