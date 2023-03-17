@@ -31,13 +31,12 @@ const useAllSubscriptionGroups = (globals: any) => {
         let feedContentlist =
             data.data &&
             data.data?.SubscriptionGroups?.filter((item: any) => {
-                const { SeriesId = undefined, SubscriptionItems = [] } =
+                const { SubscriptionItems = [] } =
                     item || {};
-                let id = SeriesId || SubscriptionItems[0]?.ProgramId;
-                if (objFilter[id] === undefined) {
-                    objFilter[id] = id;
-                    return SubscriptionItems.length > 0;
-                }
+                // let id = SeriesId || SubscriptionItems[0]?.ProgramId;
+                // if (objFilter[id] === undefined) {
+                //     objFilter[id] = id;
+                return SubscriptionItems.length > 0;
             });
         // Deep cloning to prevent unexpected changes to list
         const usableGroups = cloneDeep(feedContentlist)
