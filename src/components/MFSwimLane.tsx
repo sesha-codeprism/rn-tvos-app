@@ -114,6 +114,9 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           return;
           // props.navigation.navigate(Routes.BrowseGallery, payload);
         }
+        if (navigationTargetUri === "favorites") {
+          updateRoute(Routes.FavouriteManager, payload);
+        }
         if (navigationTargetUri === "dvr") {
           updateRoute("DvrManager", payload);
         }
@@ -131,7 +134,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
 
       const navigationTargetObject: any = {
         favorites: () => {
-          updateRoute("Favorites", payload);
+          updateRoute("FavouriteManager", payload);
         },
         dvr: () => {
           updateRoute("DvrManager", payload);
