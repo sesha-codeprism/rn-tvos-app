@@ -68,6 +68,8 @@ const snapToInterval: number =
   episodeListConfig?.snapToInterval || getScaledValue(20);
 const lazyListConfig: any = getUIdef("EpisodeList.LazyListWrapper")?.config;
 const scaledSnapToInterval = getScaledValue(lazyListConfig.snapToInterval);
+let skip = 0;
+let top = 10;
 
 const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const navigationParams = props.route.params;
@@ -215,9 +217,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
 
   let firstButtonRef = React.createRef();
   let buttonFocuszoneRef = React.createRef();
-  let selectedButtonRef = React.createRef();
-  let skip = 0;
-  let top = 10;
+  let selectedButtonRef = React.createRef();  
 
   const setFlatListRef = (ref: any) => {
     episodeFlatList = ref;
