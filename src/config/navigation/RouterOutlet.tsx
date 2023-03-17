@@ -57,6 +57,7 @@ import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups
 import useDVRRecorders from "../../customHooks/useRecorders";
 import { appQueryCache } from "../queries";
 import PackageDetailsScreen from "../../views/app/details_pages/package_details/PackageDetails.screen";
+import FavouriteManagerScreen from "../../views/app/details_pages/favouriteManager/favouriteManager";
 import DVRManagerScreen from "../../views/app/dvr_manager/dvr_manager.screen";
 
 interface RouterOutletProps {
@@ -113,6 +114,7 @@ export const Routes = {
   EpisodeList: "EpisodeList",
   // BrowseFilters: "BrowseFilters",
   PackageDetails: "PackageDetails",
+  FavouriteManager: "FavouriteManager",
   DvrManager: "DvrManager"
 };
 
@@ -310,6 +312,10 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
       <Stack.Screen
         name={Routes.PackageDetails}
         component={PackageDetailsScreen}
+      />
+      <Stack.Screen
+        name={Routes.FavouriteManager}
+        component={FavouriteManagerScreen}
       />
     </Stack.Navigator>
   );
