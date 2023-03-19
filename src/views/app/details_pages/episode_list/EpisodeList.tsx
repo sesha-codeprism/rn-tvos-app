@@ -205,7 +205,58 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     [AppStrings?.str_details_cta_watch_live]: () => {},
     [AppStrings?.str_details_cta_play_from_beginning]: () => {},
     [AppStrings?.str_details_cta_waystowatch]: () => {},
-    [AppStrings?.str_app_edit]: () => {},
+    [AppStrings?.str_app_edit]: () => {
+      const currentSubscriptionData = ctaList.find(
+        (e: any) => e.buttonText === AppStrings?.str_app_edit
+      );
+      if (currentSubscriptionData) {
+        const {
+          subscription: { SubscriptionGroup, SubscriptionItem } = {
+            SubscriptionGroup: null,
+            SubscriptionItem: null,
+          },
+        } = currentSubscriptionData;
+        if (SubscriptionGroup && SubscriptionItem) {
+          const { Definition, SeriesId } = SubscriptionGroup;
+          const { ProgramId, IsGeneric } = SubscriptionItem;
+          let programId;
+
+          if (Definition === DefinitionOfItem.SINGLE_PROGRAM) {
+            programId = ProgramId;
+            GLOBALS.recordingData = SubscriptionGroup;
+            setScreenProps({
+              isNew: false,
+              isSeries: false,
+              programId: programId,
+              isGeneric: IsGeneric,
+              isPopupModal: true,
+              SubscriptionGroup,
+              schedules: episodeSchedules,
+              isSubscriptionItem: true,
+            });
+            setRoute(DetailRoutes.RecordingOptions);
+            setOpen(true);
+            drawerRef?.current?.open();
+          } else {
+            programId = SeriesId;
+            GLOBALS.recordingData = SubscriptionGroup;
+            setScreenProps({
+              programId: ProgramId,
+              seriesId: SeriesId,
+              isNew: false,
+              isPopupModal: true,
+              SubscriptionGroup,
+              isGeneric: IsGeneric,
+              schedules: episodeSchedules,
+              isSubscriptionItem: true,
+            });
+            setRoute(DetailRoutes.EpisodeRecordOptions);
+            setOpen(true);
+            drawerRef?.current?.open();
+          }
+        }
+      }
+    },
     [AppStrings?.str_dvr_resolve_conflict]: () => {},
     [AppStrings?.str_details_cta_playdvr]: () => {},
     [AppStrings?.str_details_cta_rent]: () => {},
@@ -217,7 +268,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
 
   let firstButtonRef = React.createRef();
   let buttonFocuszoneRef = React.createRef();
-  let selectedButtonRef = React.createRef();  
+  let selectedButtonRef = React.createRef();
 
   const setFlatListRef = (ref: any) => {
     episodeFlatList = ref;

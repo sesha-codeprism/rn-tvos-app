@@ -178,7 +178,10 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
       clearIntervalTimeout = setTimeout(() => {
         stopUpdateTimer();
         console.log("Invalidating the live queries");
-        queryClient.invalidateQueries({ queryKey: ["live"] });
+        //Below line only for React Query v3.
+        queryClient.resetQueries({ queryKey: ["live"] });
+        //Below line to be uncommencted and used for React query v4 and above. Doesn't work in v3
+        //queryClient.invalidateQueries({ queryKey: ['todos'] })
       }, timeToEnd);
       setStarTime(getStartTime());
     };
@@ -188,6 +191,12 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
         clearTimeout(clearIntervalTimeout);
       }
     };
+
+    // if (__DEV__) {
+    //   setTimeout(() => {
+    //     queryClient.resetQueries({ queryKey: ["live"] });
+    //   }, 5000);
+    // }
 
     const startProgressBookmarkTimer = (timeToStart: number) => {
       stopProgressBookmarkTimer();
@@ -215,20 +224,16 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
       }
 
       const timeToStart = startTime - Date.now();
-      console.log("timeToStart", timeToStart);
       if (timeToStart > 0) {
-        console.log("timeToStart is true");
         stopUpdateTimer();
         recalculateBookmark();
         startProgressBookmarkTimer(timeToStart);
       } else {
         const timeToEnd = endTime - Date.now();
-        console.log("timeToEnd", timeToEnd);
         if (timeToEnd > 0) {
           recalculateBookmark();
           startUpdateTimer();
           startClearIntervalTimer(timeToEnd);
-          console.log("timeToStart is true");
         }
       }
     };

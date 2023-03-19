@@ -51,7 +51,12 @@ import {
   pbr,
   sourceTypeString,
 } from "../../../utils/analytics/consts";
-import { Definition, Genre, ItemShowType, SourceType } from "../../../utils/common";
+import {
+  Definition,
+  Genre,
+  ItemShowType,
+  SourceType,
+} from "../../../utils/common";
 import { useQuery } from "react-query";
 import {
   appUIDefinition,
@@ -94,8 +99,14 @@ import { DuplexManager } from "../../../modules/duplex/DuplexManager";
 import NotificationType from "../../../@types/NotificationType";
 import { ConflictResolutionContext } from "../../../contexts/conflictResolutionContext";
 import MFEventEmitter from "../../../utils/MFEventEmitter";
-import { cancelRecordingFromConflictPopup, forceResolveConflict } from "../../../../backend/dvrproxy/dvrproxy";
-import { findConflictedGroupBySeriesOrProgramId, getScheduledItems } from "../../../utils/ConflictUtils";
+import {
+  cancelRecordingFromConflictPopup,
+  forceResolveConflict,
+} from "../../../../backend/dvrproxy/dvrproxy";
+import {
+  findConflictedGroupBySeriesOrProgramId,
+  getScheduledItems,
+} from "../../../utils/ConflictUtils";
 
 interface AssetData {
   id: string;
@@ -221,7 +232,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const toggleSidePanel = () => {
-    
     setScreenProps({
       udpData: udpDataAsset,
       networkInfo: networkInfo,
@@ -235,10 +245,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     });
     setOpen(true);
     drawerRef?.current?.open();
-
-
-    
-
   };
   const openNewRecording = () => {
     //TODO: We have a check for PCON. Need to implement
@@ -374,7 +380,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   StationId: StationId,
                   ChannelNumber: ChannelNumber as number,
                   StartUtc: CatchupStartUtc || StartUtc,
-                  EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
+                  EndLateSeconds:
+                    GLOBALS.store!.settings.dvr?.stopRecording || 0,
                   RecyclingDisabled: false,
                   ChannelMapId:
                     GLOBALS.userAccountInfo.ChannelMapId?.toString(),
@@ -397,7 +404,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   StationId: StationId,
                   ChannelNumber: ChannelNumber as number,
                   StartUtc: StartUtc,
-                  EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
+                  EndLateSeconds:
+                    GLOBALS.store!.settings.dvr?.stopRecording || 0,
                   RecyclingDisabled: false,
                   ChannelMapId:
                     GLOBALS.userAccountInfo.ChannelMapId?.toString(),
@@ -510,6 +518,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           setRoute(DetailRoutes.EpisodeRecordOptions);
           setScreenProps({
             programId: schedule?.ProgramId,
+            title: udpDataAsset.title,
             seriesId: schedule?.SeriesId,
             isNew: true,
             schedules: discoverySchedulesData,
@@ -556,21 +565,32 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
   const startResolveConflict = () => {
     //if no conflict:
-    let id  = getItemId(feed);
-    const subs = GLOBALS.rawSubscriptionGroupsResponse ;
-    let conflictedSubscriptionGroup: any|undefined = findConflictedGroupBySeriesOrProgramId(id, subs?.SubscriptionGroups);
+    let id = getItemId(feed);
+    const subs = GLOBALS.rawSubscriptionGroupsResponse;
+    let conflictedSubscriptionGroup: any | undefined =
+      findConflictedGroupBySeriesOrProgramId(id, subs?.SubscriptionGroups);
     const [{ Definition: definition }] = conflictedSubscriptionGroup || {};
-    const conflictedItems = conflictedSubscriptionGroup?.[0]?.SubscriptionItems?.filter((si: any) =>  si.ItemState  === 'Conflicts');
-    if(conflictedSubscriptionGroup && conflictedItems && conflictedItems.length){
+    const conflictedItems =
+      conflictedSubscriptionGroup?.[0]?.SubscriptionItems?.filter(
+        (si: any) => si.ItemState === "Conflicts"
+      );
+    if (
+      conflictedSubscriptionGroup &&
+      conflictedItems &&
+      conflictedItems.length
+    ) {
       // determine if series conflict
-    if(definition === Definition.SINGLE_PROGRAM || definition === Definition.SINGLE_TIME){
+      if (
+        definition === Definition.SINGLE_PROGRAM ||
+        definition === Definition.SINGLE_TIME
+      ) {
         MFEventEmitter.emit("openPopup", {
           buttons: [
             {
               title: AppStrings?.str_dvr_resolve_conflict_auto,
               onPress: async () => {
                 await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup",undefined);
+                MFEventEmitter.emit("closePopup", undefined);
               },
             },
             {
@@ -578,34 +598,47 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               onPress: () => {
                 conflictContext.ProgramId = id;
                 conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
+                MFEventEmitter.emit("openConflictResolution", {
+                  passedInPops: true,
+                  drawerPercentage: 0.35,
+                  navigation: props.navigation,
+                  allSubscriptions: subs,
+                });
               },
             },
             {
               title: AppStrings?.str_dvr_donot_record,
               onPress: async () => {
-                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  false, false) ;
-                MFEventEmitter.emit("closePopup",undefined);
+                await cancelRecordingFromConflictPopup(
+                  conflictedSubscriptionGroup,
+                  false,
+                  false
+                );
+                MFEventEmitter.emit("closePopup", undefined);
               },
-            }
+            },
           ],
-          description: AppStrings?.str_dvr_conflict_popup_warning_program
+          description: AppStrings?.str_dvr_conflict_popup_warning_program,
         });
-      }else {
+      } else {
         MFEventEmitter.emit("openPopup", {
           buttons: [
             {
               title: AppStrings?.str_dvr_series_conflict_modal_record_all,
               onPress: async () => {
                 await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup",undefined);
+                MFEventEmitter.emit("closePopup", undefined);
               },
             },
             {
               title: AppStrings?.str_dvr_series_modal_recod_no_conflict,
               onPress: async () => {
-                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  true, true) ;
-                MFEventEmitter.emit("closePopup",undefined);
+                await cancelRecordingFromConflictPopup(
+                  conflictedSubscriptionGroup,
+                  true,
+                  true
+                );
+                MFEventEmitter.emit("closePopup", undefined);
               },
             },
             {
@@ -613,21 +646,30 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               onPress: () => {
                 conflictContext.ProgramId = id;
                 conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
+                MFEventEmitter.emit("openConflictResolution", {
+                  passedInPops: true,
+                  drawerPercentage: 0.35,
+                  navigation: props.navigation,
+                  allSubscriptions: subs,
+                });
               },
             },
             {
               title: AppStrings?.str_dvr_donot_record,
               onPress: async () => {
-                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup, true, false);
-                MFEventEmitter.emit("closePopup",undefined);
+                await cancelRecordingFromConflictPopup(
+                  conflictedSubscriptionGroup,
+                  true,
+                  false
+                );
+                MFEventEmitter.emit("closePopup", undefined);
               },
-            }
+            },
           ],
-          description: AppStrings?.str_dvr_conflict_popup_warning_series
+          description: AppStrings?.str_dvr_conflict_popup_warning_series,
         });
       }
-    }else {
+    } else {
       MFEventEmitter.emit("openPopup", {
         buttons: [
           {
@@ -635,9 +677,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             onPress: async () => {
               MFEventEmitter.emit("closePopup", undefined);
             },
-          }
+          },
         ],
-        description: AppStrings?.str_dvr_no_conflict_exists
+        description: AppStrings?.str_dvr_no_conflict_exists,
       });
     }
   };
@@ -688,14 +730,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             programId: programId,
             isGeneric,
             isPopupModal: true,
+            schedules: discoverySchedulesData,
             isSubscriptionItem: true,
           };
           setScreenProps(params);
           if (Definition === DefinationOfItem.SINGLE_PROGRAM) {
-            // panelName = SideMenuRoutes.DvrRecordingOptions;
             setRoute(DetailRoutes.RecordingOptions);
           } else {
-            // panelName = SideMenuRoutes.DvrEpisodeRecordingOptions;
             setRoute(DetailRoutes.EpisodeRecordOptions);
           }
         } else {
@@ -707,9 +748,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               title: udpDataAsset.title,
               isGeneric,
               isPopupModal: true,
+              schedules: discoverySchedulesData,
               isSubscriptionItem: true,
-              // onDvrItemSelected: this.setFocusBack,
-              // onUpdate: this.onDVRUpdated,
             };
             setScreenProps(params);
             setRoute(DetailRoutes.RecordingOptions);
@@ -729,12 +769,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                 title: udpDataAsset.title,
                 isPopupModal: true,
                 SubscriptionGroup,
+                schedules: discoverySchedulesData,
                 isSubscriptionItem: true,
-                // onDvrItemSelected: this.setFocusBack,
               };
               setScreenProps(params);
               setScreenProps(DetailRoutes.RecordingOptions);
-              // panelName = SideMenuRoutes.DvrRecordingOptions;
             } else {
               programId = SubscriptionItem?.ProgramId;
               if (
@@ -750,15 +789,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                 programId: programId,
                 title: udpDataAsset.title,
                 isPopupModal: true,
+                schedules: discoverySchedulesData,
                 SubscriptionGroup,
               };
               setScreenProps(params);
               setRoute(DetailRoutes.EpisodeRecordOptions);
-              // panelName = SideMenuRoutes.DvrEpisodeRecordingOptions;
             }
           }
         }
-        // this.props.openPanel(true, panelName, params);
         drawerRef.current.open();
       }
     }
@@ -1024,19 +1062,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     return true;
   };
 
-  const onDuplexMessage = (message: any) => {
-    if (message) {
-      console.log("Details onMessage", message);
-      switch (message.type) {
-        case NotificationType.pin:
-        case NotificationType.unpin:
-          const status = getItemPinnedStatus();
-          console.log("status", status);
-          setIsItemPinned(status);
-          break;
-      }
-    }
-  };
   const getPinnedItemResponse = async () => {
     const udlParam = "udl://subscriber/library/Pins";
     const resp = await getDataFromUDL(udlParam);
@@ -1049,30 +1074,17 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     defaultQueryOptions
   );
 
-  // useEffect(() => {
-  //   if (
-  //     !pinnedItemsResponse.isFetching &&
-  //     pinnedItemsResponse.isFetched &&
-  //     pinnedItemsResponse.isSuccess &&
-  //     pinnedItemsResponse.data
-  //   ) {
-  //     const status = getItemPinnedStatus();
-  //     console.log("status", status);
-  //     setIsItemPinned(status);
-  //   }
-  // }, [
-  //   pinnedItemsResponse.isFetched,
-  //   pinnedItemsResponse.data,
-  //   pinnedItemsResponse.dataUpdatedAt,
-  //   pinnedItemsResponse.isSuccess,
-  //   pinnedItemsResponse.isFetching,
-  // ]);
-
   useEffect(() => {
     currentContext.addDuplexMessageHandler(onDuplexMessage);
     () => {
       currentContext.removeDuplexHandler(onDuplexMessage);
     };
+  }, []);
+
+  useEffect(() => {
+    GLOBALS.subscriptionObservable.subscribe((event) => {
+      console.log("Received event", event);
+    });
   }, []);
 
   const getSimilarItemsForFeed = async ({ queryKey }: any) => {
@@ -1672,7 +1684,24 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         !!subscriberData,
     }
   );
-  
+
+  const onDuplexMessage = (message: any) => {
+    if (message) {
+      console.log("Details onMessage", message);
+      switch (message.type) {
+        case NotificationType.pin:
+        case NotificationType.unpin:
+          const status = getItemPinnedStatus();
+          console.log("status", status);
+          setIsItemPinned(status);
+          break;
+        case NotificationType.dvrUpdated:
+          console.log("DVR update notification listened");
+          break;
+      }
+    }
+  };
+
   useEffect(() => {
     appQueryCache.subscribe((event) => {
       console.log(event);
@@ -2049,11 +2078,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       showLiveBadge = isLive;
     }
     // PPV
-
-    console.log(
-      "Progress",
-      progressDataSource.TimeSeconds / progressDataSource.RuntimeSeconds
-    );
 
     return (
       <View style={styles.episodeBlockContainer}>

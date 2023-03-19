@@ -13,7 +13,6 @@ import { setDefaultStore } from "../../utils/DiscoveryUtils";
 import {
   connectDuplex,
   setGlobalData,
-  setLiveData,
   setNativeModuleData,
 } from "../../utils/splash/splash_utils";
 import {
@@ -25,14 +24,8 @@ import useBootstrap from "../../customHooks/useBootstrapData";
 import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
 import { GlobalContext } from "../../contexts/globalContext";
-import {
-  appQueryCache,
-  invalidateQueryBasedOnSpecificKeys,
-  queryClient,
-  resetCaches,
-} from "../../config/queries";
+import { queryClient, resetCaches } from "../../config/queries";
 import { useQuery } from "react-query";
-import { initUdls } from "../../../backend";
 import { generateGUID, makeRandomHexString } from "../../utils/guid";
 import NotificationType from "../../@types/NotificationType";
 import { massageSubscriberFeed } from "../../utils/assetUtils";
