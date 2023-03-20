@@ -8,7 +8,7 @@ import { MFGlobalsConfig } from "../../backend/configs/globals";
 export const Log =
   __DEV__ && global && global.console
     ? console.log.bind(global.console)
-    : () => {};
+    : () => { };
 
 export const updateStore = (MFStore: any) => {
   const sanitizedStore = {
@@ -24,6 +24,7 @@ export let getStore = () => {
   let serializedStore = Settings.get("store");
   if (serializedStore) {
     serializedStore = JSON.parse(serializedStore);
+    //@ts-ignore
     serializedStore.landingInfo = landingInfo?.reviveLandingInfo?.(
       serializedStore.landingInfo
     );

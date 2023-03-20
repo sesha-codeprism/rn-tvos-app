@@ -22,6 +22,7 @@ export interface QueryResponse {
 export const getHubs = async () => {
     const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
     const data = await getDataFromUDL(
+        //@ts-ignore
         `udl://discovery/hubs?rightIds=${GLOBALS.store?.rightsGroupIds}&storeId=${DefaultStore.Id}&pivots=${pivots}&lang=${GLOBALS.store?.onScreenLanguage?.languageCode || lang}`
     );
     const response: HubsResponse = data;

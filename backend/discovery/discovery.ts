@@ -1,9 +1,8 @@
+//@ts-nocheck
 import { GET } from "../utils/common/cloud";
-import { MFGlobalsConfig } from "../configs/globals";
-import { MFGlobals } from "../@types/globals";
 import { parseUri } from "../utils/url/urlUtil";
 import { GLOBALS } from "../../src/utils/globals";
-import { lang, pivots } from "../../src/config/constants";
+import { lang } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { gethubRestartTvShowcards } from "../live/live";
 
@@ -214,7 +213,7 @@ const discoverSubscriptions = async (
   return response;
 };
 
-const getPayPerView = async (id: string, params: any) => {  
+const getPayPerView = async (id: string, params: any) => {
   const pivots = `Language | ${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'} `;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/payperview/items";

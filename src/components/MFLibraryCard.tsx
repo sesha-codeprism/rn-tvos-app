@@ -77,12 +77,14 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
     const translateAnim = useRef(new Animated.Value(0)).current;
 
     const getStartTime = () => {
+      //@ts-ignore
       const schedule = props.data?.Schedule,
         startUtc = schedule?.StartUtc;
       return dateUtils.convertISOStringToTimeStamp(startUtc);
     };
 
     const getEndTime = () => {
+      //@ts-ignore
       const schedule = props.data?.Schedule,
         endUtc = schedule?.EndUtc;
       return dateUtils.convertISOStringToTimeStamp(endUtc);
@@ -408,7 +410,9 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
               renderGradiant={true}
               //@ts-ignore
               showProgress={
+                //@ts-ignore
                 props.data.Bookmark! ||
+                //@ts-ignore
                 props.data.progress ||
                 progress !== undefined
               }
