@@ -7,6 +7,10 @@ import { UserAccountInfo } from "../@types/Account";
 import { BootStrapResponse } from "../@types/BootStrapResponse";
 import { UserProfile } from "../@types/UserProfile";
 import { BrowseGallery } from "./common";
+import { Observable, Connectable } from 'rxjs';
+import * as Rx from 'rxjs'
+import useAllSubscriptionGroups from "../customHooks/useAllSubscriptionGroups";
+
 
 export const landingInfo = (function (): MFbootstrapLandingInfo {
   this.oauth = "liveid";
@@ -116,6 +120,7 @@ interface GLOBALSType {
   drawerPanelOpen: boolean;
   moviesAndTvShows?: TrendingItems[];
   recordingData: any
+  subscriptionObservable: Connectable<any>;
   /** Async store data */
   store: {
     accessToken: string | null;
@@ -173,6 +178,7 @@ export const GLOBALS: GLOBALSType = {
   rootNavigation: null,
   bootstrapSelectors: null,
   continuationToken: "",
+  subscriptionObservable: new Rx.connectable(),
   browseGalleryData: {
     page: 0,
     lastPageReached: false,

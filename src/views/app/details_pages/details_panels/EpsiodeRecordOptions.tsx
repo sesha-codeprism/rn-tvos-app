@@ -144,7 +144,6 @@ const EpisodeRecordOptions: React.FunctionComponent<
         };
       } else {
         if (isSeries) {
-          // this.props.setRecordingData(this.props.params.);
           GLOBALS.recordingData = SubscriptionGroup;
         } else {
           const selectedEpisode = SubscriptionGroup.SubscriptionItems.find(
@@ -162,7 +161,7 @@ const EpisodeRecordOptions: React.FunctionComponent<
           };
         }
       }
-      props.navigation.navigate(DetailRoutes.RecordingOptions, {
+      const navigationParams = {
         title: titleString,
         isNew: isNew,
         isSeries,
@@ -171,7 +170,12 @@ const EpisodeRecordOptions: React.FunctionComponent<
         isGeneric: isGeneric,
         isSubscriptionItem,
         isPopupModal: true,
-      });
+      };
+      console.log("NavigationParams", navigationParams);
+      props.navigation.navigate(
+        DetailRoutes.RecordingOptions,
+        navigationParams
+      );
     }
   };
 
@@ -202,46 +206,6 @@ const EpisodeRecordOptions: React.FunctionComponent<
                   handleOnPress(index);
                 }}
               />
-              // <Pressable
-              //   hasTVPreferredFocus={index === 0 ? true : false}
-              //   onFocus={() => {
-              //     console.log("Focusing on index", index);
-              //     setFocused(index);
-              //   }}
-              //   onPress={() => {
-              //     // if (item.action !== "") {
-              //     //   props.navigation.navigate(item.action);
-              //     // } else if (index === menu.length - 1) {
-              //     //   props.navigation.navigate("app", {
-              //     //     screen: Routes.ShortCode,
-              //     //   });
-              //     // } else {
-              //     //   null;
-              //     // }
-              //   }}
-              //   style={
-              //     index === focused
-              //       ? {
-              //           ...MFSettingsStyles.containerActive,
-              //           ...MFSettingsStyles.container,
-              //         }
-              //       : MFSettingsStyles.container
-              //   }
-              //   key={index}
-              // >
-              //   <Text
-              //     style={[
-              //       MFSettingsStyles.listText,
-              //       { color: index === focused ? "#EEEEEE" : "#A7A7A7" },
-              //     ]}
-              //   >
-              //     {item.title}
-              //   </Text>
-              //   <Image
-              //     source={AppImages.arrow_right}
-              //     style={{ width: 15, height: 30 }}
-              //   />
-              // </Pressable>
             );
           }}
         />

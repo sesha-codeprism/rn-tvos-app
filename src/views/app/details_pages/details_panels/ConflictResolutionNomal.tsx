@@ -102,13 +102,13 @@ const styles = StyleSheet.create(
           color: "#EEEEEE",
           alignSelf: "flex-start"
          },
-        conflictedItemContainer: { 
-          display: "flex", 
-          flexDirection: "row", 
-          marginTop: 37, 
-          marginBottom: 37, 
-          justifyContent: "space-between" 
-         },
+         conflictedItemContainer: { 
+            display: "flex", 
+            flexDirection: "row", 
+            marginTop: 25, 
+            marginBottom: 25, 
+            justifyContent: "space-between" 
+           },
          conflictedItemTitleContainer: { 
           display: "flex", 
           flexDirection: "column", 

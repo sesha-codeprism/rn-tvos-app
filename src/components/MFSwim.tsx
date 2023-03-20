@@ -55,9 +55,14 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
 
     appQueryCache.subscribe((event) => {
       if (event?.type === "queryUpdated") {
-        if (event.query.queryHash.includes("get-live-data")) {
-          console.log("Need to reset updates");
-          setMount(!mount);
+        if (
+          event.query.queryHash.includes("get-live-data") &&
+          event.query.state.data
+        ) {
+          console.log("Need to reset updates", event?.query);
+          if (!mount) {
+            setMount(true);
+          }
         }
       }
     });

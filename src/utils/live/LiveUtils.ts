@@ -1,7 +1,7 @@
 import { each, map, filter, extend, includes, some } from "lodash";
 import { ServiceMap } from "../../@types/BootStrapResponse";
 import { isPlayable } from "../assetUtils";
-import { QualityLevelValue, RestrictionsType, SourceType } from "../common";
+import { Definition, DvrItemState, QualityLevelValue, RestrictionsType, SourceType } from "../common";
 import { validCatchupStationIds } from "../restart/RestartUtils";
 import { IChannel, ServiceCollection, IService, ChannelEquivalencesMap, ChannelMapInfo, IJsonObject, ChannelIndex, QualityRights, ServiceGroup, LiveChannelMapInfo, ChannelMapLiveRights, ServiceType, IChannelCache, ServiceCollectionsMap, ServiceItem, QualityLevels, IApplicationData, IAppService, NowNextScheduleMap, NowNextSchedule, LiveSchedule, ISearchFilters } from "./live";
 import { LiveChannelLocaleMap } from "./LiveChannelLocalMap";
@@ -9,6 +9,7 @@ import { LiveChannelStore } from "./LiveChannelStore";
 import * as strUtils from "../../utils/strUtils";
 import DateUtils from "../dateUtils";
 import { generateType } from "../Subscriber.utils";
+import { DvrGroupState } from "../DVRUtils";
 
 
 const ServiceCollectionIdPPVSuffix = "_ppv_";
@@ -27,6 +28,8 @@ const orderedQualityLevels: QualityLevelValue[] = [
     QualityLevels.SD,
     QualityLevels.ReachSD
 ];
+
+
 
 export class LiveChannelMap {
     static readonly className = "live.LiveChannelMap";
@@ -1390,8 +1393,5 @@ export const updateVariant = (channelMap: LiveChannelMap, nowNextScheduleMap: No
             list.push(newChannelModel);
         }
     }
-
-
     return list;
-
 };

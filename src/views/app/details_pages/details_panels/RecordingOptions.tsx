@@ -14,6 +14,9 @@ import {
   filterLiveSchedules,
   Definition as DefinitionString,
   getStopRecordingOptions,
+  ISubscriptionSetting,
+  showDvrErrorDetails,
+  DvrItemErrorCode,
 } from "../../../../utils/DVRUtils";
 import { queryClient } from "../../../../config/queries";
 import { DvrCapabilityType, format } from "../../../../utils/assetUtils";
@@ -26,9 +29,12 @@ import MFButton, {
 } from "../../../../components/MFButton/MFButton";
 import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
-import { saveRecordingToBackend } from "../../../../../backend/dvrproxy/dvrproxy";
+import {
+  saveRecordingToBackend,
+  updateRecordingInBackend,
+} from "../../../../../backend/dvrproxy/dvrproxy";
 
-enum RecordingOptionsEnum {
+export enum RecordingOptionsEnum {
   ShowType,
   KeepAtMost,
   ChannelAndTime,
@@ -240,10 +246,12 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
       // Select only future schedule
       const stationIds = uniqSchedules
         .filter((schd) => {
+          //@ts-ignore
           const schEndDate = new Date(schd?.EndUtc);
           const now = new Date();
           return schEndDate >= now;
         })
+        //@ts-ignore
         .map((schedules) => schedules?.StationId);
       const uniqueStationIds = uniq(stationIds);
       if (GLOBALS.channelMap.Channels?.length) {
@@ -302,6 +310,174 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
       if (response?.status! >= 200 && response?.status! <= 300) {
         props.route.params.closePanel();
       }
+    }
+  };
+
+  const updateRecording = async () => {
+    if (GLOBALS.recordingData) {
+      const { channelMap, userAccountInfo } = GLOBALS;
+
+      const channelsByStationId = groupBy(
+        channelMap?.getChannels(),
+        (channel) => channel?.StationId
+      );
+      const serviceMap = channelMap?.ServiceMap;
+      const schedules = filterLiveSchedules(
+        props.route.params.schedules,
+        GLOBALS.recorders?.recorders,
+        channelsByStationId,
+        serviceMap,
+        userAccountInfo?.DvrCapability === DvrCapabilityType.CLOUDDVR
+      );
+
+      const uniqSchedules = uniqBy(schedules, "ChannelNumber");
+
+      const { SubscriptionItems, channelMapId, Id, Settings } =
+        GLOBALS.recordingData;
+      if (
+        !isSubscriptionItem &&
+        (!SubscriptionItems || SubscriptionItems.length === 0)
+      ) {
+        // if not an item, must have SubscriptionItems
+        return;
+      }
+      let promise;
+
+      let isAnyTimeAnyChannel = false;
+      let selectedChannel = Settings?.ChannelNumber;
+      if (
+        selectedChannel.startsWith &&
+        selectedChannel.startsWith(DVRAnyTimeAnyChannel)
+      ) {
+        selectedChannel = selectedChannel.split("-")?.[1];
+        isAnyTimeAnyChannel = true;
+      }
+
+      const channel = getChannelByNumber(parseInt(selectedChannel));
+      const recordingSettings = {
+        ...Settings,
+        IsMultiChannel: isAnyTimeAnyChannel,
+        ChannelNumber: +selectedChannel,
+      };
+      if (channelMapId) {
+        recordingSettings.ChannelMapId =
+          channelMapId.toString() || channelMap.channelMapId;
+      } else {
+        recordingSettings.ChannelMapId =
+          GLOBALS.userAccountInfo.ChannelMapId?.toString() ||
+          channelMap.channelMapId;
+      }
+      recordingSettings.StationId = channel?.StationId;
+      // find the schedule for selected channel
+      const selectedSchedule = uniqSchedules.find((schd) => {
+        //@ts-ignore
+        return schd?.StationId === channel?.StationId;
+      });
+
+      let { StartUtc } = recordingSettings;
+
+      const {
+        StationId,
+        ChannelNumber,
+        MaximumViewableShows,
+        EndLateSeconds,
+        RecyclingDisabled,
+        ShowType,
+        AirtimeDomain,
+        ChannelMapId,
+        ManualRDDurationSeconds,
+        ProviderName,
+        OriginalStationId,
+        IsMultiChannel,
+      } = recordingSettings;
+
+      if (selectedSchedule) {
+        //@ts-ignore
+        StartUtc = selectedSchedule?.StartUtc;
+      }
+
+      const settings: ISubscriptionSetting = {
+        StationId,
+        ChannelNumber,
+        StartUtc,
+        MaximumViewableShows,
+        EndLateSeconds,
+        RecyclingDisabled,
+        ShowType,
+        AirtimeDomain,
+        ChannelMapId,
+        ManualRDDurationSeconds,
+        ProviderName,
+        OriginalStationId,
+        IsMultiChannel,
+      };
+      if (isSubscriptionItem) {
+        const firstSubscriptionItem = SubscriptionItems[0];
+
+        if (firstSubscriptionItem.ProgramDetails.ShowType === "Movie") {
+          promise = updateRecordingInBackend(
+            SubscriptionItems[0].SubscriptionId, // movie,
+            settings as ISubscriptionSetting
+          );
+        } else {
+          if (isSeries) {
+            promise = updateRecordingInBackend(
+              SubscriptionItems[0].SubscriptionId, // tv series,
+              settings as ISubscriptionSetting
+            );
+          } else {
+            const findEpisode = SubscriptionItems.find((item: any) => {
+              return props.route.params.programId == item.ProgramId;
+            });
+            if (findEpisode) {
+              promise = updateRecordingInBackend(
+                findEpisode.Id,
+                settings as ISubscriptionSetting
+              );
+            }
+          }
+        }
+      } else if (
+        GLOBALS.recordingData?.Definition === DefinitionString.GENERIC_PROGRAM
+      ) {
+        promise = updateRecordingInBackend(
+          SubscriptionItems[0].SubscriptionId,
+          settings as ISubscriptionSetting
+        );
+      } else {
+        promise = updateRecordingInBackend(
+          SubscriptionItems[0].SubscriptionId,
+          settings as ISubscriptionSetting
+        );
+      }
+
+      promise?.then((response: any) => {
+        const {
+          data: {
+            State = undefined,
+            ErrorCode = undefined,
+            IsQuotaExceededForAddedItems = false,
+          } = {},
+        } = response || {};
+        if (State === "Failed") {
+          showDvrErrorDetails(ErrorCode);
+        }
+        // Show quota exceeded error
+        const { params: { title = "" } = {} } = props.route;
+        if (IsQuotaExceededForAddedItems) {
+          showDvrErrorDetails(DvrItemErrorCode.RECORDING_QUOTA_EXCEDDED, title);
+        }
+        // Promise.all([
+        //   this.props.getAllSubscriptionGroups().promise,
+        //   this.props.reloadScheduledRecordings().promise,
+        //   this.props.reloadViwableSubscriptionGroups().promise,
+        // ]).then(() => {
+        //   this.props.toggleSideMenu(false);
+        //   this.props.params?.onUpdate?.();
+        // });
+
+        props.route.params.closePanel();
+      });
     }
   };
 
@@ -492,6 +668,7 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
           subTitle: selection.title,
           options: getShowTypeOptions(),
         });
+        break;
       case RecordingOptionsEnum.Time:
         props.navigation.navigate(DetailRoutes.SelectOptions, {
           title: props.route.params.title,
@@ -504,10 +681,15 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
           title: props.route.params.title,
           subTitle: AppStrings?.str_dvr_recording.channel,
           options: getChannelOptions(),
+          recordingOptions: recordingOptions,
           initialValue: AnyTimeAnyChannel
             ? DVRAnyTimeAnyChannel
             : channelNumber,
         });
+        const currentChannel = recordingOptions?.find(
+          (options: any) => options?.key === RecordingOptionsEnum.Channel
+        );
+        console.log(currentChannel);
         break;
       case RecordingOptionsEnum.ChannelAndTime:
         props.navigation.navigate(DetailRoutes.ChannelAndTime, {
@@ -556,6 +738,7 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
       ) {
         schedules = await getSchedules(programId);
       }
+      //@ts-ignore
       setSchedules(schedules);
       getRecordingOptions();
     }
@@ -578,6 +761,17 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
 
   //   }, []);
   const footerComponnt = () => {
+    const { Definition, SubscriptionItems } = GLOBALS.recordingData;
+    const [{ ItemState = undefined } = {}] = SubscriptionItems || [];
+    let isDeleteButton = false;
+    if (
+      !isNew &&
+      (Definition === ItemShowType.SingleProgram || !isSeries) &&
+      ItemState === DvrItemState.RECORDED
+    ) {
+      isDeleteButton = true;
+    }
+
     return (
       <View
         style={[styles.buttonContainer, { alignSelf: "flex-end", bottom: 0 }]}
@@ -635,7 +829,7 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
               style={styles.saveButton}
               textStyle={{
                 height: 38,
-                width: 100,
+                width: 250,
                 color: "#EEEEEE",
                 fontFamily: "Inter",
                 fontSize: 25,
@@ -643,6 +837,9 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
                 letterSpacing: 0,
                 lineHeight: 38,
                 textAlign: "center",
+              }}
+              onPress={() => {
+                updateRecording();
               }}
               avatarSource={undefined}
               textLabel={AppStrings?.str_dvr_btn_save_changes}
@@ -662,6 +859,49 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
             />
           </React.Fragment>
         )}
+        {/* <React.Fragment>
+          <MFButton
+            ref={recordButtonRef}
+            variant={MFButtonVariant.Contained}
+            iconSource={0}
+            onFocus={() => {
+              setFocussed(undefined);
+            }}
+            imageSource={0}
+            style={styles.saveButton}
+            textStyle={{
+              height: 38,
+              width: 250,
+              color: "#EEEEEE",
+              fontFamily: "Inter",
+              fontSize: 25,
+              fontWeight: "600",
+              letterSpacing: 0,
+              lineHeight: 38,
+              textAlign: "center",
+            }}
+            onPress={() => {
+              console.log("DELETE");
+            }}
+            avatarSource={undefined}
+            textLabel={
+              isDeleteButton
+                ? AppStrings?.str_dvr_delete_recording
+                : AppStrings?.str_dvr_conflict_cancel
+            }
+            containedButtonProps={{
+              containedButtonStyle: {
+                unFocusedBackgroundColor: globalStyles.backgroundColors.shade3,
+                elevation: 0,
+                enabled: true,
+                focusedBackgroundColor: globalStyles.backgroundColors.primary1,
+                hoverColor: "red",
+                hasTVPreferredFocus: false,
+                unFocusedTextColor: globalStyles.fontColors.lightGrey,
+              },
+            }}
+          />
+        </React.Fragment> */}
       </View>
     );
   };

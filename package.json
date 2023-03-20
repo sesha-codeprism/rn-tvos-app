@@ -26,6 +26,7 @@
     "npm": "<8.2"
   },
   "dependencies": {
+    "@react-native-community/rxjs": "^6.5.4-custom",
     "@react-navigation/drawer": "^6.4.1",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",
@@ -60,7 +61,8 @@
     "react-navigation-drawer": "^2.7.2",
     "react-query": "^3.34.12",
     "react-redux": "^8.0.2",
-    "react-syntax-highlighter": "^15.4.5"
+    "react-syntax-highlighter": "^15.4.5",
+    "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

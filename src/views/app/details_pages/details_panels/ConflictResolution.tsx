@@ -10,6 +10,8 @@ import ConflictResolutionEpisodes from "./ConflictResolutionEpisodes";
 import ConflictResolutionTimeOverlap from "./ConflictResolutionTimeOverlap";
 import MFLoader from "../../../../components/MFLoader";
 import MFEventEmitter from "../../../../utils/MFEventEmitter";
+import { AppStrings } from "../../../../config/strings";
+
 
 
 interface Props {
@@ -242,9 +244,23 @@ const ConflictResolution: React.FunctionComponent<Props> = (props: Props) => {
                 }
               ]); 
             }else{
-              setTimeout(() => MFEventEmitter.emit("closeConflictResolution", undefined), 1000);
-              ;
+              setTimeout(() => {
+                MFEventEmitter.emit("openPopup", {
+                  buttons: [
+                    {
+                      title: "OK",
+                      onPress: async () => {
+                        MFEventEmitter.emit("closeAll", undefined);
+                        
+                      },
+                    }
+                  ],
+                  description: AppStrings?.str_dvr_no_conflict_exists
+                });
+                
+              }, 1000);
             }
+
         }
     }
   },  [isAllCoflictsLoaded])

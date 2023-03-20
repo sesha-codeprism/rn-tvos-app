@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {
   FlatList,
@@ -46,10 +46,15 @@ import MFButton, {
 } from "../../../../components/MFButton/MFButton";
 import { DetailsSidePanel } from "../DetailSidePanel";
 import { AppImages } from "../../../../assets/images";
-import { Definition as DefinitionOfItem } from "../../../../utils/DVRUtils";
+import { Definition, Definition as DefinitionOfItem } from "../../../../utils/DVRUtils";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
 import MFOverlay from "../../../../components/MFOverlay";
 import { appQueryCache } from "../../../../config/queries";
+import { getItemId } from "../../../../utils/dataUtils";
+import { findConflictedGroupBySeriesOrProgramId } from "../../../../utils/ConflictUtils";
+import MFEventEmitter from "../../../../utils/MFEventEmitter";
+import { cancelRecordingFromConflictPopup, forceResolveConflict } from "../../../../../backend/dvrproxy/dvrproxy";
+import { ConflictResolutionContext } from "../../../../contexts/conflictResolutionContext";
 
 interface EpisodeListProps {
   navigation: NativeStackNavigationProp<any>;
@@ -72,6 +77,7 @@ let skip = 0;
 let top = 10;
 
 const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
+  const conflictContext = useContext(ConflictResolutionContext);
   const navigationParams = props.route.params;
   const { udpData, subscriberData, discoveryData } = navigationParams;
   const [currentSeason, setCurrentSeason] = useState<any>();
@@ -205,8 +211,145 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     [AppStrings?.str_details_cta_watch_live]: () => {},
     [AppStrings?.str_details_cta_play_from_beginning]: () => {},
     [AppStrings?.str_details_cta_waystowatch]: () => {},
-    [AppStrings?.str_app_edit]: () => {},
-    [AppStrings?.str_dvr_resolve_conflict]: () => {},
+    [AppStrings?.str_app_edit]: () => {
+      const currentSubscriptionData = ctaList.find(
+        (e: any) => e.buttonText === AppStrings?.str_app_edit
+      );
+      if (currentSubscriptionData) {
+        const {
+          subscription: { SubscriptionGroup, SubscriptionItem } = {
+            SubscriptionGroup: null,
+            SubscriptionItem: null,
+          },
+        } = currentSubscriptionData;
+        if (SubscriptionGroup && SubscriptionItem) {
+          const { Definition, SeriesId } = SubscriptionGroup;
+          const { ProgramId, IsGeneric } = SubscriptionItem;
+          let programId;
+
+          if (Definition === DefinitionOfItem.SINGLE_PROGRAM) {
+            programId = ProgramId;
+            GLOBALS.recordingData = SubscriptionGroup;
+            setScreenProps({
+              isNew: false,
+              isSeries: false,
+              programId: programId,
+              isGeneric: IsGeneric,
+              isPopupModal: true,
+              SubscriptionGroup,
+              schedules: episodeSchedules,
+              isSubscriptionItem: true,
+            });
+            setRoute(DetailRoutes.RecordingOptions);
+            setOpen(true);
+            drawerRef?.current?.open();
+          } else {
+            programId = SeriesId;
+            GLOBALS.recordingData = SubscriptionGroup;
+            setScreenProps({
+              programId: ProgramId,
+              seriesId: SeriesId,
+              isNew: false,
+              isPopupModal: true,
+              SubscriptionGroup,
+              isGeneric: IsGeneric,
+              schedules: episodeSchedules,
+              isSubscriptionItem: true,
+            });
+            setRoute(DetailRoutes.EpisodeRecordOptions);
+            setOpen(true);
+            drawerRef?.current?.open();
+          }
+        }
+      }
+    },
+    [AppStrings?.str_dvr_resolve_conflict]: () => {
+       //if no conflict:
+    let id  = getItemId(currentEpisode);
+    const subs = GLOBALS.allSubscriptionGroups ;
+    let conflictedSubscriptionGroup: any|undefined = findConflictedGroupBySeriesOrProgramId(id, subs?.SubscriptionGroups);
+    const [{ Definition: definition }] = conflictedSubscriptionGroup || {};
+    const conflictedItems = conflictedSubscriptionGroup?.[0]?.SubscriptionItems?.filter((si: any) =>  si.ItemState  === 'Conflicts');
+    if(conflictedSubscriptionGroup && conflictedItems && conflictedItems.length){
+      // determine if series conflict
+    if(definition === Definition.SINGLE_PROGRAM || definition === Definition.SINGLE_TIME){
+        MFEventEmitter.emit("openPopup", {
+          buttons: [
+            {
+              title: AppStrings?.str_dvr_resolve_conflict_auto,
+              onPress: async () => {
+                await forceResolveConflict(conflictedSubscriptionGroup);
+                MFEventEmitter.emit("closePopup",undefined);
+              },
+            },
+            {
+              title: AppStrings?.str_dvr_resolve_conflict_manual,
+              onPress: () => {
+                conflictContext.ProgramId = id;
+                conflictContext.isEpisode = true;
+                MFEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
+              },
+            },
+            {
+              title: AppStrings?.str_dvr_donot_record,
+              onPress: async () => {
+                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  false, false) ;
+                MFEventEmitter.emit("closePopup",undefined);
+              },
+            }
+          ],
+          description: AppStrings?.str_dvr_conflict_popup_warning_program
+        });
+      }else {
+        MFEventEmitter.emit("openPopup", {
+          buttons: [
+            {
+              title: AppStrings?.str_dvr_series_conflict_modal_record_all,
+              onPress: async () => {
+                await forceResolveConflict(conflictedSubscriptionGroup);
+                MFEventEmitter.emit("closePopup",undefined);
+              },
+            },
+            {
+              title: AppStrings?.str_dvr_series_modal_recod_no_conflict,
+              onPress: async () => {
+                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  true, true) ;
+                MFEventEmitter.emit("closePopup",undefined);
+              },
+            },
+            {
+              title: AppStrings?.str_dvr_series_conflict_modal_chose_show,
+              onPress: () => {
+                conflictContext.ProgramId = id;
+                conflictContext.isEpisode = true;
+                MFEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
+              },
+            },
+            {
+              title: AppStrings?.str_dvr_donot_record,
+              onPress: async () => {
+                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup, true, false);
+                MFEventEmitter.emit("closePopup",undefined);
+              },
+            }
+          ],
+          description: AppStrings?.str_dvr_conflict_popup_warning_series
+        });
+      }
+    }else {
+      MFEventEmitter.emit("openPopup", {
+        buttons: [
+          {
+            title: "OK",
+            onPress: async () => {
+              MFEventEmitter.emit("closePopup", undefined);
+            },
+          }
+        ],
+        description: AppStrings?.str_dvr_no_conflict_exists
+      });
+    }
+    },
     [AppStrings?.str_details_cta_playdvr]: () => {},
     [AppStrings?.str_details_cta_rent]: () => {},
     [AppStrings?.str_details_cta_buy]: () => {},
@@ -217,7 +360,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
 
   let firstButtonRef = React.createRef();
   let buttonFocuszoneRef = React.createRef();
-  let selectedButtonRef = React.createRef();  
+  let selectedButtonRef = React.createRef();
 
   const setFlatListRef = (ref: any) => {
     episodeFlatList = ref;

@@ -1,9 +1,10 @@
+//@ts-nocheck
+
 import { parseUri } from "../utils/url/urlUtil";
 import { GLOBALS } from "../../src/utils/globals";
 import { DELETE, GET, POST, PUT } from "../utils/common/cloud";
 import { lang } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
-import axios from "axios";
 import { MFGlobalsConfig } from "../configs/globals";
 import { PinnedItemType } from "../../src/utils/pinnedItemType";
 import { isFeatureAssigned } from "../../src/utils/helpers";
@@ -442,7 +443,7 @@ export const getProgramSubscriberData = async (item: string, params: any) => {
 }
 
 export const getSeriesSubscriberData = async (item: string, params: any) => {
-  const { id , storeId } = params;
+  const { id, storeId } = params;
   const { accessToken } = GLOBALS.store!;
   const isCatchUp = (isFeatureAssigned("catchupEnvironment") && isFeatureAssigned("catchup")) || false;
   const types = ["Title"];

@@ -64,6 +64,27 @@ export const getAllSubscriptionGroups = async (params: any) => {
     return response;
 }
 
+export const getSubscriptiongroups = async (type: string) => {
+    const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr}v1/subscription-groups/`;
+    const paramsObject = {
+        "$type-filter": "all",
+        "$state-filter": type,
+        "$orderby": "startdate",
+        "$lang": lang,
+        "storeId": DefaultStore.Id
+    }
+    const response = await GET({
+        url,
+        params: paramsObject,
+        headers: {
+            Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+        },
+    })
+    return response;
+
+
+}
+
 export const getDVRRecorders = async (id: string, params: any) => {
     const { storeId } = params || DefaultStore?.Id;
     const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr || '') + '/v1/subscriber-recorders';
@@ -103,100 +124,100 @@ export const submitSolutionForConflicts = async (conflictId: string, solution: s
     const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscription-items/${conflictId}/conflict-solution`;
 
     const response = await PUT({
-      url: url,
-      params: {
-        ...{
-            "ScheduledSubscriptionItemIds": solution
-        }
-      },
-      headers: {
-        Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
-      },
+        url: url,
+        params: {
+            ...{
+                "ScheduledSubscriptionItemIds": solution
+            }
+        },
+        headers: {
+            Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+        },
     });
     return response;
-  };
+};
 
-  export  const forceResolveConflict = async (subscriptionGroup:any) => {
+export const forceResolveConflict = async (subscriptionGroup: any) => {
     if (!GLOBALS.bootstrapSelectors) {
         return
     }
-    const [{ Definition: defination,  Id, SubscriptionItems}] = subscriptionGroup || {};
-    if(defination === Definition.SERIES || defination === Definition.GENERIC_PROGRAM){
+    const [{ Definition: defination, Id, SubscriptionItems }] = subscriptionGroup || {};
+    if (defination === Definition.SERIES || defination === Definition.GENERIC_PROGRAM) {
         const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscriptions/${Id}/force-resolve-conflicts`;
         const response = await POST({
             url: url,
             headers: {
-              Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
             },
-          });
-          return response;
-    }else if(defination === Definition.SINGLE_PROGRAM || defination === Definition.SINGLE_TIME){
+        });
+        return response;
+    } else if (defination === Definition.SINGLE_PROGRAM || defination === Definition.SINGLE_TIME) {
         //const [{SubscriptionId},...rest] = SubscriptionItems;
         const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscriptions/${Id}/force-resolve-conflicts`;
         const response = await POST({
             url: url,
             headers: {
-              Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
             },
-          });
-          return response;
+        });
+        return response;
     }
-  }
+}
 
-  export const cancelRecordingFromConflictPopup = async (subscriptionGroup: any, ifSeries: boolean, ifSeriesNonConflicted: boolean) => {
+export const cancelRecordingFromConflictPopup = async (subscriptionGroup: any, ifSeries: boolean, ifSeriesNonConflicted: boolean) => {
     if (!GLOBALS.bootstrapSelectors) {
         return
     }
     let params = null;
     let url = null;
-    const [{ Definition: defination,  Id, SubscriptionItems}] = subscriptionGroup || {};
-    if(ifSeries && defination === Definition.SERIES || defination === Definition.GENERIC_PROGRAM){
-        if(!ifSeriesNonConflicted){
-            params =  {"SubscriptionIds":[Id],"SubscriptionItemIds":[]};  // cancels whole series
+    const [{ Definition: defination, Id, SubscriptionItems }] = subscriptionGroup || {};
+    if (ifSeries && defination === Definition.SERIES || defination === Definition.GENERIC_PROGRAM) {
+        if (!ifSeriesNonConflicted) {
+            params = { "SubscriptionIds": [Id], "SubscriptionItemIds": [] };  // cancels whole series
             url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
             const response = await POST({
                 url: url,
                 params,
                 headers: {
-                  Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                    Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
                 },
-              });
-              return response;
-        }else {
-            params =  {"SubscriptionIds":[Id],"SubscriptionItemIds":SubscriptionItems?.filter((si: any) => si.ItemState === 'Conflicts')?.map((si: any) => si?.Id)};  // cancels conflicted items
+            });
+            return response;
+        } else {
+            params = { "SubscriptionIds": [Id], "SubscriptionItemIds": SubscriptionItems?.filter((si: any) => si.ItemState === 'Conflicts')?.map((si: any) => si?.Id) };  // cancels conflicted items
             url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
             const response = await POST({
                 url: url,
                 params,
                 headers: {
-                  Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                    Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
                 },
-              });
-              return response;
+            });
+            return response;
         }
-    }else if(defination === Definition.SINGLE_PROGRAM || defination === Definition.SINGLE_TIME){
-        if(SubscriptionItems.length > 0){
-            params =  {"SubscriptionIds":[Id],"SubscriptionItemIds": [SubscriptionItems.map((si: any) => si?.Id)]};// cancel recording for programs
+    } else if (defination === Definition.SINGLE_PROGRAM || defination === Definition.SINGLE_TIME) {
+        if (SubscriptionItems.length > 0) {
+            params = { "SubscriptionIds": [Id], "SubscriptionItemIds": [SubscriptionItems.map((si: any) => si?.Id)] };// cancel recording for programs
             url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
             const response = await POST({
                 url: url,
                 params,
                 headers: {
-                  Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                    Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
                 },
-              });
-              return response;
-        }else if(SubscriptionItems.length === 0){
-            params =  {"SubscriptionIds":[Id],"SubscriptionItemIds":[]};
+            });
+            return response;
+        } else if (SubscriptionItems.length === 0) {
+            params = { "SubscriptionIds": [Id], "SubscriptionItemIds": [] };
             url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
             const response = await POST({
                 url: url,
                 params,
                 headers: {
-                  Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                    Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
                 },
-              });
-              return response;
+            });
+            return response;
         }
     }
 }
@@ -215,6 +236,22 @@ export const saveRecordingToBackend = async (subcriptionsParams: any) => {
         },
     });
     return response
+}
+
+
+export const updateRecordingInBackend = async (subscriptionId: string, subscriptionSettings: any) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return;
+    }
+    const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscriptions/${subscriptionId}/settings`;
+    const response = await PUT({
+        url: url,
+        params: subscriptionSettings,
+        headers: {
+            Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+        }
+    });
+    return response;
 }
 
 

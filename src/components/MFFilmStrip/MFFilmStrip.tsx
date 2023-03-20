@@ -328,21 +328,9 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                       }
                       showTitleOnlyOnFocus={false}
                       titlePlacement={props.titlePlacement}
-                      overlayComponent={
-                        <MFOverlay
-                          renderGradiant={true}
-                          showProgress={item.Bookmark! || item.progress}
-                          progress={item.progress ? item.progress * 100 : 20}
-                          displayTitle={item.episodeInfo && item.episodeInfo}
-                          bottomText={
-                            item.metadataLine3 ||
-                            item.durationMinutesString ||
-                            ""
-                          }
-                          // showRec={true}
-                          // recType={"series"}
-                        />
-                      }
+                      // overlayComponent={
+
+                      // }
                       progressComponent={props.progressElement}
                       showProgress={props.shouldRenderProgress}
                       shouldRenderText

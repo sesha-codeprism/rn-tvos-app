@@ -115,7 +115,7 @@ export const Routes = {
   // BrowseFilters: "BrowseFilters",
   PackageDetails: "PackageDetails",
   FavouriteManager: "FavouriteManager",
-  DvrManager: "DvrManager"
+  DvrManager: "DvrManager",
 };
 
 const Stack = createNativeStackNavigator();
@@ -239,9 +239,6 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
     if (store) {
       GLOBALS.store = store;
       console.log("Settings store successful", GLOBALS.store);
-      // GLOBALS.store!.onScreenLanguage.languageCode = "en-CA";
-      // updateStore(GLOBALS.store);
-      // console.log("After manual update", GLOBALS.store);
       const isLoggedIn =
         GLOBALS.store.accessToken !== null &&
         GLOBALS.store.refreshToken !== null;
@@ -298,10 +295,7 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
           animation: "none",
         }}
       />
-      <Stack.Screen
-        name={Routes.DvrManager}
-        component={DVRManagerScreen}
-      />
+      <Stack.Screen name={Routes.DvrManager} component={DVRManagerScreen} />
       <Stack.Screen
         name={Routes.BrowseCategory}
         component={BrowseCategoryScreen}

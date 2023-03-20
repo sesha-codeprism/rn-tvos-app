@@ -1,4 +1,6 @@
 import _ from "lodash";
+import { isEmpty, find, filter } from "lodash";
+import { Alert } from "react-native";
 import { config } from "../config/config";
 import { AppStrings } from "../config/strings";
 import { Genre, RecorderModel } from "./analytics/consts";
@@ -12,6 +14,7 @@ const dvrFilterSortEnabled = dvrConfig?.isSortByDateEnabled || true;
 //@ts-ignore
 const dvrFilterSoonToBeExpiredDays = dvrConfig?.soonToBeExpiredDays || 4;
 const MILLISECONDS_IN_24HRS = 86400000;
+
 
 
 export interface SubscriptionGroupsResponse {
@@ -252,7 +255,7 @@ interface Settings {
     ServiceCollectionId: string;
 }
 
-interface SeriesDetails {
+export interface SeriesDetails {
     Title: string;
     Images: Image[];
     ImageBucketId?: string;
@@ -280,6 +283,23 @@ interface Image {
     ImageType: string;
     Uri: string;
 }
+
+export interface ISubscriptionSetting {
+    StationId?: string;
+    ChannelNumber: number;
+    StartUtc: string;
+    MaximumViewableShows?: number;
+    EndLateSeconds: number;
+    RecyclingDisabled: boolean;
+    ShowType?: string;
+    AirtimeDomain?: string;
+    ChannelMapId: string;
+    ManualRDDurationSeconds?: number;
+    ProviderName?: string;
+    OriginalStationId?: string;
+    IsMultiChannel?: boolean;
+}
+
 
 export enum DvrItemErrorCode {
     UNKNOWN = "Unknown",
@@ -376,6 +396,11 @@ export type DvrButtonActionType = {
     buttonAction: DvrButtonAction;
     subscription?: any;
 };
+
+export enum DVRSubscriptionGroupDataFilterType {
+    Viewable = "viewable",
+    Scheduled = "scheduled",
+}
 
 export const calculateSeriesButtonAction = (
     seriesId: string,
@@ -2275,8 +2300,12 @@ export const showDvrErrorDetails = (
         case DvrItemErrorCode.RECORDING_QUOTA_EXCEDDED:
             errorMessage = `${programName} ${AppStrings?.str_dvr_quota_exceeded}`;
             break;
+        case DvrItemErrorCode.GENERIC:
+            errorMessage = 'Failed to update. Generic error encountered'
+            break;
     }
     if (errorMessage) {
+        Alert.alert(errorMessage)
         console.warn("Help")
         // displayModal({
         //     text: errorMessage,
@@ -2356,51 +2385,160 @@ export const getEndTimeIgnoreState = (subscriptionItem: any): Date => {
 
 export const getStopRecordingOptions = () => {
     return [
-      {
-        title: AppStrings?.str_dvr_recording.stop_recording_at_scheduled_time,
-        key: 0,
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_minutes,
-          "5"
-        ),
-        key: 300, // seconds
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_minutes,
-          "15"
-        ),
-        key: 900, // seconds
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_minutes,
-          "30"
-        ),
-        key: 1800, // seconds
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_hours,
-          "1"
-        ),
-        key: 3600,
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_hours,
-          "2"
-        ),
-        key: 7200,
-      },
-      {
-        title: format(
-          AppStrings?.str_dvr_recording.stop_recording_after_hours,
-          "3"
-        ),
-        key: 10800,
-      },
+        {
+            title: AppStrings?.str_dvr_recording.stop_recording_at_scheduled_time,
+            key: 0,
+        },
+        {
+            title: format(
+                AppStrings?.str_dvr_recording.stop_recording_after_minutes,
+                "5"
+            ),
+            key: 300, // seconds
+        },
+        {
+            title: format(
+                AppStrings?.str_dvr_recording.stop_recording_after_minutes,
+                "15"
+            ),
+            key: 900, // seconds
+        },
+        {
+            title: format(
+                AppStrings?.str_dvr_recording.stop_recording_after_minutes,
+                "30"
+            ),
+            key: 1800, // seconds
+        },
+        {
+            title: format(
+                AppStrings?.str_dvr_recording.stop_recording_after_hours,
+                "1"
+            ),
+            key: 3600,
+        },
+        {
+            title: format(
+                AppStrings?.str_dvr_recording.stop_recording_after_hours,
+                "2"
+            ),
+            key: 7200,
+        },
+        {
+            title: format(
+                AppStrings?.str_dvr_recording.stop_recording_after_hours,
+                "3"
+            ),
+            key: 10800,
+        },
     ];
-  };
+};
+
+function cleanupScheduledSubscriptionGroups(subscriptionGroups: any[]): any[] {
+    subscriptionGroups = subscriptionGroups?.concat().filter((sg: any) => {
+        if (isEmpty(sg.SubscriptionItems)) {
+            return false;
+        } else {
+            return true;
+        }
+    });
+    return subscriptionGroups;
+}
+
+
+export const createSubscriptionGroups = (
+    rawSubscriptionGroupResponse: any,
+    type: DVRSubscriptionGroupDataFilterType
+): any => {
+    const recordingStateIsViewable =
+        type === DVRSubscriptionGroupDataFilterType.Viewable;
+
+    if (
+        !rawSubscriptionGroupResponse ||
+        !rawSubscriptionGroupResponse.SubscriptionGroups ||
+        !rawSubscriptionGroupResponse.SubscriptionGroups.length
+    ) {
+        // Early exit if missing required data.
+        return;
+    }
+
+    let subscriptionGroups = rawSubscriptionGroupResponse.SubscriptionGroups.slice();
+
+    const uniqueSubscriptionItemIds = new Set();
+    const now = new Date();
+
+    subscriptionGroups.forEach((subg: any) => {
+        let sg = { ...subg };
+        if (sg.SubscriptionItems && sg.SubscriptionItems.length > 0) {
+            let sgsi = [...sg.SubscriptionItems];
+            sg.SubscriptionItems = sgsi;
+            sg.SubscriptionItems = sg.SubscriptionItems.concat().filter(
+                (si: any) => {
+                    if (uniqueSubscriptionItemIds.has(si.Id)) {
+                        return false;
+                    }
+                    uniqueSubscriptionItemIds.add(si.Id);
+                    return isItemStateMatchingFilter(si.ItemState, type);
+                }
+            );
+
+            if (!recordingStateIsViewable) {
+                // correct removal of recording items from scheduled section
+                // roots of this update are on backend, some issues with caches and internal workflow
+                sg.SubscriptionItems = sg.SubscriptionItems.filter(
+                    (item: any) => getEndTimeIgnoreState(item) > now
+                );
+            }
+        }
+    });
+
+    if (!recordingStateIsViewable) {
+        subscriptionGroups = cleanupScheduledSubscriptionGroups(
+            subscriptionGroups
+        );
+    }
+
+    //@ts-ignore
+    if (config?.dvr?.enableManualRecording) {
+        subscriptionGroups = subscriptionGroups.filter((sg: any) => {
+            return sg.Definition !== Definition.SINGLE_TIME;
+        });
+    }
+
+    if (recordingStateIsViewable) {
+        subscriptionGroups = subscriptionGroups.filter((sg: any) => {
+            return sg.SubscriptionItems && sg.SubscriptionItems.length > 0;
+        });
+    } else {
+        subscriptionGroups = subscriptionGroups.filter((sg: any) => {
+            return sg.State === DvrGroupState.KNOWN_SCHEDULE;
+        });
+    }
+
+    return subscriptionGroups;
+};
+
+function isItemStateMatchingFilter(
+    itemState: string,
+    filterParam: DVRSubscriptionGroupDataFilterType
+): boolean {
+    if (!filterParam) {
+        return true;
+    }
+
+    if (filterParam === DVRSubscriptionGroupDataFilterType.Viewable) {
+        return (
+            itemState === DvrItemState.RECORDED ||
+            itemState === DvrItemState.RECORDING ||
+            itemState === DvrItemState.INVALID
+        );
+    } else if (filterParam === DVRSubscriptionGroupDataFilterType.Scheduled) {
+        return (
+            itemState === DvrItemState.CONFLICTS ||
+            itemState === DvrItemState.SCHEDULED ||
+            itemState === DvrItemState.RECORDING
+        );
+    }
+
+    return false;
+}
