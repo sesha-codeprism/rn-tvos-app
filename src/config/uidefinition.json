@@ -5011,8 +5011,8 @@
            "conflictedItemContainer": { 
             "display": "flex", 
             "flexDirection": "row", 
-            "marginTop": 37, 
-            "marginBottom": 37, 
+            "marginTop": 25, 
+            "marginBottom": 25, 
             "justifyContent": "space-between" 
            },
            "conflictedItemTitleContainer": { 
