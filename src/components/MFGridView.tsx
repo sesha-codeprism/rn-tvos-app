@@ -29,6 +29,7 @@ interface MFGridProps {
   /** Rendered MFCard style when focused */
   focusedStyle?: StyleProp<ViewStyle>;
   /** Placement of the title on the card - Top, Center, Bottom or Beneath */
+  cardStyle?: "16x9" | "3x4" | "2x3";
   titlePlacement?: TitlePlacement;
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
 
@@ -64,6 +65,7 @@ const MFGridView: React.FunctionComponent<MFGridProps> = React.forwardRef(
             showTitleOnlyOnFocus={false}
             autoFocusOnFirstCard={index === 0}
             titlePlacement={props.titlePlacement}
+            cardStyle={props.cardStyle}
             onFocus={(event) => {
               props.onFocus && props.onFocus(event);
             }}
