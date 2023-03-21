@@ -145,6 +145,15 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
     }
 
     const items = dataArray?.filter((item: any) => !item?.viewAll);
+
+    if (focusedIndex > items?.length) {
+      setFocusIndex(0);
+      flatListRef.current?.scrollToIndex({
+        animated: true,
+        index: 0,
+        viewOffset: viewAllPeekValue,
+      });
+    }
     const lastIndex = items && items.length ? items.length - 1 : 0;
 
     useImperativeHandle(inRef, () => ({
