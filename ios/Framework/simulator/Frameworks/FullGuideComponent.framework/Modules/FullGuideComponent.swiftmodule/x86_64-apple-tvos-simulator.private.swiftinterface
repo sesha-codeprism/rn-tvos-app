@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)
+// swift-compiler-version: Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)
 // swift-module-flags: -target x86_64-apple-tvos15.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name FullGuideComponent
 // swift-module-flags-ignorable: -enable-bare-slash-regex
 import Alamofire
@@ -35,6 +35,7 @@ extension FullGuideComponent.MKFullGuideStorageManager {
   public func setRefrestToken(value: Swift.String)
   public func setQualityValues(value: [Swift.String])
   public func setChannelMapRights(value: Swift.Dictionary<Swift.String, Any>)
+  public func setCategories(categories: [Swift.String])
 }
 @_hasMissingDesignatedInitializers public class LiveChannel : Swift.Codable {
   @objc deinit
