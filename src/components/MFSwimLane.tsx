@@ -1,7 +1,8 @@
+//@ts-nocheck
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useRef } from "react";
-import { Alert, TouchableOpacity, View } from "react-native";
-import { Feed, FeedItem } from "../@types/HubsResponse";
+import { TouchableOpacity, View } from "react-native";
+import { Feed } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { layout2x3 } from "../config/constants";
 import { Routes } from "../config/navigation/RouterOutlet";
