@@ -11,6 +11,7 @@ import {
   Dimensions,
   TVMenuControl,
   BackHandler,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { PageContainer } from "../../../components/PageContainer";
@@ -18,7 +19,7 @@ import { getScaledValue, SCREEN_WIDTH } from "../../../utils/dimensions";
 import { globalStyles } from "../../../config/styles/GlobalStyles";
 import { getUIdef, scaleAttributes } from "../../../utils/uidefinition";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AppStrings } from "../../../config/strings";
+import { AppStrings, getFontIcon } from "../../../config/strings";
 import MFButton, {
   MFButtonVariant,
 } from "../../../components/MFButton/MFButton";
@@ -26,11 +27,16 @@ import { PressableProps } from "react-native-tvfocus";
 import { AppImages } from "../../../assets/images";
 import { appUIDefinition } from "../../../config/constants";
 import { GLOBALS } from "../../../utils/globals";
-import { buildFilterDataSource, Definition } from "../../../utils/DVRUtils";
+import {
+  buildFilterDataSource,
+  Definition,
+  Definition as DefinitionString,
+  filterRecordings,
+  getDurationSeconds,
+} from "../../../utils/DVRUtils";
 import {
   chooseRating,
   generalizeQuality,
-  getDurationSeconds,
   isExpiringSoon,
   massageDVRFeed,
   massageResult,
@@ -54,12 +60,21 @@ import { SidePanel } from "./SidePannel";
 import { getImageUri } from "../../../utils/Subscriber.utils";
 import {
   DvrRecordedState,
+  orderByDateFilterState,
   RecordStatus,
+  sortyByDateFilterState,
   sourceTypeString,
 } from "../../../utils/analytics/consts";
 import FastImage from "react-native-fast-image";
 import { config } from "../../../config/config";
-import { convertSecondsToDayHourMinStrings } from "../../../utils/dataUtils";
+import {
+  convertSecondsToDayHourMinStrings,
+  getTimeStringFromISOString,
+} from "../../../utils/dataUtils";
+import { createInitialFilterState } from "../BrowsePages/BrowseGallery/BrowseUtils/BrowseUtils";
+import { Routes } from "../../../config/navigation/RouterOutlet";
+import { DetailRoutes } from "../../../config/navigation/DetailsNavigator";
+import { DetailsSidePanel } from "../details_pages/DetailSidePanel";
 
 interface DvrManagerProps {
   navigation: NativeStackNavigationProp<any>;
@@ -76,6 +91,22 @@ export enum SubViews {
   Filter,
   None,
 }
+
+export interface HorizontalShowcardButtonType {
+  type:
+    | "Text"
+    | "TextDynamic"
+    | "Icon"
+    | "FontIcon"
+    | "CircleIcon"
+    | "TextIcon"
+    | "TextFontIcon"
+    | "TextSpinner"
+    | "FontIconBordered";
+  text: string;
+  icon: string;
+  onPress: () => void;
+}
 const dvrMenuItems = [
   { Id: DvrMenuItems.Recorded, Name: AppStrings.str_dvr_recorded },
   {
@@ -86,31 +117,54 @@ const dvrMenuItems = [
 const { width, height } = Dimensions.get("window");
 
 const DVRManagerScreen = (props: DvrManagerProps) => {
+  const channelMap = GLOBALS.channelMap;
+  const { baseFilters = "" }: any = getUIdef("DvrManager")?.config;
   const [currentDvrMenu, setCurrentDvrMenu] = useState(DvrMenuItems.Recorded);
   const [selectedAsset, setSelectedAsset] = useState();
   const [completedWidth, setCompletedWidth] = useState(0);
   const [pivots, setPivots] = useState();
+  const [open, setOpen] = useState(false);
+
+  const [route, setRoute] = useState(DetailRoutes.MoreInfo);
+
+  const [screenProps, setScreenProps] = useState<any>();
+
   const [isMenuFocused, setIsMenuFocused] = useState(false);
   const [focussedComponent, setFocussedComponent] = useState(SubViews.None);
+  const [scheduledRecordingList, setScheduledRecordingList] = useState<any>([]);
   const scheduledRecordings = massageDVRFeed(
     GLOBALS.scheduledSubscriptions,
     SourceType.DVR,
     "",
     GLOBALS.channelMap
   );
+
   const viewableRecordings = massageDVRFeed(
     GLOBALS.viewableSubscriptions,
     SourceType.DVR,
     "",
     GLOBALS.channelMap
   );
+  const viewableFilters = buildFilterDataSource(
+    GLOBALS.viewableSubscriptions?.SubscriptionGroups,
+    DvrMenuItems.Recorded,
+    channelMap,
+    false
+  );
+  const scheduledFilters = buildFilterDataSource(
+    GLOBALS.scheduledSubscriptions?.SubscriptionGroups,
+    DvrMenuItems.Scheduled,
+    channelMap,
+    false
+  );
   const [recordedList, setRecordedList] = useState<any[]>([]);
-  const channelMap = GLOBALS.channelMap;
-  const [viewableFilters, setViewableFilters] = useState();
-  const [scheduledFilters, setScheduledFilters] = useState();
+  // const [viewableFilters, setViewableFilters] = useState();
+  // const [scheduledFilters, setScheduledFilters] = useState();
   const [swimLaneKey, setSwimLaneKey] = useState("");
   const [swimLaneFocused, setSwimLaneFocused] = useState(false);
-  const [filterState, setFilterState] = useState<any>(null);
+  const [filterState, setFilterState] = useState<any>(
+    createInitialFilterState(viewableFilters, baseFilters)
+  );
   const [filterData, setFilterData] = useState<any>([]);
   const [openFilterMenu, setOpenFilterMenu] = useState(false);
   const [defaultFilterState, setDefaultFilterState] = useState<any>([]);
@@ -119,13 +173,15 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   const [currentScheduledItem, setCurrentScheduledItem] = useState<any>({
     id: null,
   });
+  const [ctaList, setCtaList] = useState<any[]>([]);
   const navigationParams = props.route.params;
-  const lazyListConfig: any = getUIdef("EpisodeList.LazyListWrapper")?.config;
-  const scaledSnapToInterval = getScaledValue(lazyListConfig.snapToInterval);
+
   const offset = useSharedValue(420);
   const opacity = useSharedValue(1);
   const firstCardRef = useRef<TouchableOpacity>(null);
   const firstScheduledCardRef: React.RefObject<any> = React.createRef<any>();
+  const firstCtaButtonRef = React.createRef();
+
   const updateSwimLaneKey = (key: string) => {
     setSwimLaneKey(key);
   };
@@ -134,6 +190,13 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     return useRef<PressableProps>(null);
   });
   const drawerRef: React.MutableRefObject<any> = useRef();
+  const moreInfoDrawerRef: React.MutableRefObject<any> = useRef();
+
+  const viewAllIcon = getFontIcon("view_all");
+
+  const editIcon = getFontIcon("edit");
+
+  const infoIcon = getFontIcon("info");
 
   const myTVEventHandler = (evt: any) => {
     if (
@@ -147,11 +210,40 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     }
   };
   useTVEventHandler(myTVEventHandler);
-  const handleFilterChange = (filterData: FilterValue) => {
-    setFilterState(filterData);
+  const handleFilterChange = (value: {
+    key: string;
+    value: { Id: string; Name: string };
+  }) => {
+    console.log("value", value);
+    let parseFilter = filterState;
+    /** Check if the array already has the data.. if Yes, delete it */
+    if (parseFilter[value.key].selectedIds.includes(value.value.Id)) {
+      parseFilter[value.key].selectedIds = [];
+    } else {
+      /** array doesn't have data.. add and make the api call */
+      parseFilter[value.key].selectedIds = [value.value.Id];
+      console.log(parseFilter);
+    }
+    setFilterState(parseFilter);
+    processData();
+  };
+  const handleClearFilter = () => {
+    setFilterState(createInitialFilterState(viewableFilters, baseFilters));
+    processData();
   };
   const processData = () => {
-    const filteredRecordinglist = viewableRecordings.filter((item: any) => {
+    // console.log(
+    //   "filterState,viewableRecordings,channelMap",
+    //   filterState,
+    //   viewableRecordings,
+    //   channelMap
+    // );
+    const recordedFilterData = filterRecordings(
+      filterState,
+      viewableRecordings,
+      channelMap
+    );
+    const filteredRecordinglist = recordedFilterData.filter((item: any) => {
       return item.SubscriptionItems.length > 0;
     });
     let listAllRecorded: any = [],
@@ -179,7 +271,17 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
             }
           });
       });
-
+    if (
+      filterState.SortBy.selectedIds.includes(orderByDateFilterState) &&
+      filterState.SortBy.selectedIds.includes(sortyByDateFilterState)
+    ) {
+      // Only sort if Sorted by Date filter is selected
+      listAllRecorded = listAllRecorded.sort((a: any, b: any) => {
+        const parsedA = new Date(a.ActualAvailabilityStartUtc);
+        const parsedB = new Date(b.ActualAvailabilityStartUtc);
+        return parsedB.getTime() - parsedA.getTime();
+      });
+    }
     const feedItems = [];
 
     if (listAllRecorded) {
@@ -344,7 +446,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
         ),
       });
     }
-    let tvShows = viewableRecordings.filter((item: any, index: any) => {
+    let tvShows = filteredRecording.filter((item: any, index: any) => {
       if (index < config.defaultFeedItemsCount) {
         return (
           !!item.SeriesId ||
@@ -355,7 +457,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
       }
     });
 
-    let movies = viewableRecordings.filter((item: any, index: any) => {
+    let movies = filteredRecording.filter((item: any, index: any) => {
       if (index < config.defaultFeedItemsCount) {
         return (
           item.Definition === Definition.SINGLE_PROGRAM &&
@@ -407,74 +509,323 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     }
     setRecordedList(feedItems);
   };
+  //   const massageDataforSchdule = (filteredRecording: any) => {
+  //     const massagedFeed = massageDVRFeed(
+  //         {
+  //             SubscriptionGroups: filteredRecording,
+  //         },
+  //         undefined,
+  //         undefined,
+  //         channelMap
+  //     );
+  //     groupedRecordings = groupRecordingsByDate(
+  //         (massagedFeed as unknown) as SubscriptionGroup[]
+  //     );
 
+  //     const validScheduledRecordingsData: any = pickBy(
+  //         groupedRecordings,
+  //         (value, key) => value.length > 0
+  //     );
+  //     return validScheduledRecordingsData;
+  // };
+
+  //   const processScheduledData = (id: string) => {
+  //     const filteredRecordinglist = scheduledRecordings.filter(
+  //         (item: any) => item.SubscriptionItems.length > 0
+  //     );
+  //     filteredRecordinglist &&
+  //         filteredRecordinglist.forEach((item: any) => {
+  //             const itemFiltered =
+  //                 item.SubscriptionItems?.length &&
+  //                 item.SubscriptionItems.filter((itemData: any) => {
+  //                     return itemData.ItemState !== DvrRecordedState.Canceled;
+  //                 });
+  //             itemFiltered && itemFiltered?.length
+  //                 ? (item.SubscriptionItems = itemFiltered)
+  //                 : (item.SubscriptionItems = []);
+  //         });
+  //     const validScheduledRecordingsData = massageDataforSchdule(
+  //         filteredRecordinglist
+  //     );
+  //     let filtredSubscriptionGroups = [];
+  //     if (props.channelMap) {
+  //         filtredSubscriptionGroups = filteredGroupedRecordings(
+  //             props.fitlerState,
+  //             validScheduledRecordingsData || [],
+  //             props.channelMap
+  //         );
+  //     } else {
+  //         filtredSubscriptionGroups = validScheduledRecordingsData || [];
+  //     }
+  //     setFocusedAsset(id);
+  //     setFiltredSubscriptionGroups({
+  //         isDataRefreshed: true,
+  //         validScheduledRecordings: filtredSubscriptionGroups,
+  //     });
+  // };
   const backAction = () => {
     console.log("Capturing hadware back presses on profile screen");
     Alert.alert("Back button pressed");
     return null;
   };
-  useEffect(() => {
-    processData();
-    setTimeout(() => {
-      console.log("recordedList", recordedList);
-    }, 5000);
-    if (channelMap && viewableRecordings) {
-      const viewableFilter = buildFilterDataSource(
-        GLOBALS.viewableSubscriptions?.SubscriptionGroups,
-        DvrMenuItems.Recorded,
-        channelMap,
-        false
-      );
-      console.log("viewableFilter inside DVR manager", viewableFilter);
-      setViewableFilters(viewableFilter);
-    }
-    if (channelMap && scheduledRecordings) {
-      const scheduledFilter = buildFilterDataSource(
-        GLOBALS.scheduledSubscriptions?.SubscriptionGroups,
-        DvrMenuItems.Scheduled,
-        channelMap,
-        false
-      );
-      console.log("scheduledFilter inside DVR manager", scheduledFilter);
+  // const toggleSidePanel = () => {
+  //   setScreenProps({
+  //     udpData: udpDataAsset,
+  //     networkInfo: networkInfo,
+  //     genres: udpDataAsset?.genre || discoveryProgramData?.genre,
+  //   });
+  //   setRoute(DetailRoutes.MoreInfo);
+  //   // drawerRef?.current.pushRoute(DetailRoutes.MoreInfo, {
+  //   //   udpData: udpDataAsset,
+  //   //   networkInfo: networkInfo,
+  //   //   genres: udpDataAsset?.genre || discoveryProgramData?.genre,
+  //   // });
+  //   setOpen(true);
+  //   drawerRef?.current?.open();
 
-      setScheduledFilters(scheduledFilter);
+  //   // drawerRef.current.open();
+  // };
+
+  const toggleMoreInfo = (item: any) => {
+    let udpData: any = {};
+    const {
+      Definition,
+      SubscriptionItems: SubscriptionGroups = [],
+      SeriesDetails,
+      SeriesId,
+      title: itemTitle = "",
+      Settings,
+    } = item;
+    const [subscriptionItem = {}] = SubscriptionGroups || [];
+    if (SeriesDetails) {
+      udpData = SeriesDetails;
+    } else if (subscriptionItem) {
+      udpData = subscriptionItem.ProgramDetails || {};
     }
+    udpData["description"] = udpData?.Description || "";
+    udpData["title"] = udpData?.Title || "";
+    setScreenProps({
+      udpData: udpData,
+      networkInfo: null, //networkInfo,
+      genres: udpData?.genre, // || discoveryProgramData?.genre,
+    });
+    setRoute(DetailRoutes.MoreInfo);
+    // drawerRef?.current.pushRoute(DetailRoutes.MoreInfo, {
+    //   udpData: udpDataAsset,
+    //   networkInfo: networkInfo,
+    //   genres: udpDataAsset?.genre || discoveryProgramData?.genre,
+    // });
+    setOpen(true);
+    drawerRef.current.close();
+    moreInfoDrawerRef?.current?.open();
+    // props.toggleSideMenu(true, SideMenuRoutes.MoreInfo, {
+    //   udpData,
+    //   genres: udpData?.Genres || [],
+    // });
+  };
+  // This method builds the CTA buttons for a specific scheduled item
+  const getCTAButtons = (item: any) => {
+    const ctaButtons: HorizontalShowcardButtonType[] = [];
+    const {
+      Definition,
+      SubscriptionItems: SubscriptionGroups = [],
+      SeriesDetails,
+      SeriesId,
+      title: itemTitle = "",
+      Settings,
+    } = item;
+    const [subscriptionItem = {}] = SubscriptionGroups || [];
+    const {
+      SubscriptionId: subscriptionGroupId,
+      Id: firstSubscriptionItemId,
+      ProgramDetails: {
+        Title = "",
+        EpisodeTitle = "",
+        SeasonNumber = undefined,
+        EpisodeNumber = undefined,
+        ShowType = undefined,
+      } = {},
+      ActualAvailabilityStartUtc,
+      ActualAvailabilityEndUtc,
+    } = subscriptionItem;
+    console.log("Definition", Definition);
+    // Program name
+    let title = "";
+    if (
+      Definition === DefinitionString.SERIES ||
+      (Definition === DefinitionString.GENERIC_PROGRAM &&
+        SubscriptionGroups.length > 1)
+    ) {
+      title = SeriesDetails?.Title || "";
+      ctaButtons.push({
+        type: "TextIcon",
+        text: AppStrings?.str_yourstuff_view_all,
+        icon: viewAllIcon,
+        onPress: () => {
+          item[
+              "ItemType"
+          ] =
+              ItemShowType.DvrScheduled;
+          props.navigation.navigate(
+              "DvrRecordedEpisode",
+              {
+                  item,
+              }
+          );
+        },
+      });
+    } else if (
+      (Definition === DefinitionString.SINGLE_PROGRAM &&
+        ShowType === ItemShowType.TVShow) ||
+      (Definition === DefinitionString.GENERIC_PROGRAM && SeriesId)
+    ) {
+      title = `${Title} ${Title && EpisodeTitle && ":"} ${EpisodeTitle}`;
+    }
+    if (title === "") {
+      title = itemTitle || "";
+    }
+    ctaButtons.push(
+      {
+        type: "TextIcon",
+        text: AppStrings?.str_app_edit,
+        icon: editIcon,
+        onPress: () => {
+          // editRecording(
+          //     item,
+          //     dateString
+          // ),
+        },
+      },
+      {
+        type: "TextIcon",
+        text: AppStrings?.str_details_cta_more_info,
+        icon: infoIcon,
+        onPress: () => {
+          toggleMoreInfo(item);
+        },
+      }
+    );
+    setCtaList(ctaButtons);
+    console.log("ctaButtons", ctaButtons);
+  };
+  const formatScheduledData = () => {
+    if(scheduledRecordings){
+      const groups = scheduledRecordings.reduce(function (acc, curr) {
+        const date = new Date(
+          curr.SubscriptionItems[0].ActualAvailabilityStartUtc
+        )
+          .toISOString()
+          .slice(0, 10);
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(curr);
+        return acc;
+      }, {});
+  
+      const objects = Object.keys(groups).map(function (date) {
+        return { date: date, data: groups[date] };
+      });
+      console.log("objects grouped data of scheduled", objects);
+      console.log("groups data of scheduled", groups);
+      const formattedData = objects.sort((a: any, b: any) => {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      });
+  
+      setScheduledRecordingList(formattedData);
+    } else {
+      setScheduledRecordingList([]);
+    }
+  };
+  useEffect(() => {
+    console.log("scheduledRecordings", scheduledRecordings);
+    // To filter and format data to show in the swimlane
+    processData();
+    formatScheduledData();
     TVMenuControl.enableTVMenuKey();
     BackHandler.addEventListener("hardwareBackPress", backAction);
   }, []);
+  // Method get executed when scheduled item get focused
   const handleScheduledItemFocus = (item: any, index: any) => {
     setCurrentScheduledItem(item);
+    // To transfer the focus to the 1st cta button
+    // firstCtaButtonRef.current?.setNativeProps({
+    //   hasTVPreferredFocus: true,
+    // });
   };
+  // Returns a flatlist that contains the scheduled items
   const renderScheduled = () => {
     return (
       <View style={styles.secondBlock}>
         <FlatList
-          snapToInterval={scaledSnapToInterval}
-          snapToAlignment={lazyListConfig.snapToAlignment || "start"}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: "100%",
-                  height: 1,
-                  backgroundColor: globalStyles.backgroundColors.shade5,
-                  marginTop: 20,
-                  marginBottom: 20,
-                }}
-              />
-            );
+        
+          snapToAlignment={"start"}
+          contentContainerStyle={{
+            justifyContent: "center",
+            width: "70%",
+            marginTop: 20,
           }}
-          horizontal={lazyListConfig.horizontal || false}
-          // ref={setFlatListRef}
-          data={scheduledRecordings}
+          // ItemSeparatorComponent={() => {
+          //   return (
+          // <View
+          //   style={{
+          //     width: 1319,
+          //     height: 1,
+          //     backgroundColor: globalStyles.backgroundColors.shade5,
+          //     marginTop: 20,
+          //     marginBottom: 20,
+          //     alignSelf: "center",
+          //   }}
+          // />
+          //   );
+          // }}
+          horizontal={false}
+          data={scheduledRecordingList}
           keyExtractor={(i) => i.Id}
-          renderItem={renderScheduledItem}
+          renderItem={renderScheduledList}
         />
       </View>
     );
   };
+  const getFormatedDate = (date: string) => {
+    const d = new Date(date);
+    const month = d.toLocaleString("default", { month: "long" });
+    const day = d.getDate();
+    const year = d.getFullYear();
+    return d.toDateString() === new Date().toDateString()
+      ? "Today"
+      : d.getDate() === new Date().getDate() + 1
+      ? "Tomorrow"
+      : `${month} ${day}, ${year}`;
+  };
+  const renderScheduledList = (data: any) => {
+    const { item, index } = data;
+    return (
+      <View key={index} style={{ justifyContent: "flex-start" }}>
+        <Text
+          style={{
+            fontSize: 29,
+            fontWeight: "bold",
+            color: "#EEEEEE",
+            letterSpacing: 0,
+            lineHeight: 50,
+            marginTop: 40,
+            marginLeft: 20,
+          }}
+        >
+          {getFormatedDate(item.date)}
+        </Text>
+        {item.data.length &&
+          item.data.map((item: any, index: any) => {
+            return renderScheduledItem({ item, index });
+          })}
+      </View>
+    );
+  };
+  // Returns the scheduled item
   const renderScheduledItem = (data: any) => {
     const { item, index } = data;
+
     // const { Description = "" } = item?.CatalogInfo;
     const name = item?.title || item?.SeriesDetails.Title;
 
@@ -486,16 +837,21 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     }
     const handleScheduledFocus = () => {
       handleScheduledItemFocus(item, index);
+      getCTAButtons(item);
     };
-
     const statusText = item?.statusText || "";
-    // const statusText = item?.statusText || "";
     const imageSource =
       getImageUri(item?.SeriesDetails, "16x9/Poster") ||
       getImageUri(item?.SeriesDetails, "16x9/KeyArt") ||
       AppImages.bgPlaceholder;
-
-    const progressBarStyle: any = getUIdef("ProgressBar")?.style;
+    const startTime = getTimeStringFromISOString(
+      item.SubscriptionItems[0].ActualAvailabilityStartUtc
+    );
+    const endTime = getTimeStringFromISOString(
+      item.SubscriptionItems[0].ActualAvailabilityEndUtc
+    );
+    const programDurationString = `${startTime} - ${endTime}`;
+    // const progressBarStyle: any = getUIdef("ProgressBar")?.style;
 
     const iconStyle = {
       color:
@@ -526,128 +882,177 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     }
     console.log(
       "currentScheduledItem?.Id === item?.Id ",
-      currentScheduledItem?.Id === item?.Id
+      currentScheduledItem?.Id === item?.Id ? item : false
     );
     const shouldShowExpiringIcon = isExpiringSoon(item);
     return (
-      <View
-        style={[styles.dvrItemContainer, selectedStyle]}
-        key={`ListItem_${index}`}
-        // ref={
-        //   index === 0
-        //     ? firstEpisodeRef
-        //     : index === currentSeasonEpisodes.length - 1
-        //     ? lastEpisodeRef
-        //     : undefined
-        // }
-      >
-        <Pressable
-          onFocus={handleScheduledFocus}
-          onPress={() => {}}
-          disabled={currentScheduledItem.Id === item?.Id}
-          focusable={currentScheduledItem.Id !== item?.Id}
-          ref={index === 0 ? firstScheduledCardRef : undefined}
-          style={styles.dvrItemShowcard}
+      <>
+        <View
+          style={[styles.dvrItemContainer, selectedStyle]}
+          key={`ListItem_${index}`}
+          // ref={
+          //   index === 0
+          //     ? firstEpisodeRef
+          //     : index === currentSeasonEpisodes.length - 1
+          //     ? lastEpisodeRef
+          //     : undefined
+          // }
         >
-          <FastImage
-            //@ts-ignore
-            source={imageSource}
-            style={styles.dvrItemImage}
-            fallback
-            defaultSource={AppImages.bgPlaceholder}
-          />
-          <View style={[styles.dvrItemInfo, { flexShrink: 1 }]}>
-            <Text style={styles.dvrItemTitle}>{name}</Text>
-            <Text style={styles.dvrItemMetadata}>{item.metadata}</Text>
-            {/* <Text style={styles.dvrItemDescription} numberOfLines={2}>
+          {currentScheduledItem?.Id === item?.Id ? (
+            <>
+              <View
+                // onFocus={handleScheduledFocus}
+                // onPress={() => {}}
+                // disabled={currentScheduledItem.Id === item?.Id}
+                // focusable={currentScheduledItem.Id !== item?.Id}
+                ref={index === 0 ? firstScheduledCardRef : undefined}
+                style={styles.dvrItemShowcard}
+              >
+                <FastImage
+                  //@ts-ignore
+                  source={imageSource}
+                  style={styles.dvrItemImage}
+                  fallback
+                  defaultSource={AppImages.bgPlaceholder}
+                />
+                <View style={[styles.dvrItemInfo, { flexShrink: 1 }]}>
+                  <Text style={styles.dvrItemMetadata}>
+                    {programDurationString}
+                  </Text>
+                  <Text style={styles.dvrItemTitle}>{name}</Text>
+                  <Text style={styles.dvrItemMetadata}>
+                    {item.metadataLine2}
+                  </Text>
+                  {/* <Text style={styles.dvrItemDescription} numberOfLines={2}>
+              {Description}
+            </Text> */}
+                  {currentScheduledItem.Id === item?.Id && (
+                    <Text style={styles.statusTextStyle} numberOfLines={2}>
+                      {statusText}
+                    </Text>
+                  )}
+                </View>
+              </View>
+
+              <View style={styles.buttonContainer}>
+                {isSelectedEpisode && (
+                  <ScrollView
+                    horizontal
+                    snapToAlignment={"start"}
+                    // snapToInterval={snapToInterval}
+                  >
+                    {ctaList?.length > 0 &&
+                      ctaList?.map((cta: any, index: number) => {
+                        let fontIconStyle: {
+                          [key: string]: any;
+                        };
+                        if (
+                          cta?.buttonAction ===
+                          AppStrings?.str_details_program_record_button
+                        ) {
+                          fontIconStyle = styles.ctaFontIconStyle;
+                        }
+                        return (
+                          <MFButton
+                            key={`ctaBtn_${cta.text}_${index}`}
+                            ref={index === 0 ? firstCtaButtonRef : null}
+                            focusable
+                            iconSource={0}
+                            hasTVPreferredFocus={swimLaneFocused && index === 0}
+                            imageSource={0}
+                            avatarSource={undefined}
+                            onFocus={() => {
+                              // setOpen(false);
+                              // drawerRef.current.close();
+                              // drawerRef.current.resetRoutes();
+                            }}
+                            variant={MFButtonVariant.FontIcon}
+                            fontIconSource={cta.icon}
+                            fontIconTextStyle={StyleSheet.flatten([
+                              styles.textStyle,
+                              {
+                                fontSize: 90,
+                                color: cta.buttonText?.includes("Record")
+                                  ? globalStyles.fontColors.badge
+                                  : "white",
+                              },
+                            ])}
+                            onPress={cta.onPress}
+                            textStyle={{
+                              color: "#EEEEEE",
+                              fontFamily: "Inter-SemiBold",
+                              fontSize: 25,
+                              fontWeight: "600",
+                              textAlign: "center",
+                              marginLeft: 21,
+                            }}
+                            textLabel={cta.text}
+                            style={{
+                              height: 62,
+                              alignSelf: "center",
+                              padding: 12,
+                              backgroundColor: "#424242",
+                              borderRadius: 6,
+                              paddingHorizontal: 35,
+                              zIndex: 100,
+                            }}
+                            focusedStyle={styles.focusedUnderLine}
+                            fontIconProps={{
+                              iconPlacement: "Left",
+                              shouldRenderImage: true,
+                            }}
+                          />
+                        );
+                      })}
+                  </ScrollView>
+                )}
+              </View>
+            </>
+          ) : (
+            <Pressable
+              onFocus={handleScheduledFocus}
+              onPress={() => {}}
+              disabled={currentScheduledItem.Id === item?.Id}
+              focusable={currentScheduledItem.Id !== item?.Id}
+              ref={index === 0 ? firstScheduledCardRef : undefined}
+              style={styles.dvrItemShowcard}
+            >
+              <FastImage
+                //@ts-ignore
+                source={imageSource}
+                style={styles.dvrItemImage}
+                fallback
+                defaultSource={AppImages.bgPlaceholder}
+              />
+              <View style={[styles.dvrItemInfo, { flexShrink: 1 }]}>
+                <Text style={styles.dvrItemMetadata}>
+                  {programDurationString}
+                </Text>
+                <Text style={styles.dvrItemTitle}>{name}</Text>
+                <Text style={styles.dvrItemMetadata}>{item.metadataLine2}</Text>
+                {/* <Text style={styles.dvrItemDescription} numberOfLines={2}>
                 {Description}
               </Text> */}
-            {currentScheduledItem.Id === item?.ProgramId && (
-              <Text style={styles.statusTextStyle} numberOfLines={2}>
-                {statusText}
-              </Text>
-            )}
-          </View>
-        </Pressable>
-
-        {/* <View style={styles.buttonContainer}>
-            {isSelectedEpisode && (
-              <ScrollView
-                horizontal
-                snapToAlignment={"start"}
-                snapToInterval={snapToInterval}
-              >
-                {ctaList?.length > 0 &&
-                  ctaList?.map((cta: any, index: number) => {
-                    let fontIconStyle: {
-                      [key: string]: any;
-                    };
-                    if (
-                      cta?.buttonAction ===
-                      AppStrings?.str_details_program_record_button
-                    ) {
-                      fontIconStyle = styles.ctaFontIconStyle;
-                    }
-                    return (
-                      <MFButton
-                        key={`ctaBtn_${cta.buttonText}_${index}`}
-                        ref={
-                          index === 0
-                            ? firstButtonRef
-                            : (buttonRefObject as any)[cta.buttonText]
-                        }
-                        focusable
-                        iconSource={0}
-                        hasTVPreferredFocus={index === 0}
-                        imageSource={0}
-                        avatarSource={undefined}
-                        onFocus={() => {
-                          setOpen(false);
-                          drawerRef.current.close();
-                          drawerRef.current.resetRoutes();
-                        }}
-                        variant={MFButtonVariant.FontIcon}
-                        fontIconSource={cta.iconSource}
-                        fontIconTextStyle={StyleSheet.flatten([
-                          styles.textStyle,
-                          {
-                            fontSize: 90,
-                            color: cta.buttonText?.includes("Record")
-                              ? globalStyles.fontColors.badge
-                              : "white",
-                          },
-                        ])}
-                        onPress={ctaButtonPress[cta.buttonAction]}
-                        textStyle={{
-                          color: "#EEEEEE",
-                          fontFamily: "Inter-SemiBold",
-                          fontSize: 25,
-                          fontWeight: "600",
-                          textAlign: "center",
-                          marginLeft: 21,
-                        }}
-                        textLabel={cta.buttonText}
-                        style={{
-                          height: 62,
-                          alignSelf: "center",
-                          padding: 12,
-                          backgroundColor: "#424242",
-                          borderRadius: 6,
-                          paddingHorizontal: 35,
-                          zIndex: 100,
-                        }}
-                        focusedStyle={styles.focusedUnderLine}
-                        fontIconProps={{
-                          iconPlacement: "Left",
-                          shouldRenderImage: true,
-                        }}
-                      />
-                    );
-                  })}
-              </ScrollView>
-            )}
-          </View> */}
-      </View>
+                {currentScheduledItem.Id === item?.Id && (
+                  <Text style={styles.statusTextStyle} numberOfLines={2}>
+                    {statusText}
+                  </Text>
+                )}
+              </View>
+            </Pressable>
+          )}
+        </View>
+        <View
+          style={{
+            width: 1319,
+            height: 1,
+            backgroundColor: globalStyles.backgroundColors.shade5,
+            marginTop: 20,
+            marginBottom: 20,
+            alignSelf: "center",
+          }}
+        />
+      </>
     );
   };
   const checkEmptyData = (items: any) => {
@@ -686,7 +1091,8 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
               updateSwimLaneKey={updateSwimLaneKey}
               cardStyle={"16x9"}
               onPress={(event) => {
-                console.log("event", event);
+                // console.log("event", event);
+                props.navigation.push(Routes.Details, { feed: event });
               }}
               onLongPress={() => {
                 Alert.alert("card long press working");
@@ -708,7 +1114,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
           <FastImage
             source={AppImages.noResultBackgroundUri}
             style={DVRManagerStyles.imageIcon}
-          ></FastImage>
+          />
           <View>
             <Text style={DVRManagerStyles.label}>
               {AppStrings?.str_dvr_no_recorded}
@@ -799,6 +1205,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
       _moveRight();
       setSwimLaneFocused(false);
       setIsMenuFocused(true);
+      setCurrentScheduledItem({ id: null });
       menuRef[currentDvrMenu].current?.setNativeProps({
         hasTVPreferredFocus: true,
       });
@@ -814,21 +1221,26 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     setOpenSidePannel(false);
     drawerRef.current.close();
   };
-
-  const handleFilterClear = () => {
-    // setDataSource([]);
-    setFilterState(null);
-    setViewableFilters(viewableFilters);
-    // setCurrentFeed(undefined);
-    // const firstFilter = createInitialFilterState(
-    //   pivotQuery?.data?.data,
-    //   baseValues
-    // );
-    // setFilterState(firstFilter);
-    // setBrowsePivots(browseFeed.pivots);
-    // setLastPageReached(false);
-    // setCurrentPage(0);
+  const closeMoreInfoModal = () => {
+    console.log("close modal called on dvr manager");
+    setOpenSidePannel(false);
+    moreInfoDrawerRef.current.close();
   };
+
+  // const handleFilterClear = () => {
+  //   // setDataSource([]);
+  //   setFilterState(null);
+  //   setViewableFilters(viewableFilters);
+  //   // setCurrentFeed(undefined);
+  //   // const firstFilter = createInitialFilterState(
+  //   //   pivotQuery?.data?.data,
+  //   //   baseValues
+  //   // );
+  //   // setFilterState(firstFilter);
+  //   // setBrowsePivots(browseFeed.pivots);
+  //   // setLastPageReached(false);
+  //   // setCurrentPage(0);
+  // };
   const renderDvrSideMenu = () => {
     return dvrMenuItems.map((dvr: { Id: any; Name?: any }, index: number) => {
       const { Name, Id } = dvr;
@@ -958,7 +1370,9 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
                 onFocus={onFocusSideBar}
                 style={{ height: "100%", width: 20 }}
               />
-              <View style={{ width: "100%", height: height, paddingBottom: 200 }}>
+              <View
+                style={{ width: "100%", height: height, paddingBottom: 200 }}
+              >
                 {currentDvrMenu === DvrMenuItems.Recorded
                   ? renderRecorded()
                   : renderScheduled()}
@@ -975,7 +1389,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
               setOpenSubMenu={() => {}}
               setOpenMenu={setOpenFilterMenu}
               handleOnPress={handleFilterChange}
-              handleFilterClear={handleFilterClear}
+              handleFilterClear={handleClearFilter}
               defaultFilterState={defaultFilterState}
             />
           )}
@@ -993,7 +1407,25 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
             drawerContent={focusedCard}
             // route={route}
             closeModal={closeModal}
+            toggleMoreInfo={() => {
+              toggleMoreInfo(focusedCard);
+            }}
             // screenProps={screenProps} // moreInfoProps={}
+          />
+          <DetailsSidePanel
+            ref={moreInfoDrawerRef}
+            drawerPercentage={37}
+            animationTime={200}
+            overlay={false}
+            opacity={1}
+            open={open}
+            animatedWidth={width * 0.37}
+            closeOnPressBack={false}
+            navigation={props.navigation}
+            drawerContent={false}
+            route={route}
+            closeModal={closeMoreInfoModal}
+            screenProps={screenProps}
           />
         </View>
       </ImageBackground>
@@ -1172,23 +1604,35 @@ const styles = StyleSheet.create({
   },
   selectedItem: {
     backgroundColor: globalStyles.backgroundColors.shade2,
+    height: 315,
+    width: 1319,
+    borderRadius: 6,
+    alignSelf: "center",
+    // borderBottomWidth: 1,
+    // borderBottomColor: globalStyles.backgroundColors.shade5,
   },
   unSelectedItem: {
     opacity: 0.8,
+    height: 201,
+    width: 1280,
+    alignSelf: "center",
+    // borderBottomWidth: 1,
+    // borderBottomColor: globalStyles.backgroundColors.shade5,
   },
   dvrItemImage: {
-    height: 237,
-    width: 419,
+    height: 180,
+    width: 318,
   },
   dvrItemShowcard: {
     flexDirection: "row",
+    justifyContent: "flex-start",
   },
   dvrItemCTA: {
     marginLeft: 25,
   },
   dvrItemInfo: {
-    height: 237,
-    justifyContent: "center",
+    height: 180,
+    justifyContent: "flex-start",
     flex: 1,
     paddingLeft: 25,
     paddingRight: 25,
@@ -1214,7 +1658,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     borderRadius: 4,
     overflow: "hidden",
-    height: 237,
+    height: 201,
   },
   statusTextStyle: {
     color: globalStyles.fontColors.statusWarning,
@@ -1230,6 +1674,26 @@ const styles = StyleSheet.create({
     width: 600,
     resizeMode: "contain",
     marginLeft: 220,
+  },
+  ctaButtonStyle: {
+    height: 66,
+    fontFamily: globalStyles.fontFamily.semiBold,
+  },
+  ctaFontIconStyle: {
+    fontFamily: globalStyles.fontFamily.icons,
+    color: globalStyles.fontColors.statusError,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 24,
+  },
+  textStyle: {
+    fontFamily: globalStyles.fontFamily.icons,
+    color: globalStyles.fontColors.light,
+  },
+  focusedUnderLine: {
+    backgroundColor: globalStyles.backgroundColors.primary1,
   },
 });
 

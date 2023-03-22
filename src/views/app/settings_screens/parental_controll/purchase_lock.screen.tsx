@@ -16,6 +16,7 @@ import { updateStore } from "../../../../utils/helpers";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
 import { PinActionTypes } from "./parental_controll.screen";
 import { AppStrings } from "../../../../config/strings";
+import { MFSelectCheckedBox, MFSelectUnCheckedBox } from "../../../../components/MFSelectBox";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -100,15 +101,9 @@ const PurchaseLockScreen: React.FunctionComponent<Props> = (props: any) => {
             >
               <View style={styles.icContainer}>
                 {locked === index ? (
-                  <Image
-                    source={AppImages.checked_circle}
-                    style={styles.icCircle}
-                  />
+                 <MFSelectCheckedBox />
                 ) : (
-                  <Image
-                    source={AppImages.unchecked_circle}
-                    style={styles.icCircle}
-                  />
+                  < MFSelectUnCheckedBox/>
                 )}
               </View>
               <View style={styles.listContent}>

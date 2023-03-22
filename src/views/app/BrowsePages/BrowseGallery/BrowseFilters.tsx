@@ -189,7 +189,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
     >
       <Animated.View style={[styles.container, animatedStyles]}>
         <View style={styles.innerContainer}>
-          {menuList && menuList.length && (
+          {menuList && menuList.length ? (
             <FlatList
               data={menuList}
               keyExtractor={(item) => item.Id}
@@ -306,7 +306,7 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                 )
               }
             />
-          )}
+          ): <View />}
           <TouchableOpacity style={styles.touchableBar} onFocus={onFocusBar} />
         </View>
         <View style={styles.subMenuContainer}>
