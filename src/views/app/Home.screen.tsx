@@ -293,17 +293,21 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                 }}
                 setSetttingsRef={setSetttingsRef}
               />
-              <View style={HomeScreenStyles.posterViewContainerStyles}>
-                {currentFeed && appUIDefinition.config.enableMarquee && (
-                  <MFMarquee
-                    currentFeed={currentFeed}
-                    rootContainerStyles={{
-                      flexDirection: GLOBALS.enableRTL ? "row-reverse" : "row",
-                      alignContent: "space-around",
-                    }}
-                  />
-                )}
-              </View>
+              {appUIDefinition.config.enableMarquee && (
+                <View style={HomeScreenStyles.posterViewContainerStyles}>
+                  {currentFeed && appUIDefinition.config.enableMarquee && (
+                    <MFMarquee
+                      currentFeed={currentFeed}
+                      rootContainerStyles={{
+                        flexDirection: GLOBALS.enableRTL
+                          ? "row-reverse"
+                          : "row",
+                        alignContent: "space-around",
+                      }}
+                    />
+                  )}
+                </View>
+              )}
               <View style={HomeScreenStyles.contentContainer}>
                 {!isLoading && (
                   <MFSwim

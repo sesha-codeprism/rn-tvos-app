@@ -21,7 +21,6 @@ import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import { HomeScreenStyles } from "../../views/app/Homescreen.styles";
 import MFViewAllButton from "./ViewAllComponent";
 import { SCREEN_WIDTH } from "../../utils/dimensions";
-import MFOverlay from "../MFOverlay";
 import MFMetaData from "../MFMetadata/MFMetaData";
 import { format } from "../../utils/DiscoveryUtils";
 import { appUIDefinition, layout2x3 } from "../../config/constants";

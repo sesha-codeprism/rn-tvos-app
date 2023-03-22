@@ -435,7 +435,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             isNew: true,
             programId: schedule?.ProgramId,
             seriesId: schedule?.SeriesId,
-            title: schedule?.Name || "",
+            title: schedule?.Name || udpDataAsset.title || "",
             isPopupModal: true,
           };
           setRoute(DetailRoutes.RecordingOptions);
@@ -452,7 +452,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       let ChannelNumber: any;
       if (StationIdFromEPGSchedule) {
         const actualSelectedChannel =
-          GLOBALS.channelMap?.findChannelByStationId(StationIdFromEPGSchedule);
+          GLOBALS.channelMap.Channels?.findChannelByStationId(
+            StationIdFromEPGSchedule
+          );
 
         ({ channel: { Number: ChannelNumber = undefined } = {} } =
           actualSelectedChannel || {});
@@ -519,6 +521,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           setScreenProps({
             programId: schedule?.ProgramId,
             seriesId: schedule?.SeriesId,
+            title: schedule?.Name || udpDataAsset.title || "",
             isNew: true,
             schedules: discoverySchedulesData,
             isPopupModal: true,

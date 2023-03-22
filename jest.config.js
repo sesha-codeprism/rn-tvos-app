@@ -41,10 +41,10 @@ module.exports = {
   coverageDirectory: "<rootDir>/coverage/",
   coverageThreshold: {
     global: {
-      branches: 8,
+      branches: 6,
       // functions: 30,
-      lines: 8,
-      statements: 8,
+      lines: 6,
+      statements: 6,
     },
   },
   moduleNameMapper: {

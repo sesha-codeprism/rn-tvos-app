@@ -10,6 +10,7 @@ import { BrowseGallery } from "./common";
 import { Observable, Connectable } from 'rxjs';
 import * as Rx from 'rxjs'
 import useAllSubscriptionGroups from "../customHooks/useAllSubscriptionGroups";
+import { Feed } from "../@types/HubsResponse";
 
 
 export const landingInfo = (function (): MFbootstrapLandingInfo {
@@ -120,6 +121,7 @@ interface GLOBALSType {
   drawerPanelOpen: boolean;
   moviesAndTvShows?: TrendingItems[];
   recordingData: any
+  selectedFeed: Feed | undefined;
   subscriptionObservable: Connectable<any>;
   /** Async store data */
   store: {
@@ -179,6 +181,7 @@ export const GLOBALS: GLOBALSType = {
   bootstrapSelectors: null,
   continuationToken: "",
   subscriptionObservable: new Rx.connectable(),
+  selectedFeed: undefined,
   browseGalleryData: {
     page: 0,
     lastPageReached: false,

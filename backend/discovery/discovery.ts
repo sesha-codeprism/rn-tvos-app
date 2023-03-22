@@ -512,6 +512,24 @@ export const getSubscriptionPackageItems = async (id: string, params: any) => {
   return response;
 }
 
+export const getDiscoveryFeeds = async (id?: string, params?: any) => {
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v4/feeds/${id}/items`;
+  const response = await GET({
+    url: url,
+    params: {
+      $top: 16,
+      $groups: GLOBALS.store?.rightsGroupIds,
+      $lang: lang,
+      storeId: DefaultStore?.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
+    },
+  });
+  return response
+}
+
+
 export const registerDiscoveryUdls = () => {
   const BASE = "discovery";
 
@@ -561,7 +579,8 @@ export const registerDiscoveryUdls = () => {
     { prefix: BASE + '/libraryprograms/collections/packages/', getter: getDiscoveryCollectionItems },
     { prefix: BASE + '/getpackageDetails/', getter: getPackageDetails },
     { prefix: BASE + "/getPackageTitles/", getter: getPackageTitles },
-    { prefix: BASE + '/getSubscriptionPackageItems/', getter: getSubscriptionPackageItems }
+    { prefix: BASE + '/getSubscriptionPackageItems/', getter: getSubscriptionPackageItems },
+    { prefix: BASE + '/feeds', getter: getDiscoveryFeeds }
   ];
   return discoveryUdls;
 };

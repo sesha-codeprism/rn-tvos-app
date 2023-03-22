@@ -26,6 +26,15 @@ export const registerUdls = () => {
   );
 };
 
+const findNearestMatch = (pattern: string) => {
+  for (const [key, value] of Object.entries(UdlProviders)) {
+    if (key === pattern) {
+      return key;
+    }
+  }
+
+}
+
 export const parseUdl = (uri: string) => {
   if (!uri || typeof uri !== "string") {
     return;
@@ -107,6 +116,8 @@ export const getList = (listId: string, params?: any) => {
       throw new Error("No getter set for the current provider");
     }
   } else {
+    const key = findNearestMatch(obj.prefix);
+    console.log("Got key", key)
     throw new Error("No current Provider.");
   }
 };

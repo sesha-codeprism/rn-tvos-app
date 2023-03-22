@@ -53,12 +53,19 @@ const BrowseCategoryCarousel: React.FunctionComponent<
       return undefined;
     }
     const url = props.feedDispatch + `&$skip=${$skip}`;
+    console.log("Url", url);
     const data = await getDataFromUDL(url);
-    console.log("Got response data", data.data);
-    return data;
+    if (data.data) {
+      console.log("Got response data", data.data);
+      return data.data;
+    } else {
+      console.log("Got response data", data);
+      return data;
+    }
   };
 
   const filterData = (dataSet: any) => {
+    console.log(dataSet);
     if (dataSet.length < props.itemsPerPage) {
       setLastPageReached(true);
     }
@@ -90,7 +97,7 @@ const BrowseCategoryCarousel: React.FunctionComponent<
 
   useEffect(() => {
     if (data && !isIdle) {
-      return filterData(data.data);
+      return filterData(data);
     }
   }, [data]);
   return isLoading ? (
@@ -119,15 +126,12 @@ const BrowseCategoryCarousel: React.FunctionComponent<
               return (
                 <MFSwimLane
                   key={index}
-                  feed={item}
-                  data={massageDiscoveryFeed(
-                    { Items: item.Items },
-                    SourceType.VOD
-                  )}
+                  feed={item.feed}
+                  data={item.items}
                   limitSwimlaneItemsTo={16}
                   swimLaneKey={swimLaneKey}
                   updateSwimLaneKey={updateSwimLaneKey}
-                  renderViewAll={item.HasMore}
+                  renderViewAll={item.feed.NavigationTargetVisibility}
                   onPress={(event) => {
                     props.navigation.push(Routes.Details, { feed: event });
                   }}

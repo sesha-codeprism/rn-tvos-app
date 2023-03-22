@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash";
 import { lang } from "../../src/config/constants";
 import { appQueryCache, queryClient } from "../../src/config/queries";
 import { massageDVRFeed } from "../../src/utils/assetUtils";
@@ -5,6 +6,7 @@ import { Definition, SourceType } from "../../src/utils/common";
 import { findConflictedGroupBySeriesOrProgramId } from "../../src/utils/ConflictUtils";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { GLOBALS } from "../../src/utils/globals";
+import { getAllRecordingBookmarks } from "../subscriber/subscriber";
 import { GET, POST, PUT } from "../utils/common/cloud";
 import { parseUri } from "../utils/url/urlUtil";
 
@@ -21,9 +23,38 @@ export const getViewableSubscriptionStems = async (uri: string, params: any) => 
         return undefined
     }
     const channelMap = GLOBALS.channelMap;
-    const type: SourceType = SourceType.DVR;
+    const recordingBookmarks = await getAllRecordingBookmarks();
     //@ts-ignore
-    return massageDVRFeed(subscriptionGroups.viewableSubscriptions, type, "", channelMap)
+    const selectedFeedContent = subscriptionGroups.viewableSubscriptions;
+    let feedContent = selectedFeedContent
+        ? cloneDeep(selectedFeedContent)
+        : selectedFeedContent;
+    const type: SourceType = SourceType.DVR;
+    if (!feedContent || !type) {
+        return undefined;
+    }
+    const objFilter: any = {};
+    let feedContentlist =
+        feedContent &&
+        feedContent?.SubscriptionGroups?.filter((item: any) => {
+            const { SeriesId = undefined, SubscriptionItems = [] } =
+                item || {};
+            let id = SeriesId || SubscriptionItems[0]?.ProgramId;
+            if (objFilter[id] === undefined) {
+                objFilter[id] = id;
+                return SubscriptionItems.length > 0;
+            }
+        });
+    // spread, dont modify the original subgroup array
+    feedContent.SubscriptionGroups = [...feedContentlist];
+
+    //@ts-ignore
+    return massageDVRFeed(feedContent,
+        type,
+        undefined,
+        channelMap,
+        undefined,
+        recordingBookmarks)
 }
 
 export const getScheduledSubscriptionGroups = async (uri: string, params: any) => {
