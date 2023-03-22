@@ -78,5 +78,10 @@ public class MKGuideBridgeManager: NSObject {
     MKFullGuideStorageManager.shared.setQualityValues(value: value)
   }
 
+  @objc func setCategoriesForCategorisedFilter (_ value: [String]) {
+    print("setCategoriesForCategorisedFilter in swift = \(value)")
+    MKFullGuideStorageManager.shared.setCategories(categories: value)
+  }
+  
 }
 

@@ -1,10 +1,13 @@
+import { cloneDeep } from "lodash";
 import { lang } from "../../src/config/constants";
 import { appQueryCache, queryClient } from "../../src/config/queries";
 import { massageDVRFeed } from "../../src/utils/assetUtils";
-import { SourceType } from "../../src/utils/common";
+import { Definition, SourceType } from "../../src/utils/common";
+import { findConflictedGroupBySeriesOrProgramId } from "../../src/utils/ConflictUtils";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { GLOBALS } from "../../src/utils/globals";
-import { GET, POST } from "../utils/common/cloud";
+import { getAllRecordingBookmarks } from "../subscriber/subscriber";
+import { GET, POST, PUT } from "../utils/common/cloud";
 import { parseUri } from "../utils/url/urlUtil";
 
 
@@ -20,9 +23,38 @@ export const getViewableSubscriptionStems = async (uri: string, params: any) => 
         return undefined
     }
     const channelMap = GLOBALS.channelMap;
-    const type: SourceType = SourceType.DVR;
+    const recordingBookmarks = await getAllRecordingBookmarks();
     //@ts-ignore
-    return massageDVRFeed(subscriptionGroups.viewableSubscriptions, type, "", channelMap)
+    const selectedFeedContent = subscriptionGroups.viewableSubscriptions;
+    let feedContent = selectedFeedContent
+        ? cloneDeep(selectedFeedContent)
+        : selectedFeedContent;
+    const type: SourceType = SourceType.DVR;
+    if (!feedContent || !type) {
+        return undefined;
+    }
+    const objFilter: any = {};
+    let feedContentlist =
+        feedContent &&
+        feedContent?.SubscriptionGroups?.filter((item: any) => {
+            const { SeriesId = undefined, SubscriptionItems = [] } =
+                item || {};
+            let id = SeriesId || SubscriptionItems[0]?.ProgramId;
+            if (objFilter[id] === undefined) {
+                objFilter[id] = id;
+                return SubscriptionItems.length > 0;
+            }
+        });
+    // spread, dont modify the original subgroup array
+    feedContent.SubscriptionGroups = [...feedContentlist];
+
+    //@ts-ignore
+    return massageDVRFeed(feedContent,
+        type,
+        undefined,
+        channelMap,
+        undefined,
+        recordingBookmarks)
 }
 
 export const getScheduledSubscriptionGroups = async (uri: string, params: any) => {
@@ -44,7 +76,7 @@ export const getScheduledSubscriptionGroups = async (uri: string, params: any) =
     return response;
 }
 
-export const getAllSubscriptionGroups = async (uri: string, params: any) => {
+export const getAllSubscriptionGroups = async (params: any) => {
     const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr}v1/subscription-groups/`;
     const paramsObject = {
         "$type-filter": params?.type || "all",
@@ -63,6 +95,27 @@ export const getAllSubscriptionGroups = async (uri: string, params: any) => {
     return response;
 }
 
+export const getSubscriptiongroups = async (type: string) => {
+    const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr}v1/subscription-groups/`;
+    const paramsObject = {
+        "$type-filter": "all",
+        "$state-filter": type,
+        "$orderby": "startdate",
+        "$lang": lang,
+        "storeId": DefaultStore.Id
+    }
+    const response = await GET({
+        url,
+        params: paramsObject,
+        headers: {
+            Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+        },
+    })
+    return response;
+
+
+}
+
 export const getDVRRecorders = async (id: string, params: any) => {
     const { storeId } = params || DefaultStore?.Id;
     const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr || '') + '/v1/subscriber-recorders';
@@ -78,6 +131,129 @@ export const getDVRRecorders = async (id: string, params: any) => {
     return response;
 }
 
+export const getConflicts = async (conflictId: string) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return
+    }
+    const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscription-items/${conflictId}/conflicts`
+    const response = await GET({
+        url: url,
+        params: {
+            storeId: DefaultStore.Id
+        },
+        headers: {
+            Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+        },
+    });
+    return response
+}
+
+export const submitSolutionForConflicts = async (conflictId: string, solution: string[]) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return
+    }
+    const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscription-items/${conflictId}/conflict-solution`;
+
+    const response = await PUT({
+        url: url,
+        params: {
+            ...{
+                "ScheduledSubscriptionItemIds": solution
+            }
+        },
+        headers: {
+            Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+        },
+    });
+    return response;
+};
+
+export const forceResolveConflict = async (subscriptionGroup: any) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return
+    }
+    const [{ Definition: defination, Id, SubscriptionItems }] = subscriptionGroup || {};
+    if (defination === Definition.SERIES || defination === Definition.GENERIC_PROGRAM) {
+        const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscriptions/${Id}/force-resolve-conflicts`;
+        const response = await POST({
+            url: url,
+            headers: {
+                Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+            },
+        });
+        return response;
+    } else if (defination === Definition.SINGLE_PROGRAM || defination === Definition.SINGLE_TIME) {
+        //const [{SubscriptionId},...rest] = SubscriptionItems;
+        const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscriptions/${Id}/force-resolve-conflicts`;
+        const response = await POST({
+            url: url,
+            headers: {
+                Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+            },
+        });
+        return response;
+    }
+}
+
+export const cancelRecordingFromConflictPopup = async (subscriptionGroup: any, ifSeries: boolean, ifSeriesNonConflicted: boolean) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return
+    }
+    let params = null;
+    let url = null;
+    const [{ Definition: defination, Id, SubscriptionItems }] = subscriptionGroup || {};
+    if (ifSeries && defination === Definition.SERIES || defination === Definition.GENERIC_PROGRAM) {
+        if (!ifSeriesNonConflicted) {
+            params = { "SubscriptionIds": [Id], "SubscriptionItemIds": [] };  // cancels whole series
+            url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
+            const response = await POST({
+                url: url,
+                params,
+                headers: {
+                    Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                },
+            });
+            return response;
+        } else {
+            params = { "SubscriptionIds": [Id], "SubscriptionItemIds": SubscriptionItems?.filter((si: any) => si.ItemState === 'Conflicts')?.map((si: any) => si?.Id) };  // cancels conflicted items
+            url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
+            const response = await POST({
+                url: url,
+                params,
+                headers: {
+                    Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                },
+            });
+            return response;
+        }
+    } else if (defination === Definition.SINGLE_PROGRAM || defination === Definition.SINGLE_TIME) {
+        if (SubscriptionItems.length > 0) {
+            params = { "SubscriptionIds": [Id], "SubscriptionItemIds": [SubscriptionItems.map((si: any) => si?.Id)] };// cancel recording for programs
+            url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
+            const response = await POST({
+                url: url,
+                params,
+                headers: {
+                    Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                },
+            });
+            return response;
+        } else if (SubscriptionItems.length === 0) {
+            params = { "SubscriptionIds": [Id], "SubscriptionItemIds": [] };
+            url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/batch-cancel-request`;
+            const response = await POST({
+                url: url,
+                params,
+                headers: {
+                    Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
+                },
+            });
+            return response;
+        }
+    }
+}
+
+
 export const saveRecordingToBackend = async (subcriptionsParams: any) => {
     if (!GLOBALS.bootstrapSelectors) {
         return
@@ -91,6 +267,22 @@ export const saveRecordingToBackend = async (subcriptionsParams: any) => {
         },
     });
     return response
+}
+
+
+export const updateRecordingInBackend = async (subscriptionId: string, subscriptionSettings: any) => {
+    if (!GLOBALS.bootstrapSelectors) {
+        return;
+    }
+    const url = `${GLOBALS.bootstrapSelectors.ServiceMap.Services.dvr}v1/subscriptions/${subscriptionId}/settings`;
+    const response = await PUT({
+        url: url,
+        params: subscriptionSettings,
+        headers: {
+            Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+        }
+    });
+    return response;
 }
 
 

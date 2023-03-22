@@ -7,6 +7,7 @@
     "url_link": "mediakind/activate",
     "pair_directions_3": "and enter the following code",
     "sample_refresh_code": "EPQTPJ",
-    "refresh_code": "Refresh Code"
+    "refresh_code": "Refresh Code",
+    "str_dvr_conflict_panel_header": "Recording Conflict",
   }
 }

@@ -1,13 +1,15 @@
+//@ts-nocheck
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useRef } from "react";
-import { Alert, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Feed } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { layout2x3 } from "../config/constants";
 import { Routes } from "../config/navigation/RouterOutlet";
 import { Layout, NavigationTarget } from "../utils/analytics/consts";
-import { ItemShowType } from "../utils/common";
+import { ContentRating, ItemShowType, Rating } from "../utils/common";
 import { GLOBALS } from "../utils/globals";
+import { IImage } from "../utils/live/live";
 import { HomeScreenStyles } from "../views/app/Homescreen.styles";
 import Styles from "./MFButtonsVariants/MFButtonStyles";
 import { TitlePlacement } from "./MFCard";
@@ -46,7 +48,49 @@ interface MFSwimLaneProps {
   flatListStyle?: any;
   autoFocusOnFirstCard?: boolean;
   navigation: NativeStackNavigationProp<any>;
-  onLongPress?:any;
+  onLongPress?: any;
+}
+
+export interface Names {
+  Culture: string;
+  Value: string;
+}
+
+export interface FeedElement {
+  Id: string;
+  Name: string;
+  ItemType: string;
+  Images?: IImage[];
+  Ratings: Rating[];
+  CallLetters: string;
+  IsAdult: boolean;
+  ShowType: string;
+  ReleaseYear?: number;
+  SupportedImages: string[];
+  ImageBucketId: string;
+  ContentRatings: ContentRating[];
+  IsLive?: boolean;
+}
+
+export interface PivotItems {
+  Id: string;
+  Name: string;
+  HasMore: boolean;
+  Items: FeedElement[];
+  HasSubcategories?: boolean;
+  HasSubcriptionPackages?: boolean;
+  IsAdult?: boolean;
+  Names?: Names;
+  ReadOnly?: boolean;
+}
+
+export class FeedContents {
+  feed: Feed | any;
+  items: any;
+  constructor(feed: any, items: any) {
+    this.feed = feed;
+    this.items = items;
+  }
 }
 
 const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
@@ -66,16 +110,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
         NavigationTarget.CLIENT_DEFINED &&
         props.data?.length >= props.limitSwimlaneItemsTo!) ||
       props.feed.NavigationTargetUri === "dvr";
-    // console.log(
-    //   "props.feed",
-    //   props.feed,
-    //   "show viewALL",
-    //   showViewAll,
-    //   "props.renderViewAll",
-    //   props.renderViewAll,
-    //   "props.feed?.NavigationTargetVisibility",
-    //   props.feed?.NavigationTargetVisibility
-    // );
+
     const updateRoute = (route: string, params: any) => {
       console.log("UpdateRoute", route, params);
       if (!route && !params) {
@@ -114,6 +149,9 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           return;
           // props.navigation.navigate(Routes.BrowseGallery, payload);
         }
+        if (navigationTargetUri === "favorites") {
+          updateRoute(Routes.FavouriteManager, payload);
+        }
         if (navigationTargetUri === "dvr") {
           updateRoute("DvrManager", payload);
         }
@@ -131,7 +169,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
 
       const navigationTargetObject: any = {
         favorites: () => {
-          updateRoute("Favorites", payload);
+          updateRoute("FavouriteManager", payload);
         },
         dvr: () => {
           updateRoute("DvrManager", payload);

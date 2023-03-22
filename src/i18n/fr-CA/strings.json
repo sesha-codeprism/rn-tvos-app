@@ -85,6 +85,7 @@
   "str_choose_profile_create_button": "New",
   "str_profile_name_taken": "Profile name ${this.state.text} is already taken",
   "str_profile_empty_name": "Name cannot be empty",
+  "str_dvr_conflict_panel_header": "Recording Conflict",
   "str_rating_providers": {
     "COGECO": "Catégories de classement"
   },
@@ -903,5 +904,18 @@
   "str_subscription_network_description": "This program is available with subscription to a premium service. Choose a service.",
   "str_subscription_select_description": "Select subscription offers",
   "str_subscription_success_notification": "Thank you for your Subscription!",
-  "str_subscription_channel_status": "You are currently not subscribed to this channel"
+  "str_subscription_channel_status": "You are currently not subscribed to this channel",
+
+  "str_dvr_resolve_conflict_auto": "Resolve Conflict Automatically",
+  "str_dvr_resolve_conflict_manual": "Resolve Conflict Manually",
+  "str_dvr_donot_record": "Don't Record",
+  "str_dvr_conflict_popup_warning_program": "The Program won't record, because  too many other recodings are scheduled at the same time.",
+  "str_dvr_conflict_popup_warning_series": "Some episodes of this program are scheduled at the same time as other recordings",
+  "str_dvr_no_conflict_exists": "No Conflict exists",
+  "str_dvr_conflict_header": "Scheduled at ",
+  "str_dvr_conflict_no": "Conflict #",
+  "str_dvr_all_conflct_must_be_resolved": "All Conflicts must be resolved",
+  "str_dvr_to_record": "To record",
+  "str_resolve_conflict_no": "Resolve Conflict #",
+  "str_donot_resolve":"Don't Resolve"
 }

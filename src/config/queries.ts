@@ -22,6 +22,7 @@ export interface QueryResponse {
 export const getHubs = async () => {
     const pivots = `Language|${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'}`;
     const data = await getDataFromUDL(
+        //@ts-ignore
         `udl://discovery/hubs?rightIds=${GLOBALS.store?.rightsGroupIds}&storeId=${DefaultStore.Id}&pivots=${pivots}&lang=${GLOBALS.store?.onScreenLanguage?.languageCode || lang}`
     );
     const response: HubsResponse = data;
@@ -52,25 +53,22 @@ export function getAllHubs(): any {
 const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: boolean = true, shouldSendParams: boolean = true) => {
     try {
         const udlID = parseUdl(uri);
-        if (udlID!.id in UdlProviders) {
-            try {
-                const data = await getDataFromUDL(uri, shouldSendParams);
-                if (data) {
-                    if (shouldMassageData) {
-                        return getMassagedData(uri, data);
-                    } else {
-                        return data;
-                    }
+        try {
+            const data = await getDataFromUDL(uri, shouldSendParams);
+            if (data) {
+                if (shouldMassageData) {
+                    return getMassagedData(uri, data);
                 } else {
-                    return undefined
+                    return data;
                 }
-
-            } catch (e) {
-                console.log("Cannot get data for UDL", udlID, 'due to', e)
+            } else {
+                return undefined
             }
-        } else {
-            console.log(uri, "has no providers set ");
+
+        } catch (e) {
+            console.log("Cannot get data for UDL", udlID, 'due to', e)
         }
+
     } catch (e) {
         console.log("Couldn't get data for UDL", uri, "due to", e);
         return undefined;

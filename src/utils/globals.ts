@@ -7,6 +7,11 @@ import { UserAccountInfo } from "../@types/Account";
 import { BootStrapResponse } from "../@types/BootStrapResponse";
 import { UserProfile } from "../@types/UserProfile";
 import { BrowseGallery } from "./common";
+import { Observable, Connectable } from 'rxjs';
+import * as Rx from 'rxjs'
+import useAllSubscriptionGroups from "../customHooks/useAllSubscriptionGroups";
+import { Feed } from "../@types/HubsResponse";
+
 
 export const landingInfo = (function (): MFbootstrapLandingInfo {
   this.oauth = "liveid";
@@ -102,6 +107,7 @@ interface GLOBALSType {
   channelRights: any;
   /** User account info  */
   userAccountInfo: UserAccountInfo;
+  rawSubscriptionGroupsResponse: any;
   allSubscriptionGroups: any;
   viewableSubscriptions: any;
   scheduledSubscriptions: any
@@ -115,6 +121,8 @@ interface GLOBALSType {
   drawerPanelOpen: boolean;
   moviesAndTvShows?: TrendingItems[];
   recordingData: any
+  selectedFeed: Feed | undefined;
+  subscriptionObservable: Connectable<any>;
   /** Async store data */
   store: {
     accessToken: string | null;
@@ -141,6 +149,9 @@ interface GLOBALSType {
           tracks: string[];
         };
         descriptiveAudio: string;
+      };
+      dvr: {
+        stopRecording: string | null
       };
     };
   } | null;
@@ -169,11 +180,18 @@ export const GLOBALS: GLOBALSType = {
   rootNavigation: null,
   bootstrapSelectors: null,
   continuationToken: "",
+  subscriptionObservable: new Rx.connectable(),
+  selectedFeed: undefined,
   browseGalleryData: {
     page: 0,
     lastPageReached: false,
     itemFeed: [],
     filterData: {},
+  },
+  settings: {
+    dvr: {
+      stopRecording: ''
+    }
   },
   moviesAndTvShows: [],
   store: null,
@@ -222,6 +240,9 @@ export const deleteUserSettings = () => {
           tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
         },
         descriptiveAudio: "",
+      },
+      dvr: {
+        stopRecording: ''
       },
     },
 

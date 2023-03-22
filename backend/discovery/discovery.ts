@@ -1,9 +1,8 @@
+//@ts-nocheck
 import { GET } from "../utils/common/cloud";
-import { MFGlobalsConfig } from "../configs/globals";
-import { MFGlobals } from "../@types/globals";
 import { parseUri } from "../utils/url/urlUtil";
 import { GLOBALS } from "../../src/utils/globals";
-import { lang, pivots } from "../../src/config/constants";
+import { lang } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { gethubRestartTvShowcards } from "../live/live";
 
@@ -214,7 +213,7 @@ const discoverSubscriptions = async (
   return response;
 };
 
-const getPayPerView = async () => {
+const getPayPerView = async (id: string, params: any) => {
   const pivots = `Language | ${GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode?.split('-')?.[0] || 'en'} `;
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery || "") + versionString + "feeds/payperview/items";
@@ -225,8 +224,8 @@ const getPayPerView = async () => {
       storeId: DefaultStore.Id,
       $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
       pivots: pivots,
-      $top: 16,
-      $skip: 0,
+      $top: params?.$top || 16,
+      $skip: params?.$skip || 0,
     },
   });
   return response;
@@ -513,6 +512,24 @@ export const getSubscriptionPackageItems = async (id: string, params: any) => {
   return response;
 }
 
+export const getDiscoveryFeeds = async (id?: string, params?: any) => {
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v4/feeds/${id}/items`;
+  const response = await GET({
+    url: url,
+    params: {
+      $top: 16,
+      $groups: GLOBALS.store?.rightsGroupIds,
+      $lang: lang,
+      storeId: DefaultStore?.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
+    },
+  });
+  return response
+}
+
+
 export const registerDiscoveryUdls = () => {
   const BASE = "discovery";
 
@@ -562,7 +579,8 @@ export const registerDiscoveryUdls = () => {
     { prefix: BASE + '/libraryprograms/collections/packages/', getter: getDiscoveryCollectionItems },
     { prefix: BASE + '/getpackageDetails/', getter: getPackageDetails },
     { prefix: BASE + "/getPackageTitles/", getter: getPackageTitles },
-    { prefix: BASE + '/getSubscriptionPackageItems/', getter: getSubscriptionPackageItems }
+    { prefix: BASE + '/getSubscriptionPackageItems/', getter: getSubscriptionPackageItems },
+    { prefix: BASE + '/feeds', getter: getDiscoveryFeeds }
   ];
   return discoveryUdls;
 };

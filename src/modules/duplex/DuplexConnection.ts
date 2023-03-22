@@ -219,12 +219,6 @@ export class DuplexConnection {
 
   private reconnectWithBackOff(): void {
     console.log("reconnectWithBackOff()");
-    if (!this.isOnline) {
-      console.log(
-        `reconnectWithBackOff(): isOnline = ${this.isOnline} returning`
-      );
-      return;
-    }
     if (this.isSuspended) {
       console.log(
         `reconnectWithBackOff(): isSuspended = ${this.isSuspended} returning`

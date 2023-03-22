@@ -20,6 +20,7 @@ import { appUIDefinition } from "../config/constants";
 import { GLOBALS } from "../utils/globals";
 import { GlobalContext } from "../contexts/globalContext";
 import { updateStore } from "../utils/helpers";
+import { queryClient } from "../config/queries";
 
 interface MFUserProfileProps {
   navigation: NativeStackNavigationProp<ParamListBase, string>;
@@ -81,8 +82,9 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> =
           currentContext.setUserProfile(GLOBALS.userProfile);
           props.navigation.reset({
             index: 0,
-            routes: [{name: Routes.Home}],
+            routes: [{ name: Routes.Home }],
           });
+          queryClient.invalidateQueries();
         } else {
           console.log("No user profile");
           props.navigation.navigate(Routes.CreateProfile, {

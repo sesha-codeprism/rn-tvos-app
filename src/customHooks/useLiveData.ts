@@ -38,6 +38,6 @@ const getLiveData = async (channelRightsInfo: any) => {
 export default function useLiveData(channelMapInfo: any) {
     // const { data: channelMapInfo } = useChannelRights();
     // console.log("channelMapInfo in useLiveData", channelMapInfo)
-    return useQuery(['get-live-data'], () => getLiveData(channelMapInfo), { refetchInterval: intervalTimer, enabled: !!GLOBALS.bootstrapSelectors?.ServiceMap.Services && !!channelMapInfo, refetchIntervalInBackground: true })
+    return useQuery(["live", 'get-live-data'], () => getLiveData(channelMapInfo), { refetchInterval: intervalTimer, enabled: !!GLOBALS.bootstrapSelectors?.ServiceMap.Services && !!channelMapInfo, refetchIntervalInBackground: true })
 }
 

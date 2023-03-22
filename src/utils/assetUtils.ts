@@ -3257,9 +3257,12 @@ export const massageSeriesDataForUDP = (
     ) {
         dvrPlayActions = calculateSeriesButtonAction(
             seriesId,
-            startTimeUtc,
-            stationId,
-            channelNumber,
+            selectedSchedule?.StartUtc ||
+            seriesUDPData?.currentCatchupSchedule?.StartUtc,
+            selectedSchedule?.StationId ||
+            seriesUDPData?.currentCatchupSchedule?.StationId,
+            selectedSchedule?.ChannelNumber ||
+            seriesUDPData?.currentCatchupSchedule?.ChannelNumber,
             entitlements,
             recordedSubscriptionGroups,
             scheduledSubscriptionGroups,

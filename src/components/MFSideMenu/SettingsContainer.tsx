@@ -24,7 +24,7 @@ interface SettingsContainerProps {
   navigation?: any;
 }
 const SettingsContainer = (props: SettingsContainerProps) => {
-  const offset = useSharedValue(0);
+  const offset = useSharedValue(GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage) ;
   const [isReady, setIsReady] = React.useState(false);
   const [initialState, setInitialState] = React.useState();
 
@@ -58,7 +58,7 @@ const SettingsContainer = (props: SettingsContainerProps) => {
 
   const openDrawer = () => {
     offset.value = withTiming(
-      SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
+      GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
       {
         duration: 10,
         easing: Easing.out(Easing.ease),
@@ -87,7 +87,6 @@ const SettingsContainer = (props: SettingsContainerProps) => {
   const renderPush = () => {
     return (
       <Modal
-        animationType="fade"
         transparent={true}
         visible={true}
         onRequestClose={() => {

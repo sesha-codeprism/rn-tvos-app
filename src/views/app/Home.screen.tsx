@@ -33,6 +33,7 @@ import useAccount from "../../customHooks/useAccount";
 import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import { ItemType } from "../../utils/common";
+import { globalStyles } from "../../config/styles/GlobalStyles";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -71,7 +72,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     feedTimeOut = setTimeout(async () => {
       if (event != null) {
         setCurrentFeed(event);
-        console.log('CurrentFeed in Home screen', event);
+        console.log("CurrentFeed in Home screen", event);
       }
     }, debounceTime);
   };
@@ -92,10 +93,14 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
           } else {
             /** If user created profile is chosen to login, replace with profile name */
             if (GLOBALS.store!.userProfile.Name!.length > 10) {
-              console.log('GLOBALS.store!.userProfile.Name', GLOBALS.store!.userProfile.Name);
+              console.log(
+                "GLOBALS.store!.userProfile.Name",
+                GLOBALS.store!.userProfile.Name
+              );
               replace_hub[0].Name =
-                (GLOBALS.store!.userProfile.Name! || GLOBALS.userProfile?.Name).substring(0, 9) + "..." ||
-                AppStrings.str_hub_name_you;
+                (
+                  GLOBALS.store!.userProfile.Name! || GLOBALS.userProfile?.Name
+                ).substring(0, 9) + "..." || AppStrings.str_hub_name_you;
             } else {
               replace_hub[0].Name =
                 GLOBALS.store!.userProfile.Name || AppStrings.str_hub_name_you;
@@ -152,7 +157,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       //         // Assumes close popup on each action, whether Yes or No or Cancel
       //         // BackHandler.exitApp()
       //         MFEventEmitter.emit("closePopup", null);
-            
+
       //       },
       //     },
       //     {
@@ -196,7 +201,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       !props.navigation.canGoBack() &&
       props.navigation.getState().routes[0].name === "home"
     ) {
-      TVMenuControl.disableTVMenuKey()
+      TVMenuControl.disableTVMenuKey();
     }
     if (__DEV__) {
       const date = new Date();
@@ -239,55 +244,56 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
         source={AppImages.landing_background}
         style={{ height: SCREEN_HEIGHT, width: SCREEN_WIDTH }}
       >
-        <ImageBackground
-          source={AppImages.bottomGradient}
-          style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
+        <View
+          style={{
+            backgroundColor: globalStyles.backgroundColors.shade1,
+            opacity: 0.9,
+            height: SCREEN_HEIGHT,
+            width: SCREEN_WIDTH,
+          }}
         >
-          <ImageBackground
-            source={AppImages.topGradient}
-            style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
-          >
-            {!isLoading && (
-              <SafeAreaView style={{ flex: 1, paddingTop: -30 }}>
-                <MFMenu
-                  navigation={props.navigation}
-                  enableRTL={GLOBALS.enableRTL}
-                  hubList={hubs}
-                  onPress={(event) => {}}
-                  onFocus={(event) => {
-                    if (hubTimeOut) {
-                      clearInterval(hubTimeOut);
-                    }
-                    hubTimeOut = setTimeout(() => {
-                      setFeeds(hubs[event]);
-                    }, debounceTime);
-                  }}
-                  setCardFocus={setCardFocus}
-                  onPressSettings={() => {
-                    MFEventEmitter.emit("openSettings", {
-                      onClose: () =>
-                        setttingsRef.current &&
-                        setttingsRef?.current?.setNativeProps({
-                          hasTVPreferredFocus: true,
-                        }),
-                      drawerPercentage: 0.35,
-                    });
-                    if (currentFeed) {
-                      // service?.addNavEventOnCurPageOpenOrClose(
-                      //   {
-                      //     navigation: {
-                      //       params: {
-                      //         feed: currentFeed,
-                      //       },
-                      //     },
-                      //   },
-                      //   Routes.Settings,
-                      //   navigationAction.pageOpen
-                      // );
-                    }
-                  }}
-                  setSetttingsRef={setSetttingsRef}
-                />
+          {!isLoading && (
+            <SafeAreaView style={{ flex: 1, paddingTop: -30 }}>
+              <MFMenu
+                navigation={props.navigation}
+                enableRTL={GLOBALS.enableRTL}
+                hubList={hubs}
+                onPress={(event) => {}}
+                onFocus={(event) => {
+                  if (hubTimeOut) {
+                    clearInterval(hubTimeOut);
+                  }
+                  hubTimeOut = setTimeout(() => {
+                    setFeeds(hubs[event]);
+                  }, debounceTime);
+                }}
+                setCardFocus={setCardFocus}
+                onPressSettings={() => {
+                  MFEventEmitter.emit("openSettings", {
+                    onClose: () =>
+                      setttingsRef.current &&
+                      setttingsRef?.current?.setNativeProps({
+                        hasTVPreferredFocus: true,
+                      }),
+                    drawerPercentage: 0.35,
+                  });
+                  if (currentFeed) {
+                    // service?.addNavEventOnCurPageOpenOrClose(
+                    //   {
+                    //     navigation: {
+                    //       params: {
+                    //         feed: currentFeed,
+                    //       },
+                    //     },
+                    //   },
+                    //   Routes.Settings,
+                    //   navigationAction.pageOpen
+                    // );
+                  }
+                }}
+                setSetttingsRef={setSetttingsRef}
+              />
+              {appUIDefinition.config.enableMarquee && (
                 <View style={HomeScreenStyles.posterViewContainerStyles}>
                   {currentFeed && appUIDefinition.config.enableMarquee && (
                     <MFMarquee
@@ -301,46 +307,46 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                     />
                   )}
                 </View>
-                <View style={HomeScreenStyles.contentContainer}>
-                  {!isLoading && (
-                    <MFSwim
-                      // @ts-ignore
-                      ref={firstSwimlaneRef}
-                      feeds={feeds}
-                      onFocus={onFeedFocus}
-                      onPress={(event) => {
-                        console.log(event);
+              )}
+              <View style={HomeScreenStyles.contentContainer}>
+                {!isLoading && (
+                  <MFSwim
+                    // @ts-ignore
+                    ref={firstSwimlaneRef}
+                    feeds={feeds}
+                    onFocus={onFeedFocus}
+                    onPress={(event) => {
+                      console.log(event);
+                      //@ts-ignore
+                      if (event.Schedule) {
                         //@ts-ignore
-                        if (event.Schedule) {
-                          //@ts-ignore
-                          event["isFromEPG"] = true;
-                          props.navigation.navigate(Routes.Details, {
-                            feed: event,
-                          });
-                        } else if (event.ItemType === ItemType.PACKAGE) {
-                          props.navigation.navigate(Routes.PackageDetails, {
-                            feed: event,
-                          });
-                        } else {
-                          props.navigation.navigate(Routes.Details, {
-                            feed: event,
-                          });
-                        }
-                      }}
-                      onListEmptyElementFocus={clearCurrentHub}
-                      onListFooterElementFocus={clearCurrentHub}
-                      limitSwimlaneItemsTo={
-                        appUIDefinition.config.limitSwimlaneItemsTo
+                        event["isFromEPG"] = true;
+                        props.navigation.navigate(Routes.Details, {
+                          feed: event,
+                        });
+                      } else if (event.ItemType === ItemType.PACKAGE) {
+                        props.navigation.navigate(Routes.PackageDetails, {
+                          feed: event,
+                        });
+                      } else {
+                        props.navigation.navigate(Routes.Details, {
+                          feed: event,
+                        });
                       }
-                      navigation={props.navigation}
-                    />
-                  )}
-                </View>
-                {isLoading && <MFLoader transparent={true} />}
-              </SafeAreaView>
-            )}
-          </ImageBackground>
-        </ImageBackground>
+                    }}
+                    onListEmptyElementFocus={clearCurrentHub}
+                    onListFooterElementFocus={clearCurrentHub}
+                    limitSwimlaneItemsTo={
+                      appUIDefinition.config.limitSwimlaneItemsTo
+                    }
+                    navigation={props.navigation}
+                  />
+                )}
+              </View>
+              {isLoading && <MFLoader transparent={true} />}
+            </SafeAreaView>
+          )}
+        </View>
       </ImageBackground>
     </View>
   );

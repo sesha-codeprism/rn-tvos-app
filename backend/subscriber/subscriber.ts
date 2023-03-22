@@ -1,12 +1,19 @@
+//@ts-nocheck
+
 import { parseUri } from "../utils/url/urlUtil";
 import { GLOBALS } from "../../src/utils/globals";
 import { DELETE, GET, POST, PUT } from "../utils/common/cloud";
 import { lang } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
-import axios from "axios";
 import { MFGlobalsConfig } from "../configs/globals";
 import { PinnedItemType } from "../../src/utils/pinnedItemType";
 import { isFeatureAssigned } from "../../src/utils/helpers";
+import { FeedType, NavigationTarget } from "../../src/utils/analytics/consts";
+import { getUIdef } from "../../src/utils/uidefinition";
+import { config } from "../../src/config/config";
+import { SourceType } from "../../src/utils/common";
+import { FeedContents } from "../../src/components/MFSwimLane";
+import { massageDiscoveryFeed } from "../../src/utils/assetUtils";
 export type PinType = "adult" | "parentalcontrol" | "purchase";
 export interface SearchParam {
   searchString: string;
@@ -15,6 +22,10 @@ export interface SearchParam {
   searchLive: boolean;
   mediaTypes?: string;
 }
+
+const browseGalleryConfig = getUIdef("BrowseGallery")?.config || {};
+const browseCategoryConfig = getUIdef("BrowseCategory")?.config || {};
+
 
 export const assetObject = {
   0: "programs",
@@ -442,13 +453,22 @@ export const getProgramSubscriberData = async (item: string, params: any) => {
 }
 
 export const getSeriesSubscriberData = async (item: string, params: any) => {
-  const { id } = params;
+  const { id, storeId } = params;
   const { accessToken } = GLOBALS.store!;
+  const isCatchUp = (isFeatureAssigned("catchupEnvironment") && isFeatureAssigned("catchup")) || false;
+  const types = ["Title"];
+  if (GLOBALS.userAccountInfo && GLOBALS.userAccountInfo.DvrCapability === "CloudDvr") {
+    types.push("Recording");
+  }
   const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v4/series/${id}`
   try {
     const response = await GET({
       url: url,
-      params: params,
+      params: {
+        storeId: storeId,
+        types: types.join(","),
+        catchup: isCatchUp
+      },
       headers: {
         Authorization: `OAUTH2 access_token="${accessToken}"`,
         'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
@@ -582,6 +602,117 @@ export const getPackageActions = async (id: string, params: any) => {
   return response
 }
 
+export const getAllRecordingBookmarks = async (id?: string, params?: any) => {
+  const { accessToken } = GLOBALS.store!;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriberbkmark || '') + `/v3/recordings/bookmarks?`;
+  const response = await GET({
+    url: url,
+    params: {
+      storeId: DefaultStore.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+    },
+  });
+  return response.data
+}
+
+export const getDynamicFeeds = async (id?: string, params?: any) => {
+  const { accessToken } = GLOBALS.store!;
+  const { $skip, $top } = params;
+  let url, paramsObject;
+  if (id === "MixedRecommendations") {
+    url =
+      GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber + `${id.toLowerCase()}`
+    paramsObject = {
+      ...params,
+      $skip: $skip || 0,
+      $top: $top || 16,
+      $lang: lang
+    }
+  } else {
+    url = GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber + `v4/libraries/${id}`;
+    let typesParam = params.types ? params.types.join(",") : "Title";
+    if (params.libraryId === "Library" && storeId) {
+      if (typesParam.includes("Title") && !typesParam.includes('PayPerView')) {
+        typesParam += ", PayPerView";
+      }
+    }
+    paramsObject = {
+      ...params,
+      types: typesParam,
+      atHome: true,
+      $skip: $skip || 0,
+      $top: $top || 16,
+      $lang: lang,
+      storeId: DefaultStore.Id
+    }
+  }
+  const response = await GET({
+    url: url,
+    params: paramsObject,
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+    },
+  });
+  const types =
+    (config.hubs.feeds as any)[id] || config.hubs.feeds.default;
+  const feedContent = response.data;
+  const type: SourceType = SourceType.VOD;
+  if (feedContent === undefined) {
+    return null;
+  }
+  if (!id) {
+    return new FeedContents(
+      GLOBALS.selectedFeed,
+      massageSubscriberFeed(feedContent, id, type)
+    );
+  }
+  let feedContents: any[] = [];
+  const libraryItemsObject: any = {};
+  feedContent.LibraryItems.map((item: any) => {
+    libraryItemsObject[item.Id] = item;
+  });
+
+  for (let category of feedContent.Libraries) {
+    let libraryItems: ILibraryItem[] = [];
+
+    for (const id of category.LibraryItems) {
+      libraryItems.push(libraryItemsObject[id]);
+    }
+
+    category["NavigationTargetVisibility"] =
+      NavigationTarget.CLIENT_DEFINED;
+
+    if (!category.HasSubcategories) {
+      category["NavigationTargetUri"] = "libraries";
+      category["Uri"] =
+        browseGalleryConfig.libraries.uri + category.Id;
+      category["FeedType"] = FeedType.Custom;
+    } else if (category.HasSubcategories) {
+      category["FeedType"] = FeedType.Mixed;
+      category["Uri"] =
+        browseCategoryConfig.browsepromotionsCategory.uri +
+        category.Id;
+      category["NavigationTargetUri"] = GLOBALS.selectedFeed.NavigationTargetUri;
+      category["NavigationTargetVisibility"] =
+        NavigationTarget.SHOW_FEED_ALWAYS;
+    } else {
+      category["FeedType"] = FeedType.Dynamic;
+    }
+
+    feedContents.push(
+      new FeedContents(
+        category,
+        massageDiscoveryFeed({ Items: libraryItems }, type)
+      )
+    );
+  }
+
+  return feedContents;
+}
 
 
 export const registerSubscriberUdls = (params?: any) => {
@@ -625,7 +756,8 @@ export const registerSubscriberUdls = (params?: any) => {
     { prefix: BASE + "/getSeasonPlayOptions/", getter: getSeasonPlayOptions },
     { prefix: BASE + "/getSeriesPlayOptions", getter: getSeriesPlayOptions },
     { prefix: BASE + "/account/", getter: getUserAccount },
-    { prefix: BASE + "/getPackageActions/", getter: getPackageActions }
+    { prefix: BASE + "/getPackageActions/", getter: getPackageActions },
+    { prefix: BASE + "/libraries/dynamicFeeds", getter: getDynamicFeeds }
   ];
   return subscriberUdls;
 };

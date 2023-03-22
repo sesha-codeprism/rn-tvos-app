@@ -14,6 +14,8 @@ import { GLOBALS } from "../../../../utils/globals";
 import { MFTabBarStyles } from "../../../../components/MFTabBar/MFTabBarStyles";
 import MFLoader from "../../../../components/MFLoader";
 import { TopBarWithTitle } from "../../../../components/TopBarWithTitle";
+import { uniq } from "lodash";
+import { getDate } from "../../../../utils/assetUtils";
 
 interface BrowseCategoryProps {
   navigation: NativeStackNavigationProp<any>;
@@ -27,7 +29,7 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
   const [isFeedDispatchSet, updateIsFeedDispatchSet] = useState(false);
   const { feed } = props.route.params;
   const browsePageConfig: any = getUIdef("BrowseCategory")?.config;
-  let requestedTime: Date | undefined;
+  let requestedTime: any;
 
   const browseFeedParams = (props: any): any => {
     const { feed } = props.route?.params;
@@ -55,7 +57,7 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
       } else {
         browseFeed["Uri"] = browseFeedObject.uri;
       }
-
+      requestedTime = getDate(feed?.Uri).toISOString();
       browseFeed["requestedTime"] = requestedTime;
       browseFeed["libraryId"] = browseFeedObject.params.libraryId;
       browseFeed["pivotGroup"] = browseFeedObject.params.pivotGroup;
@@ -82,19 +84,45 @@ const BrowseCategoryScreen: React.FunctionComponent<BrowseCategoryProps> = (
 
   useEffect(() => {
     const browseFeed = browseFeedParams(props);
+    GLOBALS.selectedFeed = browseFeed;
     if (!browseFeed) {
       console.warn("Something went wrong..");
       updateIsFeedDispatchSet(false);
       setFeedDispatch(undefined);
     }
+    let stationIds = GLOBALS.channelMap?.getValidCatchupStationIds();
+    stationIds = uniq(stationIds);
+    let stationIdsParam = "";
+    if (stationIds?.length) {
+      stationIdsParam = stationIds
+        .slice(browseFeed.$skip, browseFeed.$skip + browseFeed.$top)
+        .join(",");
+    }
 
-    const feedDispatch = `${browseFeed?.Uri}/?id=${browseFeed?.Id}&$top=${
-      browseFeed?.$top
-    }&storeId=${DefaultStore.Id}&$groups=${
-      GLOBALS.store!.rightsGroupIds
-    }&pivots=${browseFeed?.pivots}`;
+    // const feedDispatch = `${browseFeed?.Uri}/?id=${browseFeed?.Id}&$top=${
+    //   browseFeed?.$top
+    // }&storeId=${DefaultStore.Id}&$groups=${
+    //   GLOBALS.store!.rightsGroupIds
+    // }&requestedTime=${browseFeed.requestedTime}&$countPerStation=${
+    //   browseFeed?.$itemsPerRow
+    // }&$stations=${stationIdsParam}
+    // &$itemsPerRow=${browseFeed?.$itemsPerRow}&pivots=${browseFeed?.pivots}`;
+    const feedDispatch =
+      browseFeed?.Uri +
+      `/?id=${browseFeed?.Id}` +
+      `&$top=${browseFeed?.$top}` +
+      `&storeId=${DefaultStore?.Id}` +
+      `$groups=${GLOBALS.store?.rightsGroupIds}` +
+      `&requestedTime=${browseFeed?.requestedTime}` +
+      `&$countPerStation=${browseFeed?.$itemsPerRow}` +
+      `&$stations=${stationIdsParam}` +
+      `&itemsPerRow=${browseFeed?.itemsPerRow}` +
+      `&pivots=${browseFeed?.pivots}`;
     updateIsFeedDispatchSet(true);
     setFeedDispatch(feedDispatch);
+    () => {
+      GLOBALS.selectedFeed = undefined;
+    };
   }, []);
   return (
     <View style={[styles.root]}>

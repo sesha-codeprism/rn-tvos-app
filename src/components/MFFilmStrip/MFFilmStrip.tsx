@@ -21,7 +21,6 @@ import { SubscriberFeed } from "../../@types/SubscriberFeed";
 import { HomeScreenStyles } from "../../views/app/Homescreen.styles";
 import MFViewAllButton from "./ViewAllComponent";
 import { SCREEN_WIDTH } from "../../utils/dimensions";
-import MFOverlay from "../MFOverlay";
 import MFMetaData from "../MFMetadata/MFMetaData";
 import { format } from "../../utils/DiscoveryUtils";
 import { appUIDefinition, layout2x3 } from "../../config/constants";
@@ -145,6 +144,15 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
     }
 
     const items = dataArray?.filter((item: any) => !item?.viewAll);
+
+    if (focusedIndex > items?.length) {
+      setFocusIndex(0);
+      flatListRef.current?.scrollToIndex({
+        animated: true,
+        index: 0,
+        viewOffset: viewAllPeekValue,
+      });
+    }
     const lastIndex = items && items.length ? items.length - 1 : 0;
 
     useImperativeHandle(inRef, () => ({
@@ -328,21 +336,9 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                       }
                       showTitleOnlyOnFocus={false}
                       titlePlacement={props.titlePlacement}
-                      overlayComponent={
-                        <MFOverlay
-                          renderGradiant={true}
-                          showProgress={item.Bookmark! || item.progress}
-                          progress={item.progress ? item.progress * 100 : 20}
-                          displayTitle={item.episodeInfo && item.episodeInfo}
-                          bottomText={
-                            item.metadataLine3 ||
-                            item.durationMinutesString ||
-                            ""
-                          }
-                          // showRec={true}
-                          // recType={"series"}
-                        />
-                      }
+                      // overlayComponent={
+
+                      // }
                       progressComponent={props.progressElement}
                       showProgress={props.shouldRenderProgress}
                       shouldRenderText

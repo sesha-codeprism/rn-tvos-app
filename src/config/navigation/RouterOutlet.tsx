@@ -57,6 +57,7 @@ import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups
 import useDVRRecorders from "../../customHooks/useRecorders";
 import { appQueryCache } from "../queries";
 import PackageDetailsScreen from "../../views/app/details_pages/package_details/PackageDetails.screen";
+import FavouriteManagerScreen from "../../views/app/details_pages/favouriteManager/favouriteManager";
 import DVRManagerScreen from "../../views/app/dvr_manager/dvr_manager.screen";
 import DvrRecordedEpisode from "../../views/app/dvr_manager/dvr_recordedEpisodeList";
 
@@ -114,8 +115,9 @@ export const Routes = {
   EpisodeList: "EpisodeList",
   // BrowseFilters: "BrowseFilters",
   PackageDetails: "PackageDetails",
+  DvrRecordedEpisode:"DvrRecordedEpisode",
+  FavouriteManager: "FavouriteManager",
   DvrManager: "DvrManager",
-  DvrRecordedEpisode:"DvrRecordedEpisode"
 };
 
 const Stack = createNativeStackNavigator();
@@ -239,9 +241,6 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
     if (store) {
       GLOBALS.store = store;
       console.log("Settings store successful", GLOBALS.store);
-      // GLOBALS.store!.onScreenLanguage.languageCode = "en-CA";
-      // updateStore(GLOBALS.store);
-      // console.log("After manual update", GLOBALS.store);
       const isLoggedIn =
         GLOBALS.store.accessToken !== null &&
         GLOBALS.store.refreshToken !== null;
@@ -298,10 +297,7 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
           animation: "none",
         }}
       />
-      <Stack.Screen
-        name={Routes.DvrManager}
-        component={DVRManagerScreen}
-      />
+      <Stack.Screen name={Routes.DvrManager} component={DVRManagerScreen} />
       <Stack.Screen
         name={Routes.DvrRecordedEpisode}
         component={DvrRecordedEpisode}
@@ -316,6 +312,10 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
       <Stack.Screen
         name={Routes.PackageDetails}
         component={PackageDetailsScreen}
+      />
+      <Stack.Screen
+        name={Routes.FavouriteManager}
+        component={FavouriteManagerScreen}
       />
     </Stack.Navigator>
   );

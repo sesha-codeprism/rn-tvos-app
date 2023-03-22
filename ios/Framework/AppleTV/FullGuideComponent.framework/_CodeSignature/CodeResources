@@ -46,7 +46,7 @@
 		</data>
 		<key>Headers/FullGuideComponent-Swift.h</key>
 		<data>
-		2FX4dd7QZ8pdGNPhQcmTvedUNhQ=
+		NxgU+3QjUF78OC5WlVy72aOkrV4=
 		</data>
 		<key>Headers/FullGuideComponent.h</key>
 		<data>
@@ -54,27 +54,27 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		Pp5xUjTOBXWShKQcaK+0wilMV0o=
+		y3EnNcH5lgOCZcORppZB6WZiSe0=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.abi.json</key>
 		<data>
-		4h7tO1D+46JW0Ekh515617vD5hM=
+		sGzXy5UBTejkH8d1JOfWo9tsNw8=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.private.swiftinterface</key>
 		<data>
-		5h4GBYuib5+Sp3MJPSAndEHHbMQ=
+		bn+UN7oC76JlROIcuJ35BJqQ/UU=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftdoc</key>
 		<data>
-		1Sc8LbfsOfnT8dWfasLNFE8PwmA=
+		1l7DOfFSwuLPjg3G1GpYL7pseR4=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftinterface</key>
 		<data>
-		5h4GBYuib5+Sp3MJPSAndEHHbMQ=
+		bn+UN7oC76JlROIcuJ35BJqQ/UU=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftmodule</key>
 		<data>
-		v8gJSQ0Ay/0Hx9QnUm4vbyWOylc=
+		LzcciyOXXRbkLEkboHFqktrQB4M=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -157,7 +157,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			TNvompYSF09VHUAohZ1Vrjtcst+0JJqNiiNhC9ayJWY=
+			mmwz6NgYZVBpfvT31zCxllNl92zYPkXBC19rIvRNEaU=
 			</data>
 		</dict>
 		<key>Headers/FullGuideComponent.h</key>
@@ -171,35 +171,35 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			xjQCEHIgDillWYA/zPIsulTm0DTe6ZQvHgGxGJYxIk4=
+			I3oE1zXdb4c54Qu4bz9wmF6wHuYnQjHK50LSmit1U8A=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			u573vMo/esr+q52Yr9iW2xsHqCV0OHZee6urvgVRHiY=
+			JJIkqa5b5J7XTrNfOVj714eIOWNfb/gHJtsaKIvv0e4=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			9lVge5+TH8SxROYOAxMGwoZKe86JIH9xf/AqspSx2l0=
+			YecoSlm9xWIYUwjVoNGvXY6LLRzUJ5CE6AlYfu8WZc0=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			u573vMo/esr+q52Yr9iW2xsHqCV0OHZee6urvgVRHiY=
+			JJIkqa5b5J7XTrNfOVj714eIOWNfb/gHJtsaKIvv0e4=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			kJGrma58EZa5778o3cOPdTIlQ2E6h8CndLCPZoeTUpU=
+			4Og1dpK2t9mCIJ4nz1dJmDLU+wqo0WwkRm7rRAmE7Nk=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

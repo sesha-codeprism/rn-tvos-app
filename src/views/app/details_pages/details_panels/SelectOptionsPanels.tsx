@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import MFRadioSelectableButton from "../../../../components/SelectableButtons/MFRadioSelectableButton";
+import { DVRAnyTimeAnyChannel } from "../../../../utils/analytics/consts";
 import { GLOBALS } from "../../../../utils/globals";
+import { RecordingOptionsEnum } from "./RecordingOptions";
 
 interface SelectOptionsPanelProps {
   navigation?: NativeStackNavigationProp<any>;
@@ -33,6 +35,23 @@ const SelectOptionsPanel: React.FunctionComponent<SelectOptionsPanelProps> = (
     } else if (subTitle.toLowerCase().includes("show")) {
       const currentSelected = options.filter(
         (e: any) => e.key === currentData.Settings.ShowType
+      );
+      setSelectedItem(currentSelected[0].title);
+    } else if (subTitle.toLowerCase().includes("channel")) {
+      const channelInfo = GLOBALS.recordingData.Settings.ChannelNumber;
+      let channelNumber: any;
+      if (typeof channelInfo === "string") {
+        channelNumber = channelInfo.split("-")[1];
+      } else if (typeof channelInfo === "number") {
+        channelNumber = channelInfo;
+      }
+      const currentSelected = options.filter(
+        (e: any) => e.key === Number.parseInt(channelNumber)
+      );
+      setSelectedItem(currentSelected[0].title);
+    } else if (subTitle.toLowerCase().includes("time")) {
+      const currentSelected = options.filter(
+        (e: any) => e.key === currentData.Settings.AirtimeDomain
       );
       setSelectedItem(currentSelected[0].title);
     }
@@ -73,6 +92,46 @@ const SelectOptionsPanel: React.FunctionComponent<SelectOptionsPanelProps> = (
           Settings: {
             ...currentData.Settings,
             ShowType: element.key,
+          },
+        };
+        setSelectedItem(element.title);
+      }
+    } else if (subTitle.toLowerCase().includes("channel")) {
+      const { recordingOptions } = props.route.params;
+      if (element.key === DVRAnyTimeAnyChannel) {
+        const currentChannnel = recordingOptions.find(
+          (options: any) => options?.key === RecordingOptionsEnum.Channel
+        );
+        if (GLOBALS.recordingData) {
+          GLOBALS.recordingData = {
+            ...GLOBALS.recordingData,
+            Settings: {
+              ...GLOBALS.recordingData?.Settings,
+              ChannelNumber: `${DVRAnyTimeAnyChannel}-${currentChannnel?.channelNumber}`,
+              IsMultiChannel: true,
+            },
+          };
+        }
+      } else {
+        if (GLOBALS.recordingData) {
+          GLOBALS.recordingData = {
+            ...GLOBALS.recordingData,
+            Settings: {
+              ...GLOBALS.recordingData?.Settings,
+              ChannelNumber: element.key,
+              IsMultiChannel: false,
+            },
+          };
+        }
+      }
+      setSelectedItem(element.title);
+    } else if (subTitle.toLowerCase().includes("time")) {
+      if (GLOBALS.recordingData) {
+        GLOBALS.recordingData = {
+          ...currentData,
+          Settings: {
+            ...currentData.Settings,
+            AirtimeDomain: element.key,
           },
         };
         setSelectedItem(element.title);

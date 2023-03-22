@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   BackHandler,
+  Image,
+  ImageBackground,
   PressableProps,
   StyleSheet,
   Text,
@@ -158,7 +160,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     fetchFeeds,
     defaultQueryOptions
   );
-
+  
   const handleEndReached = debounce2(() => {
     if (!lastPageReached) {
       setCurrentPage(page + 1);
@@ -247,28 +249,28 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       <View style={styles.ratingBlock}>
         {first ? (
           <View style={styles.ratingBlock}>
-            <FastImage
+            <Image
               style={styles.contentRatingIcon}
               source={{
                 uri: first.Image,
               }}
-            />
+              ></Image>
             <Text
-              style={[styles.ratingTextStyle, styles.ratingTextStyle]}
+              style={[styles.ratingTextStyle, styles.contentRatingText]}
             >{`${first?.Score}%`}</Text>
           </View>
         ) : null}
 
         {second ? (
           <View style={styles.ratingBlock}>
-            <FastImage
+            <Image
               style={styles.contentRatingIcon}
               source={{
                 uri: second.Image,
               }}
-            />
+            ></Image>
             <Text
-              style={[styles.ratingTextStyle, styles.ratingTextStyle]}
+              style={[styles.ratingTextStyle, styles.contentRatingText]}
             >{`${second?.Score}%`}</Text>
           </View>
         ) : null}
@@ -439,9 +441,9 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
               <>
                 <View style={styles.currentFeedContainerStyles}>
                   {currentFeed && (
-                    <>
-                      <View style={styles.posterImageContainerStyles}>
-                        <FastImage
+                    <>                 
+                        <ImageBackground
+                          imageStyle={styles.imageStyle}
                           style={styles.posterImageStyle}
                           source={imageSource}
                         >
@@ -452,9 +454,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                             style={{
                               flex: 1,
                             }}
-                          />
-                        </FastImage>
-                      </View>
+                                />   
                       <View style={styles.metadataContainerStyles}>
                         {currentFeed?.CatalogInfo &&
                           currentFeed.CatalogInfo.Network && (
@@ -478,6 +478,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                         {renderMetadata()}
                         {renderRatingValues()}
                       </View>
+                      </ImageBackground>
                     </>
                   )}
                 </View>
@@ -514,6 +515,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                       style={HomeScreenStyles.portraitCardStyles}
                       imageStyle={HomeScreenStyles.portraitCardImageStyles}
                       focusedStyle={HomeScreenStyles.focusedStyle}
+                      cardStyle="2x3"
                       onFocus={updateFeed}
                       autoFocusOnFirstCard
                       selectedId={currentFeed?.Id}
@@ -638,7 +640,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   currentFeedContainerStyles: {
-    flex: 0.45,
+    flex: 0.50,
   },
   gridViewContainerStyles: {
     flex: 0.55,
@@ -646,7 +648,16 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   posterImageContainerStyles: { width: 918, height: 519, overflow: "hidden" },
-  posterImageStyle: { width: 918, height: 519, overflow: "hidden" },
+  posterImageStyle: {
+    position: "relative",
+    height: 519,
+    width: 918,
+    flex: 1,
+    shadowOpacity: 0.5,
+  },
+  imageStyle: {
+    resizeMode: "contain",
+  },
   networkLogoContainerStyle: {
     height: 100,
     width: 100,
@@ -694,9 +705,12 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "600",
     letterSpacing: 0,
-    lineHeight: 38,
+  },
+  contentRatingText: {
+    marginLeft: 10,
   },
   ratingBlock: {
+    marginRight: 30,
     flexDirection: "row",
   },
   filterCountContainer: {
