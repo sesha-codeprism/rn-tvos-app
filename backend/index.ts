@@ -25,36 +25,32 @@ export const getDataFromUDL = async (udl: string, shouldSendParams: boolean = tr
 
 export const getMassagedData = (uri: string, data: any) => {
   const udlID = parseUdl(uri);
-  if (udlID!.id in UdlProviders) {
-    if (udlID!.id.split("/")[0] === 'discovery') {
-      const hasDataItems = data.data.Items;
-      if (!hasDataItems) {
-        const dataSource = { Items: data.data }
-        const massagedData = massageDiscoveryFeed(dataSource, SourceType.VOD);
-        return massagedData;
-      } else {
-        const massagedData = massageDiscoveryFeed(data.data, SourceType.VOD);
-        return massagedData;
-      }
-    } else if (udlID!.id.split("/")[0] === 'subscriber') {
-      const hasDataItems = data.data.LibraryItems;
-      if (!hasDataItems) {
-        const dataSource = { LibraryItems: data.data };
-        const massagedData = massageSubscriberFeed(dataSource, "", SourceType.VOD);
-        return massagedData;
-      } else {
-        const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
-        return massagedData;
-      }
+  if (udlID!.id.split("/")[0] === 'discovery') {
+    const hasDataItems = data.data.Items;
+    if (!hasDataItems) {
+      const dataSource = { Items: data.data }
+      const massagedData = massageDiscoveryFeed(dataSource, SourceType.VOD);
+      return massagedData;
+    } else {
+      const massagedData = massageDiscoveryFeed(data.data, SourceType.VOD);
+      return massagedData;
     }
-    // else if (udlID!.id.split("/")[0] === 'dvrproxy') {
-    //   const massagedData = massageDVRFeed(data.data, SourceType.DVR, "", undefined, false);
-    //   return massagedData;
-    // } 
-    else {
-      return data
+  } else if (udlID!.id.split("/")[0] === 'subscriber') {
+    const hasDataItems = data.data.LibraryItems;
+    if (!hasDataItems) {
+      const dataSource = { LibraryItems: data.data };
+      const massagedData = massageSubscriberFeed(dataSource, "", SourceType.VOD);
+      return massagedData;
+    } else {
+      const massagedData = massageSubscriberFeed(data.data, "", SourceType.VOD);
+      return massagedData;
     }
-  } else {
-    return undefined;
+  }
+  // else if (udlID!.id.split("/")[0] === 'dvrproxy') {
+  //   const massagedData = massageDVRFeed(data.data, SourceType.DVR, "", undefined, false);
+  //   return massagedData;
+  // } 
+  else {
+    return data
   }
 }

@@ -1,12 +1,15 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { FeedItem } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { layout2x3 } from "../config/constants";
 import { appQueryCache, getAllFeedDataForFeed } from "../config/queries";
 import { GLOBALS } from "../utils/globals";
 import MFSwimLane from "./MFSwimLane";
+import MFLoader from "./MFLoader";
+import { SCREEN_WIDTH } from "../utils/dimensions";
+import { getUIdef } from "../utils/uidefinition";
 
 interface MFSwimProps {
   feeds: FeedItem | undefined;
@@ -39,6 +42,9 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
     const [swimLaneKey, setSwimLaneKey] = useState("");
     const [hubName, setHubName] = useState("");
     const [mount, setMount] = useState(false);
+    const applicationConfig = getUIdef("Application")?.config;
+    //@ts-ignore
+    const showsFeedNotImplemented = applicationConfig?.showsFeedNotImplemented;
     const data = getAllFeedDataForFeed(
       props.feeds!,
       GLOBALS.nowNextMap,
@@ -67,6 +73,8 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
       }
     });
 
+    //["#FFBDBA", "#FF9C6D", "#FFBDBA"]
+
     return (
       <FlatList
         data={props.feeds?.Feeds}
@@ -87,7 +95,21 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
         maxToRenderPerBatch={5}
         windowSize={5}
         renderItem={({ item, index }) => {
-          return (
+          // If the feed is waiting for some dependent query is is just loading, show loading indicator
+          return data[index].isIdle || data[index].isLoading ? (
+            <View
+              style={{
+                height: 350,
+                width: SCREEN_WIDTH,
+                alignContent: "center",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <MFLoader />
+            </View>
+          ) : //If the query is not in idle or loading state, then check if undefined feeds are rendered; If yes, render everything
+          showsFeedNotImplemented ? (
             <MFSwimLane
               // @ts-ignore
               ref={index === 0 ? ref : null}
@@ -118,6 +140,40 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
               }}
               navigation={props.navigation}
             />
+          ) : (
+            // If undefined feeds are not permitted, then don't render anything for now..
+            data[index].data && (
+              <MFSwimLane
+                // @ts-ignore
+                ref={index === 0 ? ref : null}
+                key={`${hubName}-${index}`}
+                swimId={`${hubName}-${index}`}
+                feed={item}
+                data={data[index].data}
+                onPress={props.onPress}
+                limitSwimlaneItemsTo={props.limitSwimlaneItemsTo}
+                onBlur={props.onBlur}
+                cardStyle={
+                  item.ShowcardAspectRatio === layout2x3 ? "2x3" : "16x9"
+                }
+                swimLaneKey={swimLaneKey}
+                updateSwimLaneKey={updateSwimLaneKey}
+                onListEmptyElementPress={props.onListEmptyElementPress}
+                onListFooterElementOnPress={props.onListFooterElementOnPress}
+                onFocus={(event) => {
+                  props.onFocus && props.onFocus(event);
+                }}
+                onListEmptyElementFocus={(event) => {
+                  props.onListEmptyElementFocus &&
+                    props.onListEmptyElementFocus(event);
+                }}
+                onListFooterElementFocus={(event) => {
+                  props.onListFooterElementFocus &&
+                    props.onListFooterElementFocus(event);
+                }}
+                navigation={props.navigation}
+              />
+            )
           );
         }}
       />

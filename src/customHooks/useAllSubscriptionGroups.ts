@@ -33,14 +33,16 @@ const useAllSubscriptionGroups = (globals: any) => {
 
         viewable.SubscriptionGroups.forEach((viewableSubscriptionGroup: any) => {
             scheduled.SubscriptionGroups.forEach((scheduledSubscriptionGroup: any) => {
-                if (viewableSubscriptionGroup.Id === scheduledSubscriptionGroup.Id) {
-                    viewableSubscriptionGroup.SubscriptionItems = uniqBy(
-                        [
-                            ...viewableSubscriptionGroup.SubscriptionItems,
-                            ...scheduledSubscriptionGroup.SubscriptionItems,
-                        ],
-                        "Id"
-                    ); // Merging items of subscriptionGroups
+                if (viewableSubscriptionGroup.SubscriptionItems.length && scheduledSubscriptionGroup.SubscriptionItems.length) {
+                    if (viewableSubscriptionGroup.Id === scheduledSubscriptionGroup.Id) {
+                        viewableSubscriptionGroup.SubscriptionItems = uniqBy(
+                            [
+                                ...viewableSubscriptionGroup.SubscriptionItems,
+                                ...scheduledSubscriptionGroup.SubscriptionItems,
+                            ],
+                            "Id"
+                        ); // Merging items of subscriptionGroups
+                    }
                 }
             });
         });

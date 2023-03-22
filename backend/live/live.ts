@@ -1,8 +1,10 @@
 import { find } from "lodash";
 import { NativeModules } from "react-native";
+import { FeedContents } from "../../src/components/MFSwimLane";
 import { config } from "../../src/config/config";
 import { lang } from "../../src/config/constants";
-import { findChannelByStationId, massageLiveFeed } from "../../src/utils/assetUtils";
+import { Layout } from "../../src/utils/analytics/consts";
+import { findChannelByStationId, massageCatchupFeed, massageLiveFeed } from "../../src/utils/assetUtils";
 import { SourceType } from "../../src/utils/common";
 import { convertISOStringToTimeStamp } from "../../src/utils/dataUtils";
 import DateUtils from "../../src/utils/dateUtils";
@@ -156,7 +158,7 @@ export const gethubRestartTvShowcards = async (id: string, params: any) => {
       return item;
     }
   });
-  const massagedData = massageLiveFeed(newItems || [], type);
+  const massagedData = massageCatchupFeed(newItems || [], type);
   return massagedData
 }
 
@@ -227,11 +229,111 @@ export const getLiveTrends = async (id: string, params: any) => {
   return massagedData;
 }
 
+export const getCatchupPivots = async (id?: string, params?: any) => {
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}/v3/libraries/catchup/pivots`;
+  const paramsObject = { ...params, $groups: GLOBALS.store?.rightsGroupIds, storeId: DefaultStore?.Id, $lang: lang }
+  const response = await GET({
+    url: url,
+    params: paramsObject,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+    },
+  });
+  return response;
+}
+
+export const getCatchupPivotItems = async (id?: string, params?: any) => {
+  const pivots = await getCatchupPivots();
+  const genre = getIdFromURI(id!);
+  const pivoteCategory = pivots.data?.find((category: any) => category.Id === "Genre")
+  const pivotId = pivoteCategory?.Pivots?.find((pivot: any) => pivot.Name === genre)
+  const { $top, $skip } = params;
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}/v3/feeds/catchup/pivot-items`;
+  const paramsObject = {
+    ...params, $groups: GLOBALS.store?.rightsGroupIds, storeId: DefaultStore?.Id, $lang: lang, pivots: pivotId ? pivotId : "",
+    $orderBy: config.defaultOrderBy,
+    $top: $top || config.defaultFeedItemsCount,
+    $skip: $skip || config.defaultSkip,
+  }
+  const response = await GET({
+    url: url,
+    params: paramsObject,
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+    },
+  });
+  const items = response.data;
+  if (!items || !items.length) {
+    return null;
+  }
+  const channelMap = GLOBALS.channelMap
+
+  const sourceType = items?.length && items[0]?.SourceType || SourceType.CATCHUP;
+  const feedContents: any = [];
+  const nestedItem: any = {};
+  const stationIds: string[] = [];
+  items?.map((item: any) => {
+    if (!stationIds.includes(item.StationId)) {
+      stationIds.push(item.StationId);
+    }
+
+    item["channel"] =
+      (item.StationId &&
+        findChannelByStationId(
+          item.StationId,
+          undefined,
+          undefined,
+          channelMap
+        ).channel) ||
+      undefined;
+
+    if (item.StationId in nestedItem) {
+      nestedItem[item.StationId].push(item);
+    } else {
+      nestedItem[item.StationId] = [item];
+    }
+  });
+  for (let id of stationIds) {
+    let feeds: any = {};
+    const { channel = undefined } =
+      findChannelByStationId(id, undefined, undefined, channelMap) ||
+      {};
+
+    feeds = { ...channel };
+    let name;
+    if (channel?.Number) {
+      name = channel?.Number;
+    }
+    if (name && channel?.CallLetters) {
+      name += ` | ${channel?.CallLetters}`;
+    } else {
+      name = channel?.CallLetters;
+    }
+    if (name) {
+      feeds["Name"] = name;
+    }
+    feeds["NavigationTargetVisibility"] =
+      GLOBALS.selectedFeed?.NavigationTargetVisibility;
+    feeds["ContextualNavigationTargetUri"] = "restartTvGallery";
+    feeds["Layout"] = Layout.Gallery;
+
+    feedContents.push(
+      // {
+      //   feed: feeds,
+      //   items: massageCatchupFeed(nestedItem[id], sourceType)
+      // }
+      new FeedContents(feeds, massageCatchupFeed(nestedItem[id], sourceType))
+    );
+  }
+  return feedContents;
+}
+
 const getFavoriteChannels = async (params?: any) => {
   const uri: string = parseUri(
     GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr || ""
   );
 };
+
 
 export const registerLiveUdls = () => {
   const BASE = "live";
@@ -239,12 +341,14 @@ export const registerLiveUdls = () => {
   const liveUdls = [
     // { prefix: BASE + "/channelMap/", getter: getChannelMap },
     { prefix: BASE + "/catchup/", getter: getCatchUp },
+
     { prefix: BASE + "/feeds/playableChannels", getter: getPlayableChannels },
     { prefix: BASE + "/myStations/", getter: getMyChannels },
     { prefix: BASE + '/feeds/playableChannels/Movie', getter: getPlayableMovieChannels },
     { prefix: BASE + '/feeds/hubRestartTvShowcards', getter: gethubRestartTvShowcards },
     { prefix: BASE + '/feeds/trending/', getter: getLiveTrends },
-    { prefix: BASE + '/channelRights/', getter: getChannelRights }
+    { prefix: BASE + '/channelRights/', getter: getChannelRights },
+    { prefix: BASE + '/catchup/pivotitems/', getter: getCatchupPivotItems }
   ];
   return liveUdls;
 };
