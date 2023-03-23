@@ -130,7 +130,7 @@ const styles = StyleSheet.create(
          },
          conflictFooterButtonTextStyle: {
           height: 38,
-          width: 200,
+          width: 350,
           color: "#EEEEEE",
           fontFamily: "Inter-Regular",
           fontSize: 25,
