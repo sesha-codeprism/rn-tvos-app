@@ -59,6 +59,7 @@ import { appQueryCache } from "../queries";
 import PackageDetailsScreen from "../../views/app/details_pages/package_details/PackageDetails.screen";
 import FavouriteManagerScreen from "../../views/app/details_pages/favouriteManager/favouriteManager";
 import DVRManagerScreen from "../../views/app/dvr_manager/dvr_manager.screen";
+import DvrRecordedEpisode from "../../views/app/dvr_manager/dvr_recordedEpisodeList";
 
 interface RouterOutletProps {
   initialState: any;
@@ -114,6 +115,7 @@ export const Routes = {
   EpisodeList: "EpisodeList",
   // BrowseFilters: "BrowseFilters",
   PackageDetails: "PackageDetails",
+  DvrRecordedEpisode:"DvrRecordedEpisode",
   FavouriteManager: "FavouriteManager",
   DvrManager: "DvrManager",
 };
@@ -296,6 +298,10 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
         }}
       />
       <Stack.Screen name={Routes.DvrManager} component={DVRManagerScreen} />
+      <Stack.Screen
+        name={Routes.DvrRecordedEpisode}
+        component={DvrRecordedEpisode}
+      />
       <Stack.Screen
         name={Routes.BrowseCategory}
         component={BrowseCategoryScreen}

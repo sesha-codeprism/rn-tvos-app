@@ -14,7 +14,10 @@ import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { AppStrings } from "../../../../config/strings";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
-import { MFSelectCheckedBox, MFSelectUnCheckedBox } from "../../../../components/MFSelectBox";
+import {
+  MFSelectCheckedBox,
+  MFSelectUnCheckedBox,
+} from "../../../../components/MFSelectBox";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -23,6 +26,8 @@ const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedLang, setSelectedLang] = useState<any>("");
   const [list, setList] = useState<string[]>([]);
+  const primary = GLOBALS.store!.settings.display.subtitleConfig.primary;
+
   const onPress = (item: string) => {
     try {
       setSelectedLang(item);
@@ -96,6 +101,9 @@ const SubtitleLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
                 >
                   {props.route.params.type === "secondary" && index === 0
                     ? item
+                    : item === primary &&
+                      !(props.route.params.type === "primary")
+                    ? `${AppStrings.ISO[item]} - Primary`
                     : AppStrings.ISO[item]}
                 </Text>
               </View>

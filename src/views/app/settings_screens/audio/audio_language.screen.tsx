@@ -96,7 +96,7 @@ const AudioLanguageScreen: React.FunctionComponent<Props> = (props: any) => {
                     { color: index === focussed ? "#EEEEEE" : "#A7A7A7" },
                   ]}
                 >
-                  {item === primary
+                  {item === primary && !(props.route.params.type === "primary")
                     ? `${AppStrings.ISO[item]} - Primary`
                     : AppStrings.ISO[item]}
                 </Text>

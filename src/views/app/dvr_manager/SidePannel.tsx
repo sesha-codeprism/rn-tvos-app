@@ -43,6 +43,7 @@ interface DetailsDrawerProps {
   route?: any;
   screenProps?: any;
   closeModal: () => void;
+  toggleMoreInfo?: ()=> void;
   // openPage: typeof DetailRoutes;
   // moreInfoProps: {
   //   udpData: any;
@@ -184,7 +185,7 @@ const SideDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
               },
             ]}
           >
-            <LongPressMenu data={props.drawerContent} />
+            <LongPressMenu data={props.drawerContent} toggleMoreInfo={props.toggleMoreInfo}  />
           </Animated.View>
         </Animated.View>
       </Modal>
