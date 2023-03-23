@@ -25,7 +25,7 @@ interface ConflictsContainerProps {
   navigation?: any;
 }
 const ConflictsContainer = (props: ConflictsContainerProps) => {
-  const offset = useSharedValue(0);
+  const offset = useSharedValue(GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage);
   const [isReady, setIsReady] = React.useState(false);
   const [initialState, setInitialState] = React.useState();
   const conflictContext = useContext(ConflictResolutionContext);
@@ -60,7 +60,7 @@ const ConflictsContainer = (props: ConflictsContainerProps) => {
 
   const openDrawer = () => {
     offset.value = withTiming(
-      SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
+      GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
       {
         duration: 10,
         easing: Easing.out(Easing.ease),
