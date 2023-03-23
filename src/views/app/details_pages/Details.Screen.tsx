@@ -1558,10 +1558,10 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }
 
     const allSubcriptionGroups = {
-      ...(GLOBALS.scheduledSubscriptionGroup || {}),
+      ...(GLOBALS.scheduledSubscriptions || {}),
       SubscriptionGroups: [
-        ...((GLOBALS.scheduledSubscriptionGroup &&
-          GLOBALS.scheduledSubscriptionGroup.SubscriptionGroups) ||
+        ...((GLOBALS.scheduledSubscriptions &&
+          GLOBALS.scheduledSubscriptions.SubscriptionGroups) ||
           []),
         ...((GLOBALS.viewableSubscriptions &&
           GLOBALS.viewableSubscriptions.SubscriptionGroups) ||

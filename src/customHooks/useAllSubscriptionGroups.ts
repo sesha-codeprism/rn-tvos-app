@@ -47,9 +47,19 @@ const useAllSubscriptionGroups = (globals: any) => {
             });
         });
 
-        viewable.SubscriptionGroups = uniqBy([...viewable.SubscriptionGroups, ...scheduled.SubscriptionGroups], "Id"); // Merging subscriptionGroups
-        console.log("viewable", viewable)
-        GLOBALS.allSubscriptionGroups = viewable;
+       const allSubscriptionGroups = {
+            ...(scheduled || {}),
+            SubscriptionGroups: [
+                ...((scheduled &&
+                    scheduled.SubscriptionGroups) ||
+                    []),
+                ...((viewable &&
+                    viewable.SubscriptionGroups) ||
+                    []),
+            ],
+        };
+        console.log("allSubscriptionGroups", allSubscriptionGroups)
+        GLOBALS.allSubscriptionGroups = allSubscriptionGroups;
         return { allSubscriptions: viewable, viewableSubscriptions: GLOBALS.viewableSubscriptions, scheduledSubscriptions: GLOBALS.scheduledSubscriptions };
         // UDL to get all the subscription groups.. we'll refetch this later on when Duplex fires..
         // const udlParams = "udl://dvrproxy/get-all-subscriptionGroups";
