@@ -138,13 +138,13 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     "",
     GLOBALS.channelMap
   );
-console.log('scheduledRecordings', scheduledRecordings)
   const viewableRecordings = massageDVRFeed(
     GLOBALS.viewableSubscriptions,
     SourceType.DVR,
     "",
     GLOBALS.channelMap
   );
+  console.log("viewableRecordings", viewableRecordings);
   const viewableFilters = buildFilterDataSource(
     GLOBALS.viewableSubscriptions?.SubscriptionGroups,
     DvrMenuItems.Recorded,
@@ -509,70 +509,32 @@ console.log('scheduledRecordings', scheduledRecordings)
     }
     setRecordedList(feedItems);
   };
-  //   const massageDataforSchdule = (filteredRecording: any) => {
-  //     const massagedFeed = massageDVRFeed(
-  //         {
-  //             SubscriptionGroups: filteredRecording,
-  //         },
-  //         undefined,
-  //         undefined,
-  //         channelMap
-  //     );
-  //     groupedRecordings = groupRecordingsByDate(
-  //         (massagedFeed as unknown) as SubscriptionGroup[]
-  //     );
 
-  //     const validScheduledRecordingsData: any = pickBy(
-  //         groupedRecordings,
-  //         (value, key) => value.length > 0
-  //     );
-  //     return validScheduledRecordingsData;
-  // };
-
-    const processScheduledData = (id: string) => {
-      const filteredRecordinglist = scheduledRecordings.filter(
-          (item: any) => item.SubscriptionItems.length > 0
-      );
-      filteredRecordinglist &&
-          filteredRecordinglist.forEach((item: any) => {
-              const itemFiltered =
-                  item.SubscriptionItems?.length &&
-                  item.SubscriptionItems.filter((itemData: any) => {
-                      return itemData.ItemState !== DvrRecordedState.Canceled;
-                  });
-              itemFiltered && itemFiltered?.length
-                  ? (item.SubscriptionItems = itemFiltered)
-                  : (item.SubscriptionItems = []);
+  const processScheduledData = () => {
+    const filteredRecordinglist = scheduledRecordings.filter(
+      (item: any) => item.SubscriptionItems.length > 0
+    );
+    filteredRecordinglist &&
+      filteredRecordinglist.forEach((item: any) => {
+        const itemFiltered =
+          item.SubscriptionItems?.length &&
+          item.SubscriptionItems.filter((itemData: any) => {
+            return itemData.ItemState !== DvrRecordedState.Canceled;
           });
-          formatScheduledData(filteredRecordinglist);
-
-  //     const validScheduledRecordingsData = massageDataforSchdule(
-  //         filteredRecordinglist
-  //     );
-  //     let filtredSubscriptionGroups = [];
-  //     if (props.channelMap) {
-  //         filtredSubscriptionGroups = filteredGroupedRecordings(
-  //             props.fitlerState,
-  //             validScheduledRecordingsData || [],
-  //             props.channelMap
-  //         );
-  //     } else {
-  //         filtredSubscriptionGroups = validScheduledRecordingsData || [];
-  //     }
-  //     setFocusedAsset(id);
-  //     setFiltredSubscriptionGroups({
-  //         isDataRefreshed: true,
-  //         validScheduledRecordings: filtredSubscriptionGroups,
-  //     });
+        itemFiltered && itemFiltered?.length
+          ? (item.SubscriptionItems = itemFiltered)
+          : (item.SubscriptionItems = []);
+      });
+    formatScheduledData(filteredRecordinglist);
   };
   const backAction = () => {
     console.log("Capturing hadware back presses on profile screen");
     Alert.alert("Back button pressed");
     return null;
   };
- 
 
   const toggleMoreInfo = (item: any) => {
+    console.log("toggleMoreInfo", item);
     let udpData: any = {};
     const {
       Definition,
@@ -588,26 +550,19 @@ console.log('scheduledRecordings', scheduledRecordings)
     } else if (subscriptionItem) {
       udpData = subscriptionItem.ProgramDetails || {};
     }
-    udpData["description"] = udpData?.Description || "";
-    udpData["title"] = udpData?.Title || "";
+    udpData["description"] =
+      item.SubscriptionItems[0].ProgramDetails.Description || "";
+    udpData["title"] = item?.title || "";
     setScreenProps({
       udpData: udpData,
       networkInfo: null, //networkInfo,
-      genres: udpData?.genre, // || discoveryProgramData?.genre,
+      genres: udpData?.genre || udpData?.Genre, // || discoveryProgramData?.genre,
     });
     setRoute(DetailRoutes.MoreInfo);
-    // drawerRef?.current.pushRoute(DetailRoutes.MoreInfo, {
-    //   udpData: udpDataAsset,
-    //   networkInfo: networkInfo,
-    //   genres: udpDataAsset?.genre || discoveryProgramData?.genre,
-    // });
+
     setOpen(true);
     drawerRef.current.close();
     moreInfoDrawerRef?.current?.open();
-    // props.toggleSideMenu(true, SideMenuRoutes.MoreInfo, {
-    //   udpData,
-    //   genres: udpData?.Genres || [],
-    // });
   };
   // This method builds the CTA buttons for a specific scheduled item
   const getCTAButtons = (item: any) => {
@@ -670,10 +625,7 @@ console.log('scheduledRecordings', scheduledRecordings)
         text: AppStrings?.str_app_edit,
         icon: editIcon,
         onPress: () => {
-          // editRecording(
-          //     item,
-          //     dateString
-          // ),
+          //To DO: Not implemented yet
         },
       },
       {
@@ -688,7 +640,7 @@ console.log('scheduledRecordings', scheduledRecordings)
     setCtaList(ctaButtons);
     console.log("ctaButtons", ctaButtons);
   };
-  const formatScheduledData = (data:any) => {
+  const formatScheduledData = (data: any) => {
     if (data) {
       const groups = data.reduce((acc: any, curr: any) => {
         console.log("curr inside formatScheduledData", curr);
@@ -730,7 +682,7 @@ console.log('scheduledRecordings', scheduledRecordings)
     console.log("scheduledRecordings", scheduledRecordings);
     // To filter and format data to show in the swimlane
     processData();
-    processScheduledData()
+    processScheduledData();
     TVMenuControl.enableTVMenuKey();
     BackHandler.addEventListener("hardwareBackPress", backAction);
   }, []);
@@ -1059,7 +1011,7 @@ console.log('scheduledRecordings', scheduledRecordings)
                 if (item.feed.Name === "TV Shows") {
                   event["ItemType"] = ItemShowType.DvrRecording;
                   props.navigation.navigate("DvrRecordedEpisode", {
-                   item: event,
+                    item: event,
                   });
                 } else {
                   props.navigation.push(Routes.Details, { feed: event });
@@ -1198,20 +1150,6 @@ console.log('scheduledRecordings', scheduledRecordings)
     moreInfoDrawerRef.current.close();
   };
 
-  // const handleFilterClear = () => {
-  //   // setDataSource([]);
-  //   setFilterState(null);
-  //   setViewableFilters(viewableFilters);
-  //   // setCurrentFeed(undefined);
-  //   // const firstFilter = createInitialFilterState(
-  //   //   pivotQuery?.data?.data,
-  //   //   baseValues
-  //   // );
-  //   // setFilterState(firstFilter);
-  //   // setBrowsePivots(browseFeed.pivots);
-  //   // setLastPageReached(false);
-  //   // setCurrentPage(0);
-  // };
   const renderDvrSideMenu = () => {
     return dvrMenuItems.map((dvr: { Id: any; Name?: any }, index: number) => {
       const { Name, Id } = dvr;

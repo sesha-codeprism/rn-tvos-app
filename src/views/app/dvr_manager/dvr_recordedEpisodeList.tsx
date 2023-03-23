@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { PageContainer } from "../../../components/PageContainer";
 import { AppImages } from "../../../assets/images";
@@ -44,6 +44,10 @@ import {
   SCREEN_WIDTH,
 } from "../../../utils/dimensions";
 import MFOverlay from "../../../components/MFOverlay";
+import { DetailsSidePanel } from "../details_pages/DetailSidePanel";
+import { DetailRoutes } from "../../../config/navigation/DetailsNavigator";
+import axios from "axios";
+import { IRecordingToDelete } from "../../../@types/subscriptionGroup";
 
 interface Props {
   navigation: NativeStackNavigationProp<any>;
@@ -82,6 +86,8 @@ const DvrRecordedEpisode = (props: any) => {
     Array<any>
   );
   const [open, setOpen] = useState(false);
+  const [route, setRoute] = useState(DetailRoutes.MoreInfo);
+  const [screenProps, setScreenProps] = useState<any>();
   const [seasonItemHeight, setSeasonItemHeight] = useState(1);
   const [isSeasonFocused, setIsSeasonFocused] = useState(true);
   const scheduledRecordings = massageDVRFeed(
@@ -101,6 +107,8 @@ const DvrRecordedEpisode = (props: any) => {
   let seasonButtonRef: React.RefObject<any> = React.createRef<any>();
   let firstEpisodeRef: React.RefObject<any> = React.createRef<any>();
   let lastEpisodeRef: React.RefObject<any> = React.createRef<any>();
+  const drawerRef: React.MutableRefObject<any> = useRef();
+  const moreInfoDrawerRef: React.MutableRefObject<any> = useRef();
 
   let buttonRefObject = {
     [AppStrings?.str_details_cta_play]: React.createRef(),
@@ -114,7 +122,46 @@ const DvrRecordedEpisode = (props: any) => {
   };
   let firstButtonRef = React.createRef();
   let isSeasonScrolled = false;
-
+  const toggleMoreInfo = (item: any) => {
+    console.log('toggleMoreInfo', item)
+    let udpData: any = {};
+    const {
+      Definition,
+      SubscriptionItems: SubscriptionGroups = [],
+      SeriesDetails,
+      SeriesId,
+      title: itemTitle = "",
+      Settings,
+    } = item;
+    const [subscriptionItem = {}] = SubscriptionGroups || [];
+    if (SeriesDetails) {
+      udpData = SeriesDetails;
+    } else  {
+      udpData = subscriptionItem.ProgramDetails || {};
+    }
+    udpData["description"] = item.SubscriptionItems[0].ProgramDetails.Description || "";
+    udpData["title"] = item?.title || "";
+    setScreenProps({
+      udpData: udpData,
+      networkInfo: null, //networkInfo,
+      genres: udpData?.genre || udpData?.Genre, // || discoveryProgramData?.genre,
+    });
+    setRoute(DetailRoutes.MoreInfo);
+    // drawerRef?.current.pushRoute(DetailRoutes.MoreInfo, {
+    //   udpData: udpDataAsset,
+    //   networkInfo: networkInfo,
+    //   genres: udpDataAsset?.genre || discoveryProgramData?.genre,
+    // });
+    setOpen(true);
+    // drawerRef.current.close();
+    moreInfoDrawerRef?.current?.open();
+    
+  };
+  const closeMoreInfoModal = () => {
+    console.log("close modal called on dvr manager");
+    // setOpenSidePannel(false);
+    moreInfoDrawerRef.current.close();
+  };
   const deleteDvrListOrItem = (item: any) => {
     // setState({
     //   isDeleted: true,
@@ -177,114 +224,75 @@ const DvrRecordedEpisode = (props: any) => {
   };
 
   const onPressSave = (item: any) => {
-    if (item?.Settings) {
-      item.Settings.RecyclingDisabled = !item?.Settings?.RecyclingDisabled;
-      Alert.alert("To DO Save recording action");
-      // props.saveRecordRequest(item?.Id, item?.Settings).then(() => {
-      //   props.getViewableRecordings().then(() => {
-      //     setupData();
-      //   });
-      // });
+    console.log("onPressSave", item);
+    const id: string = item.UniversalProgramId || item.Id;
+    
+    const serviceMap = GLOBALS.bootstrapSelectors?.ServiceMap.Services; //bootstrapBootstrapSelectors.serviceMap(getState());
+    if (!serviceMap) {
+      throw "No serviceMap or axios instance.";
     }
+    return axios
+      .put(
+        `${serviceMap.dvr}v1/scheduled-items/${id}/settings`,
+        item.dvrSetting
+      )
+      .then((response: any) => {
+        console.log("response coming in save item", response);
+        if (response?.data?.State === "Completed") {
+        }
+      })
+      .catch((err: any) => {
+        console.log("POST METHOD ERROR: ", err);
+      });
   };
 
-  const onPressMoreInfo = (item: any, isTitle = false) => {
-    props.toggleMoreInfo();
-    // item.ProgramDetails["description"] =
-    //   item?.ProgramDetails?.Description || "";
-    // if (isTitle) {
-    //   item.ProgramDetails["title"] = item?.ProgramDetails?.Title || "";
-    // }
-    // Alert.alert("To DO more info action");
-    // props.openMoreInfo(true, SideMenuRoutes.MoreInfo, {
-    //   udpData: item?.ProgramDetails,
-    //   genres: item?.ProgramDetails?.Genres,
-    // });
-  };
+ 
 
   const deleteDvrPopUp = (item: any) => {
-    Alert.alert("To DO Delete action");
-    // displayModal({
-    //   text: AppStrings?.str_dvr_delete_warning,
-    //   defaultFocusTitle: AppStrings?.str_profile_button_cancel,
-    //   buttonDataSource: [
-    //     {
-    //       title: AppStrings?.str_profile_button_delete,
-    //       onPress: () => {
-    //         deleteDvrListOrItem(item);
-    //       },
-    //     },
-    //     {
-    //       title: AppStrings?.str_profile_button_cancel,
-    //       onPress: cancelDvrButton,
-    //     },
-    //   ],
-    // });
+    Alert.alert(AppStrings?.str_dvr_delete_warning, "", [
+      {
+        text: AppStrings?.str_profile_button_delete,
+        onPress: () => {
+          deleteRecording(item);
+        },
+      },
+      {
+        text: AppStrings?.str_profile_button_cancel,
+        onPress: () => {},
+      },
+    ]);
+
+   
   };
+  const deleteRecording = (item: any) => {
+    console.log("item to delete", item);
+    const { SeriesId, SeasonNumber, EpisodeNumber } =
+      item?.ProgramDetails || {};
+    const isSeries = !!(SeriesId || SeasonNumber || EpisodeNumber);
+    const objRecorded: IRecordingToDelete  = {
+      SubscriptionId: item?.SubscriptionId,
+      SubscriptionItemIds: [item?.Id || item.UniversalProgramId],
+      isSeries: isSeries,
+    };
+    // const recordDetails: IBatchDeleteRequest = [[objRecorded]];
 
-  // const editRecording = (subscriptionItem: any) => {
-  //   subscriptionItem.Settings.StartUtc =
-  //     subscriptionItem.ActualAvailabilityStartUtc;
-  //   subscriptionItem.Settings.StationId = subscriptionItem.StationId;
-  //   props.setRecordingData(subscriptionItem);
-  //   props.toggleSideMenu(true, SideMenuRoutes.DvrRecordingOptions, {
-  //     isNew: false,
-  //     isSeries: false,
-  //     title:
-  //       subscriptionItem.ProgramDetails.EpisodeTitle ||
-  //       subscriptionItem.ProgramDetails.Title,
-  //     programId: subscriptionItem.ProgramId,
-  //     isSubscriptionItem: true,
-  //     onUpdate: setupData,
-  //     isPopupModal: true,
-  //   });
-  // };
-
-  // const playDvr = (item: any) => {
-  //   item["playSource"] = sourceTypeString.DVR;
-  //   let Bookmark = props.allRecordingBookmarks.find(
-  //     (b: any) => b.RecordingId === item.Id
-  //   );
-  //   if (Bookmark) {
-  //     props.navigation.pushRoute("VideoPlayer", {
-  //       data: { ...item, Bookmark },
-  //       id: item.ProgramId,
-  //     });
-  //   } else {
-  //     const {
-  //       Id,
-  //       ProgramId,
-  //       ScheduledRuntimeSeconds,
-  //       ProgramDetails: { SeasonId = "" } = {},
-  //     } = item || {};
-  //     if (Id && ProgramId && ScheduledRuntimeSeconds) {
-  //       const subscriptionGroup =
-  //         props.viewableRecordings?.SubscriptionGroups?.find((sg: any) =>
-  //           sg?.SubscriptionItems?.some((si: any) => si.Id === item.Id)
-  //         );
-  //       const { SeriesDetails: { SeriesId = "" } = {} } =
-  //         subscriptionGroup || {};
-  //       Bookmark = {
-  //         SeriesId: SeriesId,
-  //         RecordingId: Id,
-  //         OriginalProgramId: ProgramId,
-  //         TimeSeconds: 0,
-  //         ProgramId: ProgramId,
-  //         RuntimeSeconds: ScheduledRuntimeSeconds,
-  //         SeasonId: SeasonId,
-  //       };
-  //       props.navigation.pushRoute("VideoPlayer", {
-  //         data: { ...item, Bookmark },
-  //         id: item.ProgramId,
-  //       });
-  //     } else {
-  //       props.navigation.pushRoute("VideoPlayer", {
-  //         data: item,
-  //         id: item.ProgramId,
-  //       });
-  //     }
-  //   }
-  // };
+    const serviceMap = GLOBALS.bootstrapSelectors?.ServiceMap.Services; //bootstrapBootstrapSelectors.serviceMap(getState());
+    // const axios = sdkConfigSelectors.api(getState());
+    if (!serviceMap) {
+      throw "No serviceMap or axios instance.";
+    }
+    return axios
+      .post(`${serviceMap.dvr}v1/batch-delete-request`, [objRecorded])
+      .then((response: any) => {
+        if (response?.data?.State === "Completed") {
+          // dispatch(initData.actionCreators.request());
+        }
+      })
+      .catch((err: any) => {
+        console.log("POST METHOD ERROR: ", err);
+      });
+  };
+  
   const setupData = () => {
     const massagedData = item || [];
     let filteredRecording: any;
@@ -401,22 +409,13 @@ const DvrRecordedEpisode = (props: any) => {
           metaData: filterTvDetails[0],
           itemType: massagedData?.ItemType,
         });
-        //  setState({
-        //     season: seasonsObj,
-        //     currentDvrMenu: seasonsObj[0].Id,
-        //     mainSeason: seasonObj,
-        //     seriesDetails: seriesDetailsObject,
-        //     metaData: filterTvDetails[0],
-        //     itemType: massagedData?.ItemType,
-        // });
+        
       }
     }
   };
 
   const getCtaButtons = (item: any) => {
-    // const entitlements = removeEntitlementsAbbreviationsAndSort(
-    //   item.PlayInfo[0].Entitlements
-    // );
+   
     let ipStatus = props.account?.ClientIpStatus || {};
     if (!config.inhomeDetection.useSubscriberInHome) {
       // networkIHD data
@@ -429,21 +428,7 @@ const DvrRecordedEpisode = (props: any) => {
     }
     const ctaButtonList = [];
     if (item.itemType === ItemShowType.DvrRecording) {
-      // if (
-      //   item?.PlayInfo &&
-      //   item.PlayInfo?.length &&
-      //   isInHome(entitlements, ipStatus)
-      // ) {
-      //   ctaButtonList.push({
-      //     type: "TextIcon",
-      //     text: AppStrings?.str_details_cta_playdvr,
-      //     icon: playIcon,
-      //     onPress: () => {
-      //       // onPressPlayDVR(item)
-      //       Alert.alert('Implementation missing')
-      //     },
-      //   });
-      // }
+     
       ctaButtonList.push({
         type: "TextIcon",
         text: item?.Settings?.RecyclingDisabled
@@ -456,7 +441,7 @@ const DvrRecordedEpisode = (props: any) => {
         type: "TextIcon",
         text: AppStrings?.str_details_cta_more_info,
         icon: infoIcon,
-        onPress: () => onPressMoreInfo(item),
+        onPress: () => toggleMoreInfo(item),
       });
       ctaButtonList.push({
         type: "TextIcon",
@@ -470,7 +455,7 @@ const DvrRecordedEpisode = (props: any) => {
         text: AppStrings?.str_app_edit,
         icon: editIcon,
         onPress: () => {
-          Alert.alert("Implementation missing");
+         // TODO: Edit to be implemented
           // editRecording(item),
         },
       });
@@ -478,7 +463,7 @@ const DvrRecordedEpisode = (props: any) => {
         type: "TextIcon",
         text: AppStrings?.str_details_cta_more_info,
         icon: infoIcon,
-        onPress: () => onPressMoreInfo(item, true),
+        onPress: () => toggleMoreInfo(item),
       });
     }
     setCTAButtonList(ctaButtonList);
@@ -536,16 +521,11 @@ const DvrRecordedEpisode = (props: any) => {
       });
       setCurrentSeasonEpisodes([]);
       setCurrentEpisode(undefined);
-      // discoveryData["focusedSeason"] = {
-      //   seriesId: discoveryData?.Id,
-      //   seasonId: season?.Id,
-      // };
+      
       // Season and Episodes
       if (currentSeason) {
         setCurrentSeason(season);
       }
-      // skip = 0;
-      // top = 10;
       // setCTAList([]);
     } else {
       /** Focused season is same as currently active season  So, don't update anything */
@@ -999,6 +979,21 @@ const DvrRecordedEpisode = (props: any) => {
             /> */}
           </View>
         </View>
+        <DetailsSidePanel
+            ref={moreInfoDrawerRef}
+            drawerPercentage={37}
+            animationTime={200}
+            overlay={false}
+            opacity={1}
+            open={open}
+            animatedWidth={SCREEN_WIDTH * 0.37}
+            closeOnPressBack={false}
+            navigation={props.navigation}
+            drawerContent={false}
+            route={route}
+            closeModal={closeMoreInfoModal}
+            screenProps={screenProps}
+          />
       </ImageBackground>
     </PageContainer>
   );

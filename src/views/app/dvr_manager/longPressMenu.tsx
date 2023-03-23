@@ -23,6 +23,13 @@ import { generateType } from "../../../utils/Subscriber.utils";
 import MFButton, {
   MFButtonVariant,
 } from "../../../components/MFButton/MFButton";
+import { ISubscriptionSetting } from "../../../utils/DVRUtils";
+import { GLOBALS } from "../../../utils/globals";
+import axios from "axios";
+import {
+  IBatchDeleteRequest,
+  IRecordingToDelete,
+} from "../../../@types/subscriptionGroup";
 interface Props {
   data: any;
   toggleMoreInfo?: any;
@@ -34,21 +41,7 @@ const menuItems = [
     text: AppStrings.str_details_cta_playdvr,
     onPress: () => {},
   },
-  // {
-  //   title: "Save",
-  //   action: "",
-  //   icon: AppImages.Save_ic,
-  // },
-  // {
-  //   title: "Delete",
-  //   action: "",
-  //   icon: AppImages.Delete_ic,
-  // },
-  // {
-  //   title: "More Info",
-  //   action: "",
-  //   icon: AppImages.More_info_ic,
-  // },
+  
 ];
 const deleteIcon = AppImages.Delete_ic; // getFontIcon("delete");
 const editIcon = AppImages.More_info_ic; // getFontIcon("edit");
@@ -61,131 +54,76 @@ export default function LongPressMenu(props: any) {
   const [focused, setFocused] = useState<any>(0);
   const [listItems, setListItems] = useState(menuItems);
 
-  console.log("props in long press", props.data);
-  // const deleteDvrListOrItem = (item: any) => {
-  //   setState({
-  //     isDeleted: true,
-  //   });
-  //   let RecordingsToDelete: any = [];
-  //   let obj = {
-  //     SubscriptionId: item?.SubscriptionId,
-  //     SubscriptionItemIds: [item?.Id],
-  //     isSeries: false,
-  //   };
-  //   RecordingsToDelete.push(obj);
-
-  //   props
-  //     .deleteRequest({
-  //       RecordingsToDelete,
-  //     })
-  //     .then(() => {
-  //       props.getViewableRecordings().then(() => {
-  //         setupData();
-  //       });
-  //     });
-  // };
-
-  // const cancelDvrButton = () => {
-  //   if (focuszoneRef?.current) {
-  //     FocusManager.focus(focuszoneRef?.current);
-  //   }
-  // };
-
-  // const onPressPlayDVR = (item: any) => {
-  //   const channel = findChannelByStationId(
-  //     item.StationId,
-  //     undefined,
-  //     undefined,
-  //     props.channelMap
-  //   );
-
-  //   const channelInfo = {
-  //     Schedule: { ...item }, // to avoid cyclic error in json.stingify used in Video.tsx
-  //     Channel: channel,
-  //     Service: props.channelMap?.getService(channel?.channel),
-  //   };
-
-  //   item["ChannelInfo"] = channelInfo;
-  //   (item["assetType"] = generateType(item, SourceType.DVR)),
-  //     isPconBlocked(item?.ProgramDetails, props.locale?.full).then(
-  //       (isBlocked) => {
-  //         if (isBlocked) {
-  //           props.navigation.pushRoute("PconDisplay", {
-  //             data: item,
-  //             onSuccess: playDvr,
-  //             pinType: PinType.content,
-  //           });
-  //         } else {
-  //           playDvr(item);
-  //         }
-  //       }
-  //     );
-  // };
-
   const onPressSave = (item: any) => {
-    if (item?.Settings) {
-      item.Settings.RecyclingDisabled = !item?.Settings?.RecyclingDisabled;
-      Alert.alert("To DO Save recording action");
-      // props.saveRecordRequest(item?.Id, item?.Settings).then(() => {
-      //   props.getViewableRecordings().then(() => {
-      //     setupData();
-      //   });
-      // });
+    console.log("onPressSave", item);
+    const id: string = item.UniversalProgramId || item.Id;
+    
+    const serviceMap = GLOBALS.bootstrapSelectors?.ServiceMap.Services; //bootstrapBootstrapSelectors.serviceMap(getState());
+    if (!serviceMap) {
+      throw "No serviceMap or axios instance.";
     }
+    return axios
+      .put(
+        `${serviceMap.dvr}v1/scheduled-items/${id}/settings`,
+        item.dvrSetting
+      )
+      .then((response: any) => {
+        console.log("response coming in save item", response);
+        if (response?.data?.State === "Completed") {
+        }
+      })
+      .catch((err: any) => {
+        console.log("POST METHOD ERROR: ", err);
+      });
   };
 
-  const onPressMoreInfo = (item: any, isTitle = false) => {
-    props.toggleMoreInfo();
-    // item.ProgramDetails["description"] =
-    //   item?.ProgramDetails?.Description || "";
-    // if (isTitle) {
-    //   item.ProgramDetails["title"] = item?.ProgramDetails?.Title || "";
-    // }
-    // Alert.alert("To DO more info action");
-    // props.openMoreInfo(true, SideMenuRoutes.MoreInfo, {
-    //   udpData: item?.ProgramDetails,
-    //   genres: item?.ProgramDetails?.Genres,
-    // });
-  };
+ 
 
   const deleteDvrPopUp = (item: any) => {
-    Alert.alert("To DO Delete action");
-    // displayModal({
-    //   text: global.lStrings?.str_dvr_delete_warning,
-    //   defaultFocusTitle: global.lStrings?.str_profile_button_cancel,
-    //   buttonDataSource: [
-    //     {
-    //       title: global.lStrings?.str_profile_button_delete,
-    //       onPress: () => {
-    //         deleteDvrListOrItem(item);
-    //       },
-    //     },
-    //     {
-    //       title: global.lStrings?.str_profile_button_cancel,
-    //       onPress: cancelDvrButton,
-    //     },
-    //   ],
-    // });
+    Alert.alert(AppStrings?.str_dvr_delete_warning, "", [
+      {
+        text: AppStrings?.str_profile_button_delete,
+        onPress: () => {
+          deleteRecording(item);
+        },
+      },
+      {
+        text: AppStrings?.str_profile_button_cancel,
+        onPress: () => {},
+      },
+    ]);
+
+   
   };
+  const deleteRecording = (item: any) => {
+    console.log("item to delete", item);
+    const { SeriesId, SeasonNumber, EpisodeNumber } =
+      item?.ProgramDetails || {};
+    const isSeries = !!(SeriesId || SeasonNumber || EpisodeNumber);
+    const objRecorded: IRecordingToDelete = {
+      SubscriptionId: item?.SubscriptionId,
+      SubscriptionItemIds: [item?.Id || item.UniversalProgramId],
+      isSeries: isSeries,
+    };
+    // const recordDetails: IBatchDeleteRequest = [[objRecorded]];
 
-  // const editRecording = (subscriptionItem: any) => {
-  //   subscriptionItem.Settings.StartUtc =
-  //     subscriptionItem.ActualAvailabilityStartUtc;
-  //   subscriptionItem.Settings.StationId = subscriptionItem.StationId;
-  //   props.setRecordingData(subscriptionItem);
-  //   props.toggleSideMenu(true, SideMenuRoutes.DvrRecordingOptions, {
-  //     isNew: false,
-  //     isSeries: false,
-  //     title:
-  //       subscriptionItem.ProgramDetails.EpisodeTitle ||
-  //       subscriptionItem.ProgramDetails.Title,
-  //     programId: subscriptionItem.ProgramId,
-  //     isSubscriptionItem: true,
-  //     onUpdate: setupData,
-  //     isPopupModal: true,
-  //   });
-  // };
-
+    const serviceMap = GLOBALS.bootstrapSelectors?.ServiceMap.Services; //bootstrapBootstrapSelectors.serviceMap(getState());
+    // const axios = sdkConfigSelectors.api(getState());
+    if (!serviceMap) {
+      throw "No serviceMap or axios instance.";
+    }
+    return axios
+      .post(`${serviceMap.dvr}v1/batch-delete-request`, [objRecorded])
+      .then((response: any) => {
+        if (response?.data?.State === "Completed") {
+          // dispatch(initData.actionCreators.request());
+        }
+      })
+      .catch((err: any) => {
+        console.log("POST METHOD ERROR: ", err);
+      });
+  };
+  
   // const playDvr = (item: any) => {
   //   item["playSource"] = sourceTypeString.DVR;
   //   let Bookmark = props.allRecordingBookmarks.find(
@@ -233,7 +171,7 @@ export default function LongPressMenu(props: any) {
   // };
 
   const getCtaButtons = (item: any) => {
-    console.log('Item in get ctas', item);
+    console.log("Item in get ctas", item);
     // const entitlements = removeEntitlementsAbbreviationsAndSort(
     //   item.PlayInfo[0].Entitlements
     // );
@@ -272,34 +210,12 @@ export default function LongPressMenu(props: any) {
         icon: item?.Settings?.RecyclingDisabled ? savedIcon : unSavedIcon,
         onPress: () => onPressSave(item),
       });
-      // ctaButtonList.push({
-      //   type: "TextIcon",
-      //   text: AppStrings?.str_details_cta_more_info,
-      //   icon: infoIcon,
-      //   onPress: () => onPressMoreInfo(item),
-      // });
       ctaButtonList.push({
         type: "TextIcon",
         text: AppStrings?.str_profile_button_delete,
         icon: deleteIcon,
         onPress: () => deleteDvrPopUp(item),
       });
-    // } else {
-    //   ctaButtonList.push({
-    //     type: "TextIcon",
-    //     text: AppStrings?.str_app_edit,
-    //     icon: editIcon,
-    //     onPress: () => {
-    //       Alert.alert("Implementation missing");
-    //       // editRecording(item),
-    //     },
-    //   });
-    //   ctaButtonList.push({
-    //     type: "TextIcon",
-    //     text: AppStrings?.str_details_cta_more_info,
-    //     icon: infoIcon,
-    //     onPress: () => onPressMoreInfo(item, true),
-    //   });
     }
     setListItems(ctaButtonList);
   };
@@ -329,61 +245,6 @@ export default function LongPressMenu(props: any) {
         renderItem={({ item, index }) => {
           // console.log(item.title);
           return (
-            // <MFButton
-            //   key={`ctaBtn_${item.txext}_${index}`}
-            //   // ref={index === 0 ? firstCtaButtonRef : null}
-            //   focusable
-            //   iconSource={0}
-            //   // hasTVPreferredFocus={swimLaneFocused && index === 0}
-            //   imageSource={0}
-            //   avatarSource={undefined}
-            //   onFocus={() => {
-            //     // setOpen(false);
-            //     // drawerRef.current.close();
-            //     // drawerRef.current.resetRoutes();
-            //   }}
-            //   variant={MFButtonVariant.FontIcon}
-            //   fontIconSource={item.icon}
-            //   textLabel={item.text}
-            //   fontIconTextStyle={StyleSheet.flatten([
-            //     styles.textStyle,
-            //     {
-            //       fontSize: 90,
-            //       color: item.buttonText?.includes("Record")
-            //         ? globalStyles.fontColors.badge
-            //         : "white",
-            //     },
-            //   ])}
-            //   onPress={item.onPress}
-            //   textStyle={
-            //     [
-            //       styles.listText,
-            //       { color: index === focused ? "#EEEEEE" : "#A7A7A7" },
-            //     ]
-            //     //   {
-            //     //   color: "#EEEEEE",
-            //     //   fontFamily: "Inter-SemiBold",
-            //     //   fontSize: 25,
-            //     //   fontWeight: "600",
-            //     //   textAlign: "center",
-            //     //   marginLeft: 21,
-            //     // }
-            //   }
-            //   style={{
-            //     height: 62,
-            //     alignSelf: "center",
-            //     padding: 12,
-            //     backgroundColor: "#424242",
-            //     borderRadius: 6,
-            //     paddingHorizontal: 35,
-            //     zIndex: 100,
-            //   }}
-            //   focusedStyle={styles.focusedUnderLine}
-            //   fontIconProps={{
-            //     iconPlacement: "Left",
-            //     shouldRenderImage: true,
-            //   }}
-            // />
             <Pressable
               hasTVPreferredFocus={index === 0 ? true : false}
               onFocus={() => {
