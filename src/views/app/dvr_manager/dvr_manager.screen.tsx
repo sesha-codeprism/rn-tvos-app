@@ -753,20 +753,6 @@ console.log('scheduledRecordings', scheduledRecordings)
             width: "70%",
             marginTop: 20,
           }}
-          // ItemSeparatorComponent={() => {
-          //   return (
-          // <View
-          //   style={{
-          //     width: 1319,
-          //     height: 1,
-          //     backgroundColor: globalStyles.backgroundColors.shade5,
-          //     marginTop: 20,
-          //     marginBottom: 20,
-          //     alignSelf: "center",
-          //   }}
-          // />
-          //   );
-          // }}
           horizontal={false}
           data={scheduledRecordingList}
           keyExtractor={(i) => i.Id}
@@ -889,10 +875,6 @@ console.log('scheduledRecordings', scheduledRecordings)
           {currentScheduledItem?.Id === item?.Id ? (
             <>
               <View
-                // onFocus={handleScheduledFocus}
-                // onPress={() => {}}
-                // disabled={currentScheduledItem.Id === item?.Id}
-                // focusable={currentScheduledItem.Id !== item?.Id}
                 ref={index === 0 ? firstScheduledCardRef : undefined}
                 style={styles.dvrItemShowcard}
               >
@@ -911,9 +893,6 @@ console.log('scheduledRecordings', scheduledRecordings)
                   <Text style={styles.dvrItemMetadata}>
                     {item.metadataLine2}
                   </Text>
-                  {/* <Text style={styles.dvrItemDescription} numberOfLines={2}>
-              {Description}
-            </Text> */}
                   {currentScheduledItem.Id === item?.Id && (
                     <Text style={styles.statusTextStyle} numberOfLines={2}>
                       {statusText}
@@ -1018,9 +997,6 @@ console.log('scheduledRecordings', scheduledRecordings)
                 </Text>
                 <Text style={styles.dvrItemTitle}>{name}</Text>
                 <Text style={styles.dvrItemMetadata}>{item.metadataLine2}</Text>
-                {/* <Text style={styles.dvrItemDescription} numberOfLines={2}>
-                {Description}
-              </Text> */}
                 {currentScheduledItem.Id === item?.Id && (
                   <Text style={styles.statusTextStyle} numberOfLines={2}>
                     {statusText}

@@ -305,6 +305,22 @@ export interface ISubscriptionSetting {
     IsMultiChannel?: boolean;
 }
 
+export interface ISubscriptionSetting {
+    StationId?: string;
+    ChannelNumber: number;
+    StartUtc: string;
+    MaximumViewableShows?: number;
+    EndLateSeconds: number;
+    RecyclingDisabled: boolean;
+    ShowType?: string;
+    AirtimeDomain?: string;
+    ChannelMapId: string;
+    ManualRDDurationSeconds?: number;
+    ProviderName?: string;
+    OriginalStationId?: string;
+    IsMultiChannel?: boolean;
+}
+
 
 export enum DvrItemErrorCode {
   UNKNOWN = "Unknown",
@@ -2506,3 +2522,4 @@ function isItemStateMatchingFilter(
 
     return false;
 }
+
