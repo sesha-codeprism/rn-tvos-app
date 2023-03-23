@@ -5035,7 +5035,7 @@
         },
         "conflictFooterButtonTextStyle": {
           "height": 38,
-          "width": 200,
+          "width": 350,
           "color": "${theme.fontColors.light}",
           "fontFamily": "Inter-Regular",
           "fontSize": 25,
@@ -5063,7 +5063,7 @@
         },
         "conflictFooterButtonTextStyle": {
           "height": 38,
-          "width": 200,
+          "width": 350,
           "color": "${theme.fontColors.light}",
           "fontFamily": "Inter-Regular",
           "fontSize": 25,
@@ -5158,7 +5158,7 @@
         },
         "conflictFooterButtonTextStyle": {
           "height": 38,
-          "width": 200,
+          "width": 350,
           "color": "${theme.fontColors.light}",
           "fontFamily": "Inter-Regular",
           "fontSize": 25,

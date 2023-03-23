@@ -174,7 +174,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const [isItemPinned, setIsItemPinned] = useState(false);
   const [route, setRoute] = useState(DetailRoutes.MoreInfo);
   const [screenProps, setScreenProps] = useState<any>();
-  const [state, currentState] = useState(false);
+  const [ctaLoaded, setCTALoaded] = useState(false);
 
   const currentContext = useContext(GlobalContext);
 
@@ -1558,10 +1558,10 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }
 
     const allSubcriptionGroups = {
-      ...(GLOBALS.scheduledSubscriptionGroup || {}),
+      ...(GLOBALS.scheduledSubscriptions || {}),
       SubscriptionGroups: [
-        ...((GLOBALS.scheduledSubscriptionGroup &&
-          GLOBALS.scheduledSubscriptionGroup.SubscriptionGroups) ||
+        ...((GLOBALS.scheduledSubscriptions &&
+          GLOBALS.scheduledSubscriptions.SubscriptionGroups) ||
           []),
         ...((GLOBALS.viewableSubscriptions &&
           GLOBALS.viewableSubscriptions.SubscriptionGroups) ||
@@ -1619,7 +1619,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         );
     console.log("UDP data", udpData);
     setUDPDataAsset(udpData);
-    currentState(!state);
+    setCTALoaded(true);
     return udpData;
   };
 
@@ -1675,6 +1675,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   const closeModal = () => {
+    setCTALoaded(false);
     setOpen(false);
   };
 
@@ -1750,75 +1751,81 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
     return (
       <View style={[styles.buttonContainer]}>
-        <ScrollView horizontal nestedScrollEnabled>
-          {udpDataAsset.ctaButtons?.length &&
-            udpDataAsset.ctaButtons?.map((cta: any, index: number) => {
-              let fontIconStyle: { [key: string]: any };
-              if (
-                cta?.buttonAction ===
-                  AppStrings.str_details_program_record_button ||
-                cta?.buttonAction ===
-                  AppStrings?.str_details_series_record_button
-              ) {
-                fontIconStyle = styles.ctaFontIconStyle;
-              }
-              return (
-                <MFButton
-                  key={`ctaBtn_${cta.buttonText}_${index}`}
-                  ref={
-                    index === 0
-                      ? ctaButtonRef
-                      : (buttonRefObject as any)[cta.buttonText]
-                  }
-                  focusable
-                  iconSource={0}
-                  imageSource={0}
-                  avatarSource={undefined}
-                  onFocus={() => {
-                    setOpen(false);
-                    drawerRef.current.close();
-                    drawerRef.current.resetRoutes();
-                    setCTAButtonFocusState(cta.buttonText);
-                  }}
-                  variant={MFButtonVariant.FontIcon}
-                  fontIconSource={cta.iconSource}
-                  fontIconTextStyle={StyleSheet.flatten([
-                    styles.textStyle,
-                    {
-                      fontSize: 90,
-                      color: cta.buttonText?.includes("Record")
-                        ? g.fontColors.badge
-                        : "white",
-                    },
-                  ])}
-                  onPress={ctaButtonPress[cta.buttonAction]}
-                  textStyle={{
-                    color: "#EEEEEE",
-                    fontFamily: "Inter-SemiBold",
-                    fontSize: 25,
-                    fontWeight: "600",
-                    textAlign: "center",
-                    marginLeft: 21,
-                  }}
-                  textLabel={cta.buttonText}
-                  style={{
-                    height: 62,
-                    alignSelf: "center",
-                    padding: 12,
-                    backgroundColor: "#424242",
-                    borderRadius: 6,
-                    paddingHorizontal: 35,
-                    zIndex: 100,
-                  }}
-                  focusedStyle={styles.focusedBackground}
-                  fontIconProps={{
-                    iconPlacement: "Left",
-                    shouldRenderImage: true,
-                  }}
-                />
-              );
-            })}
-        </ScrollView>
+        {ctaLoaded ? (
+          <ScrollView horizontal nestedScrollEnabled>
+            {udpDataAsset.ctaButtons?.length &&
+              udpDataAsset.ctaButtons?.map((cta: any, index: number) => {
+                let fontIconStyle: { [key: string]: any };
+                if (
+                  cta?.buttonAction ===
+                    AppStrings.str_details_program_record_button ||
+                  cta?.buttonAction ===
+                    AppStrings?.str_details_series_record_button
+                ) {
+                  fontIconStyle = styles.ctaFontIconStyle;
+                }
+                return (
+                  <MFButton
+                    key={`ctaBtn_${cta.buttonText}_${index}`}
+                    ref={
+                      index === 0
+                        ? ctaButtonRef
+                        : (buttonRefObject as any)[cta.buttonText]
+                    }
+                    focusable
+                    iconSource={0}
+                    imageSource={0}
+                    avatarSource={undefined}
+                    onFocus={() => {
+                      setOpen(false);
+                      drawerRef.current.close();
+                      drawerRef.current.resetRoutes();
+                      setCTAButtonFocusState(cta.buttonText);
+                    }}
+                    variant={MFButtonVariant.FontIcon}
+                    fontIconSource={cta.iconSource}
+                    fontIconTextStyle={StyleSheet.flatten([
+                      styles.textStyle,
+                      {
+                        fontSize: 90,
+                        color: cta.buttonText?.includes("Record")
+                          ? g.fontColors.badge
+                          : "white",
+                      },
+                    ])}
+                    onPress={ctaButtonPress[cta.buttonAction]}
+                    textStyle={{
+                      color: "#EEEEEE",
+                      fontFamily: "Inter-SemiBold",
+                      fontSize: 25,
+                      fontWeight: "600",
+                      textAlign: "center",
+                      marginLeft: 21,
+                    }}
+                    textLabel={cta.buttonText}
+                    style={{
+                      height: 62,
+                      alignSelf: "center",
+                      padding: 12,
+                      backgroundColor: "#424242",
+                      borderRadius: 6,
+                      paddingHorizontal: 35,
+                      zIndex: 100,
+                    }}
+                    focusedStyle={styles.focusedBackground}
+                    fontIconProps={{
+                      iconPlacement: "Left",
+                      shouldRenderImage: true,
+                    }}
+                  />
+                );
+              })}
+          </ScrollView>
+        ) : (
+          <View>
+            <MFLoader />
+          </View>
+        )}
       </View>
     );
   };
