@@ -233,21 +233,22 @@ export default function LongPressMenu(props: any) {
   // };
 
   const getCtaButtons = (item: any) => {
+    console.log('Item in get ctas', item);
     // const entitlements = removeEntitlementsAbbreviationsAndSort(
     //   item.PlayInfo[0].Entitlements
     // );
-    let ipStatus = props.account?.ClientIpStatus || {};
-    if (!config.inhomeDetection.useSubscriberInHome) {
-      // networkIHD data
-      const inHomeValue =
-        props.networkIHD?.status === "inHome" ||
-        config.inhomeDetection.inHomeDefault;
-      ipStatus["InHome"] = inHomeValue
-        ? RestrictionValue.Yes
-        : RestrictionValue.No;
-    }
+    // let ipStatus = props.account?.ClientIpStatus || {};
+    // if (!config.inhomeDetection.useSubscriberInHome) {
+    //   // networkIHD data
+    //   const inHomeValue =
+    //     props.networkIHD?.status === "inHome" ||
+    //     config.inhomeDetection.inHomeDefault;
+    //   ipStatus["InHome"] = inHomeValue
+    //     ? RestrictionValue.Yes
+    //     : RestrictionValue.No;
+    // }
     const ctaButtonList = [];
-    if (item.itemType === ItemShowType.DvrRecording) {
+    if (item.ItemType === ItemShowType.DvrRecording) {
       // if (
       //   item?.PlayInfo &&
       //   item.PlayInfo?.length &&
@@ -271,34 +272,34 @@ export default function LongPressMenu(props: any) {
         icon: item?.Settings?.RecyclingDisabled ? savedIcon : unSavedIcon,
         onPress: () => onPressSave(item),
       });
-      ctaButtonList.push({
-        type: "TextIcon",
-        text: AppStrings?.str_details_cta_more_info,
-        icon: infoIcon,
-        onPress: () => onPressMoreInfo(item),
-      });
+      // ctaButtonList.push({
+      //   type: "TextIcon",
+      //   text: AppStrings?.str_details_cta_more_info,
+      //   icon: infoIcon,
+      //   onPress: () => onPressMoreInfo(item),
+      // });
       ctaButtonList.push({
         type: "TextIcon",
         text: AppStrings?.str_profile_button_delete,
         icon: deleteIcon,
         onPress: () => deleteDvrPopUp(item),
       });
-    } else {
-      ctaButtonList.push({
-        type: "TextIcon",
-        text: AppStrings?.str_app_edit,
-        icon: editIcon,
-        onPress: () => {
-          Alert.alert("Implementation missing");
-          // editRecording(item),
-        },
-      });
-      ctaButtonList.push({
-        type: "TextIcon",
-        text: AppStrings?.str_details_cta_more_info,
-        icon: infoIcon,
-        onPress: () => onPressMoreInfo(item, true),
-      });
+    // } else {
+    //   ctaButtonList.push({
+    //     type: "TextIcon",
+    //     text: AppStrings?.str_app_edit,
+    //     icon: editIcon,
+    //     onPress: () => {
+    //       Alert.alert("Implementation missing");
+    //       // editRecording(item),
+    //     },
+    //   });
+    //   ctaButtonList.push({
+    //     type: "TextIcon",
+    //     text: AppStrings?.str_details_cta_more_info,
+    //     icon: infoIcon,
+    //     onPress: () => onPressMoreInfo(item, true),
+    //   });
     }
     setListItems(ctaButtonList);
   };

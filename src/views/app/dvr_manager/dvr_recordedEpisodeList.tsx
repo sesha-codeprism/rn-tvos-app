@@ -68,6 +68,7 @@ const scaledSnapToInterval = getScaledValue(lazyListConfig.snapToInterval);
 const DvrRecordedEpisode = (props: any) => {
   const navigationParams = props.route.params;
   const { item } = navigationParams;
+  console.log("props inside DvrRecordedEpisode", props);
   const [ctaButtonList, setCTAButtonList] = useState<any[]>([]);
   const [season, setSeason] = useState<any[]>([]);
   const [currentDvrMenu, setCurrentDvrMenu] = useState("");
@@ -481,7 +482,7 @@ const DvrRecordedEpisode = (props: any) => {
       });
     }
     setCTAButtonList(ctaButtonList);
-    console.log('ctaButtonList', ctaButtonList)
+    console.log("ctaButtonList", ctaButtonList);
   };
   const getChannelByStationId = (
     channels: IChannelCache[],
@@ -492,7 +493,6 @@ const DvrRecordedEpisode = (props: any) => {
     );
   };
   useEffect(() => {
-    console.log("props inside DvrRecordedEpisode", props);
     getCtaButtons(item);
     setupData();
   }, []);
@@ -526,7 +526,7 @@ const DvrRecordedEpisode = (props: any) => {
 
   const handleSeasonFocus = (season: any) => {
     console.log("season item focused", season);
-    setIsSeasonFocused(true)
+    setIsSeasonFocused(true);
     if (season?.Id !== currentSeason?.Id) {
       /** Focused season is different from current active season  So, update episode list and everything */
       //@ts-ignore
@@ -571,9 +571,10 @@ const DvrRecordedEpisode = (props: any) => {
     const isCurrentSeason = season?.Id && currentSeason?.Id === season?.Id;
     console.log(isCurrentSeason, isCurrentSeason);
     const isCTAButtonlistEmpty = ctaButtonList?.length <= 0;
-    const selectedHighlightStyles = isCurrentSeason && isSeasonFocused
-      ? styles.seasonBlockSelectedHighlight
-      : {};
+    const selectedHighlightStyles =
+      isCurrentSeason && isSeasonFocused
+        ? styles.seasonBlockSelectedHighlight
+        : {};
 
     const textStyle = isCurrentSeason
       ? styles.seasonTextSelected
@@ -588,7 +589,9 @@ const DvrRecordedEpisode = (props: any) => {
       >
         <Pressable
           onFocus={handleSeasonItemFocus}
-          onBlur={()=>{console.log('season Blurred')}}
+          onBlur={() => {
+            console.log("season Blurred");
+          }}
           hasTVPreferredFocus={index === 0}
           ref={
             season?.Id && currentSeason?.Id === season?.Id
@@ -672,17 +675,15 @@ const DvrRecordedEpisode = (props: any) => {
         ref={
           index === 0
             ? firstEpisodeRef
-            // : index === currentSeasonEpisodes.length - 1
-            // ? lastEpisodeRef
-            : undefined
+            : // : index === currentSeasonEpisodes.length - 1
+              // ? lastEpisodeRef
+              undefined
         }
       >
-        {currentEpisode &&
-        currentEpisode?.Id === item?.Id 
-        // &&
-        // ctaButtonList &&
-        // ctaButtonList?.length 
-        ? (
+        {currentEpisode && currentEpisode?.Id === item?.Id ? (
+          // &&
+          // ctaButtonList &&
+          // ctaButtonList?.length
           <View
             ref={index === 0 ? firstEpisodeRef : undefined}
             style={styles.episodeItemShowcard}
@@ -929,7 +930,11 @@ const DvrRecordedEpisode = (props: any) => {
               <Text style={[styles.seasonMetadata, { marginBottom: 32 }]}>
                 DVR Manager
               </Text>
-              <Text style={styles.seasonTitle}>{item.title}</Text>
+              <Text style={styles.seasonTitle}>
+                {item.title.length > 20
+                  ? `${item.title.substr(0, 20)} ...`
+                  : item.title}
+              </Text>
               <Text style={styles.seasonMetadata}>{item.metadataLine2}</Text>
             </View>
             <View style={styles.flexOne}>
@@ -950,19 +955,19 @@ const DvrRecordedEpisode = (props: any) => {
             }}
             onFocus={() => {
               // Alert.alert('focus is on bar')
-              console.log('focus is on bar', ctaButtonList.length)
+              console.log("focus is on bar", ctaButtonList.length);
               if (isSeasonFocused) {
                 /** Basically we haven't focused on episodes yet.. so need to focus on episodes */
                 firstEpisodeRef?.current?.setNativeProps({
                   hasTVPreferredFocus: true,
                 });
-                setIsSeasonFocused(false)
+                setIsSeasonFocused(false);
               } else {
                 /** Coming from Episode list.. need to pick the correct season */
                 seasonButtonRef?.current?.setNativeProps({
                   hasTVPreferredFocus: true,
                 });
-                setIsSeasonFocused(true)
+                setIsSeasonFocused(true);
               }
             }}
           />
@@ -1031,6 +1036,9 @@ const styles = StyleSheet.create({
     fontSize: globalStyles.fontSizes.subTitle1,
     color: globalStyles.fontColors.light,
     marginBottom: 15,
+    // width: 400,
+    // height: 80,
+    // overflow: "visible",
   },
   seasonMetadata: {
     fontFamily: globalStyles.fontFamily.semiBold,

@@ -246,8 +246,10 @@ const BrowseFilter = (props: BrowseFilterProps) => {
               ListFooterComponentStyle={{
                 width: "100%",
                 height: 120,
+                marginTop: menuList.length <= 3 ? 600 : 0,
                 justifyContent: "flex-end",
               }}
+              
               ListFooterComponent={
                 props.filterState &&
                 !checkDefaultState() && (
@@ -257,9 +259,8 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                     style={
                       focusedMenu === menuList.length
                         ? [
-                            styles.menuItem,
+                           styles.menuItem,
                             {
-                              // marginTop: 10,
                               borderRadius: 6,
                               height: 62,
                               backgroundColor: "#063961",
@@ -270,7 +271,6 @@ const BrowseFilter = (props: BrowseFilterProps) => {
                         : [
                             styles.menuItem,
                             {
-                              // marginTop: 10,
                               backgroundColor: "#3A3A3B",
                               height: 62,
                               alignContent: "center",
