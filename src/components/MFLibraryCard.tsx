@@ -24,7 +24,12 @@ import { globalStyles } from "../config/styles/GlobalStyles";
 import { sourceTypeString } from "../utils/analytics/consts";
 import dateUtils from "../utils/dateUtils";
 import MFOverlay from "./MFOverlay";
-import { queryClient } from "../config/queries";
+import {
+  invalidateQueryBasedOnSpecificKeys,
+  queryClient,
+} from "../config/queries";
+import useLiveData, { getLiveData } from "../customHooks/useLiveData";
+import { GLOBALS } from "../utils/globals";
 const MFTheme: MFThemeObject = require("../config/theme/theme.json");
 
 export enum AspectRatios {
@@ -175,13 +180,16 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
       }
     };
 
-    const startClearIntervalTimer = (timeToEnd: number) => {
+    const startClearIntervalTimer = async (timeToEnd: number) => {
       stopClearIntervalTimer();
       clearIntervalTimeout = setTimeout(() => {
         stopUpdateTimer();
         console.log("Invalidating the live queries");
         //Below line only for React Query v3.
-        queryClient.resetQueries({ queryKey: ["live"] });
+        const resp = getLiveData(GLOBALS.channelRights).then((resp) => {
+          queryClient.refetchQueries(["live"]);
+        });
+        // queryClient.refetchQueries(["live"]);
         //Below line to be uncommencted and used for React query v4 and above. Doesn't work in v3
         //queryClient.invalidateQueries({ queryKey: ['todos'] })
       }, timeToEnd);
