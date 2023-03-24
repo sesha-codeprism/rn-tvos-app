@@ -34,6 +34,7 @@ import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import { ItemType } from "../../utils/common";
 import { globalStyles } from "../../config/styles/GlobalStyles";
+import MFNotificationCard from "../../components/MFNotification/MFNotificationCard";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
