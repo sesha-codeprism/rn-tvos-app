@@ -75,7 +75,6 @@ const MFUserProfile: React.FunctionComponent<MFUserProfileProps> =
         props.onPress(event);
       } else {
         if (props.userProfile) {
-          console.log("Userprofile found");
           GLOBALS.userProfile = props.userProfile;
           GLOBALS.store!.userProfile = GLOBALS.userProfile;
           updateStore(GLOBALS.store);

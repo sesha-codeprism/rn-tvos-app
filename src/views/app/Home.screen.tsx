@@ -43,7 +43,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   props: HomeScreenProps
 ) => {
   const [feeds, setFeeds] = useState<FeedItem>();
-  const [hubs, setHubs] = useState(Array<FeedItem>());
+  const [hubs, setHubs] = useState<Array<FeedItem>>([]);
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const [open, setOpen] = useState(false);
   // const [showExitPopup, setShowExitPopup] = useState(false);
@@ -76,15 +76,16 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       }
     }, debounceTime);
   };
-  console.log(AppStrings);
+  // console.log(AppStrings);
 
   const setHubsData = async () => {
-    if (data && hubs.length <= 0) {
+    if (data && !hubs.length) {
       const hubsResponse: Array<FeedItem> = data.data;
       const replace_hub: Array<FeedItem> = hubsResponse.filter(
         (e) => e.Name === "{profile_name}"
-      );
-      if (replace_hub.length > 0) {
+        );
+      if (replace_hub.length >= 0) {
+        replace_hub.length === 0 ? replace_hub[0] = data.data[0] : null
         if (GLOBALS.store!.userProfile) {
           /** If the value of @param GLOBALS.store!.userProfile * is not  null or  undefined */
           if (GLOBALS.store!.userProfile.Name?.toLowerCase() === "default") {
@@ -93,10 +94,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
           } else {
             /** If user created profile is chosen to login, replace with profile name */
             if (GLOBALS.store!.userProfile.Name!.length > 10) {
-              console.log(
-                "GLOBALS.store!.userProfile.Name",
-                GLOBALS.store!.userProfile.Name
-              );
+             
               replace_hub[0].Name =
                 (
                   GLOBALS.store!.userProfile.Name! || GLOBALS.userProfile?.Name
@@ -111,7 +109,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
           replace_hub[0].Name = AppStrings.str_hub_name_you;
         }
       } else {
-        console.log("No hub to replace");
+        console.log("No hub to replace",data,hubs,data && !hubs.length);
       }
       const applicationHub = hubsResponse.find(
         (element) => element?.IsApplicationHub
