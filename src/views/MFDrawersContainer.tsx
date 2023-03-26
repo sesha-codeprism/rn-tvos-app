@@ -8,6 +8,9 @@ import { ConflictResolutionContext } from "../contexts/conflictResolutionContext
 import MFPinPopup from "../components/MFPinPopup";
 import PlayerSubtitlePanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerSubtitlePanel";
 import PlayerQualityPanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerQualityPanel";
+import { PurchaseOptionsPanel } from "./app/details_pages/PurchaseOptionPanel";
+import { PurchaseInformationPanel } from "./app/details_pages/PurchaseInformationPanel";
+import { PurchaseNetworkSelectionPanel } from "./app/details_pages/package_details/PurchaseNetworkSelectionPanel";
 
 export const Empty = (props: any) => {
   return <View style={{ height: 1, backgroundColor: "black" }}></View>;
@@ -19,6 +22,9 @@ const enum Routes {
   ConflictResolution,
   PlayerSubtitle,
   PlayerQuality,
+  PurchaseOption,
+  PurchaseInformation,
+  PurchaseNetwork,
   Popup,
   MFPinPopup
 }
@@ -30,6 +36,9 @@ const ComponentLoader = {
   [Routes.PlayerSubtitle]: PlayerSubtitlePanel,
   [Routes.PlayerQuality]: PlayerQualityPanel,
   [Routes.Empty]: Empty,
+  [Routes.PurchaseOption]: PurchaseOptionsPanel,
+  [Routes.PurchaseInformation]:PurchaseInformationPanel,
+  [Routes.PurchaseNetwork]: PurchaseNetworkSelectionPanel  
 };
 
 interface MFDrawerContainer { }
@@ -134,6 +143,60 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
   }
 
 
+  const openPurchaseOption = (props: any) => {
+    //  add to component stack
+    componentStack.current?.push({ route: Routes.PurchaseOption, props: props });
+    setComponentt(Routes.PurchaseOption);
+  }
+
+  const closePurchaseOption = (params: any) => {
+    const props =
+      componentStack.current[componentStack?.current?.length - 1]?.props;
+    if (props && props?.onClose) {
+      props?.onClose?.();
+    }
+    componentStack.current?.pop();
+    setComponentt(
+      componentStack.current[componentStack?.current?.length - 1]?.route
+    );
+  }
+
+  const openPurchaseInformation = (props: any) => {
+    //  add to component stack
+    componentStack.current?.push({ route: Routes.PurchaseInformation, props: props });
+    setComponentt(Routes.PurchaseOption);
+  }
+
+  const closePurchaseInformation = (params: any) => {
+    const props =
+      componentStack.current[componentStack?.current?.length - 1]?.props;
+    if (props && props?.onClose) {
+      props?.onClose?.();
+    }
+    componentStack.current?.pop();
+    setComponentt(
+      componentStack.current[componentStack?.current?.length - 1]?.route
+    );
+  }
+
+  const openPurchaseNetwork = (props: any) => {
+    //  add to component stack
+    componentStack.current?.push({ route: Routes.PurchaseNetwork, props: props });
+    setComponentt(Routes.PurchaseOption);
+  }
+
+  const closePurchaseNetwork = (params: any) => {
+    const props =
+      componentStack.current[componentStack?.current?.length - 1]?.props;
+    if (props && props?.onClose) {
+      props?.onClose?.();
+    }
+    componentStack.current?.pop();
+    setComponentt(
+      componentStack.current[componentStack?.current?.length - 1]?.route
+    );
+  }
+
   const closeAll = () => {
     componentStack.current?.splice(1);
     setComponentt(Routes.Empty);
@@ -150,6 +213,12 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     MFEventEmitter.on("closePlayerSubtitlePanel", closePlayerSubtitle);
     MFEventEmitter.on("openPlayerQualityPanel", openPlayerQuality);
     MFEventEmitter.on("closePlayerQualityPanel", closePlayerQuality);
+    MFEventEmitter.on("openPurchaseOption", openPurchaseOption);
+    MFEventEmitter.on("closeClosePurchaseOption", closePurchaseOption);
+    MFEventEmitter.on("openPurchaseInformation", openPurchaseInformation);
+    MFEventEmitter.on("closeClosePurchaseInformation", closePurchaseInformation);
+    MFEventEmitter.on("openPurchaseNetwork", openPurchaseNetwork);
+    MFEventEmitter.on("closeClosePurchaseNetwork", closePurchaseNetwork);
     MFEventEmitter.on("closeAll", closeAll);
     MFEventEmitter.on("openPinVerificationPopup", openMFPinPopup);
     MFEventEmitter.on("closePinVerificationPopup", closeMFPinPopup);
@@ -159,7 +228,6 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     }
   }, []);
 
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>> rendering >>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
   if (currentComponent === Routes.Empty) {
     const Component = ComponentLoader[Routes.Empty];
     const props =
