@@ -66,7 +66,7 @@ const SideDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
   );
   const backAction = () => {
     console.log("Capturing hadware back presses on profile screen");
-    Alert.alert("Back button pressed");
+    // Alert.alert("Back button pressed");
     return null;
   };
   useEffect(() => {

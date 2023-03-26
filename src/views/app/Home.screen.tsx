@@ -7,8 +7,6 @@ import {
   TouchableOpacity,
   BackHandler,
   TVMenuControl,
-  Alert,
-  useTVEventHandler,
 } from "react-native";
 import { appUIDefinition, debounceTime } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -34,7 +32,6 @@ import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import { ItemType } from "../../utils/common";
 import { globalStyles } from "../../config/styles/GlobalStyles";
-import MFNotificationCard from "../../components/MFNotification/MFNotificationCard";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }

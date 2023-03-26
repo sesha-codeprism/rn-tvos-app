@@ -123,12 +123,10 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   const [selectedAsset, setSelectedAsset] = useState();
   const [completedWidth, setCompletedWidth] = useState(0);
   const [pivots, setPivots] = useState();
+  const [isFilterfocused, setIsFilterfocused] = useState(false);
   const [open, setOpen] = useState(false);
-
   const [route, setRoute] = useState(DetailRoutes.MoreInfo);
-
   const [screenProps, setScreenProps] = useState<any>();
-
   const [isMenuFocused, setIsMenuFocused] = useState(false);
   const [focussedComponent, setFocussedComponent] = useState(SubViews.None);
   const [scheduledRecordingList, setScheduledRecordingList] = useState<any>([]);
@@ -138,7 +136,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     "",
     GLOBALS.channelMap
   );
-console.log('scheduledRecordings', scheduledRecordings)
+  console.log("scheduledRecordings", scheduledRecordings);
   const viewableRecordings = massageDVRFeed(
     GLOBALS.viewableSubscriptions,
     SourceType.DVR,
@@ -179,7 +177,10 @@ console.log('scheduledRecordings', scheduledRecordings)
   const offset = useSharedValue(420);
   const opacity = useSharedValue(1);
   const firstCardRef = useRef<TouchableOpacity>(null);
-  const firstScheduledCardRef: React.RefObject<any> = React.createRef<any>();
+  let lastEpisodeRef: React.RefObject<any> = React.createRef<any>();
+  let firstEpisodeRef: React.RefObject<any> = React.createRef<any>();
+  const firstScheduledCardRef: React.RefObject<PressableProps> =
+    useRef<PressableProps>(null);
   const firstCtaButtonRef = React.createRef();
 
   const updateSwimLaneKey = (key: string) => {
@@ -529,48 +530,46 @@ console.log('scheduledRecordings', scheduledRecordings)
   //     return validScheduledRecordingsData;
   // };
 
-    const processScheduledData = (id: string) => {
-      const filteredRecordinglist = scheduledRecordings.filter(
-          (item: any) => item.SubscriptionItems.length > 0
-      );
-      filteredRecordinglist &&
-          filteredRecordinglist.forEach((item: any) => {
-              const itemFiltered =
-                  item.SubscriptionItems?.length &&
-                  item.SubscriptionItems.filter((itemData: any) => {
-                      return itemData.ItemState !== DvrRecordedState.Canceled;
-                  });
-              itemFiltered && itemFiltered?.length
-                  ? (item.SubscriptionItems = itemFiltered)
-                  : (item.SubscriptionItems = []);
+  const processScheduledData = () => {
+    const filteredRecordinglist = scheduledRecordings.filter(
+      (item: any) => item.SubscriptionItems.length > 0
+    );
+    filteredRecordinglist &&
+      filteredRecordinglist.forEach((item: any) => {
+        const itemFiltered =
+          item.SubscriptionItems?.length &&
+          item.SubscriptionItems.filter((itemData: any) => {
+            return itemData.ItemState !== DvrRecordedState.Canceled;
           });
-          formatScheduledData(filteredRecordinglist);
+        itemFiltered && itemFiltered?.length
+          ? (item.SubscriptionItems = itemFiltered)
+          : (item.SubscriptionItems = []);
+      });
+    formatScheduledData(filteredRecordinglist);
 
-  //     const validScheduledRecordingsData = massageDataforSchdule(
-  //         filteredRecordinglist
-  //     );
-  //     let filtredSubscriptionGroups = [];
-  //     if (props.channelMap) {
-  //         filtredSubscriptionGroups = filteredGroupedRecordings(
-  //             props.fitlerState,
-  //             validScheduledRecordingsData || [],
-  //             props.channelMap
-  //         );
-  //     } else {
-  //         filtredSubscriptionGroups = validScheduledRecordingsData || [];
-  //     }
-  //     setFocusedAsset(id);
-  //     setFiltredSubscriptionGroups({
-  //         isDataRefreshed: true,
-  //         validScheduledRecordings: filtredSubscriptionGroups,
-  //     });
+    //     const validScheduledRecordingsData = massageDataforSchdule(
+    //         filteredRecordinglist
+    //     );
+    //     let filtredSubscriptionGroups = [];
+    //     if (props.channelMap) {
+    //         filtredSubscriptionGroups = filteredGroupedRecordings(
+    //             props.fitlerState,
+    //             validScheduledRecordingsData || [],
+    //             props.channelMap
+    //         );
+    //     } else {
+    //         filtredSubscriptionGroups = validScheduledRecordingsData || [];
+    //     }
+    //     setFocusedAsset(id);
+    //     setFiltredSubscriptionGroups({
+    //         isDataRefreshed: true,
+    //         validScheduledRecordings: filtredSubscriptionGroups,
+    //     });
   };
   const backAction = () => {
-    console.log("Capturing hadware back presses on profile screen");
-    Alert.alert("Back button pressed");
+    console.log("Capturing hadware back presses on DVR Manager screen");
     return null;
   };
- 
 
   const toggleMoreInfo = (item: any) => {
     let udpData: any = {};
@@ -688,7 +687,7 @@ console.log('scheduledRecordings', scheduledRecordings)
     setCtaList(ctaButtons);
     console.log("ctaButtons", ctaButtons);
   };
-  const formatScheduledData = (data:any) => {
+  const formatScheduledData = (data: any) => {
     if (data) {
       const groups = data.reduce((acc: any, curr: any) => {
         console.log("curr inside formatScheduledData", curr);
@@ -730,7 +729,7 @@ console.log('scheduledRecordings', scheduledRecordings)
     console.log("scheduledRecordings", scheduledRecordings);
     // To filter and format data to show in the swimlane
     processData();
-    processScheduledData()
+    processScheduledData();
     TVMenuControl.enableTVMenuKey();
     BackHandler.addEventListener("hardwareBackPress", backAction);
   }, []);
@@ -738,9 +737,11 @@ console.log('scheduledRecordings', scheduledRecordings)
   const handleScheduledItemFocus = (item: any, index: any) => {
     setCurrentScheduledItem(item);
     // To transfer the focus to the 1st cta button
-    // firstCtaButtonRef.current?.setNativeProps({
-    //   hasTVPreferredFocus: true,
-    // });
+    ctaList.length
+      ? firstCtaButtonRef.current?.setNativeProps({
+          hasTVPreferredFocus: true,
+        })
+      : null;
   };
   // Returns a flatlist that contains the scheduled items
   const renderScheduled = () => {
@@ -773,9 +774,12 @@ console.log('scheduledRecordings', scheduledRecordings)
       : `${month} ${day}, ${year}`;
   };
   const renderScheduledList = (data: any) => {
-    const { item, index } = data;
+    const { item, index: groupIndex } = data;
     return (
-      <View key={index} style={{ justifyContent: "flex-start" }}>
+      <View
+        key={`${groupIndex}-${Date.now() * Math.random()}`}
+        style={{ justifyContent: "flex-start" }}
+      >
         <Text
           style={{
             fontSize: 29,
@@ -791,15 +795,15 @@ console.log('scheduledRecordings', scheduledRecordings)
         </Text>
         {item.data.length &&
           item.data.map((item: any, index: any) => {
-            return renderScheduledItem({ item, index });
+            return renderScheduledItem({ item, index, groupIndex });
           })}
       </View>
     );
   };
   // Returns the scheduled item
   const renderScheduledItem = (data: any) => {
-    const { item, index } = data;
-
+    const { item, index, groupIndex } = data;
+    // console.log('renderScheduledItem', index, groupIndex);
     // const { Description = "" } = item?.CatalogInfo;
     const name = item?.title || item?.SeriesDetails.Title;
 
@@ -827,12 +831,12 @@ console.log('scheduledRecordings', scheduledRecordings)
     const programDurationString = `${startTime} - ${endTime}`;
     // const progressBarStyle: any = getUIdef("ProgressBar")?.style;
 
-    const iconStyle = {
-      color:
-        item?.dvrItemsState !== RecordStatus.SCHEDULED
-          ? globalStyles.auxiliaryColors.statusError
-          : globalStyles.backgroundColors.primary1,
-    };
+    // const iconStyle = {
+    //   color:
+    //     item?.dvrItemsState !== RecordStatus.SCHEDULED
+    //       ? globalStyles.auxiliaryColors.statusError
+    //       : globalStyles.backgroundColors.primary1,
+    // };
 
     let networkImageSource = item.channelLogoUri;
     if (!networkImageSource && item?.networkInfo) {
@@ -854,28 +858,31 @@ console.log('scheduledRecordings', scheduledRecordings)
     ) {
       item["Bookmark"] = undefined;
     }
-    console.log(
-      "currentScheduledItem?.Id === item?.Id ",
-      currentScheduledItem?.Id === item?.Id ? item : false
-    );
-    const shouldShowExpiringIcon = isExpiringSoon(item);
+    // console.log(
+    //   "currentScheduledItem?.Id === item?.Id ",
+    //   currentScheduledItem?.Id === item?.Id ? "return Normal View " : "return pressable view", currentScheduledItem, item
+    // );
+    // console.log('index and group index', index, groupIndex, index === 0 && groupIndex === 0 ? `ref assigned to this item: ${item}` : "ref is null" )
+    // const shouldShowExpiringIcon = isExpiringSoon(item);
     return (
       <>
         <View
           style={[styles.dvrItemContainer, selectedStyle]}
-          key={`ListItem_${index}`}
+          key={`ListItem_${index}-${Date.now()}`}
           // ref={
           //   index === 0
           //     ? firstEpisodeRef
-          //     : index === currentSeasonEpisodes.length - 1
-          //     ? lastEpisodeRef
-          //     : undefined
+          //     :  lastEpisodeRef
           // }
         >
           {currentScheduledItem?.Id === item?.Id ? (
             <>
               <View
-                ref={index === 0 ? firstScheduledCardRef : undefined}
+                // ref={
+                //   index === 0 && groupIndex === 0
+                //     ? firstScheduledCardRef
+                //     : undefined
+                // }
                 style={styles.dvrItemShowcard}
               >
                 <FastImage
@@ -921,7 +928,7 @@ console.log('scheduledRecordings', scheduledRecordings)
                         }
                         return (
                           <MFButton
-                            key={`ctaBtn_${cta.text}_${index}`}
+                            key={`ctaBtn_${index}-${Date.now()}`}
                             ref={index === 0 ? firstCtaButtonRef : null}
                             focusable
                             iconSource={0}
@@ -981,7 +988,18 @@ console.log('scheduledRecordings', scheduledRecordings)
               onPress={() => {}}
               disabled={currentScheduledItem.Id === item?.Id}
               focusable={currentScheduledItem.Id !== item?.Id}
-              ref={index === 0 ? firstScheduledCardRef : undefined}
+              hasTVPreferredFocus={
+                !isMenuFocused &&
+                swimLaneFocused &&
+                currentDvrMenu === DvrMenuItems.Scheduled &&
+                index === 0 &&
+                groupIndex === 0
+              }
+              ref={
+                index === 0 && groupIndex === 0
+                  ? firstScheduledCardRef
+                  : undefined
+              }
               style={styles.dvrItemShowcard}
             >
               <FastImage
@@ -1054,16 +1072,21 @@ console.log('scheduledRecordings', scheduledRecordings)
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}
               cardStyle={"16x9"}
-              onPress={(event) => {
-                console.log("event", event, item);
+              onPress={(event: any) => {
+                console.log("event on press swimlane", event, item);
                 if (item.feed.Name === "TV Shows") {
                   event["ItemType"] = ItemShowType.DvrRecording;
                   props.navigation.navigate("DvrRecordedEpisode", {
-                   item: event,
+                    item: event,
                   });
                 } else {
                   props.navigation.push(Routes.Details, { feed: event });
                 }
+                // else if (event.ShowType === "TVShow") {
+                //   props.navigation.navigate("DvrRecordedEpisode", {
+                //     item: event,
+                //   });
+                // } 
               }}
               onLongPress={() => {
                 Alert.alert("card long press working");
@@ -1147,29 +1170,56 @@ console.log('scheduledRecordings', scheduledRecordings)
     };
   });
   const onFocusBar = () => {
-    console.log("bar focussed");
-    if (!isMenuFocused) {
+    if (isMenuFocused && !swimLaneFocused && !isFilterfocused) {
+      // focus is being transfered to filter button from the menu item
+      setIsMenuFocused(false);
+      setIsFilterfocused(true);
+      filterRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+    } else if (isFilterfocused && !isMenuFocused && !swimLaneFocused) {
+      // focus should be transferred to the menu item from filter button.
+      setIsFilterfocused(false);
+      setIsMenuFocused(true);
       menuRef[currentDvrMenu].current?.setNativeProps({
         hasTVPreferredFocus: true,
       });
-    } else {
-      setIsMenuFocused(false);
+    } else if (!isMenuFocused && !isFilterfocused && swimLaneFocused) {
+      // focus should transferred to filter button from the swimlane / scheduled list card
+      setIsFilterfocused(true);
       filterRef.current?.setNativeProps({ hasTVPreferredFocus: true });
+    } else if (swimLaneFocused && isFilterfocused && !isMenuFocused) {
+      // focus should be transferred to the first swimlane card or the scheduled list card
+      setIsMenuFocused(false);
+      if (currentDvrMenu === DvrMenuItems.Recorded) {
+        firstCardRef.current?.first.setNativeProps({
+          hasTVPreferredFocus: true,
+        });
+      } else {
+        // is scheduled tab is on diaplay then focus on the first card of the list
+        firstScheduledCardRef.current?.setNativeProps({
+          hasTVPreferredFocus: true,
+        });
+      }
+    } else {
+      // for the first render when the bar gets focus --> transferes the focus to the first menu element
+      setIsMenuFocused(true);
+      menuRef[currentDvrMenu].current?.setNativeProps({
+        hasTVPreferredFocus: true,
+      });
     }
   };
+
   const onFocusSideBar = () => {
+    console.log("Focus is on the side bar");
     if (!swimLaneFocused && currentDvrMenu === DvrMenuItems.Recorded) {
+      // focus transferred to the 1st card of the recently recorded swim lane
       _moveLeft();
-      console.log("firstCardRef.current", firstCardRef.current);
       firstCardRef.current?.first.setNativeProps({ hasTVPreferredFocus: true });
       setSwimLaneFocused(true);
       setIsMenuFocused(false);
     } else if (!swimLaneFocused && currentDvrMenu === DvrMenuItems.Scheduled) {
+      // focus transferred to the 1st card of the scheduled list
+      // this is being handled on the element it self using "hasTVPreferredFocus= true" based on required conditions
       _moveLeft();
-      console.log("firstCardRef.current", firstCardRef.current);
-      firstScheduledCardRef.current?.setNativeProps({
-        hasTVPreferredFocus: true,
-      });
       setSwimLaneFocused(true);
       setIsMenuFocused(false);
     } else {
@@ -1296,7 +1346,11 @@ console.log('scheduledRecordings', scheduledRecordings)
                   style={styles.filterButtonBackgroundStyles}
                   focusedStyle={styles.filterButtonFocusedStyle}
                   onFocus={() => {
+                    setIsFilterfocused(true);
                     console.log("Filter focused");
+                  }}
+                  onBlur={() => {
+                    setIsFilterfocused(false);
                   }}
                   onPress={toggleMenu}
                   iconButtonStyles={{
@@ -1339,7 +1393,11 @@ console.log('scheduledRecordings', scheduledRecordings)
               </Animated.View>
               <Pressable
                 onFocus={onFocusSideBar}
-                style={{ height: "100%", width: 20 }}
+                style={{
+                  height: "100%",
+                  width: 20,
+                  backgroundColor: "transparent",
+                }}
               />
               <View
                 style={{ width: "100%", height: height, paddingBottom: 200 }}
