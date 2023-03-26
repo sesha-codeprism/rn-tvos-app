@@ -24,7 +24,11 @@ import useBootstrap from "../../customHooks/useBootstrapData";
 import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
 import { GlobalContext } from "../../contexts/globalContext";
-import { queryClient, resetCaches } from "../../config/queries";
+import {
+  invalidateQueryBasedOnSpecificKeys,
+  queryClient,
+  resetCaches,
+} from "../../config/queries";
 import { useQuery } from "react-query";
 import { generateGUID, makeRandomHexString } from "../../utils/guid";
 import NotificationType from "../../@types/NotificationType";
@@ -32,6 +36,8 @@ import { massageSubscriberFeed } from "../../utils/assetUtils";
 import { AppStrings } from "../../config/strings";
 
 import { LogBox } from "react-native";
+import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups";
+import { getAllSubscriptionGroups } from "../../../backend/dvrproxy/dvrproxy";
 // LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 
 if (disableAllWarnings) {
@@ -75,17 +81,26 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
           GLOBALS.rootNavigation.replace(Routes.ShortCode);
         }
       } else if (message?.type === NotificationType.dvrUpdated) {
-        console.log("DVR update notification received");
-        // queryClient.invalidateQueries(["dvr"]);
-        queryClient.invalidateQueries({ queryKey: ["dvr"] });
-
-        // invalidateQueryBasedOnSpecificKeys(
-        //   "feed",
-        //   "get-all-subscriptionGroups"
-        // );
-        // setTimeout(() => {
-        //   appQueryCache.find("get-UDP-data")?.invalidate();
-        // }, 1000);
+        // GLOBALS.allSubscriptionGroups = undefined;
+        // GLOBALS.scheduledSubscriptions = undefined;
+        // GLOBALS.viewableSubscriptions = undefined;
+        invalidateQueryBasedOnSpecificKeys("dvr", "get-all-subscriptionGroups");
+        // getAllSubscriptionGroups()
+        //   .then(() => {
+        //   })
+        //   .catch((err) => {
+        //     console.warn("Something went wrong in refetching groups");
+        //   });
+        // console.log("DVR update notification received");
+        // // queryClient.invalidateQueries(["dvr"]);
+        // queryClient.invalidateQueries({ queryKey: ["dvr"] });
+        // // invalidateQueryBasedOnSpecificKeys(
+        // //   "feed",
+        // //   "get-all-subscriptionGroups"
+        // // );
+        // // setTimeout(() => {
+        // //   appQueryCache.find("get-UDP-data")?.invalidate();
+        // // }, 1000);
       }
     },
     [GLOBALS.deviceInfo.deviceId]

@@ -64,6 +64,7 @@ const DetailsDrawer = (props: DetailsDrawerProps, ref: Ref<any>) => {
   );
 
   useEffect(() => {
+    console.log('props inside moreinfo', props)
     expanded ? openDrawer() : closeDrawer();
     if (expanded) {
     }

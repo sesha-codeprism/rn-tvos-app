@@ -3254,15 +3254,12 @@ export const massageSeriesDataForUDP = (
         liveSchedules &&
         seriesSubscriberData.CatalogInfo &&
         !isRecordingBlocked
-    ) {
+    ) {        
         dvrPlayActions = calculateSeriesButtonAction(
             seriesId,
-            selectedSchedule?.StartUtc ||
-            seriesUDPData?.currentCatchupSchedule?.StartUtc,
-            selectedSchedule?.StationId ||
-            seriesUDPData?.currentCatchupSchedule?.StationId,
-            selectedSchedule?.ChannelNumber ||
-            seriesUDPData?.currentCatchupSchedule?.ChannelNumber,
+            startTimeUtc,
+            stationId,
+            channelNumber,
             entitlements,
             recordedSubscriptionGroups,
             scheduledSubscriptionGroups,
@@ -3295,7 +3292,7 @@ export const massageSeriesDataForUDP = (
             channelMap,
             selectedSchedule?.EndUtc ||
             seriesUDPData?.currentCatchupSchedule?.EndUtc
-        );
+        );       
 
         if (
             (dvrPlayActions?.buttonAction === DvrButtonAction.Edit &&
