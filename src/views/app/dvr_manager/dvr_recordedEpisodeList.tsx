@@ -343,7 +343,7 @@ const DvrRecordedEpisode = (props: any) => {
 
       filterTvDetails?.length &&
         filterTvDetails.forEach((itemFilter: any) => {
-          itemFilter?.SubscriptionItems.forEach((item: any) => {
+        itemFilter?.SubscriptionItems ?  itemFilter?.SubscriptionItems.forEach((item: any) => {
             if (setItemState[item.ItemState] !== undefined) {
               if (item?.ProgramDetails?.SeasonNumber) {
                 if (seasonObj[item.ProgramDetails.SeasonNumber] === undefined) {
@@ -365,7 +365,7 @@ const DvrRecordedEpisode = (props: any) => {
                 seasonObj[AppStrings?.str_default_season] = [item];
               }
             }
-          });
+          }): null;
         });
       const [filteredTVItem = {}] = filterTvDetails || [];
       const {
@@ -391,7 +391,7 @@ const DvrRecordedEpisode = (props: any) => {
 
       if (!seasonsObj?.length) {
         // If no seasons to show, navigate back to DVR manager
-        props.navigation.popRoute();
+        props.navigation.pop();
       } else {
         // To Do: set requires data state values
         setCurrentSeason(seasonsObj[0]);

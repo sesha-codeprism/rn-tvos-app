@@ -7,8 +7,6 @@ import {
   TouchableOpacity,
   BackHandler,
   TVMenuControl,
-  Alert,
-  useTVEventHandler,
 } from "react-native";
 import { appUIDefinition, debounceTime } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

@@ -1,3 +1,5 @@
+import mkIcons from "../config/MKIcons";
+
 /**
  * Enum for NotificationType of duplex message
  * @enum {string}
