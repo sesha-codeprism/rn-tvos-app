@@ -12,6 +12,7 @@ import {
   TVMenuControl,
   BackHandler,
   ScrollView,
+  PressableProps,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { PageContainer } from "../../../components/PageContainer";
@@ -23,7 +24,6 @@ import { AppStrings, getFontIcon } from "../../../config/strings";
 import MFButton, {
   MFButtonVariant,
 } from "../../../components/MFButton/MFButton";
-import { PressableProps } from "react-native-tvfocus";
 import { AppImages } from "../../../assets/images";
 import { appUIDefinition } from "../../../config/constants";
 import { GLOBALS } from "../../../utils/globals";
@@ -183,7 +183,16 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   const firstScheduledCardRef: React.RefObject<PressableProps> =
     useRef<PressableProps>(null);
   const firstCtaButtonRef = React.createRef();
-
+  let ctaButtonRefObject = {
+    [AppStrings?.str_details_cta_play]: React.createRef(),
+    [AppStrings?.str_details_program_record_button]: React.createRef(),
+    [AppStrings?.str_details_cta_more_info]: React.createRef(),
+    [AppStrings?.str_details_cta_restart]: React.createRef(),
+    [AppStrings?.str_details_cta_resume]: React.createRef(),
+    [AppStrings?.str_details_cta_waystowatch]: React.createRef(),
+    [AppStrings?.str_app_edit]: React.createRef(),
+    [AppStrings?.str_dvr_resolve_conflict]: React.createRef(),
+  };
   const updateSwimLaneKey = (key: string) => {
     setSwimLaneKey(key);
   };
@@ -816,7 +825,14 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     //   "currentScheduledItem?.Id === item?.Id ",
     //   currentScheduledItem?.Id === item?.Id ? "return Normal View " : "return pressable view", currentScheduledItem, item
     // );
-    // console.log('index and group index', index, groupIndex, index === 0 && groupIndex === 0 ? `ref assigned to this item: ${item}` : "ref is null" )
+    console.log(
+      "index and group index",
+      index,
+      groupIndex,
+      index === 0 && groupIndex === 0
+        ? `ref assigned to this item: ${item}`
+        : "ref is null"
+    );
     // const shouldShowExpiringIcon = isExpiringSoon(item);
     return (
       <>
@@ -832,11 +848,11 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
           {currentScheduledItem?.Id === item?.Id ? (
             <>
               <View
-                // ref={
-                //   index === 0 && groupIndex === 0
-                //     ? firstScheduledCardRef
-                //     : undefined
-                // }
+                ref={
+                  index === 0 && groupIndex === 0
+                    ? firstScheduledCardRef
+                    : undefined
+                }
                 style={styles.dvrItemShowcard}
               >
                 <FastImage
@@ -883,13 +899,19 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
                         return (
                           <MFButton
                             key={`ctaBtn_${index}-${Date.now()}`}
-                            ref={index === 0 ? firstCtaButtonRef : null}
-                            focusable
+                            ref={
+                              index === 0
+                                ? firstCtaButtonRef
+                                : (ctaButtonRefObject as any)[cta.text]
+                              //  index === 0 ? firstCtaButtonRef : null
+                            }
+                            // focusable
                             iconSource={0}
-                            hasTVPreferredFocus={swimLaneFocused && index === 0}
+                            hasTVPreferredFocus={index === 0}
                             imageSource={0}
                             avatarSource={undefined}
                             onFocus={() => {
+                              console.log("Cta focussed", ctaList[index]);
                               // setOpen(false);
                               // drawerRef.current.close();
                               // drawerRef.current.resetRoutes();
@@ -900,7 +922,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
                               styles.textStyle,
                               {
                                 fontSize: 90,
-                                color: cta.buttonText?.includes("Record")
+                                color: cta.text?.includes("Record")
                                   ? globalStyles.fontColors.badge
                                   : "white",
                               },
@@ -942,13 +964,13 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
               onPress={() => {}}
               disabled={currentScheduledItem.Id === item?.Id}
               focusable={currentScheduledItem.Id !== item?.Id}
-              hasTVPreferredFocus={
-                !isMenuFocused &&
-                swimLaneFocused &&
-                currentDvrMenu === DvrMenuItems.Scheduled &&
-                index === 0 &&
-                groupIndex === 0
-              }
+              // hasTVPreferredFocus={
+              //   !isMenuFocused &&
+              //   swimLaneFocused &&
+              //   currentDvrMenu === DvrMenuItems.Scheduled &&
+              //   index === 0 &&
+              //   groupIndex === 0 ? true : false
+              // }
               ref={
                 index === 0 && groupIndex === 0
                   ? firstScheduledCardRef
@@ -1040,7 +1062,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
                 //   props.navigation.navigate("DvrRecordedEpisode", {
                 //     item: event,
                 //   });
-                // } 
+                // }
               }}
               onLongPress={() => {
                 Alert.alert("card long press working");
@@ -1173,7 +1195,11 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     } else if (!swimLaneFocused && currentDvrMenu === DvrMenuItems.Scheduled) {
       // focus transferred to the 1st card of the scheduled list
       // this is being handled on the element it self using "hasTVPreferredFocus= true" based on required conditions
+      console.log('focus transferred to the 1st card of the scheduled list', firstScheduledCardRef)
       _moveLeft();
+      firstScheduledCardRef.current?.setNativeProps({
+        hasTVPreferredFocus: true,
+      });
       setSwimLaneFocused(true);
       setIsMenuFocused(false);
     } else {
