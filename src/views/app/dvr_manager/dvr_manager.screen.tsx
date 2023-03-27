@@ -825,14 +825,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     //   "currentScheduledItem?.Id === item?.Id ",
     //   currentScheduledItem?.Id === item?.Id ? "return Normal View " : "return pressable view", currentScheduledItem, item
     // );
-    console.log(
-      "index and group index",
-      index,
-      groupIndex,
-      index === 0 && groupIndex === 0
-        ? `ref assigned to this item: ${item}`
-        : "ref is null"
-    );
+    // console.log('index and group index', index, groupIndex, index === 0 && groupIndex === 0 ? `ref assigned to this item: ${item}` : "ref is null" )
     // const shouldShowExpiringIcon = isExpiringSoon(item);
     return (
       <>

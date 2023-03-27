@@ -34,7 +34,7 @@
 		</data>
 		<key>EPGViewController.storyboardc/stb-iC-LEn-view-L1W-8E-Efy.nib</key>
 		<data>
-		SGvYsjafEpx2maW6tFXfIVVLiXQ=
+		FfEaCHueBa819OzKIpVFk6Wp1go=
 		</data>
 		<key>EPGViewController.storyboardc/ye0-cS-pmP-view-UKr-HT-bAA.nib</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Headers/FullGuideComponent-Swift.h</key>
 		<data>
-		NxgU+3QjUF78OC5WlVy72aOkrV4=
+		yBWqL3qh2jPibmF7ukmtsmzVPHE=
 		</data>
 		<key>Headers/FullGuideComponent.h</key>
 		<data>
@@ -54,11 +54,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		y3EnNcH5lgOCZcORppZB6WZiSe0=
+		LpVkuG0fznxM0JWl4Kye8i5IF8k=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.abi.json</key>
 		<data>
-		sGzXy5UBTejkH8d1JOfWo9tsNw8=
+		nqOujDObH+FgzEl5cYv7+n5g8BA=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.private.swiftinterface</key>
 		<data>
@@ -74,7 +74,7 @@
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.swiftmodule</key>
 		<data>
-		LzcciyOXXRbkLEkboHFqktrQB4M=
+		WHSU1crWDWDCWqxx60fNKY4lqB0=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -136,7 +136,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			VAGqRejSGcVGpDJcfTOBcjPVIcYfFl5vOYmo5Ibhlts=
+			HJ8t9eGOrdCp7/tpZhCm+iyzOUaPC28K1oiEDmUHxZg=
 			</data>
 		</dict>
 		<key>EPGViewController.storyboardc/ye0-cS-pmP-view-UKr-HT-bAA.nib</key>
@@ -157,7 +157,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			mmwz6NgYZVBpfvT31zCxllNl92zYPkXBC19rIvRNEaU=
+			FgU8xMojqS2GAB+pzGG8gHVfG763yJXFw6ZfKPn8JnM=
 			</data>
 		</dict>
 		<key>Headers/FullGuideComponent.h</key>
@@ -171,7 +171,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			I3oE1zXdb4c54Qu4bz9wmF6wHuYnQjHK50LSmit1U8A=
+			WFTV1Qx1xxY1oX3jdIebhOwL/xe0BegnUK8lfOhTJas=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos.private.swiftinterface</key>
@@ -199,7 +199,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			4Og1dpK2t9mCIJ4nz1dJmDLU+wqo0WwkRm7rRAmE7Nk=
+			eSnA/EL4Q/ak0G1vfac/k9ob2C27rE4FLjSSFpww4Cg=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
