@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import FastImage from "react-native-fast-image";
 import { searchItems } from "../../backend/subscriber/subscriber";
+import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { AppImages } from "../assets/images";
 import Search from "../components/MFSearch";
 import MFSwimLane from "../components/MFSwimLane";
@@ -62,6 +63,8 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const [showSearchResults, setShowSearchResult] = useState(false);
   const [swimLaneKey, setSwimLaneKey] = useState("");
   const [swimLaneFocused, setSwimLaneFocused] = useState(false);
+  const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
+
   const firstCardRef = useRef<TouchableOpacity>(null);
 
   const updateSwimLaneKey = (key: string) => {
@@ -141,17 +144,19 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
               // @ts-ignore
               feed={item}
               data={item.Elements}
-              limitSwimlaneItemsTo={10}
+              limitSwimlaneItemsTo={16}
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}
               onPress={(event) => {
                 props.navigation.push(Routes.Details, { feed: event });
               }}
-              onFocus={() => {
+              onFocus={(event: SubscriberFeed) => {
                 setTimeout(() => {
+                  setCurrentFeed(event);
                   setSwimLaneFocused(true);
                 }, 500);
               }}
+              renderViewAll={item.Elements.length >= 15 ? true: false}
               navigation={props.navigation}
             />
           );
