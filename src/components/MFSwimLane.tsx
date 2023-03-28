@@ -128,6 +128,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
       }
     };
     const onTapViewAll = (feed: any) => {
+      console.log('View all pressed', feed);
       if (!props.navigation) {
         console.warn("Missing navigation prop");
         return;

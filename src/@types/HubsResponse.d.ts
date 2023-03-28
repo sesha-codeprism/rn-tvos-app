@@ -132,6 +132,7 @@ export interface FeedItem {
   Feeds: Feed[];
   IsOnDemand?: boolean;
   IsApplicationHub?: boolean;
+  IsProfileHub?: boolean;
 }
 
 export interface Feed {

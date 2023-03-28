@@ -80,34 +80,46 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     if (data && !hubs.length) {
       const hubsResponse: Array<FeedItem> = data.data;
       const replace_hub: Array<FeedItem> = hubsResponse.filter(
-        (e) => e.Name === "{profile_name}"
-        );
+        (e) => e.Name === "{profile_name}" || e.IsProfileHub
+      );
+      // const profilehub = hubsResponse.find(
+      //   (item, index) => item.Name === GLOBALS.store!.userProfile.Name
+      // );
+      console.log(
+        "setHubsData data.data",
+        data.data,
+        replace_hub,
+        replace_hub.length
+      );
       if (replace_hub.length >= 0) {
-        replace_hub.length === 0 ? replace_hub[0] = data.data[0] : null
+        // replace_hub.length === 0 ? (replace_hub[0] = data.data[0]) : null;
         if (GLOBALS.store!.userProfile) {
           /** If the value of @param GLOBALS.store!.userProfile * is not  null or  undefined */
           if (GLOBALS.store!.userProfile.Name?.toLowerCase() === "default") {
             /** If default profile is used to login to the app..replace `${profile_name}` with "You"*/
             replace_hub[0].Name = AppStrings.str_hub_name_you;
+            replace_hub[0].IsProfileHub = true;
           } else {
             /** If user created profile is chosen to login, replace with profile name */
             if (GLOBALS.store!.userProfile.Name!.length > 10) {
-             
               replace_hub[0].Name =
                 (
                   GLOBALS.store!.userProfile.Name! || GLOBALS.userProfile?.Name
                 ).substring(0, 9) + "..." || AppStrings.str_hub_name_you;
+              replace_hub[0].IsProfileHub = true;
             } else {
               replace_hub[0].Name =
                 GLOBALS.store!.userProfile.Name || AppStrings.str_hub_name_you;
+              replace_hub[0].IsProfileHub = true;
             }
           }
         } else {
           /** If there's no @param GLOBALS.store!.userProfile set*/
           replace_hub[0].Name = AppStrings.str_hub_name_you;
+          replace_hub[0].IsProfileHub = true;
         }
       } else {
-        console.log("No hub to replace",data,hubs,data && !hubs.length);
+        console.log("No hub to replace", data, hubs, data && !hubs.length);
       }
       const applicationHub = hubsResponse.find(
         (element) => element?.IsApplicationHub
