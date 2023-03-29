@@ -26,6 +26,7 @@ export const getHubs = async () => {
         `udl://discovery/hubs?rightIds=${GLOBALS.store?.rightsGroupIds}&storeId=${DefaultStore.Id}&pivots=${pivots}&lang=${GLOBALS.store?.onScreenLanguage?.languageCode || lang}`
     );
     const response: HubsResponse = data;
+    console.log("Hub", response)
     return response;
 };
 
@@ -77,7 +78,7 @@ const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: bo
 
 export const getAllFeedDataForFeed = (feed: FeedItem, nowNextMap: any, currentSlots: any, channelRights: any) => {
     return useQueries(
-        feed.Feeds.map(element => {
+        feed.Feeds.filter((e) => e.Name !== 'Free Preview').map(element => {
             return element.Uri.toLowerCase().includes('live') ? {
                 queryKey: ['live', element.Uri],
                 queryFn: () => getUDLData(element.Uri),

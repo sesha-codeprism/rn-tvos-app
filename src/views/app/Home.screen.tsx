@@ -58,6 +58,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
 
   const { data, isLoading } = getAllHubs();
   props.navigation.addListener("focus", () => {
+    setHubsData();
     console.log("focused");
   });
 
@@ -74,25 +75,16 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       }
     }, debounceTime);
   };
-  // console.log(AppStrings);
 
   const setHubsData = async () => {
     if (data && !hubs.length) {
       const hubsResponse: Array<FeedItem> = data.data;
       const replace_hub: Array<FeedItem> = hubsResponse.filter(
-        (e) => e.Name === "{profile_name}" || e.IsProfileHub
+        (e) =>
+          e.Name === "{profile_name}" || e.Name === "You" || e.IsProfileHub!
       );
-      // const profilehub = hubsResponse.find(
-      //   (item, index) => item.Name === GLOBALS.store!.userProfile.Name
-      // );
-      console.log(
-        "setHubsData data.data",
-        data.data,
-        replace_hub,
-        replace_hub.length
-      );
-      if (replace_hub.length >= 0) {
-        // replace_hub.length === 0 ? (replace_hub[0] = data.data[0]) : null;
+      if (replace_hub.length) {
+        replace_hub.length === 0 ? (replace_hub[0] = data.data[0]) : null;
         if (GLOBALS.store!.userProfile) {
           /** If the value of @param GLOBALS.store!.userProfile * is not  null or  undefined */
           if (GLOBALS.store!.userProfile.Name?.toLowerCase() === "default") {
@@ -240,12 +232,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
 
-  console.log("firstSwimlaneRef ", firstSwimlaneRef);
-  // console.log(
-  //   GLOBALS.nowNextMap.now
-  //     .map((e: any) => e.ProgramId !== undefined)
-  //     .filter((val: any) => val !== false).length
-  // );
   return (
     <View style={HomeScreenStyles.container}>
       <ImageBackground

@@ -7,10 +7,9 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/dimensions";
+import { SCREEN_WIDTH } from "../utils/dimensions";
 import { GLOBALS } from "../utils/globals";
 import MFEventEmitter from "../utils/MFEventEmitter";
-import { AppStrings } from "../config/strings";
 interface MFPopupProps {
   buttons?: Buttons[];
   title?: string;
