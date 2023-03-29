@@ -1052,78 +1052,49 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     [AppStrings?.str_app_edit]: openEditRecordingsPanel,
     [AppStrings?.str_details_cta_playdvr]: handlePlayDvr,
     [AppStrings?.str_details_cta_rent]: () => {
-      //TODO: Finish implementation of CTA rent
-      const purchaseActions = udpDataAsset.purchasePackage == undefined &&
-      udpDataAsset.subscriptionExists == undefined
-          ? udpDataAsset.purchaseActions
-          : udpDataAsset.subscriptionExists
-          ? props?.selectedNetwork?.length > 0
-              ? props?.selectedNetwork[0]?.purchaseActions
-              : udpDataAsset?.subscriptionPackages[0]
-                    ?.purchaseActions
-          : udpDataAsset.purchasePackageActions;
-
-     const isSubscribe =  udpDataAsset.subscriptionExists ||
-      udpDataAsset?.channelActions?.length > 0
-          ? true
-          : false;
-
-     const channelSubscribeActions = udpDataAsset.channelActions;
-     console.log('>>>>>>>>>>>>>>>>>>>> RENT >>>>>>>>>>>>>>>>>>>>');
-     console.log('purchaseActions ', purchaseActions);
-     console.log('isSubscribe ', isSubscribe);
-     console.log('channelSubscribeActions ', channelSubscribeActions);
+      MFEventEmitter.emit("openPurchase", {
+        params:{
+          udpAssetData: udpDataAsset,
+          panelTitle: AppStrings?.str_details_cta_buy,
+          confirmPlayCallBack: ctaButtonPress[
+            AppStrings?.str_details_cta_play
+          ],
+        }
+      });
     },
     [AppStrings?.str_details_cta_buy]: () => {
-      //TODO: Finish implementation of CTA buy
-      const purchaseActions = udpDataAsset.purchasePackage == undefined &&
-      udpDataAsset.subscriptionExists == undefined
-          ? udpDataAsset.purchaseActions
-          : udpDataAsset.subscriptionExists
-          ? props?.selectedNetwork?.length > 0
-              ? props?.selectedNetwork[0]?.purchaseActions
-              : udpDataAsset?.subscriptionPackages[0]
-                    ?.purchaseActions
-          : udpDataAsset.purchasePackageActions;
-
-     const isSubscribe =  udpDataAsset.subscriptionExists ||
-      udpDataAsset?.channelActions?.length > 0
-          ? true
-          : false;
-
-     const channelSubscribeActions = udpDataAsset.channelActions;
-     console.log('>>>>>>>>>>>>>>>>>>>> BUY >>>>>>>>>>>>>>>>>>>>');
-     console.log('purchaseActions ', purchaseActions);
-     console.log('isSubscribe ', isSubscribe);
-     console.log('channelSubscribeActions ', channelSubscribeActions);
+      MFEventEmitter.emit("openPurchase", {
+        params:{
+          udpAssetData: udpDataAsset,
+          panelTitle: AppStrings?.str_details_cta_buy,
+          confirmPlayCallBack: ctaButtonPress[
+            AppStrings?.str_details_cta_play
+          ],
+        }
+      });
     },
     [AppStrings?.str_details_cta_rentbuy]: () => {
-      //TODO: Finish implementation of CTA rent-buy
-      const purchaseActions = udpDataAsset.purchasePackage == undefined &&
-      udpDataAsset.subscriptionExists == undefined
-          ? udpDataAsset.purchaseActions
-          : udpDataAsset.subscriptionExists
-          ? props?.selectedNetwork?.length > 0
-              ? props?.selectedNetwork[0]?.purchaseActions
-              : udpDataAsset?.subscriptionPackages[0]
-                    ?.purchaseActions
-          : udpDataAsset.purchasePackageActions;
-
-     const isSubscribe =  udpDataAsset.subscriptionExists ||
-      udpDataAsset?.channelActions?.length > 0
-          ? true
-          : false;
-
-     const channelSubscribeActions = udpDataAsset.channelActions;
-     console.log('>>>>>>>>>>>>>>>>>>>> RENT/BUY >>>>>>>>>>>>>>>>>>>>');
-     console.log('purchaseActions ', purchaseActions);
-     console.log('isSubscribe ', isSubscribe);
-     console.log('channelSubscribeActions ', channelSubscribeActions);
+      MFEventEmitter.emit("openPurchase", {
+        params:{
+          udpAssetData: udpDataAsset,
+          panelTitle: AppStrings?.str_details_cta_buy,
+          confirmPlayCallBack: ctaButtonPress[
+            AppStrings?.str_details_cta_play
+          ],
+        }
+      });
     },
     [AppStrings?.str_details_cta_package]: () => {
       udpDataAsset["purchasePackage"] = true;
-      //TODO: Finish implementation of Package details
-      featureNotImplementedAlert();
+      MFEventEmitter.emit("openPurchase", {
+        params:{
+          udpAssetData: udpDataAsset,
+          panelTitle: AppStrings?.str_details_cta_buy,
+          confirmPlayCallBack: ctaButtonPress[
+            AppStrings?.str_details_cta_play
+          ],
+        }
+      });
     },
     [AppStrings?.str_details_cta_subscribe]: () => {
       const networks = udpDataAsset.subscriptionPackages.filter(

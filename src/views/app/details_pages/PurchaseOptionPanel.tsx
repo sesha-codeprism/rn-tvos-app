@@ -1,29 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { Quality } from "../__types__/waysToWatch";
-import mkIcons from "../config/MK-IconCodes.json";
-import { generateType } from "../utilities/types";
-import { SourceType } from "../MediaFirstClientUDL/src/__types__/common/common";
 
-import { SideMenuRoutes } from "./sideMenu";
-import { globals as g } from "../config/Globals";
-import { getScaledHeight, getScaledValue } from "../utilities/dimensions";
-import { metadataSeparator, Network } from "../utilities/assetUtils";
-import { currencies } from "../utilities/currencies";
 import { AppStrings } from "../../../config/strings";
 import { AppImages } from "../../../assets/images";
 import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
 import { scaleAttributes } from "../../../utils/uidefinition";
+import mkIcons from "../../../config/MKIcons";
+import { generateType, metadataSeparator } from "../../../utils/Subscriber.utils";
+import { SourceType } from "../../../utils/common";
+import { getScaledHeight, getScaledValue } from "../../../utils/dimensions";
+import { currencies } from "../../../utils/currencies";
+import MFEventEmitter from "../../../utils/MFEventEmitter";
+
+export type Quality = "SD" | "HD";
 
 type PurchaseOptionsPanelProps = {
     params: {
         panelTitle: string;
         udpAssetData: any;
         confirmPlayCallBack: any;
-        selectedNetwork?: Network;
+        selectedNetwork?: any;
         focusedEpisodeId?: string;
         rerouteToDetails?: any;
+        playOptionRefetch?:any;
+        packageActionRefetch?: any;
     };
 };
 
@@ -34,7 +35,6 @@ type PurchaseOptionsPanelState = {
 let selectedPurchaseOption = "";
 
 const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProps> = (props: PurchaseOptionsPanelProps) => {
-
     const [purchaseActions, setPurchaseActions] = useState([]);
     const [isSubscribe, setIsSubscribe] = useState(true);
     const [channelSubscribeActions, setChannelSubscribeActions] = useState([]);
@@ -56,27 +56,27 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
     }, []);
 
     useEffect(() => {
-        const purchaseActionsTemp = props.params.udpAssetData.purchasePackage == undefined &&
-            props.params.udpAssetData.subscriptionExists == undefined
-            ? props.params.udpAssetData.purchaseActions
-            : props.params.udpAssetData.subscriptionExists
-                ? props.params?.selectedNetwork?.length > 0
-                    ? props.params?.selectedNetwork[0]?.purchaseActions
-                    : props.params?.udpAssetData?.subscriptionPackages[0]
+        const purchaseActionsTemp = props.route.params.udpAssetData.purchasePackage == undefined &&
+            props.route.params.udpAssetData.subscriptionExists == undefined
+            ? props.route.params.udpAssetData.purchaseActions
+            : props.route.params.udpAssetData.subscriptionExists
+                ? props.route.params?.selectedNetwork?.length > 0
+                    ? props.route.params?.selectedNetwork[0]?.purchaseActions
+                    : props.route.params?.udpAssetData?.subscriptionPackages[0]
                         ?.purchaseActions
-                : props.params.udpAssetData.purchasePackageActions;
+                : props.route.params.udpAssetData.purchasePackageActions;
 
         const isSubscribeTemp =
-            props.params.udpAssetData.subscriptionExists ||
-                props.params.udpAssetData?.channelActions?.length > 0
+            props.route.params.udpAssetData.subscriptionExists ||
+                props.route.params.udpAssetData?.channelActions?.length > 0
                 ? true
                 : false;
 
-        const channelSubscribeActionsTemp = props.params.udpAssetData.channelActions;
+        const channelSubscribeActionsTemp = props.route.params.udpAssetData.channelActions;
 
-        const headingLine1Temp = props.params.panelTitle;
+        const headingLine1Temp = props.route.params.panelTitle;
 
-        const headingLine2Temp = props.params?.udpAssetData.title;
+        const headingLine2Temp = props.route.params?.udpAssetData.title;
         setPurchaseActions(purchaseActionsTemp);
         setIsSubscribe(isSubscribeTemp);
         setChannelSubscribeActions(channelSubscribeActionsTemp);
@@ -137,21 +137,23 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                     : AppStrings?.str_details_cta_buy;
 
         const subTitle = [];
-        subTitle.push(props.params?.udpAssetData?.title);
+        subTitle.push(props.route.params?.udpAssetData?.title);
         subTitle.push(
             getQualityString(data.purchaseAction?.QualityLevels[0])
         );
 
-        props.navigation.pushRoute(SideMenuRoutes.PurchaseInformation, {
+        MFEventEmitter.emit("openPurchaseInformation", {
             title: headingType,
             subTitle: subTitle.join(metadataSeparator),
             purchaseActions: data.purchaseAction,
             udpAssetData: data.udpAssetData,
-            confirmPlayCallBack: props.params.confirmPlayCallBack,
-            focusedEpisodeId: props.params.focusedEpisodeId,
+            confirmPlayCallBack: props.route.params.confirmPlayCallBack,
+            focusedEpisodeId: props.route.params.focusedEpisodeId,
             isChannelSubscription:
                 channelSubscribeActions?.length > 0 ? true : false,
-            rerouteToDetails: props.params.rerouteToDetails,
+            rerouteToDetails: props.route.params.rerouteToDetails,
+            playOptionRefetch:props.route.params.playOptionRefetch,
+            packageActionRefetch: props.route.params.packageActionRefetch
         });
     };
 
@@ -187,6 +189,7 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                                 channelSubscribeActions?.length > 0
                                 ? purchaseAction.PackageName
                                 : `${purchaseAction.Currency} ${purchaseAction.Price}`;
+                        ///@ts-ignore
                         const rightValue = `${currencies[purchaseAction.Currency]
                                 .symbol_native
                             } ${purchaseAction.Price.toFixed(2)} `;
@@ -265,17 +268,17 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
     };
 
     const renderBody = () => {
-        const { udpData, networkIHD, account } = props.params.udpAssetData;
-        const { udpAssetData } = props.params;
+        const { udpData, networkIHD, account } = props.route.params.udpAssetData;
+        const { udpAssetData } = props.route.params;
         let [rentPurchaseActions, buyPurchaseActions, subscribeActions] = [
             [],
             [],
             [],
         ];
         if (
-            props.params.panelTitle ===
+            props.route.params.panelTitle ===
             AppStrings?.str_details_cta_rentbuy ||
-            props.params.panelTitle ===
+            props.route.params.panelTitle ===
             AppStrings?.str_details_cta_package
         ) {
             purchaseActions.map((purchaseAction: any) => {
@@ -290,17 +293,17 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                     buyPurchaseActions.push(purchaseAction);
             });
         } else if (
-            props.params.panelTitle ===
+            props.route.params.panelTitle ===
             AppStrings?.str_details_cta_rent
         ) {
             rentPurchaseActions = purchaseActions;
         } else if (
-            props.params.panelTitle ===
+            props.route.params.panelTitle ===
             AppStrings?.str_details_cta_buy
         ) {
             buyPurchaseActions = purchaseActions;
         } else if (
-            props.params.panelTitle ===
+            props.route.params.panelTitle ===
             AppStrings?.str_details_cta_subscribe
         ) {
             if (channelSubscribeActions) {
@@ -390,9 +393,9 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                     )}
                 {filteredSubscribeAction.length > 0 && (
                     <View>
-                        {props.params.selectedNetwork && (
+                        {props.route.params.selectedNetwork && (
                             <Text style={styles.textStyle}>
-                                {props.params.selectedNetwork.Name}
+                                {props.route.params.selectedNetwork.Name}
                             </Text>
                         )}
                         <Text style={styles.subTextStyle}>
@@ -461,18 +464,46 @@ const styles = StyleSheet.create(
             paddingRight: 40,
         },
         textStyle: {
-            fontFamily: g.fontFamily.bold,
-            color: g.fontColors.light,
-            fontSize: g.fontSizes.subTitle2,
+            fontFamily: "Inter-Bold",
+            color: "#EEEEEE",
+            fontSize: 31,
             marginLeft: 51,
             marginTop: 20,
         },
         subTextStyle: {
-            color: g.fontColors.light,
-            fontSize: g.fontSizes.body2,
+            color: "#EEEEEE",
+            fontSize:25,
             marginLeft: 51,
             marginTop: 20,
             marginBottom: 40,
         },
+        containerActive: {
+            backgroundColor: "#053C69",
+            borderRadius: 6,
+            shadowColor: "#0000006b",
+            shadowOffset: {
+              width: 6,
+              height: 8
+            },
+            shadowOpacity: 0.42,
+            shadowRadius: 4.65,
+            elevation: 8
+          },
+          container: {
+            width: "100%",
+            height: 100,
+            justifyContent: "space-between",
+            alignContent: "center",
+            alignItems: "center",
+            padding: 30,
+            display: "flex",
+            flexDirection: "row"
+          },
+          containerSpacing: { padding: 10, marginBottom: 30 },
+          listText: {
+            fontSize: 29,
+            letterSpacing: 0,
+            lineHeight: 50
+          }
     })
 );

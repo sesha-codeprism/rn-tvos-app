@@ -63,9 +63,18 @@ import DvrRecordedEpisode from "../../views/app/dvr_manager/dvr_recordedEpisodeL
 import PlayerTest from  "../../views/VideoPlayer/PlayerTest";
 import  Video from "../../views/VideoPlayer/Video";
 import FavoriteChannelsScreen from "../../views/app/details_pages/favoriteChannels/favoriteChannels";
+import { PurchaseOptionsPanel } from "../../views/app/details_pages/PurchaseOptionPanel";
+import { PurchaseInformationPanel } from "../../views/app/details_pages/PurchaseInformationPanel";
+import { PurchaseNetworkSelectionPanel } from "../../views/app/details_pages/package_details/PurchaseNetworkSelectionPanel";
+import { TermsAndConditions } from "../../views/app/details_pages/TermsAndConfitions";
 
 interface RouterOutletProps {
   initialState: any;
+}
+
+interface PurchaseOutletProps {
+  initialState: any;
+  params: any
 }
 
 export const Routes = {
@@ -124,9 +133,50 @@ export const Routes = {
   PlayerTest: "PlayerTest",
   Video: "Video",
   FavoriteChannelsManager: "FavoriteChannelsManager",
+  DvrManager: "DvrManager",
+  PurchaseOptions: "PurchaseOptions",
+  PurchaseInformation: "PurchaseInformation",
+  PurchaseNetworkSelectionPanel: "PurchaseNetworkSelection",
+  TermsAndConditions: "TermsAndConditions"
 };
 
 const Stack = createNativeStackNavigator();
+export const PurchasePanelNavigator: React.FunctionComponent<PurchaseOutletProps> = (props) => {
+  return (
+    <NavigationContainer
+      independent={true}
+      initialState={props.initialState}
+      onStateChange={(state) =>
+        SettingsRN.set({ PURCHASE_NAVIGATION_HISTORY: JSON.stringify(state) })
+      }
+    >
+      <Stack.Navigator
+        initialRouteName={Routes.PurchaseOptions}
+        screenOptions={{
+          headerShown: false,
+          animation: "slide_from_left",
+          animationTypeForReplace: "push",
+          gestureEnabled: false,
+        }}
+      >
+        <Stack.Screen
+          name={Routes.PurchaseOptions}
+          component={PurchaseOptionsPanel}
+          initialParams={props.params}
+        />
+        <Stack.Screen
+          name={Routes.PurchaseInformation}
+          component={PurchaseInformationPanel}
+        />
+        <Stack.Screen
+          name={Routes.PurchaseNetworkSelectionPanel}
+          component={PurchaseNetworkSelectionPanel}
+        />
+        <Stack.Screen name={Routes.TermsAndConditions} component={TermsAndConditions} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
   props
 ) => {

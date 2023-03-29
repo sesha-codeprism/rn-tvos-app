@@ -11,6 +11,7 @@ import PlayerQualityPanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerQualit
 import { PurchaseOptionsPanel } from "./app/details_pages/PurchaseOptionPanel";
 import { PurchaseInformationPanel } from "./app/details_pages/PurchaseInformationPanel";
 import { PurchaseNetworkSelectionPanel } from "./app/details_pages/package_details/PurchaseNetworkSelectionPanel";
+import Purchase from "../components/MFSideMenu/PurchaseContainer";
 
 export const Empty = (props: any) => {
   return <View style={{ height: 1, backgroundColor: "black" }}></View>;
@@ -25,6 +26,7 @@ const enum Routes {
   PurchaseOption,
   PurchaseInformation,
   PurchaseNetwork,
+  Purchase,
   Popup,
   MFPinPopup
 }
@@ -36,9 +38,7 @@ const ComponentLoader = {
   [Routes.PlayerSubtitle]: PlayerSubtitlePanel,
   [Routes.PlayerQuality]: PlayerQualityPanel,
   [Routes.Empty]: Empty,
-  [Routes.PurchaseOption]: PurchaseOptionsPanel,
-  [Routes.PurchaseInformation]:PurchaseInformationPanel,
-  [Routes.PurchaseNetwork]: PurchaseNetworkSelectionPanel  
+  [Routes.Purchase]: Purchase,
 };
 
 interface MFDrawerContainer { }
@@ -143,13 +143,13 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
   }
 
 
-  const openPurchaseOption = (props: any) => {
+  const openPurchase = (props: any) => {
     //  add to component stack
-    componentStack.current?.push({ route: Routes.PurchaseOption, props: props });
-    setComponentt(Routes.PurchaseOption);
+    componentStack.current?.push({ route: Routes.Purchase, props: props });
+    setComponentt(Routes.Purchase);
   }
 
-  const closePurchaseOption = (params: any) => {
+  const closePurchase = (params: any) => {
     const props =
       componentStack.current[componentStack?.current?.length - 1]?.props;
     if (props && props?.onClose) {
@@ -161,41 +161,7 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     );
   }
 
-  const openPurchaseInformation = (props: any) => {
-    //  add to component stack
-    componentStack.current?.push({ route: Routes.PurchaseInformation, props: props });
-    setComponentt(Routes.PurchaseOption);
-  }
-
-  const closePurchaseInformation = (params: any) => {
-    const props =
-      componentStack.current[componentStack?.current?.length - 1]?.props;
-    if (props && props?.onClose) {
-      props?.onClose?.();
-    }
-    componentStack.current?.pop();
-    setComponentt(
-      componentStack.current[componentStack?.current?.length - 1]?.route
-    );
-  }
-
-  const openPurchaseNetwork = (props: any) => {
-    //  add to component stack
-    componentStack.current?.push({ route: Routes.PurchaseNetwork, props: props });
-    setComponentt(Routes.PurchaseOption);
-  }
-
-  const closePurchaseNetwork = (params: any) => {
-    const props =
-      componentStack.current[componentStack?.current?.length - 1]?.props;
-    if (props && props?.onClose) {
-      props?.onClose?.();
-    }
-    componentStack.current?.pop();
-    setComponentt(
-      componentStack.current[componentStack?.current?.length - 1]?.route
-    );
-  }
+  
 
   const closeAll = () => {
     componentStack.current?.splice(1);
@@ -219,6 +185,8 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     MFEventEmitter.on("closeClosePurchaseInformation", closePurchaseInformation);
     MFEventEmitter.on("openPurchaseNetwork", openPurchaseNetwork);
     MFEventEmitter.on("closeClosePurchaseNetwork", closePurchaseNetwork);
+    MFEventEmitter.on("openPurchase", openPurchase);
+    MFEventEmitter.on("closeClosePurchase", closePurchase);;
     MFEventEmitter.on("closeAll", closeAll);
     MFEventEmitter.on("openPinVerificationPopup", openMFPinPopup);
     MFEventEmitter.on("closePinVerificationPopup", closeMFPinPopup);
@@ -254,6 +222,8 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     return <Component {...props}>/</Component>;
   } else if (currentComponent === Routes.PlayerQuality) {
     const Component = ComponentLoader[Routes.PlayerQuality];
+  } else if(currentComponent === Routes.Purchase) {
+    const Component = ComponentLoader[Routes.Purchase];
     const props =
       componentStack.current[componentStack?.current?.length - 1]?.props;
     //@ts-ignore

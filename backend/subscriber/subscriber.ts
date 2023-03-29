@@ -519,6 +519,24 @@ export const pinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?
   return response;
 }
 
+export const purchaseItem = async (offerId: string, offerPrice: number) => {
+  const { accessToken } = GLOBALS.store!;
+  //@ts-ignore
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `v2/purchases?deviceType=${MFGlobalsConfig.deviceType}&storeId=${DefaultStore.Id}`;
+  const response = await POST({
+    url: url,
+    params: {
+      offerId,
+      offerPrice,
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+    },
+  });
+  return response;
+}
+
 export const unpinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?: boolean) => {
   const { accessToken } = GLOBALS.store!;
   //@ts-ignore
