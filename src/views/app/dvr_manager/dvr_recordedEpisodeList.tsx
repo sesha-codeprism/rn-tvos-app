@@ -420,7 +420,7 @@ const DvrRecordedEpisode = (props: any) => {
     if (!config.inhomeDetection.useSubscriberInHome) {
       // networkIHD data
       const inHomeValue =
-        props.networkIHD?.status === "inHome" ||
+        GLOBALS.networkIHD?.status === "inHome" ||
         config.inhomeDetection.inHomeDefault;
       ipStatus["InHome"] = inHomeValue
         ? RestrictionValue.Yes

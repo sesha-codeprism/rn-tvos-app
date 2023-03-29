@@ -32,6 +32,8 @@ import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import { ItemType } from "../../utils/common";
 import { globalStyles } from "../../config/styles/GlobalStyles";
+import { getNetworkIHD } from "../../../backend/networkIHD/networkIHD";
+import { MFGlobalsConfig } from "../../../backend/configs/globals";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -49,6 +51,12 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const setttingsRef = useRef(null);
   const drawerRef: React.MutableRefObject<any> = useRef();
   const accountInfo = useAccount();
+  const params = {
+    connectionUrl = undefined,
+    inHomeApiEndpoint = undefined,
+    useSubscriberInHome = false,
+  } = MFGlobalsConfig?.config?.inhomeDetection || {};
+  getNetworkIHD(params);
   const currentContext = useContext(GlobalContext);
 
   let feedTimeOut: any = null;
