@@ -82,9 +82,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       const replace_hub: Array<FeedItem> = hubsResponse.filter(
         (e) => e.Name === "{profile_name}" || e.IsProfileHub
       );
-      // const profilehub = hubsResponse.find(
-      //   (item, index) => item.Name === GLOBALS.store!.userProfile.Name
-      // );
       console.log(
         "setHubsData data.data",
         data.data,
