@@ -1675,7 +1675,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   const closeModal = () => {
-    setCTALoaded(false);
     setOpen(false);
   };
 
