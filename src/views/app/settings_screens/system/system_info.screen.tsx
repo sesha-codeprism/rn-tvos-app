@@ -26,7 +26,9 @@ const SystemInformationScreen: React.FunctionComponent<Props> = (
       },
       {
         title: "In Home Status",
-        description: "NA",
+        description: GLOBALS.networkIHD?.status === "inHome"
+        ? AppStrings?.str_settings_about_inhome
+        : AppStrings?.str_settings_about_out_of_home  
       },
       {
         title: "Device ID",

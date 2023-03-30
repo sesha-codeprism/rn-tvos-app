@@ -580,8 +580,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
           GLOBALS.viewableSubscriptions,
           GLOBALS.scheduledSubscriptions,
           GLOBALS.recorders,
-          //TODO: networkIHD isn't supposed to be auto-undefined.. Implement this and pick up the current value
-          undefined,
+          GLOBALS.networkIHD,
           isSeriesRecordingBlocked,
           stationId,
           undefined,
