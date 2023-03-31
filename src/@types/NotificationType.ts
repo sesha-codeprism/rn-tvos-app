@@ -154,7 +154,10 @@ import mkIcons from "../config/MKIcons";
     easmessage = "eas-message",
 
     // dvr changed
-    dvrUpdated = "DvrUpdated"
+    dvrUpdated = "DvrUpdated",
+
+    // fav channle changed
+    pinUnpinChannel = "pin_unpin_channel"
 }
 
 export default NotificationType

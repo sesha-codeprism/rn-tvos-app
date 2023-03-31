@@ -40,9 +40,14 @@ const GuideScreen: React.FunctionComponent<GuideScreenProps> = (props) => {
       feed: feed[0],
     });
   };
+
+  const onFavourite = (event: { nativeEvent: { program: any } }) => {
+    props.navigation.push(Routes.FavoriteChannelsManager);
+  }
+  
   return (
     <View style={{ alignContent: "center", alignItems: "center", padding: 5 }}>
-      <MKGuide style={{ width: "100%", height: "100%" }} onUpdate={onUpdate} />
+      <MKGuide style={{ width: "100%", height: "100%" }} onUpdate={onUpdate} onFavourite={onFavourite}/>
     </View>
   );
 };

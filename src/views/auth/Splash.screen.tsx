@@ -23,6 +23,7 @@ import {
 import useBootstrap from "../../customHooks/useBootstrapData";
 import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
+import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import {
   invalidateQueryBasedOnSpecificKeys,
@@ -101,6 +102,8 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         // // setTimeout(() => {
         // //   appQueryCache.find("get-UDP-data")?.invalidate();
         // // }, 1000);
+      }else if (message?.type === NotificationType.pinUnpinChannel) {
+        MFEventEmitter.emit("FavoriteChannelUpdated", message);
       }
     },
     [GLOBALS.deviceInfo.deviceId]
