@@ -13,8 +13,9 @@ import ErrorBoundary from "react-native-error-boundary";
 import ErrorFallbackComponent from "../components/ErroFallBackComponent";
 import { queryClient } from "../config/queries";
 import MFNotificationCard from "../components/MFNotification/MFNotificationCard";
+import EASContainer from "./EASContainer";
 
-interface AppProps { }
+interface AppProps {}
 
 const App: React.FunctionComponent<AppProps> = (props) => {
   // const queryClient = new QueryClient();
@@ -23,7 +24,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     GLOBALS.store?.settings?.display?.onScreenLanguage
   );
   const [enableRTL, shouldEnableRTL] = useState(GLOBALS.enableRTL);
-  const duplexMessageHandleStack = useRef([() => { }]);
+  const duplexMessageHandleStack = useRef([() => {}]);
 
   async function getLandingData() {
     initUIDef();
@@ -96,9 +97,9 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   };
 
   return (
-
     <QueryClientProvider client={queryClient}>
       <GlobalContext.Provider value={appSettings}>
+        <EASContainer />
         <MFDrawerContainer />
         <ErrorBoundary
           onError={errorHandler}
@@ -110,7 +111,6 @@ const App: React.FunctionComponent<AppProps> = (props) => {
               GLOBALS.store?.refreshToken !== null
             }
           />
-        
         </ErrorBoundary>
       </GlobalContext.Provider>
       {/* <MFNotificationCard
@@ -136,7 +136,6 @@ const App: React.FunctionComponent<AppProps> = (props) => {
           
         /> */}
     </QueryClientProvider>
-
   );
 };
 

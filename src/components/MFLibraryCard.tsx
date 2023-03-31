@@ -30,6 +30,7 @@ import {
 } from "../config/queries";
 import useLiveData, { getLiveData } from "../customHooks/useLiveData";
 import { GLOBALS } from "../utils/globals";
+import { debounce2 } from "../utils/app/app.utilities";
 const MFTheme: MFThemeObject = require("../config/theme/theme.json");
 
 export enum AspectRatios {
@@ -185,13 +186,11 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
       clearIntervalTimeout = setTimeout(() => {
         stopUpdateTimer();
         console.log("Invalidating the live queries");
-        //Below line only for React Query v3.
-        const resp = getLiveData(GLOBALS.channelRights).then((resp) => {
-          queryClient.refetchQueries(["live"]);
-        });
-        // queryClient.refetchQueries(["live"]);
-        //Below line to be uncommencted and used for React query v4 and above. Doesn't work in v3
-        //queryClient.invalidateQueries({ queryKey: ['todos'] })
+        debounce2(() => {
+          getLiveData(GLOBALS.channelRights).then((resp) => {
+            queryClient.refetchQueries(["live"]);
+          });
+        }, 500);
       }, timeToEnd);
       setStarTime(getStartTime());
     };

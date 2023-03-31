@@ -8,7 +8,11 @@ import DeviceInfo from "react-native-device-info";
 import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { processBootStrap } from "../../../backend/authentication/authentication";
 import { Routes } from "../../config/navigation/RouterOutlet";
-import { appUIDefinition, disableAllWarnings } from "../../config/constants";
+import {
+  appUIDefinition,
+  disableAllWarnings,
+  lang,
+} from "../../config/constants";
 import { setDefaultStore } from "../../utils/DiscoveryUtils";
 import {
   connectDuplex,
@@ -38,6 +42,14 @@ import { AppStrings } from "../../config/strings";
 import { LogBox } from "react-native";
 import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups";
 import { getAllSubscriptionGroups } from "../../../backend/dvrproxy/dvrproxy";
+import {
+  EasAlertShortCode,
+  isMatch,
+  parseMessage,
+} from "../../utils/EAS/EASUtils";
+import MFEventEmitter from "../../utils/MFEventEmitter";
+import { sourceTypeString } from "../../utils/analytics/consts";
+
 // LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 
 if (disableAllWarnings) {
@@ -69,6 +81,70 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
     }
   );
 
+  const CreatePlayInfo = (expChannel: any) => {
+    if (!expChannel?.channel || !expChannel?.service) {
+      return null;
+    }
+    const nowNext = GLOBALS.nowNextMap[expChannel?.channel.StationId];
+    const schedule: any = nowNext && nowNext.now;
+    const programId: string = schedule && schedule.ProgramId;
+
+    const iplayInfo: any = {
+      CallLetters: expChannel.channel?.CallLetters,
+      ChannelInfo: {
+        Channel: expChannel.channel,
+        Service: expChannel.service,
+        Schedule: schedule,
+      },
+      programId: programId || expChannel.service.Id,
+      channelNumber: expChannel.channel.Number,
+      channelName: expChannel.channel.Name,
+      id: programId,
+      networkInfo: "",
+      progress: 0,
+      metadataLine2: "",
+      metadataLine3: "",
+      networkLogo: "",
+      assetType: generateType(schedule, SourceType.LIVE),
+      Schedule: schedule,
+    };
+
+    if (expChannel.service && expChannel.service.eas2Level) {
+      iplayInfo.eas2Level = expChannel.service.eas2Level;
+    }
+
+    if (expChannel.service && expChannel.service.isEasLevel1) {
+      iplayInfo.isEasLevel1 = expChannel.service.isEasLevel1;
+    }
+    return iplayInfo;
+  };
+
+  const getExceptionChannel = () => {
+    let channelMap = GLOBALS.channelMap;
+    let service: any;
+    const serviceMap: any = channelMap?.ServiceMap;
+    const channels = channelMap?.Channels;
+    const collectionIds: any = Object.keys(serviceMap);
+    let serviceCollectionId = "";
+    let channel: any;
+    // Find first exception service
+    for (const i of collectionIds) {
+      service = serviceMap[i];
+      if (service && service.isEasLevel1) {
+        serviceCollectionId = i;
+        break;
+      }
+    }
+    // Find the channel
+    for (const ch of channels) {
+      channel = ch;
+      if (ch.ServiceCollectionId === serviceCollectionId) {
+        break;
+      }
+    }
+
+    return { channel, service };
+  };
   const onDuplexMessage = useCallback(
     (message: any) => {
       if (message?.type === NotificationType.DeviceDeleted) {
@@ -81,26 +157,82 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
           GLOBALS.rootNavigation.replace(Routes.ShortCode);
         }
       } else if (message?.type === NotificationType.dvrUpdated) {
-        // GLOBALS.allSubscriptionGroups = undefined;
-        // GLOBALS.scheduledSubscriptions = undefined;
-        // GLOBALS.viewableSubscriptions = undefined;
         invalidateQueryBasedOnSpecificKeys("dvr", "get-all-subscriptionGroups");
-        // getAllSubscriptionGroups()
-        //   .then(() => {
-        //   })
-        //   .catch((err) => {
-        //     console.warn("Something went wrong in refetching groups");
-        //   });
-        // console.log("DVR update notification received");
-        // // queryClient.invalidateQueries(["dvr"]);
-        // queryClient.invalidateQueries({ queryKey: ["dvr"] });
-        // // invalidateQueryBasedOnSpecificKeys(
-        // //   "feed",
-        // //   "get-all-subscriptionGroups"
-        // // );
-        // // setTimeout(() => {
-        // //   appQueryCache.find("get-UDP-data")?.invalidate();
-        // // }, 1000);
+      } else if (message?.type === NotificationType.easmessage) {
+        const { payload } = message;
+        const localeStr =
+          GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode ||
+          "en-US";
+        const easMessage: string = payload;
+        const easParsedMessage = parseMessage(
+          easMessage,
+          lang,
+          GLOBALS.bootstrapSelectors?.EasProfile.GeoCode
+        );
+        const isMatchChecked = isMatch(easParsedMessage.easGeoCodes);
+        const displayMessage = async () => {
+          //TODO: V2 app is dispatching an Analytics event here..
+          if (isMatchChecked && easParsedMessage) {
+            // setEASAlertId(easParsedMessage.id);
+            const eventStartTimeInMilliseconds =
+              easParsedMessage?.startTime.getTime();
+            const currentTimeInMilliseconds = new Date().getTime();
+            const elapsedStartTimeMs = Math.max(
+              0,
+              eventStartTimeInMilliseconds - currentTimeInMilliseconds
+            );
+            const eventEndTimeInMilliseconds =
+              easParsedMessage?.endTime.getTime();
+
+            if (EasAlertShortCode[easParsedMessage?.alertShortCode]) {
+              let expChannel = getExceptionChannel();
+              if (easParsedMessage.alertShortCode === EasAlertShortCode.EAN) {
+                let playinfo: any = CreatePlayInfo(expChannel);
+                //TODO: If on player, pop the stack
+                // if (this.props.currentRoute.name === Routes.VideoPlayer) {
+                //   this.props.popRoute();
+                // }
+                if (expChannel && expChannel.channel.Number) {
+                  playinfo["playSource"] = sourceTypeString.LIVE;
+                  //TODO: Navigate to player
+                  // this.props.pushRoute("VideoPlayer", {
+                  //   data: playinfo,
+                  //   id: playinfo?.id,
+                  // });
+                }
+              }
+            } else if (
+              eventEndTimeInMilliseconds >= currentTimeInMilliseconds
+            ) {
+              setTimeout(() => {
+                MFEventEmitter.emit("EASReceived", {
+                  message: easParsedMessage,
+                  easDetails: GLOBALS.bootstrapSelectors?.EasProfile,
+                  locale: localeStr,
+                });
+              }, elapsedStartTimeMs);
+            }
+            // this.props.clearEASMessage();
+          } else {
+            // ai.trackEvent(IAnalyticsEvents.EAS_FAILED, {
+            //   message: easMessage,
+            //   clientCurrentTimeUtcStr: new Date().toLocaleDateString(),
+            //   clientGeoCode: "",
+            //   payloadSize: easMessage?.length,
+            // });
+            console.warn("EAS failed", message);
+          }
+        };
+        displayMessage();
+
+        // MFEventEmitter.emit("EASReceived", {
+        //   message: easParsedMessage,
+        //   easDetails: GLOBALS.bootstrapSelectors?.EasProfile,
+        //   locale: (
+        //     GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode ||
+        //     "en-US"
+        //   ).toLowerCase(),
+        // });
       }
     },
     [GLOBALS.deviceInfo.deviceId]
