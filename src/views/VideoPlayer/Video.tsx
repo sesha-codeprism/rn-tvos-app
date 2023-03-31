@@ -9,6 +9,7 @@ import { appUIDefinition } from '../../config/constants';
 import MFLoader from '../../components/MFLoader';
 import MFPopup from '../../components/MFPopup';
 import { MockPlayer } from './MockPlayer';
+import MFEventEmitter from '../../utils/MFEventEmitter';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
 
@@ -42,7 +43,7 @@ const Video: React.FunctionComponent<VideoPlayerProps> = (
         if(props?.debugModeInSimulator){
             setTimeout(() =>{
                 setShowLoader(false);
-            }, 3000);
+            }, 1000);
         }
         
     }, [props?.server_url, props?.videoURI, props?.tenantId, props?.stsToken, props?.user_token])
@@ -78,7 +79,7 @@ const Video: React.FunctionComponent<VideoPlayerProps> = (
     }
 
     const onSubtitlePressed = () => {
-        //open panel
+        MFEventEmitter.emit('openPlayerSubtitlePanel', {drawerPercentage: 0.37});
     }
     const onQualityPressed = () => {
         //open panel
