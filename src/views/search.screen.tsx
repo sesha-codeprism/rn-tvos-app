@@ -58,7 +58,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const [searchResult, setSearchResult] = useState<
     SearchResultObject[] | undefined
   >();
-  const [trendingData, setTrendingData] = useState(GLOBALS.moviesAndTvShows);
+  const [trendingData, setTrendingData] = useState<any>(GLOBALS.moviesAndTvShows);
   const [showTrending, setShowTrending] = useState(true);
   const [showSearchResults, setShowSearchResult] = useState(false);
   const [swimLaneKey, setSwimLaneKey] = useState("");
@@ -142,8 +142,8 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
               ref={index === 0 ? firstCardRef : null}
               key={index}
               // @ts-ignore
-              feed={item}
-              data={item.Elements}
+              feed={item.feed}
+              data={item.items}
               limitSwimlaneItemsTo={16}
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}
@@ -156,7 +156,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
                   setSwimLaneFocused(true);
                 }, 500);
               }}
-              renderViewAll={item.Elements.length >= 15 ? true: false}
+              renderViewAll={item.items.length >= 15 ? true: false}
               navigation={props.navigation}
             />
           );
