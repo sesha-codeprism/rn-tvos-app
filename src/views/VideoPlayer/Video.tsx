@@ -14,15 +14,17 @@ import MFEventEmitter from '../../utils/MFEventEmitter';
 const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
 
 export type VideoPlayerPropsExplicit = {
-    server_url?: string;
-    live?: boolean;
-    user_token?: string;
-    stsToken?: string;
-    videoURI?: string;
-    tenantId?: string;
-    locale?: any;
-    playerKey?: any;
-    debugModeInSimulator: boolean;
+    params: {
+        server_url?: string;
+        live?: boolean;
+        user_token?: string;
+        stsToken?: string;
+        videoURI?: string;
+        tenantId?: string;
+        locale?: any;
+        playerKey?: any;
+        debugModeInSimulator: boolean;
+    },
     navigation?: NativeStackNavigationProp<any>;
 }
 
@@ -40,13 +42,13 @@ const Video: React.FunctionComponent<VideoPlayerProps> = (
 
 
     useEffect(() => {
-        if(props?.debugModeInSimulator){
+        if(props?.params?.debugModeInSimulator){
             setTimeout(() =>{
                 setShowLoader(false);
             }, 1000);
         }
         
-    }, [props?.server_url, props?.videoURI, props?.tenantId, props?.stsToken, props?.user_token])
+    }, [props?.params?.server_url, props?.params?.videoURI, props?.params?.tenantId, props?.params?.stsToken, props?.params?.user_token])
 
 
     // Loader
@@ -65,20 +67,9 @@ const Video: React.FunctionComponent<VideoPlayerProps> = (
         }
         setPlayerState(state)
     }
-
-    const onStallStarted = (e: any) => {
-        setPlayerState('buffering');
-        console.log('Setting loader true for state => onStallStarted');
-        setShowLoader(true);
-    }
-
-    const onStallEnded = (e: any) => {
-        console.log('Setting loader false for state => onStallEnded');
-        setPlayerState('');
-        setShowLoader(false)
-    }
-
+    
     const onSubtitlePressed = () => {
+        // 2nd argument, pass in reference to  PlayerManager
         MFEventEmitter.emit('openPlayerSubtitlePanel', {drawerPercentage: 0.37});
     }
     const onQualityPressed = () => {
@@ -90,13 +81,14 @@ const Video: React.FunctionComponent<VideoPlayerProps> = (
             <MFLoader transparent={false} />
         )
     }
-    else if (props?.debugModeInSimulator) {
+    else if (props?.params?.debugModeInSimulator) {
         return (<MockPlayer onSubtitlePressed={onSubtitlePressed} onQualityPressed={onQualityPressed}/>)
     } else {
         if(props?.style && playerSourceConfig?.sourceUrl && plyerBackendConfig){
             if(!error){
-                return (<View style={playerStyles.flexOne}>
-                    <MFLoader/> {/**  actual native player, remove loader when  available */}
+                return (<View style={playerStyles.flexOne}> 
+                {/* Uncommennt when  actual player is  available */}
+                {/* To test, in  HomeScreen, in passed in parameter when navigating to PlayerTest, pass debugModeInSimulator as false #321*/}
                     {/* <MKPlayer
                         style={{ width: screenWidth, height: screenHeight }}
                         sourceUrl={playerSourceConfig?.sourceUrl}
@@ -138,7 +130,9 @@ const Video: React.FunctionComponent<VideoPlayerProps> = (
 }
 
 Video.defaultProps  = {
-    debugModeInSimulator:true
+    params: {
+        debugModeInSimulator:true
+    }
 }
 export default Video;
 

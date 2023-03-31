@@ -61,6 +61,7 @@ import FavouriteManagerScreen from "../../views/app/details_pages/favouriteManag
 import DVRManagerScreen from "../../views/app/dvr_manager/dvr_manager.screen";
 import DvrRecordedEpisode from "../../views/app/dvr_manager/dvr_recordedEpisodeList";
 import PlayerTest from  "../../views/VideoPlayer/PlayerTest";
+import  Video from "../../views/VideoPlayer/Video";
 import FavoriteChannelsScreen from "../../views/app/details_pages/favoriteChannels/favoriteChannels";
 
 interface RouterOutletProps {
@@ -121,6 +122,7 @@ export const Routes = {
   FavouriteManager: "FavouriteManager",
   DvrManager: "DvrManager",
   PlayerTest: "PlayerTest",
+  Video: "Video",
   FavoriteChannelsManager: "FavoriteChannelsManager",
 };
 
@@ -323,6 +325,7 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
         component={FavouriteManagerScreen}
       />
       <Stack.Screen name={Routes.PlayerTest} component={PlayerTest}/>
+      <Stack.Screen name={Routes.Video} component={Video}/>
       <Stack.Screen
         name={Routes.FavoriteChannelsManager}
         component={FavoriteChannelsScreen}
