@@ -71,7 +71,7 @@ const PlayerPanelQuality = (props: PlayerPanelQualityProps) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    MFEventEmitter.emit("closeSettings", null);
+    MFEventEmitter.emit("closePlayerQualityPanel", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {

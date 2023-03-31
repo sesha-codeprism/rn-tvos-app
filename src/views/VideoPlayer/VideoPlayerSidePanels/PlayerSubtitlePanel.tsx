@@ -46,7 +46,7 @@ const PlayerPlanelSubtitle = (props: PlayerPlanelSubtitleProps) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    MFEventEmitter.emit("closeSettings", null);
+    MFEventEmitter.emit("closePlayerSubtitlePanel", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {
