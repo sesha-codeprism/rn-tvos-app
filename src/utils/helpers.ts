@@ -15,6 +15,7 @@ export const updateStore = (MFStore: any) => {
     ...MFStore,
     landingInfo: { ...landingInfo },
     MFGlobalsConfig: { ...MFGlobalsConfig },
+    playerSessionSettings: null //  player session  settings should not be persisted in localstorage
   };
   Settings.set({ store: JSON.stringify(sanitizedStore) });
   GLOBALS.store = getStore();

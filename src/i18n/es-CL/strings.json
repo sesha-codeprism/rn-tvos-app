@@ -913,5 +913,6 @@
   "str_dvr_all_conflct_must_be_resolved": "All Conflicts must be resolved",
   "str_dvr_to_record": "To record",
   "str_resolve_conflict_no": "Resolve Conflict #",
-  "str_donot_resolve":"Don't Resolve"
+  "str_donot_resolve":"Don't Resolve",
+  "str_player_subtitle_panel_header": "Primary and secondary preferences can be change under Settings > Audio / Display."
 }
