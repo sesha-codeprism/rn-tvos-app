@@ -60,7 +60,7 @@ export const MockPlayer: React.FunctionComponent<{onQualityPressed: any, onSubti
                 </Text>
             </View>
 
-            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: "space-around", height: 100, width: SCREEN_WIDTH }}>
+            {/* <View style={{ display: 'flex', flexDirection: 'row', justifyContent: "space-around", height: 100, width: SCREEN_WIDTH }}>
                 <MFButton
                     focusable
                     iconSource={0}
@@ -124,7 +124,7 @@ export const MockPlayer: React.FunctionComponent<{onQualityPressed: any, onSubti
                         shouldRenderImage: true,
                     }}
                 />
-            </View>
+            </View> */}
         </View>
     )
 }
