@@ -75,7 +75,7 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
 
     return (
       <FlatList
-        data={props.feeds?.Feeds.filter((e) => e.Name !== "Free Preview")}
+        data={props.feeds?.Feeds}
         keyExtractor={(x, i) => i.toString()}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
