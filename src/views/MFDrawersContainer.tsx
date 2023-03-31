@@ -5,6 +5,8 @@ import Settings from "../components/MFSideMenu/SettingsContainer";
 import ConflictResolutionPanel from "../views/app/details_pages/details_panels/ConflictsContainer";
 import MFEventEmitter from "../utils/MFEventEmitter";
 import { ConflictResolutionContext } from "../contexts/conflictResolutionContext";
+import PlayerSubtitlePanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerSubtitlePanel";
+import PlayerQualityPanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerQualityPanel";
 
 export const Empty = (props: any) => {
   return <View style={{ height: 1, backgroundColor: "black" }}></View>;
@@ -14,12 +16,16 @@ const enum Routes {
   Empty,
   Settings,
   ConflictResolution,
+  PlayerSubtitle,
+  PlayerQuality,
   Popup,
 }
 const ComponentLoader = {
   [Routes.Settings]: Settings,
   [Routes.ConflictResolution]: ConflictResolutionPanel,
   [Routes.Popup]: MFPopup,
+  [Routes.PlayerSubtitle]: PlayerSubtitlePanel,
+  [Routes.PlayerQuality]: PlayerQualityPanel,
   [Routes.Empty]: Empty,
 };
 
@@ -27,7 +33,6 @@ interface MFDrawerContainer { }
 
 const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
   const [currentComponent, setComponentt] = useState(Routes.Empty);
-  const conflictContext = useContext(ConflictResolutionContext);
 
   const componentStack = useRef([{ route: Routes.Empty, props: {} }]);
 
@@ -35,8 +40,6 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     //  add to component stack
     componentStack.current?.push({ route: Routes.Settings, props: props });
     setComponentt(Routes.Settings);
-    console.log(`>>>>>>>>>> currentComponent  >>>>>>>>> ${currentComponent} >>>>>>>>>>>>>>`);
-    console.log(`>>>>>>>>>>> componentStack.current >>>>>>>> ${componentStack.current} >>>>>>>>>>>>>>`);
   };
 
   const closeSettings = (params: any) => {
@@ -82,6 +85,40 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     setComponentt(Routes.Empty);
   }
 
+
+  const openPlayerSubtitle = (props: any) => {
+    //  add to component stack
+    componentStack.current?.push({ route: Routes.PlayerSubtitle, props: props });
+    setComponentt(Routes.PlayerSubtitle);
+  }
+
+  const closePlayerSubtitle = (params: any) => {
+    const props =
+      componentStack.current[componentStack?.current?.length - 1]?.props;
+    if (props && props?.onClose) {
+      props?.onClose?.();
+    }
+    componentStack.current = [{ route: Routes.Empty, props: {} }];
+    setComponentt(Routes.Empty);
+  }
+
+  const openPlayerQuality = (props: any) => {
+    //  add to component stack
+    componentStack.current?.push({ route: Routes.PlayerQuality, props: props });
+    setComponentt(Routes.PlayerQuality);
+  }
+
+  const closePlayerQuality = (params: any) => {
+    const props =
+      componentStack.current[componentStack?.current?.length - 1]?.props;
+    if (props && props?.onClose) {
+      props?.onClose?.();
+    }
+    componentStack.current = [{ route: Routes.Empty, props: {} }];
+    setComponentt(Routes.Empty);
+  }
+
+
   const closeAll = () => {
     componentStack.current?.splice(1);
     setComponentt(Routes.Empty);
@@ -94,6 +131,10 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     MFEventEmitter.on("closePopup", closePopup);
     MFEventEmitter.on("openConflictResolution", openConflict);
     MFEventEmitter.on("closeConflictResolution", closeConflict);
+    MFEventEmitter.on("openPlayerSubtitlePanel", openPlayerSubtitle);
+    MFEventEmitter.on("closePlayerSubtitlePanel", closePlayerSubtitle);
+    MFEventEmitter.on("openPlayerQualityPanel", openPlayerQuality);
+    MFEventEmitter.on("closePlayerQualityPanel", closePlayerQuality);
     MFEventEmitter.on("closeAll", closeAll);
     console.log('MFDrawersComponent mounted');
     return () => {
@@ -116,6 +157,18 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     return <Component {...props}>/</Component>;
   } else if (currentComponent === Routes.ConflictResolution) {
     const Component = ComponentLoader[Routes.ConflictResolution];
+    const props =
+      componentStack.current[componentStack?.current?.length - 1]?.props;
+    //@ts-ignore
+    return <Component {...props}>/</Component>;
+  } else if (currentComponent === Routes.PlayerSubtitle) {
+    const Component = ComponentLoader[Routes.PlayerSubtitle];
+    const props =
+      componentStack.current[componentStack?.current?.length - 1]?.props;
+    //@ts-ignore
+    return <Component {...props}>/</Component>;
+  } else if (currentComponent === Routes.PlayerQuality) {
+    const Component = ComponentLoader[Routes.PlayerQuality];
     const props =
       componentStack.current[componentStack?.current?.length - 1]?.props;
     //@ts-ignore

@@ -60,6 +60,7 @@ import PackageDetailsScreen from "../../views/app/details_pages/package_details/
 import FavouriteManagerScreen from "../../views/app/details_pages/favouriteManager/favouriteManager";
 import DVRManagerScreen from "../../views/app/dvr_manager/dvr_manager.screen";
 import DvrRecordedEpisode from "../../views/app/dvr_manager/dvr_recordedEpisodeList";
+import PlayerTest from  "../../views/VideoPlayer/PlayerTest";
 import FavoriteChannelsScreen from "../../views/app/details_pages/favoriteChannels/favoriteChannels";
 
 interface RouterOutletProps {
@@ -119,8 +120,8 @@ export const Routes = {
   DvrRecordedEpisode:"DvrRecordedEpisode",
   FavouriteManager: "FavouriteManager",
   DvrManager: "DvrManager",
+  PlayerTest: "PlayerTest",
   FavoriteChannelsManager: "FavoriteChannelsManager",
-  DvrManager: "DvrManager"
 };
 
 const Stack = createNativeStackNavigator();
@@ -229,6 +230,7 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           component={StopRecordingScreen}
         />
         <Stack.Screen name={Routes.FOSSLicense} component={FossLicenseScreen} />
+    
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -320,6 +322,7 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
         name={Routes.FavouriteManager}
         component={FavouriteManagerScreen}
       />
+      <Stack.Screen name={Routes.PlayerTest} component={PlayerTest}/>
       <Stack.Screen
         name={Routes.FavoriteChannelsManager}
         component={FavoriteChannelsScreen}
