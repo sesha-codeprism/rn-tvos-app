@@ -1152,7 +1152,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       channelIndex: index,
     };
   };
-
+// TODO: show notifications for fav and unfav
   const handleFavoritePress = async () => {
     const seriesId = udpDataAsset?.SeriesId;
     let assetId;

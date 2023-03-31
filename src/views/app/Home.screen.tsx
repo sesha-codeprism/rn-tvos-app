@@ -32,6 +32,7 @@ import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import { ItemType } from "../../utils/common";
 import { globalStyles } from "../../config/styles/GlobalStyles";
+import MFNotificationCard from "../../components/MFNotification/MFNotificationCard";
 import { getNetworkIHD } from "../../../backend/networkIHD/networkIHD";
 import { MFGlobalsConfig } from "../../../backend/configs/globals";
 interface HomeScreenProps {
@@ -200,6 +201,20 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   };
 
   useEffect(() => {
+    // setTimeout(() => {
+    //   MFEventEmitter.emit("createNotification",  {
+    //     id: "NO_NETWORK",
+    //     iconName: "favorite_selected",
+    //     subtitle: AppStrings?.str_home_network_down,
+    // })
+    // }, 4000);
+    // setTimeout(() => {
+    //   MFEventEmitter.emit("createNotification",  {
+    //     id: "NO_NETWORK",
+    //     iconName: "favorite_selected",
+    //     subtitle: `${AppStrings?.str_home_network_down} New`,
+    // })
+    // }, 8000);
     if (!open) {
       console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
       TVMenuControl.enableTVMenuKey();
