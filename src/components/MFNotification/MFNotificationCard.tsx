@@ -59,22 +59,24 @@ const MFNotificationCard = (props: NotificationCardProps) => {
       onCloseNotification && onCloseNotification(notification);
     });
   };
-  const clock = () => {
+  const clock = (progress: any) => {
     const { duration } = props;
     // Calculate how much each tick should increase the progress to allow for the duration.
     const increment = 100 / (duration / config.notificationsConfig.tick);
+    
     if (progress < 100) {
-      setProgress(progress + increment);
+      const newProgress = progress + increment;
+      setProgress(newProgress);
 
       setTimeout(() => {
-        clock();
+        clock(newProgress);
       }, config.notificationsConfig.tick);
     } else {
       slideOut();
     }
   };
   useEffect(() => {
-    clock();
+    clock(progress);
     slideIn();
   }, []);
 

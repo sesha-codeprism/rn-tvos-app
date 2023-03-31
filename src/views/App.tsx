@@ -12,8 +12,8 @@ import { initUdls } from "../../backend";
 import ErrorBoundary from "react-native-error-boundary";
 import ErrorFallbackComponent from "../components/ErroFallBackComponent";
 import { queryClient } from "../config/queries";
-import MFNotificationCard from "../components/MFNotification/MFNotificationCard";
 import EASContainer from "./EASContainer";
+import MFNotificationProvider from "../components/MFNotification/MFNotificationProvider";
 
 interface AppProps {}
 
@@ -98,43 +98,24 @@ const App: React.FunctionComponent<AppProps> = (props) => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <EASContainer />
       <GlobalContext.Provider value={appSettings}>
         <EASContainer />
-        <MFDrawerContainer />
-        <ErrorBoundary
-          onError={errorHandler}
-          FallbackComponent={ErrorFallbackComponent}
-        >
-          <RouterOutlet
-            isAuthorized={
-              GLOBALS.store?.accessToken !== null &&
-              GLOBALS.store?.refreshToken !== null
-            }
-          />
-        </ErrorBoundary>
+        <MFNotificationProvider>
+          <MFDrawerContainer />
+          <ErrorBoundary
+            onError={errorHandler}
+            FallbackComponent={ErrorFallbackComponent}
+          >
+            <RouterOutlet
+              isAuthorized={
+                GLOBALS.store?.accessToken !== null &&
+                GLOBALS.store?.refreshToken !== null
+              }
+            />
+          </ErrorBoundary>
+        </MFNotificationProvider>
       </GlobalContext.Provider>
-      {/* <MFNotificationCard
-          duration={2000}
-          iconName={"favorite_selected"}
-          id={"11"}
-          onCloseNotification={() => {
-            console.log("Notification closed");
-          }}
-          containerStyle={{
-            width: 700,
-            height: 200,
-            backgroundColor: "red",
-            position: 'absolute',
-            top: 100,
-            right: 100,
-            zIndex: 5
-          }}
-          iconStyle={{ width: 100, height: 100 }}
-          title={"Title-Test Notification"}
-          // subtitle={"Sub-title test Notification"}
-          key={12345}
-          
-        /> */}
     </QueryClientProvider>
   );
 };

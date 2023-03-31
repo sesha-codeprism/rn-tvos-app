@@ -1152,7 +1152,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       channelIndex: index,
     };
   };
-
+// TODO: show notifications for fav and unfav
   const handleFavoritePress = async () => {
     const seriesId = udpDataAsset?.SeriesId;
     let assetId;
@@ -1585,7 +1585,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.userAccountInfo,
           GLOBALS.recorders,
           playActionsData,
-          undefined,
+          GLOBALS.networkIHD,
           startDateFromEPG,
           endDateFromEPG,
           GLOBALS.channelRights,
@@ -1607,7 +1607,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.viewableSubscriptions,
           GLOBALS.scheduledSubscriptions,
           GLOBALS.recorders,
-          undefined,
+          GLOBALS.networkIHD,
           undefined,
           undefined,
           startDateFromEPG,

@@ -27,21 +27,19 @@ import {
 import useBootstrap from "../../customHooks/useBootstrapData";
 import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
+import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import {
   invalidateQueryBasedOnSpecificKeys,
-  queryClient,
   resetCaches,
 } from "../../config/queries";
 import { useQuery } from "react-query";
 import { generateGUID, makeRandomHexString } from "../../utils/guid";
 import NotificationType from "../../@types/NotificationType";
-import { massageSubscriberFeed } from "../../utils/assetUtils";
+import { massageTrendingData } from "../../utils/assetUtils";
 import { AppStrings } from "../../config/strings";
 
 import { LogBox } from "react-native";
-import useAllSubscriptionGroups from "../../customHooks/useAllSubscriptionGroups";
-import { getAllSubscriptionGroups } from "../../../backend/dvrproxy/dvrproxy";
 import {
   EasAlertShortCode,
   isMatch,
@@ -233,6 +231,24 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         //     "en-US"
         //   ).toLowerCase(),
         // });
+        // getAllSubscriptionGroups()
+        //   .then(() => {
+        //   })
+        //   .catch((err) => {
+        //     console.warn("Something went wrong in refetching groups");
+        //   });
+        // console.log("DVR update notification received");
+        // // queryClient.invalidateQueries(["dvr"]);
+        // queryClient.invalidateQueries({ queryKey: ["dvr"] });
+        // // invalidateQueryBasedOnSpecificKeys(
+        // //   "feed",
+        // //   "get-all-subscriptionGroups"
+        // // );
+        // // setTimeout(() => {
+        // //   appQueryCache.find("get-UDP-data")?.invalidate();
+        // // }, 1000);
+      } else if (message?.type === NotificationType.pinUnpinChannel) {
+        MFEventEmitter.emit("FavoriteChannelUpdated", message);
       }
     },
     [GLOBALS.deviceInfo.deviceId]
@@ -336,27 +352,29 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         )?.[0] || "en"
       }`,
     });
-    const massagedTVData = massageSubscriberFeed(
-      { LibraryItems: TVShow.data.Items },
-      "",
-      SourceType.VOD
-    );
-    const massagedMovieData = massageSubscriberFeed(
-      { LibraryItems: movies.data.Items },
-      "",
-      SourceType.VOD
-    );
+    const massagedTVData = massageTrendingData(TVShow.data, "tvshows");
+    //  massageSubscriberFeed(
+    //   { LibraryItems: TVShow.data.Items },
+    //   "",
+    //   SourceType.VOD
+    // );
+    const massagedMovieData = massageTrendingData(movies.data, "movies");
+    //  massageSubscriberFeed(
+    //   { LibraryItems: movies.data.Items },
+    //   "",
+    //   SourceType.VOD
+    // );
     const tvShowsString =
       AppStrings?.str_search_catagory_tvshows || "Trending TV Shows";
     const trendingMovieString =
       AppStrings?.str_search_catagory_movie || "Trending Movies";
     GLOBALS.moviesAndTvShows = [
       //@ts-ignore
-      { Name: tvShowsString, Elements: massagedTVData },
-      { Name: trendingMovieString, Elements: massagedMovieData },
+      ...massagedTVData,
+      ...massagedMovieData,
     ];
-    console.log("movies", movies);
-    console.log("TVShow", TVShow);
+    console.log("movies", massageTrendingData(movies.data, "movies"));
+    console.log("TVShow", massageTrendingData(TVShow.data, "tvshows"));
   };
   return (
     <View style={styles.container}>

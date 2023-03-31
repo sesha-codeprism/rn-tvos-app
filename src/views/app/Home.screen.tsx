@@ -32,8 +32,8 @@ import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import { ItemType } from "../../utils/common";
 import { globalStyles } from "../../config/styles/GlobalStyles";
-import { parseMessage } from "../../utils/EAS/EASUtils";
-import EventEmitter from "../../utils/MFEventEmitter";
+import { getNetworkIHD } from "../../../backend/networkIHD/networkIHD";
+import { MFGlobalsConfig } from "../../../backend/configs/globals";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -51,6 +51,12 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const setttingsRef = useRef(null);
   const drawerRef: React.MutableRefObject<any> = useRef();
   const accountInfo = useAccount();
+  const params = {
+    connectionUrl = undefined,
+    inHomeApiEndpoint = undefined,
+    useSubscriberInHome = false,
+  } = MFGlobalsConfig?.config?.inhomeDetection || {};
+  getNetworkIHD(params);
   const currentContext = useContext(GlobalContext);
 
   let feedTimeOut: any = null;
@@ -194,6 +200,20 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   };
 
   useEffect(() => {
+    // setTimeout(() => {
+    //   MFEventEmitter.emit("createNotification",  {
+    //     id: "NO_NETWORK",
+    //     iconName: "favorite_selected",
+    //     subtitle: AppStrings?.str_home_network_down,
+    // })
+    // }, 4000);
+    // setTimeout(() => {
+    //   MFEventEmitter.emit("createNotification",  {
+    //     id: "NO_NETWORK",
+    //     iconName: "favorite_selected",
+    //     subtitle: `${AppStrings?.str_home_network_down} New`,
+    // })
+    // }, 8000);
     if (!open) {
       console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
       TVMenuControl.enableTVMenuKey();
@@ -306,7 +326,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                 </View>
               )}
               <View style={HomeScreenStyles.contentContainer}>
-                {!isLoading && (
+                {!isLoading && (xw
                   <MFSwim
                     // @ts-ignore
                     ref={firstSwimlaneRef}

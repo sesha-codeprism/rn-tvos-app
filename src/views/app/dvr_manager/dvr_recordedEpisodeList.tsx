@@ -48,6 +48,7 @@ import { DetailsSidePanel } from "../details_pages/DetailSidePanel";
 import { DetailRoutes } from "../../../config/navigation/DetailsNavigator";
 import axios from "axios";
 import { IRecordingToDelete } from "../../../@types/subscriptionGroup";
+import MFEventEmitter from "../../../utils/MFEventEmitter";
 
 interface Props {
   navigation: NativeStackNavigationProp<any>;
@@ -123,7 +124,7 @@ const DvrRecordedEpisode = (props: any) => {
   let firstButtonRef = React.createRef();
   let isSeasonScrolled = false;
   const toggleMoreInfo = (item: any) => {
-    console.log('toggleMoreInfo', item)
+    console.log("toggleMoreInfo", item);
     let udpData: any = {};
     const {
       Definition,
@@ -136,10 +137,11 @@ const DvrRecordedEpisode = (props: any) => {
     const [subscriptionItem = {}] = SubscriptionGroups || [];
     if (SeriesDetails) {
       udpData = SeriesDetails;
-    } else  {
+    } else {
       udpData = subscriptionItem.ProgramDetails || {};
     }
-    udpData["description"] = item.SubscriptionItems[0].ProgramDetails.Description || "";
+    udpData["description"] =
+      item.SubscriptionItems[0].ProgramDetails.Description || "";
     udpData["title"] = item?.title || "";
     setScreenProps({
       udpData: udpData,
@@ -155,7 +157,6 @@ const DvrRecordedEpisode = (props: any) => {
     setOpen(true);
     // drawerRef.current.close();
     moreInfoDrawerRef?.current?.open();
-    
   };
   const closeMoreInfoModal = () => {
     console.log("close modal called on dvr manager");
@@ -226,7 +227,7 @@ const DvrRecordedEpisode = (props: any) => {
   const onPressSave = (item: any) => {
     console.log("onPressSave", item);
     const id: string = item.UniversalProgramId || item.Id;
-    
+
     const serviceMap = GLOBALS.bootstrapSelectors?.ServiceMap.Services; //bootstrapBootstrapSelectors.serviceMap(getState());
     if (!serviceMap) {
       throw "No serviceMap or axios instance.";
@@ -239,14 +240,17 @@ const DvrRecordedEpisode = (props: any) => {
       .then((response: any) => {
         console.log("response coming in save item", response);
         if (response?.data?.State === "Completed") {
+          MFEventEmitter.emit("createNotification", {
+            id: AppStrings?.str_restrictions.apple_tv_blocked,
+            iconName: "info",
+            subtitle: AppStrings?.str_dvr_recording_success,
+          });
         }
       })
       .catch((err: any) => {
         console.log("POST METHOD ERROR: ", err);
       });
   };
-
- 
 
   const deleteDvrPopUp = (item: any) => {
     Alert.alert(AppStrings?.str_dvr_delete_warning, "", [
@@ -261,15 +265,13 @@ const DvrRecordedEpisode = (props: any) => {
         onPress: () => {},
       },
     ]);
-
-   
   };
   const deleteRecording = (item: any) => {
     console.log("item to delete", item);
     const { SeriesId, SeasonNumber, EpisodeNumber } =
       item?.ProgramDetails || {};
     const isSeries = !!(SeriesId || SeasonNumber || EpisodeNumber);
-    const objRecorded: IRecordingToDelete  = {
+    const objRecorded: IRecordingToDelete = {
       SubscriptionId: item?.SubscriptionId,
       SubscriptionItemIds: [item?.Id || item.UniversalProgramId],
       isSeries: isSeries,
@@ -286,13 +288,18 @@ const DvrRecordedEpisode = (props: any) => {
       .then((response: any) => {
         if (response?.data?.State === "Completed") {
           // dispatch(initData.actionCreators.request());
+          MFEventEmitter.emit("createNotification", {
+            id: AppStrings?.str_dvr_recording_deleted,
+            iconName: "delete",
+            subtitle: AppStrings?.str_dvr_recording_deleted,
+          });
         }
       })
       .catch((err: any) => {
         console.log("POST METHOD ERROR: ", err);
       });
   };
-  
+
   const setupData = () => {
     const massagedData = item || [];
     let filteredRecording: any;
@@ -343,29 +350,33 @@ const DvrRecordedEpisode = (props: any) => {
 
       filterTvDetails?.length &&
         filterTvDetails.forEach((itemFilter: any) => {
-        itemFilter?.SubscriptionItems ?  itemFilter?.SubscriptionItems.forEach((item: any) => {
-            if (setItemState[item.ItemState] !== undefined) {
-              if (item?.ProgramDetails?.SeasonNumber) {
-                if (seasonObj[item.ProgramDetails.SeasonNumber] === undefined) {
-                  seasonObj[item.ProgramDetails.SeasonNumber] = [item];
-                } else {
-                  seasonObj[item.ProgramDetails.SeasonNumber] = [
-                    ...seasonObj[item.ProgramDetails.SeasonNumber],
-                    item,
-                  ];
+          itemFilter?.SubscriptionItems
+            ? itemFilter?.SubscriptionItems.forEach((item: any) => {
+                if (setItemState[item.ItemState] !== undefined) {
+                  if (item?.ProgramDetails?.SeasonNumber) {
+                    if (
+                      seasonObj[item.ProgramDetails.SeasonNumber] === undefined
+                    ) {
+                      seasonObj[item.ProgramDetails.SeasonNumber] = [item];
+                    } else {
+                      seasonObj[item.ProgramDetails.SeasonNumber] = [
+                        ...seasonObj[item.ProgramDetails.SeasonNumber],
+                        item,
+                      ];
+                    }
+                  } else if (
+                    seasonObj[AppStrings?.str_default_season] !== undefined
+                  ) {
+                    seasonObj[AppStrings?.str_default_season] = [
+                      ...seasonObj[AppStrings?.str_default_season],
+                      item,
+                    ];
+                  } else {
+                    seasonObj[AppStrings?.str_default_season] = [item];
+                  }
                 }
-              } else if (
-                seasonObj[AppStrings?.str_default_season] !== undefined
-              ) {
-                seasonObj[AppStrings?.str_default_season] = [
-                  ...seasonObj[AppStrings?.str_default_season],
-                  item,
-                ];
-              } else {
-                seasonObj[AppStrings?.str_default_season] = [item];
-              }
-            }
-          }): null;
+              })
+            : null;
         });
       const [filteredTVItem = {}] = filterTvDetails || [];
       const {
@@ -409,18 +420,16 @@ const DvrRecordedEpisode = (props: any) => {
           metaData: filterTvDetails[0],
           itemType: massagedData?.ItemType,
         });
-        
       }
     }
   };
 
   const getCtaButtons = (item: any) => {
-   
     let ipStatus = props.account?.ClientIpStatus || {};
     if (!config.inhomeDetection.useSubscriberInHome) {
       // networkIHD data
       const inHomeValue =
-        props.networkIHD?.status === "inHome" ||
+        GLOBALS.networkIHD?.status === "inHome" ||
         config.inhomeDetection.inHomeDefault;
       ipStatus["InHome"] = inHomeValue
         ? RestrictionValue.Yes
@@ -428,7 +437,6 @@ const DvrRecordedEpisode = (props: any) => {
     }
     const ctaButtonList = [];
     if (item.itemType === ItemShowType.DvrRecording) {
-     
       ctaButtonList.push({
         type: "TextIcon",
         text: item?.Settings?.RecyclingDisabled
@@ -455,7 +463,7 @@ const DvrRecordedEpisode = (props: any) => {
         text: AppStrings?.str_app_edit,
         icon: editIcon,
         onPress: () => {
-         // TODO: Edit to be implemented
+          // TODO: Edit to be implemented
           // editRecording(item),
         },
       });
@@ -521,7 +529,7 @@ const DvrRecordedEpisode = (props: any) => {
       });
       setCurrentSeasonEpisodes([]);
       setCurrentEpisode(undefined);
-      
+
       // Season and Episodes
       if (currentSeason) {
         setCurrentSeason(season);
@@ -980,20 +988,20 @@ const DvrRecordedEpisode = (props: any) => {
           </View>
         </View>
         <DetailsSidePanel
-            ref={moreInfoDrawerRef}
-            drawerPercentage={37}
-            animationTime={200}
-            overlay={false}
-            opacity={1}
-            open={open}
-            animatedWidth={SCREEN_WIDTH * 0.37}
-            closeOnPressBack={false}
-            navigation={props.navigation}
-            drawerContent={false}
-            route={route}
-            closeModal={closeMoreInfoModal}
-            screenProps={screenProps}
-          />
+          ref={moreInfoDrawerRef}
+          drawerPercentage={37}
+          animationTime={200}
+          overlay={false}
+          opacity={1}
+          open={open}
+          animatedWidth={SCREEN_WIDTH * 0.37}
+          closeOnPressBack={false}
+          navigation={props.navigation}
+          drawerContent={false}
+          route={route}
+          closeModal={closeMoreInfoModal}
+          screenProps={screenProps}
+        />
       </ImageBackground>
     </PageContainer>
   );
