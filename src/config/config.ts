@@ -87,7 +87,7 @@ export const config = {
     defaultOrderBy: "Popularity",
     longPressThreshold: 500,
     inhomeDetection: {
-        inHomeDefault: true,
+        inHomeDefault: false,
         connectionUrl: "mkinhome.azurewebsites.net",
         inHomeApiEndpoint: "/v1/ihd/users/userAccount/{accountId}/isInHome",
         useSubscriberInHome: false,

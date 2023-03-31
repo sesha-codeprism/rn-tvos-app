@@ -1585,7 +1585,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.userAccountInfo,
           GLOBALS.recorders,
           playActionsData,
-          undefined,
+          GLOBALS.networkIHD,
           startDateFromEPG,
           endDateFromEPG,
           GLOBALS.channelRights,
@@ -1607,7 +1607,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.viewableSubscriptions,
           GLOBALS.scheduledSubscriptions,
           GLOBALS.recorders,
-          undefined,
+          GLOBALS.networkIHD,
           undefined,
           undefined,
           startDateFromEPG,
@@ -1675,7 +1675,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   const closeModal = () => {
-    setCTALoaded(false);
     setOpen(false);
   };
 

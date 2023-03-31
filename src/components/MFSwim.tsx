@@ -73,11 +73,9 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
       }
     });
 
-    //["#FFBDBA", "#FF9C6D", "#FFBDBA"]
-
     return (
       <FlatList
-        data={props.feeds?.Feeds}
+        data={props.feeds?.Feeds.filter((e) => e.Name !== "Free Preview")}
         keyExtractor={(x, i) => i.toString()}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
@@ -120,9 +118,6 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
               onPress={props.onPress}
               limitSwimlaneItemsTo={props.limitSwimlaneItemsTo}
               onBlur={props.onBlur}
-              cardStyle={
-                item.ShowcardAspectRatio === layout2x3 ? "2x3" : "16x9"
-              }
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}
               onListEmptyElementPress={props.onListEmptyElementPress}
@@ -153,9 +148,6 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
                 onPress={props.onPress}
                 limitSwimlaneItemsTo={props.limitSwimlaneItemsTo}
                 onBlur={props.onBlur}
-                cardStyle={
-                  item.ShowcardAspectRatio === layout2x3 ? "2x3" : "16x9"
-                }
                 swimLaneKey={swimLaneKey}
                 updateSwimLaneKey={updateSwimLaneKey}
                 onListEmptyElementPress={props.onListEmptyElementPress}

@@ -30,7 +30,7 @@ IPA_FOLDER_NAME="Release-${DATE}"
 EXPORT_FILE_PATH="outputs/${IPA_FOLDER_NAME}"
 ExportOptions_Path=./ios/ExportOptions.plist
 
-SCHEME_NAME="RetailClient-tvOS"
+SCHEME_NAME="RetailClient-tvOS_Player"
 CONFIGURATION="Release"
 PROJECT_TYPE="workspace"
 PROJECT_TYPE_EXT="xcworkspace"

@@ -479,7 +479,25 @@ export const getSeriesSubscriberData = async (item: string, params: any) => {
     console.error("Cannot getProgramSubscriberData due to ", e);
     return undefined;
   }
+}
 
+export const getAllPinnedItems = async (Id: string, ItemType: PinnedItemType, requestFlag?: boolean) => {
+  const { accessToken } = GLOBALS.store!;
+  //@ts-ignore
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + "/v4/pinned-items/?types=FavoriteChannel&$skip=0&$top=90&storeId=HubsAndFeeds-Main";
+  const response = await GET({
+    url: url,
+    params: {
+      storeId: DefaultStore.Id,
+      Id: Id,
+      // ItemType: ItemType
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+    },
+  });
+  return response;
 }
 
 export const pinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?: boolean) => {
@@ -504,7 +522,7 @@ export const pinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?
 export const unpinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?: boolean) => {
   const { accessToken } = GLOBALS.store!;
   //@ts-ignore
-  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v2/pinned-items/${ItemType}/${Id}?`;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v2/pinned-items/${ItemType}/${Id}?storeId=${DefaultStore.Id}`;
   const response = await DELETE({
     url: url,
     headers: {
@@ -752,6 +770,10 @@ export const registerSubscriberUdls = (params?: any) => {
     {
       prefix: BASE + "/getSeriesSubscriberData/",
       getter: getSeriesSubscriberData
+    },
+    {
+      prefix: BASE + "/getAllPinnedItems/",
+      getter: getAllPinnedItems
     },
     { prefix: BASE + "/getSeasonPlayOptions/", getter: getSeasonPlayOptions },
     { prefix: BASE + "/getSeriesPlayOptions", getter: getSeriesPlayOptions },

@@ -60,6 +60,7 @@ import PackageDetailsScreen from "../../views/app/details_pages/package_details/
 import FavouriteManagerScreen from "../../views/app/details_pages/favouriteManager/favouriteManager";
 import DVRManagerScreen from "../../views/app/dvr_manager/dvr_manager.screen";
 import DvrRecordedEpisode from "../../views/app/dvr_manager/dvr_recordedEpisodeList";
+import FavoriteChannelsScreen from "../../views/app/details_pages/favoriteChannels/favoriteChannels";
 
 interface RouterOutletProps {
   initialState: any;
@@ -118,6 +119,8 @@ export const Routes = {
   DvrRecordedEpisode:"DvrRecordedEpisode",
   FavouriteManager: "FavouriteManager",
   DvrManager: "DvrManager",
+  FavoriteChannelsManager: "FavoriteChannelsManager",
+  DvrManager: "DvrManager"
 };
 
 const Stack = createNativeStackNavigator();
@@ -316,6 +319,10 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
       <Stack.Screen
         name={Routes.FavouriteManager}
         component={FavouriteManagerScreen}
+      />
+      <Stack.Screen
+        name={Routes.FavoriteChannelsManager}
+        component={FavoriteChannelsScreen}
       />
     </Stack.Navigator>
   );

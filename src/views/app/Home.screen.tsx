@@ -32,6 +32,8 @@ import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import { ItemType } from "../../utils/common";
 import { globalStyles } from "../../config/styles/GlobalStyles";
+import { getNetworkIHD } from "../../../backend/networkIHD/networkIHD";
+import { MFGlobalsConfig } from "../../../backend/configs/globals";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -49,6 +51,12 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const setttingsRef = useRef(null);
   const drawerRef: React.MutableRefObject<any> = useRef();
   const accountInfo = useAccount();
+  const params = {
+    connectionUrl = undefined,
+    inHomeApiEndpoint = undefined,
+    useSubscriberInHome = false,
+  } = MFGlobalsConfig?.config?.inhomeDetection || {};
+  getNetworkIHD(params);
   const currentContext = useContext(GlobalContext);
 
   let feedTimeOut: any = null;
@@ -58,6 +66,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
 
   const { data, isLoading } = getAllHubs();
   props.navigation.addListener("focus", () => {
+    setHubsData();
     console.log("focused");
   });
 
@@ -74,22 +83,16 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       }
     }, debounceTime);
   };
-  // console.log(AppStrings);
 
   const setHubsData = async () => {
     if (data && !hubs.length) {
       const hubsResponse: Array<FeedItem> = data.data;
       const replace_hub: Array<FeedItem> = hubsResponse.filter(
-        (e) => e.Name === "{profile_name}" || e.IsProfileHub
+        (e) =>
+          e.Name === "{profile_name}" || e.Name === "You" || e.IsProfileHub!
       );
-      console.log(
-        "setHubsData data.data",
-        data.data,
-        replace_hub,
-        replace_hub.length
-      );
-      if (replace_hub.length >= 0) {
-        // replace_hub.length === 0 ? (replace_hub[0] = data.data[0]) : null;
+      if (replace_hub.length) {
+        replace_hub.length === 0 ? (replace_hub[0] = data.data[0]) : null;
         if (GLOBALS.store!.userProfile) {
           /** If the value of @param GLOBALS.store!.userProfile * is not  null or  undefined */
           if (GLOBALS.store!.userProfile.Name?.toLowerCase() === "default") {
@@ -237,12 +240,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
 
-  console.log("firstSwimlaneRef ", firstSwimlaneRef);
-  // console.log(
-  //   GLOBALS.nowNextMap.now
-  //     .map((e: any) => e.ProgramId !== undefined)
-  //     .filter((val: any) => val !== false).length
-  // );
   return (
     <View style={HomeScreenStyles.container}>
       <ImageBackground
