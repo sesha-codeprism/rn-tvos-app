@@ -51,11 +51,11 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const setttingsRef = useRef(null);
   const drawerRef: React.MutableRefObject<any> = useRef();
   const accountInfo = useAccount();
-  const params = {
+  const params = ({
     connectionUrl = undefined,
     inHomeApiEndpoint = undefined,
     useSubscriberInHome = false,
-  } = MFGlobalsConfig?.config?.inhomeDetection || {};
+  } = MFGlobalsConfig?.config?.inhomeDetection || {});
   getNetworkIHD(params);
   const currentContext = useContext(GlobalContext);
 
@@ -244,7 +244,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
 
   // useEffect(() => {
   //   const parsedMessage = parseMessage(
-  //     `{"continuationToken":"448407|prasad.test1@outlook.com;514514;A","type":"eas-message","content":"[!fips:121002,,3500000],[[[EXP:16703798688035635200],[MAX:1],[SHARE:EXP;BEG],[BEG:16703797141847408640],[WHEN:00:00:00],[EVENT:page:eas2.xml?__MPFLayer=eas2&tid=alert_9498319+Sender_1]],[[MAX:1],[WHEN:60],[EVENT:#urn:microsoft:mediaroom:action:eas:audio2end]],[[ID:alert_9498319+Sender_1],[#title:EAS Alert.],[#body:EAS Alert Testing],[#title(fr-ca):Alert d'urgence.],[#body(fr-ca):Ceci est un test du System de l'alerte urgente.],[#title():],[#body():],[#title():],[#body():],[#title():],[#body():],[#easaudio:eas://239.0.12.44:1223],[#priority:12],[#extdata0:999],[#alerttype:Duplex],[#alertShortCode:Level2]]]"}`,
+  //     `{"continuationToken":"448407|prasad.test1@outlook.com;514514;A","type":"eas-message","content":"[!fips:121002,,3500000],[[[EXP:16703798688035635200],[MAX:1],[SHARE:EXP;BEG],[BEG:16703797141847408640],[WHEN:00:00:00],[EVENT:page:eas2.xml?__MPFLayer=eas2&tid=alert_9498319+Sender_1]],[[MAX:1],[WHEN:60],[EVENT:#urn:microsoft:mediaroom:action:eas:audio2end]],[[ID:alert_9498319+Sender_1],[#title:EAS Alert.],[#body: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elit duis tristique sollicitudin nibh sit amet commodo. Est sit amet facilisis magna etiam tempor orci. Non quam lacus suspendisse faucibus interdum posuere lorem. Quam elementum pulvinar etiam non quam. Elit duis tristique sollicitudin nibh sit amet commodo nulla. Et malesuada fames ac turpis egestas sed tempus urna. Sollicitudin nibh sit amet commodo. Pellentesque elit eget gravida cum sociis natoque penatibus. Porta nibh venenatis cras sed. Cursus mattis molestie a iaculis at erat pellentesque adipiscing. Urna neque viverra justo nec ultrices dui sapien. Tincidunt praesent semper feugiat nibh sed pulvinar proin. Amet nulla facilisi morbi tempus iaculis urna id. Ut diam quam nulla porttitor massa id neque. In eu mi bibendum neque egestas.Est ante in nibh mauris cursus mattis molestie. Cras tincidunt lobortis feugiat vivamus at augue eget. Ullamcorper sit amet risus nullam eget. Quisque sagittis purus sit amet volutpat consequat mauris. Tortor at auctor urna nunc id cursus metus. Mi eget mauris pharetra et ultrices neque ornare aenean. Ultricies tristique nulla aliquet enim. Dis parturient montes nascetur ridiculus. Nullam vehicula ipsum a arcu. Nibh cras pulvinar mattis nunc sed. Interdum velit laoreet id donec ultrices tincidunt arcu. Sodales ut etiam sit amet nisl purus in mollis nunc. Orci dapibus ultrices in iaculis nunc sed. ],[#title(fr-ca):Alert d'urgence.],[#body(fr-ca):Ceci est un test du System de l'alerte urgente.],[#title():],[#body():],[#title():],[#body():],[#title():],[#body():],[#easaudio:eas://239.0.12.44:1223],[#priority:12],[#extdata0:999],[#alerttype:Duplex],[#alertShortCode:Level2]]]"}`,
   //     GLOBALS.store?.settings?.display.onScreenLanguage.languageCode,
   //     GLOBALS.bootstrapSelectors?.EasProfile.GeoCode
   //   );
@@ -326,7 +326,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                 </View>
               )}
               <View style={HomeScreenStyles.contentContainer}>
-                {!isLoading && (xw
+                {!isLoading && (
                   <MFSwim
                     // @ts-ignore
                     ref={firstSwimlaneRef}

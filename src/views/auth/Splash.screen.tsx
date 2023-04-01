@@ -45,7 +45,6 @@ import {
   isMatch,
   parseMessage,
 } from "../../utils/EAS/EASUtils";
-import MFEventEmitter from "../../utils/MFEventEmitter";
 import { sourceTypeString } from "../../utils/analytics/consts";
 
 // LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
