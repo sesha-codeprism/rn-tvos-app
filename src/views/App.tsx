@@ -12,7 +12,7 @@ import { initUdls } from "../../backend";
 import ErrorBoundary from "react-native-error-boundary";
 import ErrorFallbackComponent from "../components/ErroFallBackComponent";
 import { queryClient } from "../config/queries";
-import MFNotificationCard from "../components/MFNotification/MFNotificationCard";
+import EASContainer from "./EASContainer";
 import MFNotificationProvider from "../components/MFNotification/MFNotificationProvider";
 
 interface AppProps {}
@@ -98,8 +98,10 @@ const App: React.FunctionComponent<AppProps> = (props) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MFNotificationProvider>
-        <GlobalContext.Provider value={appSettings}>
+      <EASContainer />
+      <GlobalContext.Provider value={appSettings}>
+        <EASContainer />
+        <MFNotificationProvider>
           <MFDrawerContainer />
           <ErrorBoundary
             onError={errorHandler}
@@ -112,8 +114,8 @@ const App: React.FunctionComponent<AppProps> = (props) => {
               }
             />
           </ErrorBoundary>
-        </GlobalContext.Provider>
-      </MFNotificationProvider>
+        </MFNotificationProvider>
+      </GlobalContext.Provider>
     </QueryClientProvider>
   );
 };

@@ -11,7 +11,7 @@ export const HomeScreenStyles = StyleSheet.create({
   contentContainer: {
     height: '100%',
     // paddingBottom: 500
-    flex: 1
+    flex: 1,
   },
   viewContainer: {
     paddingHorizontal: 50,

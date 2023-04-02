@@ -78,6 +78,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const cardRef = useRef<PressableProps>(null);
   const pivotsParam = "pivots=true";
   const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
+  console.log("Pivot url", pivotURL, browseFeed.Uri, browseFeed);
 
   // UNSTABLE_usePreventRemove(openMenu, (data) => {
   //   setOpenSubMenu(false);
@@ -160,7 +161,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     fetchFeeds,
     defaultQueryOptions
   );
-  
+
   const handleEndReached = debounce2(() => {
     if (!lastPageReached) {
       setCurrentPage(page + 1);
@@ -254,7 +255,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
               source={{
                 uri: first.Image,
               }}
-              ></Image>
+            ></Image>
             <Text
               style={[styles.ratingTextStyle, styles.contentRatingText]}
             >{`${first?.Score}%`}</Text>
@@ -441,43 +442,43 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
               <>
                 <View style={styles.currentFeedContainerStyles}>
                   {currentFeed && (
-                    <>                 
-                        <ImageBackground
-                          imageStyle={styles.imageStyle}
-                          style={styles.posterImageStyle}
-                          source={imageSource}
-                        >
-                          <LinearGradient
-                            colors={["transparent", "#00030E", "#00030E"]}
-                            start={{ x: 0, y: 0.8 }}
-                            end={{ x: 0, y: 1 }}
-                            style={{
-                              flex: 1,
-                            }}
-                                />   
-                      <View style={styles.metadataContainerStyles}>
-                        {currentFeed?.CatalogInfo &&
-                          currentFeed.CatalogInfo.Network && (
-                            <View style={styles.networkLogoContainerStyle}>
-                              <FastImage
-                                source={{
-                                  uri: getNetworkInfo(currentFeed)
-                                    .tenFootLargeURL.uri,
-                                }}
-                                style={styles.networkLogoStyles}
-                              />
-                            </View>
-                          )}
-                        <MFText
-                          shouldRenderText
-                          displayText={currentFeed!.title}
-                          textStyle={styles.titleTextStyle}
-                          adjustsFontSizeToFit={false}
-                          numberOfLines={3}
+                    <>
+                      <ImageBackground
+                        imageStyle={styles.imageStyle}
+                        style={styles.posterImageStyle}
+                        source={imageSource}
+                      >
+                        <LinearGradient
+                          colors={["transparent", "#00030E", "#00030E"]}
+                          start={{ x: 0, y: 0.8 }}
+                          end={{ x: 0, y: 1 }}
+                          style={{
+                            flex: 1,
+                          }}
                         />
-                        {renderMetadata()}
-                        {renderRatingValues()}
-                      </View>
+                        <View style={styles.metadataContainerStyles}>
+                          {currentFeed?.CatalogInfo &&
+                            currentFeed.CatalogInfo.Network && (
+                              <View style={styles.networkLogoContainerStyle}>
+                                <FastImage
+                                  source={{
+                                    uri: getNetworkInfo(currentFeed)
+                                      .tenFootLargeURL.uri,
+                                  }}
+                                  style={styles.networkLogoStyles}
+                                />
+                              </View>
+                            )}
+                          <MFText
+                            shouldRenderText
+                            displayText={currentFeed!.title}
+                            textStyle={styles.titleTextStyle}
+                            adjustsFontSizeToFit={false}
+                            numberOfLines={3}
+                          />
+                          {renderMetadata()}
+                          {renderRatingValues()}
+                        </View>
                       </ImageBackground>
                     </>
                   )}
@@ -640,7 +641,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   currentFeedContainerStyles: {
-    flex: 0.50,
+    flex: 0.5,
   },
   gridViewContainerStyles: {
     flex: 0.55,

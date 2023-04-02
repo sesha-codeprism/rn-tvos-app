@@ -10,6 +10,7 @@ import MFSwimLane from "./MFSwimLane";
 import MFLoader from "./MFLoader";
 import { SCREEN_WIDTH } from "../utils/dimensions";
 import { getUIdef } from "../utils/uidefinition";
+import EventEmitter from "../utils/MFEventEmitter";
 
 interface MFSwimProps {
   feeds: FeedItem | undefined;
@@ -59,19 +60,36 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
       setHubName(props.feeds?.Name || "");
     });
 
-    appQueryCache.subscribe((event) => {
-      if (event?.type === "queryUpdated") {
-        if (
-          event.query.queryHash.includes("get-live-data") &&
-          event.query.state.data
-        ) {
-          console.log("Need to reset updates", event?.query);
-          if (!mount) {
-            setMount(true);
-          }
-        }
-      }
-    });
+    // useEffect(() => {
+    //   const that = this;
+    //   const updateUI = () => {
+    //     setMount(!mount);
+    //   };
+    //   //@ts-ignore
+    //   EventEmitter.on(updateUI.bind(that), undefined);
+    // }, []),
+    //   appQueryCache.subscribe((event) => {
+    //     if (event?.type === "queryUpdated") {
+    //       if (
+    //         event.query.queryHash.includes("get-live-data") &&
+    //         event.query.state.data
+    //       ) {
+    //         console.log("Need to reset updates", event?.query);
+    //         if (!mount) {
+    //           setMount(true);
+    //         }
+    //       }
+    //     }
+    //   });
+
+    const updateUI = (params?: any) => {
+      console.log("received params,", params!);
+      setMount(!mount);
+    };
+
+    useEffect(() => {
+      EventEmitter.on("UpdateFeeds", updateUI);
+    }, []);
 
     return (
       <FlatList

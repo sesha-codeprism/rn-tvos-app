@@ -12302,6 +12302,11 @@ react-native-shimmer-placeholder@^2.0.9:
   resolved "https://registry.yarnpkg.com/react-native-shimmer-placeholder/-/react-native-shimmer-placeholder-2.0.9.tgz#0096932289bd9ec5747cd4f1c9d15f91ba02157a"
   integrity sha512-s2pfAAO6uaybREYM2KcaxP3c2XlZvLfHfzmhMlGEoOhSKaoM92KpA1Hx0BeC75yilkliJuowqO/hFzvLB0h7hg==
 
+react-native-sound-player@^0.13.2:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/react-native-sound-player/-/react-native-sound-player-0.13.2.tgz#c4be0b9a36b13204940d03f787cbbc0c742c8907"
+  integrity sha512-m457mjp496sARAED7epYzbhorfiLZ3j6HzJn7zEL9RU+ZJKcans/0gFNUEBvlh31fSDZRliQ2WwE4mJ6836bNg==
+
 react-native-syntax-highlighter@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-native-syntax-highlighter/-/react-native-syntax-highlighter-2.0.0.tgz#c8a4930d513d7f813858a1959937045eae021010"

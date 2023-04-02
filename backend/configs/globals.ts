@@ -1,5 +1,5 @@
 const GlobalsConfig = (function () {
-	let url = 'https://reachclient.prodb.skt.tv3cloud.com/';
+	let url = 'https://reachclient.dev.mr.tv3cloud.com/';
 	let stsUrl = '';
 	let defaultLanguage = 'en-US';
 	const config = {
