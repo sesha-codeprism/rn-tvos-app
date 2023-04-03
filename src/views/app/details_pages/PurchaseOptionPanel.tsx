@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 
-import { AppStrings } from "../../../config/strings";
+import { AppStrings, getFontIcon } from "../../../config/strings";
 import { AppImages } from "../../../assets/images";
 import SideMenuLayout from "../../../components/MFSideMenu/MFSideMenu";
 import { scaleAttributes } from "../../../utils/uidefinition";
@@ -11,7 +11,8 @@ import { generateType, metadataSeparator } from "../../../utils/Subscriber.utils
 import { SourceType } from "../../../utils/common";
 import { getScaledHeight, getScaledValue } from "../../../utils/dimensions";
 import { currencies } from "../../../utils/currencies";
-import MFEventEmitter from "../../../utils/MFEventEmitter";
+import { globalStyles } from "../../../config/styles/GlobalStyles";
+import { Routes } from "../../../config/navigation/RouterOutlet";
 
 export type Quality = "SD" | "HD";
 
@@ -25,7 +26,8 @@ type PurchaseOptionsPanelProps = {
         rerouteToDetails?: any;
         playOptionRefetch?:any;
         packageActionRefetch?: any;
-    };
+    },
+    navigation: any
 };
 
 type PurchaseOptionsPanelState = {
@@ -40,7 +42,7 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
     const [channelSubscribeActions, setChannelSubscribeActions] = useState([]);
     const [headingLine1, setheadingLine1] = useState("");
     const [headingLine2, setheadingLine2] = useState("");
-    const [focused, setFocused] = useState(0);
+    const [focused, setFocused] = useState({});
 
     const firstButtonRef = useRef<any>(null);
     const invertedHeading = true;
@@ -76,7 +78,7 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
 
         const headingLine1Temp = props.route.params.panelTitle;
 
-        const headingLine2Temp = props.route.params?.udpAssetData.title;
+        const headingLine2Temp = props.route.params?.udpAssetData.title || props.route.params?.udpAssetData.Name;
         setPurchaseActions(purchaseActionsTemp);
         setIsSubscribe(isSubscribeTemp);
         setChannelSubscribeActions(channelSubscribeActionsTemp);
@@ -137,12 +139,12 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                     : AppStrings?.str_details_cta_buy;
 
         const subTitle = [];
-        subTitle.push(props.route.params?.udpAssetData?.title);
+        subTitle.push(props.route.params?.udpAssetData?.title || props.route.params?.udpAssetData?.Name);
         subTitle.push(
             getQualityString(data.purchaseAction?.QualityLevels[0])
         );
 
-        MFEventEmitter.emit("openPurchaseInformation", {
+        props.navigation.push(Routes.PurchaseInformation, {
             title: headingType,
             subTitle: subTitle.join(metadataSeparator),
             purchaseActions: data.purchaseAction,
@@ -164,13 +166,14 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
         account: any,
         udpAssetData: any,
         isFirstButton: boolean,
-        isRentAndBuy: boolean
+        isRentAndBuy: boolean,
+        type: string
     ) => {
         const innerScrollViewContainer = isRentAndBuy
             ? purchaseActions.length < 4 && purchaseActions.length > 0
                 ? {
                     ...styles.innerScrollViewContainer,
-                    height: getScaledHeight(purchaseActions.length * 120),
+                    height: getScaledHeight(purchaseActions.length * 150),
                 }
                 : styles.innerScrollViewContainerRentBuy
             : styles.innerScrollViewContainer;
@@ -212,13 +215,13 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                             <Pressable
                                 hasTVPreferredFocus={isFirstButton}
                                 onFocus={() => {
-                                    setFocused(index);
+                                    setFocused({[type]: index});
                                 }}
                                 onPress={() => {
                                     onPressPurchaseAction(data)
                                 }}
                                 style={[
-                                    index === focused
+                                    index === focused?.[type]
                                         ? {
                                             ...styles?.containerActive,
                                             ...styles?.container,
@@ -230,18 +233,21 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                                 isTVSelectable={true}
                             >
 
-                                <Text
+                                {getQualityIcon(purchaseAction.QualityLevels[0]) && (
+                                    <Text
                                     style={[
-                                        styles?.listText,
+                                        styles?.fontIconStyle,
                                         { color: index === focused ? "#EEEEEE" : "#A7A7A7" },
                                     ]}
                                 >
-                                    {getQualityIcon(purchaseAction.QualityLevels[0])}
+                                    {getFontIcon(getQualityIcon(purchaseAction.QualityLevels[0]))}
                                 </Text>
+                                )
+                                    }
                                 <Text
                                     style={[
                                         styles?.listText,
-                                        { color: index === focused ? "#EEEEEE" : "#A7A7A7" },
+                                        { color: index === focused?.[type] ? "#EEEEEE" : "#A7A7A7" },
                                     ]}
                                 >
                                     {data.centerValue}
@@ -249,7 +255,7 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                                 <Text
                                     style={[
                                         styles?.listText,
-                                        { color: index === focused ? "#EEEEEE" : "#A7A7A7" },
+                                        { color: index === focused?.[type] ? "#EEEEEE" : "#A7A7A7" },
                                     ]}
                                 >
                                     {data.rightValue}
@@ -370,7 +376,8 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                         account,
                         udpAssetData,
                         true,
-                        isRentBuy
+                        isRentBuy,
+                        'rent'
                     )}
                 {filteredBuyPurchaseActions.length > 0 && !isSubscribe && (
                     <Text style={styles.textStyle}>
@@ -389,7 +396,8 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                             filteredBuyPurchaseActions.length > 0
                             ? true
                             : false,
-                        isRentBuy
+                        isRentBuy,
+                        'buy'
                     )}
                 {filteredSubscribeAction.length > 0 && (
                     <View>
@@ -414,7 +422,8 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                         account,
                         udpAssetData,
                         true,
-                        isRentBuy
+                        isRentBuy,
+                        'subscribe'
                     )}
             </ScrollView>
         );
@@ -504,6 +513,10 @@ const styles = StyleSheet.create(
             fontSize: 29,
             letterSpacing: 0,
             lineHeight: 50
+          },
+          fontIconStyle: {
+            fontFamily: globalStyles.fontFamily.icons,
+            fontSize: 70,
           }
     })
 );

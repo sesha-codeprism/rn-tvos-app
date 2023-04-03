@@ -73,7 +73,8 @@ const PurchaseContainer = (props: PurchaseContainerProps) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    MFEventEmitter.emit("closePurchase", null);
+    SettingsRN.set({ PURCHASE_NAVIGATION_HISTORY: {} })
+    MFEventEmitter.emit("closeClosePurchase", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {

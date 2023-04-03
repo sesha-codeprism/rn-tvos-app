@@ -522,7 +522,7 @@ export const pinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?
 export const purchaseItem = async (offerId: string, offerPrice: number) => {
   const { accessToken } = GLOBALS.store!;
   //@ts-ignore
-  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `v2/purchases?deviceType=${MFGlobalsConfig.deviceType}&storeId=${DefaultStore.Id}`;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v2/purchases?deviceType=${MFGlobalsConfig.deviceType}&storeId=${DefaultStore.Id}`;
   const response = await POST({
     url: url,
     params: {

@@ -2786,6 +2786,18 @@
               "flexDirection": "row",
               "alignItems": "center",
               "marginTop": 28
+            },
+            "focusedBackground":{
+              "backgroundColor": "${theme.backgroundColors.primary1}",
+              "borderRadius": 6,
+              "shadowColor": "#0000006b",
+              "shadowOffset": {
+                "width": 6,
+                "height": 8
+              },
+              "shadowOpacity": 0.42,
+              "shadowRadius": 4.65,
+              "elevation": 8
             }
           }
         }

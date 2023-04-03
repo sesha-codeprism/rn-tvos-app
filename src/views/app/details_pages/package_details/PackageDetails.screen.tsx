@@ -47,6 +47,7 @@ import { SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { DetailsSidePanel } from "../DetailSidePanel";
 import { open } from "fs";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
+import MFEventEmitter from "../../../../utils/MFEventEmitter";
 const { width, height } = Dimensions.get("window");
 
 interface PackageDetailsProps {
@@ -398,6 +399,21 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
             iconPlacement: "Left",
             shouldRenderImage: true,
           }}
+          onPress={() =>  {
+            MFEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: {
+                  ...packageData,
+                  purchaseActions: packageActions?.PurchaseActions
+                },
+                panelTitle: AppStrings?.str_details_cta_rentbuy,
+                confirmPlayCallBack: ctaButtonPress[
+                  AppStrings?.str_details_cta_rentbuy
+                ],
+              },
+              drawerPercentage:0.37
+            });
+          }}
         />
       );
     } else if (isRent) {
@@ -444,6 +460,21 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
             iconPlacement: "Left",
             shouldRenderImage: true,
           }}
+          onPress={() =>  {
+            MFEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: {
+                  ...packageData,
+                  purchaseActions: packageActions?.PurchaseActions
+                },
+                panelTitle: AppStrings?.str_details_cta_rent,
+                confirmPlayCallBack: ctaButtonPress[
+                  AppStrings?.str_details_cta_rent
+                ],
+              },
+              drawerPercentage:0.37
+            });
+          }}
         />
       );
     } else if (isBuy) {
@@ -489,6 +520,21 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
           fontIconProps={{
             iconPlacement: "Left",
             shouldRenderImage: true,
+          }}
+          onPress={() =>  {
+            MFEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: {
+                  ...packageData,
+                  purchaseActions: packageActions?.PurchaseActions
+                },
+                panelTitle: AppStrings?.str_details_cta_buy,
+                confirmPlayCallBack: ctaButtonPress[
+                  AppStrings?.str_details_cta_buy
+                ],
+              },
+              drawerPercentage:0.37
+            });
           }}
         />
       );
@@ -780,6 +826,18 @@ const packageDetailsStyle: any = StyleSheet.create(
         alignItems: "center",
         marginTop: 28,
       },
+      focusedBackground:{
+        backgroundColor: "#053C69",
+        borderRadius: 6,
+        shadowColor: "#0000006b",
+        shadowOffset: {
+          width: 6,
+          height: 8
+        },
+        shadowOpacity: 0.42,
+        shadowRadius: 4.65,
+        elevation: 8
+      }
     })
 );
 

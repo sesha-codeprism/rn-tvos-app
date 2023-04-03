@@ -365,11 +365,66 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     }
     },
     [AppStrings?.str_details_cta_playdvr]: () => {},
-    [AppStrings?.str_details_cta_rent]: () => {},
-    [AppStrings?.str_details_cta_buy]: () => {},
-    [AppStrings?.str_details_cta_rentbuy]: () => {},
-    [AppStrings?.str_details_cta_package]: () => {},
-    [AppStrings?.str_details_cta_subscribe]: () => {},
+    [AppStrings?.str_details_cta_rent]: () => {
+      MFEventEmitter.emit("openPurchase", {
+        params:{
+          udpAssetData: episodeDetailsData,
+          panelTitle: AppStrings?.str_details_cta_rent,
+          confirmPlayCallBack: ctaButtonPress[
+            AppStrings?.str_details_cta_play
+          ]
+        },
+        drawerPercentage:0.37
+      });
+    },
+    [AppStrings?.str_details_cta_buy]: () => {
+      MFEventEmitter.emit("openPurchase", {
+        params:{
+          udpAssetData: episodeDetailsData,
+          panelTitle: AppStrings?.str_details_cta_buy,
+          confirmPlayCallBack: ctaButtonPress[
+            AppStrings?.str_details_cta_buy
+          ]
+        },
+        drawerPercentage:0.37
+      });
+    },
+    [AppStrings?.str_details_cta_rentbuy]: () => {
+      MFEventEmitter.emit("openPurchase", {
+        params:{
+          udpAssetData: episodeDetailsData,
+          panelTitle: AppStrings?.str_details_cta_rentbuy,
+          confirmPlayCallBack: ctaButtonPress[
+            AppStrings?.str_details_cta_rentbuy
+          ]
+        },
+        drawerPercentage:0.37
+      });
+    },
+    [AppStrings?.str_details_cta_package]: () => {
+      MFEventEmitter.emit("openPurchase", {
+        params:{
+          udpAssetData: episodeDetailsData,
+          panelTitle: AppStrings?.str_details_cta_package,
+          confirmPlayCallBack: ctaButtonPress[
+            AppStrings?.str_details_cta_package
+          ]
+        },
+        drawerPercentage:0.37
+      });
+    },
+    [AppStrings?.str_details_cta_subscribe]: () => {
+      MFEventEmitter.emit("openPurchase", {
+        params:{
+          udpAssetData: episodeDetailsData,
+          panelTitle: AppStrings?.str_details_cta_subscribe,
+          confirmPlayCallBack: ctaButtonPress[
+            AppStrings?.str_details_cta_subscribe
+          ]
+        },
+        drawerPercentage:0.37
+      });
+    },
   };
 
   let firstButtonRef = React.createRef();

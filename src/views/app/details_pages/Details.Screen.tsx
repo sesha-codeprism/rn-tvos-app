@@ -1055,11 +1055,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       MFEventEmitter.emit("openPurchase", {
         params:{
           udpAssetData: udpDataAsset,
-          panelTitle: AppStrings?.str_details_cta_buy,
+          panelTitle: AppStrings?.str_details_cta_rent,
           confirmPlayCallBack: ctaButtonPress[
             AppStrings?.str_details_cta_play
-          ],
-        }
+          ]
+        },
+        drawerPercentage:0.37
       });
     },
     [AppStrings?.str_details_cta_buy]: () => {
@@ -1070,18 +1071,20 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           confirmPlayCallBack: ctaButtonPress[
             AppStrings?.str_details_cta_play
           ],
-        }
+        },
+        drawerPercentage:0.37
       });
     },
     [AppStrings?.str_details_cta_rentbuy]: () => {
       MFEventEmitter.emit("openPurchase", {
         params:{
           udpAssetData: udpDataAsset,
-          panelTitle: AppStrings?.str_details_cta_buy,
+          panelTitle: AppStrings?.str_details_cta_rentbuy,
           confirmPlayCallBack: ctaButtonPress[
-            AppStrings?.str_details_cta_play
+            AppStrings?.str_details_cta_rentbuy
           ],
-        }
+        },
+        drawerPercentage:0.37
       });
     },
     [AppStrings?.str_details_cta_package]: () => {
@@ -1089,11 +1092,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       MFEventEmitter.emit("openPurchase", {
         params:{
           udpAssetData: udpDataAsset,
-          panelTitle: AppStrings?.str_details_cta_buy,
+          panelTitle: AppStrings?.str_details_cta_package,
           confirmPlayCallBack: ctaButtonPress[
-            AppStrings?.str_details_cta_play
+            AppStrings?.str_details_cta_package
           ],
-        }
+        },
+        drawerPercentage:0.37
       });
     },
     [AppStrings?.str_details_cta_subscribe]: () => {
@@ -1103,25 +1107,29 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         }
       );
       if (networks && networks.length > 0) {
-        //TODO: Finish implementation for PurchaseNetwork feature
-        // props.openPanel(true, SideMenuRoutes.PurchaseNetwork, {
-        //     udpAssetData: udpDataAsset,
-        //     panelTitle: AppStrings?.str_details_cta_subscribe,
-        //     panelSubtitle: udpDataAsset?.title,
-        //     confirmPlayCallBack: ctaButtonPress[
-        //         AppStrings?.str_details_cta_play
-        //     ],
-        // });
+        MFEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_subscribe,
+            confirmPlayCallBack: ctaButtonPress[
+              AppStrings?.str_details_cta_subscribe
+            ],
+          },
+          drawerPercentage:0.37,
+          "isPurchaseNetwork": true
+        });
       } else {
         udpDataAsset["subscriptionExists"] = true;
-        //TODO: Finish implementation of PurchaseOptions
-        // props.openPanel(true, SideMenuRoutes.PurchaseOptions, {
-        //     udpAssetData: udpDataAsset,
-        //     panelTitle: AppStrings?.str_details_cta_subscribe,
-        //     confirmPlayCallBack: ctaButtonPress[
-        //         AppStrings?.str_details_cta_play
-        //     ],
-        // });
+        MFEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_subscribe,
+            confirmPlayCallBack: ctaButtonPress[
+              AppStrings?.str_details_cta_subscribe
+            ],
+          },
+          drawerPercentage:0.37
+        });
       }
     },
   };
