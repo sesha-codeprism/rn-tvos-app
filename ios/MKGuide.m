@@ -10,5 +10,6 @@
 RCT_EXPORT_VIEW_PROPERTY(guideParams, NSDictionary*)
 RCT_EXTERN_METHOD(initiateFullGuideWith:(NSString *)Token)
 RCT_EXPORT_VIEW_PROPERTY(onUpdate, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onFavourite, RCTBubblingEventBlock)
 
 @end
