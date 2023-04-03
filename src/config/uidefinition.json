@@ -4161,56 +4161,112 @@
     {
       "id": "PlayerSlidePanel",
       "style": {
-        "bodyRoot": {
-          "flex": 1,
-          "backgroundColor": "${theme.backgroundColors.shade1}",
-          "paddingHorizontal": 25,
-          "paddingVertical": 60
-        },
-        "instructionsContainer": {
-          "paddingHorizontal": 33
-        },
-        "instructionsText": {
-          "fontSize": "${theme.fontSizes.body1}",
-          "color": "${theme.fontColors.darkGrey}"
-        },
-        "headerText": {
-          "fontSize": "${theme.fontSizes.subTitle1}",
-          "marginHorizontal": 33,
-          "marginTop": 38,
-          "marginBottom": 24,
-          "color": "${theme.fontColors.light}",
-          "fontFamily": "${theme.fontFamily.bold}"
-        },
-        "selectButtonContainer": {
+        "root": {
           "width": "100%",
-          "height": 100
-        }
+          "height": "100%",
+          "backgroundColor": "${theme.backgroundColors.shade1}",
+          "display": "flex",
+          "flexDirection": "column"
+      },
+      "headerContainer": {
+          "width": "100%",
+          "height": 185,
+          "padding": 50,
+          "justifyContent": "center",
+          "flexDirection": "row",
+          "flex": 1,
+          "flexWrap": "wrap"
+      },
+      "contentContainer": {
+          "width": "100%",
+          "padding": 30,
+          "paddingTop": 10,
+          "height": "80%",
+          "display": "flex",
+          "flexDirection": "column"
+      },
+      "container": {
+          "width": "100%",
+          "height": 100,
+          "alignContent": "center",
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row"
+      },
+      "icContainer": {
+          "width": "15%",
+          "height": 83,
+          "alignContent": "center",
+          "alignItems": "center",
+          "justifyContent": "center"
+      },
+      "listContent": {
+          "width": "85%",
+          "height": 83,
+          "justifyContent": "center"
+      },
+      "listText": {
+          "fontSize": 29,
+          "letterSpacing": 0,
+          "lineHeight": 50
+      }
       }
     },
     {
       "id": "VideoQualityPanel",
       "style": {
-        "bodyRoot": {
-          "flex": 1,
-          "backgroundColor": "${theme.backgroundColors.shade1}",
-          "paddingHorizontal": 25,
-          "paddingVertical": 60
+        "root": {
+            "width": "100%",
+            "height": "100%",
+            "backgroundColor": "${theme.backgroundColors.shade1}",
+            "display": "flex",
+            "flexDirection": "column"
         },
-        "headerText": {
-          "fontSize": "${theme.fontSizes.subTitle1}",
-          "marginHorizontal": 33,
-          "marginTop": 38,
-          "marginBottom": 24,
-          "color": "${theme.fontColors.light}",
-          "fontFamily": "${theme.fontFamily.bold}"
+        "headerContainer": {
+            "width": "100%",
+            "height": 185,
+            "padding": 50,
+            "justifyContent": "center",
+            "flexDirection": "row",
+            "flex": 1,
+            "flexWrap": "wrap"
         },
-        "selectButtonContainer": {
-          "width": "100%",
-          "height": 100,
-          "paddingLeft": 30,
-          "paddingRight": 30,
-          "paddingTop": 10
+        "contentContainer": {
+            "width": "100%",
+            "padding": 30,
+            "paddingTop": 10,
+            "height": "80%",
+            "display": "flex",
+            "flexDirection": "column"
+        },
+        "listText": {
+            "fontSize": 29,
+            "letterSpacing": 0,
+            "lineHeight": 50
+        },
+        "container": {
+            "width": "100%",
+            "height": 100,
+            "alignContent": "center",
+            "alignItems": "center",
+            "display": "flex",
+            "flexDirection": "row"
+        },
+        "containerActive": {
+            "backgroundColor": "${theme.backgroundColors.primary1}",
+            "borderRadius": 6
+        },
+        "icContainer": {
+            "width": "15%",
+            "height": 83,
+            "alignContent": "center",
+            "alignItems": "center",
+            "justifyContent": "center"
+        },
+        "listContent": {
+            "width": "85%",
+            "height": 83,
+            "justifyContent": "center"
         }
       }
     },

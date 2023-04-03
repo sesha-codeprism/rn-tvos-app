@@ -32,6 +32,7 @@ import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import { ItemType } from "../../utils/common";
 import { globalStyles } from "../../config/styles/GlobalStyles";
+import MFButton, {MFButtonVariant} from "../../components/MFButton/MFButton";
 import { getNetworkIHD } from "../../../backend/networkIHD/networkIHD";
 import { MFGlobalsConfig } from "../../../backend/configs/globals";
 interface HomeScreenProps {
@@ -325,6 +326,33 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                   )}
                 </View>
               )}
+               <MFButton
+                  variant={MFButtonVariant.Contained}
+                  iconSource={0}
+                  style={{ width: 274, height: 62, margin: 20 }}
+                  focusedStyle={{ width: 274, height: 62 }}
+                  textStyle={{ color: "white", fontSize: 25, textAlign: "center" }}
+                  onPress={() => {
+                    props.navigation.navigate(Routes.PlayerTest, {
+                      params: {
+                        debugModeInSimulator: true
+                      },
+                    });
+                  }}
+                  textLabel="Test Playback"
+                  imageSource={0}
+                  avatarSource={0}
+                  containedButtonProps={{
+                    containedButtonStyle: {
+                      unFocusedTextColor: "grey",
+                      enabled: true,
+                      elevation: 5,
+                      focusedBackgroundColor: "#053C69",
+                      unFocusedBackgroundColor: "#424242",
+                      hoverColor: appUIDefinition.theme.backgroundColors.shade2,
+                    },
+                  }}
+                />
               <View style={HomeScreenStyles.contentContainer}>
                 {!isLoading && (
                   <MFSwim
