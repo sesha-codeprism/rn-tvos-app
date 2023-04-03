@@ -11,6 +11,7 @@ import { GLOBALS } from "../../../../utils/globals";
 import { MKPAudioTrack, MKPSubtitleTrack } from "./videoDataTypes";
 import MFLoader from "../../../../components/MFLoader";
 import { getUIdef, scaleAttributes } from "../../../../utils/uidefinition";
+import MFEventEmitter from "../../../../utils/MFEventEmitter";
 
 export type PlayerSubtitleSideMenuProps = {
     playerManager: typeof NativeModules; // passed in player NativeModule reference
@@ -63,7 +64,8 @@ export const PlayerSubtitleSideMenu: React.FunctionComponent<PlayerSubtitleSideM
             GLOBALS.store.playerSessionSettings = {};
         }
         GLOBALS.store!.playerSessionSettings.subtitle = item.label; // no need to update  store, only current  app sesssion
-        props.playerManager.setSubtitle(item.identifier)
+        props.playerManager.setSubtitle(item.identifier);
+        MFEventEmitter.emit("closePlayerSubtitlePanel", undefined);
     }
 
     const onAudioTrackPress = (item: MKPAudioTrack) => {
@@ -72,7 +74,8 @@ export const PlayerSubtitleSideMenu: React.FunctionComponent<PlayerSubtitleSideM
             GLOBALS.store.playerSessionSettings = {};
         }
         GLOBALS.store!.playerSessionSettings.audioLanguages = item.label; // no need to update  store, only current  app sesssion
-        props.playerManager.setAudio(item.identifier)
+        props.playerManager.setAudio(item.identifier);
+        MFEventEmitter.emit("closePlayerSubtitlePanel", undefined);
     }
 
     const onCCPress = (item: any) => {
@@ -81,6 +84,7 @@ export const PlayerSubtitleSideMenu: React.FunctionComponent<PlayerSubtitleSideM
             GLOBALS.store.playerSessionSettings = {};
         }
         GLOBALS.store!.playerSessionSettings.closedCaption = item.key; // no need to update  store, only current  app sesssion
+        MFEventEmitter.emit("closePlayerSubtitlePanel", undefined);
     }
 
     if ((!availableSubtitleTracks || (availableSubtitleTracks && availableSubtitleTracks.length === 0)) &&
@@ -280,7 +284,7 @@ export const PlayerSubtitleSideMenu: React.FunctionComponent<PlayerSubtitleSideM
 }
 
 const styles = StyleSheet.create(
-    getUIdef("DvrManager")?.style ||
+    getUIdef("PlayerSlidePanel")?.style ||
     scaleAttributes({
         root: {
             width: "100%",

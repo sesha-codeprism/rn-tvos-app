@@ -22,3 +22,15 @@ export type MKPSubtitleTrack = MKPTrack & {
 export type MKPAudioTrack =  MPTrack & {
     language: string, // The IETF BCP 47 language tag associated with the subtitle track.
 }
+
+type MKPQuality = {
+    identifier: string,
+    label: string,
+    bitrate: number,
+    codec: string
+}
+
+export type MKPVideoQuality = MKPQuality & {
+    width:  number
+    height: number
+}
