@@ -25,13 +25,19 @@ export const isAdultContentBlock = () => {
 
 export const isPconBlocked = (playInfo: any, locale?: any) => {
   // Schedule.Ratings
-  const pconRatingConfigs = GLOBALS.store?.settings.parentalControll.contentLock || {};
-  console.log("playInfo inside isPconBlocked", playInfo, pconRatingConfigs, GLOBALS.store?.settings.parentalControll.contentLock);
+  const pconRatingConfigs =
+    GLOBALS.store?.settings.parentalControll.contentLock || {};
+  console.log(
+    "playInfo inside isPconBlocked",
+    playInfo,
+    pconRatingConfigs,
+    GLOBALS.store?.settings.parentalControll.contentLock
+  );
   const ratings = playInfo && playInfo.Ratings ? playInfo.Ratings : [];
   const isRated = Array.isArray(ratings) && ratings.length;
   let isLocked: boolean = false;
   const ratingProviders = Object.keys(pconRatingConfigs);
-  console.log("isPconBlocked data", ratings, isRated,ratingProviders);
+  console.log("isPconBlocked data", ratings, isRated, ratingProviders);
   if (ratingProviders.length && ratings.length && isRated) {
     for (let i = 0; i < ratings.length; i++) {
       let ratingObj = ratings[i];
@@ -72,9 +78,17 @@ export const isPurchaseLocked = () => {
 };
 
 export const isUnratedContentLocked = () => {
-  const contentLockConfig =
-    pconConfig && pconConfig?.contentLock ? pconConfig?.contentLock : {};
+  const contentLockConfig = GLOBALS.store?.settings.parentalControll.contentLock || {};
+    // pconConfig && pconConfig?.contentLock ? pconConfig?.contentLock : {};
   const isEmpty = Object.keys(contentLockConfig).length > 0 ? false : true;
+  const isUnratedLocked = contentLockConfig["lockUnratedContent"];
+  console.log(
+    "isUnratedContentLocked",
+    pconConfig,
+    contentLockConfig,
+    contentLockConfig.lockUnratedContent,
+    isUnratedLocked
+  );
   if (!isEmpty) {
     return contentLockConfig.lockUnratedContent ? true : false;
   } else {

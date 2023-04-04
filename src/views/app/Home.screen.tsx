@@ -257,89 +257,21 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   };
 
   const onPressSwim = (event) => {
-    console.log(event);
+    console.log("onPressSwim",event);
     //@ts-ignore
     if (event.Schedule) {
-      const IsAdult = event.Schedule.IsAdult;
-      if (IsAdult && isAdultContentBlock()) {
-        MFEventEmitter.emit("openPinVerificationPopup", {
-          // title: "test 1",
-          // subtitle: "sub title test 1",
-          // bodyTitle: "bodyTitle1",
-          // bodySubitle: "bodySubitle",
-          pinType: PinType.adult,
-          data: event,
-          onSuccess: () => {
-            //@ts-ignore
-            event["isFromEPG"] = true;
-            props.navigation.navigate(Routes.Details, {
-              feed: event,
-            });
-          },
-        });
-      } else if (isPconBlocked(event.Schedule)) {
-        MFEventEmitter.emit("openPinVerificationPopup", {
-          // title: "test 1",
-          // subtitle: "sub title test 1",
-          // bodyTitle: "bodyTitle1",
-          // bodySubitle: "bodySubitle",
-          pinType: PinType.content,
-          data: event,
-          onSuccess: () => {
-            //@ts-ignore
-            event["isFromEPG"] = true;
-            props.navigation.navigate(Routes.Details, {
-              feed: event,
-            });
-          },
-        });
-      } else {
-        //@ts-ignore
-        event["isFromEPG"] = true;
+      event["isFromEPG"] = true;
         props.navigation.navigate(Routes.Details, {
           feed: event,
         });
-      }
     } else if (event.ItemType === ItemType.PACKAGE) {
       props.navigation.navigate(Routes.PackageDetails, {
         feed: event,
       });
     } else {
-      // if data is available directly
-      const IsAdult = event.IsAdult;
-      if (IsAdult && isAdultContentBlock()) {
-        MFEventEmitter.emit("openPinVerificationPopup", {
-          // title: "test 1",
-          // subtitle: "sub title test 1",
-          // bodyTitle: "bodyTitle1",
-          // bodySubitle: "bodySubitle",
-          pinType: PinType.adult,
-          data: event,
-          onSuccess: () => {
-            props.navigation.navigate(Routes.Details, {
-              feed: event,
-            });
-          },
-        });
-      } else if (isPconBlocked(event.Ratings)) {
-        MFEventEmitter.emit("openPinVerificationPopup", {
-          // title: "test 1",
-          // subtitle: "sub title test 1",
-          // bodyTitle: "bodyTitle1",
-          // bodySubitle: "bodySubitle",
-          pinType: PinType.content,
-          data: event,
-          onSuccess: () => {
-            props.navigation.navigate(Routes.Details, {
-              feed: event,
-            });
-          },
-        });
-      } else {
         props.navigation.navigate(Routes.Details, {
           feed: event,
         });
-      }
     }
   };
   return (

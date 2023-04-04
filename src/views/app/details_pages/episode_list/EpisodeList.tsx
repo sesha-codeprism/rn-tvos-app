@@ -30,6 +30,7 @@ import {
 import { AppStrings, getFontIcon } from "../../../../config/strings";
 import {
   assetTypeObject,
+  PinType,
   RecordStatus,
   sourceTypeString,
 } from "../../../../utils/analytics/consts";
@@ -55,6 +56,7 @@ import { findConflictedGroupBySeriesOrProgramId } from "../../../../utils/Confli
 import MFEventEmitter from "../../../../utils/MFEventEmitter";
 import { cancelRecordingFromConflictPopup, forceResolveConflict } from "../../../../../backend/dvrproxy/dvrproxy";
 import { ConflictResolutionContext } from "../../../../contexts/conflictResolutionContext";
+import { isPconBlocked } from "../../../../utils/pconControls";
 
 interface EpisodeListProps {
   navigation: NativeStackNavigationProp<any>;
@@ -153,6 +155,8 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
 
   const ctaButtonPress: any = {
     [AppStrings?.str_details_program_record_button]: () => {
+      console.log('str_details_program_record_button', currentEpisode)
+     const openPannel = ()=>{
       drawerRef?.current?.close();
       const { stationId } = navigationParams;
 
@@ -203,6 +207,16 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         setOpen(open);
         drawerRef?.current?.open();
       }
+     }
+     if (isPconBlocked(currentEpisode.CatalogInfo)) {
+      MFEventEmitter.emit("openPinVerificationPopup", {
+        pinType: PinType.content,
+        data: currentEpisode,
+        onSuccess: openPannel,
+      });
+    } else {
+      openPannel();
+    }
     },
     [AppStrings?.str_details_cta_more_info]: toggleSidePanel,
     [AppStrings?.str_details_cta_play]: () => {},
