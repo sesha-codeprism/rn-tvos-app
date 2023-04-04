@@ -1,4 +1,4 @@
-import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Pressable, StyleSheet, Text, View,  Settings as SettingsRN, } from "react-native";
 import React, { ReactNode, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
@@ -31,6 +31,8 @@ interface Props {
   children?: ReactNode;
 }
 const numberPad = [1, 2, 3, 4, 5, "del", 6, 7, 8, 9, 0];
+const thirtyMinutes = 1800000;
+
 const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [pin, setPin] = useState<any>(["", "", "", ""]);
@@ -40,8 +42,22 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const [actionType, setActionType] = useState(props.route.params.action);
   const [errMessage, setErrMessage] = useState("");
   const [passwordRes, setPasswordRes] = useState("");
+  const [isLockedOut, setLockedOut] = useState(false);
+    const [numberOfAttempts, setNumberOfAttempts] = useState(5);
+    const [timeLeft, setTimeLeft] = useState(Infinity);
 
   useEffect(() => {
+    const lockoutTime = SettingsRN.get("LOCKOUT_TIME");
+    if (lockoutTime) {
+        const currentTime = new Date().getTime();
+        if (currentTime - lockoutTime < thirtyMinutes) {
+            setLockedOut(true);
+            setTimeLeft(
+                    thirtyMinutes / 60000 -
+                    Math.floor((currentTime - lockoutTime) / 60000),
+            );
+        }
+    }
     if (actionType !== PinActionTypes["UPDATE"]) {
       getPassword(props.route.params.pinType)
         .then((res: any) => {
@@ -169,12 +185,27 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         props.navigation.replace(props.route.params.screenTarget);
         return true;
       } else {
-        console.log("incorrect password");
-        setErrMessage(AppStrings.str_settings_wrong_pin);
-        setTimeout(() => {
-          setErrMessage("");
-          setPin(["", "", "", ""]);
-        }, 2000);
+        setNumberOfAttempts(numberOfAttempts - 1);
+        if (numberOfAttempts - 1 < 1) {
+          setLockedOut(true);
+          SettingsRN.set({ LOCKOUT_TIME: new Date().getTime() });
+          setErrMessage("Pin verification will be locked for next 30 mins");
+          setTimeout(() => {
+            setPin(["", "", "", ""]);
+          }, 2000);
+        } else {
+          setErrMessage(AppStrings.str_settings_wrong_pin);
+          setTimeout(() => {
+            setPin(["", "", "", ""]);
+            setErrMessage("")
+          }, 2000);
+        }
+        // console.log("incorrect password");
+        // setErrMessage(AppStrings.str_settings_wrong_pin);
+        // setTimeout(() => {
+        //   setErrMessage("");
+        //   setPin(["", "", "", ""]);
+        // }, 2000);
         return false;
       }
     } catch (error) {
@@ -327,6 +358,11 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         })}
       </View>
       {errMessage !== "" && <Text style={styles.errMessage}>{errMessage}</Text>}
+      {timeLeft < Infinity && (
+            <Text
+              style={styles.errMessage}
+            >{`Pin verification will be locked for next ${timeLeft} mins`}</Text>
+          )}
       <View style={styles.numberPadContainer}>
         <View style={styles.numberPad}>
           <FlatList
@@ -361,12 +397,10 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
               ) : (
                 <Pressable
                   hasTVPreferredFocus={index === 1}
+                  disabled={isLockedOut}
                   onFocus={() => {
-                    setFocussed(item);
+                    !isLockedOut && setFocussed(item);
                   }}
-                  // onBlur={() => {
-                  //   index === numberPad.length ? setFocussed("") : null;
-                  // }}
                   key={index}
                   style={
                     item === focussed
@@ -374,7 +408,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
                       : styles.numberPadItem
                   }
                   onPress={() => {
-                    onPressNumber(item);
+                    !isLockedOut && onPressNumber(item);
                   }}
                 >
                   <Text

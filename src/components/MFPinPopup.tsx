@@ -149,6 +149,7 @@ const MFPinPopup = (props: PinPopupProps) => {
           setErrMessage(AppStrings.str_settings_wrong_pin);
           setTimeout(() => {
             setPin(["", "", "", ""]);
+            setErrMessage("")
           }, 2000);
         }
         return false;
@@ -496,6 +497,7 @@ const styles = StyleSheet.create({
     fontSize: 23,
     letterSpacing: 0,
     lineHeight: 38,
+    marginLeft: 100
   },
   numberPadContainer: {
     display: "flex",
