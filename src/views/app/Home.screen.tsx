@@ -401,7 +401,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                   )}
                 </View>
               )}
-              <MFButton
+              {/* <MFButton
                 variant={MFButtonVariant.Contained}
                 iconSource={0}
                 style={{ width: 274, height: 62, margin: 20 }}
@@ -431,7 +431,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                     hoverColor: appUIDefinition.theme.backgroundColors.shade2,
                   },
                 }}
-              />
+              /> */}
               <View style={HomeScreenStyles.contentContainer}>
                 {!isLoading && (
                   <MFSwim
