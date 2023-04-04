@@ -5,6 +5,7 @@ import Settings from "../components/MFSideMenu/SettingsContainer";
 import ConflictResolutionPanel from "../views/app/details_pages/details_panels/ConflictsContainer";
 import MFEventEmitter from "../utils/MFEventEmitter";
 import { ConflictResolutionContext } from "../contexts/conflictResolutionContext";
+import MFPinPopup from "../components/MFPinPopup";
 import PlayerSubtitlePanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerSubtitlePanel";
 import PlayerQualityPanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerQualityPanel";
 
@@ -19,11 +20,13 @@ const enum Routes {
   PlayerSubtitle,
   PlayerQuality,
   Popup,
+  MFPinPopup
 }
 const ComponentLoader = {
   [Routes.Settings]: Settings,
   [Routes.ConflictResolution]: ConflictResolutionPanel,
   [Routes.Popup]: MFPopup,
+  [Routes.MFPinPopup]: MFPinPopup,
   [Routes.PlayerSubtitle]: PlayerSubtitlePanel,
   [Routes.PlayerQuality]: PlayerQualityPanel,
   [Routes.Empty]: Empty,
@@ -84,6 +87,18 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     componentStack.current = [{ route: Routes.Empty, props: {} }];
     setComponentt(Routes.Empty);
   }
+  const openMFPinPopup = (props: any) => {
+    //  add MFPinPopup to component stack
+    componentStack.current?.push({ route: Routes.MFPinPopup, props: props });
+    setComponentt(Routes.MFPinPopup);
+  };
+  const closeMFPinPopup = (params: any) => {
+    // remove MFPinPopup from componnent stack
+    componentStack.current?.pop();
+    setComponentt(
+      componentStack.current[componentStack?.current?.length - 1]?.route
+    );
+  };
 
 
   const openPlayerSubtitle = (props: any) => {
@@ -136,6 +151,8 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     MFEventEmitter.on("openPlayerQualityPanel", openPlayerQuality);
     MFEventEmitter.on("closePlayerQualityPanel", closePlayerQuality);
     MFEventEmitter.on("closeAll", closeAll);
+    MFEventEmitter.on("openPinVerificationPopup", openMFPinPopup);
+    MFEventEmitter.on("closePinVerificationPopup", closeMFPinPopup);
     console.log('MFDrawersComponent mounted');
     return () => {
       console.log('MFDrawersComponent un mounted');
@@ -175,6 +192,12 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     return <Component {...props}>/</Component>;
   } else if (currentComponent === Routes.Popup) {
     const Component = ComponentLoader[Routes.Popup];
+    const props =
+      componentStack.current[componentStack?.current?.length - 1]?.props;
+    //@ts-ignore
+    return <Component {...props}>/</Component>;
+  } else if(currentComponent === Routes.MFPinPopup){
+    const Component = ComponentLoader[Routes.MFPinPopup];
     const props =
       componentStack.current[componentStack?.current?.length - 1]?.props;
     //@ts-ignore

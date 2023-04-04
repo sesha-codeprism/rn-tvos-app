@@ -50,6 +50,9 @@ import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { debounce2 } from "../../../../utils/app/app.utilities";
 import _ from "lodash";
 import { AppStrings } from "../../../../config/strings";
+import { isAdultContentBlock, isPconBlocked } from "../../../../utils/pconControls";
+import MFEventEmitter from "../../../../utils/MFEventEmitter";
+import { PinType } from "../../../../utils/analytics/consts";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -374,6 +377,36 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       </View>
     );
   };
+  const handlePress = (event: any) => {
+    console.log("handlePress inside browse gallery", event);
+    const IsAdult = event.IsAdult;
+    if (IsAdult && isAdultContentBlock()) {
+      MFEventEmitter.emit("openPinVerificationPopup", {
+        pinType: PinType.adult,
+        data: event,
+        onSuccess: () => {
+          props.navigation.navigate(Routes.Details, {
+            feed: event,
+          });
+        },
+      });
+    } else if (isPconBlocked(event)) {
+      MFEventEmitter.emit("openPinVerificationPopup", {
+        pinType: PinType.content,
+        data: event,
+        onSuccess: () => {
+          props.navigation.navigate(Routes.Details, {
+            feed: event,
+          });
+        },
+      });
+    } else {
+      props.navigation.navigate(Routes.Details, {
+        feed: event,
+      });
+    }
+    // props.navigation.push(Routes.Details, { feed: event });
+  };
 
   const imageSource: any =
     currentFeed?.image16x9KeyArtURL ||
@@ -521,9 +554,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                       autoFocusOnFirstCard
                       selectedId={currentFeed?.Id}
                       onEndReached={handleEndReached}
-                      onPress={(event) => {
-                        props.navigation.push(Routes.Details, { feed: event });
-                      }}
+                      onPress={handlePress}
                     />
                   </LinearGradient>
                 </View>

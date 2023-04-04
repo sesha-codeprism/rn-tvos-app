@@ -15,6 +15,12 @@ import { GLOBALS } from "../../../../utils/globals";
 import _ from "lodash";
 import { AppStrings } from "../../../../config/strings";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
+import { config } from "../../../../config/config";
+import {
+  ADULT_CONTENT,
+  ADULT_STORE,
+  ADULT_STORE_REQUIRE_PIN,
+} from "../../../../utils/pconControls";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -29,8 +35,25 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
   const [list, setList] = useState<any[]>([]);
 
   const formatList = () => {
+    console.log(
+      "config.allowAdultLocks && !config.adultContentMasking",
+      config.allowAdultLocks,
+      config.adultContentMasking
+    );
     try {
       const values = GLOBALS.store!.settings.parentalControll;
+      const adultOption = {
+        title: AppStrings.str_settings_adult_locks,
+        subTitle:
+          values.adultLock[ADULT_CONTENT] ||
+          values.adultLock[ADULT_STORE] ||
+          values.adultLock[ADULT_STORE_REQUIRE_PIN]
+            ? AppStrings.str_settings_locked
+            : AppStrings.str_settings_unrestricted,
+        action: "pin_lock",
+        screenTarget: Routes.AdultLock,
+        icon: "",
+      };
       const listItem = [
         {
           title: AppStrings.str_settings_content_locks,
@@ -41,17 +64,7 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
           screenTarget: Routes.ContentLock,
           icon: "",
         },
-        {
-          title: AppStrings.str_settings_adult_locks,
-          subTitle:
-            values.adultLock["adultContentMasking"] ||
-            values.adultLock["allowAdultLocks"]
-              ? AppStrings.str_settings_locked
-              : AppStrings.str_settings_unrestricted,
-          action: "pin_lock",
-          screenTarget: Routes.AdultLock,
-          icon: "",
-        },
+
         {
           title: AppStrings.str_settings_content_purchase_locks,
           subTitle: values.purchaseLock["locked"]
@@ -62,6 +75,9 @@ const ParentalControllScreen: React.FunctionComponent<Props> = (props: any) => {
           icon: "",
         },
       ];
+      if (config.allowAdultLocks && !config.adultContentMasking) {
+        listItem.splice(1, 0, adultOption);
+      }
       setList(listItem);
     } catch (error) {
       console.log("error", error);

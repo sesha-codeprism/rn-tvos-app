@@ -16,17 +16,23 @@ import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
 import { PinActionTypes } from "./parental_controll.screen";
 import { AppStrings } from "../../../../config/strings";
+import { ADULT_CONTENT, ADULT_STORE, ADULT_STORE_REQUIRE_PIN } from "../../../../utils/pconControls";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
+
 const list = [
   {
-    title: "Hide Adult Store",
-    action: "allowAdultLocks",
+    title: AppStrings?.str_settings_adult_locks_store,
+    action: ADULT_STORE,
   },
   {
-    title: "Hide Adult Content",
-    action: "adultContentMasking",
+    title: AppStrings?.str_settings_adult_locks_content,
+    action: ADULT_CONTENT,
+  },
+  {
+    title: AppStrings?.str_require_pin_adult_store,
+    action: ADULT_STORE_REQUIRE_PIN,
   },
 ];
 const AdultLockScreen: React.FunctionComponent<Props> = (props: any) => {

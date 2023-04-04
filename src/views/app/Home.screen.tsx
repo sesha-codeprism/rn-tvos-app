@@ -35,6 +35,8 @@ import { globalStyles } from "../../config/styles/GlobalStyles";
 import MFButton, {MFButtonVariant} from "../../components/MFButton/MFButton";
 import { getNetworkIHD } from "../../../backend/networkIHD/networkIHD";
 import { MFGlobalsConfig } from "../../../backend/configs/globals";
+import { isAdultContentBlock, isPconBlocked } from "../../utils/pconControls";
+import { PinType } from "../../utils/analytics/consts";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -267,6 +269,92 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
 
+  const onPressSwim = (event) => {
+    console.log(event);
+    //@ts-ignore
+    if (event.Schedule) {
+      const IsAdult = event.Schedule.IsAdult;
+      if (IsAdult && isAdultContentBlock()) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          // title: "test 1",
+          // subtitle: "sub title test 1",
+          // bodyTitle: "bodyTitle1",
+          // bodySubitle: "bodySubitle",
+          pinType: PinType.adult,
+          data: event,
+          onSuccess: () => {
+            //@ts-ignore
+            event["isFromEPG"] = true;
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else if (isPconBlocked(event.Schedule)) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          // title: "test 1",
+          // subtitle: "sub title test 1",
+          // bodyTitle: "bodyTitle1",
+          // bodySubitle: "bodySubitle",
+          pinType: PinType.content,
+          data: event,
+          onSuccess: () => {
+            //@ts-ignore
+            event["isFromEPG"] = true;
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else {
+        //@ts-ignore
+        event["isFromEPG"] = true;
+        props.navigation.navigate(Routes.Details, {
+          feed: event,
+        });
+      }
+    } else if (event.ItemType === ItemType.PACKAGE) {
+      props.navigation.navigate(Routes.PackageDetails, {
+        feed: event,
+      });
+    } else {
+      // if data is available directly
+      const IsAdult = event.IsAdult;
+      if (IsAdult && isAdultContentBlock()) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          // title: "test 1",
+          // subtitle: "sub title test 1",
+          // bodyTitle: "bodyTitle1",
+          // bodySubitle: "bodySubitle",
+          pinType: PinType.adult,
+          data: event,
+          onSuccess: () => {
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else if (isPconBlocked(event.Ratings)) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          // title: "test 1",
+          // subtitle: "sub title test 1",
+          // bodyTitle: "bodyTitle1",
+          // bodySubitle: "bodySubitle",
+          pinType: PinType.content,
+          data: event,
+          onSuccess: () => {
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else {
+        props.navigation.navigate(Routes.Details, {
+          feed: event,
+        });
+      }
+    }
+  };
   return (
     <View style={HomeScreenStyles.container}>
       <ImageBackground
@@ -361,23 +449,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                     feeds={feeds}
                     onFocus={onFeedFocus}
                     onPress={(event) => {
-                      console.log(event);
-                      //@ts-ignore
-                      if (event.Schedule) {
-                        //@ts-ignore
-                        event["isFromEPG"] = true;
-                        props.navigation.navigate(Routes.Details, {
-                          feed: event,
-                        });
-                      } else if (event.ItemType === ItemType.PACKAGE) {
-                        props.navigation.navigate(Routes.PackageDetails, {
-                          feed: event,
-                        });
-                      } else {
-                        props.navigation.navigate(Routes.Details, {
-                          feed: event,
-                        });
-                      }
+                      onPressSwim(event);
                     }}
                     onListEmptyElementFocus={clearCurrentHub}
                     onListFooterElementFocus={clearCurrentHub}

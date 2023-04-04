@@ -111,7 +111,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         props.route.params.action !== PinActionTypes["UPDATE"]
       ) {
         console.log("pin", pin, "pinConfirm", pinConfirm);
-        if (pin.join() === pinConfirm.join()) {
+        if (pin.join("") === pinConfirm.join("")) {
           setErrMessage("");
           const res = setPasscode(props.route.params.pinType);
           console.log("setpin response", res);
@@ -124,7 +124,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         props.route.params.action === PinActionTypes["UPDATE"]
       ) {
         console.log("pin inside UPDATE", pin, "pinConfirm", pinConfirm);
-        if (pin.join() === pinConfirm.join()) {
+        if (pin.join("") === pinConfirm.join("")) {
           const res = updatePasscode(props.route.params.pinType);
           console.log("change pin response", res);
         } else {
@@ -185,7 +185,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const setPasscode = async (type: PinType) => {
     try {
       console.log("setPasscode", type);
-      const pinInput = pin.join();
+      const pinInput = pin.join("");
       const hashedPin = getPasscodeHash(
         pinInput,
         GLOBALS.bootstrapSelectors?.OriginalAccountId ||
@@ -208,13 +208,15 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
 
   const updatePasscode = async (type: PinType) => {
     try {
-      const pinInput = pin.join();
+      const pinInput = pin.join("");
+
       const hashedPin = getPasscodeHash(
         pinInput,
         GLOBALS.bootstrapSelectors?.OriginalAccountId ||
           GLOBALS.bootstrapSelectors?.AccountId ||
           ""
       );
+      console.log('updatePasscode',pinInput, hashedPin )
       const res = await changePasscodes(type, hashedPin);
       if (res.status === 200 || res.status === 201) {
         props.navigation.goBack();

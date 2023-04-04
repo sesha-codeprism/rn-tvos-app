@@ -49,6 +49,7 @@ import {
   itemTypeString,
   languageKey,
   pbr,
+  PinType,
   sourceTypeString,
 } from "../../../utils/analytics/consts";
 import {
@@ -107,6 +108,7 @@ import {
   findConflictedGroupBySeriesOrProgramId,
   getScheduledItems,
 } from "../../../utils/ConflictUtils";
+import { isAdultContentBlock, isPconBlocked } from "../../../utils/pconControls";
 
 interface AssetData {
   id: string;
@@ -806,7 +808,39 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }
   };
 
-  const handlePlayDvr = () => {};
+  const handlePlayDvr = () => {
+    console.log('handlePlayDvr', props);
+    const data = props.route.params.feed;
+
+    let details;
+    if(data.Definition === "SingleProgram"&& data.SubscriptionItems.length){
+      details = data.SubscriptionItems[0].ProgramDetails
+    } else{
+      details = data.SeriesDetails
+
+    }
+    const IsAdult = details.IsAdult;
+    if (IsAdult && isAdultContentBlock()) {
+      MFEventEmitter.emit("openPinVerificationPopup", {
+        pinType: PinType.adult,
+        data: data,
+        onSuccess: () => {
+          // To be implemented Play action
+        },
+      });
+    } else if (isPconBlocked(details)) {
+      MFEventEmitter.emit("openPinVerificationPopup", {
+        pinType: PinType.content,
+        data: data,
+        onSuccess: () => {
+          // To be implemented Play action
+        },
+      });
+    } else {
+      // To be implemented Play action
+    }
+    // route.params.feed.SeriesDetails
+  };
   const ctaButtonPress = {
     [AppStrings?.str_details_cta_subscribe]: () => {},
     [AppStrings?.str_details_cta_play]: () => {
@@ -944,7 +978,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       });
     },
     [AppStrings?.str_details_cta_waystowatch]: () => {
-      featureNotImplementedAlert();
+      // TODO: check for the pcon when watch live is implemented
+      // featureNotImplementedAlert();
       // const { Schedule } = feed;
 
       // const episodeNumber = Schedule?.EpisodeNumber;
