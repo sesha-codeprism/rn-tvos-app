@@ -1,5 +1,6 @@
 import { massageDiscoveryFeed, massageDVRFeed, massageSubscriberFeed } from "../src/utils/assetUtils";
 import { SourceType } from "../src/utils/common";
+import { GLOBALS } from "../src/utils/globals";
 import { registerUdls, parseUdl, getList, UdlProviders } from "./udl/provider";
 
 export const enum UDLType {
@@ -32,7 +33,7 @@ export const getMassagedData = (uri: string, data: any) => {
       const massagedData = massageDiscoveryFeed(dataSource, SourceType.VOD);
       return massagedData;
     } else {
-      const massagedData = massageDiscoveryFeed(data.data, SourceType.VOD);
+      const massagedData = massageDiscoveryFeed(data.data, SourceType.VOD, GLOBALS.nowNextMap);
       return massagedData;
     }
   } else if (udlID!.id.split("/")[0] === 'subscriber') {
