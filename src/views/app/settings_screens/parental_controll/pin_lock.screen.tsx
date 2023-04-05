@@ -1,4 +1,12 @@
-import { Alert, Image, Pressable, StyleSheet, Text, View,  Settings as SettingsRN, } from "react-native";
+import {
+  Alert,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Settings as SettingsRN,
+} from "react-native";
 import React, { ReactNode, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
@@ -43,20 +51,20 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const [errMessage, setErrMessage] = useState("");
   const [passwordRes, setPasswordRes] = useState("");
   const [isLockedOut, setLockedOut] = useState(false);
-    const [numberOfAttempts, setNumberOfAttempts] = useState(5);
-    const [timeLeft, setTimeLeft] = useState(Infinity);
+  const [numberOfAttempts, setNumberOfAttempts] = useState(5);
+  const [timeLeft, setTimeLeft] = useState(Infinity);
 
   useEffect(() => {
     const lockoutTime = SettingsRN.get("LOCKOUT_TIME");
     if (lockoutTime) {
-        const currentTime = new Date().getTime();
-        if (currentTime - lockoutTime < thirtyMinutes) {
-            setLockedOut(true);
-            setTimeLeft(
-                    thirtyMinutes / 60000 -
-                    Math.floor((currentTime - lockoutTime) / 60000),
-            );
-        }
+      const currentTime = new Date().getTime();
+      if (currentTime - lockoutTime < thirtyMinutes) {
+        setLockedOut(true);
+        setTimeLeft(
+          thirtyMinutes / 60000 -
+            Math.floor((currentTime - lockoutTime) / 60000)
+        );
+      }
     }
     if (actionType !== PinActionTypes["UPDATE"]) {
       getPassword(props.route.params.pinType)
@@ -180,25 +188,52 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         hashedPin
       );
       // const data = await getPassword(type);
-      if (passcode && isHash(passcode) && passcode === hashedPin) {
-        console.log("password matching", props.route.params.screenTarget);
-        props.navigation.replace(props.route.params.screenTarget);
-        return true;
-      } else {
-        setNumberOfAttempts(numberOfAttempts - 1);
-        if (numberOfAttempts - 1 < 1) {
-          setLockedOut(true);
-          SettingsRN.set({ LOCKOUT_TIME: new Date().getTime() });
-          setErrMessage("Pin verification will be locked for next 30 mins");
-          setTimeout(() => {
-            setPin(["", "", "", ""]);
-          }, 2000);
+      // && passcode === hashedPin
+      if (passcode && isHash(passcode)) {
+        if (passcode === hashedPin) {
+          console.log("password matching", props.route.params.screenTarget);
+          props.navigation.replace(props.route.params.screenTarget);
+          return true;
         } else {
-          setErrMessage(AppStrings.str_settings_wrong_pin);
-          setTimeout(() => {
-            setPin(["", "", "", ""]);
-            setErrMessage("")
-          }, 2000);
+          setNumberOfAttempts(numberOfAttempts - 1);
+          if (numberOfAttempts - 1 < 1) {
+            setLockedOut(true);
+            SettingsRN.set({ LOCKOUT_TIME: new Date().getTime() });
+            setErrMessage("Pin verification will be locked for next 30 mins");
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+            }, 2000);
+          } else {
+            setErrMessage(AppStrings.str_settings_wrong_pin);
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+              setErrMessage("");
+            }, 2000);
+          }
+          return false;
+        }
+      } else {
+        if(passcode === pinInput){
+          console.log("password matching", props.route.params.screenTarget);
+          props.navigation.replace(props.route.params.screenTarget);
+          return true;
+        } else {
+          setNumberOfAttempts(numberOfAttempts - 1);
+          if (numberOfAttempts - 1 < 1) {
+            setLockedOut(true);
+            SettingsRN.set({ LOCKOUT_TIME: new Date().getTime() });
+            setErrMessage("Pin verification will be locked for next 30 mins");
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+            }, 2000);
+          } else {
+            setErrMessage(AppStrings.str_settings_wrong_pin);
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+              setErrMessage("");
+            }, 2000);
+          }
+          return false;
         }
         // console.log("incorrect password");
         // setErrMessage(AppStrings.str_settings_wrong_pin);
@@ -206,7 +241,6 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         //   setErrMessage("");
         //   setPin(["", "", "", ""]);
         // }, 2000);
-        return false;
       }
     } catch (error) {
       console.log("error getting pin");
@@ -247,7 +281,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
           GLOBALS.bootstrapSelectors?.AccountId ||
           ""
       );
-      console.log('updatePasscode',pinInput, hashedPin )
+      console.log("updatePasscode", pinInput, hashedPin);
       const res = await changePasscodes(type, hashedPin);
       if (res.status === 200 || res.status === 201) {
         props.navigation.goBack();
@@ -359,10 +393,10 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
       </View>
       {errMessage !== "" && <Text style={styles.errMessage}>{errMessage}</Text>}
       {timeLeft < Infinity && (
-            <Text
-              style={styles.errMessage}
-            >{`Pin verification will be locked for next ${timeLeft} mins`}</Text>
-          )}
+        <Text
+          style={styles.errMessage}
+        >{`Pin verification will be locked for next ${timeLeft} mins`}</Text>
+      )}
       <View style={styles.numberPadContainer}>
         <View style={styles.numberPad}>
           <FlatList

@@ -176,6 +176,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   const navigationParams = props.route.params;
 
   const offset = useSharedValue(420);
+  const margin = useSharedValue(0);
   const opacity = useSharedValue(1);
   const firstCardRef = useRef<TouchableOpacity>(null);
   let lastEpisodeRef: React.RefObject<any> = React.createRef<any>();
@@ -695,7 +696,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   }, []);
   // Method get executed when scheduled item get focused
   const handleScheduledItemFocus = (item: any, index: any) => {
-    console.log('handleScheduledItemFocus', item, index);
+    console.log("handleScheduledItemFocus", item, index);
     setCurrentScheduledItem(item);
     getCTAButtons(item);
     // To transfer the focus to the 1st cta button
@@ -708,7 +709,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   // Returns a flatlist that contains the scheduled items
   const renderScheduled = () => {
     return (
-      <View style={styles.secondBlock}>
+      <View style={[styles.secondBlock]}>
         <FlatList
           // snapToAlignment={"start"}
           contentContainerStyle={{
@@ -735,31 +736,33 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
       ? "Tomorrow"
       : `${month} ${day}, ${year}`;
   };
+  const animatedListStyle = useAnimatedStyle(() => {
+    return {
+      marginLeft: margin.value,
+    };
+  });
   const renderScheduledList = (data: any) => {
     const { item, index: groupIndex } = data;
     return (
-      <View
-        key={groupIndex}
-        style={{ justifyContent: "flex-start" }}
+      <Animated.View
+        key={`laneTitle_${groupIndex}`}
+        style={{ flex: 1, width: "100%", ...animatedListStyle }}
       >
-        <Text
+        <View
           style={{
-            fontSize: 29,
-            fontWeight: "bold",
-            color: "#EEEEEE",
-            letterSpacing: 0,
-            lineHeight: 50,
-            marginTop: 40,
-            marginLeft: 20,
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            alignContent: "flex-start",
+            width: "100%",
           }}
         >
-          {getFormatedDate(item.date)}
-        </Text>
-        {item.data.length &&
-          item.data.map((item: any, index: any) => {
-            return renderScheduledItem({ item, index, groupIndex });
-          })}
-      </View>
+          <Text style={styles.laneTitle}>{getFormatedDate(item.date)}</Text>
+          {item.data.length &&
+            item.data.map((item: any, index: any) => {
+              return renderScheduledItem({ item, index, groupIndex });
+            })}
+        </View>
+      </Animated.View>
     );
   };
   // Returns the scheduled item
@@ -777,7 +780,6 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     }
     const handleScheduledFocus = () => {
       handleScheduledItemFocus(item, index);
-    
     };
     const statusText = item?.statusText || "";
     const imageSource =
@@ -827,10 +829,10 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     // console.log('index and group index', index, groupIndex, index === 0 && groupIndex === 0 ? `ref assigned to this item: ${item}` : "ref is null" )
     // const shouldShowExpiringIcon = isExpiringSoon(item);
     return (
-      <React.Fragment  key={`ListItem_${index}`}>
+      <React.Fragment key={`ListItem_${index}`}>
         <View
           style={[styles.dvrItemContainer, selectedStyle]}
-         
+
           // ref={
           //   index === 0
           //     ? firstEpisodeRef
@@ -1109,6 +1111,10 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     }
   };
   const _moveRight = () => {
+    margin.value = withTiming(0, {
+      duration: 400,
+      easing: Easing.out(Easing.ease),
+    });
     offset.value = withTiming(420, {
       duration: 400,
       easing: Easing.out(Easing.ease),
@@ -1119,6 +1125,10 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     });
   };
   const _moveLeft = () => {
+    margin.value = withTiming(420, {
+      duration: 400,
+      easing: Easing.out(Easing.ease),
+    });
     offset.value = withTiming(0, {
       duration: 400,
       easing: Easing.out(Easing.ease),
@@ -1184,7 +1194,10 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     } else if (!swimLaneFocused && currentDvrMenu === DvrMenuItems.Scheduled) {
       // focus transferred to the 1st card of the scheduled list
       // this is being handled on the element it self using "hasTVPreferredFocus= true" based on required conditions
-      console.log('focus transferred to the 1st card of the scheduled list', firstScheduledCardRef)
+      console.log(
+        "focus transferred to the 1st card of the scheduled list",
+        firstScheduledCardRef
+      );
       _moveLeft();
       firstScheduledCardRef.current?.setNativeProps({
         hasTVPreferredFocus: true,
@@ -1650,7 +1663,8 @@ const styles = StyleSheet.create({
     fontSize: globalStyles.fontSizes.body2,
   },
   secondBlock: {
-    flex: 1,
+    // flex: 1,
+    marginLeft: 0,
   },
   imageIcon: {
     marginTop: 130,
@@ -1678,6 +1692,15 @@ const styles = StyleSheet.create({
   },
   focusedUnderLine: {
     backgroundColor: globalStyles.backgroundColors.primary1,
+  },
+  laneTitle: {
+    fontSize: 29,
+    fontWeight: "bold",
+    color: "#EEEEEE",
+    letterSpacing: 0,
+    lineHeight: 50,
+    marginTop: 40,
+    marginLeft: 20,
   },
 });
 

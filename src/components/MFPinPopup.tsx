@@ -133,8 +133,10 @@ const MFPinPopup = (props: PinPopupProps) => {
         isHash(passcode) &&
         passcode === hashedPin
       ) {
-        props.onSuccess ? props.onSuccess() : null;
         MFEventEmitter.emit("closePinVerificationPopup", undefined);
+        setTimeout(() => {
+          props.onSuccess ? props.onSuccess() : null;
+        }, 1000);
         return true;
       } else {
         setNumberOfAttempts(numberOfAttempts - 1);
