@@ -9,7 +9,7 @@ import {
     durationStringToSeconds,
 } from "../../../utils/dataUtils";
 
-import { assetTypeObject, PinType } from "../../../utils/analytics/consts";
+import { assetTypeObject, pbr, PinType } from "../../../utils/analytics/consts";
 import { getRestrictionsText } from "../../../utils/assetUtils";;
 import { currencies } from "../../../utils/currencies";
 import { AppStrings } from "../../../config/strings";
@@ -62,7 +62,7 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
         };
 
         if (isPurchaseLocked()) {
-            MFEventEmitter.emit("closeClosePurchaseInformation", undefined);
+            MFEventEmitter.emit("closeClosePurchase", undefined);
             MFEventEmitter.emit("OpenPurchasePIN", {
                 screenName: "Purchase Pin",
                 action: "validate_pin",
@@ -91,7 +91,7 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
                 props.route.params?.purchaseActions?.Price
             )
                 .then(() => {
-                    MFEventEmitter.emit("closeClosePurchaseInformation", undefined);
+                    MFEventEmitter.emit("closeClosePurchase", undefined);
 
                     /* - Channel subscription not in scope right now
                     // same reload channel rights,  set to guide, remake live feed
@@ -100,9 +100,6 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
                         this.props.route.params.rerouteToDetails(true);
                     }
                     */
-
-                    // Note dispatch current play options, either get the key/refetch from details page
-                    props.route.params.playOptionRefetch();
 
                     /** Refresh
                      FeedType: "Dynamic"
@@ -115,14 +112,6 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
                         ShowcardAspectRatio: "SixteenByNine"
                         Uri: "udl://subscriber/library/Library"
                      */
-
-                    // same  from package
-                    if (false
-                        // if from packkage
-                    ) {
-                        // refetch  package actions
-                        props.route.params.packageActionRefetch();
-                    }
                 })
                 .then(() => {
                     if (
@@ -134,7 +123,7 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
 
                 })
                 .catch((error: any) => {
-                    MFEventEmitter.emit("closeClosePurchaseInformation", undefined);
+                    MFEventEmitter.emit("closeClosePurchase", undefined);
                     MFEventEmitter.emit("openPopup", {
                         buttons: [
                             {
@@ -163,7 +152,7 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
                 props.route.params?.purchaseActions?.Price
             )
                 .then(() => {
-                    MFEventEmitter.emit("closeClosePurchaseInformation", undefined);
+                    MFEventEmitter.emit("closeClosePurchase", undefined);
                     setLoader(false);
                     confirmPlayCallBack();
                 })
@@ -176,7 +165,7 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
                     }
                 })
                 .catch((error: any) => {
-                    MFEventEmitter.emit("closeClosePurchaseInformation", undefined);
+                    MFEventEmitter.emit("closeClosePurchase", undefined);
                     MFEventEmitter.emit("openPopup", {
                         buttons: [
                             {
@@ -280,6 +269,14 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
             centerValue: AppStrings?.str_terms_and_conditions,
             purchaseAction: props.route.params?.purchaseActions,
         };
+
+        const validRestrictions = props.route.params?.purchaseActions.Restrictions?.filter((restriction: string) => {
+            if(pbr.RestrictionsType[restriction] || pbr.RestrictionsType[restriction.toUpperCase()] || pbr.AbbreviatedRestrictions[restriction] || pbr.AbbreviatedRestrictions[restriction.toUpperCase()]){
+                return true;
+            }else  {
+                return false;
+            }
+        })
         return (
             <View style={style.container}>
                 <Text style={style.qualityPriceText}>
@@ -288,16 +285,17 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
                         } ${props.route.params?.purchaseActions.Price}`}
                 </Text>
                 <Text style={style.statusTextStyle}>{statusText}</Text>
-                {props.route.params?.purchaseActions.Restrictions?.map(
-                    (restriction: any) => {
-                        return (
-                            <Text
-                                key={restriction}
-                                style={style.restrictionTextStyle}
-                            >
-                                {`* ${getRestrictionsText(restriction)}`}
-                            </Text>
-                        );
+                {
+                validRestrictions && validRestrictions.length  > 0 && validRestrictions.map(
+                    (restriction: any, index:number) => {
+                            return (
+                                <Text
+                                    key={restriction}
+                                    style={style.restrictionTextStyle}
+                                >
+                                    {`* ${getRestrictionsText(restriction)}`}
+                                </Text>
+                            );
                     }
                 )}
                 <View
@@ -376,12 +374,14 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
         );
     }
 
+    const body = renderBody();
+    console.log('body ', body);
     return (
         <SideMenuLayout
             title={headingLine1}
             subTitle={headingLine2}
         >
-            {renderBody()}
+            {body}
         </SideMenuLayout>
     )
 }

@@ -112,6 +112,7 @@ import {
   isAdultContentBlock,
   isPconBlocked,
 } from "../../../utils/pconControls";
+import { getAllSubscriptionGroups } from "../../../customHooks/useAllSubscriptionGroups";
 
 interface AssetData {
   id: string;
@@ -1056,9 +1057,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         params:{
           udpAssetData: udpDataAsset,
           panelTitle: AppStrings?.str_details_cta_rent,
-          confirmPlayCallBack: ctaButtonPress[
-            AppStrings?.str_details_cta_play
-          ]
         },
         drawerPercentage:0.37
       });
@@ -1068,9 +1066,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         params:{
           udpAssetData: udpDataAsset,
           panelTitle: AppStrings?.str_details_cta_buy,
-          confirmPlayCallBack: ctaButtonPress[
-            AppStrings?.str_details_cta_play
-          ],
         },
         drawerPercentage:0.37
       });
@@ -1080,9 +1075,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         params:{
           udpAssetData: udpDataAsset,
           panelTitle: AppStrings?.str_details_cta_rentbuy,
-          confirmPlayCallBack: ctaButtonPress[
-            AppStrings?.str_details_cta_rentbuy
-          ],
         },
         drawerPercentage:0.37
       });
@@ -1093,9 +1085,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         params:{
           udpAssetData: udpDataAsset,
           panelTitle: AppStrings?.str_details_cta_package,
-          confirmPlayCallBack: ctaButtonPress[
-            AppStrings?.str_details_cta_package
-          ],
         },
         drawerPercentage:0.37
       });
@@ -1111,9 +1100,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           params:{
             udpAssetData: udpDataAsset,
             panelTitle: AppStrings?.str_details_cta_subscribe,
-            confirmPlayCallBack: ctaButtonPress[
-              AppStrings?.str_details_cta_subscribe
-            ],
           },
           drawerPercentage:0.37,
           "isPurchaseNetwork": true
@@ -1124,9 +1110,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           params:{
             udpAssetData: udpDataAsset,
             panelTitle: AppStrings?.str_details_cta_subscribe,
-            confirmPlayCallBack: ctaButtonPress[
-              AppStrings?.str_details_cta_subscribe
-            ],
           },
           drawerPercentage:0.37
         });
@@ -1134,9 +1117,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     },
   };
 
-  const onGetScrollView = (scrolViewRef: ScrollView | null): void => {
-    scrollViewRef = scrolViewRef;
-  };
+
   const updateAssetData = () => {
     //@ts-ignore
     const assetType = feed?.assetType!;
@@ -1164,7 +1145,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
   const onDuplexMessage = (message: any) => {
     if (message) {
-      console.log("Details onMessage", message);
+      console.log(`Details ${assetData?.id} onMessage`, message);
       switch (message.type) {
         case NotificationType.pin:
         case NotificationType.unpin:
@@ -1172,6 +1153,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           console.log("status", status);
           setIsItemPinned(status);
           break;
+        case NotificationType.Purchase:
+            invalidatPlayOption();
+            invalidateSubscriberData();
       }
     }
   };
@@ -1207,9 +1191,10 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   // ]);
 
   useEffect(() => {
-    currentContext.addDuplexMessageHandler(onDuplexMessage);
+    const boundDuplexConnector = onDuplexMessage.bind(this);
+    currentContext.addDuplexMessageHandler(boundDuplexConnector);
     () => {
-      currentContext.removeDuplexHandler(onDuplexMessage);
+      currentContext.removeDuplexHandler(boundDuplexConnector);
     };
   }, []);
 
@@ -1729,8 +1714,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           isFeatureAssigned("IOSCarrierBilling")
         );
     console.log("UDP data", udpData);
-    setUDPDataAsset(udpData);
-    setCTALoaded(true);
+    const stringifiedUdpData = JSON.stringify(udpData);
+    const stringifiedUdpDataAsset = JSON.stringify(udpDataAsset);
+    if(stringifiedUdpData !== stringifiedUdpDataAsset){
+      setUDPDataAsset(udpData);
+      setCTALoaded(true);
+    }
     return udpData;
   };
 
@@ -1752,7 +1741,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   useEffect(() => {
-    if (similarItemsData && !isFetchingSimilarItems) {
+    if (similarItemsData && !isFetchingSimilarItems && similarData !== similarItemsData) {
       setSimilarData(similarItemsData);
     }
   }, [similarItemsData, isFetchingSimilarItems]);
@@ -1770,7 +1759,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   useEffect(() => {
-    if (discoveryProgramQueryData && !isFetchingDiscoveryProgramQueryData) {
+    if (discoveryProgramQueryData && !isFetchingDiscoveryProgramQueryData && discoveryProgramData !== discoveryProgramQueryData) {
       setdiscoveryProgramData(discoveryProgramQueryData);
     }
   }, [discoveryProgramQueryData, isFetchingDiscoveryProgramQueryData]);
@@ -1790,54 +1779,60 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   useEffect(() => {
-    if (discoverySchedulesQueryData && !isFetchingDiscoverySchedulesQueryData) {
+    if (discoverySchedulesQueryData && !isFetchingDiscoverySchedulesQueryData && discoverySchedulesData !== discoverySchedulesQueryData) {
       setdiscoverySchedulesData(discoverySchedulesQueryData);
     }
   }, [discoverySchedulesQueryData, isFetchingDiscoverySchedulesQueryData]);
+
   const playActionsQuery = useQuery(
     ["get-playActions", assetData?.id],
     () => getPlayActions(assetData),
-    { ...defaultQueryOptions }
+    { 
+      cacheTime: 60000,
+      staleTime: 60000,
+    }
   );
 
+  const invalidatPlayOption = () => {
+    invalidateQueryBasedOnSpecificKeys("get-playActions", assetData?.id);
+  }
+
+  const invalidateSubscriberData = () =>{
+    invalidateQueryBasedOnSpecificKeys("get-subscriber-data", assetData?.id);
+  }
+
+
   useEffect(() => {
-    if (playActionsQuery.data && !playActionsQuery.isFetching) {
+    if (playActionsQuery.data && !playActionsQuery.isFetching && !playActionsQuery.isStale && playActionsQuery.isFetched && playActionsData !== playActionsQuery.data) {
       setplayActionsData(playActionsQuery.data);
     }
-  }, [playActionsQuery.data, playActionsQuery.isFetching]);
+  }, [playActionsQuery.data, playActionsQuery.isFetching, playActionsQuery.isStale, playActionsQuery.isFetched]);
 
   const subscriberDataQuery = useQuery(
     ["get-subscriber-data", assetData?.id],
     () => getProgramSubscriberData(assetData),
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
+ 
 
-  const { data, isLoading, refetch } = useQuery(
-    ["get-UDP-data", assetData?.id],
-    () => getUDPData(),
-    {
-      refetchOnMount: "always",
-      enabled:
-        !!similarData &&
-        !!discoveryProgramData &&
-        !!discoverySchedulesData &&
-        !!playActionsData &&
-        !!subscriberData,
-    }
-  );
+  const subscrptionGroups = useQuery(['dvr', 'get-all-subscriptionGroups'], getAllSubscriptionGroups, { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors });
+
+  // useEffect(() => {
+  //   appQueryCache.subscribe((event) => {
+  //     console.log(event);
+  //     if (event?.type === "queryUpdated") {
+  //       if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
+  //         setTimeout(() => {
+  //           refetch();
+  //         }, 1000);
+  //       }
+  //     }
+  //   });
+  // }, []);
 
   useEffect(() => {
-    appQueryCache.subscribe((event) => {
-      console.log(event);
-      if (event?.type === "queryUpdated") {
-        if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
-          setTimeout(() => {
-            refetch();
-          }, 1000);
-        }
-      }
-    });
-  }, []);
+    getUDPData();
+  }, [similarData, discoveryProgramData, discoverySchedulesData, playActionsData, subscriberData, subscrptionGroups])
 
   useEffect(() => {
     if (ctaButtonRef) {

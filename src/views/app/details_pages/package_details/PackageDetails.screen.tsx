@@ -7,7 +7,7 @@ import {
   Dimensions,
   Alert,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { PageContainerWithBackgroundImage } from "../../../../components/PageContainer";
 import { AppImages } from "../../../../assets/images";
 import { getUIdef, scaleAttributes } from "../../../../utils/uidefinition";
@@ -48,7 +48,11 @@ import { DetailsSidePanel } from "../DetailSidePanel";
 import { open } from "fs";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
 import MFEventEmitter from "../../../../utils/MFEventEmitter";
+import NotificationType from "../../../../@types/NotificationType";
+import { invalidateQueryBasedOnSpecificKeys } from "../../../../config/queries";
+import { GlobalContext } from "../../../../contexts/globalContext";
 const { width, height } = Dimensions.get("window");
+
 
 interface PackageDetailsProps {
   navigation: NativeStackNavigationProp<any>;
@@ -76,6 +80,7 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState(DetailRoutes.MoreInfo);
   const [screenProps, setScreenProps] = useState<any>();
+  const currentContext = useContext(GlobalContext);
 
   /** Variables and consts used throughout the screen */
   const moreInfoIcon = getFontIcon("info");
@@ -153,6 +158,29 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
     () => getPackageActions(),
     { ...defaultQueryOptions, enabled: !!feed }
   );
+
+
+  const invalidatePackageAction = () => {
+    invalidateQueryBasedOnSpecificKeys("getPackageActions", feed?.Id);
+  }
+
+  const onDuplexMessage = (message: any) => {
+    if (message) {
+      switch (message.type) {
+        case NotificationType.Purchase:
+        case NotificationType.Subscription:
+          invalidatePackageAction();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const boundDuplexConnector = onDuplexMessage.bind(this);
+    currentContext.addDuplexMessageHandler(boundDuplexConnector);
+    () => {
+      currentContext.removeDuplexHandler(boundDuplexConnector);
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -265,7 +293,17 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
   };
 
   const handleRentButtonPress = (panelTitle: string) => {
-    featureNotImplementedAlert();
+    MFEventEmitter.emit("openPurchase", {
+      params:{
+          udpAssetData: {
+              ...packageData,
+              purchasePackage: true,
+              purchasePackageActions: packageActions,
+        },
+        panelTitle: panelTitle,
+      },
+      drawerPercentage:0.37
+    });
 
     // if (packageActions?.PurchaseActions != undefined) {
     //   this.props.openPanel(true, SideMenuRoutes.PurchaseOptions, {

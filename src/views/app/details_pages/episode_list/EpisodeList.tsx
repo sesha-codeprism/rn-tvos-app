@@ -26,6 +26,7 @@ import {
   massageEpisodePlayOption,
   massageProgramDataForUDP,
   massageSeasonPlayOptionData,
+  SubscriptionPackages,
 } from "../../../../utils/assetUtils";
 import { AppStrings, getFontIcon } from "../../../../config/strings";
 import {
@@ -50,13 +51,15 @@ import { AppImages } from "../../../../assets/images";
 import { Definition, Definition as DefinitionOfItem } from "../../../../utils/DVRUtils";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
 import MFOverlay from "../../../../components/MFOverlay";
-import { appQueryCache } from "../../../../config/queries";
+import { appQueryCache, invalidateQueryBasedOnEpisode, invalidateQueryBasedOnSpecificKeys } from "../../../../config/queries";
 import { getItemId } from "../../../../utils/dataUtils";
 import { findConflictedGroupBySeriesOrProgramId } from "../../../../utils/ConflictUtils";
 import MFEventEmitter from "../../../../utils/MFEventEmitter";
 import { cancelRecordingFromConflictPopup, forceResolveConflict } from "../../../../../backend/dvrproxy/dvrproxy";
 import { ConflictResolutionContext } from "../../../../contexts/conflictResolutionContext";
 import { isPconBlocked } from "../../../../utils/pconControls";
+import { GlobalContext } from "../../../../contexts/globalContext";
+import NotificationType from "../../../../@types/NotificationType";
 
 interface EpisodeListProps {
   navigation: NativeStackNavigationProp<any>;
@@ -77,6 +80,7 @@ const lazyListConfig: any = getUIdef("EpisodeList.LazyListWrapper")?.config;
 const scaledSnapToInterval = getScaledValue(lazyListConfig.snapToInterval);
 let skip = 0;
 let top = 10;
+let gCurrentEpisodeToRefresh: any = null;
 
 const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const conflictContext = useContext(ConflictResolutionContext);
@@ -94,6 +98,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const [route, setRoute] = useState(DetailRoutes.MoreInfo);
   const [screenProps, setScreenProps] = useState<any>();
   const [mount, setMount] = useState(false);
+  const currentContext = useContext(GlobalContext);
 
   const metadataList: string[] = discoveryData?.ReleaseYear
     ? [discoveryData?.ReleaseYear]
@@ -152,6 +157,38 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     setOpen(open);
     drawerRef?.current?.open();
   };
+
+  const invalidateEpisodePlayoptions = () => {
+    if(gCurrentEpisodeToRefresh){
+      invalidateQueryBasedOnEpisode("get-episode-playoptions", JSON.stringify(gCurrentEpisodeToRefresh));
+    }
+  }
+
+  const invalidateEpisodeSchedules = () =>{
+    if(gCurrentEpisodeToRefresh){
+      invalidateQueryBasedOnEpisode("get-episode-schedules", JSON.stringify(gCurrentEpisodeToRefresh));
+    }
+  }
+
+  const onDuplexMessage = (message: any) => {
+    if (message) {
+      switch (message.type) {
+        case NotificationType.Purchase:
+        case NotificationType.Subscription:
+          invalidateEpisodePlayoptions();
+          invalidateEpisodeSchedules();
+          setMount(!mount);
+      }
+    }
+  };
+  
+  useEffect(() => {
+    const boundDuplexConnector = onDuplexMessage.bind(this);
+    currentContext.addDuplexMessageHandler(boundDuplexConnector);
+    () => {
+      currentContext.removeDuplexHandler(boundDuplexConnector);
+    };
+  }, []);
 
   const ctaButtonPress: any = {
     [AppStrings?.str_details_program_record_button]: () => {
@@ -370,9 +407,6 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         params:{
           udpAssetData: episodeDetailsData,
           panelTitle: AppStrings?.str_details_cta_rent,
-          confirmPlayCallBack: ctaButtonPress[
-            AppStrings?.str_details_cta_play
-          ]
         },
         drawerPercentage:0.37
       });
@@ -382,9 +416,6 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         params:{
           udpAssetData: episodeDetailsData,
           panelTitle: AppStrings?.str_details_cta_buy,
-          confirmPlayCallBack: ctaButtonPress[
-            AppStrings?.str_details_cta_buy
-          ]
         },
         drawerPercentage:0.37
       });
@@ -394,36 +425,45 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         params:{
           udpAssetData: episodeDetailsData,
           panelTitle: AppStrings?.str_details_cta_rentbuy,
-          confirmPlayCallBack: ctaButtonPress[
-            AppStrings?.str_details_cta_rentbuy
-          ]
         },
         drawerPercentage:0.37
       });
     },
     [AppStrings?.str_details_cta_package]: () => {
+      episodeDetailsData["purchasePackage"] = true;
       MFEventEmitter.emit("openPurchase", {
         params:{
           udpAssetData: episodeDetailsData,
           panelTitle: AppStrings?.str_details_cta_package,
-          confirmPlayCallBack: ctaButtonPress[
-            AppStrings?.str_details_cta_package
-          ]
         },
         drawerPercentage:0.37
       });
     },
     [AppStrings?.str_details_cta_subscribe]: () => {
-      MFEventEmitter.emit("openPurchase", {
-        params:{
-          udpAssetData: episodeDetailsData,
-          panelTitle: AppStrings?.str_details_cta_subscribe,
-          confirmPlayCallBack: ctaButtonPress[
-            AppStrings?.str_details_cta_subscribe
-          ]
-        },
-        drawerPercentage:0.37
-      });
+      const networks = episodeDetailsData.subscriptionPackages.filter(
+        (network: SubscriptionPackages) => {
+          return network.purchaseNetwork != undefined;
+        }
+      );
+      if (networks && networks.length > 0) {
+        MFEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: episodeDetailsData,
+            panelTitle: AppStrings?.str_details_cta_subscribe,
+          },
+          drawerPercentage:0.37,
+          "isPurchaseNetwork": true
+        });
+      } else {
+        episodeDetailsData["subscriptionExists"] = true;
+        MFEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: episodeDetailsData,
+            panelTitle: AppStrings?.str_details_cta_subscribe,
+          },
+          drawerPercentage:0.37
+        });
+      }
     },
   };
 
@@ -677,7 +717,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       return;
     }
     // Adding mount as a dependency to make the CTA useEffect re-fire after "DVR updated" duplex message is obtained
-  }, [seasonPlayOptions, episodeDiscoveryData, episodeSchedules, mount]);
+  }, [seasonPlayOptions, episodePlayOptions, episodeDiscoveryData, episodeSchedules, mount]);
 
   useEffect(() => {
     appQueryCache.subscribe((event) => {
@@ -767,6 +807,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       });
       setCurrentSeasonEpisodes([]);
       setCurrentEpisode(undefined);
+      gCurrentEpisodeToRefresh = undefined;
       discoveryData["focusedSeason"] = {
         seriesId: discoveryData?.Id,
         seasonId: season?.Id,
@@ -781,6 +822,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     } else {
       /** Focused season is same as currently active season  So, don't update anything */
       setCurrentEpisode(undefined);
+      gCurrentEpisodeToRefresh = undefined;
       setCTAList([]);
     }
   };
@@ -863,6 +905,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     discoveryData["currentEpisode"] = episode;
 
     setCurrentEpisode(episode);
+    gCurrentEpisodeToRefresh = episode;
     if (episode?.index === skip - 2) {
       getMoreEpisodes();
     } else {
@@ -1260,6 +1303,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
               data={currentSeasonEpisodes}
               keyExtractor={extractKey}
               renderItem={renderEpisodeListItem}
+              extraData={mount}
             />
             <Pressable
               style={{

@@ -127,6 +127,18 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
         }
     };
 
+    useEffect(() => {
+        if(props?.isPurchaseNetwork){
+            props.navigation.push(Routes.PurchaseNetworkSelectionPanel, {
+                panelTitle: AppStrings?.str_details_cta_subscribe,
+                panelSubtitle: props.route.params?.udpAssetData.title || props.route.params?.udpAssetData.Name,
+                udpAssetData: props.route.params.udpAssetData,
+                confirmPlayCallBack: props.route.params.confirmPlayCallBack,
+                focusedEpisodeId: props.route.params.focusedEpisodeId,
+            });
+        }
+    },[props?.isPurchaseNetwork]);
+
     const onPressPurchaseAction = (data: any) => {
         selectedPurchaseOption = data.purchaseAction?.OfferId;
 

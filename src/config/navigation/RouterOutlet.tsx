@@ -146,9 +146,6 @@ export const PurchasePanelNavigator: React.FunctionComponent<PurchaseOutletProps
     <NavigationContainer
       independent={true}
       initialState={props.initialState}
-      onStateChange={(state) =>
-        SettingsRN.set({ PURCHASE_NAVIGATION_HISTORY: JSON.stringify(state) })
-      }
     >
       <Stack.Navigator
         initialRouteName={Routes.PurchaseOptions}
