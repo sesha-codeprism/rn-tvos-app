@@ -523,9 +523,7 @@ export const getSubscriptionPackageItems = async (id: string, params: any) => {
   const { $skip, $top, $lang, $groups, storeId } = params;
   if(Id && categoryId ){
     uri = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + `/v3/subscription-packages/${Id}/categories/${categoryId}/items`
-  }else{
-    console.log("****else");
-    
+  }else{    
     uri = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + `/v3/subscription-packages/${Id}/items`;
   }
   const type: SourceType = SourceType.PACKAGE;
