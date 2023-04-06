@@ -27,9 +27,9 @@ export const setGlobalData = (bootStrapResponse: BootStrapResponse) => {
                     GLOBALS.store.settings.display.onScreenLanguage.enableRTL;
             }
             if (GLOBALS.store.settings.display.onScreenLanguage.languageCode == "") {
-                GLOBALS.store.settings.display.onScreenLanguage.languageCode = "en-US";
+                GLOBALS.store.settings.display.onScreenLanguage.languageCode = config.onScreenLanguage.primary;
             }
-            setOnScreenLanguage(GLOBALS.store.settings.display.onScreenLanguage.languageCode)
+            // setOnScreenLanguage(GLOBALS.store.settings.display.onScreenLanguage.languageCode)
             GLOBALS.store.CurrentStoreID = DefaultStore.Id;
             console.log("GLOBALS", GLOBALS);
             updateStore(GLOBALS.store);

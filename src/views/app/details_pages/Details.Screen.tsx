@@ -253,7 +253,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
   const openNewRecording = () => {
     const data: any = feed;
-    let details;
+    let details = discoveryProgramData;
+    console.log('isPconBlocked(details) in recording:',isPconBlocked(details))
     const openPannel = () => {
       //TODO: We have a check for PCON. Need to implement
       const contentType = assetData.assetType?.contentType;
@@ -576,11 +577,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         }
       }
     };
-    if (data.Definition === "SingleProgram" && data.SubscriptionItems.length) {
-      details = data.SubscriptionItems[0].ProgramDetails;
-    } else {
-      details = data.SeriesDetails;
-    }
     if (isPconBlocked(details)) {
       MFEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.content,
@@ -836,12 +832,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   const handlePlayDvr = () => {
     console.log("handlePlayDvr", props);
     const data: any = feed;
-    let details;
-    if (data.Definition === "SingleProgram" && data.SubscriptionItems.length) {
-      details = data.SubscriptionItems[0].ProgramDetails;
-    } else {
-      details = data.SeriesDetails;
-    }
+    let details = discoveryProgramData;
     const IsAdult = details.IsAdult;
     if (IsAdult && isAdultContentBlock()) {
       MFEventEmitter.emit("openPinVerificationPopup", {
@@ -961,17 +952,28 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       navigateToPlayer();
     },
     [AppStrings?.str_details_cta_restart]: () => {
-      const catchupSchedule = udpDataAsset.currentCatchupSchedule?.Schedule;
-      getBookmark(
-        `${catchupSchedule?.StationId.trim()}_${catchupSchedule?.StartUtc.trim()}_${catchupSchedule?.EndUtc.trim()}`,
-        udlBookMark.CATCHUP
-      )
-        .then((bookmark) => {
-          handleRestart(bookmark);
-        })
-        .catch(() => {
-          handleRestart();
+      const restart = () => {
+        const catchupSchedule = udpDataAsset.currentCatchupSchedule?.Schedule;
+        getBookmark(
+          `${catchupSchedule?.StationId.trim()}_${catchupSchedule?.StartUtc.trim()}_${catchupSchedule?.EndUtc.trim()}`,
+          udlBookMark.CATCHUP
+        )
+          .then((bookmark) => {
+            handleRestart(bookmark);
+          })
+          .catch(() => {
+            handleRestart();
+          });
+      };
+      if (isPconBlocked(discoveryProgramData)) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.content,
+          data: data,
+          onSuccess: restart,
         });
+      } else {
+        restart();
+      }
     },
     [AppStrings?.str_details_cta_more_info]: toggleSidePanel,
     [AppStrings?.str_details_cta_more_episodes]: () => {
@@ -1485,12 +1487,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       featureNotImplementedAlert();
     };
     console.log("navigateToPlayer", props);
-    let details;
-    if (data.Definition === "SingleProgram" && data.SubscriptionItems.length) {
-      details = data.SubscriptionItems[0].ProgramDetails;
-    } else {
-      details = data.SeriesDetails;
-    }
+    let details = discoveryProgramData;
     if (isPconBlocked(details)) {
       MFEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.content,

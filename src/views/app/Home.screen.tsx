@@ -202,20 +202,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   };
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   MFEventEmitter.emit("createNotification",  {
-    //     id: "NO_NETWORK",
-    //     iconName: "favorite_selected",
-    //     subtitle: AppStrings?.str_home_network_down,
-    // })
-    // }, 4000);
-    // setTimeout(() => {
-    //   MFEventEmitter.emit("createNotification",  {
-    //     id: "NO_NETWORK",
-    //     iconName: "favorite_selected",
-    //     subtitle: `${AppStrings?.str_home_network_down} New`,
-    // })
-    // }, 8000);
     if (!open) {
       console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
       TVMenuControl.enableTVMenuKey();

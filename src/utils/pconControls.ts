@@ -39,24 +39,38 @@ export const isPconBlocked = (playInfo: any, locale?: any) => {
   const ratingProviders = Object.keys(pconRatingConfigs);
   console.log("isPconBlocked data", ratings, isRated, ratingProviders);
   if (ratingProviders.length && ratings.length && isRated) {
+    console.log("inside rating if check");
     for (let i = 0; i < ratings.length; i++) {
       let ratingObj = ratings[i];
-      if (ratingProviders.indexOf(ratingObj.System.toUpperCase()) > -1) {
-        const ratedList: any[] =
-          pconRatingConfigs[ratingObj.System.toUpperCase()];
+      console.log(
+        "inside for loop RenderCount:",
+        i,
+        "index of provider",
+        ratingProviders.indexOf(ratingObj.System),
+        "ratingObj",
+        ratingObj
+      );
+      if (ratingProviders.indexOf(ratingObj.System) > -1) {
+        const ratedList: any[] = pconRatingConfigs[ratingObj.System];
+        console.log("Found provider details rated provider is:", ratedList);
         if (ratedList.length) {
           const ratedVal = ratedList.find(
             (item, index) => item.title === ratingObj.Value
           );
+          console.log("checking for exact rating ratedVal", ratedVal);
           if (ratedVal) {
-            isLocked = true;
+            console.log('PCON is blocked');
+             isLocked = true;
+             break;
           } else {
             isLocked = false;
           }
         } else {
+          console.log("ratedList is  empty");
           isLocked = false;
         }
       } else {
+        console.log("Rating provider not found");
         isLocked = false;
       }
     }
@@ -78,8 +92,9 @@ export const isPurchaseLocked = () => {
 };
 
 export const isUnratedContentLocked = () => {
-  const contentLockConfig = GLOBALS.store?.settings.parentalControll.contentLock || {};
-    // pconConfig && pconConfig?.contentLock ? pconConfig?.contentLock : {};
+  const contentLockConfig =
+    GLOBALS.store?.settings.parentalControll.contentLock || {};
+  // pconConfig && pconConfig?.contentLock ? pconConfig?.contentLock : {};
   const isEmpty = Object.keys(contentLockConfig).length > 0 ? false : true;
   const isUnratedLocked = contentLockConfig["lockUnratedContent"];
   console.log(

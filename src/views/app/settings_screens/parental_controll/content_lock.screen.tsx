@@ -138,6 +138,7 @@ const ContentLockScreen: React.FunctionComponent<Props> = (props: any) => {
           width: "100%",
           height: "100%",
           justifyContent: "flex-end",
+          marginTop: list.length <= 2 ? 100: 0
         }}
         ListFooterComponent={() => {
           return (
