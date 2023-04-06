@@ -37,6 +37,7 @@ import { getNetworkIHD } from "../../../backend/networkIHD/networkIHD";
 import { MFGlobalsConfig } from "../../../backend/configs/globals";
 import { isAdultContentBlock, isPconBlocked } from "../../utils/pconControls";
 import { PinType } from "../../utils/analytics/consts";
+import { Layout } from "../../utils/analytics/consts";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -256,7 +257,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
 
-  const onPressSwim = (event) => {
+  const onPressSwim = (event,feed?:any) => {
     console.log(event);
     //@ts-ignore
     if (event.Schedule) {
@@ -304,6 +305,22 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       props.navigation.navigate(Routes.PackageDetails, {
         feed: event,
       });
+    } else if (event.ItemType === ItemType.SVODPACKAGE) {
+      const isSvodData = { ...feed, ...event };
+      const payload: any = {
+        feed: isSvodData,
+        title: isSvodData.Name,
+        navigationTargetUri: isSvodData.NavigationTargetUri,
+      };
+      let route;
+      if (isSvodData?.Layout === Layout.Category) {
+        route = "BrowseCategory";
+      } else {
+        route = "BrowseGallery";
+      }
+      if (route) {       
+        props.navigation.navigate(Routes[`${route}`], payload);
+      }
     } else {
       // if data is available directly
       const IsAdult = event.IsAdult;
@@ -439,8 +456,8 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                     ref={firstSwimlaneRef}
                     feeds={feeds}
                     onFocus={onFeedFocus}
-                    onPress={(event) => {
-                      onPressSwim(event);
+                    onPress={(event, feed) => {
+                      onPressSwim(event, feed);
                     }}
                     onListEmptyElementFocus={clearCurrentHub}
                     onListFooterElementFocus={clearCurrentHub}

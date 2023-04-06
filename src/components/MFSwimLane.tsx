@@ -127,6 +127,9 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
         props.navigation.navigate(Routes.FallBack, params);
       }
     };
+    const onPress = (event: any) => {
+      props.onPress &&  props.onPress(event, props.feed)
+    }
     const onTapViewAll = (feed: any) => {
       console.log('View all pressed', feed);
       if (!props.navigation) {
@@ -259,7 +262,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           customViewAllTitle={props.customViewAllTitle}
           feed={props.feed}
           cardStyle={props.cardStyle}
-          onPress={props.onPress}
+          onPress={onPress}
           onLongPress={props.onLongPress}
           onBlur={(event) => {
             _onBlur();
