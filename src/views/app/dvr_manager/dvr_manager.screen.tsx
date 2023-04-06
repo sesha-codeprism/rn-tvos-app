@@ -709,20 +709,26 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   // Returns a flatlist that contains the scheduled items
   const renderScheduled = () => {
     return (
-      <View style={[styles.secondBlock]}>
+      <Animated.View
+        style={[
+          styles.secondBlock,
+          { ...animatedListStyle, alignSelf: "flex-start" },
+        ]}
+      >
         <FlatList
+          style={{ width: "100%", alignSelf: "flex-start" }}
           // snapToAlignment={"start"}
           contentContainerStyle={{
-            justifyContent: "center",
             width: "70%",
             marginTop: 20,
+            alignSelf: "flex-start",
           }}
           horizontal={false}
           data={scheduledRecordingList}
           keyExtractor={(i) => i.Id}
           renderItem={renderScheduledList}
         />
-      </View>
+      </Animated.View>
     );
   };
   const getFormatedDate = (date: string) => {
@@ -744,25 +750,18 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
   const renderScheduledList = (data: any) => {
     const { item, index: groupIndex } = data;
     return (
-      <Animated.View
-        key={`laneTitle_${groupIndex}`}
-        style={{ flex: 1, width: "100%", ...animatedListStyle }}
+      <View
+        style={{
+          width: "100%",
+          // backgroundColor: "red",
+        }}
       >
-        <View
-          style={{
-            justifyContent: "flex-start",
-            alignItems: "flex-start",
-            alignContent: "flex-start",
-            width: "100%",
-          }}
-        >
-          <Text style={styles.laneTitle}>{getFormatedDate(item.date)}</Text>
-          {item.data.length &&
-            item.data.map((item: any, index: any) => {
-              return renderScheduledItem({ item, index, groupIndex });
-            })}
-        </View>
-      </Animated.View>
+        <Text style={styles.laneTitle}>{getFormatedDate(item.date)}</Text>
+        {item.data.length &&
+          item.data.map((item: any, index: any) => {
+            return renderScheduledItem({ item, index, groupIndex });
+          })}
+      </View>
     );
   };
   // Returns the scheduled item
@@ -1125,7 +1124,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
     });
   };
   const _moveLeft = () => {
-    margin.value = withTiming(420, {
+    margin.value = withTiming(220, {
       duration: 400,
       easing: Easing.out(Easing.ease),
     });
@@ -1342,7 +1341,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
                 onFocus={onFocusBar}
               />
             </View>
-            <View style={DVRManagerStyles.dvrMain}>
+            <View style={[DVRManagerStyles.dvrMain]}>
               <Animated.View
                 style={[
                   DVRManagerStyles.dvrView,
@@ -1368,7 +1367,14 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
                 }}
               />
               <View
-                style={{ width: "100%", height: height, paddingBottom: 200 }}
+                style={{
+                  width: "100%",
+                  height: height,
+                  paddingBottom: 200,
+                  justifyContent: "flex-start",
+                  alignContent: "flex-start",
+                  alignItems: "flex-start",
+                }}
               >
                 {currentDvrMenu === DvrMenuItems.Recorded
                   ? renderRecorded()
@@ -1409,7 +1415,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
             }}
             // screenProps={screenProps} // moreInfoProps={}
           />
-          <DetailsSidePanel
+          {/* <DetailsSidePanel
             ref={moreInfoDrawerRef}
             drawerPercentage={37}
             animationTime={200}
@@ -1423,7 +1429,7 @@ const DVRManagerScreen = (props: DvrManagerProps) => {
             route={route}
             closeModal={closeMoreInfoModal}
             screenProps={screenProps}
-          />
+          /> */}
         </View>
       </ImageBackground>
     </PageContainer>
@@ -1665,6 +1671,7 @@ const styles = StyleSheet.create({
   secondBlock: {
     // flex: 1,
     marginLeft: 0,
+    width: "100%",
   },
   imageIcon: {
     marginTop: 130,
@@ -1701,6 +1708,7 @@ const styles = StyleSheet.create({
     lineHeight: 50,
     marginTop: 40,
     marginLeft: 20,
+    textAlign: "left",
   },
 });
 

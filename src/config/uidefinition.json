@@ -4556,7 +4556,6 @@
           "paddingTop": 40
         },
         "dvrMain": {
-          "display": "flex",
           "flexDirection": "row",
           "width": "100%",
           "height": "100%"
