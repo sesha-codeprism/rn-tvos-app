@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {
+  DeviceEventEmitter,
   FlatList,
   ImageBackground,
   Pressable,
@@ -60,6 +61,7 @@ import { ConflictResolutionContext } from "../../../../contexts/conflictResoluti
 import { isPconBlocked } from "../../../../utils/pconControls";
 import { GlobalContext } from "../../../../contexts/globalContext";
 import NotificationType from "../../../../@types/NotificationType";
+import { getAllSubscriptionGroups } from "../../../../customHooks/useAllSubscriptionGroups";
 
 interface EpisodeListProps {
   navigation: NativeStackNavigationProp<any>;
@@ -83,7 +85,6 @@ let top = 10;
 let gCurrentEpisodeToRefresh: any = null;
 
 const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
-  const conflictContext = useContext(ConflictResolutionContext);
   const navigationParams = props.route.params;
   const { udpData, subscriberData, discoveryData } = navigationParams;
   const [currentSeason, setCurrentSeason] = useState<any>();
@@ -99,6 +100,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const [screenProps, setScreenProps] = useState<any>();
   const [mount, setMount] = useState(false);
   const currentContext = useContext(GlobalContext);
+  const [incomingDuplexMessage, setIncomingDuplexMessage] = useState<any|null>(null);
 
   const metadataList: string[] = discoveryData?.ReleaseYear
     ? [discoveryData?.ReleaseYear]
@@ -158,34 +160,42 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     drawerRef?.current?.open();
   };
 
-  const invalidateEpisodePlayoptions = () => {
-    if(gCurrentEpisodeToRefresh){
-      invalidateQueryBasedOnEpisode("get-episode-playoptions", JSON.stringify(gCurrentEpisodeToRefresh));
-    }
-  }
-
-  const invalidateEpisodeSchedules = () =>{
-    if(gCurrentEpisodeToRefresh){
-      invalidateQueryBasedOnEpisode("get-episode-schedules", JSON.stringify(gCurrentEpisodeToRefresh));
-    }
-  }
 
   const onDuplexMessage = (message: any) => {
     if (message) {
       switch (message.type) {
         case NotificationType.Purchase:
         case NotificationType.Subscription:
-          invalidateEpisodePlayoptions();
-          invalidateEpisodeSchedules();
-          setMount(!mount);
+          setIncomingDuplexMessage(message);
       }
     }
   };
-  
+
+  const testMethod = (param: any) => {
+    console.log('>>>>>>>>>>>>>> Fired from  DeviceEventEmmiter >>>>>>>>', currentEpisode,  param.currentEpisode);
+  }
+
+  useEffect(() => {
+    if(incomingDuplexMessage){
+      // processs incoming duplex message
+      console.log(currentEpisode);
+      invalidateQueryBasedOnSpecificKeys("get-episode-playoptions", currentEpisode);
+      invalidateQueryBasedOnSpecificKeys("get-episode-schedules", currentEpisode);
+      invalidateQueryBasedOnSpecificKeys("feed", "udl://subscriber/library/Library");
+      MFEventEmitter.emit("UpdateFeeds", currentEpisode);
+      DeviceEventEmitter.emit('test', {currentEpisode:currentEpisode});
+      // incoming message  processed, empty  the state
+      setIncomingDuplexMessage(undefined);
+      setMount(!mount)
+    }
+  }, [incomingDuplexMessage]);
+
   useEffect(() => {
     const boundDuplexConnector = onDuplexMessage.bind(this);
+    const subscription = DeviceEventEmitter.addListener("test", testMethod);
     currentContext.addDuplexMessageHandler(boundDuplexConnector);
     () => {
+      subscription.remove();
       currentContext.removeDuplexHandler(boundDuplexConnector);
     };
   }, []);
@@ -594,6 +604,8 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     return data.data;
   };
 
+  const { data: subscrptionGroups } = useQuery(['dvr', 'get-all-subscriptionGroups'], getAllSubscriptionGroups, { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors });
+
   const { data: seasonPlayOptions, isLoading } = useQuery(
     ["get-seasonsPlayData", currentSeason],
     getCurrentSeasonPlayOptions,
@@ -717,21 +729,21 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       return;
     }
     // Adding mount as a dependency to make the CTA useEffect re-fire after "DVR updated" duplex message is obtained
-  }, [seasonPlayOptions, episodePlayOptions, episodeDiscoveryData, episodeSchedules, mount]);
+  }, [seasonPlayOptions, episodePlayOptions, episodeDiscoveryData, episodeSchedules, mount, subscrptionGroups]);
 
-  useEffect(() => {
-    appQueryCache.subscribe((event) => {
-      console.log(event);
-      if (event?.type === "queryUpdated") {
-        if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
-          setTimeout(() => {
-            // A simple reset function to trigger the useEffect that calculates the CTA buttons
-            setMount(!mount);
-          }, 1000);
-        }
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   appQueryCache.subscribe((event) => {
+  //     console.log(event);
+  //     if (event?.type === "queryUpdated") {
+  //       if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
+  //         setTimeout(() => {
+  //           // A simple reset function to trigger the useEffect that calculates the CTA buttons
+  //           setMount(!mount);
+  //         }, 1000);
+  //       }
+  //     }
+  //   });
+  // }, []);
 
   const getEpisodesInChunks = (start: number, offset: number) => {
     if (seasonPlayOptions) {

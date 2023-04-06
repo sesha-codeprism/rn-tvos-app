@@ -58,7 +58,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     inHomeApiEndpoint = undefined,
     useSubscriberInHome = false,
   } = MFGlobalsConfig?.config?.inhomeDetection || {});
-  getNetworkIHD(params);
+  //getNetworkIHD(params);
   const currentContext = useContext(GlobalContext);
 
   let feedTimeOut: any = null;

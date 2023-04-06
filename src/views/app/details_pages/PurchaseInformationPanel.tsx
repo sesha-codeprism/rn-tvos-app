@@ -100,18 +100,6 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
                         this.props.route.params.rerouteToDetails(true);
                     }
                     */
-
-                    /** Refresh
-                     FeedType: "Dynamic"
-                        Id: "fa3e5be4-ec34-4c74-9002-21a7525cd5da"
-                        Layout: "Gallery"
-                        Name: "Purchases"
-                        NavigationTargetText: "View All {0}"
-                        NavigationTargetUri: "libraries"
-                        NavigationTargetVisibility: "Always"
-                        ShowcardAspectRatio: "SixteenByNine"
-                        Uri: "udl://subscriber/library/Library"
-                     */
                 })
                 .then(() => {
                     if (

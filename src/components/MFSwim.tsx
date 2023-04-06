@@ -60,27 +60,6 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
       setHubName(props.feeds?.Name || "");
     });
 
-    // useEffect(() => {
-    //   const that = this;
-    //   const updateUI = () => {
-    //     setMount(!mount);
-    //   };
-    //   //@ts-ignore
-    //   EventEmitter.on(updateUI.bind(that), undefined);
-    // }, []),
-    //   appQueryCache.subscribe((event) => {
-    //     if (event?.type === "queryUpdated") {
-    //       if (
-    //         event.query.queryHash.includes("get-live-data") &&
-    //         event.query.state.data
-    //       ) {
-    //         console.log("Need to reset updates", event?.query);
-    //         if (!mount) {
-    //           setMount(true);
-    //         }
-    //       }
-    //     }
-    //   });
 
     const updateUI = (params?: any) => {
       console.log("received params,", params!);
@@ -110,6 +89,7 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
         snapToInterval={0}
         maxToRenderPerBatch={5}
         windowSize={5}
+        extraData={mount}
         renderItem={({ item, index }) => {
           // If the feed is waiting for some dependent query is is just loading, show loading indicator
           return data[index].isIdle || data[index].isLoading ? (
@@ -152,6 +132,7 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
                   props.onListFooterElementFocus(event);
               }}
               navigation={props.navigation}
+              extraData={mount}
             />
           ) : (
             // If undefined feeds are not permitted, then don't render anything for now..
@@ -182,6 +163,7 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
                     props.onListFooterElementFocus(event);
                 }}
                 navigation={props.navigation}
+                extraData={mount}
               />
             )
           );

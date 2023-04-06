@@ -1156,6 +1156,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         case NotificationType.Purchase:
             invalidatPlayOption();
             invalidateSubscriberData();
+            invalidateQueryBasedOnSpecificKeys("feed", "udl://subscriber/library/Library");
       }
     }
   };
@@ -1817,18 +1818,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
   const subscrptionGroups = useQuery(['dvr', 'get-all-subscriptionGroups'], getAllSubscriptionGroups, { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors });
 
-  // useEffect(() => {
-  //   appQueryCache.subscribe((event) => {
-  //     console.log(event);
-  //     if (event?.type === "queryUpdated") {
-  //       if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
-  //         setTimeout(() => {
-  //           refetch();
-  //         }, 1000);
-  //       }
-  //     }
-  //   });
-  // }, []);
 
   useEffect(() => {
     getUDPData();
