@@ -258,7 +258,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   };
 
   const onPressSwim = (event,feed?:any) => {
-    console.log(event);
+    console.log("onPressSwim",event);
     //@ts-ignore
     if (event.Schedule) {
       const IsAdult = event.Schedule.IsAdult;

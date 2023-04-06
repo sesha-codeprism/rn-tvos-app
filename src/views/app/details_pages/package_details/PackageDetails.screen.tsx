@@ -116,9 +116,9 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
     return data.data;
   };
 
-  const getSubscriptionPackageItems = async () => {
+  const getPackageItems = async () => {
     const udlParam =
-      `udl://${UDLType.Discovery}/getSubscriptionPackageItems/` +
+      `udl://${UDLType.Discovery}/getPackageItems/` +
       `?$skip=${$skip}&$top=${$top}&$lang=${lang}$groups=${GLOBALS.store?.rightsGroupIds}&storeId=${DefaultStore.Id}&packageId=${feed?.Id}`;
     const data = await getDataFromUDL(udlParam);
     return data.data;
@@ -190,8 +190,8 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
   }, [packageTitlesQuery.data, packageTitlesQuery.isFetching]);
 
   const subscriptionPackageItemsQuery = useQuery(
-    ["getSubscriptionPackageItems", feed?.id],
-    () => getSubscriptionPackageItems(),
+    ["getPackageItems", feed?.id],
+    () => getPackageItems(),
     {
       ...defaultQueryOptions,
       //@ts-ignore
