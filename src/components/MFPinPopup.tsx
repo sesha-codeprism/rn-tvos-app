@@ -20,6 +20,7 @@ import MFButton, { MFButtonVariant } from "./MFButton/MFButton";
 import { AppImages } from "../assets/images";
 import { globalStyles } from "../config/styles/GlobalStyles";
 import { metadataSeparator } from "../utils/Subscriber.utils";
+import { format } from "../utils/assetUtils";
 
 interface PinPopupProps {
   title?: string;
@@ -124,37 +125,62 @@ const MFPinPopup = (props: PinPopupProps) => {
           ""
       );
       const [{ Passcode: passcode }] = passcodeData?.data || {};
-
-      if (
-        !isLoading &&
-        !isStale &&
-        isFetched &&
-        passcode &&
-        isHash(passcode) &&
-        passcode === hashedPin
-      ) {
-        MFEventEmitter.emit("closePinVerificationPopup", undefined);
-        setTimeout(() => {
-          props.onSuccess ? props.onSuccess() : null;
-        }, 1000);
-        return true;
-      } else {
-        setNumberOfAttempts(numberOfAttempts - 1);
-        if (numberOfAttempts - 1 < 1) {
-          setLockedOut(true);
-          SettingsRN.set({ LOCKOUT_TIME: new Date().getTime() });
-          setErrMessage("Pin verification will be locked for next 30 mins");
+      if (!isLoading && !isStale && isFetched && passcode && isHash(passcode)) {
+        if (passcode === hashedPin) {
+          console.log("hashed password matching");
+          MFEventEmitter.emit("closePinVerificationPopup", undefined);
           setTimeout(() => {
-            setPin(["", "", "", ""]);
-          }, 2000);
+            props.onSuccess ? props.onSuccess() : null;
+          }, 1000);
+          return true;
         } else {
-          setErrMessage(AppStrings.str_settings_wrong_pin);
-          setTimeout(() => {
-            setPin(["", "", "", ""]);
-            setErrMessage("")
-          }, 2000);
+          setNumberOfAttempts(numberOfAttempts - 1);
+          if (numberOfAttempts - 1 < 1) {
+            setLockedOut(true);
+            SettingsRN.set({ LOCKOUT_TIME: new Date().getTime() });
+            setErrMessage(
+              format(AppStrings.str_settings_pin_lockout_instruction, `30`)
+            );
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+            }, 2000);
+          } else {
+            setErrMessage(AppStrings.str_settings_wrong_pin);
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+              setErrMessage("");
+            }, 2000);
+          }
+          return false;
         }
-        return false;
+      } else {
+        if (passcode === pinInput) {
+          console.log("unprotected password matching");
+          MFEventEmitter.emit("closePinVerificationPopup", undefined);
+          setTimeout(() => {
+            props.onSuccess ? props.onSuccess() : null;
+          }, 1000);
+          return true;
+        } else {
+          setNumberOfAttempts(numberOfAttempts - 1);
+          if (numberOfAttempts - 1 < 1) {
+            setLockedOut(true);
+            SettingsRN.set({ LOCKOUT_TIME: new Date().getTime() });
+            setErrMessage(
+              format(AppStrings.str_settings_pin_lockout_instruction, `30`)
+            );
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+            }, 2000);
+          } else {
+            setErrMessage(AppStrings.str_settings_wrong_pin);
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+              setErrMessage("");
+            }, 2000);
+          }
+          return false;
+        }
       }
     } catch (error) {
       console.log("error getting pin");
@@ -273,9 +299,12 @@ const MFPinPopup = (props: PinPopupProps) => {
             <Text style={styles.errMessage}>{errMessage}</Text>
           )}
           {timeLeft < Infinity && (
-            <Text
-              style={styles.errMessage}
-            >{`Pin verification will be locked for next ${timeLeft} mins`}</Text>
+            <Text style={styles.errMessage}>
+              {format(
+                AppStrings.str_settings_pin_lockout_instruction,
+                `${timeLeft}`
+              )}
+            </Text>
           )}
           <View style={styles.numberPadContainer}>
             <View style={styles.numberPad}>
@@ -499,7 +528,7 @@ const styles = StyleSheet.create({
     fontSize: 23,
     letterSpacing: 0,
     lineHeight: 38,
-    marginLeft: 100
+    marginLeft: 100,
   },
   numberPadContainer: {
     display: "flex",

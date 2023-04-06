@@ -14,7 +14,10 @@ import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
 import { AppStrings } from "../../../../config/strings";
-import { MFSelectCheckedBox, MFSelectUnCheckedBox } from "../../../../components/MFSelectBox";
+import {
+  MFSelectCheckedBox,
+  MFSelectUnCheckedBox,
+} from "../../../../components/MFSelectBox";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -75,7 +78,9 @@ const UnratedContentScreen: React.FunctionComponent<Props> = (props: any) => {
       subTitle={AppStrings.str_settings_unrated_content}
     >
       <View style={styles.contentTitleContainer}>
-        <Text style={styles.contentTitle}>Lock unrated content</Text>
+        <Text style={styles.contentTitle}>
+          {AppStrings.str_settings_unrated_content_label}
+        </Text>
       </View>
       <FlatList
         data={list}

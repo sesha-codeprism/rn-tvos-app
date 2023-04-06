@@ -27,6 +27,7 @@ import { GLOBALS } from "../../../../utils/globals";
 import { PinActionTypes } from "./parental_controll.screen";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
 import { AppStrings } from "../../../../config/strings";
+import { format } from "../../../../utils/assetUtils";
 interface PinProps {
   screenName: string;
   pinType: PinType;
@@ -187,8 +188,6 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         "hashedPin",
         hashedPin
       );
-      // const data = await getPassword(type);
-      // && passcode === hashedPin
       if (passcode && isHash(passcode)) {
         if (passcode === hashedPin) {
           console.log("password matching", props.route.params.screenTarget);
@@ -199,7 +198,9 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
           if (numberOfAttempts - 1 < 1) {
             setLockedOut(true);
             SettingsRN.set({ LOCKOUT_TIME: new Date().getTime() });
-            setErrMessage("Pin verification will be locked for next 30 mins");
+            setErrMessage(
+              format(AppStrings.str_settings_pin_lockout_instruction, "30")
+            );
             setTimeout(() => {
               setPin(["", "", "", ""]);
             }, 2000);
@@ -222,7 +223,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
           if (numberOfAttempts - 1 < 1) {
             setLockedOut(true);
             SettingsRN.set({ LOCKOUT_TIME: new Date().getTime() });
-            setErrMessage("Pin verification will be locked for next 30 mins");
+            format(AppStrings.str_settings_pin_lockout_instruction, "30");
             setTimeout(() => {
               setPin(["", "", "", ""]);
             }, 2000);
@@ -235,12 +236,6 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
           }
           return false;
         }
-        // console.log("incorrect password");
-        // setErrMessage(AppStrings.str_settings_wrong_pin);
-        // setTimeout(() => {
-        //   setErrMessage("");
-        //   setPin(["", "", "", ""]);
-        // }, 2000);
       }
     } catch (error) {
       console.log("error getting pin");
@@ -393,9 +388,12 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
       </View>
       {errMessage !== "" && <Text style={styles.errMessage}>{errMessage}</Text>}
       {timeLeft < Infinity && (
-        <Text
-          style={styles.errMessage}
-        >{`Pin verification will be locked for next ${timeLeft} mins`}</Text>
+        <Text style={styles.errMessage}>
+          {format(
+            AppStrings.str_settings_pin_lockout_instruction,
+            `${timeLeft}`
+          )}
+        </Text>
       )}
       <View style={styles.numberPadContainer}>
         <View style={styles.numberPad}>
@@ -461,11 +459,13 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         </View>
       </View>
       <View style={styles.bottomTextContainer}>
-        <Text style={styles.inputLebelText}>To set or reset PIN</Text>
+        <Text style={styles.inputLebelText}>
+          {AppStrings.str_settings_setpin_instruction}
+        </Text>
         <Text
           style={[styles.inputLebelText, { fontWeight: "600", marginTop: 10 }]}
         >
-          Please call (333)546-5689
+          {AppStrings.str_settings_setpin_contact}
         </Text>
       </View>
     </SideMenuLayout>
