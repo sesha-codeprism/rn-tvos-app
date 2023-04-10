@@ -34,6 +34,7 @@ import { updateVariant } from "../../../../utils/live/LiveUtils";
 import {
   assetTypeObject,
   fontIconsObject,
+  PinType,
 } from "../../../../utils/analytics/consts";
 import { isFeatureAssigned } from "../../../../utils/helpers";
 import MFButton, {
@@ -51,6 +52,7 @@ import MFEventEmitter from "../../../../utils/MFEventEmitter";
 import NotificationType from "../../../../@types/NotificationType";
 import { invalidateQueryBasedOnSpecificKeys } from "../../../../config/queries";
 import { GlobalContext } from "../../../../contexts/globalContext";
+import { isPurchaseLocked } from "../../../../utils/pconControls";
 const { width, height } = Dimensions.get("window");
 
 
@@ -438,19 +440,29 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
             shouldRenderImage: true,
           }}
           onPress={() =>  {
-            MFEventEmitter.emit("openPurchase", {
-              params:{
-                udpAssetData: {
-                  ...packageData,
-                  purchaseActions: packageActions?.PurchaseActions
+            if(isPurchaseLocked()){
+              MFEventEmitter.emit("openPinVerificationPopup", {
+                pinType: PinType.purchase,
+                data: {
+                  udpData: {
+                    ...packageData,
+                    purchaseActions: packageActions?.PurchaseActions
+                  }
                 },
-                panelTitle: AppStrings?.str_details_cta_rentbuy,
-                confirmPlayCallBack: ctaButtonPress[
-                  AppStrings?.str_details_cta_rentbuy
-                ],
-              },
-              drawerPercentage:0.37
-            });
+                onSuccess: () => {
+                  MFEventEmitter.emit("openPurchase", {
+                    params:{
+                      udpAssetData: {
+                        ...packageData,
+                        purchaseActions: packageActions?.PurchaseActions
+                      },
+                      panelTitle: AppStrings?.str_details_cta_rentbuy,
+                    },
+                    drawerPercentage:0.37
+                  });
+                },
+              });
+            }
           }}
         />
       );
@@ -499,19 +511,29 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
             shouldRenderImage: true,
           }}
           onPress={() =>  {
-            MFEventEmitter.emit("openPurchase", {
-              params:{
-                udpAssetData: {
-                  ...packageData,
-                  purchaseActions: packageActions?.PurchaseActions
+            if(isPurchaseLocked()){
+              MFEventEmitter.emit("openPinVerificationPopup", {
+                pinType: PinType.purchase,
+                data: {
+                  udpData: {
+                    ...packageData,
+                    purchaseActions: packageActions?.PurchaseActions
+                  }
                 },
-                panelTitle: AppStrings?.str_details_cta_rent,
-                confirmPlayCallBack: ctaButtonPress[
-                  AppStrings?.str_details_cta_rent
-                ],
-              },
-              drawerPercentage:0.37
-            });
+                onSuccess: () => {
+                  MFEventEmitter.emit("openPurchase", {
+                    params:{
+                      udpAssetData: {
+                        ...packageData,
+                        purchaseActions: packageActions?.PurchaseActions
+                      },
+                      panelTitle: AppStrings?.str_details_cta_rent,
+                    },
+                    drawerPercentage:0.37
+                  });
+                },
+              });
+            }
           }}
         />
       );
@@ -560,19 +582,29 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
             shouldRenderImage: true,
           }}
           onPress={() =>  {
-            MFEventEmitter.emit("openPurchase", {
-              params:{
-                udpAssetData: {
-                  ...packageData,
-                  purchaseActions: packageActions?.PurchaseActions
+            if(isPurchaseLocked()){
+              MFEventEmitter.emit("openPinVerificationPopup", {
+                pinType: PinType.purchase,
+                data: {
+                  udpData: {
+                    ...packageData,
+                    purchaseActions: packageActions?.PurchaseActions
+                  }
                 },
-                panelTitle: AppStrings?.str_details_cta_buy,
-                confirmPlayCallBack: ctaButtonPress[
-                  AppStrings?.str_details_cta_buy
-                ],
-              },
-              drawerPercentage:0.37
-            });
+                onSuccess: () => {
+                  MFEventEmitter.emit("openPurchase", {
+                    params:{
+                      udpAssetData: {
+                        ...packageData,
+                        purchaseActions: packageActions?.PurchaseActions
+                      },
+                      panelTitle: AppStrings?.str_details_cta_buy,
+                    },
+                    drawerPercentage:0.37
+                  });
+                },
+              });
+            }
           }}
         />
       );

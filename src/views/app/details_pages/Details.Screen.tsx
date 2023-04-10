@@ -111,6 +111,7 @@ import {
 import {
   isAdultContentBlock,
   isPconBlocked,
+  isPurchaseLocked,
 } from "../../../utils/pconControls";
 import { getAllSubscriptionGroups } from "../../../customHooks/useAllSubscriptionGroups";
 
@@ -1053,41 +1054,81 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     [AppStrings?.str_app_edit]: openEditRecordingsPanel,
     [AppStrings?.str_details_cta_playdvr]: handlePlayDvr,
     [AppStrings?.str_details_cta_rent]: () => {
-      MFEventEmitter.emit("openPurchase", {
-        params:{
-          udpAssetData: udpDataAsset,
-          panelTitle: AppStrings?.str_details_cta_rent,
-        },
-        drawerPercentage:0.37
-      });
+      if(isPurchaseLocked()){
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            MFEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_rent,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      }
     },
     [AppStrings?.str_details_cta_buy]: () => {
-      MFEventEmitter.emit("openPurchase", {
-        params:{
-          udpAssetData: udpDataAsset,
-          panelTitle: AppStrings?.str_details_cta_buy,
-        },
-        drawerPercentage:0.37
-      });
+      if(isPurchaseLocked()){
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            MFEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_buy,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      }
     },
     [AppStrings?.str_details_cta_rentbuy]: () => {
-      MFEventEmitter.emit("openPurchase", {
-        params:{
-          udpAssetData: udpDataAsset,
-          panelTitle: AppStrings?.str_details_cta_rentbuy,
-        },
-        drawerPercentage:0.37
-      });
+      if(isPurchaseLocked()){
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            MFEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_rentbuy,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      }
     },
     [AppStrings?.str_details_cta_package]: () => {
       udpDataAsset["purchasePackage"] = true;
-      MFEventEmitter.emit("openPurchase", {
-        params:{
-          udpAssetData: udpDataAsset,
-          panelTitle: AppStrings?.str_details_cta_package,
-        },
-        drawerPercentage:0.37
-      });
+      if(isPurchaseLocked()){
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            MFEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_package,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      }
     },
     [AppStrings?.str_details_cta_subscribe]: () => {
       const networks = udpDataAsset.subscriptionPackages.filter(
@@ -1096,23 +1137,43 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         }
       );
       if (networks && networks.length > 0) {
-        MFEventEmitter.emit("openPurchase", {
-          params:{
-            udpAssetData: udpDataAsset,
-            panelTitle: AppStrings?.str_details_cta_subscribe,
-          },
-          drawerPercentage:0.37,
-          "isPurchaseNetwork": true
-        });
+        if(isPurchaseLocked()){
+          MFEventEmitter.emit("openPinVerificationPopup", {
+            pinType: PinType.purchase,
+            data: {
+              udpData: udpDataAsset
+            },
+            onSuccess: () => {
+              MFEventEmitter.emit("openPurchase", {
+                params:{
+                  udpAssetData: udpDataAsset,
+                  panelTitle: AppStrings?.str_details_cta_subscribe,
+                },
+                drawerPercentage:0.37,
+                "isPurchaseNetwork": true
+              });
+            },
+          });
+        }
       } else {
         udpDataAsset["subscriptionExists"] = true;
-        MFEventEmitter.emit("openPurchase", {
-          params:{
-            udpAssetData: udpDataAsset,
-            panelTitle: AppStrings?.str_details_cta_subscribe,
-          },
-          drawerPercentage:0.37
-        });
+        if(isPurchaseLocked()){
+          MFEventEmitter.emit("openPinVerificationPopup", {
+            pinType: PinType.purchase,
+            data: {
+              udpData: udpDataAsset
+            },
+            onSuccess: () => {
+              MFEventEmitter.emit("openPurchase", {
+                params:{
+                  udpAssetData: udpDataAsset,
+                  panelTitle: AppStrings?.str_details_cta_subscribe,
+                },
+                drawerPercentage:0.37
+              });
+            },
+          });
+        }
       }
     },
   };

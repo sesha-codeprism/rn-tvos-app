@@ -58,7 +58,7 @@ import { findConflictedGroupBySeriesOrProgramId } from "../../../../utils/Confli
 import MFEventEmitter from "../../../../utils/MFEventEmitter";
 import { cancelRecordingFromConflictPopup, forceResolveConflict } from "../../../../../backend/dvrproxy/dvrproxy";
 import { ConflictResolutionContext } from "../../../../contexts/conflictResolutionContext";
-import { isPconBlocked } from "../../../../utils/pconControls";
+import { isPconBlocked, isPurchaseLocked } from "../../../../utils/pconControls";
 import { GlobalContext } from "../../../../contexts/globalContext";
 import NotificationType from "../../../../@types/NotificationType";
 import { getAllSubscriptionGroups } from "../../../../customHooks/useAllSubscriptionGroups";
@@ -413,41 +413,81 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     },
     [AppStrings?.str_details_cta_playdvr]: () => {},
     [AppStrings?.str_details_cta_rent]: () => {
-      MFEventEmitter.emit("openPurchase", {
-        params:{
-          udpAssetData: episodeDetailsData,
-          panelTitle: AppStrings?.str_details_cta_rent,
-        },
-        drawerPercentage:0.37
-      });
+      if(isPurchaseLocked()){
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: episodeDetailsData
+          },
+          onSuccess: () => {
+            MFEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: episodeDetailsData,
+                panelTitle: AppStrings?.str_details_cta_rent,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      }
     },
     [AppStrings?.str_details_cta_buy]: () => {
-      MFEventEmitter.emit("openPurchase", {
-        params:{
-          udpAssetData: episodeDetailsData,
-          panelTitle: AppStrings?.str_details_cta_buy,
-        },
-        drawerPercentage:0.37
-      });
+      if(isPurchaseLocked()){
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: episodeDetailsData
+          },
+          onSuccess: () => {
+            MFEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: episodeDetailsData,
+                panelTitle: AppStrings?.str_details_cta_buy,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      }
     },
     [AppStrings?.str_details_cta_rentbuy]: () => {
-      MFEventEmitter.emit("openPurchase", {
-        params:{
-          udpAssetData: episodeDetailsData,
-          panelTitle: AppStrings?.str_details_cta_rentbuy,
-        },
-        drawerPercentage:0.37
-      });
+      if(isPurchaseLocked()){
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: episodeDetailsData
+          },
+          onSuccess: () => {
+            MFEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: episodeDetailsData,
+                panelTitle: AppStrings?.str_details_cta_rentbuy,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      }
     },
     [AppStrings?.str_details_cta_package]: () => {
       episodeDetailsData["purchasePackage"] = true;
-      MFEventEmitter.emit("openPurchase", {
-        params:{
-          udpAssetData: episodeDetailsData,
-          panelTitle: AppStrings?.str_details_cta_package,
-        },
-        drawerPercentage:0.37
-      });
+      if(isPurchaseLocked()){
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: episodeDetailsData
+          },
+          onSuccess: () => {
+            MFEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: episodeDetailsData,
+                panelTitle: AppStrings?.str_details_cta_package,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      }
     },
     [AppStrings?.str_details_cta_subscribe]: () => {
       const networks = episodeDetailsData.subscriptionPackages.filter(
@@ -456,23 +496,43 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         }
       );
       if (networks && networks.length > 0) {
-        MFEventEmitter.emit("openPurchase", {
-          params:{
-            udpAssetData: episodeDetailsData,
-            panelTitle: AppStrings?.str_details_cta_subscribe,
-          },
-          drawerPercentage:0.37,
-          "isPurchaseNetwork": true
-        });
+        if(isPurchaseLocked()){
+          MFEventEmitter.emit("openPinVerificationPopup", {
+            pinType: PinType.purchase,
+            data: {
+              udpData: episodeDetailsData
+            },
+            onSuccess: () => {
+              MFEventEmitter.emit("openPurchase", {
+                params:{
+                  udpAssetData: episodeDetailsData,
+                  panelTitle: AppStrings?.str_details_cta_subscribe,
+                },
+                drawerPercentage:0.37,
+                "isPurchaseNetwork": true
+              });
+            },
+          });
+        }
       } else {
         episodeDetailsData["subscriptionExists"] = true;
-        MFEventEmitter.emit("openPurchase", {
-          params:{
-            udpAssetData: episodeDetailsData,
-            panelTitle: AppStrings?.str_details_cta_subscribe,
-          },
-          drawerPercentage:0.37
-        });
+        if(isPurchaseLocked()){
+          MFEventEmitter.emit("openPinVerificationPopup", {
+            pinType: PinType.purchase,
+            data: {
+              udpData: episodeDetailsData
+            },
+            onSuccess: () => {
+              MFEventEmitter.emit("openPurchase", {
+                params:{
+                  udpAssetData: episodeDetailsData,
+                  panelTitle: AppStrings?.str_details_cta_subscribe,
+                },
+                drawerPercentage:0.37
+              });
+            },
+          });
+        }
       }
     },
   };

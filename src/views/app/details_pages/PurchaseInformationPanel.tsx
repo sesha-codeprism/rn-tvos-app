@@ -77,11 +77,11 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
 
     // TBD: after notifications story
     const showNotification = () => {
-        // this.props.createNotification({
-        //     id: AppStrings?.str_subscription_success_notification,
-        //     iconName: "subscribe",
-        //     subtitle: AppStrings?.str_subscription_success_notification,
-        // });
+        MFEventEmitter.emit("createNotification", {
+            id: AppStrings?.str_subscription_success_notification,
+            iconName: "subscribe",
+            subtitle: AppStrings?.str_subscription_success_notification,
+          });
     };
 
     const onPressConfirm = () => {
