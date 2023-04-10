@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Modal,
   Settings as SettingsRN,
+  DeviceEventEmitter,
 } from "react-native";
 import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
 import { GLOBALS } from "../../utils/globals";
@@ -13,7 +14,6 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import MFEventEmitter from "../../utils/MFEventEmitter";
 import { Empty } from "../../views/MFDrawersContainer";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -74,7 +74,7 @@ const SettingsContainer = (props: SettingsContainerProps) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    MFEventEmitter.emit("closeSettings", null);
+    DeviceEventEmitter.emit("closeSettings", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {

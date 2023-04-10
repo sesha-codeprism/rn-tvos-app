@@ -1,4 +1,5 @@
 import {
+  DeviceEventEmitter,
   FlatList,
   Image,
   NativeModules,
@@ -18,7 +19,6 @@ import { updateStore } from "../../../../utils/helpers";
 import { getUrlParts, parseUri } from "../../../../../backend/utils/url/urlUtil";
 import { resetCaches } from "../../../../config/queries";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
-import MFEventEmitter from "../../../../utils/MFEventEmitter";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -43,7 +43,7 @@ const SelectServiceScreen: React.FunctionComponent<Props> = (props: any) => {
     GLOBALS.bootstrapSelectors = null;
     /** Reset the Query cache to make sure no cached API data is returned by React-Query */
     resetCaches();
-    MFEventEmitter.emit('closeSettings', undefined);
+    DeviceEventEmitter.emit('closeSettings', undefined);
     GLOBALS.rootNavigation.replace(Routes.ShortCode);
   };
 

@@ -3,7 +3,6 @@ import { DeviceEventEmitter, View } from "react-native";
 import MFPopup from "../components/MFPopup";
 import Settings from "../components/MFSideMenu/SettingsContainer";
 import ConflictResolutionPanel from "../views/app/details_pages/details_panels/ConflictsContainer";
-import MFEventEmitter from "../utils/MFEventEmitter";
 import { ConflictResolutionContext } from "../contexts/conflictResolutionContext";
 import MFPinPopup from "../components/MFPinPopup";
 import PlayerSubtitlePanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerSubtitlePanel";

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Alert,
   BackHandler,
+  DeviceEventEmitter,
   Dimensions,
   Image,
   ImageBackground,
@@ -99,7 +100,6 @@ import { GlobalContext } from "../../../contexts/globalContext";
 import { DuplexManager } from "../../../modules/duplex/DuplexManager";
 import NotificationType from "../../../@types/NotificationType";
 import { ConflictResolutionContext } from "../../../contexts/conflictResolutionContext";
-import MFEventEmitter from "../../../utils/MFEventEmitter";
 import {
   cancelRecordingFromConflictPopup,
   forceResolveConflict,
@@ -580,7 +580,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       }
     };
     if (isPconBlocked(details)) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.content,
         data: data,
         onSuccess: openPannel,
@@ -611,13 +611,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         definition === Definition.SINGLE_PROGRAM ||
         definition === Definition.SINGLE_TIME
       ) {
-        MFEventEmitter.emit("openPopup", {
+        DeviceEventEmitter.emit("openPopup", {
           buttons: [
             {
               title: AppStrings?.str_dvr_resolve_conflict_auto,
               onPress: async () => {
                 await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
             {
@@ -625,7 +625,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               onPress: () => {
                 conflictContext.ProgramId = id;
                 conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {
+                DeviceEventEmitter.emit("openConflictResolution", {
                   passedInPops: true,
                   drawerPercentage: 0.35,
                   navigation: props.navigation,
@@ -641,20 +641,20 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   false,
                   false
                 );
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
           ],
           description: AppStrings?.str_dvr_conflict_popup_warning_program,
         });
       } else {
-        MFEventEmitter.emit("openPopup", {
+        DeviceEventEmitter.emit("openPopup", {
           buttons: [
             {
               title: AppStrings?.str_dvr_series_conflict_modal_record_all,
               onPress: async () => {
                 await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
             {
@@ -665,7 +665,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   true,
                   true
                 );
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
             {
@@ -673,7 +673,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               onPress: () => {
                 conflictContext.ProgramId = id;
                 conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {
+                DeviceEventEmitter.emit("openConflictResolution", {
                   passedInPops: true,
                   drawerPercentage: 0.35,
                   navigation: props.navigation,
@@ -689,7 +689,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   true,
                   false
                 );
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
           ],
@@ -697,12 +697,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         });
       }
     } else {
-      MFEventEmitter.emit("openPopup", {
+      DeviceEventEmitter.emit("openPopup", {
         buttons: [
           {
             title: "OK",
             onPress: async () => {
-              MFEventEmitter.emit("closePopup", undefined);
+              DeviceEventEmitter.emit("closePopup", undefined);
             },
           },
         ],
@@ -837,7 +837,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     let details = discoveryProgramData;
     const IsAdult = details.IsAdult;
     if (IsAdult && isAdultContentBlock()) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.adult,
         data: data,
         onSuccess: () => {
@@ -845,7 +845,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         },
       });
     } else if (isPconBlocked(details)) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.content,
         data: data,
         onSuccess: () => {
@@ -968,7 +968,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           });
       };
       if (isPconBlocked(discoveryProgramData)) {
-        MFEventEmitter.emit("openPinVerificationPopup", {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.content,
           data: data,
           onSuccess: restart,
@@ -1055,13 +1055,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     [AppStrings?.str_details_cta_playdvr]: handlePlayDvr,
     [AppStrings?.str_details_cta_rent]: () => {
       if(isPurchaseLocked()){
-        MFEventEmitter.emit("openPinVerificationPopup", {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
             udpData: udpDataAsset
           },
           onSuccess: () => {
-            MFEventEmitter.emit("openPurchase", {
+            DeviceEventEmitter.emit("openPurchase", {
               params:{
                 udpAssetData: udpDataAsset,
                 panelTitle: AppStrings?.str_details_cta_rent,
@@ -1074,13 +1074,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     },
     [AppStrings?.str_details_cta_buy]: () => {
       if(isPurchaseLocked()){
-        MFEventEmitter.emit("openPinVerificationPopup", {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
             udpData: udpDataAsset
           },
           onSuccess: () => {
-            MFEventEmitter.emit("openPurchase", {
+            DeviceEventEmitter.emit("openPurchase", {
               params:{
                 udpAssetData: udpDataAsset,
                 panelTitle: AppStrings?.str_details_cta_buy,
@@ -1093,13 +1093,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     },
     [AppStrings?.str_details_cta_rentbuy]: () => {
       if(isPurchaseLocked()){
-        MFEventEmitter.emit("openPinVerificationPopup", {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
             udpData: udpDataAsset
           },
           onSuccess: () => {
-            MFEventEmitter.emit("openPurchase", {
+            DeviceEventEmitter.emit("openPurchase", {
               params:{
                 udpAssetData: udpDataAsset,
                 panelTitle: AppStrings?.str_details_cta_rentbuy,
@@ -1113,13 +1113,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     [AppStrings?.str_details_cta_package]: () => {
       udpDataAsset["purchasePackage"] = true;
       if(isPurchaseLocked()){
-        MFEventEmitter.emit("openPinVerificationPopup", {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
             udpData: udpDataAsset
           },
           onSuccess: () => {
-            MFEventEmitter.emit("openPurchase", {
+            DeviceEventEmitter.emit("openPurchase", {
               params:{
                 udpAssetData: udpDataAsset,
                 panelTitle: AppStrings?.str_details_cta_package,
@@ -1138,13 +1138,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       );
       if (networks && networks.length > 0) {
         if(isPurchaseLocked()){
-          MFEventEmitter.emit("openPinVerificationPopup", {
+          DeviceEventEmitter.emit("openPinVerificationPopup", {
             pinType: PinType.purchase,
             data: {
               udpData: udpDataAsset
             },
             onSuccess: () => {
-              MFEventEmitter.emit("openPurchase", {
+              DeviceEventEmitter.emit("openPurchase", {
                 params:{
                   udpAssetData: udpDataAsset,
                   panelTitle: AppStrings?.str_details_cta_subscribe,
@@ -1158,13 +1158,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       } else {
         udpDataAsset["subscriptionExists"] = true;
         if(isPurchaseLocked()){
-          MFEventEmitter.emit("openPinVerificationPopup", {
+          DeviceEventEmitter.emit("openPinVerificationPopup", {
             pinType: PinType.purchase,
             data: {
               udpData: udpDataAsset
             },
             onSuccess: () => {
-              MFEventEmitter.emit("openPurchase", {
+              DeviceEventEmitter.emit("openPurchase", {
                 params:{
                   udpAssetData: udpDataAsset,
                   panelTitle: AppStrings?.str_details_cta_subscribe,
@@ -1572,7 +1572,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     console.log("navigateToPlayer", props);
     let details = discoveryProgramData;
     if (isPconBlocked(details)) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.content,
         data: data,
         onSuccess: play,

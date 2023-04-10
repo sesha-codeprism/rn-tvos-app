@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList, View } from "react-native";
+import { DeviceEventEmitter, FlatList, View } from "react-native";
 import { FeedItem } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { layout2x3 } from "../config/constants";
@@ -10,7 +10,6 @@ import MFSwimLane from "./MFSwimLane";
 import MFLoader from "./MFLoader";
 import { SCREEN_WIDTH } from "../utils/dimensions";
 import { getUIdef } from "../utils/uidefinition";
-import EventEmitter from "../utils/MFEventEmitter";
 
 interface MFSwimProps {
   feeds: FeedItem | undefined;
@@ -67,7 +66,10 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
     };
 
     useEffect(() => {
-      EventEmitter.on("UpdateFeeds", updateUI);
+      const UpdateFeedsSubscription = DeviceEventEmitter.addListener("UpdateFeeds", updateUI);
+      return  () => {
+        UpdateFeedsSubscription.remove();
+      }
     }, []);
 
     return (

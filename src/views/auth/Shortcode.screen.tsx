@@ -1,6 +1,6 @@
 //@ts-nocheck
 import React, { useState, useEffect, useContext } from "react";
-import { View } from "react-native";
+import { DeviceEventEmitter, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import MFText from "../../components/MFText";
 import { MFThemeObject } from "../../@types/MFTheme";
@@ -29,7 +29,6 @@ import { resetSpecificQuery } from "../../config/queries";
 import { GlobalContext } from "../../contexts/globalContext";
 import { useQuery } from "react-query";
 import { getStoresOfZones } from "../../../backend/discovery/discovery";
-import MFEventEmitter from "../../utils/MFEventEmitter";
 
 const MFTheme: MFThemeObject = require("../../config/theme/theme.json");
 
@@ -119,7 +118,7 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
       GLOBALS.deviceInfo &&
       storeResults?.data?.data
     ) {
-      MFEventEmitter.emit("createNotification",  {
+      DeviceEventEmitter.emit("createNotification",  {
         id: AppStrings?.str_pair_device_success,
         iconName: "info",
         subtitle: AppStrings?.str_pair_device_success,

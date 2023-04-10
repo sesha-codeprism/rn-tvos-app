@@ -28,7 +28,6 @@ import { useQuery } from "react-query";
 import { GlobalContext } from "../../../../contexts/globalContext";
 import { IChannel } from "../../../../utils/live/live";
 import { PinnedItemType } from "../../../../utils/pinnedItemType";
-import MFEventEmitter from "../../../../utils/MFEventEmitter";
 
 interface FavouriteManagerProps {
   navigation: NativeStackNavigationProp<any>;

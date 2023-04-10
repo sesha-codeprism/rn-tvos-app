@@ -1,7 +1,6 @@
 import { DeviceEventEmitter, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import MFNotificationCard, { Notification } from "./MFNotificationCard";
-import MFEventEmitter from "../../utils/MFEventEmitter";
 
 import { config } from "../../config/config";
 import { getUIdef, scaleAttributes } from "../../utils/uidefinition";

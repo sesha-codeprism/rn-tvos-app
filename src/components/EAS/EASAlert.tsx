@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { DeviceEventEmitter, StyleSheet, Text, View } from "react-native";
 import { getUIdef, scaleAttributes } from "../../utils/uidefinition";
 import { globalStyles as g } from "../../config/styles/GlobalStyles";
 import { AppStrings } from "../../config/strings";
 import AutoScrollingText from "../AutoSizingText";
 import SoundPlayer from "react-native-sound-player";
-import EventEmitter from "../../utils/MFEventEmitter";
 
 interface EASProps {
   easMessage: any;
@@ -48,7 +47,7 @@ const EASAlert: React.FunctionComponent<EASProps> = (props) => {
       props.easMessage?.locale.toLowerCase()
     );
     setTimeout(() => {
-      EventEmitter.emit("EASClose", null);
+      DeviceEventEmitter.emit("EASClose", null);
     }, elapsedEndTimeMs);
     return () => {
       SoundPlayer.stop();

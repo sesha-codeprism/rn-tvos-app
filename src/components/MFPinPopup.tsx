@@ -6,9 +6,9 @@ import {
   Text,
   View,
   Settings as SettingsRN,
+  DeviceEventEmitter,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import MFEventEmitter from "./../utils/MFEventEmitter";
 import { useQuery } from "react-query";
 import { getPasscodes, PinType } from "../../backend/subscriber/subscriber";
 import { getPasscodeHash, isHash } from "../utils/helpers";
@@ -128,7 +128,7 @@ const MFPinPopup = (props: PinPopupProps) => {
       if (!isLoading && !isStale && isFetched && passcode && isHash(passcode)) {
         if (passcode === hashedPin) {
           console.log("hashed password matching");
-          MFEventEmitter.emit("closePinVerificationPopup", undefined);
+          DeviceEventEmitter.emit("closePinVerificationPopup", undefined);
           setTimeout(() => {
             props.onSuccess ? props.onSuccess() : null;
           }, 1000);
@@ -156,7 +156,7 @@ const MFPinPopup = (props: PinPopupProps) => {
       } else {
         if (passcode === pinInput) {
           console.log("unprotected password matching");
-          MFEventEmitter.emit("closePinVerificationPopup", undefined);
+          DeviceEventEmitter.emit("closePinVerificationPopup", undefined);
           setTimeout(() => {
             props.onSuccess ? props.onSuccess() : null;
           }, 1000);
@@ -241,10 +241,10 @@ const MFPinPopup = (props: PinPopupProps) => {
       transparent={true}
       visible={true}
       onRequestClose={() => {
-        MFEventEmitter.emit("closePinVerificationPopup", undefined);
+        DeviceEventEmitter.emit("closePinVerificationPopup", undefined);
       }}
       onDismiss={() => {
-        MFEventEmitter.emit("closePinVerificationPopup", undefined);
+        DeviceEventEmitter.emit("closePinVerificationPopup", undefined);
       }}
       presentationStyle={"overFullScreen"}
     >

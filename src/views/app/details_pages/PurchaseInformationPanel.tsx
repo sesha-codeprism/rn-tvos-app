@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, DeviceEventEmitter } from "react-native";
 import { scaleAttributes, getUIdef } from "../../../utils/uidefinition";
 
 import { replacePlaceHoldersInTemplatedString } from "../../../utils/strings";
@@ -13,7 +13,6 @@ import { assetTypeObject, pbr, PinType } from "../../../utils/analytics/consts";
 import { getRestrictionsText } from "../../../utils/assetUtils";;
 import { currencies } from "../../../utils/currencies";
 import { AppStrings } from "../../../config/strings";
-import MFEventEmitter from "../../../utils/MFEventEmitter";
 import { GLOBALS } from "../../../utils/globals";
 import { purchaseItem } from "../../../../backend/subscriber/subscriber";
 import React, { useState } from "react";
@@ -62,8 +61,8 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
         };
 
         if (isPurchaseLocked()) {
-            MFEventEmitter.emit("closeClosePurchase", undefined);
-            MFEventEmitter.emit("OpenPurchasePIN", {
+            DeviceEventEmitter.emit("closeClosePurchase", undefined);
+            DeviceEventEmitter.emit("OpenPurchasePIN", {
                 screenName: "Purchase Pin",
                 action: "validate_pin",
                 label: "Enter Purchase PIN",
@@ -77,7 +76,7 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
 
     // TBD: after notifications story
     const showNotification = () => {
-        MFEventEmitter.emit("createNotification", {
+        DeviceEventEmitter.emit("createNotification", {
             id: AppStrings?.str_subscription_success_notification,
             iconName: "subscribe",
             subtitle: AppStrings?.str_subscription_success_notification,
@@ -91,7 +90,7 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
                 props.route.params?.purchaseActions?.Price
             )
                 .then(() => {
-                    MFEventEmitter.emit("closeClosePurchase", undefined);
+                    DeviceEventEmitter.emit("closeClosePurchase", undefined);
 
                     /* - Channel subscription not in scope right now
                     // same reload channel rights,  set to guide, remake live feed
@@ -111,13 +110,13 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
 
                 })
                 .catch((error: any) => {
-                    MFEventEmitter.emit("closeClosePurchase", undefined);
-                    MFEventEmitter.emit("openPopup", {
+                    DeviceEventEmitter.emit("closeClosePurchase", undefined);
+                    DeviceEventEmitter.emit("openPopup", {
                         buttons: [
                             {
                                 title: "OK",
                                 onPress: () => {
-                                    MFEventEmitter.emit("closeAll", undefined);
+                                    DeviceEventEmitter.emit("closeAll", undefined);
 
                                 },
                             }
@@ -140,7 +139,7 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
                 props.route.params?.purchaseActions?.Price
             )
                 .then(() => {
-                    MFEventEmitter.emit("closeClosePurchase", undefined);
+                    DeviceEventEmitter.emit("closeClosePurchase", undefined);
                     setLoader(false);
                     confirmPlayCallBack();
                 })
@@ -153,13 +152,13 @@ const PurchaseInformationPanelImpl: React.FunctionComponent<PurchaseInfromationP
                     }
                 })
                 .catch((error: any) => {
-                    MFEventEmitter.emit("closeClosePurchase", undefined);
-                    MFEventEmitter.emit("openPopup", {
+                    DeviceEventEmitter.emit("closeClosePurchase", undefined);
+                    DeviceEventEmitter.emit("openPopup", {
                         buttons: [
                             {
                                 title: "OK",
                                 onPress: () => {
-                                    MFEventEmitter.emit("closeAll", undefined);
+                                    DeviceEventEmitter.emit("closeAll", undefined);
 
                                 },
                             }

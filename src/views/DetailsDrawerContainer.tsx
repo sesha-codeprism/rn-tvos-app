@@ -2,7 +2,6 @@ import React, { Ref, useEffect, useRef, useState } from "react";
 import { DeviceEventEmitter, Dimensions, Modal, StyleSheet, View } from "react-native";
 
 import MFPopup from "../components/MFPopup";
-import MFEventEmitter from "../utils/MFEventEmitter";
 import EpisodeRecordOptions from "./app/details_pages/details_panels/EpsiodeRecordOptions";
 import MoreInfoPanel from "./app/details_pages/details_panels/MoreInfoPanel";
 import DetailsContainer from "./DetailsModal";

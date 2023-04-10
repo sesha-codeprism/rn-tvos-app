@@ -1,7 +1,6 @@
 import React, { Ref, useEffect, useRef, useState } from "react";
 import { DeviceEventEmitter, View } from "react-native";
 import EASModal from "../components/EAS/EASModal";
-import MFEventEmitter from "../utils/MFEventEmitter";
 
 export const Empty = (props: any) => {
   return <View style={{ height: 1, backgroundColor: "black" }}></View>;

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
+  DeviceEventEmitter,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { PageContainerWithBackgroundImage } from "../../../../components/PageContainer";
@@ -48,7 +49,6 @@ import { SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { DetailsSidePanel } from "../DetailSidePanel";
 import { open } from "fs";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
-import MFEventEmitter from "../../../../utils/MFEventEmitter";
 import NotificationType from "../../../../@types/NotificationType";
 import { invalidateQueryBasedOnSpecificKeys } from "../../../../config/queries";
 import { GlobalContext } from "../../../../contexts/globalContext";
@@ -295,7 +295,7 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
   };
 
   const handleRentButtonPress = (panelTitle: string) => {
-    MFEventEmitter.emit("openPurchase", {
+    DeviceEventEmitter.emit("openPurchase", {
       params:{
           udpAssetData: {
               ...packageData,
@@ -441,7 +441,7 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
           }}
           onPress={() =>  {
             if(isPurchaseLocked()){
-              MFEventEmitter.emit("openPinVerificationPopup", {
+              DeviceEventEmitter.emit("openPinVerificationPopup", {
                 pinType: PinType.purchase,
                 data: {
                   udpData: {
@@ -450,7 +450,7 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
                   }
                 },
                 onSuccess: () => {
-                  MFEventEmitter.emit("openPurchase", {
+                  DeviceEventEmitter.emit("openPurchase", {
                     params:{
                       udpAssetData: {
                         ...packageData,
@@ -512,7 +512,7 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
           }}
           onPress={() =>  {
             if(isPurchaseLocked()){
-              MFEventEmitter.emit("openPinVerificationPopup", {
+              DeviceEventEmitter.emit("openPinVerificationPopup", {
                 pinType: PinType.purchase,
                 data: {
                   udpData: {
@@ -521,7 +521,7 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
                   }
                 },
                 onSuccess: () => {
-                  MFEventEmitter.emit("openPurchase", {
+                  DeviceEventEmitter.emit("openPurchase", {
                     params:{
                       udpAssetData: {
                         ...packageData,
@@ -583,7 +583,7 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
           }}
           onPress={() =>  {
             if(isPurchaseLocked()){
-              MFEventEmitter.emit("openPinVerificationPopup", {
+              DeviceEventEmitter.emit("openPinVerificationPopup", {
                 pinType: PinType.purchase,
                 data: {
                   udpData: {
@@ -592,7 +592,7 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
                   }
                 },
                 onSuccess: () => {
-                  MFEventEmitter.emit("openPurchase", {
+                  DeviceEventEmitter.emit("openPurchase", {
                     params:{
                       udpAssetData: {
                         ...packageData,

@@ -5,6 +5,7 @@ import {
   Modal,
   ActivityIndicator,
   Settings as SettingsRN,
+  DeviceEventEmitter,
 } from "react-native";
 import { PurchasePanelNavigator } from "../../config/navigation/RouterOutlet";
 import { GLOBALS } from "../../utils/globals";
@@ -14,7 +15,6 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import MFEventEmitter from "../../utils/MFEventEmitter";
 import { Empty } from "../../views/MFDrawersContainer";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -74,7 +74,7 @@ const PurchaseContainer = (props: PurchaseContainerProps) => {
       easing: Easing.in(Easing.linear),
     });
     SettingsRN.set({ PURCHASE_NAVIGATION_HISTORY: {} })
-    MFEventEmitter.emit("closeClosePurchase", null);
+    DeviceEventEmitter.emit("closeClosePurchase", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {

@@ -55,7 +55,6 @@ import MFOverlay from "../../../../components/MFOverlay";
 import { appQueryCache, invalidateQueryBasedOnEpisode, invalidateQueryBasedOnSpecificKeys } from "../../../../config/queries";
 import { getItemId } from "../../../../utils/dataUtils";
 import { findConflictedGroupBySeriesOrProgramId } from "../../../../utils/ConflictUtils";
-import MFEventEmitter from "../../../../utils/MFEventEmitter";
 import { cancelRecordingFromConflictPopup, forceResolveConflict } from "../../../../../backend/dvrproxy/dvrproxy";
 import { ConflictResolutionContext } from "../../../../contexts/conflictResolutionContext";
 import { isPconBlocked, isPurchaseLocked } from "../../../../utils/pconControls";
@@ -182,7 +181,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       invalidateQueryBasedOnSpecificKeys("get-episode-playoptions", currentEpisode);
       invalidateQueryBasedOnSpecificKeys("get-episode-schedules", currentEpisode);
       invalidateQueryBasedOnSpecificKeys("feed", "udl://subscriber/library/Library");
-      MFEventEmitter.emit("UpdateFeeds", currentEpisode);
+      DeviceEventEmitter.emit("UpdateFeeds", currentEpisode);
       DeviceEventEmitter.emit('test', {currentEpisode:currentEpisode});
       // incoming message  processed, empty  the state
       setIncomingDuplexMessage(undefined);
@@ -256,7 +255,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       }
      }
      if (isPconBlocked(currentEpisode.CatalogInfo)) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.content,
         data: currentEpisode,
         onSuccess: openPannel,
@@ -334,13 +333,13 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     if(conflictedSubscriptionGroup && conflictedItems && conflictedItems.length){
       // determine if series conflict
     if(definition === Definition.SINGLE_PROGRAM || definition === Definition.SINGLE_TIME){
-        MFEventEmitter.emit("openPopup", {
+        DeviceEventEmitter.emit("openPopup", {
           buttons: [
             {
               title: AppStrings?.str_dvr_resolve_conflict_auto,
               onPress: async () => {
                 await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup",undefined);
+                DeviceEventEmitter.emit("closePopup",undefined);
               },
             },
             {
@@ -348,34 +347,34 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
               onPress: () => {
                 conflictContext.ProgramId = id;
                 conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
+                DeviceEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
               },
             },
             {
               title: AppStrings?.str_dvr_donot_record,
               onPress: async () => {
                 await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  false, false) ;
-                MFEventEmitter.emit("closePopup",undefined);
+                DeviceEventEmitter.emit("closePopup",undefined);
               },
             }
           ],
           description: AppStrings?.str_dvr_conflict_popup_warning_program
         });
       }else {
-        MFEventEmitter.emit("openPopup", {
+        DeviceEventEmitter.emit("openPopup", {
           buttons: [
             {
               title: AppStrings?.str_dvr_series_conflict_modal_record_all,
               onPress: async () => {
                 await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup",undefined);
+                DeviceEventEmitter.emit("closePopup",undefined);
               },
             },
             {
               title: AppStrings?.str_dvr_series_modal_recod_no_conflict,
               onPress: async () => {
                 await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  true, true) ;
-                MFEventEmitter.emit("closePopup",undefined);
+                DeviceEventEmitter.emit("closePopup",undefined);
               },
             },
             {
@@ -383,14 +382,14 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
               onPress: () => {
                 conflictContext.ProgramId = id;
                 conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
+                DeviceEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
               },
             },
             {
               title: AppStrings?.str_dvr_donot_record,
               onPress: async () => {
                 await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup, true, false);
-                MFEventEmitter.emit("closePopup",undefined);
+                DeviceEventEmitter.emit("closePopup",undefined);
               },
             }
           ],
@@ -398,12 +397,12 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         });
       }
     }else {
-      MFEventEmitter.emit("openPopup", {
+      DeviceEventEmitter.emit("openPopup", {
         buttons: [
           {
             title: "OK",
             onPress: async () => {
-              MFEventEmitter.emit("closePopup", undefined);
+              DeviceEventEmitter.emit("closePopup", undefined);
             },
           }
         ],
@@ -414,13 +413,13 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     [AppStrings?.str_details_cta_playdvr]: () => {},
     [AppStrings?.str_details_cta_rent]: () => {
       if(isPurchaseLocked()){
-        MFEventEmitter.emit("openPinVerificationPopup", {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
             udpData: episodeDetailsData
           },
           onSuccess: () => {
-            MFEventEmitter.emit("openPurchase", {
+            DeviceEventEmitter.emit("openPurchase", {
               params:{
                 udpAssetData: episodeDetailsData,
                 panelTitle: AppStrings?.str_details_cta_rent,
@@ -433,13 +432,13 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     },
     [AppStrings?.str_details_cta_buy]: () => {
       if(isPurchaseLocked()){
-        MFEventEmitter.emit("openPinVerificationPopup", {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
             udpData: episodeDetailsData
           },
           onSuccess: () => {
-            MFEventEmitter.emit("openPurchase", {
+            DeviceEventEmitter.emit("openPurchase", {
               params:{
                 udpAssetData: episodeDetailsData,
                 panelTitle: AppStrings?.str_details_cta_buy,
@@ -452,13 +451,13 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     },
     [AppStrings?.str_details_cta_rentbuy]: () => {
       if(isPurchaseLocked()){
-        MFEventEmitter.emit("openPinVerificationPopup", {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
             udpData: episodeDetailsData
           },
           onSuccess: () => {
-            MFEventEmitter.emit("openPurchase", {
+            DeviceEventEmitter.emit("openPurchase", {
               params:{
                 udpAssetData: episodeDetailsData,
                 panelTitle: AppStrings?.str_details_cta_rentbuy,
@@ -472,13 +471,13 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     [AppStrings?.str_details_cta_package]: () => {
       episodeDetailsData["purchasePackage"] = true;
       if(isPurchaseLocked()){
-        MFEventEmitter.emit("openPinVerificationPopup", {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
             udpData: episodeDetailsData
           },
           onSuccess: () => {
-            MFEventEmitter.emit("openPurchase", {
+            DeviceEventEmitter.emit("openPurchase", {
               params:{
                 udpAssetData: episodeDetailsData,
                 panelTitle: AppStrings?.str_details_cta_package,
@@ -497,13 +496,13 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       );
       if (networks && networks.length > 0) {
         if(isPurchaseLocked()){
-          MFEventEmitter.emit("openPinVerificationPopup", {
+          DeviceEventEmitter.emit("openPinVerificationPopup", {
             pinType: PinType.purchase,
             data: {
               udpData: episodeDetailsData
             },
             onSuccess: () => {
-              MFEventEmitter.emit("openPurchase", {
+              DeviceEventEmitter.emit("openPurchase", {
                 params:{
                   udpAssetData: episodeDetailsData,
                   panelTitle: AppStrings?.str_details_cta_subscribe,
@@ -517,13 +516,13 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       } else {
         episodeDetailsData["subscriptionExists"] = true;
         if(isPurchaseLocked()){
-          MFEventEmitter.emit("openPinVerificationPopup", {
+          DeviceEventEmitter.emit("openPinVerificationPopup", {
             pinType: PinType.purchase,
             data: {
               udpData: episodeDetailsData
             },
             onSuccess: () => {
-              MFEventEmitter.emit("openPurchase", {
+              DeviceEventEmitter.emit("openPurchase", {
                 params:{
                   udpAssetData: episodeDetailsData,
                   panelTitle: AppStrings?.str_details_cta_subscribe,
