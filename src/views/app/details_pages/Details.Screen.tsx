@@ -858,7 +858,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     // route.params.feed.SeriesDetails
   };
   const ctaButtonPress = {
-    [AppStrings?.str_details_cta_subscribe]: () => {},
     [AppStrings?.str_details_cta_play]: () => {
       const playAction = getRestrictionsForVod(
         udpDataAsset.usablePlayActions,
@@ -1070,6 +1069,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             });
           },
         });
+      } else  {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_rent,
+          },
+          drawerPercentage:0.37
+        });
       }
     },
     [AppStrings?.str_details_cta_buy]: () => {
@@ -1089,6 +1096,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             });
           },
         });
+      }else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_buy,
+          },
+          drawerPercentage:0.37
+        });
       }
     },
     [AppStrings?.str_details_cta_rentbuy]: () => {
@@ -1107,6 +1122,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               drawerPercentage:0.37
             });
           },
+        });
+      } else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_rentbuy,
+          },
+          drawerPercentage:0.37
         });
       }
     },
@@ -1128,6 +1151,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             });
           },
         });
+      } else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_package,
+          },
+          drawerPercentage:0.37
+        });
       }
     },
     [AppStrings?.str_details_cta_subscribe]: () => {
@@ -1148,11 +1179,20 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                 params:{
                   udpAssetData: udpDataAsset,
                   panelTitle: AppStrings?.str_details_cta_subscribe,
+                  "isPurchaseNetwork": true
                 },
                 drawerPercentage:0.37,
-                "isPurchaseNetwork": true
               });
             },
+          });
+        } else {
+          DeviceEventEmitter.emit("openPurchase", {
+            params:{
+              udpAssetData: udpDataAsset,
+              panelTitle: AppStrings?.str_details_cta_subscribe,
+              "isPurchaseNetwork": true
+            },
+            drawerPercentage:0.37,
           });
         }
       } else {
@@ -1172,6 +1212,14 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                 drawerPercentage:0.37
               });
             },
+          });
+        }else{
+          DeviceEventEmitter.emit("openPurchase", {
+            params:{
+              udpAssetData: udpDataAsset,
+              panelTitle: AppStrings?.str_details_cta_subscribe,
+            },
+            drawerPercentage:0.37
           });
         }
       }

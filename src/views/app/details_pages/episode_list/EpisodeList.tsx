@@ -159,7 +159,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     drawerRef?.current?.open();
   };
 
-
+  // On Duplex message, only set the  component  state
   const onDuplexMessage = (message: any) => {
     if (message) {
       switch (message.type) {
@@ -170,10 +170,8 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     }
   };
 
-  const testMethod = (param: any) => {
-    console.log('>>>>>>>>>>>>>> Fired from  DeviceEventEmmiter >>>>>>>>', currentEpisode,  param.currentEpisode);
-  }
 
+  //  Message Processor
   useEffect(() => {
     if(incomingDuplexMessage){
       // processs incoming duplex message
@@ -191,10 +189,8 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
 
   useEffect(() => {
     const boundDuplexConnector = onDuplexMessage.bind(this);
-    const subscription = DeviceEventEmitter.addListener("test", testMethod);
     currentContext.addDuplexMessageHandler(boundDuplexConnector);
     () => {
-      subscription.remove();
       currentContext.removeDuplexHandler(boundDuplexConnector);
     };
   }, []);
@@ -428,6 +424,14 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
             });
           },
         });
+      }else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: episodeDetailsData,
+            panelTitle: AppStrings?.str_details_cta_rent,
+          },
+          drawerPercentage:0.37
+        });
       }
     },
     [AppStrings?.str_details_cta_buy]: () => {
@@ -446,6 +450,14 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
               drawerPercentage:0.37
             });
           },
+        });
+      }else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: episodeDetailsData,
+            panelTitle: AppStrings?.str_details_cta_buy,
+          },
+          drawerPercentage:0.37
         });
       }
     },
@@ -466,6 +478,14 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
             });
           },
         });
+      }else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: episodeDetailsData,
+            panelTitle: AppStrings?.str_details_cta_rentbuy,
+          },
+          drawerPercentage:0.37
+        });
       }
     },
     [AppStrings?.str_details_cta_package]: () => {
@@ -485,6 +505,14 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
               drawerPercentage:0.37
             });
           },
+        });
+      }else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: episodeDetailsData,
+            panelTitle: AppStrings?.str_details_cta_package,
+          },
+          drawerPercentage:0.37
         });
       }
     },
@@ -512,6 +540,15 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
               });
             },
           });
+        }else {
+          DeviceEventEmitter.emit("openPurchase", {
+            params:{
+              udpAssetData: episodeDetailsData,
+              panelTitle: AppStrings?.str_details_cta_subscribe,
+            },
+            drawerPercentage:0.37,
+            "isPurchaseNetwork": true
+          });
         }
       } else {
         episodeDetailsData["subscriptionExists"] = true;
@@ -530,6 +567,14 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
                 drawerPercentage:0.37
               });
             },
+          });
+        }else {
+          DeviceEventEmitter.emit("openPurchase", {
+            params:{
+              udpAssetData: episodeDetailsData,
+              panelTitle: AppStrings?.str_details_cta_subscribe,
+            },
+            drawerPercentage:0.37
           });
         }
       }

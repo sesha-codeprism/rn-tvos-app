@@ -128,7 +128,7 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
     };
 
     useEffect(() => {
-        if(props?.isPurchaseNetwork){
+        if(props?.route.params.isPurchaseNetwork){
             props.navigation.push(Routes.PurchaseNetworkSelectionPanel, {
                 panelTitle: AppStrings?.str_details_cta_subscribe,
                 panelSubtitle: props.route.params?.udpAssetData.title || props.route.params?.udpAssetData.Name,
@@ -137,7 +137,7 @@ const PurchaseOptionsPanelImpl: React.FunctionComponent<PurchaseOptionsPanelProp
                 focusedEpisodeId: props.route.params.focusedEpisodeId,
             });
         }
-    },[props?.isPurchaseNetwork]);
+    },[props?.route.params.isPurchaseNetwork]);
 
     const onPressPurchaseAction = (data: any) => {
         selectedPurchaseOption = data.purchaseAction?.OfferId;

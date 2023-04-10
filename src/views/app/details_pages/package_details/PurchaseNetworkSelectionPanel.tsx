@@ -53,8 +53,7 @@ const PurchaseNetworkSelectionPanelImpl: React.FunctionComponent<PurchaseNetwork
             subTitle: props.route.params?.udpAssetData?.title,
             selectedNetwork: selectedNetworkPackage,
             udpAssetData: props.route.params?.udpAssetData,
-            confirmPlayCallBack: props.route.params.confirmPlayCallBack,
-            focusedEpisodeId: props.route.params.focusedEpisodeId,
+            "isPurchaseNetwork": false
         });
     };
 
@@ -149,15 +148,6 @@ export const PurchaseNetworkSelectionPanel = PurchaseNetworkSelectionPanelImpl
 //   getUIdef("PurchaseNetworkSelectionPanel")?.style ||
 const styles = StyleSheet.create(
         scaleAttributes({
-            root: {
-                paddingTop: 37,
-            },
-            selectButtonContainer: {
-                width: "100%",
-                height: 100,
-                paddingLeft: 20,
-                paddingRight: 20,
-            },
             scrollViewContainer: {
                 paddingTop: 34,
                 paddingLeft: 20,
@@ -172,5 +162,33 @@ const styles = StyleSheet.create(
                 marginTop: 20,
                 marginBottom: 40,
             },
+            containerActive: {
+                backgroundColor: "#053C69",
+                borderRadius: 6,
+                shadowColor: "#0000006b",
+                shadowOffset: {
+                  width: 6,
+                  height: 8
+                },
+                shadowOpacity: 0.42,
+                shadowRadius: 4.65,
+                elevation: 8
+              },
+              container: {
+                width: "100%",
+                height: 100,
+                justifyContent: "space-between",
+                alignContent: "center",
+                alignItems: "center",
+                padding: 30,
+                display: "flex",
+                flexDirection: "row"
+              },
+              containerSpacing: { padding: 10, marginBottom: 30 },
+              listText: {
+                fontSize: 29,
+                letterSpacing: 0,
+                lineHeight: 50
+              }
         })
 );
