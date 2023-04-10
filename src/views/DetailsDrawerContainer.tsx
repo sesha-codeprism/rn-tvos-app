@@ -1,5 +1,5 @@
 import React, { Ref, useEffect, useRef, useState } from "react";
-import { Dimensions, Modal, StyleSheet, View } from "react-native";
+import { DeviceEventEmitter, Dimensions, Modal, StyleSheet, View } from "react-native";
 
 import MFPopup from "../components/MFPopup";
 import MFEventEmitter from "../utils/MFEventEmitter";
@@ -73,11 +73,18 @@ const MFDetailsDrawerContainer = (props: any, ref: Ref<any>) => {
   };
 
   useEffect(() => {
-    MFEventEmitter.on("openMoreInfo", openMoreInfo);
-    MFEventEmitter.on("openPopup", openPopup);
-    MFEventEmitter.on("closePopup", closePopup);
-    MFEventEmitter.on("closeModal", closeModal);
-    MFEventEmitter.on("openEpisodeRecordOptions", openEpisodeRecordOptions);
+    const openMoreInfoSubscription = DeviceEventEmitter.addListener("openMoreInfo", openMoreInfo);
+    const openPopupSubscription = DeviceEventEmitter.addListener("openPopup", openPopup);
+    const closePopupSubscription = DeviceEventEmitter.addListener("closePopup", closePopup);
+    const closeModalSubscription = DeviceEventEmitter.addListener("closeModal", closeModal);
+    const openEpisodeRecordOptionsSubscription = DeviceEventEmitter.addListener("openEpisodeRecordOptions", openEpisodeRecordOptions);
+    return () => {
+      openMoreInfoSubscription.remove();
+      openPopupSubscription.remove();
+      closePopupSubscription.remove();
+      closeModalSubscription.remove();
+      openEpisodeRecordOptionsSubscription.remove();
+    }
   }, []);
 
   if (currentComponent === Routes.Empty) {

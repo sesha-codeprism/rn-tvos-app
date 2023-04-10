@@ -1,5 +1,5 @@
 import React, { forwardRef, Ref, useContext, useEffect, useRef, useState } from "react";
-import { View } from "react-native";
+import { DeviceEventEmitter, View } from "react-native";
 import MFPopup from "../components/MFPopup";
 import Settings from "../components/MFSideMenu/SettingsContainer";
 import ConflictResolutionPanel from "../views/app/details_pages/details_panels/ConflictsContainer";
@@ -166,39 +166,39 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
   }
 
   useEffect(() => {
-    MFEventEmitter.on("openSettings", openSettings);
-    MFEventEmitter.on("closeSettings", closeSettings);
-    MFEventEmitter.on("openPopup", openPopup);
-    MFEventEmitter.on("closePopup", closePopup);
-    MFEventEmitter.on("openConflictResolution", openConflict);
-    MFEventEmitter.on("closeConflictResolution", closeConflict);
-    MFEventEmitter.on("openPlayerSubtitlePanel", openPlayerSubtitle);
-    MFEventEmitter.on("closePlayerSubtitlePanel", closePlayerSubtitle);
-    MFEventEmitter.on("openPlayerQualityPanel", openPlayerQuality);
-    MFEventEmitter.on("closePlayerQualityPanel", closePlayerQuality);
-    MFEventEmitter.on("openPurchase", openPurchase);
-    MFEventEmitter.on("closeClosePurchase", closePurchase);;
-    MFEventEmitter.on("closeAll", closeAll);
-    MFEventEmitter.on("openPinVerificationPopup", openMFPinPopup);
-    MFEventEmitter.on("closePinVerificationPopup", closeMFPinPopup);
+    const openSettingsSubscription = DeviceEventEmitter.addListener("openSettings", openSettings);
+    const closeSettingsSubscription = DeviceEventEmitter.addListener("closeSettings", closeSettings);
+    const openPopupSubscription = DeviceEventEmitter.addListener("openPopup", openPopup);
+    const closePopupSubscription = DeviceEventEmitter.addListener("closePopup", closePopup);
+    const openConflictResolutionSubscription = DeviceEventEmitter.addListener("openConflictResolution", openConflict);
+    const closeConflictResolutionSubscription = DeviceEventEmitter.addListener("closeConflictResolution", closeConflict);
+    const openPlayerSubtitlePanelSubscription = DeviceEventEmitter.addListener("openPlayerSubtitlePanel", openPlayerSubtitle);
+    const closePlayerSubtitlePanelSubscription = DeviceEventEmitter.addListener("closePlayerSubtitlePanel", closePlayerSubtitle);
+    const openPlayerQualityPanelSubscription = DeviceEventEmitter.addListener("openPlayerQualityPanel", openPlayerQuality);
+    const closePlayerQualityPanelSubscription = DeviceEventEmitter.addListener("closePlayerQualityPanel", closePlayerQuality);
+    const openPurchaseSubscription = DeviceEventEmitter.addListener("openPurchase", openPurchase);
+    const closeClosePurchaseSubscription = DeviceEventEmitter.addListener("closeClosePurchase", closePurchase);
+    const closeAllSubscription = DeviceEventEmitter.addListener("closeAll", closeAll);
+    const openPinVerificationPopupSubscription = DeviceEventEmitter.addListener("openPinVerificationPopup", openMFPinPopup);
+    const closePinVerificationPopupSubscription = DeviceEventEmitter.addListener("closePinVerificationPopup", closeMFPinPopup);
     console.log('MFDrawersComponent mounted');
     return () => {
       console.log('MFDrawersComponent un mounted');
-      MFEventEmitter.uregisterListner("openSettings", openSettings);
-      MFEventEmitter.uregisterListner("closeSettings", closeSettings);
-      MFEventEmitter.uregisterListner("openPopup", openPopup);
-      MFEventEmitter.uregisterListner("closePopup", closePopup);
-      MFEventEmitter.uregisterListner("openConflictResolution", openConflict);
-      MFEventEmitter.uregisterListner("closeConflictResolution", closeConflict);
-      MFEventEmitter.uregisterListner("openPlayerSubtitlePanel", openPlayerSubtitle);
-      MFEventEmitter.uregisterListner("closePlayerSubtitlePanel", closePlayerSubtitle);
-      MFEventEmitter.uregisterListner("openPlayerQualityPanel", openPlayerQuality);
-      MFEventEmitter.uregisterListner("closePlayerQualityPanel", closePlayerQuality);
-      MFEventEmitter.uregisterListner("openPurchase", openPurchase);
-      MFEventEmitter.uregisterListner("closeClosePurchase", closePurchase);;
-      MFEventEmitter.uregisterListner("closeAll", closeAll);
-      MFEventEmitter.uregisterListner("openPinVerificationPopup", openMFPinPopup);
-      MFEventEmitter.uregisterListner("closePinVerificationPopup", closeMFPinPopup);
+      openSettingsSubscription.remove();
+      closeSettingsSubscription.remove();
+      openPopupSubscription.remove();
+      closePopupSubscription.remove();
+      openConflictResolutionSubscription.remove();
+      closeConflictResolutionSubscription.remove();
+      openPlayerSubtitlePanelSubscription.remove();
+      closePlayerSubtitlePanelSubscription.remove();
+      openPlayerQualityPanelSubscription.remove();
+      closePlayerQualityPanelSubscription.remove();
+      openPurchaseSubscription.remove();
+      closeClosePurchaseSubscription.remove();
+      closeAllSubscription.remove();
+      openPinVerificationPopupSubscription.remove();
+      closePinVerificationPopupSubscription.remove();
     }
   }, []);
 

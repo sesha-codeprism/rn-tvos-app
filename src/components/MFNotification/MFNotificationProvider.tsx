@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { DeviceEventEmitter, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import MFNotificationCard, { Notification } from "./MFNotificationCard";
 import MFEventEmitter from "../../utils/MFEventEmitter";
@@ -31,8 +31,12 @@ const MFNotificationProvider = (props: NotificationProviderProps) => {
   };
 
   useEffect(() => {
-    MFEventEmitter.on("createNotification", createNotification);
-    MFEventEmitter.on("closeNotification", closeNotification);
+    const createNotificationSubscription = DeviceEventEmitter.addListener("createNotification", createNotification);
+    const closeNotificationSubscription = DeviceEventEmitter.addListener("closeNotification", closeNotification);
+    return () => {
+      createNotificationSubscription.remove();
+      closeNotificationSubscription.remove();
+    }
   }, []);
 
   return (

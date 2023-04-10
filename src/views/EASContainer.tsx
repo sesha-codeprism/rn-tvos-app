@@ -1,5 +1,5 @@
 import React, { Ref, useEffect, useRef, useState } from "react";
-import { View } from "react-native";
+import { DeviceEventEmitter, View } from "react-native";
 import EASModal from "../components/EAS/EASModal";
 import MFEventEmitter from "../utils/MFEventEmitter";
 
@@ -43,12 +43,15 @@ const EASContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
   };
 
   useEffect(() => {
-    MFEventEmitter.on("EASReceived", openALert);
-    MFEventEmitter.on("EASClose", closePopup);
-    MFEventEmitter.on("closeAll", closeAll);
     console.log("MFDrawersComponent mounted");
+    const EASReceivedSubscription = DeviceEventEmitter.addListener("EASReceived", openALert);
+    const EASCloseSubscription = DeviceEventEmitter.addListener("EASClose", closePopup);
+    const closeAllSubscription = DeviceEventEmitter.addListener("closeAll", closeAll);
     return () => {
       console.log("MFDrawersComponent un mounted");
+      EASReceivedSubscription.remove();
+      EASCloseSubscription.remove();
+      closeAllSubscription.remove();
     };
   }, []);
 

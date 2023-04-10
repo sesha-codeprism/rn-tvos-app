@@ -1,3 +1,6 @@
+/**
+ * @deprecated Instead use DeviceEventEmitter
+ */
 class MFEventEmitter {
     events: Record<string, any>;
     constructor() {

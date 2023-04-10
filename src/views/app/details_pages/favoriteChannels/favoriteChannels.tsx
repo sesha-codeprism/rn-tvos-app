@@ -1,5 +1,6 @@
 import {
   Alert,
+  DeviceEventEmitter,
   FlatList,
   Image,
   ImageBackground,
@@ -57,7 +58,10 @@ const FavoriteChannelsScreen = (props: FavouriteManagerProps) => {
   };
 
   useEffect(() => {
-    MFEventEmitter.on("FavoriteChannelUpdated", onDuplexMessage);
+    const favoriteChannelUpdatedSubscription = DeviceEventEmitter.addListener("FavoriteChannelUpdated", onDuplexMessage);
+    return () => {
+      favoriteChannelUpdatedSubscription.remove()
+    }
   }, []);
 
   useEffect(() => {
