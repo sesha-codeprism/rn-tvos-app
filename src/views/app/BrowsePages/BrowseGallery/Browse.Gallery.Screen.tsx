@@ -79,10 +79,15 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const barRef = useRef<TouchableOpacity>(null);
   const filterRef = useRef<PressableProps>(null);
   const cardRef = useRef<PressableProps>(null);
+  GLOBALS.selectedFeed = browseFeed;
   const pivotsParam = "pivots=true";
-  const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
-  console.log("Pivot url", pivotURL, browseFeed.Uri, browseFeed);
-
+  let pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
+  let browseFeedUri =`${browseFeed.Uri}?$top=${browseFeed.$top}`;
+  if (browseFeed.Id){
+    pivotURL=`${pivotURL}?Id=${browseFeed?.Id}`;
+    browseFeedUri = `${browseFeed.Uri}?Id=${browseFeed?.Id}&$top=${browseFeed.$top}`;
+  }
+  console.log("Pivot url", pivotURL, browseFeedUri, browseFeed);
   // UNSTABLE_usePreventRemove(openMenu, (data) => {
   //   setOpenSubMenu(false);
   //   setOpenMenu(false);
@@ -94,8 +99,8 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     try {
       const $top = browseFeed.$top;
       const skip = $top * page;
-      let finalUri = "";
-      const uri = `${browseFeed.Uri}?$top=${$top}&$skip=${skip}&storeId=${
+       let finalUri = "";
+       const uri = `${browseFeedUri}&$skip=${skip}&storeId=${
         DefaultStore.Id
       }&$groups=${GLOBALS.store!.rightsGroupIds}`;
       if (browsePivots) {
@@ -160,7 +165,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   };
 
   const { data, isLoading, isIdle, isFetched } = useQuery(
-    [`browseFeed-${browseFeed?.Uri}`, browsePivots, page],
+    [`browseFeed-${browseFeedUri}`, browsePivots, page],
     fetchFeeds,
     defaultQueryOptions
   );
@@ -197,6 +202,11 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   //   cardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
   // }
   // }
+  useEffect(() => {
+    return () => {
+      GLOBALS.selectedFeed = undefined;
+    };
+  }, []);
   useEffect(() => {
     console.log("pivotQuery?.data?.data", pivotQuery?.data?.data);
     if (!pivotQuery.data) {

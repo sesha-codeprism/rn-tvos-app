@@ -15,7 +15,7 @@ import EventEmitter from "../utils/MFEventEmitter";
 interface MFSwimProps {
   feeds: FeedItem | undefined;
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
-  onPress?: null | ((event: SubscriberFeed) => void) | undefined;
+  onPress?: null | ((event: SubscriberFeed, feed?: any) => void) | undefined;
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
   limitSwimlaneItemsTo?: number;
   onListEmptyElementFocus?:
