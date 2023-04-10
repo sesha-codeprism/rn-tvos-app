@@ -8,7 +8,7 @@ import {
   BackHandler,
   TVMenuControl,
 } from "react-native";
-import { appUIDefinition, debounceTime } from "../../config/constants";
+import { appUIDefinition, debounceTime, lang } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
@@ -32,8 +32,11 @@ import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import { ItemType } from "../../utils/common";
 import { globalStyles } from "../../config/styles/GlobalStyles";
+import MFButton, { MFButtonVariant } from "../../components/MFButton/MFButton";
 import { getNetworkIHD } from "../../../backend/networkIHD/networkIHD";
 import { MFGlobalsConfig } from "../../../backend/configs/globals";
+import { isAdultContentBlock, isPconBlocked } from "../../utils/pconControls";
+import { PinType } from "../../utils/analytics/consts";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -46,16 +49,15 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const [hubs, setHubs] = useState<Array<FeedItem>>([]);
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const [open, setOpen] = useState(false);
-  // const [showExitPopup, setShowExitPopup] = useState(false);
   const firstSwimlaneRef = useRef<TouchableOpacity>(null);
   const setttingsRef = useRef(null);
   const drawerRef: React.MutableRefObject<any> = useRef();
   const accountInfo = useAccount();
-  const params = {
+  const params = ({
     connectionUrl = undefined,
     inHomeApiEndpoint = undefined,
     useSubscriberInHome = false,
-  } = MFGlobalsConfig?.config?.inhomeDetection || {};
+  } = MFGlobalsConfig?.config?.inhomeDetection || {});
   getNetworkIHD(params);
   const currentContext = useContext(GlobalContext);
 
@@ -66,7 +68,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
 
   const { data, isLoading } = getAllHubs();
   props.navigation.addListener("focus", () => {
-    setHubsData();
+    // setHubsData();
     console.log("focused");
   });
 
@@ -240,6 +242,24 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
 
+  const onPressSwim = (event) => {
+    console.log("onPressSwim",event);
+    //@ts-ignore
+    if (event.Schedule) {
+      event["isFromEPG"] = true;
+        props.navigation.navigate(Routes.Details, {
+          feed: event,
+        });
+    } else if (event.ItemType === ItemType.PACKAGE) {
+      props.navigation.navigate(Routes.PackageDetails, {
+        feed: event,
+      });
+    } else {
+        props.navigation.navigate(Routes.Details, {
+          feed: event,
+        });
+    }
+  };
   return (
     <View style={HomeScreenStyles.container}>
       <ImageBackground
@@ -255,7 +275,9 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
           }}
         >
           {!isLoading && (
-            <SafeAreaView style={{ flex: 1, paddingTop: -30 }}>
+            <SafeAreaView
+              style={{ flex: 1, paddingTop: -30, paddingBottom: -60 }}
+            >
               <MFMenu
                 navigation={props.navigation}
                 enableRTL={GLOBALS.enableRTL}
@@ -279,19 +301,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                       }),
                     drawerPercentage: 0.35,
                   });
-                  if (currentFeed) {
-                    // service?.addNavEventOnCurPageOpenOrClose(
-                    //   {
-                    //     navigation: {
-                    //       params: {
-                    //         feed: currentFeed,
-                    //       },
-                    //     },
-                    //   },
-                    //   Routes.Settings,
-                    //   navigationAction.pageOpen
-                    // );
-                  }
                 }}
                 setSetttingsRef={setSetttingsRef}
               />
@@ -310,6 +319,37 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                   )}
                 </View>
               )}
+              {/* <MFButton
+                variant={MFButtonVariant.Contained}
+                iconSource={0}
+                style={{ width: 274, height: 62, margin: 20 }}
+                focusedStyle={{ width: 274, height: 62 }}
+                textStyle={{
+                  color: "white",
+                  fontSize: 25,
+                  textAlign: "center",
+                }}
+                onPress={() => {
+                  props.navigation.navigate(Routes.PlayerTest, {
+                    params: {
+                      debugModeInSimulator: true,
+                    },
+                  });
+                }}
+                textLabel="Test Playback"
+                imageSource={0}
+                avatarSource={0}
+                containedButtonProps={{
+                  containedButtonStyle: {
+                    unFocusedTextColor: "grey",
+                    enabled: true,
+                    elevation: 5,
+                    focusedBackgroundColor: "#053C69",
+                    unFocusedBackgroundColor: "#424242",
+                    hoverColor: appUIDefinition.theme.backgroundColors.shade2,
+                  },
+                }}
+              /> */}
               <View style={HomeScreenStyles.contentContainer}>
                 {!isLoading && (
                   <MFSwim
@@ -318,23 +358,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                     feeds={feeds}
                     onFocus={onFeedFocus}
                     onPress={(event) => {
-                      console.log(event);
-                      //@ts-ignore
-                      if (event.Schedule) {
-                        //@ts-ignore
-                        event["isFromEPG"] = true;
-                        props.navigation.navigate(Routes.Details, {
-                          feed: event,
-                        });
-                      } else if (event.ItemType === ItemType.PACKAGE) {
-                        props.navigation.navigate(Routes.PackageDetails, {
-                          feed: event,
-                        });
-                      } else {
-                        props.navigation.navigate(Routes.Details, {
-                          feed: event,
-                        });
-                      }
+                      onPressSwim(event);
                     }}
                     onListEmptyElementFocus={clearCurrentHub}
                     onListFooterElementFocus={clearCurrentHub}

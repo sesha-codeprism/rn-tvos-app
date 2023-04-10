@@ -2,13 +2,20 @@ import Foundation
 import UIKit
 import FullGuideComponent
 
-class MKGuide: UIView, channelProgramDelegate {
+class MKGuide: UIView, channelProgramDelegate, ActionHandlerDelegate {
 
   @objc var onUpdate: RCTBubblingEventBlock?
+  @objc var onFavourite: RCTBubblingEventBlock?
 
   func selectedProgram(program: [String : Any]) {
     if onUpdate != nil {
       onUpdate!(["program": program])
+    }
+  }
+
+  func favouriteChannelSelected(){
+    if onFavourite != nil {
+      onFavourite!(["favouriteChannelSelected": true])
     }
   }
     weak var epgVC: UIViewController?
@@ -27,6 +34,7 @@ class MKGuide: UIView, channelProgramDelegate {
   override init(frame: CGRect) {
     super.init(frame: frame)
     MKFullGuideStorageManager.shared.selectedDelegate = self
+    MKFullGuideStorageManager.shared.filterselectionDelegate = self
   }
   
     required init?(coder aDecoder: NSCoder) { fatalError("nope") }

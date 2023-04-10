@@ -78,7 +78,7 @@ const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: bo
 
 export const getAllFeedDataForFeed = (feed: FeedItem, nowNextMap: any, currentSlots: any, channelRights: any) => {
     return useQueries(
-        feed.Feeds.filter((e) => e.Name !== 'Free Preview').map(element => {
+        feed.Feeds.map(element => {
             return element.Uri.toLowerCase().includes('live') ? {
                 queryKey: ['live', element.Uri],
                 queryFn: () => getUDLData(element.Uri),
@@ -92,7 +92,8 @@ export const getAllFeedDataForFeed = (feed: FeedItem, nowNextMap: any, currentSl
             } : {
                 queryKey: ['feed', element.Uri],
                 queryFn: () => getUDLData(element.Uri),
-                staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime
+                staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime,
+                enabled: !!nowNextMap
             }
         }),
     )

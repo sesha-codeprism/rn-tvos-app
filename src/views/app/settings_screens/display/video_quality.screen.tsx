@@ -18,26 +18,13 @@ import {
   MFSelectCheckedBox,
   MFSelectUnCheckedBox,
 } from "../../../../components/MFSelectBox";
+
+import { MFGlobalsConfig } from "../../../../../backend/configs/globals";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
-const list = [
-  {
-    localizedText: "str_bitrate_option_0",
-    id: "51200",
-    icon: "ThreeBars",
-  },
-  {
-    localizedText: "str_bitrate_option_1",
-    id: "2884",
-    icon: "TwoBars",
-  },
-  {
-    localizedText: "str_bitrate_option_2",
-    id: "1500",
-    icon: "OneBar",
-  },
-];
+const list = MFGlobalsConfig.config.bitrates10ft;
+
 const VideoQualityScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [selectedQyality, setSelectedQyality] = useState<any>({});

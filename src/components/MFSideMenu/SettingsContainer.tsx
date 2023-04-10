@@ -1,9 +1,8 @@
-import React, { forwardRef, Ref, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Dimensions,
   StyleSheet,
   Modal,
-  ActivityIndicator,
   Settings as SettingsRN,
 } from "react-native";
 import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
@@ -24,7 +23,9 @@ interface SettingsContainerProps {
   navigation?: any;
 }
 const SettingsContainer = (props: SettingsContainerProps) => {
-  const offset = useSharedValue(GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage) ;
+  const offset = useSharedValue(
+    GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage
+  );
   const [isReady, setIsReady] = React.useState(false);
   const [initialState, setInitialState] = React.useState();
 
@@ -58,7 +59,9 @@ const SettingsContainer = (props: SettingsContainerProps) => {
 
   const openDrawer = () => {
     offset.value = withTiming(
-      GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
+      GLOBALS.enableRTL
+        ? 0
+        : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
       {
         duration: 10,
         easing: Easing.out(Easing.ease),

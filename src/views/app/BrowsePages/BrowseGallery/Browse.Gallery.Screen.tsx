@@ -50,6 +50,9 @@ import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { debounce2 } from "../../../../utils/app/app.utilities";
 import _ from "lodash";
 import { AppStrings } from "../../../../config/strings";
+import { isAdultContentBlock, isPconBlocked } from "../../../../utils/pconControls";
+import MFEventEmitter from "../../../../utils/MFEventEmitter";
+import { PinType } from "../../../../utils/analytics/consts";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -78,6 +81,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const cardRef = useRef<PressableProps>(null);
   const pivotsParam = "pivots=true";
   const pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
+  console.log("Pivot url", pivotURL, browseFeed.Uri, browseFeed);
 
   // UNSTABLE_usePreventRemove(openMenu, (data) => {
   //   setOpenSubMenu(false);
@@ -160,7 +164,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     fetchFeeds,
     defaultQueryOptions
   );
-  
+
   const handleEndReached = debounce2(() => {
     if (!lastPageReached) {
       setCurrentPage(page + 1);
@@ -254,7 +258,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
               source={{
                 uri: first.Image,
               }}
-              ></Image>
+            ></Image>
             <Text
               style={[styles.ratingTextStyle, styles.contentRatingText]}
             >{`${first?.Score}%`}</Text>
@@ -373,6 +377,36 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       </View>
     );
   };
+  const handlePress = (event: any) => {
+    console.log("handlePress inside browse gallery", event);
+    const IsAdult = event.IsAdult;
+    if (IsAdult && isAdultContentBlock()) {
+      MFEventEmitter.emit("openPinVerificationPopup", {
+        pinType: PinType.adult,
+        data: event,
+        onSuccess: () => {
+          props.navigation.navigate(Routes.Details, {
+            feed: event,
+          });
+        },
+      });
+    } else if (isPconBlocked(event)) {
+      MFEventEmitter.emit("openPinVerificationPopup", {
+        pinType: PinType.content,
+        data: event,
+        onSuccess: () => {
+          props.navigation.navigate(Routes.Details, {
+            feed: event,
+          });
+        },
+      });
+    } else {
+      props.navigation.navigate(Routes.Details, {
+        feed: event,
+      });
+    }
+    // props.navigation.push(Routes.Details, { feed: event });
+  };
 
   const imageSource: any =
     currentFeed?.image16x9KeyArtURL ||
@@ -441,43 +475,43 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
               <>
                 <View style={styles.currentFeedContainerStyles}>
                   {currentFeed && (
-                    <>                 
-                        <ImageBackground
-                          imageStyle={styles.imageStyle}
-                          style={styles.posterImageStyle}
-                          source={imageSource}
-                        >
-                          <LinearGradient
-                            colors={["transparent", "#00030E", "#00030E"]}
-                            start={{ x: 0, y: 0.8 }}
-                            end={{ x: 0, y: 1 }}
-                            style={{
-                              flex: 1,
-                            }}
-                                />   
-                      <View style={styles.metadataContainerStyles}>
-                        {currentFeed?.CatalogInfo &&
-                          currentFeed.CatalogInfo.Network && (
-                            <View style={styles.networkLogoContainerStyle}>
-                              <FastImage
-                                source={{
-                                  uri: getNetworkInfo(currentFeed)
-                                    .tenFootLargeURL.uri,
-                                }}
-                                style={styles.networkLogoStyles}
-                              />
-                            </View>
-                          )}
-                        <MFText
-                          shouldRenderText
-                          displayText={currentFeed!.title}
-                          textStyle={styles.titleTextStyle}
-                          adjustsFontSizeToFit={false}
-                          numberOfLines={3}
+                    <>
+                      <ImageBackground
+                        imageStyle={styles.imageStyle}
+                        style={styles.posterImageStyle}
+                        source={imageSource}
+                      >
+                        <LinearGradient
+                          colors={["transparent", "#00030E", "#00030E"]}
+                          start={{ x: 0, y: 0.8 }}
+                          end={{ x: 0, y: 1 }}
+                          style={{
+                            flex: 1,
+                          }}
                         />
-                        {renderMetadata()}
-                        {renderRatingValues()}
-                      </View>
+                        <View style={styles.metadataContainerStyles}>
+                          {currentFeed?.CatalogInfo &&
+                            currentFeed.CatalogInfo.Network && (
+                              <View style={styles.networkLogoContainerStyle}>
+                                <FastImage
+                                  source={{
+                                    uri: getNetworkInfo(currentFeed)
+                                      .tenFootLargeURL.uri,
+                                  }}
+                                  style={styles.networkLogoStyles}
+                                />
+                              </View>
+                            )}
+                          <MFText
+                            shouldRenderText
+                            displayText={currentFeed!.title}
+                            textStyle={styles.titleTextStyle}
+                            adjustsFontSizeToFit={false}
+                            numberOfLines={3}
+                          />
+                          {renderMetadata()}
+                          {renderRatingValues()}
+                        </View>
                       </ImageBackground>
                     </>
                   )}
@@ -520,9 +554,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                       autoFocusOnFirstCard
                       selectedId={currentFeed?.Id}
                       onEndReached={handleEndReached}
-                      onPress={(event) => {
-                        props.navigation.push(Routes.Details, { feed: event });
-                      }}
+                      onPress={handlePress}
                     />
                   </LinearGradient>
                 </View>
@@ -640,7 +672,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   currentFeedContainerStyles: {
-    flex: 0.50,
+    flex: 0.5,
   },
   gridViewContainerStyles: {
     flex: 0.55,
