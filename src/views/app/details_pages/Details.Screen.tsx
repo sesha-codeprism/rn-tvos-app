@@ -1562,7 +1562,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     const id =
       isSeries(assetData) || feed?.isFromEPG
         ? feed?.Schedule?.ProgramId || feed?.ProgramId || feed?.Id
-        : feed?.Id;
+        : feed?.Id || feed?.ProgramId;
     const params = `?catchup=true&storeId=${DefaultStore.Id}&groups=${
       GLOBALS.store!.rightsGroupIds
     }&id=${id}`;
