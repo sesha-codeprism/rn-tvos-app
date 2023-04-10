@@ -20,6 +20,12 @@ class MFEventEmitter {
         })
       }
     }
+
+    uregisterListner = (event: string, listener: any) => {
+      if (this.events[event]) {
+        this.events[event] = this.events.filter((listnr: any) => listener !== listnr);
+      }
+    }
   }
   
   const EventEmitter = new MFEventEmitter();

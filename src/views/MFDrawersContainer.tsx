@@ -8,9 +8,6 @@ import { ConflictResolutionContext } from "../contexts/conflictResolutionContext
 import MFPinPopup from "../components/MFPinPopup";
 import PlayerSubtitlePanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerSubtitlePanel";
 import PlayerQualityPanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerQualityPanel";
-import { PurchaseOptionsPanel } from "./app/details_pages/PurchaseOptionPanel";
-import { PurchaseInformationPanel } from "./app/details_pages/PurchaseInformationPanel";
-import { PurchaseNetworkSelectionPanel } from "./app/details_pages/package_details/PurchaseNetworkSelectionPanel";
 import Purchase from "../components/MFSideMenu/PurchaseContainer";
 
 export const Empty = (props: any) => {
@@ -179,12 +176,6 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     MFEventEmitter.on("closePlayerSubtitlePanel", closePlayerSubtitle);
     MFEventEmitter.on("openPlayerQualityPanel", openPlayerQuality);
     MFEventEmitter.on("closePlayerQualityPanel", closePlayerQuality);
-    MFEventEmitter.on("openPurchaseOption", openPurchaseOption);
-    MFEventEmitter.on("closeClosePurchaseOption", closePurchaseOption);
-    MFEventEmitter.on("openPurchaseInformation", openPurchaseInformation);
-    MFEventEmitter.on("closeClosePurchaseInformation", closePurchaseInformation);
-    MFEventEmitter.on("openPurchaseNetwork", openPurchaseNetwork);
-    MFEventEmitter.on("closeClosePurchaseNetwork", closePurchaseNetwork);
     MFEventEmitter.on("openPurchase", openPurchase);
     MFEventEmitter.on("closeClosePurchase", closePurchase);;
     MFEventEmitter.on("closeAll", closeAll);
@@ -193,6 +184,21 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     console.log('MFDrawersComponent mounted');
     return () => {
       console.log('MFDrawersComponent un mounted');
+      MFEventEmitter.uregisterListner("openSettings", openSettings);
+      MFEventEmitter.uregisterListner("closeSettings", closeSettings);
+      MFEventEmitter.uregisterListner("openPopup", openPopup);
+      MFEventEmitter.uregisterListner("closePopup", closePopup);
+      MFEventEmitter.uregisterListner("openConflictResolution", openConflict);
+      MFEventEmitter.uregisterListner("closeConflictResolution", closeConflict);
+      MFEventEmitter.uregisterListner("openPlayerSubtitlePanel", openPlayerSubtitle);
+      MFEventEmitter.uregisterListner("closePlayerSubtitlePanel", closePlayerSubtitle);
+      MFEventEmitter.uregisterListner("openPlayerQualityPanel", openPlayerQuality);
+      MFEventEmitter.uregisterListner("closePlayerQualityPanel", closePlayerQuality);
+      MFEventEmitter.uregisterListner("openPurchase", openPurchase);
+      MFEventEmitter.uregisterListner("closeClosePurchase", closePurchase);;
+      MFEventEmitter.uregisterListner("closeAll", closeAll);
+      MFEventEmitter.uregisterListner("openPinVerificationPopup", openMFPinPopup);
+      MFEventEmitter.uregisterListner("closePinVerificationPopup", closeMFPinPopup);
     }
   }, []);
 
