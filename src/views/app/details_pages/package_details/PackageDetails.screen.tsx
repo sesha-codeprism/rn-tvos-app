@@ -648,42 +648,42 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
       type="FullPage"
       imageUrl={backgroundImage}
     >
-      <View style={packageDetailsStyle.detailContainer}>
-        {renderShowcard()}
+      <View  style={packageDetailsStyle.containerOpacity}>   
+        <View style={packageDetailsStyle.detailContainer}>
+          {renderShowcard()}
 
-        <View style={packageDetailsStyle.metadataViewStyle}>
-          {/* Metada */}
-          {renderAssetInfo()}
+          <View style={packageDetailsStyle.metadataViewStyle}>
+            {/* Metada */}
+            {renderAssetInfo()}
+          </View>
         </View>
-      </View>
-      {packageData && (
-        <TouchableOpacity
-          accessible={true}
-          activeOpacity={0.3}
-          onFocus={onFocusBar}
-          style={
-            packageTitles && packageTitles.length
-              ? {
-                  backgroundColor: "transparent",
-                  height: 20,
-                  width: SCREEN_WIDTH,
-                  marginTop: 50,
-                  zIndex: 100,
-                }
-              : {
-                  backgroundColor: "transparent",
-                  height: 20,
-                  width: SCREEN_WIDTH,
-                  marginTop: 50,
-                  zIndex: 100,
-                  // marginBottom: 60,
-                }
-          }
-        />
-      )}
-      <View style={packageDetailsStyle.moreDetailsContainer}>
-        {/* Package Itemss */}
-        {renderPackageItems()}
+        {packageData && (
+          <TouchableOpacity
+            accessible={true}
+            activeOpacity={0.3}
+            onFocus={onFocusBar}
+            style={
+              packageTitles && packageTitles.length
+                ? {
+                    backgroundColor: "transparent",
+                    width: SCREEN_WIDTH,
+                    zIndex: 100,
+                  }
+                : {
+                    backgroundColor: "transparent",
+                    height: 20,
+                    width: SCREEN_WIDTH,
+                    marginTop: 50,
+                    zIndex: 100,
+                    // marginBottom: 60,
+                  }
+            }
+          />
+        )}
+        <View style={packageDetailsStyle.moreDetailsContainer}>
+          {/* Package Itemss */}
+          {renderPackageItems()}
+        </View>
       </View>
       <DetailsSidePanel
         ref={drawerRef}
