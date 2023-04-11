@@ -52,7 +52,7 @@ import { AppImages } from "../../../../assets/images";
 import { Definition, Definition as DefinitionOfItem } from "../../../../utils/DVRUtils";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
 import MFOverlay from "../../../../components/MFOverlay";
-import { appQueryCache, invalidateQueryBasedOnEpisode, invalidateQueryBasedOnSpecificKeys } from "../../../../config/queries";
+import { invalidateQueryBasedOnEpisode, invalidateQueryBasedOnSpecificKeys } from "../../../../config/queries";
 import { getItemId } from "../../../../utils/dataUtils";
 import { findConflictedGroupBySeriesOrProgramId } from "../../../../utils/ConflictUtils";
 import { cancelRecordingFromConflictPopup, forceResolveConflict } from "../../../../../backend/dvrproxy/dvrproxy";

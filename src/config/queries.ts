@@ -130,19 +130,3 @@ export const invalidateQueryBasedOnSpecificKeys = (firstKey: string, secondKey: 
 
 }
 
-export const invalidateQueryBasedOnEpisode = (firstKey: string, episode: any) => {
-    const programId = episode?.ProgramId || episode?.CatalogInfo?.UniversalProgramId;
-    queryClient
-        .invalidateQueries({
-            predicate: (query) => {
-                //@ts-ignore
-                const episodeKey =  JSON.parse(query.queryKey[1]);
-                return (query.queryKey[0] === firstKey && (episodeKey?.ProgramId === programId || episodeKey?.CatalogInfo?.UniversalProgramId === programId));
-            }
-        })
-        .then(() => {
-            console.log("Episode Update done");
-        })
-        .catch((e: any) => console.log("Cannot find Query call", firstKey, episode, "due to", e));
-
-}
