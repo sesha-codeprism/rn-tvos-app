@@ -86,6 +86,8 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   if (browseFeed.Id){
     pivotURL=`${pivotURL}?Id=${browseFeed?.Id}`;
     browseFeedUri = `${browseFeed.Uri}?Id=${browseFeed?.Id}&$top=${browseFeed.$top}`;
+  }else if(browseFeed?.StationId){
+    browseFeedUri = `${browseFeed.Uri}?Id=${browseFeed?.StationId}&$top=${browseFeed.$top}`;
   }
   console.log("Pivot url", pivotURL, browseFeedUri, browseFeed);
   // UNSTABLE_usePreventRemove(openMenu, (data) => {

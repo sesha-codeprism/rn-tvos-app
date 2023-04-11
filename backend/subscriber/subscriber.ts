@@ -638,11 +638,12 @@ export const getAllRecordingBookmarks = async (id?: string, params?: any) => {
 
 export const getDynamicFeeds = async (id?: string, params?: any) => {
   const { accessToken } = GLOBALS.store!;
-  const { $skip, $top } = params;
+  const { $skip, $top, Id } = params;
   let url, paramsObject;
+  const libraryId = Id || id;
   if (id === "MixedRecommendations") {
     url =
-      GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber + `${id.toLowerCase()}`
+      GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber + `${libraryId.toLowerCase()}`
     paramsObject = {
       ...params,
       $skip: $skip || 0,
@@ -650,7 +651,7 @@ export const getDynamicFeeds = async (id?: string, params?: any) => {
       $lang: lang
     }
   } else {
-    url = GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber + `v4/libraries/${id}`;
+    url = GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber + `v4/libraries/${libraryId}`;
     let typesParam = params.types ? params.types.join(",") : "Title";
     if (params.libraryId === "Library" && storeId) {
       if (typesParam.includes("Title") && !typesParam.includes('PayPerView')) {
@@ -728,7 +729,10 @@ export const getDynamicFeeds = async (id?: string, params?: any) => {
       )
     );
   }
-
+  if(Id){ 
+    return {data : feedContents[0].items};
+  }
+  
   return feedContents;
 }
 
@@ -779,7 +783,8 @@ export const registerSubscriberUdls = (params?: any) => {
     { prefix: BASE + "/getSeriesPlayOptions", getter: getSeriesPlayOptions },
     { prefix: BASE + "/account/", getter: getUserAccount },
     { prefix: BASE + "/getPackageActions/", getter: getPackageActions },
-    { prefix: BASE + "/libraries/dynamicFeeds", getter: getDynamicFeeds }
+    { prefix: BASE + "/libraries/dynamicFeeds", getter: getDynamicFeeds },
+    { prefix: BASE + "/library", getter: getDynamicFeeds }
   ];
   return subscriberUdls;
 };
