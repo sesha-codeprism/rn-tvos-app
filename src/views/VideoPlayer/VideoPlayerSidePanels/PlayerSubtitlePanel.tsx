@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Modal,
   Settings as SettingsRN,
+  DeviceEventEmitter,
 } from "react-native";
 import { GLOBALS } from "../../../utils/globals";
 import Animated, {
@@ -12,7 +13,6 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import MFEventEmitter from "../../../utils/MFEventEmitter";
 import { PlayerSubtitleSideMenu } from "./SideMenus/PlayerSubtitleSideMenu";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -46,7 +46,7 @@ const PlayerPlanelSubtitle = (props: PlayerPlanelSubtitleProps) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    MFEventEmitter.emit("closePlayerSubtitlePanel", null);
+    DeviceEventEmitter.emit("closePlayerSubtitlePanel", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {

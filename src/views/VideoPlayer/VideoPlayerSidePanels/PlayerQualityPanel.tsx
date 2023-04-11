@@ -5,6 +5,7 @@ import {
   Modal,
   ActivityIndicator,
   Settings as SettingsRN,
+  DeviceEventEmitter,
 } from "react-native";
 import { GLOBALS } from "../../../utils/globals";
 import Animated, {
@@ -13,7 +14,6 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import MFEventEmitter from "../../../utils/MFEventEmitter";
 import { Empty } from "../../MFDrawersContainer";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -71,7 +71,7 @@ const PlayerPanelQuality = (props: PlayerPanelQualityProps) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    MFEventEmitter.emit("closePlayerQualityPanel", null);
+    DeviceEventEmitter.emit("closePlayerQualityPanel", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {

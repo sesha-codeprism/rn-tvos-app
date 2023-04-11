@@ -49,6 +49,7 @@ interface MFSwimLaneProps {
   autoFocusOnFirstCard?: boolean;
   navigation: NativeStackNavigationProp<any>;
   onLongPress?: any;
+  extraData: boolean;
 }
 
 export interface Names {
@@ -299,6 +300,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           onViewAllPressed={onTapViewAll}
           flatListStyle={{ display: "flex", flex: 1, flexDirection: "row" }}
           getNoItemReturenedRef={() => innerNoItemsReturenedRef}
+          extraData={props.extraData}
         />
       </View>
     );

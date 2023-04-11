@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React, { forwardRef, Ref, useEffect, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
   Modal,
+  ActivityIndicator,
   Settings as SettingsRN,
   DeviceEventEmitter,
 } from "react-native";
-import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
+import { PurchasePanelNavigator } from "../../config/navigation/RouterOutlet";
 import { GLOBALS } from "../../utils/globals";
 import Animated, {
   useSharedValue,
@@ -18,14 +19,14 @@ import { Empty } from "../../views/MFDrawersContainer";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-interface SettingsContainerProps {
+
+interface PurchaseContainerProps {
   drawerPercentage: number;
+  params:any;
   navigation?: any;
 }
-const SettingsContainer = (props: SettingsContainerProps) => {
-  const offset = useSharedValue(
-    GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage
-  );
+const PurchaseContainer = (props: PurchaseContainerProps) => {
+  const offset = useSharedValue(GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage) ;
   const [isReady, setIsReady] = React.useState(false);
   const [initialState, setInitialState] = React.useState();
 
@@ -33,7 +34,7 @@ const SettingsContainer = (props: SettingsContainerProps) => {
     const restoreState = async () => {
       try {
         // Only restore state
-        const savedStateString = SettingsRN.get("SETTINGS_NAVIGATION_HISTORY");
+        const savedStateString = SettingsRN.get("PURCHASE_NAVIGATION_HISTORY");
         const state = savedStateString
           ? JSON.parse(savedStateString)
           : undefined;
@@ -59,9 +60,7 @@ const SettingsContainer = (props: SettingsContainerProps) => {
 
   const openDrawer = () => {
     offset.value = withTiming(
-      GLOBALS.enableRTL
-        ? 0
-        : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
+      GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
       {
         duration: 10,
         easing: Easing.out(Easing.ease),
@@ -74,7 +73,8 @@ const SettingsContainer = (props: SettingsContainerProps) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    DeviceEventEmitter.emit("closeSettings", null);
+    SettingsRN.set({ PURCHASE_NAVIGATION_HISTORY: {} })
+    DeviceEventEmitter.emit("closeClosePurchase", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {
@@ -102,15 +102,15 @@ const SettingsContainer = (props: SettingsContainerProps) => {
         presentationStyle={"overFullScreen"}
       >
         <Animated.View style={[styles.container, animatedStyles]}>
-          <SettingsNavigator isAuthorized={true} initialState={initialState} />
+          <PurchasePanelNavigator initialState={initialState} params={props.params} />
         </Animated.View>
       </Modal>
     );
   };
   return renderPush();
 };
-const Settings = SettingsContainer;
-export default Settings;
+const Purchase = PurchaseContainer;
+export default Purchase;
 
 const styles = StyleSheet.create({
   main: {

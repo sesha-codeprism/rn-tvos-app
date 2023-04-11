@@ -29,7 +29,6 @@ import { isFeatureAssigned } from "../../utils/helpers";
 import { GLOBALS } from "../../utils/globals";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { appQueryCache, queryClient } from "../../config/queries";
-import EventEmitter from "../../utils/MFEventEmitter";
 
 interface MFMenuProps {
   navigation: any;

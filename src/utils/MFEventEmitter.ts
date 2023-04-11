@@ -1,3 +1,6 @@
+/**
+ * @deprecated Instead use DeviceEventEmitter
+ */
 class MFEventEmitter {
     events: Record<string, any>;
     constructor() {
@@ -18,6 +21,12 @@ class MFEventEmitter {
         this.events[event].forEach((listener: any) => {
           listener(payload)
         })
+      }
+    }
+
+    uregisterListner = (event: string, listener: any) => {
+      if (this.events[event]) {
+        this.events[event] = this.events.filter((listnr: any) => listener !== listnr);
       }
     }
   }

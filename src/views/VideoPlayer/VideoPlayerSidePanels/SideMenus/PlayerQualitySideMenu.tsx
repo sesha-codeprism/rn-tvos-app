@@ -1,4 +1,5 @@
 import {
+    DeviceEventEmitter,
     FlatList,
     Pressable,
     StyleSheet,
@@ -18,7 +19,6 @@ import { MFGlobalsConfig } from "../../../../../backend/configs/globals";
 import { NativeModules } from 'react-native';
 import MFLoader from "../../../../components/MFLoader";
 import { getUIdef, scaleAttributes } from "../../../../utils/uidefinition";
-import MFEventEmitter from "../../../../utils/MFEventEmitter";
 import { MKPVideoQuality } from "./videoDataTypes";
 interface Props {
     playerManager: typeof NativeModules; // passed in player NativeModule reference
@@ -46,7 +46,7 @@ const PlayerQualitySideMenu: React.FunctionComponent<Props> = (props: Props) => 
         setCurrentVideoQuality(item);
         props.playerManager.maxSelectableBitrate(item.bitrate);
         GLOBALS.store!.playerSessionSettings.bitrates10ft = item.bitrate;
-        MFEventEmitter.emit("closePlayerQualityPanel", undefined);
+        DeviceEventEmitter.emit("closePlayerQualityPanel", undefined);
     };
 
     if (!availableVideoQualities && !currentVideoQuality) {

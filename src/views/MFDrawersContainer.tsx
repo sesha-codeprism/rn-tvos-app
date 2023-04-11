@@ -1,13 +1,13 @@
 import React, { forwardRef, Ref, useContext, useEffect, useRef, useState } from "react";
-import { View } from "react-native";
+import { DeviceEventEmitter, View } from "react-native";
 import MFPopup from "../components/MFPopup";
 import Settings from "../components/MFSideMenu/SettingsContainer";
 import ConflictResolutionPanel from "../views/app/details_pages/details_panels/ConflictsContainer";
-import MFEventEmitter from "../utils/MFEventEmitter";
 import { ConflictResolutionContext } from "../contexts/conflictResolutionContext";
 import MFPinPopup from "../components/MFPinPopup";
 import PlayerSubtitlePanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerSubtitlePanel";
 import PlayerQualityPanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerQualityPanel";
+import Purchase from "../components/MFSideMenu/PurchaseContainer";
 
 export const Empty = (props: any) => {
   return <View style={{ height: 1, backgroundColor: "black" }}></View>;
@@ -19,6 +19,10 @@ const enum Routes {
   ConflictResolution,
   PlayerSubtitle,
   PlayerQuality,
+  PurchaseOption,
+  PurchaseInformation,
+  PurchaseNetwork,
+  Purchase,
   Popup,
   MFPinPopup
 }
@@ -30,6 +34,7 @@ const ComponentLoader = {
   [Routes.PlayerSubtitle]: PlayerSubtitlePanel,
   [Routes.PlayerQuality]: PlayerQualityPanel,
   [Routes.Empty]: Empty,
+  [Routes.Purchase]: Purchase,
 };
 
 interface MFDrawerContainer { }
@@ -134,32 +139,68 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
   }
 
 
+  const openPurchase = (props: any) => {
+    //  add to component stack
+    componentStack.current?.push({ route: Routes.Purchase, props: props });
+    setComponentt(Routes.Purchase);
+  }
+
+  const closePurchase = (params: any) => {
+    const props =
+      componentStack.current[componentStack?.current?.length - 1]?.props;
+    if (props && props?.onClose) {
+      props?.onClose?.();
+    }
+    componentStack.current?.pop();
+    setComponentt(
+      componentStack.current[componentStack?.current?.length - 1]?.route
+    );
+  }
+
+  
+
   const closeAll = () => {
     componentStack.current?.splice(1);
     setComponentt(Routes.Empty);
   }
 
   useEffect(() => {
-    MFEventEmitter.on("openSettings", openSettings);
-    MFEventEmitter.on("closeSettings", closeSettings);
-    MFEventEmitter.on("openPopup", openPopup);
-    MFEventEmitter.on("closePopup", closePopup);
-    MFEventEmitter.on("openConflictResolution", openConflict);
-    MFEventEmitter.on("closeConflictResolution", closeConflict);
-    MFEventEmitter.on("openPlayerSubtitlePanel", openPlayerSubtitle);
-    MFEventEmitter.on("closePlayerSubtitlePanel", closePlayerSubtitle);
-    MFEventEmitter.on("openPlayerQualityPanel", openPlayerQuality);
-    MFEventEmitter.on("closePlayerQualityPanel", closePlayerQuality);
-    MFEventEmitter.on("closeAll", closeAll);
-    MFEventEmitter.on("openPinVerificationPopup", openMFPinPopup);
-    MFEventEmitter.on("closePinVerificationPopup", closeMFPinPopup);
+    const openSettingsSubscription = DeviceEventEmitter.addListener("openSettings", openSettings);
+    const closeSettingsSubscription = DeviceEventEmitter.addListener("closeSettings", closeSettings);
+    const openPopupSubscription = DeviceEventEmitter.addListener("openPopup", openPopup);
+    const closePopupSubscription = DeviceEventEmitter.addListener("closePopup", closePopup);
+    const openConflictResolutionSubscription = DeviceEventEmitter.addListener("openConflictResolution", openConflict);
+    const closeConflictResolutionSubscription = DeviceEventEmitter.addListener("closeConflictResolution", closeConflict);
+    const openPlayerSubtitlePanelSubscription = DeviceEventEmitter.addListener("openPlayerSubtitlePanel", openPlayerSubtitle);
+    const closePlayerSubtitlePanelSubscription = DeviceEventEmitter.addListener("closePlayerSubtitlePanel", closePlayerSubtitle);
+    const openPlayerQualityPanelSubscription = DeviceEventEmitter.addListener("openPlayerQualityPanel", openPlayerQuality);
+    const closePlayerQualityPanelSubscription = DeviceEventEmitter.addListener("closePlayerQualityPanel", closePlayerQuality);
+    const openPurchaseSubscription = DeviceEventEmitter.addListener("openPurchase", openPurchase);
+    const closeClosePurchaseSubscription = DeviceEventEmitter.addListener("closeClosePurchase", closePurchase);
+    const closeAllSubscription = DeviceEventEmitter.addListener("closeAll", closeAll);
+    const openPinVerificationPopupSubscription = DeviceEventEmitter.addListener("openPinVerificationPopup", openMFPinPopup);
+    const closePinVerificationPopupSubscription = DeviceEventEmitter.addListener("closePinVerificationPopup", closeMFPinPopup);
     console.log('MFDrawersComponent mounted');
     return () => {
       console.log('MFDrawersComponent un mounted');
+      openSettingsSubscription.remove();
+      closeSettingsSubscription.remove();
+      openPopupSubscription.remove();
+      closePopupSubscription.remove();
+      openConflictResolutionSubscription.remove();
+      closeConflictResolutionSubscription.remove();
+      openPlayerSubtitlePanelSubscription.remove();
+      closePlayerSubtitlePanelSubscription.remove();
+      openPlayerQualityPanelSubscription.remove();
+      closePlayerQualityPanelSubscription.remove();
+      openPurchaseSubscription.remove();
+      closeClosePurchaseSubscription.remove();
+      closeAllSubscription.remove();
+      openPinVerificationPopupSubscription.remove();
+      closePinVerificationPopupSubscription.remove();
     }
   }, []);
 
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>> rendering >>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
   if (currentComponent === Routes.Empty) {
     const Component = ComponentLoader[Routes.Empty];
     const props =
@@ -186,6 +227,8 @@ const DrawerContainer = (props: MFDrawerContainer, ref: Ref<any>) => {
     return <Component {...props}>/</Component>;
   } else if (currentComponent === Routes.PlayerQuality) {
     const Component = ComponentLoader[Routes.PlayerQuality];
+  } else if(currentComponent === Routes.Purchase) {
+    const Component = ComponentLoader[Routes.Purchase];
     const props =
       componentStack.current[componentStack?.current?.length - 1]?.props;
     //@ts-ignore

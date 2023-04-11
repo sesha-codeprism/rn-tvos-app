@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   BackHandler,
+  DeviceEventEmitter,
   Dimensions,
   Modal,
   StyleSheet,
@@ -8,7 +9,6 @@ import {
   View,
 } from "react-native";
 import Animated from "react-native-reanimated";
-import EventEmitter from "../../utils/MFEventEmitter";
 import EASAlert from "./EASAlert";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -19,14 +19,14 @@ interface EASContainerProps {
 const EASModal = (props: EASContainerProps) => {
   const closeDrawer = () => {
     console.log("Requestiong modal close");
-    EventEmitter.emit("EASClose", null);
+    DeviceEventEmitter.emit("EASClose", null);
   };
 
   useEffect(() => {
     TVMenuControl.enableTVMenuKey();
     BackHandler.addEventListener("hardwareBackPress", () => {
       console.log("Requestiong modal close");
-      EventEmitter.emit("EASClose", null);
+      DeviceEventEmitter.emit("EASClose", null);
       return true;
     });
   }, []);
