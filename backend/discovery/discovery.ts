@@ -7,6 +7,8 @@ import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { gethubRestartTvShowcards } from "../live/live";
 import { massageDiscoveryFeed, massageSubscriptionPackagePivots } from "../../src/utils/assetUtils";
 import { SourceType } from "../../src/utils/common";
+import { FeedContents } from "../../src/components/MFSwimLane";
+
 
 /** Note: Discovery calls don't require AUTH token */
 
@@ -355,15 +357,47 @@ const getDiscoveryLibrariesPivotCategories = async (
   id: string,
   params: any
 ) => {
+  const feed = GLOBALS.selectedFeed;
+  const { $skip, $top, $lang, $groups, storeId, $stations, $countPerStation, pivots, pivotGroup } = params;
   const url = `${GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery}/v3/libraries/complete/pivot-items`;
   const response = await GET({
     url: url,
-    params: params,
+    params: {
+      pivotGroup: pivotGroup,
+      pivots: pivots + ($lang?.short || lang.short),
+      $itemsPerRow: $countPerStation,
+      $skip: $skip || 0,
+      $top: $top || 30,
+      $lang: $lang || lang,
+      $groups: $groups || GLOBALS.store?.rightsGroupIds,
+      storeId: storeId || DefaultStore.Id
+
+    },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
-  return response;
+  const type: SourceType = SourceType.VOD;
+  let feedContents: any[] = [];
+  for (let category of response?.data) {
+      const categoryItem = {
+          FeedType: feed.FeedType,
+          Id: category.Id,
+          Name: category.Name,
+          HasMore: (category?.HasMore && category.HasMore) || false,
+          NavigationTargetUri: feed?.NavigationTargetUri || "",
+          NavigationTargetVisibility: feed?.NavigationTargetVisibility,
+          Uri: feed.Uri,
+          pivotGroup: feed.pivotGroup,
+      };
+      feedContents.push(
+          new FeedContents(
+              categoryItem,
+              massageDiscoveryFeed(category, type)
+          )
+      );
+  }  
+  return feedContents;
 };
 
 const getDiscoverLibraryItemPivots = async (id: string, params: any) => {
