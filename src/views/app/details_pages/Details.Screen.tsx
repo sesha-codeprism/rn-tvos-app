@@ -1263,6 +1263,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           setIsItemPinned(status);
           break;
         case NotificationType.Purchase:
+        case NotificationType.Subscription:
             invalidatPlayOption();
             invalidateSubscriberData();
             invalidateQueryBasedOnSpecificKeys("feed", "udl://subscriber/library/Library");
