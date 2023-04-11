@@ -4,7 +4,7 @@ import { FeedContents } from "../../src/components/MFSwimLane";
 import { config } from "../../src/config/config";
 import { lang } from "../../src/config/constants";
 import { Layout } from "../../src/utils/analytics/consts";
-import { findChannelByStationId, massageCatchupFeed, massageLiveFeed } from "../../src/utils/assetUtils";
+import { findChannelByStationId, getDate, massageCatchupFeed, massageLiveFeed } from "../../src/utils/assetUtils";
 import { SourceType } from "../../src/utils/common";
 import { convertISOStringToTimeStamp } from "../../src/utils/dataUtils";
 import DateUtils from "../../src/utils/dateUtils";
@@ -312,6 +312,7 @@ export const getCatchupPivotItems = async (id?: string, params?: any) => {
     if (name) {
       feeds["Name"] = name;
     }
+    feeds["NavigationTargetUri"] = "restartTv";
     feeds["NavigationTargetVisibility"] =
       GLOBALS.selectedFeed?.NavigationTargetVisibility;
     feeds["ContextualNavigationTargetUri"] = "restartTvGallery";
@@ -326,6 +327,35 @@ export const getCatchupPivotItems = async (id?: string, params?: any) => {
     );
   }
   return feedContents;
+}
+
+export const getCatchupItems = async (id?: string, params?: any) => {
+  let uri: string;
+  const { accessToken } = GLOBALS.store!;
+  const { $skip, $top, $lang, $groups, storeId, pivots} = params;
+  const {$orderBy, StationId, Uri } = GLOBALS.selectedFeed;
+  uri = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + `/v3/libraries/catchup/items`
+
+  const type: SourceType = SourceType.PACKAGE;
+  const response = await GET({
+    url: uri,
+    params: {
+      $skip: $skip || 0,
+      $top: $top || 100,
+      requestedTime: getDate(Uri).toISOString(),
+      pivots: pivots,
+      $stations: StationId,
+      $orderBy: $orderBy,
+      $groups: $groups || GLOBALS.store?.rightsGroupIds,
+      $lang: $lang || lang,
+      storeId: storeId || DefaultStore.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  }); 
+  const sourceType = response.data?.length && response.data[0]?.SourceType;
+  return massageCatchupFeed(response.data, sourceType);
 }
 
 const getFavoriteChannels = async (params?: any) => {
@@ -348,7 +378,9 @@ export const registerLiveUdls = () => {
     { prefix: BASE + '/feeds/hubRestartTvShowcards', getter: gethubRestartTvShowcards },
     { prefix: BASE + '/feeds/trending/', getter: getLiveTrends },
     { prefix: BASE + '/channelRights/', getter: getChannelRights },
-    { prefix: BASE + '/catchup/pivotitems/', getter: getCatchupPivotItems }
+    { prefix: BASE + '/catchup/pivotitems/', getter: getCatchupPivotItems },
+    { prefix: BASE + '/catchup/items/', getter: getCatchupItems },
+    { prefix: BASE + '/catchup/items/pivots=true', getter: getCatchupPivots },
   ];
   return liveUdls;
 };

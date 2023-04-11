@@ -128,10 +128,9 @@ const BrowseCategoryCarousel: React.FunctionComponent<
                   key={index}
                   feed={item.feed}
                   data={item.items}
-                  limitSwimlaneItemsTo={16}
+                  limitSwimlaneItemsTo={9}
                   swimLaneKey={swimLaneKey}
                   updateSwimLaneKey={updateSwimLaneKey}
-                  renderViewAll={item.feed.NavigationTargetVisibility}
                   onPress={(event) => {
                     props.navigation.push(Routes.Details, { feed: event });
                   }}

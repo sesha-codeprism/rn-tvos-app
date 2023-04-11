@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import {
   BackHandler,
+  DeviceEventEmitter,
   Dimensions,
   Modal,
   StyleSheet,
@@ -15,7 +16,6 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { GLOBALS } from "../utils/globals";
-import MFEventEmitter from "../utils/MFEventEmitter";
 import { Empty } from "./MFDrawersContainer";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -42,7 +42,7 @@ const DetailsContainer = (props: any) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    MFEventEmitter.emit("closeModal", null);
+    DeviceEventEmitter.emit("closeModal", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {

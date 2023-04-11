@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   BackHandler,
+  DeviceEventEmitter,
   Image,
   ImageBackground,
   PressableProps,
@@ -51,7 +52,6 @@ import { debounce2 } from "../../../../utils/app/app.utilities";
 import _ from "lodash";
 import { AppStrings } from "../../../../config/strings";
 import { isAdultContentBlock, isPconBlocked } from "../../../../utils/pconControls";
-import MFEventEmitter from "../../../../utils/MFEventEmitter";
 import { PinType } from "../../../../utils/analytics/consts";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
@@ -86,6 +86,8 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   if (browseFeed.Id){
     pivotURL=`${pivotURL}?Id=${browseFeed?.Id}`;
     browseFeedUri = `${browseFeed.Uri}?Id=${browseFeed?.Id}&$top=${browseFeed.$top}`;
+  }else if(browseFeed?.StationId){
+    browseFeedUri = `${browseFeed.Uri}?Id=${browseFeed?.StationId}&$top=${browseFeed.$top}`;
   }
   console.log("Pivot url", pivotURL, browseFeedUri, browseFeed);
   // UNSTABLE_usePreventRemove(openMenu, (data) => {
@@ -391,7 +393,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     console.log("handlePress inside browse gallery", event);
     const IsAdult = event.IsAdult;
     if (IsAdult && isAdultContentBlock()) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.adult,
         data: event,
         onSuccess: () => {
@@ -401,7 +403,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
         },
       });
     } else if (isPconBlocked(event)) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.content,
         data: event,
         onSuccess: () => {
