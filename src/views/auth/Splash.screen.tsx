@@ -52,6 +52,10 @@ import {
   parseMessage,
 } from "../../utils/EAS/EASUtils";
 import { sourceTypeString } from "../../utils/analytics/consts";
+import {
+  getNotification,
+  setNotification,
+} from "../../components/MFNotification/NotificationStore";
 
 // LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 
@@ -231,12 +235,30 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
       } else if (message?.type === NotificationType.pinUnpinChannel) {
         DeviceEventEmitter.emit("FavoriteChannelUpdated", message);
       } else if (message?.type === NotificationType.UINotification) {
-        DeviceEventEmitter.emit("createNotification", {
-          id: message.payload.messageId || AppStrings?.str_pair_device_success,
-          iconName: "notification",
-          title: message.payload.Title,
-          subtitle: message.payload.Description,
-        });
+        const notification = getNotification();
+        console.log('notification', notification);
+        if (
+          notification &&
+          notification.payload.messageId !== message.payload.messageId
+        ) {
+          setNotification(message);
+          DeviceEventEmitter.emit("createNotification", {
+            id:
+              message.payload.messageId || AppStrings?.str_pair_device_success,
+            iconName: "notification",
+            title: message.payload.Title,
+            subtitle: message.payload.Description,
+          });
+        } else if (!notification) {
+          setNotification(message);
+          DeviceEventEmitter.emit("createNotification", {
+            id:
+              message.payload.messageId || AppStrings?.str_pair_device_success,
+            iconName: "notification",
+            title: message.payload.Title,
+            subtitle: message.payload.Description,
+          });
+        }
       }
     },
     [GLOBALS.deviceInfo.deviceId]
