@@ -1,6 +1,6 @@
 //@ts-nocheck
 import React, { useState, useEffect, useContext } from "react";
-import { View } from "react-native";
+import { DeviceEventEmitter, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import MFText from "../../components/MFText";
 import { MFThemeObject } from "../../@types/MFTheme";
@@ -118,6 +118,11 @@ const ShortCodeScreen: React.FunctionComponent<ShortCodeScreenProps> = (
       GLOBALS.deviceInfo &&
       storeResults?.data?.data
     ) {
+      DeviceEventEmitter.emit("createNotification",  {
+        id: AppStrings?.str_pair_device_success,
+        iconName: "info",
+        subtitle: AppStrings?.str_pair_device_success,
+    })
       processBootStrap(data?.data, "10ft").then(() => {
         setGlobalData(data?.data).then(async () => {
           setNativeModuleData().then(async () => {

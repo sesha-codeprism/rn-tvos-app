@@ -48,6 +48,7 @@ const AppImages: { [key: string]: Source | any } = {
   Delete_ic: require(`${imagesDirectory}/Delete_ic.png`),
   More_info_ic: require(`${imagesDirectory}/More_info_ic.png`),
   Save_ic: require(`${imagesDirectory}/Save_ic.png`),
+  defalut_channel_logo: require(`${imagesDirectory}/casting_overposter.png`)
 };
 
 export { AppImages };

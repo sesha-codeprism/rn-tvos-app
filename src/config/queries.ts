@@ -26,6 +26,7 @@ export const getHubs = async () => {
         `udl://discovery/hubs?rightIds=${GLOBALS.store?.rightsGroupIds}&storeId=${DefaultStore.Id}&pivots=${pivots}&lang=${GLOBALS.store?.onScreenLanguage?.languageCode || lang}`
     );
     const response: HubsResponse = data;
+    console.log("Hub", response)
     return response;
 };
 
@@ -91,7 +92,8 @@ export const getAllFeedDataForFeed = (feed: FeedItem, nowNextMap: any, currentSl
             } : {
                 queryKey: ['feed', element.Uri],
                 queryFn: () => getUDLData(element.Uri),
-                staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime
+                staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime,
+                enabled: !!nowNextMap
             }
         }),
     )
@@ -127,3 +129,4 @@ export const invalidateQueryBasedOnSpecificKeys = (firstKey: string, secondKey: 
         .catch((e: any) => console.log("Cannot find Query call", firstKey, secondKey, "due to", e));
 
 }
+

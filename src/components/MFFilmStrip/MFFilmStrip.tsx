@@ -101,6 +101,7 @@ export interface MFFilmStripProps {
   filmStripId?: string;
   getNoItemReturenedRef?: null | (() => any) | undefined;
   onLongPress?: any;
+  extraData: boolean;
 }
 /**
  * Component that renders horizontal-scrolling collection of items
@@ -271,6 +272,7 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                 index,
               })}
               key={`${props.filmStripId}-flatlist`}
+              extraData={props.extraData}
               renderItem={({ item, index }) => {
                 if (item.viewAll) {
                   return (

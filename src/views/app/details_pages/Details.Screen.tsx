@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Alert,
   BackHandler,
+  DeviceEventEmitter,
   Dimensions,
   Image,
   ImageBackground,
@@ -49,6 +50,7 @@ import {
   itemTypeString,
   languageKey,
   pbr,
+  PinType,
   sourceTypeString,
 } from "../../../utils/analytics/consts";
 import {
@@ -98,7 +100,6 @@ import { GlobalContext } from "../../../contexts/globalContext";
 import { DuplexManager } from "../../../modules/duplex/DuplexManager";
 import NotificationType from "../../../@types/NotificationType";
 import { ConflictResolutionContext } from "../../../contexts/conflictResolutionContext";
-import MFEventEmitter from "../../../utils/MFEventEmitter";
 import {
   cancelRecordingFromConflictPopup,
   forceResolveConflict,
@@ -107,6 +108,12 @@ import {
   findConflictedGroupBySeriesOrProgramId,
   getScheduledItems,
 } from "../../../utils/ConflictUtils";
+import {
+  isAdultContentBlock,
+  isPconBlocked,
+  isPurchaseLocked,
+} from "../../../utils/pconControls";
+import { getAllSubscriptionGroups } from "../../../customHooks/useAllSubscriptionGroups";
 
 interface AssetData {
   id: string;
@@ -247,151 +254,103 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     drawerRef?.current?.open();
   };
   const openNewRecording = () => {
-    //TODO: We have a check for PCON. Need to implement
-    const contentType = assetData.assetType?.contentType;
-    let { ChannelInfo: { channel: currentChannel = undefined } = {} } =
-      feed || {};
-    if (
-      contentType === ContentType.PROGRAM ||
-      contentType === ContentType.GENERIC
-    ) {
-      let schedule = playActionsData.Schedules?.[0];
-
-      // Get the correct schedule, the one which is shown in UI
+    const data: any = feed;
+    let details = discoveryProgramData;
+    console.log('isPconBlocked(details) in recording:',isPconBlocked(details))
+    const openPannel = () => {
+      //TODO: We have a check for PCON. Need to implement
+      const contentType = assetData.assetType?.contentType;
+      let { ChannelInfo: { channel: currentChannel = undefined } = {} } =
+        feed || {};
       if (
-        currentChannel &&
-        playActionsData.Schedules &&
-        playActionsData.Schedules.length
+        contentType === ContentType.PROGRAM ||
+        contentType === ContentType.GENERIC
       ) {
-        schedule = playActionsData.Schedules.find(
-          (s: any) =>
-            s?.ChannelNumber === currentChannel?.Number ||
-            s?.ChannelNumber == currentChannel?.number
-        );
-      }
-      if (schedule) {
-        if (feed) {
-          const {
-            //@ts-ignore
-            Schedule: {
-              channelId: StationIdFromEPGSchedule = "",
-              contentType: ContentTypeFromEPGSchedule = "",
-            } = {},
-            //@ts-ignore
-            currentCatchupSchedule,
-            //@ts-ignore
-            currentCatchupSchedule: { ShowType = undefined } = {},
-            //@ts-ignore
-            ChannelInfo,
-            //@ts-ignore
-            currentSchedule,
-            //@ts-ignore
-            ShowType: ShowTypeSingleProgram = undefined,
-            //@ts-ignore
-            channel: { id: StationIdFromEPGChannel = "" } = {},
-          } = feed;
+        let schedule = playActionsData.Schedules?.[0];
 
-          if (
-            StationIdFromEPGSchedule &&
-            ContentTypeFromEPGSchedule === ItemShowType.Movie
-          ) {
-            const actualSelectedChannel =
-              GLOBALS.channelMap?.findChannelByStationId(
-                StationIdFromEPGSchedule
-              );
-            if (actualSelectedChannel) {
-              // assign the selected schedule
-              const selectedSchedule = playActionsData.Schedules?.find(
-                (s: any) =>
-                  s?.ChannelNumber === actualSelectedChannel?.channel?.Number
-              );
-              if (selectedSchedule) {
-                // overwrite
-                schedule = selectedSchedule;
+        // Get the correct schedule, the one which is shown in UI
+        if (
+          currentChannel &&
+          playActionsData.Schedules &&
+          playActionsData.Schedules.length
+        ) {
+          schedule = playActionsData.Schedules.find(
+            (s: any) =>
+              s?.ChannelNumber === currentChannel?.Number ||
+              s?.ChannelNumber == currentChannel?.number
+          );
+        }
+        if (schedule) {
+          if (feed) {
+            const {
+              //@ts-ignore
+              Schedule: {
+                channelId: StationIdFromEPGSchedule = "",
+                contentType: ContentTypeFromEPGSchedule = "",
+              } = {},
+              //@ts-ignore
+              currentCatchupSchedule,
+              //@ts-ignore
+              currentCatchupSchedule: { ShowType = undefined } = {},
+              //@ts-ignore
+              ChannelInfo,
+              //@ts-ignore
+              currentSchedule,
+              //@ts-ignore
+              ShowType: ShowTypeSingleProgram = undefined,
+              //@ts-ignore
+              channel: { id: StationIdFromEPGChannel = "" } = {},
+            } = feed;
+
+            if (
+              StationIdFromEPGSchedule &&
+              ContentTypeFromEPGSchedule === ItemShowType.Movie
+            ) {
+              const actualSelectedChannel =
+                GLOBALS.channelMap?.findChannelByStationId(
+                  StationIdFromEPGSchedule
+                );
+              if (actualSelectedChannel) {
+                // assign the selected schedule
+                const selectedSchedule = playActionsData.Schedules?.find(
+                  (s: any) =>
+                    s?.ChannelNumber === actualSelectedChannel?.channel?.Number
+                );
+                if (selectedSchedule) {
+                  // overwrite
+                  schedule = selectedSchedule;
+                }
               }
             }
-          }
 
-          if (StationIdFromEPGChannel) {
-            let actualSelectedChannel =
-              GLOBALS.channelMap?.findChannelByStationId(
-                StationIdFromEPGChannel
-              );
-            if (actualSelectedChannel) {
-              // assign the selected schedule
-              const selectedSchedule = playActionsData.Schedules?.find(
-                (s: any) =>
-                  s?.ChannelNumber === actualSelectedChannel?.channel?.Number
-              );
-              if (selectedSchedule) {
-                // overwrite
-                schedule = selectedSchedule;
+            if (StationIdFromEPGChannel) {
+              let actualSelectedChannel =
+                GLOBALS.channelMap?.findChannelByStationId(
+                  StationIdFromEPGChannel
+                );
+              if (actualSelectedChannel) {
+                // assign the selected schedule
+                const selectedSchedule = playActionsData.Schedules?.find(
+                  (s: any) =>
+                    s?.ChannelNumber === actualSelectedChannel?.channel?.Number
+                );
+                if (selectedSchedule) {
+                  // overwrite
+                  schedule = selectedSchedule;
+                }
               }
             }
-          }
 
-          if (ChannelInfo || currentSchedule) {
-            const stationId =
-              ChannelInfo?.channel?.StationId ||
-              currentSchedule?.StationId ||
-              schedule.StationId;
+            if (ChannelInfo || currentSchedule) {
+              const stationId =
+                ChannelInfo?.channel?.StationId ||
+                currentSchedule?.StationId ||
+                schedule.StationId;
 
-            const channel = playActionsData.Schedules?.find(
-              (x: any) => x.StationId === stationId
-            );
-            const { StationId, ChannelNumber, StartUtc } = channel;
-            GLOBALS.recordingData = {
-              Definition: DefinationOfItem.SINGLE_PROGRAM,
-              Parameters: [
-                {
-                  Key: "ProgramId",
-                  Value: schedule?.ProgramId,
-                },
-              ],
-              Settings: {
-                StationId: StationId,
-                ChannelNumber: ChannelNumber as number,
-                StartUtc: StartUtc,
-                EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
-                RecyclingDisabled: false,
-                ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
-                IsMultiChannel: false,
-              },
-            };
-            // this.props.setRecordingData();
-          } else if (
-            ShowType === ItemShowType.Movie ||
-            ShowTypeSingleProgram === ItemShowType.Movie
-          ) {
-            const { StationId, ChannelNumber, CatchupStartUtc, StartUtc } =
-              StationIdFromEPGSchedule
-                ? schedule || currentCatchupSchedule
-                : currentCatchupSchedule || schedule;
-            if (ChannelNumber) {
-              GLOBALS.recordingData = {
-                Definition: DefinationOfItem.SINGLE_PROGRAM,
-                Parameters: [
-                  {
-                    Key: "ProgramId",
-                    Value: schedule?.ProgramId,
-                  },
-                ],
-                Settings: {
-                  StationId: StationId,
-                  ChannelNumber: ChannelNumber as number,
-                  StartUtc: CatchupStartUtc || StartUtc,
-                  EndLateSeconds:
-                    GLOBALS.store!.settings.dvr?.stopRecording || 0,
-                  RecyclingDisabled: false,
-                  ChannelMapId:
-                    GLOBALS.userAccountInfo.ChannelMapId?.toString(),
-                  IsMultiChannel: false,
-                },
-              };
-            }
-          } else if (schedule) {
-            const { StationId, ChannelNumber, StartUtc } = schedule;
-            if (ChannelNumber) {
+              const channel = playActionsData.Schedules?.find(
+                (x: any) => x.StationId === stationId
+              );
+              const { StationId, ChannelNumber, StartUtc } = channel;
               GLOBALS.recordingData = {
                 Definition: DefinationOfItem.SINGLE_PROGRAM,
                 Parameters: [
@@ -413,155 +372,221 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                 },
               };
               // this.props.setRecordingData();
+            } else if (
+              ShowType === ItemShowType.Movie ||
+              ShowTypeSingleProgram === ItemShowType.Movie
+            ) {
+              const { StationId, ChannelNumber, CatchupStartUtc, StartUtc } =
+                StationIdFromEPGSchedule
+                  ? schedule || currentCatchupSchedule
+                  : currentCatchupSchedule || schedule;
+              if (ChannelNumber) {
+                GLOBALS.recordingData = {
+                  Definition: DefinationOfItem.SINGLE_PROGRAM,
+                  Parameters: [
+                    {
+                      Key: "ProgramId",
+                      Value: schedule?.ProgramId,
+                    },
+                  ],
+                  Settings: {
+                    StationId: StationId,
+                    ChannelNumber: ChannelNumber as number,
+                    StartUtc: CatchupStartUtc || StartUtc,
+                    EndLateSeconds:
+                      GLOBALS.store!.settings.dvr?.stopRecording || 0,
+                    RecyclingDisabled: false,
+                    ChannelMapId:
+                      GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+                    IsMultiChannel: false,
+                  },
+                };
+              }
+            } else if (schedule) {
+              const { StationId, ChannelNumber, StartUtc } = schedule;
+              if (ChannelNumber) {
+                GLOBALS.recordingData = {
+                  Definition: DefinationOfItem.SINGLE_PROGRAM,
+                  Parameters: [
+                    {
+                      Key: "ProgramId",
+                      Value: schedule?.ProgramId,
+                    },
+                  ],
+                  Settings: {
+                    StationId: StationId,
+                    ChannelNumber: ChannelNumber as number,
+                    StartUtc: StartUtc,
+                    EndLateSeconds:
+                      GLOBALS.store!.settings.dvr?.stopRecording || 0,
+                    RecyclingDisabled: false,
+                    ChannelMapId:
+                      GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+                    IsMultiChannel: false,
+                  },
+                };
+                // this.props.setRecordingData();
+              }
             }
           }
-        }
-        let params = undefined;
-        if (contentType === ContentType.GENERIC || schedule?.IsGeneric) {
-          params = {
-            isNew: true,
-            isSeries: false,
-            title: udpDataAsset.title,
-            schedules: discoverySchedulesData,
-            programId: schedule?.ProgramId,
-            isGeneric: true,
-            isPopupModal: true,
-          };
-          setRoute(DetailRoutes.EpisodeRecordOptions);
-          setScreenProps(params);
-          drawerRef.current?.open();
-        } else {
-          params = {
-            isNew: true,
-            programId: schedule?.ProgramId,
-            seriesId: schedule?.SeriesId,
-            title: schedule?.Name || udpDataAsset.title || "",
-            isPopupModal: true,
-          };
-          setRoute(DetailRoutes.RecordingOptions);
-          setScreenProps(params);
-          drawerRef.current?.open();
-        }
-      }
-    } else {
-      let schedule = discoverySchedulesData[0];
-
-      // Get the correct schedule, the one which is shown in UI
-      const { Schedule: { channelId: StationIdFromEPGSchedule = "" } = {} } =
-        feed || {};
-      let ChannelNumber: any;
-      if (StationIdFromEPGSchedule) {
-        const actualSelectedChannel =
-          GLOBALS.channelMap.Channels?.findChannelByStationId(
-            StationIdFromEPGSchedule
-          );
-
-        ({ channel: { Number: ChannelNumber = undefined } = {} } =
-          actualSelectedChannel || {});
-      }
-
-      if (
-        (ChannelNumber || currentChannel) &&
-        discoverySchedulesData &&
-        discoverySchedulesData.length
-      ) {
-        schedule = discoverySchedulesData.find(
-          (scheduleEntry: any) =>
-            scheduleEntry?.ChannelNumber ===
-            (ChannelNumber || currentChannel?.Number || currentChannel?.number)
-        );
-      }
-      if (feed?.isFromEPG && StationIdFromEPGSchedule) {
-        const currentSchedule = discoverySchedulesData.find(
-          (scheduleEntry: any) => {
-            return (
-              scheduleEntry?.ProgramId === feed?.Schedule?.ProgramId &&
-              scheduleEntry?.StationId === StationIdFromEPGSchedule &&
-              scheduleEntry?.StartUtc === feed?.Schedule.StartUtc
-            );
+          let params = undefined;
+          if (contentType === ContentType.GENERIC || schedule?.IsGeneric) {
+            params = {
+              isNew: true,
+              isSeries: false,
+              title: udpDataAsset.title,
+              schedules: discoverySchedulesData,
+              programId: schedule?.ProgramId,
+              isGeneric: true,
+              isPopupModal: true,
+            };
+            setRoute(DetailRoutes.EpisodeRecordOptions);
+            setScreenProps(params);
+            drawerRef.current?.open();
+          } else {
+            params = {
+              isNew: true,
+              programId: schedule?.ProgramId,
+              seriesId: schedule?.SeriesId,
+              title: schedule?.Name || udpDataAsset.title || "",
+              isPopupModal: true,
+            };
+            setRoute(DetailRoutes.RecordingOptions);
+            setScreenProps(params);
+            drawerRef.current?.open();
           }
-        );
-        if (currentSchedule) {
-          schedule = currentSchedule;
-        }
-      }
-
-      if (!schedule && feed?.Schedule) {
-        schedule = feed?.Schedule;
-      }
-      if (
-        udpDataAsset.ctaButtons.some(
-          (cta: any) =>
-            cta.buttonText === AppStrings?.str_details_program_record_button
-        )
-      ) {
-        if (schedule) {
-          GLOBALS.recordingData = {
-            Definition: DefinationOfItem.SINGLE_PROGRAM,
-            Parameters: [
-              {
-                Key: "ProgramId",
-                Value: schedule?.ProgramId,
-              },
-            ],
-            Settings: {
-              StationId: schedule?.StationId,
-              ChannelNumber: schedule?.ChannelNumber,
-              StartUtc: schedule?.StartUtc,
-              MaximumViewableShows: undefined,
-              EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
-              RecyclingDisabled: false,
-              ShowType: "FirstRunOnly",
-              AirtimeDomain: "Anytime",
-              ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
-              IsMultiChannel: false,
-            },
-          };
-          setRoute(DetailRoutes.EpisodeRecordOptions);
-          setScreenProps({
-            programId: schedule?.ProgramId,
-            seriesId: schedule?.SeriesId,
-            title: schedule?.Name || udpDataAsset.title || "",
-            isNew: true,
-            schedules: discoverySchedulesData,
-            isPopupModal: true,
-          });
-          drawerRef.current?.open();
         }
       } else {
-        if (schedule) {
-          GLOBALS.recordingData = {
-            Definition: DefinationOfItem.SERIES,
-            Parameters: [
-              {
-                Key: "TVSeriesId",
-                Value: schedule?.SeriesId,
+        let schedule = discoverySchedulesData[0];
+
+        // Get the correct schedule, the one which is shown in UI
+        const { Schedule: { channelId: StationIdFromEPGSchedule = "" } = {} } =
+          feed || {};
+        let ChannelNumber: any;
+        if (StationIdFromEPGSchedule) {
+          const actualSelectedChannel =
+            GLOBALS.channelMap.Channels?.findChannelByStationId(
+              StationIdFromEPGSchedule
+            );
+
+          ({ channel: { Number: ChannelNumber = undefined } = {} } =
+            actualSelectedChannel || {});
+        }
+
+        if (
+          (ChannelNumber || currentChannel) &&
+          discoverySchedulesData &&
+          discoverySchedulesData.length
+        ) {
+          schedule = discoverySchedulesData.find(
+            (scheduleEntry: any) =>
+              scheduleEntry?.ChannelNumber ===
+              (ChannelNumber ||
+                currentChannel?.Number ||
+                currentChannel?.number)
+          );
+        }
+        if (feed?.isFromEPG && StationIdFromEPGSchedule) {
+          const currentSchedule = discoverySchedulesData.find(
+            (scheduleEntry: any) => {
+              return (
+                scheduleEntry?.ProgramId === feed?.Schedule?.ProgramId &&
+                scheduleEntry?.StationId === StationIdFromEPGSchedule &&
+                scheduleEntry?.StartUtc === feed?.Schedule.StartUtc
+              );
+            }
+          );
+          if (currentSchedule) {
+            schedule = currentSchedule;
+          }
+        }
+
+        if (!schedule && feed?.Schedule) {
+          schedule = feed?.Schedule;
+        }
+        if (
+          udpDataAsset.ctaButtons.some(
+            (cta: any) =>
+              cta.buttonText === AppStrings?.str_details_program_record_button
+          )
+        ) {
+          if (schedule) {
+            GLOBALS.recordingData = {
+              Definition: DefinationOfItem.SINGLE_PROGRAM,
+              Parameters: [
+                {
+                  Key: "ProgramId",
+                  Value: schedule?.ProgramId,
+                },
+              ],
+              Settings: {
+                StationId: schedule?.StationId,
+                ChannelNumber: schedule?.ChannelNumber,
+                StartUtc: schedule?.StartUtc,
+                MaximumViewableShows: undefined,
+                EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
+                RecyclingDisabled: false,
+                ShowType: "FirstRunOnly",
+                AirtimeDomain: "Anytime",
+                ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+                IsMultiChannel: false,
               },
-            ],
-            Settings: {
-              StationId: schedule?.StationId,
-              ChannelNumber: schedule?.ChannelNumber,
-              StartUtc: schedule?.StartUtc,
-              MaximumViewableShows: undefined,
-              EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
-              RecyclingDisabled: false,
-              ShowType: DvrGroupShowType.Any,
-              AirtimeDomain: "Anytime",
-              ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
-              IsMultiChannel: false,
-            },
-          };
-          setRoute(DetailRoutes.RecordingOptions);
-          setScreenProps({
-            title: udpDataAsset.title,
-            isNew: true,
-            schedules: discoverySchedulesData,
-            isSeries: true,
-            isPopupModal: true,
-          });
-          drawerRef.current?.open();
+            };
+            setRoute(DetailRoutes.EpisodeRecordOptions);
+            setScreenProps({
+              programId: schedule?.ProgramId,
+              seriesId: schedule?.SeriesId,
+              title: schedule?.Name || udpDataAsset.title || "",
+              isNew: true,
+              schedules: discoverySchedulesData,
+              isPopupModal: true,
+            });
+            drawerRef.current?.open();
+          }
+        } else {
+          if (schedule) {
+            GLOBALS.recordingData = {
+              Definition: DefinationOfItem.SERIES,
+              Parameters: [
+                {
+                  Key: "TVSeriesId",
+                  Value: schedule?.SeriesId,
+                },
+              ],
+              Settings: {
+                StationId: schedule?.StationId,
+                ChannelNumber: schedule?.ChannelNumber,
+                StartUtc: schedule?.StartUtc,
+                MaximumViewableShows: undefined,
+                EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
+                RecyclingDisabled: false,
+                ShowType: DvrGroupShowType.Any,
+                AirtimeDomain: "Anytime",
+                ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId?.toString(),
+                IsMultiChannel: false,
+              },
+            };
+            setRoute(DetailRoutes.RecordingOptions);
+            setScreenProps({
+              title: udpDataAsset.title,
+              isNew: true,
+              schedules: discoverySchedulesData,
+              isSeries: true,
+              isPopupModal: true,
+            });
+            drawerRef.current?.open();
+          }
         }
       }
+    };
+    if (isPconBlocked(details)) {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
+        pinType: PinType.content,
+        data: data,
+        onSuccess: openPannel,
+      });
+    } else {
+      openPannel();
     }
   };
 
@@ -586,13 +611,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         definition === Definition.SINGLE_PROGRAM ||
         definition === Definition.SINGLE_TIME
       ) {
-        MFEventEmitter.emit("openPopup", {
+        DeviceEventEmitter.emit("openPopup", {
           buttons: [
             {
               title: AppStrings?.str_dvr_resolve_conflict_auto,
               onPress: async () => {
                 await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
             {
@@ -600,7 +625,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               onPress: () => {
                 conflictContext.ProgramId = id;
                 conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {
+                DeviceEventEmitter.emit("openConflictResolution", {
                   passedInPops: true,
                   drawerPercentage: 0.35,
                   navigation: props.navigation,
@@ -616,20 +641,20 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   false,
                   false
                 );
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
           ],
           description: AppStrings?.str_dvr_conflict_popup_warning_program,
         });
       } else {
-        MFEventEmitter.emit("openPopup", {
+        DeviceEventEmitter.emit("openPopup", {
           buttons: [
             {
               title: AppStrings?.str_dvr_series_conflict_modal_record_all,
               onPress: async () => {
                 await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
             {
@@ -640,7 +665,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   true,
                   true
                 );
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
             {
@@ -648,7 +673,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               onPress: () => {
                 conflictContext.ProgramId = id;
                 conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {
+                DeviceEventEmitter.emit("openConflictResolution", {
                   passedInPops: true,
                   drawerPercentage: 0.35,
                   navigation: props.navigation,
@@ -664,7 +689,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   true,
                   false
                 );
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
           ],
@@ -672,12 +697,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         });
       }
     } else {
-      MFEventEmitter.emit("openPopup", {
+      DeviceEventEmitter.emit("openPopup", {
         buttons: [
           {
             title: "OK",
             onPress: async () => {
-              MFEventEmitter.emit("closePopup", undefined);
+              DeviceEventEmitter.emit("closePopup", undefined);
             },
           },
         ],
@@ -806,9 +831,33 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     }
   };
 
-  const handlePlayDvr = () => {};
+  const handlePlayDvr = () => {
+    console.log("handlePlayDvr", props);
+    const data: any = feed;
+    let details = discoveryProgramData;
+    const IsAdult = details.IsAdult;
+    if (IsAdult && isAdultContentBlock()) {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
+        pinType: PinType.adult,
+        data: data,
+        onSuccess: () => {
+          // To be implemented Play action
+        },
+      });
+    } else if (isPconBlocked(details)) {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
+        pinType: PinType.content,
+        data: data,
+        onSuccess: () => {
+          // To be implemented Play action
+        },
+      });
+    } else {
+      // To be implemented Play action
+    }
+    // route.params.feed.SeriesDetails
+  };
   const ctaButtonPress = {
-    [AppStrings?.str_details_cta_subscribe]: () => {},
     [AppStrings?.str_details_cta_play]: () => {
       const playAction = getRestrictionsForVod(
         udpDataAsset.usablePlayActions,
@@ -904,17 +953,28 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       navigateToPlayer();
     },
     [AppStrings?.str_details_cta_restart]: () => {
-      const catchupSchedule = udpDataAsset.currentCatchupSchedule?.Schedule;
-      getBookmark(
-        `${catchupSchedule?.StationId.trim()}_${catchupSchedule?.StartUtc.trim()}_${catchupSchedule?.EndUtc.trim()}`,
-        udlBookMark.CATCHUP
-      )
-        .then((bookmark) => {
-          handleRestart(bookmark);
-        })
-        .catch(() => {
-          handleRestart();
+      const restart = () => {
+        const catchupSchedule = udpDataAsset.currentCatchupSchedule?.Schedule;
+        getBookmark(
+          `${catchupSchedule?.StationId.trim()}_${catchupSchedule?.StartUtc.trim()}_${catchupSchedule?.EndUtc.trim()}`,
+          udlBookMark.CATCHUP
+        )
+          .then((bookmark) => {
+            handleRestart(bookmark);
+          })
+          .catch(() => {
+            handleRestart();
+          });
+      };
+      if (isPconBlocked(discoveryProgramData)) {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.content,
+          data: data,
+          onSuccess: restart,
         });
+      } else {
+        restart();
+      }
     },
     [AppStrings?.str_details_cta_more_info]: toggleSidePanel,
     [AppStrings?.str_details_cta_more_episodes]: () => {
@@ -944,6 +1004,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       });
     },
     [AppStrings?.str_details_cta_waystowatch]: () => {
+      // TODO: check for the pcon when watch live is implemented
       featureNotImplementedAlert();
       // const { Schedule } = feed;
 
@@ -992,21 +1053,113 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     [AppStrings?.str_app_edit]: openEditRecordingsPanel,
     [AppStrings?.str_details_cta_playdvr]: handlePlayDvr,
     [AppStrings?.str_details_cta_rent]: () => {
-      //TODO: Finish implementation of CTA rent
-      featureNotImplementedAlert();
+      if(isPurchaseLocked()){
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            DeviceEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_rent,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      } else  {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_rent,
+          },
+          drawerPercentage:0.37
+        });
+      }
     },
     [AppStrings?.str_details_cta_buy]: () => {
-      //TODO: Finish implementation of CTA buy
-      featureNotImplementedAlert();
+      if(isPurchaseLocked()){
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            DeviceEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_buy,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      }else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_buy,
+          },
+          drawerPercentage:0.37
+        });
+      }
     },
     [AppStrings?.str_details_cta_rentbuy]: () => {
-      //TODO: Finish implementation of CTA rent-buy
-      featureNotImplementedAlert();
+      if(isPurchaseLocked()){
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            DeviceEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_rentbuy,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      } else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_rentbuy,
+          },
+          drawerPercentage:0.37
+        });
+      }
     },
     [AppStrings?.str_details_cta_package]: () => {
       udpDataAsset["purchasePackage"] = true;
-      //TODO: Finish implementation of Package details
-      featureNotImplementedAlert();
+      if(isPurchaseLocked()){
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            DeviceEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_package,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      } else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_package,
+          },
+          drawerPercentage:0.37
+        });
+      }
     },
     [AppStrings?.str_details_cta_subscribe]: () => {
       const networks = udpDataAsset.subscriptionPackages.filter(
@@ -1015,32 +1168,65 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         }
       );
       if (networks && networks.length > 0) {
-        //TODO: Finish implementation for PurchaseNetwork feature
-        // props.openPanel(true, SideMenuRoutes.PurchaseNetwork, {
-        //     udpAssetData: udpDataAsset,
-        //     panelTitle: AppStrings?.str_details_cta_subscribe,
-        //     panelSubtitle: udpDataAsset?.title,
-        //     confirmPlayCallBack: ctaButtonPress[
-        //         AppStrings?.str_details_cta_play
-        //     ],
-        // });
+        if(isPurchaseLocked()){
+          DeviceEventEmitter.emit("openPinVerificationPopup", {
+            pinType: PinType.purchase,
+            data: {
+              udpData: udpDataAsset
+            },
+            onSuccess: () => {
+              DeviceEventEmitter.emit("openPurchase", {
+                params:{
+                  udpAssetData: udpDataAsset,
+                  panelTitle: AppStrings?.str_details_cta_subscribe,
+                  "isPurchaseNetwork": true
+                },
+                drawerPercentage:0.37,
+              });
+            },
+          });
+        } else {
+          DeviceEventEmitter.emit("openPurchase", {
+            params:{
+              udpAssetData: udpDataAsset,
+              panelTitle: AppStrings?.str_details_cta_subscribe,
+              "isPurchaseNetwork": true
+            },
+            drawerPercentage:0.37,
+          });
+        }
       } else {
         udpDataAsset["subscriptionExists"] = true;
-        //TODO: Finish implementation of PurchaseOptions
-        // props.openPanel(true, SideMenuRoutes.PurchaseOptions, {
-        //     udpAssetData: udpDataAsset,
-        //     panelTitle: AppStrings?.str_details_cta_subscribe,
-        //     confirmPlayCallBack: ctaButtonPress[
-        //         AppStrings?.str_details_cta_play
-        //     ],
-        // });
+        if(isPurchaseLocked()){
+          DeviceEventEmitter.emit("openPinVerificationPopup", {
+            pinType: PinType.purchase,
+            data: {
+              udpData: udpDataAsset
+            },
+            onSuccess: () => {
+              DeviceEventEmitter.emit("openPurchase", {
+                params:{
+                  udpAssetData: udpDataAsset,
+                  panelTitle: AppStrings?.str_details_cta_subscribe,
+                },
+                drawerPercentage:0.37
+              });
+            },
+          });
+        }else{
+          DeviceEventEmitter.emit("openPurchase", {
+            params:{
+              udpAssetData: udpDataAsset,
+              panelTitle: AppStrings?.str_details_cta_subscribe,
+            },
+            drawerPercentage:0.37
+          });
+        }
       }
     },
   };
 
-  const onGetScrollView = (scrolViewRef: ScrollView | null): void => {
-    scrollViewRef = scrolViewRef;
-  };
+
   const updateAssetData = () => {
     //@ts-ignore
     const assetType = feed?.assetType!;
@@ -1068,7 +1254,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
   const onDuplexMessage = (message: any) => {
     if (message) {
-      console.log("Details onMessage", message);
+      console.log(`Details ${assetData?.id} onMessage`, message);
       switch (message.type) {
         case NotificationType.pin:
         case NotificationType.unpin:
@@ -1076,6 +1262,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           console.log("status", status);
           setIsItemPinned(status);
           break;
+        case NotificationType.Purchase:
+        case NotificationType.Subscription:
+            invalidatPlayOption();
+            invalidateSubscriberData();
+            invalidateQueryBasedOnSpecificKeys("feed", "udl://subscriber/library/Library");
       }
     }
   };
@@ -1111,9 +1302,10 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   // ]);
 
   useEffect(() => {
-    currentContext.addDuplexMessageHandler(onDuplexMessage);
+    const boundDuplexConnector = onDuplexMessage.bind(this);
+    currentContext.addDuplexMessageHandler(boundDuplexConnector);
     () => {
-      currentContext.removeDuplexHandler(onDuplexMessage);
+      currentContext.removeDuplexHandler(boundDuplexConnector);
     };
   }, []);
 
@@ -1152,7 +1344,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       channelIndex: index,
     };
   };
-
+  // TODO: show notifications for fav and unfav
   const handleFavoritePress = async () => {
     const seriesId = udpDataAsset?.SeriesId;
     let assetId;
@@ -1422,7 +1614,22 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
   const navigateToPlayer = (bookmark?: any) => {
     //TODO: Finish implementation of navigate to player..
-    featureNotImplementedAlert();
+    const data: any = feed;
+    const play = () => {
+      featureNotImplementedAlert();
+    };
+    console.log("navigateToPlayer", props);
+    let details = discoveryProgramData;
+    if (isPconBlocked(details)) {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
+        pinType: PinType.content,
+        data: data,
+        onSuccess: play,
+      });
+    } else {
+      // To be implemented Play action
+      play();
+    }
   };
 
   const handleRestart = (bookmark?: any) => {
@@ -1487,7 +1694,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     const id =
       isSeries(assetData) || feed?.isFromEPG
         ? feed?.Schedule?.ProgramId || feed?.ProgramId || feed?.Id
-        : feed?.Id;
+        : feed?.Id || feed?.ProgramId;
     const params = `?catchup=true&storeId=${DefaultStore.Id}&groups=${
       GLOBALS.store!.rightsGroupIds
     }&id=${id}`;
@@ -1585,7 +1792,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.userAccountInfo,
           GLOBALS.recorders,
           playActionsData,
-          undefined,
+          GLOBALS.networkIHD,
           startDateFromEPG,
           endDateFromEPG,
           GLOBALS.channelRights,
@@ -1607,7 +1814,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           GLOBALS.viewableSubscriptions,
           GLOBALS.scheduledSubscriptions,
           GLOBALS.recorders,
-          undefined,
+          GLOBALS.networkIHD,
           undefined,
           undefined,
           startDateFromEPG,
@@ -1618,8 +1825,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           isFeatureAssigned("IOSCarrierBilling")
         );
     console.log("UDP data", udpData);
-    setUDPDataAsset(udpData);
-    setCTALoaded(true);
+    const stringifiedUdpData = JSON.stringify(udpData);
+    const stringifiedUdpDataAsset = JSON.stringify(udpDataAsset);
+    if(stringifiedUdpData !== stringifiedUdpDataAsset){
+      setUDPDataAsset(udpData);
+      setCTALoaded(true);
+    }
     return udpData;
   };
 
@@ -1641,7 +1852,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   useEffect(() => {
-    if (similarItemsData && !isFetchingSimilarItems) {
+    if (similarItemsData && !isFetchingSimilarItems && similarData !== similarItemsData) {
       setSimilarData(similarItemsData);
     }
   }, [similarItemsData, isFetchingSimilarItems]);
@@ -1659,7 +1870,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   useEffect(() => {
-    if (discoveryProgramQueryData && !isFetchingDiscoveryProgramQueryData) {
+    if (discoveryProgramQueryData && !isFetchingDiscoveryProgramQueryData && discoveryProgramData !== discoveryProgramQueryData) {
       setdiscoveryProgramData(discoveryProgramQueryData);
     }
   }, [discoveryProgramQueryData, isFetchingDiscoveryProgramQueryData]);
@@ -1675,59 +1886,52 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   const closeModal = () => {
-    setCTALoaded(false);
     setOpen(false);
   };
 
   useEffect(() => {
-    if (discoverySchedulesQueryData && !isFetchingDiscoverySchedulesQueryData) {
+    if (discoverySchedulesQueryData && !isFetchingDiscoverySchedulesQueryData && discoverySchedulesData !== discoverySchedulesQueryData) {
       setdiscoverySchedulesData(discoverySchedulesQueryData);
     }
   }, [discoverySchedulesQueryData, isFetchingDiscoverySchedulesQueryData]);
+
   const playActionsQuery = useQuery(
     ["get-playActions", assetData?.id],
     () => getPlayActions(assetData),
-    { ...defaultQueryOptions }
+    { 
+      cacheTime: 60000,
+      staleTime: 60000,
+    }
   );
 
+  const invalidatPlayOption = () => {
+    invalidateQueryBasedOnSpecificKeys("get-playActions", assetData?.id);
+  }
+
+  const invalidateSubscriberData = () =>{
+    invalidateQueryBasedOnSpecificKeys("get-subscriber-data", assetData?.id);
+  }
+
+
   useEffect(() => {
-    if (playActionsQuery.data && !playActionsQuery.isFetching) {
+    if (playActionsQuery.data && !playActionsQuery.isFetching && !playActionsQuery.isStale && playActionsQuery.isFetched && playActionsData !== playActionsQuery.data) {
       setplayActionsData(playActionsQuery.data);
     }
-  }, [playActionsQuery.data, playActionsQuery.isFetching]);
+  }, [playActionsQuery.data, playActionsQuery.isFetching, playActionsQuery.isStale, playActionsQuery.isFetched]);
 
   const subscriberDataQuery = useQuery(
     ["get-subscriber-data", assetData?.id],
     () => getProgramSubscriberData(assetData),
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
+ 
 
-  const { data, isLoading, refetch } = useQuery(
-    ["get-UDP-data", assetData?.id],
-    () => getUDPData(),
-    {
-      refetchOnMount: "always",
-      enabled:
-        !!similarData &&
-        !!discoveryProgramData &&
-        !!discoverySchedulesData &&
-        !!playActionsData &&
-        !!subscriberData,
-    }
-  );
+  const subscrptionGroups = useQuery(['dvr', 'get-all-subscriptionGroups'], getAllSubscriptionGroups, { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors });
+
 
   useEffect(() => {
-    appQueryCache.subscribe((event) => {
-      console.log(event);
-      if (event?.type === "queryUpdated") {
-        if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
-          setTimeout(() => {
-            refetch();
-          }, 1000);
-        }
-      }
-    });
-  }, []);
+    getUDPData();
+  }, [similarData, discoveryProgramData, discoverySchedulesData, playActionsData, subscriberData, subscrptionGroups])
 
   useEffect(() => {
     if (ctaButtonRef) {

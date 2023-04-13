@@ -5,6 +5,10 @@ import { GLOBALS } from "../../src/utils/globals";
 import { lang } from "../../src/config/constants";
 import { DefaultStore } from "../../src/utils/DiscoveryUtils";
 import { gethubRestartTvShowcards } from "../live/live";
+import { massageDiscoveryFeed, massageSubscriptionPackagePivots } from "../../src/utils/assetUtils";
+import { SourceType } from "../../src/utils/common";
+import { FeedContents } from "../../src/components/MFSwimLane";
+
 
 /** Note: Discovery calls don't require AUTH token */
 
@@ -353,15 +357,47 @@ const getDiscoveryLibrariesPivotCategories = async (
   id: string,
   params: any
 ) => {
+  const feed = GLOBALS.selectedFeed;
+  const { $skip, $top, $lang, $groups, storeId, $stations, $countPerStation, pivots, pivotGroup } = params;
   const url = `${GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery}/v3/libraries/complete/pivot-items`;
   const response = await GET({
     url: url,
-    params: params,
+    params: {
+      pivotGroup: pivotGroup,
+      pivots: pivots + ($lang?.short || lang.short),
+      $itemsPerRow: $countPerStation,
+      $skip: $skip || 0,
+      $top: $top || 30,
+      $lang: $lang || lang,
+      $groups: $groups || GLOBALS.store?.rightsGroupIds,
+      storeId: storeId || DefaultStore.Id
+
+    },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
   });
-  return response;
+  const type: SourceType = SourceType.VOD;
+  let feedContents: any[] = [];
+  for (let category of response?.data) {
+      const categoryItem = {
+          FeedType: feed.FeedType,
+          Id: category.Id,
+          Name: category.Name,
+          HasMore: (category?.HasMore && category.HasMore) || false,
+          NavigationTargetUri: feed?.NavigationTargetUri || "",
+          NavigationTargetVisibility: feed?.NavigationTargetVisibility,
+          Uri: feed.Uri,
+          pivotGroup: feed.pivotGroup,
+      };
+      feedContents.push(
+          new FeedContents(
+              categoryItem,
+              massageDiscoveryFeed(category, type)
+          )
+      );
+  }  
+  return feedContents;
 };
 
 const getDiscoverLibraryItemPivots = async (id: string, params: any) => {
@@ -492,7 +528,56 @@ export const getPackageTitles = async (id: string, params: any) => {
   });
   return response;
 }
-export const getSubscriptionPackageItems = async (id: string, params: any) => {
+export const getSubscriptionPackageCategories = async (id: string, params: any) => {  
+  const Id = GLOBALS.selectedFeed.Id;
+  const { accessToken } = GLOBALS.store!;
+  const { $skip, $top, $lang, $groups, storeId } = params;
+  const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + `/v3/subscription-packages/${Id}/categories`
+  const response = await GET({
+    url: uri,
+    params: {
+      $skip: $skip || 0,
+      $top: $top || 30,
+      $lang: $lang || lang,
+      $groups: $groups || GLOBALS.store?.rightsGroupIds,
+      storeId: storeId || DefaultStore.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  });
+  const pivots = massageSubscriptionPackagePivots(response.data);
+  return ({ data: pivots});
+}
+
+export const getSubscriptionPackageItems = async (id: string, params: any) => {  
+  let uri: string;
+  const { Id, categoryId } = GLOBALS.selectedFeed;
+  const { accessToken } = GLOBALS.store!;
+  const { $skip, $top, $lang, $groups, storeId } = params;
+  if(Id && categoryId ){
+    uri = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + `/v3/subscription-packages/${Id}/categories/${categoryId}/items`
+  }else{    
+    uri = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + `/v3/subscription-packages/${Id}/items`;
+  }
+  const type: SourceType = SourceType.PACKAGE;
+  const response = await GET({
+    url: uri,
+    params: {
+      $skip: $skip || 0,
+      $top: $top || 100,
+      $lang: $lang || lang,
+      $groups: $groups || GLOBALS.store?.rightsGroupIds,
+      storeId: storeId || DefaultStore.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+    },
+  }); 
+  return response;
+}
+
+export const getPackageItems = async (id: string, params: any) => {
   const { accessToken } = GLOBALS.store!;
   const { $skip, $top, $lang, $groups, storeId, packageId, categoryId } = params;
   const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + packageId && categoryId ? `/v3/subscription-packages/${packageId}/categories/${categoryId}/items` : `/v3/packages/${packageId}/titles`;
@@ -565,6 +650,14 @@ export const registerDiscoveryUdls = () => {
     {
       prefix: BASE + "libraryprograms/collections/packages",
       getDiscoveryLibraryPackages,
+    },   
+    {
+      prefix: BASE + "/subscriptionPackage/items",
+      getter: getSubscriptionPackageItems,
+    },
+    {
+      prefix: BASE + "/subscriptionPackage/items/pivots=true",
+      getter: getSubscriptionPackageCategories,
     },
     {
       prefix: BASE + '/programs/',
@@ -579,7 +672,7 @@ export const registerDiscoveryUdls = () => {
     { prefix: BASE + '/libraryprograms/collections/packages/', getter: getDiscoveryCollectionItems },
     { prefix: BASE + '/getpackageDetails/', getter: getPackageDetails },
     { prefix: BASE + "/getPackageTitles/", getter: getPackageTitles },
-    { prefix: BASE + '/getSubscriptionPackageItems/', getter: getSubscriptionPackageItems },
+    { prefix: BASE + '/getPackageItems/', getter: getPackageItems },
     { prefix: BASE + '/feeds', getter: getDiscoveryFeeds }
   ];
   return discoveryUdls;

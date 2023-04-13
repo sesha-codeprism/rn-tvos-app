@@ -14,6 +14,7 @@ import { AppStrings } from "../../../../config/strings";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { GLOBALS } from "../../../../utils/globals";
 import { updateStore } from "../../../../utils/helpers";
+import { format } from "../../../../utils/assetUtils";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
   providers: string;
@@ -113,8 +114,13 @@ const RatingScreen: React.FunctionComponent<Props> = (props: any) => {
     >
       <View style={styles.contentTitleContainer}>
         <Text style={styles.contentTitle}>
-          Please select the Movie Ratings which you like to lock. All ratings
-          above your selected rating will also be locked.
+          {format(
+            AppStrings.str_settings_ratings_description,
+            props.route.params.title
+          )}
+
+          {/* Please select the Movie Ratings which you like to lock. All ratings
+          above your selected rating will also be locked. */}
         </Text>
       </View>
       <FlatList

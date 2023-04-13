@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   BackHandler,
   TVMenuControl,
+  DeviceEventEmitter,
 } from "react-native";
-import { appUIDefinition, debounceTime } from "../../config/constants";
+import { appUIDefinition, debounceTime, lang } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS } from "../../utils/globals";
 import { HomeScreenStyles } from "./Homescreen.styles";
@@ -28,10 +29,15 @@ import MFSwim from "../../components/MFSwim";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useAccount from "../../customHooks/useAccount";
-import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import { ItemType } from "../../utils/common";
 import { globalStyles } from "../../config/styles/GlobalStyles";
+import MFButton, { MFButtonVariant } from "../../components/MFButton/MFButton";
+import { getNetworkIHD } from "../../../backend/networkIHD/networkIHD";
+import { MFGlobalsConfig } from "../../../backend/configs/globals";
+import { isAdultContentBlock, isPconBlocked } from "../../utils/pconControls";
+import { PinType } from "../../utils/analytics/consts";
+import { Layout } from "../../utils/analytics/consts";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -44,11 +50,16 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   const [hubs, setHubs] = useState<Array<FeedItem>>([]);
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
   const [open, setOpen] = useState(false);
-  // const [showExitPopup, setShowExitPopup] = useState(false);
   const firstSwimlaneRef = useRef<TouchableOpacity>(null);
   const setttingsRef = useRef(null);
   const drawerRef: React.MutableRefObject<any> = useRef();
   const accountInfo = useAccount();
+  const params = ({
+    connectionUrl = undefined,
+    inHomeApiEndpoint = undefined,
+    useSubscriberInHome = false,
+  } = MFGlobalsConfig?.config?.inhomeDetection || {});
+  //getNetworkIHD(params);
   const currentContext = useContext(GlobalContext);
 
   let feedTimeOut: any = null;
@@ -58,6 +69,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
 
   const { data, isLoading } = getAllHubs();
   props.navigation.addListener("focus", () => {
+    // setHubsData();
     console.log("focused");
   });
 
@@ -74,22 +86,16 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       }
     }, debounceTime);
   };
-  // console.log(AppStrings);
 
   const setHubsData = async () => {
     if (data && !hubs.length) {
       const hubsResponse: Array<FeedItem> = data.data;
       const replace_hub: Array<FeedItem> = hubsResponse.filter(
-        (e) => e.Name === "{profile_name}" || e.IsProfileHub
+        (e) =>
+          e.Name === "{profile_name}" || e.Name === "You" || e.IsProfileHub!
       );
-      console.log(
-        "setHubsData data.data",
-        data.data,
-        replace_hub,
-        replace_hub.length
-      );
-      if (replace_hub.length >= 0) {
-        // replace_hub.length === 0 ? (replace_hub[0] = data.data[0]) : null;
+      if (replace_hub.length) {
+        replace_hub.length === 0 ? (replace_hub[0] = data.data[0]) : null;
         if (GLOBALS.store!.userProfile) {
           /** If the value of @param GLOBALS.store!.userProfile * is not  null or  undefined */
           if (GLOBALS.store!.userProfile.Name?.toLowerCase() === "default") {
@@ -197,6 +203,20 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
   };
 
   useEffect(() => {
+    // setTimeout(() => {
+    //   MFEventEmitter.emit("createNotification",  {
+    //     id: "NO_NETWORK",
+    //     iconName: "favorite_selected",
+    //     subtitle: AppStrings?.str_home_network_down,
+    // })
+    // }, 4000);
+    // setTimeout(() => {
+    //   MFEventEmitter.emit("createNotification",  {
+    //     id: "NO_NETWORK",
+    //     iconName: "favorite_selected",
+    //     subtitle: `${AppStrings?.str_home_network_down} New`,
+    // })
+    // }, 8000);
     if (!open) {
       console.log("Drawer status (Hopefully false):", "setting TVMenuKey");
       TVMenuControl.enableTVMenuKey();
@@ -237,12 +257,108 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
 
-  console.log("firstSwimlaneRef ", firstSwimlaneRef);
-  // console.log(
-  //   GLOBALS.nowNextMap.now
-  //     .map((e: any) => e.ProgramId !== undefined)
-  //     .filter((val: any) => val !== false).length
-  // );
+  const onPressSwim = (event,feed?:any) => {
+    console.log("onPressSwim",event);
+    //@ts-ignore
+    if (event.Schedule) {
+      const IsAdult = event.Schedule.IsAdult;
+      if (IsAdult && isAdultContentBlock()) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          // title: "test 1",
+          // subtitle: "sub title test 1",
+          // bodyTitle: "bodyTitle1",
+          // bodySubitle: "bodySubitle",
+          pinType: PinType.adult,
+          data: event,
+          onSuccess: () => {
+            //@ts-ignore
+            event["isFromEPG"] = true;
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else if (isPconBlocked(event.Schedule)) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          // title: "test 1",
+          // subtitle: "sub title test 1",
+          // bodyTitle: "bodyTitle1",
+          // bodySubitle: "bodySubitle",
+          pinType: PinType.content,
+          data: event,
+          onSuccess: () => {
+            //@ts-ignore
+            event["isFromEPG"] = true;
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else {
+        //@ts-ignore
+        event["isFromEPG"] = true;
+        props.navigation.navigate(Routes.Details, {
+          feed: event,
+        });
+      }
+    } else if (event.ItemType === ItemType.PACKAGE) {
+      props.navigation.navigate(Routes.PackageDetails, {
+        feed: event,
+      });
+    } else if (event.ItemType === ItemType.SVODPACKAGE) {
+      const isSvodData = { ...feed, ...event };
+      const payload: any = {
+        feed: isSvodData,
+        title: isSvodData.Name,
+        navigationTargetUri: isSvodData.NavigationTargetUri,
+      };
+      let route;
+      if (isSvodData?.Layout === Layout.Category) {
+        route = "BrowseCategory";
+      } else {
+        route = "BrowseGallery";
+      }
+      if (route) {       
+        props.navigation.navigate(Routes[`${route}`], payload);
+      }
+    } else {
+      // if data is available directly
+      const IsAdult = event.IsAdult;
+      if (IsAdult && isAdultContentBlock()) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          // title: "test 1",
+          // subtitle: "sub title test 1",
+          // bodyTitle: "bodyTitle1",
+          // bodySubitle: "bodySubitle",
+          pinType: PinType.adult,
+          data: event,
+          onSuccess: () => {
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else if (isPconBlocked(event.Ratings)) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          // title: "test 1",
+          // subtitle: "sub title test 1",
+          // bodyTitle: "bodyTitle1",
+          // bodySubitle: "bodySubitle",
+          pinType: PinType.content,
+          data: event,
+          onSuccess: () => {
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else {
+        props.navigation.navigate(Routes.Details, {
+          feed: event,
+        });
+      }
+    }
+  };
   return (
     <View style={HomeScreenStyles.container}>
       <ImageBackground
@@ -258,7 +374,9 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
           }}
         >
           {!isLoading && (
-            <SafeAreaView style={{ flex: 1, paddingTop: -30 }}>
+            <SafeAreaView
+              style={{ flex: 1, paddingTop: -30, paddingBottom: -60 }}
+            >
               <MFMenu
                 navigation={props.navigation}
                 enableRTL={GLOBALS.enableRTL}
@@ -274,7 +392,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                 }}
                 setCardFocus={setCardFocus}
                 onPressSettings={() => {
-                  MFEventEmitter.emit("openSettings", {
+                  DeviceEventEmitter.emit("openSettings", {
                     onClose: () =>
                       setttingsRef.current &&
                       setttingsRef?.current?.setNativeProps({
@@ -282,19 +400,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                       }),
                     drawerPercentage: 0.35,
                   });
-                  if (currentFeed) {
-                    // service?.addNavEventOnCurPageOpenOrClose(
-                    //   {
-                    //     navigation: {
-                    //       params: {
-                    //         feed: currentFeed,
-                    //       },
-                    //     },
-                    //   },
-                    //   Routes.Settings,
-                    //   navigationAction.pageOpen
-                    // );
-                  }
                 }}
                 setSetttingsRef={setSetttingsRef}
               />
@@ -313,6 +418,37 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                   )}
                 </View>
               )}
+              {/* <MFButton
+                variant={MFButtonVariant.Contained}
+                iconSource={0}
+                style={{ width: 274, height: 62, margin: 20 }}
+                focusedStyle={{ width: 274, height: 62 }}
+                textStyle={{
+                  color: "white",
+                  fontSize: 25,
+                  textAlign: "center",
+                }}
+                onPress={() => {
+                  props.navigation.navigate(Routes.PlayerTest, {
+                    params: {
+                      debugModeInSimulator: true,
+                    },
+                  });
+                }}
+                textLabel="Test Playback"
+                imageSource={0}
+                avatarSource={0}
+                containedButtonProps={{
+                  containedButtonStyle: {
+                    unFocusedTextColor: "grey",
+                    enabled: true,
+                    elevation: 5,
+                    focusedBackgroundColor: "#053C69",
+                    unFocusedBackgroundColor: "#424242",
+                    hoverColor: appUIDefinition.theme.backgroundColors.shade2,
+                  },
+                }}
+              /> */}
               <View style={HomeScreenStyles.contentContainer}>
                 {!isLoading && (
                   <MFSwim
@@ -320,24 +456,8 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                     ref={firstSwimlaneRef}
                     feeds={feeds}
                     onFocus={onFeedFocus}
-                    onPress={(event) => {
-                      console.log(event);
-                      //@ts-ignore
-                      if (event.Schedule) {
-                        //@ts-ignore
-                        event["isFromEPG"] = true;
-                        props.navigation.navigate(Routes.Details, {
-                          feed: event,
-                        });
-                      } else if (event.ItemType === ItemType.PACKAGE) {
-                        props.navigation.navigate(Routes.PackageDetails, {
-                          feed: event,
-                        });
-                      } else {
-                        props.navigation.navigate(Routes.Details, {
-                          feed: event,
-                        });
-                      }
+                    onPress={(event, feed) => {
+                      onPressSwim(event, feed);
                     }}
                     onListEmptyElementFocus={clearCurrentHub}
                     onListFooterElementFocus={clearCurrentHub}

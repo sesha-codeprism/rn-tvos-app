@@ -43,7 +43,7 @@ const getProgramPlayActions = async (itemID: string, params: any) => {
       params: params,
       headers: {
         Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-        'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+        'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
       },
     });
     return response;
@@ -70,7 +70,7 @@ const getSimilarPrograms = async (itemId: string, params: any) => {
     params: params,
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -95,7 +95,7 @@ const getYouMightLike = async (params: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -133,7 +133,7 @@ const getBookmarks = async (uri: string, params: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -156,7 +156,7 @@ export const getSubscriberPins = async (params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -179,7 +179,7 @@ const getReminders = async (params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -201,7 +201,7 @@ const getSubscriberSubscriptions = async (params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -224,7 +224,7 @@ const getYouMightLikeByTaste = async (params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -246,7 +246,7 @@ const getYouMightLikeBySpecificTaste = async (params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -268,7 +268,7 @@ const getLibrary = async (params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -290,7 +290,7 @@ const getLiveTrendingPrograms = async () => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -304,7 +304,7 @@ export const getAllSubscriberProfiles = async () => {
     url: url,
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -330,7 +330,7 @@ export const createUserProfile = async (
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -355,7 +355,7 @@ export const updateUserProfile = async (data: {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -368,7 +368,7 @@ export const deleteUserProfile = async (id: string) => {
     url: url,
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
 
@@ -442,7 +442,7 @@ export const getProgramSubscriberData = async (item: string, params: any) => {
       params: params,
       headers: {
         Authorization: `OAUTH2 access_token="${accessToken}"`,
-        'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+        'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
       },
     });
     return response;
@@ -471,7 +471,7 @@ export const getSeriesSubscriberData = async (item: string, params: any) => {
       },
       headers: {
         Authorization: `OAUTH2 access_token="${accessToken}"`,
-        'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+        'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
       },
     });
     return response;
@@ -479,7 +479,25 @@ export const getSeriesSubscriberData = async (item: string, params: any) => {
     console.error("Cannot getProgramSubscriberData due to ", e);
     return undefined;
   }
+}
 
+export const getAllPinnedItems = async (Id: string, ItemType: PinnedItemType, requestFlag?: boolean) => {
+  const { accessToken } = GLOBALS.store!;
+  //@ts-ignore
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + "/v4/pinned-items/?types=FavoriteChannel&$skip=0&$top=90&storeId=HubsAndFeeds-Main";
+  const response = await GET({
+    url: url,
+    params: {
+      storeId: DefaultStore.Id,
+      Id: Id,
+      // ItemType: ItemType
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
+    },
+  });
+  return response;
 }
 
 export const pinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?: boolean) => {
@@ -495,6 +513,24 @@ export const pinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?
     },
     headers: {
       Authorization: `OAUTH2 access_token="${accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
+    },
+  });
+  return response;
+}
+
+export const purchaseItem = async (offerId: string, offerPrice: number) => {
+  const { accessToken } = GLOBALS.store!;
+  //@ts-ignore
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v2/purchases?deviceType=${MFGlobalsConfig.deviceType}&storeId=${DefaultStore.Id}`;
+  const response = await POST({
+    url: url,
+    params: {
+      offerId,
+      offerPrice,
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
       'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
     },
   });
@@ -504,12 +540,12 @@ export const pinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?
 export const unpinItem = async (Id: string, ItemType: PinnedItemType, requestFlag?: boolean) => {
   const { accessToken } = GLOBALS.store!;
   //@ts-ignore
-  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v2/pinned-items/${ItemType}/${Id}?`;
+  const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v2/pinned-items/${ItemType}/${Id}?storeId=${DefaultStore.Id}`;
   const response = await DELETE({
     url: url,
     headers: {
       Authorization: `OAUTH2 access_token="${accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -541,7 +577,7 @@ export const getSeasonPlayOptions = async (iD: string, params: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -567,7 +603,7 @@ export const getSeriesPlayOptions = async (id: string, params: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response;
@@ -596,7 +632,7 @@ export const getPackageActions = async (id: string, params: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response
@@ -612,7 +648,7 @@ export const getAllRecordingBookmarks = async (id?: string, params?: any) => {
     },
     headers: {
       Authorization: `OAUTH2 access_token="${accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   return response.data
@@ -620,11 +656,12 @@ export const getAllRecordingBookmarks = async (id?: string, params?: any) => {
 
 export const getDynamicFeeds = async (id?: string, params?: any) => {
   const { accessToken } = GLOBALS.store!;
-  const { $skip, $top } = params;
+  const { $skip, $top, Id } = params;
   let url, paramsObject;
+  const libraryId = Id || id;
   if (id === "MixedRecommendations") {
     url =
-      GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber + `${id.toLowerCase()}`
+      GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber + `${libraryId.toLowerCase()}`
     paramsObject = {
       ...params,
       $skip: $skip || 0,
@@ -632,7 +669,7 @@ export const getDynamicFeeds = async (id?: string, params?: any) => {
       $lang: lang
     }
   } else {
-    url = GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber + `v4/libraries/${id}`;
+    url = GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber + `v4/libraries/${libraryId}`;
     let typesParam = params.types ? params.types.join(",") : "Title";
     if (params.libraryId === "Library" && storeId) {
       if (typesParam.includes("Title") && !typesParam.includes('PayPerView')) {
@@ -654,7 +691,7 @@ export const getDynamicFeeds = async (id?: string, params?: any) => {
     params: paramsObject,
     headers: {
       Authorization: `OAUTH2 access_token="${accessToken}"`,
-      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
   const types =
@@ -710,7 +747,10 @@ export const getDynamicFeeds = async (id?: string, params?: any) => {
       )
     );
   }
-
+  if(Id){ 
+    return {data : feedContents[0].items};
+  }
+  
   return feedContents;
 }
 
@@ -753,11 +793,16 @@ export const registerSubscriberUdls = (params?: any) => {
       prefix: BASE + "/getSeriesSubscriberData/",
       getter: getSeriesSubscriberData
     },
+    {
+      prefix: BASE + "/getAllPinnedItems/",
+      getter: getAllPinnedItems
+    },
     { prefix: BASE + "/getSeasonPlayOptions/", getter: getSeasonPlayOptions },
     { prefix: BASE + "/getSeriesPlayOptions", getter: getSeriesPlayOptions },
     { prefix: BASE + "/account/", getter: getUserAccount },
     { prefix: BASE + "/getPackageActions/", getter: getPackageActions },
-    { prefix: BASE + "/libraries/dynamicFeeds", getter: getDynamicFeeds }
+    { prefix: BASE + "/libraries/dynamicFeeds", getter: getDynamicFeeds },
+    { prefix: BASE + "/library", getter: getDynamicFeeds }
   ];
   return subscriberUdls;
 };

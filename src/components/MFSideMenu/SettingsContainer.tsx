@@ -1,10 +1,10 @@
-import React, { forwardRef, Ref, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Dimensions,
   StyleSheet,
   Modal,
-  ActivityIndicator,
   Settings as SettingsRN,
+  DeviceEventEmitter,
 } from "react-native";
 import { SettingsNavigator } from "../../config/navigation/RouterOutlet";
 import { GLOBALS } from "../../utils/globals";
@@ -14,7 +14,6 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import MFEventEmitter from "../../utils/MFEventEmitter";
 import { Empty } from "../../views/MFDrawersContainer";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -24,7 +23,9 @@ interface SettingsContainerProps {
   navigation?: any;
 }
 const SettingsContainer = (props: SettingsContainerProps) => {
-  const offset = useSharedValue(GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage) ;
+  const offset = useSharedValue(
+    GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage
+  );
   const [isReady, setIsReady] = React.useState(false);
   const [initialState, setInitialState] = React.useState();
 
@@ -58,7 +59,9 @@ const SettingsContainer = (props: SettingsContainerProps) => {
 
   const openDrawer = () => {
     offset.value = withTiming(
-      GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
+      GLOBALS.enableRTL
+        ? 0
+        : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
       {
         duration: 10,
         easing: Easing.out(Easing.ease),
@@ -71,7 +74,7 @@ const SettingsContainer = (props: SettingsContainerProps) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    MFEventEmitter.emit("closeSettings", null);
+    DeviceEventEmitter.emit("closeSettings", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {

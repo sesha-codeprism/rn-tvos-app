@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeModules } from 'react-native';
+import { DeviceEventEmitter, NativeModules } from 'react-native';
 import { useQuery } from 'react-query';
 import { DefaultStore } from '../utils/DiscoveryUtils';
 import { GLOBALS } from '../utils/globals';
@@ -25,6 +25,7 @@ export const getLiveData = async (channelRightsInfo: any) => {
                         GLOBALS.nowNextMap = nowNextSchedules;
                         const finalLiveData = { slots: parsedSlots, channelMap: memoizedChannelMap, nowNextSchedules: nowNextSchedules }
                         console.log("Finally done..", finalLiveData)
+                        DeviceEventEmitter.emit("UpdateFeeds", finalLiveData)
                         resolve(finalLiveData);
                     })
                 }

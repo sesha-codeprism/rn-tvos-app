@@ -9,5 +9,6 @@
     "sample_refresh_code": "EPQTPJ",
     "refresh_code": "Refresh Code",
     "str_dvr_conflict_panel_header": "Recording Conflict",
+    "str_player_subtitle_panel_header": "Primary and secondary preferences can be change under Settings > Audio / Display."
   }
 }

@@ -107,6 +107,7 @@ interface GLOBALSType {
   channelRights: any;
   /** User account info  */
   userAccountInfo: UserAccountInfo;
+  networkIHD: any;
   rawSubscriptionGroupsResponse: any;
   allSubscriptionGroups: any;
   viewableSubscriptions: any;
@@ -154,6 +155,7 @@ interface GLOBALSType {
         stopRecording: string | null
       };
     };
+    playerSessionSettings: any
   } | null;
   [key: string]: any;
 }
@@ -196,6 +198,7 @@ export const GLOBALS: GLOBALSType = {
   moviesAndTvShows: [],
   store: null,
   storeID: undefined,
+  playerSessionSettings: null
 };
 
 export const resetAuthData = () => {
@@ -231,7 +234,7 @@ export const deleteUserSettings = () => {
           languageCode: "en-US",
           enableRTL: false
         },
-        closedCaption: "",
+        closedCaption: "Off",
       },
       audio: {
         audioLanguages: {
@@ -245,6 +248,6 @@ export const deleteUserSettings = () => {
         stopRecording: ''
       },
     },
-
+    playerSessionSettings: null
   }
 }

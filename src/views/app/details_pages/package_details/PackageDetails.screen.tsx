@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
+  DeviceEventEmitter,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { PageContainerWithBackgroundImage } from "../../../../components/PageContainer";
 import { AppImages } from "../../../../assets/images";
 import { getUIdef, scaleAttributes } from "../../../../utils/uidefinition";
@@ -34,6 +35,7 @@ import { updateVariant } from "../../../../utils/live/LiveUtils";
 import {
   assetTypeObject,
   fontIconsObject,
+  PinType,
 } from "../../../../utils/analytics/consts";
 import { isFeatureAssigned } from "../../../../utils/helpers";
 import MFButton, {
@@ -47,7 +49,12 @@ import { SCREEN_WIDTH } from "../../../../utils/dimensions";
 import { DetailsSidePanel } from "../DetailSidePanel";
 import { open } from "fs";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
+import NotificationType from "../../../../@types/NotificationType";
+import { invalidateQueryBasedOnSpecificKeys } from "../../../../config/queries";
+import { GlobalContext } from "../../../../contexts/globalContext";
+import { isPurchaseLocked } from "../../../../utils/pconControls";
 const { width, height } = Dimensions.get("window");
+
 
 interface PackageDetailsProps {
   navigation: NativeStackNavigationProp<any>;
@@ -75,6 +82,7 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState(DetailRoutes.MoreInfo);
   const [screenProps, setScreenProps] = useState<any>();
+  const currentContext = useContext(GlobalContext);
 
   /** Variables and consts used throughout the screen */
   const moreInfoIcon = getFontIcon("info");
@@ -116,9 +124,9 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
     return data.data;
   };
 
-  const getSubscriptionPackageItems = async () => {
+  const getPackageItems = async () => {
     const udlParam =
-      `udl://${UDLType.Discovery}/getSubscriptionPackageItems/` +
+      `udl://${UDLType.Discovery}/getPackageItems/` +
       `?$skip=${$skip}&$top=${$top}&$lang=${lang}$groups=${GLOBALS.store?.rightsGroupIds}&storeId=${DefaultStore.Id}&packageId=${feed?.Id}`;
     const data = await getDataFromUDL(udlParam);
     return data.data;
@@ -152,6 +160,29 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
     () => getPackageActions(),
     { ...defaultQueryOptions, enabled: !!feed }
   );
+
+
+  const invalidatePackageAction = () => {
+    invalidateQueryBasedOnSpecificKeys("getPackageActions", feed?.Id);
+  }
+
+  const onDuplexMessage = (message: any) => {
+    if (message) {
+      switch (message.type) {
+        case NotificationType.Purchase:
+        case NotificationType.Subscription:
+          invalidatePackageAction();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const boundDuplexConnector = onDuplexMessage.bind(this);
+    currentContext.addDuplexMessageHandler(boundDuplexConnector);
+    () => {
+      currentContext.removeDuplexHandler(boundDuplexConnector);
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -190,8 +221,8 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
   }, [packageTitlesQuery.data, packageTitlesQuery.isFetching]);
 
   const subscriptionPackageItemsQuery = useQuery(
-    ["getSubscriptionPackageItems", feed?.id],
-    () => getSubscriptionPackageItems(),
+    ["getPackageItems", feed?.id],
+    () => getPackageItems(),
     {
       ...defaultQueryOptions,
       //@ts-ignore
@@ -264,7 +295,17 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
   };
 
   const handleRentButtonPress = (panelTitle: string) => {
-    featureNotImplementedAlert();
+    DeviceEventEmitter.emit("openPurchase", {
+      params:{
+          udpAssetData: {
+              ...packageData,
+              purchasePackage: true,
+              purchasePackageActions: packageActions,
+        },
+        panelTitle: panelTitle,
+      },
+      drawerPercentage:0.37
+    });
 
     // if (packageActions?.PurchaseActions != undefined) {
     //   this.props.openPanel(true, SideMenuRoutes.PurchaseOptions, {
@@ -398,6 +439,31 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
             iconPlacement: "Left",
             shouldRenderImage: true,
           }}
+          onPress={() =>  {
+            if(isPurchaseLocked()){
+              DeviceEventEmitter.emit("openPinVerificationPopup", {
+                pinType: PinType.purchase,
+                data: {
+                  udpData: {
+                    ...packageData,
+                    purchaseActions: packageActions?.PurchaseActions
+                  }
+                },
+                onSuccess: () => {
+                  DeviceEventEmitter.emit("openPurchase", {
+                    params:{
+                      udpAssetData: {
+                        ...packageData,
+                        purchaseActions: packageActions?.PurchaseActions
+                      },
+                      panelTitle: AppStrings?.str_details_cta_rentbuy,
+                    },
+                    drawerPercentage:0.37
+                  });
+                },
+              });
+            }
+          }}
         />
       );
     } else if (isRent) {
@@ -444,6 +510,31 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
             iconPlacement: "Left",
             shouldRenderImage: true,
           }}
+          onPress={() =>  {
+            if(isPurchaseLocked()){
+              DeviceEventEmitter.emit("openPinVerificationPopup", {
+                pinType: PinType.purchase,
+                data: {
+                  udpData: {
+                    ...packageData,
+                    purchaseActions: packageActions?.PurchaseActions
+                  }
+                },
+                onSuccess: () => {
+                  DeviceEventEmitter.emit("openPurchase", {
+                    params:{
+                      udpAssetData: {
+                        ...packageData,
+                        purchaseActions: packageActions?.PurchaseActions
+                      },
+                      panelTitle: AppStrings?.str_details_cta_rent,
+                    },
+                    drawerPercentage:0.37
+                  });
+                },
+              });
+            }
+          }}
         />
       );
     } else if (isBuy) {
@@ -489,6 +580,31 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
           fontIconProps={{
             iconPlacement: "Left",
             shouldRenderImage: true,
+          }}
+          onPress={() =>  {
+            if(isPurchaseLocked()){
+              DeviceEventEmitter.emit("openPinVerificationPopup", {
+                pinType: PinType.purchase,
+                data: {
+                  udpData: {
+                    ...packageData,
+                    purchaseActions: packageActions?.PurchaseActions
+                  }
+                },
+                onSuccess: () => {
+                  DeviceEventEmitter.emit("openPurchase", {
+                    params:{
+                      udpAssetData: {
+                        ...packageData,
+                        purchaseActions: packageActions?.PurchaseActions
+                      },
+                      panelTitle: AppStrings?.str_details_cta_buy,
+                    },
+                    drawerPercentage:0.37
+                  });
+                },
+              });
+            }
           }}
         />
       );
@@ -648,42 +764,42 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
       type="FullPage"
       imageUrl={backgroundImage}
     >
-      <View style={packageDetailsStyle.detailContainer}>
-        {renderShowcard()}
+      <View  style={packageDetailsStyle.containerOpacity}>   
+        <View style={packageDetailsStyle.detailContainer}>
+          {renderShowcard()}
 
-        <View style={packageDetailsStyle.metadataViewStyle}>
-          {/* Metada */}
-          {renderAssetInfo()}
+          <View style={packageDetailsStyle.metadataViewStyle}>
+            {/* Metada */}
+            {renderAssetInfo()}
+          </View>
         </View>
-      </View>
-      {packageData && (
-        <TouchableOpacity
-          accessible={true}
-          activeOpacity={0.3}
-          onFocus={onFocusBar}
-          style={
-            packageTitles && packageTitles.length
-              ? {
-                  backgroundColor: "transparent",
-                  height: 20,
-                  width: SCREEN_WIDTH,
-                  marginTop: 50,
-                  zIndex: 100,
-                }
-              : {
-                  backgroundColor: "transparent",
-                  height: 20,
-                  width: SCREEN_WIDTH,
-                  marginTop: 50,
-                  zIndex: 100,
-                  // marginBottom: 60,
-                }
-          }
-        />
-      )}
-      <View style={packageDetailsStyle.moreDetailsContainer}>
-        {/* Package Itemss */}
-        {renderPackageItems()}
+        {packageData && (
+          <TouchableOpacity
+            accessible={true}
+            activeOpacity={0.3}
+            onFocus={onFocusBar}
+            style={
+              packageTitles && packageTitles.length
+                ? {
+                    backgroundColor: "transparent",
+                    width: SCREEN_WIDTH,
+                    zIndex: 100,
+                  }
+                : {
+                    backgroundColor: "transparent",
+                    height: 20,
+                    width: SCREEN_WIDTH,
+                    marginTop: 50,
+                    zIndex: 100,
+                    // marginBottom: 60,
+                  }
+            }
+          />
+        )}
+        <View style={packageDetailsStyle.moreDetailsContainer}>
+          {/* Package Itemss */}
+          {renderPackageItems()}
+        </View>
       </View>
       <DetailsSidePanel
         ref={drawerRef}
@@ -780,6 +896,18 @@ const packageDetailsStyle: any = StyleSheet.create(
         alignItems: "center",
         marginTop: 28,
       },
+      focusedBackground:{
+        backgroundColor: "#053C69",
+        borderRadius: 6,
+        shadowColor: "#0000006b",
+        shadowOffset: {
+          width: 6,
+          height: 8
+        },
+        shadowOpacity: 0.42,
+        shadowRadius: 4.65,
+        elevation: 8
+      }
     })
 );
 

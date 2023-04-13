@@ -5942,12 +5942,7 @@ export const getBrowseFeedObject = (feed: any, browsePageConfig: any): any => {
     const navigationTargetUri = feed.NavigationTargetUri?.split("?")[0];
     if (!navigationTargetUri && feed.ItemType === ItemShowType.SvodPackage) {
         browseFeedObject = browsePageConfig[ItemShowType.browseSvodPackage];
-    } else if (
-        navigationTargetUri &&
-        feed.ItemType === ItemShowType.SvodPackage
-    ) {
-        browseFeedObject = browsePageConfig[navigationTargetUri];
-    } else if (navigationTargetUri === browseType.browsepromotions) {
+    }  else if (navigationTargetUri === browseType.browsepromotions) {
         if (feedBaseURI.discovery.test(feed.Uri)) {
             if (feed.ItemType === ItemShowType.SvodPackage) {
                 browseFeedObject =

@@ -5,6 +5,7 @@ import { AppImages } from "../../../../assets/images";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStrings } from "../../../../config/strings";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
+import { format } from "../../../../utils/assetUtils";
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -51,8 +52,9 @@ const TvRatingScreen: React.FunctionComponent<Props> = (props: any) => {
     >
       <View style={styles.contentTitleContainer}>
         <Text style={styles.contentTitle}>
-          Please select the TV Ratings which you like to lock. All ratings above
-          your selected rating will also be locked.
+          {format(AppStrings.str_settings_ratings_description,"TV Ratings") }
+          {/* Please select the TV Ratings which you like to lock. All ratings above
+          your selected rating will also be locked. */}
         </Text>
       </View>
       {ratingList.map((item: any, index: any) => {

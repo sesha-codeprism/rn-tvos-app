@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList, View } from "react-native";
+import { DeviceEventEmitter, FlatList, View } from "react-native";
 import { FeedItem } from "../@types/HubsResponse";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { layout2x3 } from "../config/constants";
@@ -14,7 +14,7 @@ import { getUIdef } from "../utils/uidefinition";
 interface MFSwimProps {
   feeds: FeedItem | undefined;
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
-  onPress?: null | ((event: SubscriberFeed) => void) | undefined;
+  onPress?: null | ((event: SubscriberFeed, feed?: any) => void) | undefined;
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
   limitSwimlaneItemsTo?: number;
   onListEmptyElementFocus?:
@@ -59,21 +59,18 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
       setHubName(props.feeds?.Name || "");
     });
 
-    appQueryCache.subscribe((event) => {
-      if (event?.type === "queryUpdated") {
-        if (
-          event.query.queryHash.includes("get-live-data") &&
-          event.query.state.data
-        ) {
-          console.log("Need to reset updates", event?.query);
-          if (!mount) {
-            setMount(true);
-          }
-        }
-      }
-    });
 
-    //["#FFBDBA", "#FF9C6D", "#FFBDBA"]
+    const updateUI = (params?: any) => {
+      console.log("received params,", params!);
+      setMount(!mount);
+    };
+
+    useEffect(() => {
+      const UpdateFeedsSubscription = DeviceEventEmitter.addListener("UpdateFeeds", updateUI);
+      return  () => {
+        UpdateFeedsSubscription.remove();
+      }
+    }, []);
 
     return (
       <FlatList
@@ -94,6 +91,7 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
         snapToInterval={0}
         maxToRenderPerBatch={5}
         windowSize={5}
+        extraData={mount}
         renderItem={({ item, index }) => {
           // If the feed is waiting for some dependent query is is just loading, show loading indicator
           return data[index].isIdle || data[index].isLoading ? (
@@ -120,9 +118,6 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
               onPress={props.onPress}
               limitSwimlaneItemsTo={props.limitSwimlaneItemsTo}
               onBlur={props.onBlur}
-              cardStyle={
-                item.ShowcardAspectRatio === layout2x3 ? "2x3" : "16x9"
-              }
               swimLaneKey={swimLaneKey}
               updateSwimLaneKey={updateSwimLaneKey}
               onListEmptyElementPress={props.onListEmptyElementPress}
@@ -139,6 +134,7 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
                   props.onListFooterElementFocus(event);
               }}
               navigation={props.navigation}
+              extraData={mount}
             />
           ) : (
             // If undefined feeds are not permitted, then don't render anything for now..
@@ -153,9 +149,6 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
                 onPress={props.onPress}
                 limitSwimlaneItemsTo={props.limitSwimlaneItemsTo}
                 onBlur={props.onBlur}
-                cardStyle={
-                  item.ShowcardAspectRatio === layout2x3 ? "2x3" : "16x9"
-                }
                 swimLaneKey={swimLaneKey}
                 updateSwimLaneKey={updateSwimLaneKey}
                 onListEmptyElementPress={props.onListEmptyElementPress}
@@ -172,6 +165,7 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
                     props.onListFooterElementFocus(event);
                 }}
                 navigation={props.navigation}
+                extraData={mount}
               />
             )
           );

@@ -23,7 +23,7 @@ import { DvrCapabilityType, format } from "../../../../utils/assetUtils";
 import { groupBy, uniq, uniqBy, values } from "lodash";
 import { DvrItemState } from "../../../../utils/common";
 import { getTimeStringFromISOString } from "../../../../utils/dataUtils";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { DeviceEventEmitter, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import MFButton, {
   MFButtonVariant,
 } from "../../../../components/MFButton/MFButton";
@@ -309,6 +309,12 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
       const response = await saveRecordingToBackend(recording);
       if (response?.status! >= 200 && response?.status! <= 300) {
         props.route.params.closePanel();
+        //show notofication for recording started
+        DeviceEventEmitter.emit("createNotification", {
+          id: AppStrings?.str_restrictions.apple_tv_blocked,
+          iconName: "info",
+          subtitle: AppStrings?.str_dvr_recording_success,
+        });
       }
     }
   };

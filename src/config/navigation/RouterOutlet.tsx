@@ -60,9 +60,21 @@ import PackageDetailsScreen from "../../views/app/details_pages/package_details/
 import FavouriteManagerScreen from "../../views/app/details_pages/favouriteManager/favouriteManager";
 import DVRManagerScreen from "../../views/app/dvr_manager/dvr_manager.screen";
 import DvrRecordedEpisode from "../../views/app/dvr_manager/dvr_recordedEpisodeList";
+import PlayerTest from  "../../views/VideoPlayer/PlayerTest";
+import  Video from "../../views/VideoPlayer/Video";
+import FavoriteChannelsScreen from "../../views/app/details_pages/favoriteChannels/favoriteChannels";
+import { PurchaseOptionsPanel } from "../../views/app/details_pages/PurchaseOptionPanel";
+import { PurchaseInformationPanel } from "../../views/app/details_pages/PurchaseInformationPanel";
+import { PurchaseNetworkSelectionPanel } from "../../views/app/details_pages/package_details/PurchaseNetworkSelectionPanel";
+import { TermsAndConditions } from "../../views/app/details_pages/TermsAndConfitions";
 
 interface RouterOutletProps {
   initialState: any;
+}
+
+interface PurchaseOutletProps {
+  initialState: any;
+  params: any
 }
 
 export const Routes = {
@@ -118,9 +130,50 @@ export const Routes = {
   DvrRecordedEpisode:"DvrRecordedEpisode",
   FavouriteManager: "FavouriteManager",
   DvrManager: "DvrManager",
+  PlayerTest: "PlayerTest",
+  Video: "Video",
+  FavoriteChannelsManager: "FavoriteChannelsManager",
+  DvrManager: "DvrManager",
+  PurchaseOptions: "PurchaseOptions",
+  PurchaseInformation: "PurchaseInformation",
+  PurchaseNetworkSelectionPanel: "PurchaseNetworkSelection",
+  TermsAndConditions: "TermsAndConditions"
 };
 
 const Stack = createNativeStackNavigator();
+export const PurchasePanelNavigator: React.FunctionComponent<PurchaseOutletProps> = (props) => {
+  return (
+    <NavigationContainer
+      independent={true}
+      initialState={props.initialState}
+    >
+      <Stack.Navigator
+        initialRouteName={Routes.PurchaseOptions}
+        screenOptions={{
+          headerShown: false,
+          animation: "slide_from_left",
+          animationTypeForReplace: "push",
+          gestureEnabled: false,
+        }}
+      >
+        <Stack.Screen
+          name={Routes.PurchaseOptions}
+          component={PurchaseOptionsPanel}
+          initialParams={props.params}
+        />
+        <Stack.Screen
+          name={Routes.PurchaseInformation}
+          component={PurchaseInformationPanel}
+        />
+        <Stack.Screen
+          name={Routes.PurchaseNetworkSelectionPanel}
+          component={PurchaseNetworkSelectionPanel}
+        />
+        <Stack.Screen name={Routes.TermsAndConditions} component={TermsAndConditions} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
   props
 ) => {
@@ -226,6 +279,7 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           component={StopRecordingScreen}
         />
         <Stack.Screen name={Routes.FOSSLicense} component={FossLicenseScreen} />
+    
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -316,6 +370,12 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
       <Stack.Screen
         name={Routes.FavouriteManager}
         component={FavouriteManagerScreen}
+      />
+      <Stack.Screen name={Routes.PlayerTest} component={PlayerTest}/>
+      <Stack.Screen name={Routes.Video} component={Video}/>
+      <Stack.Screen
+        name={Routes.FavoriteChannelsManager}
+        component={FavoriteChannelsScreen}
       />
     </Stack.Navigator>
   );

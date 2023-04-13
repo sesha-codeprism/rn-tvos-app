@@ -1,4 +1,12 @@
-import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Settings as SettingsRN,
+} from "react-native";
 import React, { ReactNode, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppImages } from "../../../../assets/images";
@@ -19,6 +27,7 @@ import { GLOBALS } from "../../../../utils/globals";
 import { PinActionTypes } from "./parental_controll.screen";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
 import { AppStrings } from "../../../../config/strings";
+import { format } from "../../../../utils/assetUtils";
 interface PinProps {
   screenName: string;
   pinType: PinType;
@@ -31,6 +40,8 @@ interface Props {
   children?: ReactNode;
 }
 const numberPad = [1, 2, 3, 4, 5, "del", 6, 7, 8, 9, 0];
+const thirtyMinutes = 1800000;
+
 const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const [focussed, setFocussed] = useState<any>("");
   const [pin, setPin] = useState<any>(["", "", "", ""]);
@@ -40,8 +51,22 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const [actionType, setActionType] = useState(props.route.params.action);
   const [errMessage, setErrMessage] = useState("");
   const [passwordRes, setPasswordRes] = useState("");
+  const [isLockedOut, setLockedOut] = useState(false);
+  const [numberOfAttempts, setNumberOfAttempts] = useState(5);
+  const [timeLeft, setTimeLeft] = useState(Infinity);
 
   useEffect(() => {
+    const lockoutTime = SettingsRN.get("LOCKOUT_TIME");
+    if (lockoutTime) {
+      const currentTime = new Date().getTime();
+      if (currentTime - lockoutTime < thirtyMinutes) {
+        setLockedOut(true);
+        setTimeLeft(
+          thirtyMinutes / 60000 -
+            Math.floor((currentTime - lockoutTime) / 60000)
+        );
+      }
+    }
     if (actionType !== PinActionTypes["UPDATE"]) {
       getPassword(props.route.params.pinType)
         .then((res: any) => {
@@ -111,7 +136,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         props.route.params.action !== PinActionTypes["UPDATE"]
       ) {
         console.log("pin", pin, "pinConfirm", pinConfirm);
-        if (pin.join() === pinConfirm.join()) {
+        if (pin.join("") === pinConfirm.join("")) {
           setErrMessage("");
           const res = setPasscode(props.route.params.pinType);
           console.log("setpin response", res);
@@ -124,7 +149,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         props.route.params.action === PinActionTypes["UPDATE"]
       ) {
         console.log("pin inside UPDATE", pin, "pinConfirm", pinConfirm);
-        if (pin.join() === pinConfirm.join()) {
+        if (pin.join("") === pinConfirm.join("")) {
           const res = updatePasscode(props.route.params.pinType);
           console.log("change pin response", res);
         } else {
@@ -163,19 +188,54 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         "hashedPin",
         hashedPin
       );
-      // const data = await getPassword(type);
-      if (passcode && isHash(passcode) && passcode === hashedPin) {
-        console.log("password matching", props.route.params.screenTarget);
-        props.navigation.replace(props.route.params.screenTarget);
-        return true;
+      if (passcode && isHash(passcode)) {
+        if (passcode === hashedPin) {
+          console.log("password matching", props.route.params.screenTarget);
+          props.navigation.replace(props.route.params.screenTarget);
+          return true;
+        } else {
+          setNumberOfAttempts(numberOfAttempts - 1);
+          if (numberOfAttempts - 1 < 1) {
+            setLockedOut(true);
+            SettingsRN.set({ LOCKOUT_TIME: new Date().getTime() });
+            setErrMessage(
+              format(AppStrings.str_settings_pin_lockout_instruction, "30")
+            );
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+            }, 2000);
+          } else {
+            setErrMessage(AppStrings.str_settings_wrong_pin);
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+              setErrMessage("");
+            }, 2000);
+          }
+          return false;
+        }
       } else {
-        console.log("incorrect password");
-        setErrMessage(AppStrings.str_settings_wrong_pin);
-        setTimeout(() => {
-          setErrMessage("");
-          setPin(["", "", "", ""]);
-        }, 2000);
-        return false;
+        if(passcode === pinInput){
+          console.log("password matching", props.route.params.screenTarget);
+          props.navigation.replace(props.route.params.screenTarget);
+          return true;
+        } else {
+          setNumberOfAttempts(numberOfAttempts - 1);
+          if (numberOfAttempts - 1 < 1) {
+            setLockedOut(true);
+            SettingsRN.set({ LOCKOUT_TIME: new Date().getTime() });
+            format(AppStrings.str_settings_pin_lockout_instruction, "30");
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+            }, 2000);
+          } else {
+            setErrMessage(AppStrings.str_settings_wrong_pin);
+            setTimeout(() => {
+              setPin(["", "", "", ""]);
+              setErrMessage("");
+            }, 2000);
+          }
+          return false;
+        }
       }
     } catch (error) {
       console.log("error getting pin");
@@ -185,7 +245,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
   const setPasscode = async (type: PinType) => {
     try {
       console.log("setPasscode", type);
-      const pinInput = pin.join();
+      const pinInput = pin.join("");
       const hashedPin = getPasscodeHash(
         pinInput,
         GLOBALS.bootstrapSelectors?.OriginalAccountId ||
@@ -208,13 +268,15 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
 
   const updatePasscode = async (type: PinType) => {
     try {
-      const pinInput = pin.join();
+      const pinInput = pin.join("");
+
       const hashedPin = getPasscodeHash(
         pinInput,
         GLOBALS.bootstrapSelectors?.OriginalAccountId ||
           GLOBALS.bootstrapSelectors?.AccountId ||
           ""
       );
+      console.log("updatePasscode", pinInput, hashedPin);
       const res = await changePasscodes(type, hashedPin);
       if (res.status === 200 || res.status === 201) {
         props.navigation.goBack();
@@ -325,6 +387,14 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         })}
       </View>
       {errMessage !== "" && <Text style={styles.errMessage}>{errMessage}</Text>}
+      {timeLeft < Infinity && (
+        <Text style={styles.errMessage}>
+          {format(
+            AppStrings.str_settings_pin_lockout_instruction,
+            `${timeLeft}`
+          )}
+        </Text>
+      )}
       <View style={styles.numberPadContainer}>
         <View style={styles.numberPad}>
           <FlatList
@@ -359,12 +429,10 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
               ) : (
                 <Pressable
                   hasTVPreferredFocus={index === 1}
+                  disabled={isLockedOut}
                   onFocus={() => {
-                    setFocussed(item);
+                    !isLockedOut && setFocussed(item);
                   }}
-                  // onBlur={() => {
-                  //   index === numberPad.length ? setFocussed("") : null;
-                  // }}
                   key={index}
                   style={
                     item === focussed
@@ -372,7 +440,7 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
                       : styles.numberPadItem
                   }
                   onPress={() => {
-                    onPressNumber(item);
+                    !isLockedOut && onPressNumber(item);
                   }}
                 >
                   <Text
@@ -391,11 +459,13 @@ const PinLockScreen: React.FunctionComponent<Props> = (props: any) => {
         </View>
       </View>
       <View style={styles.bottomTextContainer}>
-        <Text style={styles.inputLebelText}>To set or reset PIN</Text>
+        <Text style={styles.inputLebelText}>
+          {AppStrings.str_settings_setpin_instruction}
+        </Text>
         <Text
           style={[styles.inputLebelText, { fontWeight: "600", marginTop: 10 }]}
         >
-          Please call (333)546-5689
+          {AppStrings.str_settings_setpin_contact}
         </Text>
       </View>
     </SideMenuLayout>

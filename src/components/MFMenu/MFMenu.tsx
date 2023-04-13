@@ -148,6 +148,7 @@ const MFMenu = (props: MFMenuProps) => {
                   onFocus={() => {
                     setTimeout(() => {
                       setFocused("search");
+                      // EventEmitter.emit("EASClose", null);
                     }, 200);
                   }}
                   onBlur={() => {

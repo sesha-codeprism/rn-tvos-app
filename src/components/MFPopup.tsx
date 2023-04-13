@@ -1,4 +1,5 @@
 import {
+  DeviceEventEmitter,
   FlatList,
   Modal,
   Pressable,
@@ -7,10 +8,8 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/dimensions";
+import { SCREEN_WIDTH } from "../utils/dimensions";
 import { GLOBALS } from "../utils/globals";
-import MFEventEmitter from "../utils/MFEventEmitter";
-import { AppStrings } from "../config/strings";
 interface MFPopupProps {
   buttons?: Buttons[];
   title?: string;
@@ -57,10 +56,10 @@ const MFPopup = (props: MFPopupProps) => {
       transparent={true}
       visible={true}
       onRequestClose={() => {
-        MFEventEmitter.emit("closePopup", null);
+        DeviceEventEmitter.emit("closePopup", null);
       }}
       onDismiss={() => {
-        MFEventEmitter.emit("closePopup", null);
+        DeviceEventEmitter.emit("closePopup", null);
       }}
       presentationStyle={"overFullScreen"}
     >
