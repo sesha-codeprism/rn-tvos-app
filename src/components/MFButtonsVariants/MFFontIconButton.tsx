@@ -90,6 +90,7 @@ const MFFontIconButton: React.FunctionComponent<MFFontIconProps> =
         onPress={_onPress}
         hasTVPreferredFocus={props.hasTVPreferredFocus ? true : false}
         focusable={props.focusable === false ? false : true}
+        isTVSelectable={true}
       >
         {props.iconPlacement === "Left" ? (
           <React.Fragment>
