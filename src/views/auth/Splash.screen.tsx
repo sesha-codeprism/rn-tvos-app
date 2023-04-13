@@ -3,7 +3,14 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
 import AnimatedLottieView from "lottie-react-native";
-import { View, StyleSheet, Image, Dimensions, Settings, DeviceEventEmitter } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Dimensions,
+  Settings,
+  DeviceEventEmitter,
+} from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { processBootStrap } from "../../../backend/authentication/authentication";
@@ -143,6 +150,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
   };
   const onDuplexMessage = useCallback(
     (message: any) => {
+      console.log("message from op portal", message);
       if (message?.type === NotificationType.DeviceDeleted) {
         const { payload: { deviceId = "" } = {} } = message;
         if (deviceId === GLOBALS.deviceInfo.deviceId) {
@@ -220,33 +228,15 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
           }
         };
         displayMessage();
-
-        // MFEventEmitter.emit("EASReceived", {
-        //   message: easParsedMessage,
-        //   easDetails: GLOBALS.bootstrapSelectors?.EasProfile,
-        //   locale: (
-        //     GLOBALS.store?.settings?.display?.onScreenLanguage?.languageCode ||
-        //     "en-US"
-        //   ).toLowerCase(),
-        // });
-        // getAllSubscriptionGroups()
-        //   .then(() => {
-        //   })
-        //   .catch((err) => {
-        //     console.warn("Something went wrong in refetching groups");
-        //   });
-        // console.log("DVR update notification received");
-        // // queryClient.invalidateQueries(["dvr"]);
-        // queryClient.invalidateQueries({ queryKey: ["dvr"] });
-        // // invalidateQueryBasedOnSpecificKeys(
-        // //   "feed",
-        // //   "get-all-subscriptionGroups"
-        // // );
-        // // setTimeout(() => {
-        // //   appQueryCache.find("get-UDP-data")?.invalidate();
-        // // }, 1000);
       } else if (message?.type === NotificationType.pinUnpinChannel) {
         DeviceEventEmitter.emit("FavoriteChannelUpdated", message);
+      } else if (message?.type === NotificationType.UINotification) {
+        DeviceEventEmitter.emit("createNotification", {
+          id: message.payload.messageId || AppStrings?.str_pair_device_success,
+          iconName: "notification",
+          title: message.payload.Title,
+          subtitle: message.payload.Description,
+        });
       }
     },
     [GLOBALS.deviceInfo.deviceId]
