@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { DeviceEventEmitter, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { GLOBALS, resetAuthData } from "../../../utils/globals";
@@ -8,7 +8,6 @@ import { Routes } from "../../../config/navigation/RouterOutlet";
 import { resetCaches } from "../../../config/queries";
 import { AppStrings } from "../../../config/strings";
 import { deleteDevice } from "../../../../backend/subscriber/subscriber";
-import MFEventEmitter from "../../../utils/MFEventEmitter";
 
 interface AccountSettingsProps {
   navigation: NativeStackNavigationProp<any>;
@@ -65,15 +64,15 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
                 : styles.signoutButton
             }
             onPress={() => {
-              MFEventEmitter.emit("openPopup", {
+              DeviceEventEmitter.emit("openPopup", {
                 buttons: [
                   {
                     title: "Yes",
                     onPress: () => {
                       console.log("signout pressed");
                       // Assumes close popup on each action, whether Yes or No or Cancel
-                      MFEventEmitter.emit("closePopup", null);
-                      MFEventEmitter.emit("closeSettings", null);
+                      DeviceEventEmitter.emit("closePopup", null);
+                      DeviceEventEmitter.emit("closeSettings", null);
                       logUserOut();
 
                     },
@@ -82,7 +81,7 @@ const AccountSettingsScreen: React.FunctionComponent<AccountSettingsProps> = (
                     title: "Cancel",
                     onPress: () => {
                     // Assumes close popup on each action, whether Yes or No or Cancel
-                    MFEventEmitter.emit("closePopup", null);
+                    DeviceEventEmitter.emit("closePopup", null);
                     },
                   },
                 ],

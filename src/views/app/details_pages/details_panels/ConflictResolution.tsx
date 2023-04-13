@@ -9,8 +9,8 @@ import ConflictResolutionNormal from "./ConflictResolutionNomal";
 import ConflictResolutionEpisodes from "./ConflictResolutionEpisodes";
 import ConflictResolutionTimeOverlap from "./ConflictResolutionTimeOverlap";
 import MFLoader from "../../../../components/MFLoader";
-import MFEventEmitter from "../../../../utils/MFEventEmitter";
 import { AppStrings } from "../../../../config/strings";
+import { DeviceEventEmitter } from "react-native";
 
 
 
@@ -50,7 +50,7 @@ const ConflictResolution: React.FunctionComponent<Props> = (props: Props) => {
       setViewData(viewData.slice(0, -1));
       setViewState(viewState.slice(0, -1));
       if (viewState.length === 2) {
-        MFEventEmitter.emit("closeConflictResolution", undefined);
+        DeviceEventEmitter.emit("closeConflictResolution", undefined);
       }
     }else {
       const resolvedConflict = params.resolved?.SubscriptionItemId;
@@ -80,7 +80,7 @@ const ConflictResolution: React.FunctionComponent<Props> = (props: Props) => {
           newViewState.pop();
           // if only one remaining, that means no view, close the panel, all resolved
           if(newViewState.length === 1){
-            MFEventEmitter.emit("closeConflictResolution", undefined);
+            DeviceEventEmitter.emit("closeConflictResolution", undefined);
           }else{
             setViewData(newViewData);
             setViewState(newViewState);
@@ -108,7 +108,7 @@ const ConflictResolution: React.FunctionComponent<Props> = (props: Props) => {
           newViewState.pop();
           newViewState.pop();
           if(newViewState.length === 1){
-            MFEventEmitter.emit("closeConflictResolution", undefined);
+            DeviceEventEmitter.emit("closeConflictResolution", undefined);
           }else{
             setViewData(newViewData);
             setViewState(newViewState);
@@ -245,12 +245,12 @@ const ConflictResolution: React.FunctionComponent<Props> = (props: Props) => {
               ]); 
             }else{
               setTimeout(() => {
-                MFEventEmitter.emit("openPopup", {
+                DeviceEventEmitter.emit("openPopup", {
                   buttons: [
                     {
                       title: "OK",
                       onPress: async () => {
-                        MFEventEmitter.emit("closeAll", undefined);
+                        DeviceEventEmitter.emit("closeAll", undefined);
                         
                       },
                     }
@@ -269,7 +269,7 @@ const ConflictResolution: React.FunctionComponent<Props> = (props: Props) => {
   useEffect(()  => {
     if(!doesConflictExists){
       // exit the panel
-      MFEventEmitter.emit("closeConflictResolution", undefined);
+      DeviceEventEmitter.emit("closeConflictResolution", undefined);
     }
   }, [doesConflictExists]);
 

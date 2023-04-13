@@ -107,6 +107,7 @@ const BrowseCategoryCarousel: React.FunctionComponent<
       {dataSource !== undefined ? (
         dataSource.length > 0 ? (
           <FlatList
+          contentContainerStyle={{paddingBottom: 50}}
             data={dataSource}
             keyExtractor={(x, i) => i.toString()}
             ItemSeparatorComponent={(x, i) => (
@@ -118,8 +119,8 @@ const BrowseCategoryCarousel: React.FunctionComponent<
                 }}
               />
             )}
-            snapToAlignment={browsePageConfig.snapToAlignment}
-            snapToInterval={scaledSnapToInterval}
+            snapToAlignment={"start"}
+            snapToInterval={0}
             onEndReachedThreshold={0.8}
             onEndReached={handleEndReached}
             renderItem={({ item, index }) => {
@@ -128,26 +129,15 @@ const BrowseCategoryCarousel: React.FunctionComponent<
                   key={index}
                   feed={item.feed}
                   data={item.items}
-                  limitSwimlaneItemsTo={16}
+                  limitSwimlaneItemsTo={9}
                   swimLaneKey={swimLaneKey}
                   updateSwimLaneKey={updateSwimLaneKey}
-                  renderViewAll={item.feed.NavigationTargetVisibility}
                   onPress={(event) => {
                     props.navigation.push(Routes.Details, { feed: event });
                   }}
                   onFocus={(event) => {
-                    flatListRef.current?.scrollToIndex({
-                      animated: true,
-                      index: index,
-                      viewOffset: 200,
-                    });
                   }}
                   onListEmptyElementFocus={(event) => {
-                    flatListRef.current?.scrollToIndex({
-                      animated: true,
-                      index: index,
-                      viewOffset: 200,
-                    });
                   }}
                   navigation={props.navigation}
                 />

@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/routers";
 import AnimatedLottieView from "lottie-react-native";
-import { View, StyleSheet, Image, Dimensions, Settings } from "react-native";
+import { View, StyleSheet, Image, Dimensions, Settings, DeviceEventEmitter } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { GLOBALS, resetAuthData } from "../../utils/globals";
 import { processBootStrap } from "../../../backend/authentication/authentication";
@@ -27,7 +27,6 @@ import {
 import useBootstrap from "../../customHooks/useBootstrapData";
 import { SourceType } from "../../utils/common";
 import { updateStore } from "../../utils/helpers";
-import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import {
   invalidateQueryBasedOnSpecificKeys,
@@ -202,7 +201,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
               eventEndTimeInMilliseconds >= currentTimeInMilliseconds
             ) {
               setTimeout(() => {
-                MFEventEmitter.emit("EASReceived", {
+                DeviceEventEmitter.emit("EASReceived", {
                   message: easParsedMessage,
                   easDetails: GLOBALS.bootstrapSelectors?.EasProfile,
                   locale: localeStr,
@@ -247,7 +246,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         // //   appQueryCache.find("get-UDP-data")?.invalidate();
         // // }, 1000);
       } else if (message?.type === NotificationType.pinUnpinChannel) {
-        MFEventEmitter.emit("FavoriteChannelUpdated", message);
+        DeviceEventEmitter.emit("FavoriteChannelUpdated", message);
       }
     },
     [GLOBALS.deviceInfo.deviceId]

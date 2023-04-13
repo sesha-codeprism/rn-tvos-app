@@ -1,4 +1,5 @@
 import {
+  DeviceEventEmitter,
   FlatList,
   Modal,
   Pressable,
@@ -9,7 +10,6 @@ import {
 import React, { useState } from "react";
 import { SCREEN_WIDTH } from "../utils/dimensions";
 import { GLOBALS } from "../utils/globals";
-import MFEventEmitter from "../utils/MFEventEmitter";
 interface MFPopupProps {
   buttons?: Buttons[];
   title?: string;
@@ -56,10 +56,10 @@ const MFPopup = (props: MFPopupProps) => {
       transparent={true}
       visible={true}
       onRequestClose={() => {
-        MFEventEmitter.emit("closePopup", null);
+        DeviceEventEmitter.emit("closePopup", null);
       }}
       onDismiss={() => {
-        MFEventEmitter.emit("closePopup", null);
+        DeviceEventEmitter.emit("closePopup", null);
       }}
       presentationStyle={"overFullScreen"}
     >

@@ -14,6 +14,7 @@ import ErrorFallbackComponent from "../components/ErroFallBackComponent";
 import { queryClient } from "../config/queries";
 import EASContainer from "./EASContainer";
 import MFNotificationProvider from "../components/MFNotification/MFNotificationProvider";
+import { DeviceEventEmitter } from "react-native";
 
 interface AppProps {}
 
@@ -62,6 +63,9 @@ const App: React.FunctionComponent<AppProps> = (props) => {
       console.log(
         `app-start-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
       );
+    }
+    return () => {
+      DeviceEventEmitter.removeAllListeners();
     }
   }, []);
 

@@ -129,3 +129,4 @@ export const invalidateQueryBasedOnSpecificKeys = (firstKey: string, secondKey: 
         .catch((e: any) => console.log("Cannot find Query call", firstKey, secondKey, "due to", e));
 
 }
+

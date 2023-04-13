@@ -1,5 +1,6 @@
 import {
   Alert,
+  DeviceEventEmitter,
   FlatList,
   ImageBackground,
   Pressable,
@@ -48,7 +49,6 @@ import { DetailsSidePanel } from "../details_pages/DetailSidePanel";
 import { DetailRoutes } from "../../../config/navigation/DetailsNavigator";
 import axios from "axios";
 import { IRecordingToDelete } from "../../../@types/subscriptionGroup";
-import MFEventEmitter from "../../../utils/MFEventEmitter";
 
 interface Props {
   navigation: NativeStackNavigationProp<any>;
@@ -240,7 +240,7 @@ const DvrRecordedEpisode = (props: any) => {
       .then((response: any) => {
         console.log("response coming in save item", response);
         if (response?.data?.State === "Completed") {
-          MFEventEmitter.emit("createNotification", {
+          DeviceEventEmitter.emit("createNotification", {
             id: AppStrings?.str_restrictions.apple_tv_blocked,
             iconName: "info",
             subtitle: AppStrings?.str_dvr_recording_success,
@@ -288,7 +288,7 @@ const DvrRecordedEpisode = (props: any) => {
       .then((response: any) => {
         if (response?.data?.State === "Completed") {
           // dispatch(initData.actionCreators.request());
-          MFEventEmitter.emit("createNotification", {
+          DeviceEventEmitter.emit("createNotification", {
             id: AppStrings?.str_dvr_recording_deleted,
             iconName: "delete",
             subtitle: AppStrings?.str_dvr_recording_deleted,

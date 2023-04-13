@@ -3,6 +3,8 @@ const GlobalsConfig = (function () {
 	// let url = "https://reachclient.prodb.skt.tv3cloud.com/";
 	let stsUrl = '';
 	let defaultLanguage = 'en-US';
+	let deviceType = "AppleTV";
+
 	const config = {
 		//For SKT prodb:
 
@@ -46,6 +48,8 @@ const GlobalsConfig = (function () {
 		url: url,
 		stsUrl: stsUrl,
 		config:config,
+		deviceType: deviceType,
+		defaultLanguage: defaultLanguage
 	}
 })();
 

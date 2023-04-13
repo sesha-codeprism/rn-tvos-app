@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Alert,
   BackHandler,
+  DeviceEventEmitter,
   Dimensions,
   Image,
   ImageBackground,
@@ -99,7 +100,6 @@ import { GlobalContext } from "../../../contexts/globalContext";
 import { DuplexManager } from "../../../modules/duplex/DuplexManager";
 import NotificationType from "../../../@types/NotificationType";
 import { ConflictResolutionContext } from "../../../contexts/conflictResolutionContext";
-import MFEventEmitter from "../../../utils/MFEventEmitter";
 import {
   cancelRecordingFromConflictPopup,
   forceResolveConflict,
@@ -111,7 +111,9 @@ import {
 import {
   isAdultContentBlock,
   isPconBlocked,
+  isPurchaseLocked,
 } from "../../../utils/pconControls";
+import { getAllSubscriptionGroups } from "../../../customHooks/useAllSubscriptionGroups";
 
 interface AssetData {
   id: string;
@@ -578,7 +580,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       }
     };
     if (isPconBlocked(details)) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.content,
         data: data,
         onSuccess: openPannel,
@@ -609,13 +611,13 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         definition === Definition.SINGLE_PROGRAM ||
         definition === Definition.SINGLE_TIME
       ) {
-        MFEventEmitter.emit("openPopup", {
+        DeviceEventEmitter.emit("openPopup", {
           buttons: [
             {
               title: AppStrings?.str_dvr_resolve_conflict_auto,
               onPress: async () => {
                 await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
             {
@@ -623,7 +625,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               onPress: () => {
                 conflictContext.ProgramId = id;
                 conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {
+                DeviceEventEmitter.emit("openConflictResolution", {
                   passedInPops: true,
                   drawerPercentage: 0.35,
                   navigation: props.navigation,
@@ -639,20 +641,20 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   false,
                   false
                 );
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
           ],
           description: AppStrings?.str_dvr_conflict_popup_warning_program,
         });
       } else {
-        MFEventEmitter.emit("openPopup", {
+        DeviceEventEmitter.emit("openPopup", {
           buttons: [
             {
               title: AppStrings?.str_dvr_series_conflict_modal_record_all,
               onPress: async () => {
                 await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
             {
@@ -663,7 +665,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   true,
                   true
                 );
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
             {
@@ -671,7 +673,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
               onPress: () => {
                 conflictContext.ProgramId = id;
                 conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {
+                DeviceEventEmitter.emit("openConflictResolution", {
                   passedInPops: true,
                   drawerPercentage: 0.35,
                   navigation: props.navigation,
@@ -687,7 +689,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
                   true,
                   false
                 );
-                MFEventEmitter.emit("closePopup", undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
           ],
@@ -695,12 +697,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         });
       }
     } else {
-      MFEventEmitter.emit("openPopup", {
+      DeviceEventEmitter.emit("openPopup", {
         buttons: [
           {
             title: "OK",
             onPress: async () => {
-              MFEventEmitter.emit("closePopup", undefined);
+              DeviceEventEmitter.emit("closePopup", undefined);
             },
           },
         ],
@@ -835,7 +837,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     let details = discoveryProgramData;
     const IsAdult = details.IsAdult;
     if (IsAdult && isAdultContentBlock()) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.adult,
         data: data,
         onSuccess: () => {
@@ -843,7 +845,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         },
       });
     } else if (isPconBlocked(details)) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.content,
         data: data,
         onSuccess: () => {
@@ -856,7 +858,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     // route.params.feed.SeriesDetails
   };
   const ctaButtonPress = {
-    [AppStrings?.str_details_cta_subscribe]: () => {},
     [AppStrings?.str_details_cta_play]: () => {
       const playAction = getRestrictionsForVod(
         udpDataAsset.usablePlayActions,
@@ -966,7 +967,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           });
       };
       if (isPconBlocked(discoveryProgramData)) {
-        MFEventEmitter.emit("openPinVerificationPopup", {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.content,
           data: data,
           onSuccess: restart,
@@ -1052,21 +1053,113 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     [AppStrings?.str_app_edit]: openEditRecordingsPanel,
     [AppStrings?.str_details_cta_playdvr]: handlePlayDvr,
     [AppStrings?.str_details_cta_rent]: () => {
-      //TODO: Finish implementation of CTA rent
-      featureNotImplementedAlert();
+      if(isPurchaseLocked()){
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            DeviceEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_rent,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      } else  {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_rent,
+          },
+          drawerPercentage:0.37
+        });
+      }
     },
     [AppStrings?.str_details_cta_buy]: () => {
-      //TODO: Finish implementation of CTA buy
-      featureNotImplementedAlert();
+      if(isPurchaseLocked()){
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            DeviceEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_buy,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      }else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_buy,
+          },
+          drawerPercentage:0.37
+        });
+      }
     },
     [AppStrings?.str_details_cta_rentbuy]: () => {
-      //TODO: Finish implementation of CTA rent-buy
-      featureNotImplementedAlert();
+      if(isPurchaseLocked()){
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            DeviceEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_rentbuy,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      } else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_rentbuy,
+          },
+          drawerPercentage:0.37
+        });
+      }
     },
     [AppStrings?.str_details_cta_package]: () => {
       udpDataAsset["purchasePackage"] = true;
-      //TODO: Finish implementation of Package details
-      featureNotImplementedAlert();
+      if(isPurchaseLocked()){
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.purchase,
+          data: {
+            udpData: udpDataAsset
+          },
+          onSuccess: () => {
+            DeviceEventEmitter.emit("openPurchase", {
+              params:{
+                udpAssetData: udpDataAsset,
+                panelTitle: AppStrings?.str_details_cta_package,
+              },
+              drawerPercentage:0.37
+            });
+          },
+        });
+      } else {
+        DeviceEventEmitter.emit("openPurchase", {
+          params:{
+            udpAssetData: udpDataAsset,
+            panelTitle: AppStrings?.str_details_cta_package,
+          },
+          drawerPercentage:0.37
+        });
+      }
     },
     [AppStrings?.str_details_cta_subscribe]: () => {
       const networks = udpDataAsset.subscriptionPackages.filter(
@@ -1075,32 +1168,65 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         }
       );
       if (networks && networks.length > 0) {
-        //TODO: Finish implementation for PurchaseNetwork feature
-        // props.openPanel(true, SideMenuRoutes.PurchaseNetwork, {
-        //     udpAssetData: udpDataAsset,
-        //     panelTitle: AppStrings?.str_details_cta_subscribe,
-        //     panelSubtitle: udpDataAsset?.title,
-        //     confirmPlayCallBack: ctaButtonPress[
-        //         AppStrings?.str_details_cta_play
-        //     ],
-        // });
+        if(isPurchaseLocked()){
+          DeviceEventEmitter.emit("openPinVerificationPopup", {
+            pinType: PinType.purchase,
+            data: {
+              udpData: udpDataAsset
+            },
+            onSuccess: () => {
+              DeviceEventEmitter.emit("openPurchase", {
+                params:{
+                  udpAssetData: udpDataAsset,
+                  panelTitle: AppStrings?.str_details_cta_subscribe,
+                  "isPurchaseNetwork": true
+                },
+                drawerPercentage:0.37,
+              });
+            },
+          });
+        } else {
+          DeviceEventEmitter.emit("openPurchase", {
+            params:{
+              udpAssetData: udpDataAsset,
+              panelTitle: AppStrings?.str_details_cta_subscribe,
+              "isPurchaseNetwork": true
+            },
+            drawerPercentage:0.37,
+          });
+        }
       } else {
         udpDataAsset["subscriptionExists"] = true;
-        //TODO: Finish implementation of PurchaseOptions
-        // props.openPanel(true, SideMenuRoutes.PurchaseOptions, {
-        //     udpAssetData: udpDataAsset,
-        //     panelTitle: AppStrings?.str_details_cta_subscribe,
-        //     confirmPlayCallBack: ctaButtonPress[
-        //         AppStrings?.str_details_cta_play
-        //     ],
-        // });
+        if(isPurchaseLocked()){
+          DeviceEventEmitter.emit("openPinVerificationPopup", {
+            pinType: PinType.purchase,
+            data: {
+              udpData: udpDataAsset
+            },
+            onSuccess: () => {
+              DeviceEventEmitter.emit("openPurchase", {
+                params:{
+                  udpAssetData: udpDataAsset,
+                  panelTitle: AppStrings?.str_details_cta_subscribe,
+                },
+                drawerPercentage:0.37
+              });
+            },
+          });
+        }else{
+          DeviceEventEmitter.emit("openPurchase", {
+            params:{
+              udpAssetData: udpDataAsset,
+              panelTitle: AppStrings?.str_details_cta_subscribe,
+            },
+            drawerPercentage:0.37
+          });
+        }
       }
     },
   };
 
-  const onGetScrollView = (scrolViewRef: ScrollView | null): void => {
-    scrollViewRef = scrolViewRef;
-  };
+
   const updateAssetData = () => {
     //@ts-ignore
     const assetType = feed?.assetType!;
@@ -1128,7 +1254,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
 
   const onDuplexMessage = (message: any) => {
     if (message) {
-      console.log("Details onMessage", message);
+      console.log(`Details ${assetData?.id} onMessage`, message);
       switch (message.type) {
         case NotificationType.pin:
         case NotificationType.unpin:
@@ -1136,6 +1262,11 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           console.log("status", status);
           setIsItemPinned(status);
           break;
+        case NotificationType.Purchase:
+        case NotificationType.Subscription:
+            invalidatPlayOption();
+            invalidateSubscriberData();
+            invalidateQueryBasedOnSpecificKeys("feed", "udl://subscriber/library/Library");
       }
     }
   };
@@ -1171,9 +1302,10 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   // ]);
 
   useEffect(() => {
-    currentContext.addDuplexMessageHandler(onDuplexMessage);
+    const boundDuplexConnector = onDuplexMessage.bind(this);
+    currentContext.addDuplexMessageHandler(boundDuplexConnector);
     () => {
-      currentContext.removeDuplexHandler(onDuplexMessage);
+      currentContext.removeDuplexHandler(boundDuplexConnector);
     };
   }, []);
 
@@ -1489,7 +1621,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     console.log("navigateToPlayer", props);
     let details = discoveryProgramData;
     if (isPconBlocked(details)) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
+      DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.content,
         data: data,
         onSuccess: play,
@@ -1562,7 +1694,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     const id =
       isSeries(assetData) || feed?.isFromEPG
         ? feed?.Schedule?.ProgramId || feed?.ProgramId || feed?.Id
-        : feed?.Id;
+        : feed?.Id || feed?.ProgramId;
     const params = `?catchup=true&storeId=${DefaultStore.Id}&groups=${
       GLOBALS.store!.rightsGroupIds
     }&id=${id}`;
@@ -1693,8 +1825,12 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           isFeatureAssigned("IOSCarrierBilling")
         );
     console.log("UDP data", udpData);
-    setUDPDataAsset(udpData);
-    setCTALoaded(true);
+    const stringifiedUdpData = JSON.stringify(udpData);
+    const stringifiedUdpDataAsset = JSON.stringify(udpDataAsset);
+    if(stringifiedUdpData !== stringifiedUdpDataAsset){
+      setUDPDataAsset(udpData);
+      setCTALoaded(true);
+    }
     return udpData;
   };
 
@@ -1716,7 +1852,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   useEffect(() => {
-    if (similarItemsData && !isFetchingSimilarItems) {
+    if (similarItemsData && !isFetchingSimilarItems && similarData !== similarItemsData) {
       setSimilarData(similarItemsData);
     }
   }, [similarItemsData, isFetchingSimilarItems]);
@@ -1734,7 +1870,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   );
 
   useEffect(() => {
-    if (discoveryProgramQueryData && !isFetchingDiscoveryProgramQueryData) {
+    if (discoveryProgramQueryData && !isFetchingDiscoveryProgramQueryData && discoveryProgramData !== discoveryProgramQueryData) {
       setdiscoveryProgramData(discoveryProgramQueryData);
     }
   }, [discoveryProgramQueryData, isFetchingDiscoveryProgramQueryData]);
@@ -1754,54 +1890,48 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   useEffect(() => {
-    if (discoverySchedulesQueryData && !isFetchingDiscoverySchedulesQueryData) {
+    if (discoverySchedulesQueryData && !isFetchingDiscoverySchedulesQueryData && discoverySchedulesData !== discoverySchedulesQueryData) {
       setdiscoverySchedulesData(discoverySchedulesQueryData);
     }
   }, [discoverySchedulesQueryData, isFetchingDiscoverySchedulesQueryData]);
+
   const playActionsQuery = useQuery(
     ["get-playActions", assetData?.id],
     () => getPlayActions(assetData),
-    { ...defaultQueryOptions }
+    { 
+      cacheTime: 60000,
+      staleTime: 60000,
+    }
   );
 
+  const invalidatPlayOption = () => {
+    invalidateQueryBasedOnSpecificKeys("get-playActions", assetData?.id);
+  }
+
+  const invalidateSubscriberData = () =>{
+    invalidateQueryBasedOnSpecificKeys("get-subscriber-data", assetData?.id);
+  }
+
+
   useEffect(() => {
-    if (playActionsQuery.data && !playActionsQuery.isFetching) {
+    if (playActionsQuery.data && !playActionsQuery.isFetching && !playActionsQuery.isStale && playActionsQuery.isFetched && playActionsData !== playActionsQuery.data) {
       setplayActionsData(playActionsQuery.data);
     }
-  }, [playActionsQuery.data, playActionsQuery.isFetching]);
+  }, [playActionsQuery.data, playActionsQuery.isFetching, playActionsQuery.isStale, playActionsQuery.isFetched]);
 
   const subscriberDataQuery = useQuery(
     ["get-subscriber-data", assetData?.id],
     () => getProgramSubscriberData(assetData),
     { ...defaultQueryOptions, refetchOnMount: "always" }
   );
+ 
 
-  const { data, isLoading, refetch } = useQuery(
-    ["get-UDP-data", assetData?.id],
-    () => getUDPData(),
-    {
-      refetchOnMount: "always",
-      enabled:
-        !!similarData &&
-        !!discoveryProgramData &&
-        !!discoverySchedulesData &&
-        !!playActionsData &&
-        !!subscriberData,
-    }
-  );
+  const subscrptionGroups = useQuery(['dvr', 'get-all-subscriptionGroups'], getAllSubscriptionGroups, { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors });
+
 
   useEffect(() => {
-    appQueryCache.subscribe((event) => {
-      console.log(event);
-      if (event?.type === "queryUpdated") {
-        if (event.query.queryHash?.includes("get-all-subscriptionGroups")) {
-          setTimeout(() => {
-            refetch();
-          }, 1000);
-        }
-      }
-    });
-  }, []);
+    getUDPData();
+  }, [similarData, discoveryProgramData, discoverySchedulesData, playActionsData, subscriberData, subscrptionGroups])
 
   useEffect(() => {
     if (ctaButtonRef) {

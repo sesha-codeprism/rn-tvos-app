@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Modal,
   Settings as SettingsRN,
+  DeviceEventEmitter,
 } from "react-native";
 import { GLOBALS } from "../../../../utils/globals";
 import Animated, {
@@ -12,7 +13,6 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import MFEventEmitter from "../../../../utils/MFEventEmitter";
 import { Empty } from "../../../../views/MFDrawersContainer";
 import ConflictResolution from "./ConflictResolution";
 import { ConflictResolutionContext } from "../../../../contexts/conflictResolutionContext";
@@ -73,7 +73,7 @@ const ConflictsContainer = (props: ConflictsContainerProps) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    MFEventEmitter.emit("closeConflictResolution", null);
+    DeviceEventEmitter.emit("closeConflictResolution", null);
   };
 
   const animatedStyles = useAnimatedStyle(() => {
