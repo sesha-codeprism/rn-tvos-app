@@ -38,6 +38,8 @@ import { MFGlobalsConfig } from "../../../backend/configs/globals";
 import { isAdultContentBlock, isPconBlocked } from "../../utils/pconControls";
 import { PinType } from "../../utils/analytics/consts";
 import { Layout } from "../../utils/analytics/consts";
+import { config } from "../../config/config";
+import { cloneDeep } from "lodash";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -257,8 +259,8 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
 
-  const onPressSwim = (event,feed?:any) => {
-    console.log("onPressSwim",event);
+  const onPressSwim = (event, feed?: any) => {
+    console.log("onPressSwim", event);
     //@ts-ignore
     if (event.Schedule) {
       const IsAdult = event.Schedule.IsAdult;
@@ -318,7 +320,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       } else {
         route = "BrowseGallery";
       }
-      if (route) {       
+      if (route) {
         props.navigation.navigate(Routes[`${route}`], payload);
       }
     } else {
@@ -387,7 +389,24 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                     clearInterval(hubTimeOut);
                   }
                   hubTimeOut = setTimeout(() => {
-                    setFeeds(hubs[event]);
+                    const currentFeed = cloneDeep(hubs[event]);
+                    let feeds = currentFeed.Feeds;
+                    //TODO: Fix this zones call
+                    const zones = [];
+                    if (
+                      config.guide.guideFilteredFeed.isEnabled &&
+                      (!!currentFeed?.IsExternalHub ||
+                        currentFeed.Name ===
+                          config.guide.guideFilteredFeed.hubName) &&
+                      zones.length === 0
+                    ) {
+                      feeds = [
+                        config.guide.guideFilteredFeed.feedUri,
+                        ...currentFeed.Feeds,
+                      ];
+                    }
+                    currentFeed.Feeds = feeds;
+                    setFeeds(currentFeed);
                   }, debounceTime);
                 }}
                 setCardFocus={setCardFocus}
@@ -454,7 +473,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                   <MFSwim
                     // @ts-ignore
                     ref={firstSwimlaneRef}
-                    feeds={feeds}
+                    hub={feeds}
                     onFocus={onFeedFocus}
                     onPress={(event, feed) => {
                       onPressSwim(event, feed);

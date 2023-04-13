@@ -187,7 +187,7 @@ export const config = {
                     },
                     id: "live/feeds/allChannels/",
                     image16x9KeyArtURL: {
-                        uri: "res://drawable/default/AllChannels.png",
+                        uri: "AllChannels",
                     },
                     metadataLine2: "",
                     metadataLine3: "",
@@ -206,7 +206,7 @@ export const config = {
                     },
                     id: "live/feeds/allNews/",
                     image16x9KeyArtURL: {
-                        uri: "res://drawable/default/News.png",
+                        uri: "News",
                     },
                     metadataLine2: "",
                     metadataLine3: "",
@@ -224,7 +224,7 @@ export const config = {
                     },
                     id: "live/feeds/allSports/",
                     image16x9KeyArtURL: {
-                        uri: "res://drawable/default/Sports.png",
+                        uri: "Sports",
                     },
                     metadataLine2: "",
                     metadataLine3: "",
@@ -242,7 +242,7 @@ export const config = {
                     },
                     id: "live/feeds/allMusic/",
                     image16x9KeyArtURL: {
-                        uri: "res://drawable/default/Music.png",
+                        uri: "Music",
                     },
                     metadataLine2: "",
                     metadataLine3: "",
@@ -260,7 +260,7 @@ export const config = {
                     },
                     id: "live/feeds/allChildren/",
                     image16x9KeyArtURL: {
-                        uri: "res://drawable/default/Children.png",
+                        uri: "Children",
                     },
                     metadataLine2: "",
                     metadataLine3: "",

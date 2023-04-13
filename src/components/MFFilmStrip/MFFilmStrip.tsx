@@ -226,6 +226,8 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
         ? props.updateSwimLaneKey(
             props.libraryItems[Object.keys(props.libraryItems)[0]][index].title
           )
+        : props.updateSwimLaneKey && props.feed?.Uri
+        ? props.updateSwimLaneKey(props.feed?.Uri)
         : null;
     };
 
@@ -398,12 +400,14 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
         currentFeed &&
         props.swimLaneKey?.trim().length! > 0 &&
         (props.swimLaneKey === props.title ||
-          props.swimLaneKey === currentFeed?.title) ? (
+          props.swimLaneKey === currentFeed?.title ||
+          props.swimLaneKey === props.feed?.Uri) ? (
           <View
             style={{
               width: 500,
               height: 70,
               paddingTop: 5,
+              backgroundColor: __DEV__ ? "red" : "transparent",
             }}
           >
             <MFMetaData

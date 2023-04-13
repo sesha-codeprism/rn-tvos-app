@@ -129,10 +129,10 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
       }
     };
     const onPress = (event: any) => {
-      props.onPress &&  props.onPress(event, props.feed)
-    }
+      props.onPress && props.onPress(event, props.feed);
+    };
     const onTapViewAll = (feed: any) => {
-      console.log('View all pressed', feed);
+      console.log("View all pressed", feed);
       if (!props.navigation) {
         console.warn("Missing navigation prop");
         return;
@@ -298,7 +298,10 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           onListFooterElementOnPress={props.onListFooterElementOnPress}
           onListFooterElementFocus={props.onListFooterElementFocus}
           onViewAllPressed={onTapViewAll}
-          flatListStyle={{ display: "flex", flex: 1, flexDirection: "row" }}
+          flatListStyle={{
+            flexDirection: "row",
+            backgroundColor: __DEV__ ? "gold" : "transparent",
+          }}
           getNoItemReturenedRef={() => innerNoItemsReturenedRef}
           extraData={props.extraData}
         />
