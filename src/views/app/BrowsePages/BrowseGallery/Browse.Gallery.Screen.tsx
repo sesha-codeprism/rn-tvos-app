@@ -51,7 +51,10 @@ import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { debounce2 } from "../../../../utils/app/app.utilities";
 import _ from "lodash";
 import { AppStrings } from "../../../../config/strings";
-import { isAdultContentBlock, isPconBlocked } from "../../../../utils/pconControls";
+import {
+  isAdultContentBlock,
+  isPconBlocked,
+} from "../../../../utils/pconControls";
 import { PinType } from "../../../../utils/analytics/consts";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
@@ -82,11 +85,11 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   GLOBALS.selectedFeed = browseFeed;
   const pivotsParam = "pivots=true";
   let pivotURL = `${removeTrailingSlash(browseFeed.Uri)}/${pivotsParam}`;
-  let browseFeedUri =`${browseFeed.Uri}?$top=${browseFeed.$top}`;
-  if (browseFeed.Id){
-    pivotURL=`${pivotURL}?Id=${browseFeed?.Id}`;
+  let browseFeedUri = `${browseFeed.Uri}?$top=${browseFeed.$top}`;
+  if (browseFeed.Id) {
+    pivotURL = `${pivotURL}?Id=${browseFeed?.Id}`;
     browseFeedUri = `${browseFeed.Uri}?Id=${browseFeed?.Id}&$top=${browseFeed.$top}`;
-  }else if(browseFeed?.StationId){
+  } else if (browseFeed?.StationId) {
     browseFeedUri = `${browseFeed.Uri}?Id=${browseFeed?.StationId}&$top=${browseFeed.$top}`;
   }
   console.log("Pivot url", pivotURL, browseFeedUri, browseFeed);
@@ -98,19 +101,32 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   //@ts-ignore
   const fetchFeeds = async ({ queryKey }: any) => {
     const [key, requestPivots, page] = queryKey;
+    const isSearch = feed.NavigationTargetUri === "browsesearch";
     try {
       const $top = browseFeed.$top;
       const skip = $top * page;
-       let finalUri = "";
-       const uri = `${browseFeedUri}&$skip=${skip}&storeId=${
+      let finalUri = "";
+      const searchParams = `?partialName=${feed.SearchString}&storeId=${
+        DefaultStore.Id
+      }&$skip=${skip}&$top=${$top}&searchLive=${false}&$groups=${
+        GLOBALS.bootstrapSelectors?.RightsGroupIds
+      }&$lang=${
+        GLOBALS.store!.onScreenLanguage?.languageCode || lang || "en-US"
+      }`;
+      const uri = `${browseFeedUri}&$skip=${skip}&storeId=${
         DefaultStore.Id
       }&$groups=${GLOBALS.store!.rightsGroupIds}`;
       if (browsePivots) {
         finalUri = uri.concat(`&pivots=${requestPivots}`);
+      } else if (isSearch) {
+        finalUri = uri + searchParams;
       } else {
         finalUri = uri;
       }
-      const data = await getDataFromUDL(finalUri);
+      console.log('isSearch', isSearch, finalUri)
+      const data = isSearch
+        ? await getDataFromUDL(finalUri, true)
+        : await getDataFromUDL(finalUri);
       if (data) {
         /** we have data from backend, so use the data and setState */
         const massagedData = getMassagedData(uri, data);

@@ -3,6 +3,7 @@ import { registerSubscriberUdls } from "../subscriber/subscriber";
 import { getUrlParts, getQueryParams, parseUri } from "../utils/url/urlUtil";
 import { registerLiveUdls } from "../live/live";
 import { registerDVRProxyUdls } from "../dvrproxy/dvrproxy";
+import { registerSearchUdls } from "../search/search";
 
 export const UdlProviders: any = {};
 export const udlList: any = {}
@@ -23,6 +24,7 @@ export const registerUdls = () => {
     ...registerSubscriberUdls(),
     ...registerLiveUdls(),
     ...registerDVRProxyUdls(),
+    ...registerSearchUdls(),
   );
 };
 

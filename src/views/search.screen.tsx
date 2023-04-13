@@ -26,6 +26,7 @@ import { ItemShowType } from "../utils/common";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/dimensions";
 import { GLOBALS } from "../utils/globals";
 import { getUIdef } from "../utils/uidefinition";
+import { NavigationTarget, browseType } from "../utils/analytics/consts";
 
 // const Search = requireNativeComponent('NKSearchComponent');
 
@@ -300,7 +301,16 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
               ref={index === 0 ? firstCardRef : null}
               key={index}
               //@ts-ignore
-              feed={{ Name: mediaTypes }}
+              feed={{
+                Name: mediaTypes,
+                NavigationTargetUri: browseType.browsesearch,
+                NavigationTargetVisibility: NavigationTarget.SHOW_FEED_ALWAYS,
+                FeedType: "Dynamic",
+                SearchString: searchString,
+                // mediaTypes: mediaTypes,
+                Uri: "udl://search/getSearchItems"
+              }}
+              navigation={props.navigation}
               data={massagedlistItems}
               limitSwimlaneItemsTo={10}
               swimLaneKey={swimLaneKey}
