@@ -160,3 +160,11 @@ export function isHash(str: string) {
   let sha256Regex = new RegExp(/^([a-f0-9]{64})$/);
   return sha256Regex.test(str);
 }
+
+export const generateColor = () => {
+  const randomColor = Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, '0');
+  return `#${randomColor}`;
+};
+

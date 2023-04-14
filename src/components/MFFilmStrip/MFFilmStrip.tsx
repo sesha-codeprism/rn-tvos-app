@@ -24,6 +24,7 @@ import { SCREEN_WIDTH } from "../../utils/dimensions";
 import MFMetaData from "../MFMetadata/MFMetaData";
 import { format } from "../../utils/DiscoveryUtils";
 import { appUIDefinition, layout2x3 } from "../../config/constants";
+import { generateColor } from "../../utils/helpers";
 // export interface FeedsObject {
 //   imageSource?: string;
 //   imageStyles?: StyleProp<ImageStyle>;
@@ -340,9 +341,6 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                       }
                       showTitleOnlyOnFocus={false}
                       titlePlacement={props.titlePlacement}
-                      // overlayComponent={
-
-                      // }
                       progressComponent={props.progressElement}
                       showProgress={props.shouldRenderProgress}
                       shouldRenderText
@@ -407,7 +405,6 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
               width: 500,
               height: 70,
               paddingTop: 5,
-              backgroundColor: __DEV__ ? "red" : "transparent",
             }}
           >
             <MFMetaData

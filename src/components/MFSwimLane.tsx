@@ -15,6 +15,7 @@ import Styles from "./MFButtonsVariants/MFButtonStyles";
 import { TitlePlacement } from "./MFCard";
 import MFFilmStrip from "./MFFilmStrip/MFFilmStrip";
 import MFViewAllButton from "./MFFilmStrip/ViewAllComponent";
+import { generateColor } from "../utils/helpers";
 
 interface MFSwimLaneProps {
   feed: Feed;
@@ -299,8 +300,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           onListFooterElementFocus={props.onListFooterElementFocus}
           onViewAllPressed={onTapViewAll}
           flatListStyle={{
-            flexDirection: "row",
-            backgroundColor: __DEV__ ? "gold" : "transparent",
+            height: 100,
           }}
           getNoItemReturenedRef={() => innerNoItemsReturenedRef}
           extraData={props.extraData}

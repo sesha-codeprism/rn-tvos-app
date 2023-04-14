@@ -75,6 +75,8 @@ export class ItemType {
   public static SETTINGS = "Settings";
   public static LIVEPROGRAM = "LiveProgram";
   public static LIVESERIES = "LiveSeries";
+  public static GENERICLIVE = "GENERIC-LIVE"
+  public static LIVETVGUIDE = "liveTvGuide"
 }
 
 export class ShowType {

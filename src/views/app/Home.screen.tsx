@@ -8,6 +8,7 @@ import {
   BackHandler,
   TVMenuControl,
   DeviceEventEmitter,
+  NativeModules,
 } from "react-native";
 import { appUIDefinition, debounceTime, lang } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -354,6 +355,17 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
             });
           },
         });
+      } else if (event.ItemType === ItemType.LIVETVGUIDE) {
+        if (event.filterId) {
+          NativeModules.MKGuideBridgeManager.setCategoriesForCategorisedFilter([
+            event.filterId,
+          ]);
+        } else {
+          NativeModules.MKGuideBridgeManager.setCategoriesForCategorisedFilter(
+            []
+          );
+        }
+        props.navigation.navigate("guide");
       } else {
         props.navigation.navigate(Routes.Details, {
           feed: event,
