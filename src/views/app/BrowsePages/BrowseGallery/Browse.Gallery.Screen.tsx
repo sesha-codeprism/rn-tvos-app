@@ -79,6 +79,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const lengthPerPage = browseFeed.$top;
 
   const [page, setCurrentPage] = useState(0);
+  const isSearch = feed.NavigationTargetUri === "browsesearch";
   const barRef = useRef<TouchableOpacity>(null);
   const filterRef = useRef<PressableProps>(null);
   const cardRef = useRef<PressableProps>(null);
@@ -97,39 +98,43 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   //   setOpenSubMenu(false);
   //   setOpenMenu(false);
   // });
-
+  const getDataForSearch = (data: any) => {
+    const feedName = feed.Name.split(" ").join("");
+    console.log("data coming to search filter", data, feedName);
+    const filteredData = data.find((item: any, index: any) =>
+      item.hasOwnProperty(feedName)
+    );
+    return filteredData[feedName];
+  };
   //@ts-ignore
   const fetchFeeds = async ({ queryKey }: any) => {
     const [key, requestPivots, page] = queryKey;
-    const isSearch = feed.NavigationTargetUri === "browsesearch";
     try {
       const $top = browseFeed.$top;
       const skip = $top * page;
       let finalUri = "";
-      const searchParams = `?partialName=${feed.SearchString}&storeId=${
-        DefaultStore.Id
-      }&$skip=${skip}&$top=${$top}&searchLive=${false}&$groups=${
-        GLOBALS.bootstrapSelectors?.RightsGroupIds
-      }&$lang=${
+      const searchParams = `&partialName=${
+        feed.SearchString
+      }&$top=${$top}&searchLive=${false}&$lang=${
         GLOBALS.store!.onScreenLanguage?.languageCode || lang || "en-US"
       }`;
       const uri = `${browseFeedUri}&$skip=${skip}&storeId=${
         DefaultStore.Id
       }&$groups=${GLOBALS.store!.rightsGroupIds}`;
-      if (browsePivots) {
-        finalUri = uri.concat(`&pivots=${requestPivots}`);
-      } else if (isSearch) {
+      if (isSearch) {
         finalUri = uri + searchParams;
+      } else if (browsePivots) {
+        finalUri = uri.concat(`&pivots=${requestPivots}`);
       } else {
         finalUri = uri;
       }
-      console.log('isSearch', isSearch, finalUri)
-      const data = isSearch
-        ? await getDataFromUDL(finalUri, true)
-        : await getDataFromUDL(finalUri);
+      const data = await getDataFromUDL(finalUri);
+      console.log("isSearch", isSearch, finalUri, data);
       if (data) {
         /** we have data from backend, so use the data and setState */
+        isSearch ? (data["data"] = getDataForSearch(data.data)) : null;
         const massagedData = getMassagedData(uri, data);
+        console.log("massagedData in get feeds", massagedData);
         return massagedData;
       } else {
         console.log("No data currently for", uri);
@@ -185,7 +190,9 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const { data, isLoading, isIdle, isFetched } = useQuery(
     [`browseFeed-${browseFeedUri}`, browsePivots, page],
     fetchFeeds,
-    defaultQueryOptions
+    isSearch
+      ? { refetchOnMount: "always", ...defaultQueryOptions }
+      : defaultQueryOptions
   );
 
   const handleEndReached = debounce2(() => {
@@ -230,6 +237,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     if (!pivotQuery.data) {
       cardRef.current?.setNativeProps({ hasTVPreferredFocus: true });
     }
+    console.log("Data in side gallery inside useeffect", data);
     if (data && isFetched) {
       const firstFilter = createInitialFilterState(
         pivotQuery?.data?.data,
@@ -818,3 +826,34 @@ const styles = StyleSheet.create({
   },
 });
 export default GalleryScreen;
+
+// Id: "fake_1257000_Default1_movie"
+// IsAdult: false
+// ItemType: "Program"
+// Name: "Alice in Wonderland"
+// Ratings: [{…}]
+// ReleaseYear: 2022
+// ShowType: "Movie"
+// assetType: {itemType: "PROGRAM-VOD", contentType: "PROGRAM", sourceType: "VOD"}
+// episodeInfo: undefined
+// image2x3KeyArtURL: undefined
+// image2x3PosterURL: undefined
+// image16x9KeyArtURL: undefined
+// image16x9PosterURL: undefined
+// metadataLine2: "2022  ·  R"
+// ratingValues: []
+// title: "Alice in Wonderland"
+
+// EntityType: "Program"
+// Id: "667969ThirdParty31303032303939353432"
+// ImageBucketId: "images"
+// Images: (4) [{…}, {…}, {…}, {…}]
+// IsGeneric: false
+// ItemType: "Program"
+// Name: "Avengers: Age of Ultron"
+// Ratings: [{…}]
+// ReleaseYear: 2015
+// RuntimeSeconds: 10800
+// ShowType: "Movie"
+// StationIds: (4) ["1704573", "1705109", "1703864", "1703819"]
+// SupportedImages: (11) ["4x3/Poster", "4x3/KeyArt", "3x4/Poster", "3x4/KeyArt", "2x3/Poster", "2x3/KeyArt", "16x9/Poster", "16x9/KeyArt", "3x2/KeyArt", "PosterLandscape", "KeyArtLandscape"]

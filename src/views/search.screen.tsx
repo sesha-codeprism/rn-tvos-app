@@ -308,7 +308,6 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
                 FeedType: "Dynamic",
                 SearchString: searchString,
                 // mediaTypes: mediaTypes,
-                Uri: "udl://search/getSearchItems"
               }}
               navigation={props.navigation}
               data={massagedlistItems}
