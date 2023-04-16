@@ -145,6 +145,10 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
       const navigationTargetUri =
         feed.NavigationTargetUri && feed.NavigationTargetUri.split("?")[0];
       const browseObject = () => {
+        if (feed.Layout === Layout.Category) {
+          updateRoute("BrowseCategory", payload);
+          return;
+        }
         if (
           navigationTargetUri === "browsepromotions" ||
           navigationTargetUri === "browsepayperview" ||
