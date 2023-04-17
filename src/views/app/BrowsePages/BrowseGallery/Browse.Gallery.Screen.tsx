@@ -54,11 +54,18 @@ import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { debounce2 } from "../../../../utils/app/app.utilities";
 import _ from "lodash";
 import { AppStrings, getFontIcon } from "../../../../config/strings";
-import { isAdultContentBlock, isPconBlocked } from "../../../../utils/pconControls";
+import {
+  isAdultContentBlock,
+  isPconBlocked,
+} from "../../../../utils/pconControls";
 import { fontIconsObject, PinType } from "../../../../utils/analytics/consts";
 import { getItemId } from "../../../../utils/dataUtils";
-import { assetTypeObject, ContentType } from "../../../../utils/analytics/consts";
+import {
+  assetTypeObject,
+  ContentType,
+} from "../../../../utils/analytics/consts";
 import { isFeatureAssigned } from "../../../../utils/helpers";
+import { invalidateQueryBasedOnSpecificKeys } from "../../../../config/queries";
 interface GalleryScreenProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -67,7 +74,8 @@ interface GalleryScreenProps {
 const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const feed: Feed = props.route.params.feed;
   const [currentFeed, setCurrentFeed] = useState<SubscriberFeed>();
-  const [currentFocusedFeed, setCurrentFocusedFeed] = useState<SubscriberFeed>();
+  const [currentFocusedFeed, setCurrentFocusedFeed] =
+    useState<SubscriberFeed>();
   const [openMenu, setOpenMenu] = useState(false);
   const [openSubMenu, setOpenSubMenu] = useState(false);
   const [filterState, setFilterState] = useState<any>(null);
@@ -81,9 +89,9 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const [dataSource, setDataSource] = useState(Array<any>());
   const [playActionsData, setplayActionsData] = useState<any>(undefined);
   const [discoverySchedulesData, setdiscoverySchedulesData] =
-  useState<any>(undefined);
+    useState<any>(undefined);
   const [discoveryProgramData, setdiscoveryProgramData] =
-  useState<any>(undefined);
+    useState<any>(undefined);
   const [subscriberData, setsubscriberData] = useState<any>(undefined);
   // Get the desired length per page from the config params(top value).
   const lengthPerPage = browseFeed.$top;
@@ -163,7 +171,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     }
     const dataArray = dataSource;
     if (dataArray.length > 0) {
-      const newArray = dataArray.concat(dataSet);
+      const newArray = isSearch? dataSet : dataArray.concat(dataSet);
       setDataSource(newArray);
     } else {
       setDataSource(dataSet);
@@ -230,21 +238,21 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     }
   );
   const isSeries = (assetData: any) =>
-  assetData.assetType.contentType === ContentType.SERIES ||
-  assetData.assetType.contentType === ContentType.EPISODE;
+    assetData.assetType.contentType === ContentType.SERIES ||
+    assetData.assetType.contentType === ContentType.EPISODE;
 
   const isProgramOrGeneric = (assetData: any) =>
     assetData.assetType.contentType === ContentType.PROGRAM ||
     assetData.assetType.contentType === ContentType.GENERIC;
 
-  const getPlayActions = async (assetData:any) => {
+  const getPlayActions = async (assetData: any) => {
     if (!assetData) {
       console.log("No asset data to make api call..");
       return undefined;
     }
-    const id =  isSeries(assetData) 
-    ? assetData?.Schedule?.ProgramId || assetData?.ProgramId || assetData?.Id
-    : assetData?.Id || assetData?.ProgramId;
+    const id = isSeries(assetData)
+      ? assetData?.Schedule?.ProgramId || assetData?.ProgramId || assetData?.Id
+      : assetData?.Id || assetData?.ProgramId;
     const params = `?catchup=true&storeId=${DefaultStore.Id}&groups=${
       GLOBALS.store!.rightsGroupIds
     }&id=${id}`;
@@ -258,16 +266,16 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       console.log("No asset data to make api call..");
       return undefined;
     }
-    
+
     let udlParam: string = "";
     const id = getItemId(assetData);
-    const params = `?$top=${browseFeed.$top}&$skip=${browseFeed.$skip}&storeId=${
-      DefaultStore.Id
-    }&$groups=${GLOBALS.store!.rightsGroupIds}&pivots=${
-      browseFeed.pivots
-    }&id=${id}&itemType=${assetData.ItemType}&lang=${
-      GLOBALS.store!.onScreenLanguage.languageCode
-    }`;
+    const params = `?$top=${browseFeed.$top}&$skip=${
+      browseFeed.$skip
+    }&storeId=${DefaultStore.Id}&$groups=${
+      GLOBALS.store!.rightsGroupIds
+    }&pivots=${browseFeed.pivots}&id=${id}&itemType=${
+      assetData.ItemType
+    }&lang=${GLOBALS.store!.onScreenLanguage.languageCode}`;
     if (isSeries(assetData)) {
       udlParam = "udl://discovery/seriesSchedules/" + params;
     } else if (isProgramOrGeneric(assetData)) {
@@ -293,7 +301,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       udlParam = "udl://discovery/series/" + params;
     } else if (isProgramOrGeneric(assetData)) {
       udlParam = "udl://discovery/programs/" + params;
-    } 
+    }
     const data = await getDataFromUDL(udlParam);
     const massagedData = massageDiscoveryFeedAsset(
       data.data,
@@ -308,7 +316,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       return undefined;
     }
     let udlParam: string = "";
-    const id = getItemId(assetData);    
+    const id = getItemId(assetData);
     const params = `?storeId=${DefaultStore.Id}&id=${id}`;
     if (isSeries(assetData)) {
       udlParam = "udl://subscriber/getSeriesSubscriberData/" + params;
@@ -322,7 +330,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const playActionsQuery = useQuery(
     ["get-playActions", currentFeed?.Id],
     () => getPlayActions(currentFeed),
-    { 
+    {
       cacheTime: 60000,
       staleTime: 60000,
     }
@@ -371,6 +379,9 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   useEffect(() => {
     return () => {
       GLOBALS.selectedFeed = undefined;
+      isSearch
+        ? invalidateQueryBasedOnSpecificKeys(`browseFeed`, browseFeedUri)
+        : null;
     };
   }, []);
   useEffect(() => {
@@ -393,36 +404,61 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   }, [data]);
 
   useEffect(() => {
-    if (playActionsQuery.data && !playActionsQuery.isFetching && !playActionsQuery.isStale && playActionsQuery.isFetched && playActionsData !== playActionsQuery.data) {
+    if (
+      playActionsQuery.data &&
+      !playActionsQuery.isFetching &&
+      !playActionsQuery.isStale &&
+      playActionsQuery.isFetched &&
+      playActionsData !== playActionsQuery.data
+    ) {
       setplayActionsData(playActionsQuery.data);
     }
-  }, [playActionsQuery.data, playActionsQuery.isFetching, playActionsQuery.isStale, playActionsQuery.isFetched]);
+  }, [
+    playActionsQuery.data,
+    playActionsQuery.isFetching,
+    playActionsQuery.isStale,
+    playActionsQuery.isFetched,
+  ]);
 
   useEffect(() => {
-    if (discoverySchedulesQueryData && !isFetchingDiscoverySchedulesQueryData && discoverySchedulesData !== discoverySchedulesQueryData) {
+    if (
+      discoverySchedulesQueryData &&
+      !isFetchingDiscoverySchedulesQueryData &&
+      discoverySchedulesData !== discoverySchedulesQueryData
+    ) {
       setdiscoverySchedulesData(discoverySchedulesQueryData);
     }
   }, [discoverySchedulesQueryData, isFetchingDiscoverySchedulesQueryData]);
 
   useEffect(() => {
-    if (discoveryProgramQueryData && !isFetchingDiscoveryProgramQueryData && discoveryProgramData !== discoveryProgramQueryData) {
+    if (
+      discoveryProgramQueryData &&
+      !isFetchingDiscoveryProgramQueryData &&
+      discoveryProgramData !== discoveryProgramQueryData
+    ) {
       setdiscoveryProgramData(discoveryProgramQueryData);
     }
   }, [discoveryProgramQueryData, isFetchingDiscoveryProgramQueryData]);
 
   useEffect(() => {
-    if (subscriberDataQuery && !isFetchingsubscriberDataQuery && subscriberData !== subscriberDataQuery) {
+    if (
+      subscriberDataQuery &&
+      !isFetchingsubscriberDataQuery &&
+      subscriberData !== subscriberDataQuery
+    ) {
       setsubscriberData(subscriberDataQuery);
     }
   }, [subscriberDataQuery, isFetchingsubscriberDataQuery]);
 
   useEffect(() => {
     if (currentFeed && subscriberData && playActionsData) {
-      if (currentFeed?.assetType?.contentType === ContentType.PROGRAM ||
-          currentFeed?.assetType?.contentType === ContentType.GENERIC ||
-          currentFeed?.assetType?.contentType === ContentType.EPISODE
+      if (
+        currentFeed?.assetType?.contentType === ContentType.PROGRAM ||
+        currentFeed?.assetType?.contentType === ContentType.GENERIC ||
+        currentFeed?.assetType?.contentType === ContentType.EPISODE
       ) {
-          setCurrentFocusedFeed(massageProgramDataForUDP(
+        setCurrentFocusedFeed(
+          massageProgramDataForUDP(
             playActionsData,
             currentFeed,
             discoveryProgramData,
@@ -445,9 +481,11 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
             undefined,
             undefined,
             isFeatureAssigned("IOSCarrierBilling")
-          ));              
-        } else {      
-          setCurrentFocusedFeed(massageSeriesDataForUDP(
+          )
+        );
+      } else {
+        setCurrentFocusedFeed(
+          massageSeriesDataForUDP(
             subscriberData,
             discoveryProgramData,
             discoverySchedulesData,
@@ -467,10 +505,11 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
             undefined,
             undefined,
             isFeatureAssigned("IOSCarrierBilling")
-          ));
+          )
+        );
       }
     }
-  }, [currentFeed,subscriberData,playActionsData]);
+  }, [currentFeed, subscriberData, playActionsData]);
 
   const handleFilterClear = () => {
     setDataSource([]);
@@ -547,15 +586,19 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
 
     const navigationTargetUri = feed?.NavigationTargetUri?.split("?")[0];
     if (navigationTargetUri !== browseType.restartTv) {
-      metadata = currentFocusedFeed?.genre ? getGenreText(currentFocusedFeed?.genre) : [];      
-      currentFocusedFeed?.ReleaseYear && metadata?.push(currentFocusedFeed?.ReleaseYear);
+      metadata = currentFocusedFeed?.genre
+        ? getGenreText(currentFocusedFeed?.genre)
+        : [];
+      currentFocusedFeed?.ReleaseYear &&
+        metadata?.push(currentFocusedFeed?.ReleaseYear);
       currentFocusedFeed?.Rating && metadata?.push(currentFocusedFeed?.Rating);
     }
 
     return (
       <View style={styles.metadataContainer}>
         <Text numberOfLines={2} style={styles.metadataLine2}>
-          {metadata?.join(metadataSeparator) || currentFocusedFeed?.metadataLine2}
+          {metadata?.join(metadataSeparator) ||
+            currentFocusedFeed?.metadataLine2}
         </Text>
       </View>
     );
@@ -568,38 +611,31 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       currentFocusedFeed?.combinedQualityLevels[0];
     const audioTag = currentFocusedFeed?.combinedAudioIndicator;
     return (
-        <View style={styles.metadataContainer}>
-            {/* Quality Indicators */}
-            {!!qualityLevel && (
-                <Text style={styles.fontIconStyle}>
-                    {getFontIcon((fontIconsObject as any)[qualityLevel])}
-                </Text>
-            )}
-            {/* Language Indicators */}
-            {!!langaugeIndicator && (
-                <Text style={styles.fontIconStyle}>
-                    {getFontIcon(
-                        (fontIconsObject as any)[langaugeIndicator]
-                    )}
-                </Text>
-            )}
+      <View style={styles.metadataContainer}>
+        {/* Quality Indicators */}
+        {!!qualityLevel && (
+          <Text style={styles.fontIconStyle}>
+            {getFontIcon((fontIconsObject as any)[qualityLevel])}
+          </Text>
+        )}
+        {/* Language Indicators */}
+        {!!langaugeIndicator && (
+          <Text style={styles.fontIconStyle}>
+            {getFontIcon((fontIconsObject as any)[langaugeIndicator])}
+          </Text>
+        )}
 
-            {/* Audio Indicator */}
+        {/* Audio Indicator */}
 
-            {!!audioTag?.length &&
-                audioTag.map((audioIndicator: any) => {
-                    return (
-                        <Text
-                            style={styles.fontIconStyle}
-                            key={audioIndicator}
-                        >
-                            {getFontIcon(
-                                (fontIconsObject as any)[audioIndicator]
-                            )}
-                        </Text>
-                    );
-                })}
-        </View>
+        {!!audioTag?.length &&
+          audioTag.map((audioIndicator: any) => {
+            return (
+              <Text style={styles.fontIconStyle} key={audioIndicator}>
+                {getFontIcon((fontIconsObject as any)[audioIndicator])}
+              </Text>
+            );
+          })}
+      </View>
     );
   };
 
@@ -714,7 +750,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const statusText =
     (currentFocusedFeed?.statusText?.length &&
       currentFocusedFeed?.statusText[0]) ||
-    "";  
+    "";
 
   return (
     <View style={styles.root}>
@@ -815,11 +851,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
                           {renderMetadata()}
                           {renderIndicators()}
                           {renderRatingValues()}
-                          <Text
-                            style={
-                              styles.statusTextStyle
-                            }
-                          >
+                          <Text style={styles.statusTextStyle}>
                             {statusText}
                           </Text>
                         </View>
