@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, StyleSheet, View, Alert } from "react-native";
+import { FlatList, StyleSheet, View, Alert, Pressable } from "react-native";
 import MFSelectableButton from "../../../../components/SelectableButtons/MFSelectableButton";
 import SideMenuLayout from "../../../../components/MFSideMenu/MFSideMenu";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
@@ -49,7 +49,7 @@ const EpisodeRecordOptions: React.FunctionComponent<
   const secondButtonRef = React.createRef();
 
   let focuszoneRef: React.RefObject<any>;
-  const [focused, setFocused] = useState<any>(0);
+  const [focussed, setFocussed] = useState<any>(0);
 
   const handleOnPress = (index: number) => {
     const selectedItem = options[index];
@@ -73,6 +73,7 @@ const EpisodeRecordOptions: React.FunctionComponent<
       title,
       isNew,
       SubscriptionGroup,
+      programDiscoveryData,
     } = props.route.params;
 
     if (type === EpisodeRecordingOptionsEnum.Episode) {
@@ -80,7 +81,9 @@ const EpisodeRecordOptions: React.FunctionComponent<
       schedulesArray = schedules;
       key = "ProgramId";
       isSeries = false;
-      titleString = title;
+      titleString = programDiscoveryData
+        ? getSubTitle(programDiscoveryData)
+        : title;
       definition = Definition.SINGLE_PROGRAM;
       const { SubscriptionItems = [] } = GLOBALS.recordingData || [];
       const [item] = SubscriptionItems;
@@ -171,7 +174,7 @@ const EpisodeRecordOptions: React.FunctionComponent<
         isSubscriptionItem,
         isPopupModal: true,
       };
-      console.log("NavigationParams", navigationParams);
+
       props.navigation.navigate(
         DetailRoutes.RecordingOptions,
         navigationParams
@@ -179,11 +182,32 @@ const EpisodeRecordOptions: React.FunctionComponent<
     }
   };
 
+  const getSubTitle = (programDiscoveryData: any) => {
+    return (
+      (programDiscoveryData.SeasonNumber
+        ? `S${programDiscoveryData.SeasonNumber} `
+        : "") +
+        (programDiscoveryData.SeasonNumber && programDiscoveryData.EpisodeNumber
+          ? " "
+          : "") +
+        (programDiscoveryData.EpisodeNumber
+          ? `E${programDiscoveryData.EpisodeNumber} `
+          : "") +
+        (programDiscoveryData?.EpisodeName
+          ? `. ${programDiscoveryData?.EpisodeName}`
+          : "") || ""
+    );
+  };
+
   return (
     <SideMenuLayout
       //@ts-ignore
       title={props.route.params.title}
-      subTitle={"Record Options"}
+      subTitle={
+        props.route.params.programDiscoveryData
+          ? getSubTitle(props.route.params.programDiscoveryData)
+          : "Record Options"
+      }
       contentContainerStyle={{
         padding: 0,
         width: "100%",
@@ -192,7 +216,12 @@ const EpisodeRecordOptions: React.FunctionComponent<
       }}
       isTitleInverted={true}
     >
-      <View style={{ paddingHorizontal: 30, paddingVertical: 10 }}>
+      <View
+        style={{
+          paddingHorizontal: 30,
+          paddingVertical: 10,
+        }}
+      >
         <FlatList
           data={options}
           keyExtractor={(item: any) => item.title}
@@ -201,10 +230,14 @@ const EpisodeRecordOptions: React.FunctionComponent<
               <MFSelectableButton
                 key={`Index-${index}`}
                 title={item.title}
-                hasTVPreferredFocus={index === 0}
+                hasTVPreferredFocus={index === 1}
                 onPress={() => {
                   handleOnPress(index);
                 }}
+                onFocus={() => {
+                  setFocussed(index);
+                }}
+                isFoucsed={focussed === index}
               />
             );
           }}
@@ -214,53 +247,53 @@ const EpisodeRecordOptions: React.FunctionComponent<
   );
 };
 
-const uidefStyles = getUIdef("EpisodeRecordOptions")?.style || {
-  selectButtonContainer: {
-    width: "100%",
-    height: 120,
-    justifyContent: "space-between",
-    alignContent: "center",
-    alignItems: "center",
-    padding: 30,
-    display: "flex",
-    flexDirection: "row",
-  },
-  focusedselectButtonContainer: {
-    backgroundColor: "#053C69",
-    borderRadius: 6,
-    shadowColor: "#0000006b",
-    shadowOffset: { width: 6, height: 8 },
-    shadowOpacity: 0.42,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
-  contentContainer: {
-    flex: 0.8,
-    flexDirection: "column",
-    alignContent: "center",
-  },
-  chevronContainer: { flex: 0.2 },
-  chevronStyles: {
-    fontFamily: "MyFontRegular",
-    fontSize: 70,
-    textAlign: "center",
-    color: "#A7A7A7",
-    marginBottom: 8,
-  },
-  focusedText: { color: "#EEEEEE" },
-  selectButtonTitle: {
-    color: "#A7A7A7",
-    fontFamily: "Inter-Regular",
-    fontSize: 29,
-    paddingVertical: 10,
-  },
-  selectButtonContent: {
-    color: "#A7A7A7",
-    fontFamily: "Inter-Regular",
-    fontSize: 23,
-  },
-};
+// const uidefStyles = getUIdef("EpisodeRecordOptions")?.style || {
+//   selectButtonContainer: {
+//     width: "100%",
+//     height: 120,
+//     justifyContent: "space-between",
+//     alignContent: "center",
+//     alignItems: "center",
+//     padding: 30,
+//     display: "flex",
+//     flexDirection: "row",
+//   },
+//   focusedselectButtonContainer: {
+//     backgroundColor: "#053C69",
+//     borderRadius: 6,
+//     shadowColor: "#0000006b",
+//     shadowOffset: { width: 6, height: 8 },
+//     shadowOpacity: 0.42,
+//     shadowRadius: 4.65,
+//     elevation: 8,
+//   },
+//   contentContainer: {
+//     flex: 0.8,
+//     flexDirection: "column",
+//     alignContent: "center",
+//   },
+//   chevronContainer: { flex: 0.2 },
+//   chevronStyles: {
+//     fontFamily: "MyFontRegular",
+//     fontSize: 70,
+//     textAlign: "center",
+//     color: "#A7A7A7",
+//     marginBottom: 8,
+//   },
+//   focusedText: { color: "#EEEEEE" },
+//   selectButtonTitle: {
+//     color: "#A7A7A7",
+//     fontFamily: "Inter-Regular",
+//     fontSize: 29,
+//     paddingVertical: 10,
+//   },
+//   selectButtonContent: {
+//     color: "#A7A7A7",
+//     fontFamily: "Inter-Regular",
+//     fontSize: 23,
+//   },
+// };
 
-const styles = StyleSheet.create(uidefStyles);
+//const styles = StyleSheet.create(uidefStyles);
 
 export default EpisodeRecordOptions;
