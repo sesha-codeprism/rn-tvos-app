@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   BackHandler,
   TVMenuControl,
+  DeviceEventEmitter,
 } from "react-native";
 import { appUIDefinition, debounceTime, lang } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -28,7 +29,6 @@ import MFSwim from "../../components/MFSwim";
 import { Routes } from "../../config/navigation/RouterOutlet";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useAccount from "../../customHooks/useAccount";
-import MFEventEmitter from "../../utils/MFEventEmitter";
 import { GlobalContext } from "../../contexts/globalContext";
 import { ItemType } from "../../utils/common";
 import { globalStyles } from "../../config/styles/GlobalStyles";
@@ -59,7 +59,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     inHomeApiEndpoint = undefined,
     useSubscriberInHome = false,
   } = MFGlobalsConfig?.config?.inhomeDetection || {});
-  getNetworkIHD(params);
+  //getNetworkIHD(params);
   const currentContext = useContext(GlobalContext);
 
   let feedTimeOut: any = null;
@@ -392,7 +392,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                 }}
                 setCardFocus={setCardFocus}
                 onPressSettings={() => {
-                  MFEventEmitter.emit("openSettings", {
+                  DeviceEventEmitter.emit("openSettings", {
                     onClose: () =>
                       setttingsRef.current &&
                       setttingsRef?.current?.setNativeProps({

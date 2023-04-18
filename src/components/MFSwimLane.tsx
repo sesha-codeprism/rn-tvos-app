@@ -49,6 +49,7 @@ interface MFSwimLaneProps {
   autoFocusOnFirstCard?: boolean;
   navigation: NativeStackNavigationProp<any>;
   onLongPress?: any;
+  extraData: boolean;
 }
 
 export interface Names {
@@ -144,6 +145,10 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
       const navigationTargetUri =
         feed.NavigationTargetUri && feed.NavigationTargetUri.split("?")[0];
       const browseObject = () => {
+        if (feed.Layout === Layout.Category) {
+          updateRoute("BrowseCategory", payload);
+          return;
+        }
         if (
           navigationTargetUri === "browsepromotions" ||
           navigationTargetUri === "browsepayperview" ||
@@ -299,6 +304,7 @@ const MFSwimLane: React.FunctionComponent<MFSwimLaneProps> = React.forwardRef(
           onViewAllPressed={onTapViewAll}
           flatListStyle={{ display: "flex", flex: 1, flexDirection: "row" }}
           getNoItemReturenedRef={() => innerNoItemsReturenedRef}
+          extraData={props.extraData}
         />
       </View>
     );

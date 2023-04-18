@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dimensions, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { DeviceEventEmitter, Dimensions, StyleSheet, Text, View, ViewStyle } from "react-native";
 import { globalStyles as g } from "../../config/styles/GlobalStyles";
 import { useEffect, useState } from "react";
 
@@ -9,7 +9,6 @@ import { appUIDefinition } from '../../config/constants';
 import MFLoader from '../../components/MFLoader';
 import MFPopup from '../../components/MFPopup';
 import { MockPlayer } from './MockPlayer';
-import MFEventEmitter from '../../utils/MFEventEmitter';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
 
@@ -70,7 +69,7 @@ const Video: React.FunctionComponent<VideoPlayerProps> = (
     
     const onSubtitlePressed = () => {
         // 2nd argument, pass in reference to  PlayerManager
-        MFEventEmitter.emit('openPlayerSubtitlePanel', {drawerPercentage: 0.37});
+        DeviceEventEmitter.emit('openPlayerSubtitlePanel', {drawerPercentage: 0.37});
     }
     const onQualityPressed = () => {
         //open panel

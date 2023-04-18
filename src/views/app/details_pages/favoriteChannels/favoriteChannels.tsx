@@ -1,5 +1,6 @@
 import {
   Alert,
+  DeviceEventEmitter,
   FlatList,
   Image,
   ImageBackground,
@@ -27,7 +28,6 @@ import { useQuery } from "react-query";
 import { GlobalContext } from "../../../../contexts/globalContext";
 import { IChannel } from "../../../../utils/live/live";
 import { PinnedItemType } from "../../../../utils/pinnedItemType";
-import MFEventEmitter from "../../../../utils/MFEventEmitter";
 
 interface FavouriteManagerProps {
   navigation: NativeStackNavigationProp<any>;
@@ -57,7 +57,10 @@ const FavoriteChannelsScreen = (props: FavouriteManagerProps) => {
   };
 
   useEffect(() => {
-    MFEventEmitter.on("FavoriteChannelUpdated", onDuplexMessage);
+    const favoriteChannelUpdatedSubscription = DeviceEventEmitter.addListener("FavoriteChannelUpdated", onDuplexMessage);
+    return () => {
+      favoriteChannelUpdatedSubscription.remove()
+    }
   }, []);
 
   useEffect(() => {
