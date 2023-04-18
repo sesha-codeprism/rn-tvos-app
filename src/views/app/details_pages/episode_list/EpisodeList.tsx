@@ -47,14 +47,20 @@ import MFButton, {
 } from "../../../../components/MFButton/MFButton";
 import { DetailsSidePanel } from "../DetailSidePanel";
 import { AppImages } from "../../../../assets/images";
-import { Definition, Definition as DefinitionOfItem } from "../../../../utils/DVRUtils";
+import {
+  Definition,
+  Definition as DefinitionOfItem,
+} from "../../../../utils/DVRUtils";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
 import MFOverlay from "../../../../components/MFOverlay";
 import { appQueryCache } from "../../../../config/queries";
 import { getItemId } from "../../../../utils/dataUtils";
 import { findConflictedGroupBySeriesOrProgramId } from "../../../../utils/ConflictUtils";
 import MFEventEmitter from "../../../../utils/MFEventEmitter";
-import { cancelRecordingFromConflictPopup, forceResolveConflict } from "../../../../../backend/dvrproxy/dvrproxy";
+import {
+  cancelRecordingFromConflictPopup,
+  forceResolveConflict,
+} from "../../../../../backend/dvrproxy/dvrproxy";
 import { ConflictResolutionContext } from "../../../../contexts/conflictResolutionContext";
 import { isPconBlocked } from "../../../../utils/pconControls";
 
@@ -155,68 +161,70 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
 
   const ctaButtonPress: any = {
     [AppStrings?.str_details_program_record_button]: () => {
-      console.log('str_details_program_record_button', currentEpisode)
-     const openPannel = ()=>{
-      drawerRef?.current?.close();
-      const { stationId } = navigationParams;
+      console.log("str_details_program_record_button", currentEpisode);
+      const openPannel = () => {
+        drawerRef?.current?.close();
+        const { stationId } = navigationParams;
 
-      if (!episodeSchedules) {
-        console.warn("No Schedules");
-        return;
-      }
-      const schedules = episodeSchedules;
-      if (schedules && schedules.length) {
-        let schedule = schedules[0];
-        // Get the correct schedule, the one which is shown in UI
-        if (stationId && schedules && schedules.length) {
-          schedule =
-            schedules.find((s: any) => s?.StationId === stationId) || schedule;
+        if (!episodeSchedules) {
+          console.warn("No Schedules");
+          return;
         }
-        const recordingOptions = {
-          Definition: DefinitionOfItem.SINGLE_PROGRAM,
-          Parameters: [
-            {
-              Key: "ProgramId",
-              Value: episodeDiscoveryData?.Id,
+        const schedules = episodeSchedules;
+        if (schedules && schedules.length) {
+          let schedule = schedules[0];
+          // Get the correct schedule, the one which is shown in UI
+          if (stationId && schedules && schedules.length) {
+            schedule =
+              schedules.find((s: any) => s?.StationId === stationId) ||
+              schedule;
+          }
+          const recordingOptions = {
+            Definition: DefinitionOfItem.SINGLE_PROGRAM,
+            Parameters: [
+              {
+                Key: "ProgramId",
+                Value: episodeDiscoveryData?.Id,
+              },
+            ],
+            Settings: {
+              StationId: schedule.StationId,
+              ChannelNumber: schedule.ChannelNumber as number,
+              StartUtc: schedule.StartUtc,
+              MaximumViewableShows: undefined,
+              EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
+              RecyclingDisabled: false,
+              ShowType: "FirstRunOnly",
+              AirtimeDomain: "Anytime",
+              ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId.toString(),
+              IsMultiChannel: false,
             },
-          ],
-          Settings: {
-            StationId: schedule.StationId,
-            ChannelNumber: schedule.ChannelNumber as number,
-            StartUtc: schedule.StartUtc,
-            MaximumViewableShows: undefined,
-            EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
-            RecyclingDisabled: false,
-            ShowType: "FirstRunOnly",
-            AirtimeDomain: "Anytime",
-            ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId.toString(),
-            IsMultiChannel: false,
-          },
-        };
-        const params = {
-          isNew: true,
-          programId: episodeDiscoveryData.Id,
-          seriesId: episodeDiscoveryData.SeriesId,
-          isGeneric: episodeDiscoveryData?.isGeneric,
-          programDiscoveryData: episodeDiscoveryData,
-          schedules: schedules,
-          recordingOptions: recordingOptions,
-        };
-        setRoute(DetailRoutes.EpisodeRecordOptions);
-        setScreenProps(params);
-        setOpen(open);
-        drawerRef?.current?.open();
+          };
+          const params = {
+            isNew: true,
+            programId: episodeDiscoveryData.Id,
+            seriesId: episodeDiscoveryData.SeriesId,
+            isGeneric: episodeDiscoveryData?.isGeneric,
+            programDiscoveryData: episodeDiscoveryData,
+            schedules: schedules,
+            recordingOptions: recordingOptions,
+            title:episodeDiscoveryData.Name
+          };
+          setRoute(DetailRoutes.EpisodeRecordOptions);
+          setScreenProps(params);
+          setOpen(open);
+          drawerRef?.current?.open();
+        }
+      };
+      if (isPconBlocked(currentEpisode.CatalogInfo)) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.content,
+          data: currentEpisode,
+          onSuccess: openPannel,
+        });
+      } else {
+        openPannel();
       }
-     }
-     if (isPconBlocked(currentEpisode.CatalogInfo)) {
-      MFEventEmitter.emit("openPinVerificationPopup", {
-        pinType: PinType.content,
-        data: currentEpisode,
-        onSuccess: openPannel,
-      });
-    } else {
-      openPannel();
-    }
     },
     [AppStrings?.str_details_cta_more_info]: toggleSidePanel,
     [AppStrings?.str_details_cta_play]: () => {},
@@ -278,91 +286,124 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       }
     },
     [AppStrings?.str_dvr_resolve_conflict]: () => {
-       //if no conflict:
-    let id  = getItemId(currentEpisode);
-    const subs = GLOBALS.allSubscriptionGroups ;
-    let conflictedSubscriptionGroup: any|undefined = findConflictedGroupBySeriesOrProgramId(id, subs?.SubscriptionGroups);
-    const [{ Definition: definition }] = conflictedSubscriptionGroup || {};
-    const conflictedItems = conflictedSubscriptionGroup?.[0]?.SubscriptionItems?.filter((si: any) =>  si.ItemState  === 'Conflicts');
-    if(conflictedSubscriptionGroup && conflictedItems && conflictedItems.length){
-      // determine if series conflict
-    if(definition === Definition.SINGLE_PROGRAM || definition === Definition.SINGLE_TIME){
+      //if no conflict:
+      let id = getItemId(currentEpisode);
+      const subs = GLOBALS.allSubscriptionGroups;
+      let conflictedSubscriptionGroup: any | undefined =
+        findConflictedGroupBySeriesOrProgramId(id, subs?.SubscriptionGroups);
+      const [{ Definition: definition }] = conflictedSubscriptionGroup || {};
+      const conflictedItems =
+        conflictedSubscriptionGroup?.[0]?.SubscriptionItems?.filter(
+          (si: any) => si.ItemState === "Conflicts"
+        );
+      if (
+        conflictedSubscriptionGroup &&
+        conflictedItems &&
+        conflictedItems.length
+      ) {
+        // determine if series conflict
+        if (
+          definition === Definition.SINGLE_PROGRAM ||
+          definition === Definition.SINGLE_TIME
+        ) {
+          MFEventEmitter.emit("openPopup", {
+            buttons: [
+              {
+                title: AppStrings?.str_dvr_resolve_conflict_auto,
+                onPress: async () => {
+                  await forceResolveConflict(conflictedSubscriptionGroup);
+                  MFEventEmitter.emit("closePopup", undefined);
+                },
+              },
+              {
+                title: AppStrings?.str_dvr_resolve_conflict_manual,
+                onPress: () => {
+                  conflictContext.ProgramId = id;
+                  conflictContext.isEpisode = true;
+                  MFEventEmitter.emit("openConflictResolution", {
+                    passedInPops: true,
+                    drawerPercentage: 0.35,
+                    navigation: props.navigation,
+                    allSubscriptions: subs,
+                  });
+                },
+              },
+              {
+                title: AppStrings?.str_dvr_donot_record,
+                onPress: async () => {
+                  await cancelRecordingFromConflictPopup(
+                    conflictedSubscriptionGroup,
+                    false,
+                    false
+                  );
+                  MFEventEmitter.emit("closePopup", undefined);
+                },
+              },
+            ],
+            description: AppStrings?.str_dvr_conflict_popup_warning_program,
+          });
+        } else {
+          MFEventEmitter.emit("openPopup", {
+            buttons: [
+              {
+                title: AppStrings?.str_dvr_series_conflict_modal_record_all,
+                onPress: async () => {
+                  await forceResolveConflict(conflictedSubscriptionGroup);
+                  MFEventEmitter.emit("closePopup", undefined);
+                },
+              },
+              {
+                title: AppStrings?.str_dvr_series_modal_recod_no_conflict,
+                onPress: async () => {
+                  await cancelRecordingFromConflictPopup(
+                    conflictedSubscriptionGroup,
+                    true,
+                    true
+                  );
+                  MFEventEmitter.emit("closePopup", undefined);
+                },
+              },
+              {
+                title: AppStrings?.str_dvr_series_conflict_modal_chose_show,
+                onPress: () => {
+                  conflictContext.ProgramId = id;
+                  conflictContext.isEpisode = true;
+                  MFEventEmitter.emit("openConflictResolution", {
+                    passedInPops: true,
+                    drawerPercentage: 0.35,
+                    navigation: props.navigation,
+                    allSubscriptions: subs,
+                  });
+                },
+              },
+              {
+                title: AppStrings?.str_dvr_donot_record,
+                onPress: async () => {
+                  await cancelRecordingFromConflictPopup(
+                    conflictedSubscriptionGroup,
+                    true,
+                    false
+                  );
+                  MFEventEmitter.emit("closePopup", undefined);
+                },
+              },
+            ],
+            description: AppStrings?.str_dvr_conflict_popup_warning_series,
+          });
+        }
+      } else {
         MFEventEmitter.emit("openPopup", {
           buttons: [
             {
-              title: AppStrings?.str_dvr_resolve_conflict_auto,
+              title: "OK",
               onPress: async () => {
-                await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup",undefined);
+                MFEventEmitter.emit("closePopup", undefined);
               },
             },
-            {
-              title: AppStrings?.str_dvr_resolve_conflict_manual,
-              onPress: () => {
-                conflictContext.ProgramId = id;
-                conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
-              },
-            },
-            {
-              title: AppStrings?.str_dvr_donot_record,
-              onPress: async () => {
-                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  false, false) ;
-                MFEventEmitter.emit("closePopup",undefined);
-              },
-            }
           ],
-          description: AppStrings?.str_dvr_conflict_popup_warning_program
-        });
-      }else {
-        MFEventEmitter.emit("openPopup", {
-          buttons: [
-            {
-              title: AppStrings?.str_dvr_series_conflict_modal_record_all,
-              onPress: async () => {
-                await forceResolveConflict(conflictedSubscriptionGroup);
-                MFEventEmitter.emit("closePopup",undefined);
-              },
-            },
-            {
-              title: AppStrings?.str_dvr_series_modal_recod_no_conflict,
-              onPress: async () => {
-                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  true, true) ;
-                MFEventEmitter.emit("closePopup",undefined);
-              },
-            },
-            {
-              title: AppStrings?.str_dvr_series_conflict_modal_chose_show,
-              onPress: () => {
-                conflictContext.ProgramId = id;
-                conflictContext.isEpisode = true;
-                MFEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
-              },
-            },
-            {
-              title: AppStrings?.str_dvr_donot_record,
-              onPress: async () => {
-                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup, true, false);
-                MFEventEmitter.emit("closePopup",undefined);
-              },
-            }
-          ],
-          description: AppStrings?.str_dvr_conflict_popup_warning_series
+          description: AppStrings?.str_dvr_no_conflict_exists,
         });
       }
-    }else {
-      MFEventEmitter.emit("openPopup", {
-        buttons: [
-          {
-            title: "OK",
-            onPress: async () => {
-              MFEventEmitter.emit("closePopup", undefined);
-            },
-          }
-        ],
-        description: AppStrings?.str_dvr_no_conflict_exists
-      });
-    }
     },
     [AppStrings?.str_details_cta_playdvr]: () => {},
     [AppStrings?.str_details_cta_rent]: () => {},

@@ -8,6 +8,8 @@ import { getUIdef } from "../../../../utils/uidefinition";
 import { Definition } from "../../../../utils/common";
 import { DvrGroupShowType } from "../../../../utils/DVRUtils";
 import { GLOBALS } from "../../../../utils/globals";
+import { format } from "../../../../utils/assetUtils";
+import { metadataSeparator } from "../../../../utils/Subscriber.utils";
 
 export interface EpisodeRecordOptionsProps {
   isNew: boolean;
@@ -22,11 +24,16 @@ enum EpisodeRecordingOptionsEnum {
   Episode,
   Series,
 }
+type EpisodeData = {
+  seasonNumber: number;
+  episodeNumber: number;
+  episodeName: string;
+};
 
 const EpisodeRecordOptions: React.FunctionComponent<
   EpisodeRecordOptionsProps
 > = (props) => {
-  console.log(props);
+  console.log("EpisodeRecordOptions props", props);
   const options = [
     {
       title: AppStrings?.str_dvr_recording.only_this_episode,
@@ -82,7 +89,7 @@ const EpisodeRecordOptions: React.FunctionComponent<
       key = "ProgramId";
       isSeries = false;
       titleString = programDiscoveryData
-        ? getSubTitle(programDiscoveryData)
+        ? getEpisodeTitleString(programDiscoveryData)
         : title;
       definition = Definition.SINGLE_PROGRAM;
       const { SubscriptionItems = [] } = GLOBALS.recordingData || [];
@@ -182,21 +189,28 @@ const EpisodeRecordOptions: React.FunctionComponent<
     }
   };
 
-  const getSubTitle = (programDiscoveryData: any) => {
-    return (
-      (programDiscoveryData.SeasonNumber
-        ? `S${programDiscoveryData.SeasonNumber} `
-        : "") +
-        (programDiscoveryData.SeasonNumber && programDiscoveryData.EpisodeNumber
-          ? " "
-          : "") +
-        (programDiscoveryData.EpisodeNumber
-          ? `E${programDiscoveryData.EpisodeNumber} `
-          : "") +
-        (programDiscoveryData?.EpisodeName
-          ? `. ${programDiscoveryData?.EpisodeName}`
-          : "") || ""
-    );
+  const getEpisodeTitleString = (programDiscoveryData: any) => {
+    const episodeData = {
+      seasonNumber: programDiscoveryData.SeasonNumber || "",
+      episodeNumber: programDiscoveryData.EpisodeNumber || "",
+      episodeName:
+        programDiscoveryData?.EpisodeName || programDiscoveryData.Name || "",
+    };
+    const { str_seasonNumber, str_episodeNumber } = AppStrings || {};
+    const { episodeName, episodeNumber, seasonNumber } = episodeData;
+    const seasonTranslation = seasonNumber
+      ? format(str_seasonNumber || "S{0}", seasonNumber.toString()) ||
+        `S${seasonNumber}`
+      : "";
+    const episodeTranslation = episodeNumber
+      ? format(str_episodeNumber || "E{0}", episodeNumber.toString()) ||
+        `E${episodeNumber}`
+      : "";
+    const episodeTitle =
+      episodeNumber || seasonNumber
+        ? `${metadataSeparator}${episodeName}`
+        : episodeName;
+    return `${seasonTranslation}${episodeTranslation}${episodeTitle}`;
   };
 
   return (
@@ -205,7 +219,7 @@ const EpisodeRecordOptions: React.FunctionComponent<
       title={props.route.params.title}
       subTitle={
         props.route.params.programDiscoveryData
-          ? getSubTitle(props.route.params.programDiscoveryData)
+          ? getEpisodeTitleString(props.route.params.programDiscoveryData)
           : "Record Options"
       }
       contentContainerStyle={{
@@ -237,7 +251,6 @@ const EpisodeRecordOptions: React.FunctionComponent<
                 onFocus={() => {
                   setFocussed(index);
                 }}
-                isFoucsed={focussed === index}
               />
             );
           }}
