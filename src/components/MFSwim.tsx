@@ -12,7 +12,7 @@ import { SCREEN_WIDTH } from "../utils/dimensions";
 import { getUIdef } from "../utils/uidefinition";
 
 interface MFSwimProps {
-  feeds: FeedItem | undefined;
+  hub: FeedItem | undefined;
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
   onPress?: null | ((event: SubscriberFeed, feed?: any) => void) | undefined;
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
@@ -46,35 +46,38 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
     //@ts-ignore
     const showsFeedNotImplemented = applicationConfig?.showsFeedNotImplemented;
     const data = getAllFeedDataForFeed(
-      props.feeds!,
+      props.hub!,
       GLOBALS.nowNextMap,
       GLOBALS.currentSlots,
       GLOBALS.channelMap
     );
+    console.log(props.hub);
     const updateSwimLaneKey = (key: string) => {
+      console.log("setting swimlaneKey", key);
       setSwimLaneKey(key);
     };
 
     useEffect(() => {
-      setHubName(props.feeds?.Name || "");
+      setHubName(props.hub?.Name || "");
     });
-
 
     const updateUI = (params?: any) => {
       console.log("received params,", params!);
       setMount(!mount);
     };
-
     useEffect(() => {
-      const UpdateFeedsSubscription = DeviceEventEmitter.addListener("UpdateFeeds", updateUI);
-      return  () => {
+      const UpdateFeedsSubscription = DeviceEventEmitter.addListener(
+        "UpdateFeeds",
+        updateUI
+      );
+      return () => {
         UpdateFeedsSubscription.remove();
-      }
+      };
     }, []);
 
     return (
       <FlatList
-        data={props.feeds?.Feeds}
+        data={props.hub?.Feeds}
         keyExtractor={(x, i) => i.toString()}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}

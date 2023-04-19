@@ -8,6 +8,7 @@ import {
   BackHandler,
   TVMenuControl,
   DeviceEventEmitter,
+  NativeModules,
 } from "react-native";
 import { appUIDefinition, debounceTime, lang } from "../../config/constants";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -38,6 +39,8 @@ import { MFGlobalsConfig } from "../../../backend/configs/globals";
 import { isAdultContentBlock, isPconBlocked } from "../../utils/pconControls";
 import { PinType } from "../../utils/analytics/consts";
 import { Layout } from "../../utils/analytics/consts";
+import { config } from "../../config/config";
+import { cloneDeep } from "lodash";
 interface HomeScreenProps {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -132,7 +135,8 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
         hubsResponse.splice(indexOfHub, 1);
       }
       setHubs(hubsResponse);
-      setFeeds(hubsResponse[0]);
+      // setFeeds(hubsResponse[0]);
+      setFeedsData(0, hubsResponse);
       GLOBALS.rootNavigation = props.navigation;
     }
   };
@@ -228,12 +232,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     ) {
       TVMenuControl.disableTVMenuKey();
     }
-    if (__DEV__) {
-      const date = new Date();
-      console.log(
-        `app-end-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-      );
-    }
     //register duplex handler
     currentContext.addDuplexMessageHandler(onDuplexMessage);
     () => {
@@ -243,6 +241,23 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
 
   const setSetttingsRef = (ref: any) => {
     setttingsRef.current = ref;
+  };
+
+  const setFeedsData = (index: number, hubs: any) => {
+    const currentFeed = cloneDeep(hubs[index]);
+    let feeds = currentFeed.Feeds;
+    const zones = [];
+    if (
+      config.guide.guideFilteredFeed.isEnabled &&
+      (!!currentFeed?.IsExternalHub ||
+        currentFeed.Name.toLowerCase() ===
+          config.guide.guideFilteredFeed.hubName.toLowerCase()) &&
+      zones.length === 0
+    ) {
+      feeds = [config.guide.guideFilteredFeed.feedUri, ...currentFeed.Feeds];
+    }
+    currentFeed.Feeds = feeds;
+    setFeeds(currentFeed);
   };
 
   setHubsData();
@@ -257,8 +272,8 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     cardRef?.setNativeProps({ hasTVPreferredFocus: true });
   };
 
-  const onPressSwim = (event,feed?:any) => {
-    console.log("onPressSwim",event);
+  const onPressSwim = (event, feed?: any) => {
+    console.log("onPressSwim", event);
     //@ts-ignore
     if (event.Schedule) {
       const IsAdult = event.Schedule.IsAdult;
@@ -312,7 +327,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
       } else {
         route = "BrowseGallery";
       }
-      if (route) {       
+      if (route) {
         props.navigation.navigate(Routes[`${route}`], payload);
       }
     } else {
@@ -346,6 +361,17 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
             });
           },
         });
+      } else if (event.ItemType === ItemType.LIVETVGUIDE) {
+        if (event.filterId) {
+          NativeModules.MKGuideBridgeManager.setCategoriesForCategorisedFilter([
+            event.filterId,
+          ]);
+        } else {
+          NativeModules.MKGuideBridgeManager.setCategoriesForCategorisedFilter(
+            []
+          );
+        }
+        props.navigation.navigate("guide");
       } else {
         props.navigation.navigate(Routes.Details, {
           feed: event,
@@ -381,7 +407,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                     clearInterval(hubTimeOut);
                   }
                   hubTimeOut = setTimeout(() => {
-                    setFeeds(hubs[event]);
+                    setFeedsData(event, hubs);
                   }, debounceTime);
                 }}
                 setCardFocus={setCardFocus}
@@ -412,43 +438,12 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
                   )}
                 </View>
               )}
-              {/* <MFButton
-                variant={MFButtonVariant.Contained}
-                iconSource={0}
-                style={{ width: 274, height: 62, margin: 20 }}
-                focusedStyle={{ width: 274, height: 62 }}
-                textStyle={{
-                  color: "white",
-                  fontSize: 25,
-                  textAlign: "center",
-                }}
-                onPress={() => {
-                  props.navigation.navigate(Routes.PlayerTest, {
-                    params: {
-                      debugModeInSimulator: true,
-                    },
-                  });
-                }}
-                textLabel="Test Playback"
-                imageSource={0}
-                avatarSource={0}
-                containedButtonProps={{
-                  containedButtonStyle: {
-                    unFocusedTextColor: "grey",
-                    enabled: true,
-                    elevation: 5,
-                    focusedBackgroundColor: "#053C69",
-                    unFocusedBackgroundColor: "#424242",
-                    hoverColor: appUIDefinition.theme.backgroundColors.shade2,
-                  },
-                }}
-              /> */}
               <View style={HomeScreenStyles.contentContainer}>
                 {!isLoading && (
                   <MFSwim
                     // @ts-ignore
                     ref={firstSwimlaneRef}
-                    feeds={feeds}
+                    hub={feeds}
                     onFocus={onFeedFocus}
                     onPress={(event, feed) => {
                       onPressSwim(event, feed);

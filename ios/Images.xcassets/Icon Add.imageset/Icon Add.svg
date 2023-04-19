@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="62px" height="62px" viewBox="0 0 62 62" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>F9EE618D-CB85-4C8A-A3D6-F01157778516</title>
+    <defs>
+        <polygon id="path-1" points="62 35.4285714 35.4285714 35.4285714 35.4285714 62 26.5714286 62 26.5714286 35.4285714 0 35.4285714 0 26.5714286 26.5714286 26.5714286 26.5714286 0 35.4285714 0 35.4285714 26.5714286 62 26.5714286"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="SignleProfileAcces-Manage_SamsungTV_V1_sj_02" transform="translate(-1429.000000, -421.000000)">
+            <g id="Icon-Add" transform="translate(1429.000000, 421.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use fill="#FFFFFF" fill-rule="nonzero" xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>
