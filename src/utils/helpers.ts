@@ -8,14 +8,14 @@ import { MFGlobalsConfig } from "../../backend/configs/globals";
 export const Log =
   __DEV__ && global && global.console
     ? console.log.bind(global.console)
-    : () => { };
+    : () => {};
 
 export const updateStore = (MFStore: any) => {
   const sanitizedStore = {
     ...MFStore,
     landingInfo: { ...landingInfo },
     MFGlobalsConfig: { ...MFGlobalsConfig },
-    playerSessionSettings: null //  player session  settings should not be persisted in localstorage
+    playerSessionSettings: null, //  player session  settings should not be persisted in localstorage
   };
   Settings.set({ store: JSON.stringify(sanitizedStore) });
   GLOBALS.store = getStore();
@@ -160,3 +160,7 @@ export function isHash(str: string) {
   let sha256Regex = new RegExp(/^([a-f0-9]{64})$/);
   return sha256Regex.test(str);
 }
+
+export const minifyText = (text: string, maxLength: number) => {
+  return text.length <= maxLength ? text : `${text.substring(0, maxLength)}...`;
+};
