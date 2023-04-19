@@ -80,7 +80,6 @@ const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: bo
 }
 
 export const getGuideDataFromUIDef = (feed: any) => {
-    console.log("Here I am");
     const shortcuts = (config.guide.guideFilteredFeed as any)[feed.Uri];
     const shortcutsLength = shortcuts.length;
 

@@ -185,6 +185,7 @@ export const setNativeModuleData = async () => {
             NativeModules.MKGuideBridgeManager.setChannelmapId(GLOBALS.bootstrapSelectors?.ChannelMapId);
             NativeModules.MKGuideBridgeManager.setEnvironment(GLOBALS.bootstrapSelectors?.ServiceMap.Services);
             NativeModules.MKGuideBridgeManager.setQualityforFilters(["HD", "SD", "4k"]);
+            // NativeModules.MKGuideBridgeManager.setCategoriesForCategorisedFilter(["Sports"])
             const channelRights = await getChannelRights();
             NativeModules.MKGuideBridgeManager.setchannelMapRights(channelRights?.data);
             resolve()

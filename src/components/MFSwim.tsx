@@ -65,7 +65,6 @@ const MFSwim: React.FunctionComponent<MFSwimProps> = React.forwardRef(
       console.log("received params,", params!);
       setMount(!mount);
     };
-    console.log("This is the key", swimLaneKey);
     useEffect(() => {
       const UpdateFeedsSubscription = DeviceEventEmitter.addListener(
         "UpdateFeeds",

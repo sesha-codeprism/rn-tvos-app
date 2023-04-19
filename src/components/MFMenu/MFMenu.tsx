@@ -7,6 +7,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import {
+  DeviceEventEmitter,
   GestureResponderEvent,
   Pressable,
   StyleSheet,
@@ -56,6 +57,7 @@ const MFMenu = (props: MFMenuProps) => {
         "QueryCache",
         queryClient.getQueryCache()
       );
+      DeviceEventEmitter.emit("UpdateFeeds", { a: 1, b: 2 });
     }
     props.onPress && props.onPress(index);
   };

@@ -186,11 +186,10 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
       clearIntervalTimeout = setTimeout(() => {
         stopUpdateTimer();
         console.log("Invalidating the live queries");
-        debounce2(() => {
-          getLiveData(GLOBALS.channelRights).then((resp) => {
-            queryClient.refetchQueries(["live"]);
-          });
-        }, 500);
+        console.log("Refreshing details");
+        getLiveData(GLOBALS.channelRights).then((resp) => {
+          queryClient.refetchQueries(["live"]);
+        });
       }, timeToEnd);
       setStarTime(getStartTime());
     };
