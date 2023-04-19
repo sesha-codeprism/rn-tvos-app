@@ -149,4 +149,5 @@ export interface Feed {
   DefaultSortType?: string;
   ShowDescription?: string;
   ShowTitle?: string;
+  SearchString?: string;
 }

@@ -1883,7 +1883,9 @@ export const massageProgramDataForUDP = (
     let playActionsExists = false;
 
     const schedules =
-        playOptions?.Schedules || filteredEpisodePlayOptions?.Schedules;
+        (playOptions?.Schedules?.length && playOptions?.Schedules) || 
+        (filteredEpisodePlayOptions?.Schedules?.length && filteredEpisodePlayOptions?.Schedules) || 
+        programSchedulesData;
     const vods = playOptions?.Vods;
     const subscriptionPackages: SubscriptionPackages[] = [];
 
@@ -5564,7 +5566,7 @@ const getPlayableLiveSchedule = (
             validLiveSchedule = schedule;
             validLiveChannel = channel;
             // Contextual button based on passed in channelNumber
-            if (ChannelNumber === +params.ChannelNumber) {
+            if ((ChannelNumber === +params.ChannelNumber) || (ChannelNumber === +params.channel.Number)) {
                 contextualChannel = channel;
                 return true;
             }
