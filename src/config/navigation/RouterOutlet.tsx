@@ -67,6 +67,7 @@ import { PurchaseOptionsPanel } from "../../views/app/details_pages/PurchaseOpti
 import { PurchaseInformationPanel } from "../../views/app/details_pages/PurchaseInformationPanel";
 import { PurchaseNetworkSelectionPanel } from "../../views/app/details_pages/package_details/PurchaseNetworkSelectionPanel";
 import { TermsAndConditions } from "../../views/app/details_pages/TermsAndConfitions";
+import DevicesScreen from "../../views/app/settings_screens/devices/devices.screen";
 
 interface RouterOutletProps {
   initialState: any;
@@ -137,7 +138,8 @@ export const Routes = {
   PurchaseOptions: "PurchaseOptions",
   PurchaseInformation: "PurchaseInformation",
   PurchaseNetworkSelectionPanel: "PurchaseNetworkSelection",
-  TermsAndConditions: "TermsAndConditions"
+  TermsAndConditions: "TermsAndConditions",
+  Devices:'devices'
 };
 
 const Stack = createNativeStackNavigator();
@@ -279,6 +281,7 @@ export const SettingsNavigator: React.FunctionComponent<RouterOutletProps> = (
           component={StopRecordingScreen}
         />
         <Stack.Screen name={Routes.FOSSLicense} component={FossLicenseScreen} />
+        <Stack.Screen name={Routes.Devices} component={DevicesScreen} />
     
       </Stack.Navigator>
     </NavigationContainer>

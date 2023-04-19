@@ -15,7 +15,7 @@ export const updateStore = (MFStore: any) => {
     ...MFStore,
     landingInfo: { ...landingInfo },
     MFGlobalsConfig: { ...MFGlobalsConfig },
-    playerSessionSettings: null //  player session  settings should not be persisted in localstorage
+    playerSessionSettings: null, //  player session  settings should not be persisted in localstorage
   };
   Settings.set({ store: JSON.stringify(sanitizedStore) });
   GLOBALS.store = getStore();
@@ -168,3 +168,6 @@ export const generateColor = () => {
   return `#${randomColor}`;
 };
 
+export const minifyText = (text: string, maxLength: number) => {
+  return text.length <= maxLength ? text : `${text.substring(0, maxLength)}...`;
+};

@@ -286,8 +286,6 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
           pinType: PinType.adult,
           data: event,
           onSuccess: () => {
-            //@ts-ignore
-            event["isFromEPG"] = true;
             props.navigation.navigate(Routes.Details, {
               feed: event,
             });
@@ -302,16 +300,12 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
           pinType: PinType.content,
           data: event,
           onSuccess: () => {
-            //@ts-ignore
-            event["isFromEPG"] = true;
             props.navigation.navigate(Routes.Details, {
               feed: event,
             });
           },
         });
       } else {
-        //@ts-ignore
-        event["isFromEPG"] = true;
         props.navigation.navigate(Routes.Details, {
           feed: event,
         });

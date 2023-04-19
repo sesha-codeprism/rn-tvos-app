@@ -2428,16 +2428,16 @@
               "paddingLeft": 20,
               "paddingRight": 20,
               "marginBottom": 200
-          },
-          "statusTextStyle": {
+            },
+            "statusTextStyle": {
               "color": "${theme.fontColors.light}",
               "fontSize": "${theme.fontSizes.body2}",
               "marginLeft": 50,
               "marginRight": 50,
               "marginTop": 20,
               "marginBottom": 40
-          },
-          "containerActive": {
+            },
+            "containerActive": {
               "backgroundColor": "#053C69",
               "borderRadius": 6,
               "shadowColor": "#0000006b",
@@ -2455,11 +2455,14 @@
               "justifyContent": "space-between",
               "alignContent": "center",
               "alignItems": "center",
-               "padding": 30,
+              "padding": 30,
               "display": "flex",
               "flexDirection": "row"
             },
-            "containerSpacing": { "padding": 10, "marginBottom": 30 },
+            "containerSpacing": {
+              "padding": 10,
+              "marginBottom": 30
+            },
             "listText": {
               "fontSize": 29,
               "letterSpacing": 0,
@@ -2806,7 +2809,7 @@
               "alignItems": "center",
               "marginTop": 28
             },
-            "focusedBackground":{
+            "focusedBackground": {
               "backgroundColor": "${theme.backgroundColors.primary1}",
               "borderRadius": 6,
               "shadowColor": "#0000006b",
@@ -3599,7 +3602,8 @@
     {
       "id": "EpisodeList",
       "config": {
-        "snapToInterval": 20
+        "snapToInterval": 20,
+        "maxTextLength": 25
       },
       "style": {
         "containerStyle": {
@@ -4198,8 +4202,8 @@
           "backgroundColor": "${theme.backgroundColors.shade1}",
           "display": "flex",
           "flexDirection": "column"
-      },
-      "headerContainer": {
+        },
+        "headerContainer": {
           "width": "100%",
           "height": 185,
           "padding": 50,
@@ -4207,97 +4211,97 @@
           "flexDirection": "row",
           "flex": 1,
           "flexWrap": "wrap"
-      },
-      "contentContainer": {
+        },
+        "contentContainer": {
           "width": "100%",
           "padding": 30,
           "paddingTop": 10,
           "height": "80%",
           "display": "flex",
           "flexDirection": "column"
-      },
-      "container": {
+        },
+        "container": {
           "width": "100%",
           "height": 100,
           "alignContent": "center",
           "alignItems": "center",
           "display": "flex",
           "flexDirection": "row"
-      },
-      "icContainer": {
+        },
+        "icContainer": {
           "width": "15%",
           "height": 83,
           "alignContent": "center",
           "alignItems": "center",
           "justifyContent": "center"
-      },
-      "listContent": {
+        },
+        "listContent": {
           "width": "85%",
           "height": 83,
           "justifyContent": "center"
-      },
-      "listText": {
+        },
+        "listText": {
           "fontSize": 29,
           "letterSpacing": 0,
           "lineHeight": 50
-      }
+        }
       }
     },
     {
       "id": "VideoQualityPanel",
       "style": {
         "root": {
-            "width": "100%",
-            "height": "100%",
-            "backgroundColor": "${theme.backgroundColors.shade1}",
-            "display": "flex",
-            "flexDirection": "column"
+          "width": "100%",
+          "height": "100%",
+          "backgroundColor": "${theme.backgroundColors.shade1}",
+          "display": "flex",
+          "flexDirection": "column"
         },
         "headerContainer": {
-            "width": "100%",
-            "height": 185,
-            "padding": 50,
-            "justifyContent": "center",
-            "flexDirection": "row",
-            "flex": 1,
-            "flexWrap": "wrap"
+          "width": "100%",
+          "height": 185,
+          "padding": 50,
+          "justifyContent": "center",
+          "flexDirection": "row",
+          "flex": 1,
+          "flexWrap": "wrap"
         },
         "contentContainer": {
-            "width": "100%",
-            "padding": 30,
-            "paddingTop": 10,
-            "height": "80%",
-            "display": "flex",
-            "flexDirection": "column"
+          "width": "100%",
+          "padding": 30,
+          "paddingTop": 10,
+          "height": "80%",
+          "display": "flex",
+          "flexDirection": "column"
         },
         "listText": {
-            "fontSize": 29,
-            "letterSpacing": 0,
-            "lineHeight": 50
+          "fontSize": 29,
+          "letterSpacing": 0,
+          "lineHeight": 50
         },
         "container": {
-            "width": "100%",
-            "height": 100,
-            "alignContent": "center",
-            "alignItems": "center",
-            "display": "flex",
-            "flexDirection": "row"
+          "width": "100%",
+          "height": 100,
+          "alignContent": "center",
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row"
         },
         "containerActive": {
-            "backgroundColor": "${theme.backgroundColors.primary1}",
-            "borderRadius": 6
+          "backgroundColor": "${theme.backgroundColors.primary1}",
+          "borderRadius": 6
         },
         "icContainer": {
-            "width": "15%",
-            "height": 83,
-            "alignContent": "center",
-            "alignItems": "center",
-            "justifyContent": "center"
+          "width": "15%",
+          "height": 83,
+          "alignContent": "center",
+          "alignItems": "center",
+          "justifyContent": "center"
         },
         "listContent": {
-            "width": "85%",
-            "height": 83,
-            "justifyContent": "center"
+          "width": "85%",
+          "height": 83,
+          "justifyContent": "center"
         }
       }
     },
@@ -4556,7 +4560,9 @@
           "flexDirection": "column",
           "alignContent": "center"
         },
-        "chevronContainer": { "flex": 0.2 },
+        "chevronContainer": {
+          "flex": 0.2
+        },
         "chevronStyles": {
           "fontFamily": "MyFontRegular",
           "fontSize": 70,
@@ -4809,13 +4815,19 @@
     {
       "id": "RecordingOptions",
       "style": {
-        "container": { "flexGrow": 1, "paddingTop": 30 },
+        "container": {
+          "flexGrow": 1,
+          "paddingTop": 30
+        },
         "buttonTextStyle": {
           "fontSize": 25,
           "fontFamily": "Inter-SemiBold",
           "color": "#EEEEEE"
         },
-        "buttonContainer": { "marginTop": 120, "width": 714 },
+        "buttonContainer": {
+          "marginTop": 120,
+          "width": 714
+        },
         "saveButton": {
           "height": 70,
           "width": 533,
@@ -4876,7 +4888,9 @@
           "flexDirection": "column",
           "alignContent": "center"
         },
-        "chevronContainer": { "flex": 0.2 },
+        "chevronContainer": {
+          "flex": 0.2
+        },
         "chevronStyles": {
           "fontFamily": "MyFontRegular",
           "fontSize": 70,
@@ -4903,7 +4917,10 @@
           "opacity": 0.7,
           "fontFamily": "Inter-Regular"
         },
-        "selectButtonIcon": { "width": 16, "height": 26 }
+        "selectButtonIcon": {
+          "width": 16,
+          "height": 26
+        }
       }
     },
     {
@@ -5075,8 +5092,12 @@
           "height": 90,
           "width": 90
         },
-        "priorityButtonFocussed": { "color": "#053C69" },
-        "priorityButtonUnFocussed": { "color": "${theme.fontColors.light}" },
+        "priorityButtonFocussed": {
+          "color": "#053C69"
+        },
+        "priorityButtonUnFocussed": {
+          "color": "${theme.fontColors.light}"
+        },
         "seperator": {
           "width": "100%",
           "opacity": 0.4,
@@ -5180,8 +5201,14 @@
           "display": "flex",
           "flexDirection": "row"
         },
-        "containerSpacing": { "padding": 10, "marginBottom": 30 },
-        "itemContainer": { "display": "flex", "flexDirection": "row" },
+        "containerSpacing": {
+          "padding": 10,
+          "marginBottom": 30
+        },
+        "itemContainer": {
+          "display": "flex",
+          "flexDirection": "row"
+        },
         "itemTextContainer": {
           "display": "flex",
           "flexDirection": "column",
@@ -5982,7 +6009,10 @@
     "debounceTime": 500,
     "protocol": "https",
     "hostname": "reachclient.dev.mr.tv3cloud.com",
-    "currentLocale": { "full": "en-US", "short": "fr" },
+    "currentLocale": {
+      "full": "en-US",
+      "short": "fr"
+    },
     "useLottieAnimationOnSplash": false,
     "height16x9": 253,
     "height2x3": 350,

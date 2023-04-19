@@ -269,10 +269,17 @@ export const getFeedByID = async (id: string) => {
 };
 
 export const getDiscoveryCategoryItems = async (id: string, params: any) => {
-  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL} v4 / categories / ${params.id} /items`;
+  const {$groups, $skip, $top, Id, storeId} = params;
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap.Services.discoverySSL}v4/categories/${Id}/items`;
   const response = await GET({
     url: url,
-    params: params,
+    params: {
+      $top: $top,
+      $skip: $skip,
+      $groups: $groups,
+      $lang: GLOBALS.store?.onScreenLanguage?.languageCode || lang,
+      storeId: storeId || DefaultStore.Id,
+    },
     headers: {
       Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
     },
@@ -614,6 +621,46 @@ export const getDiscoveryFeeds = async (id?: string, params?: any) => {
   return response
 }
 
+export const getPromotionalCategories = async (id?: string, params?: any) => {  
+  const feed = GLOBALS.selectedFeed;
+  const { $skip, $top, $lang, $groups, storeId, $countPerStation} = params;
+  const url = `${GLOBALS.bootstrapSelectors?.ServiceMap?.Services?.discovery}/v3/categories/${params.id}/subcategories-items`;
+  const response = await GET({
+    url: url,
+    params: {
+      $itemsPerRow: $countPerStation,
+      $skip: $skip || 0,
+      $top: $top || 30,
+      $lang: $lang || lang,
+      $groups: $groups || GLOBALS.store?.rightsGroupIds,
+      storeId: storeId || DefaultStore.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store?.accessToken}"`,
+    },
+  });
+  const type: SourceType = SourceType.VOD;
+  let feedContents: any[] = [];
+  for (let category of response?.data) {
+      const categoryItem = {
+          FeedType: feed.FeedType,
+          Id: category.Id,
+          Name: category.Name,
+          HasMore: (category?.HasMore && category.HasMore) || false,
+          NavigationTargetUri: feed?.NavigationTargetUri || "",
+          NavigationTargetVisibility: feed?.NavigationTargetVisibility,
+          Uri: feed.Uri,
+          pivotGroup: feed.pivotGroup,
+      };
+      feedContents.push(
+          new FeedContents(
+              categoryItem,
+              massageDiscoveryFeed(category, type)
+          )
+      );
+  }  
+  return feedContents;
+}
 
 export const registerDiscoveryUdls = () => {
   const BASE = "discovery";
@@ -673,7 +720,8 @@ export const registerDiscoveryUdls = () => {
     { prefix: BASE + '/getpackageDetails/', getter: getPackageDetails },
     { prefix: BASE + "/getPackageTitles/", getter: getPackageTitles },
     { prefix: BASE + '/getPackageItems/', getter: getPackageItems },
-    { prefix: BASE + '/feeds', getter: getDiscoveryFeeds }
+    { prefix: BASE + '/feeds', getter: getDiscoveryFeeds },
+    { prefix: BASE + '/promotionalcategories/items/', getter: getPromotionalCategories }
   ];
   return discoveryUdls;
 };

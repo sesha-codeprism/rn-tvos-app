@@ -43,21 +43,34 @@ import { defaultQueryOptions } from "../../../../config/constants";
 import { getDataFromUDL } from "../../../../../backend";
 import { GLOBALS } from "../../../../utils/globals";
 import { DefaultStore } from "../../../../utils/DiscoveryUtils";
-import { isFeatureAssigned } from "../../../../utils/helpers";
+import { isFeatureAssigned, minifyText } from "../../../../utils/helpers";
 import MFButton, {
   MFButtonVariant,
 } from "../../../../components/MFButton/MFButton";
 import { DetailsSidePanel } from "../DetailSidePanel";
 import { AppImages } from "../../../../assets/images";
-import { Definition, Definition as DefinitionOfItem } from "../../../../utils/DVRUtils";
+import {
+  Definition,
+  Definition as DefinitionOfItem,
+} from "../../../../utils/DVRUtils";
 import { DetailRoutes } from "../../../../config/navigation/DetailsNavigator";
 import MFOverlay from "../../../../components/MFOverlay";
-import { invalidateQueryBasedOnEpisode, invalidateQueryBasedOnSpecificKeys } from "../../../../config/queries";
+import {
+  invalidateQueryBasedOnEpisode,
+  invalidateQueryBasedOnSpecificKeys,
+} from "../../../../config/queries";
 import { getItemId } from "../../../../utils/dataUtils";
 import { findConflictedGroupBySeriesOrProgramId } from "../../../../utils/ConflictUtils";
-import { cancelRecordingFromConflictPopup, forceResolveConflict } from "../../../../../backend/dvrproxy/dvrproxy";
+import MFEventEmitter from "../../../../utils/MFEventEmitter";
+import {
+  cancelRecordingFromConflictPopup,
+  forceResolveConflict,
+} from "../../../../../backend/dvrproxy/dvrproxy";
 import { ConflictResolutionContext } from "../../../../contexts/conflictResolutionContext";
-import { isPconBlocked, isPurchaseLocked } from "../../../../utils/pconControls";
+import {
+  isPconBlocked,
+  isPurchaseLocked,
+} from "../../../../utils/pconControls";
 import { GlobalContext } from "../../../../contexts/globalContext";
 import NotificationType from "../../../../@types/NotificationType";
 import { getAllSubscriptionGroups } from "../../../../customHooks/useAllSubscriptionGroups";
@@ -99,7 +112,9 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const [screenProps, setScreenProps] = useState<any>();
   const [mount, setMount] = useState(false);
   const currentContext = useContext(GlobalContext);
-  const [incomingDuplexMessage, setIncomingDuplexMessage] = useState<any|null>(null);
+  const [incomingDuplexMessage, setIncomingDuplexMessage] = useState<
+    any | null
+  >(null);
 
   const metadataList: string[] = discoveryData?.ReleaseYear
     ? [discoveryData?.ReleaseYear]
@@ -170,20 +185,28 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     }
   };
 
-
   //  Message Processor
   useEffect(() => {
-    if(incomingDuplexMessage){
+    if (incomingDuplexMessage) {
       // processs incoming duplex message
       console.log(currentEpisode);
-      invalidateQueryBasedOnSpecificKeys("get-episode-playoptions", currentEpisode);
-      invalidateQueryBasedOnSpecificKeys("get-episode-schedules", currentEpisode);
-      invalidateQueryBasedOnSpecificKeys("feed", "udl://subscriber/library/Library");
+      invalidateQueryBasedOnSpecificKeys(
+        "get-episode-playoptions",
+        currentEpisode
+      );
+      invalidateQueryBasedOnSpecificKeys(
+        "get-episode-schedules",
+        currentEpisode
+      );
+      invalidateQueryBasedOnSpecificKeys(
+        "feed",
+        "udl://subscriber/library/Library"
+      );
       DeviceEventEmitter.emit("UpdateFeeds", currentEpisode);
-      DeviceEventEmitter.emit('test', {currentEpisode:currentEpisode});
+      DeviceEventEmitter.emit("test", { currentEpisode: currentEpisode });
       // incoming message  processed, empty  the state
       setIncomingDuplexMessage(undefined);
-      setMount(!mount)
+      setMount(!mount);
     }
   }, [incomingDuplexMessage]);
 
@@ -197,68 +220,80 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
 
   const ctaButtonPress: any = {
     [AppStrings?.str_details_program_record_button]: () => {
-      console.log('str_details_program_record_button', currentEpisode)
-     const openPannel = ()=>{
-      drawerRef?.current?.close();
-      const { stationId } = navigationParams;
+      console.log("str_details_program_record_button", currentEpisode);
+      const openPannel = () => {
+        drawerRef?.current?.close();
+        const { stationId } = navigationParams;
 
-      if (!episodeSchedules) {
-        console.warn("No Schedules");
-        return;
-      }
-      const schedules = episodeSchedules;
-      if (schedules && schedules.length) {
-        let schedule = schedules[0];
-        // Get the correct schedule, the one which is shown in UI
-        if (stationId && schedules && schedules.length) {
-          schedule =
-            schedules.find((s: any) => s?.StationId === stationId) || schedule;
+        if (!episodeSchedules) {
+          console.warn("No Schedules");
+          return;
         }
-        const recordingOptions = {
-          Definition: DefinitionOfItem.SINGLE_PROGRAM,
-          Parameters: [
-            {
-              Key: "ProgramId",
-              Value: episodeDiscoveryData?.Id,
+        const schedules = episodeSchedules;
+        if (schedules && schedules.length) {
+          let schedule = schedules[0];
+          // Get the correct schedule, the one which is shown in UI
+          if (stationId && schedules && schedules.length) {
+            schedule =
+              schedules.find((s: any) => s?.StationId === stationId) ||
+              schedule;
+          }
+          const recordingOptions = {
+            Definition: DefinitionOfItem.SINGLE_PROGRAM,
+            Parameters: [
+              {
+                Key: "ProgramId",
+                Value: episodeDiscoveryData?.Id,
+              },
+            ],
+            Settings: {
+              StationId: schedule.StationId,
+              ChannelNumber: schedule.ChannelNumber as number,
+              StartUtc: schedule.StartUtc,
+              MaximumViewableShows: undefined,
+              EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
+              RecyclingDisabled: false,
+              ShowType: "FirstRunOnly",
+              AirtimeDomain: "Anytime",
+              ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId.toString(),
+              IsMultiChannel: false,
             },
-          ],
-          Settings: {
-            StationId: schedule.StationId,
-            ChannelNumber: schedule.ChannelNumber as number,
-            StartUtc: schedule.StartUtc,
-            MaximumViewableShows: undefined,
-            EndLateSeconds: GLOBALS.store!.settings.dvr?.stopRecording || 0,
-            RecyclingDisabled: false,
-            ShowType: "FirstRunOnly",
-            AirtimeDomain: "Anytime",
-            ChannelMapId: GLOBALS.userAccountInfo.ChannelMapId.toString(),
-            IsMultiChannel: false,
-          },
-        };
-        const params = {
-          isNew: true,
-          programId: episodeDiscoveryData.Id,
-          seriesId: episodeDiscoveryData.SeriesId,
-          isGeneric: episodeDiscoveryData?.isGeneric,
-          programDiscoveryData: episodeDiscoveryData,
-          schedules: schedules,
-          recordingOptions: recordingOptions,
-        };
-        setRoute(DetailRoutes.EpisodeRecordOptions);
-        setScreenProps(params);
-        setOpen(open);
-        drawerRef?.current?.open();
+          };
+          const params = {
+            isNew: true,
+            programId: episodeDiscoveryData.Id,
+            seriesId: episodeDiscoveryData.SeriesId,
+            isGeneric: episodeDiscoveryData?.isGeneric,
+            programDiscoveryData: episodeDiscoveryData,
+            schedules: schedules,
+            recordingOptions: recordingOptions,
+            title: episodeDiscoveryData.Name,
+          };
+          setRoute(DetailRoutes.EpisodeRecordOptions);
+          setScreenProps(params);
+          setOpen(open);
+          drawerRef?.current?.open();
+        }
+        //};
+        // if (isPconBlocked(currentEpisode.CatalogInfo)) {
+        //   MFEventEmitter.emit("openPinVerificationPopup", {
+        //     pinType: PinType.content,
+        //     data: currentEpisode,
+        //     onSuccess: openPannel,
+        //   });
+        // } else {
+        //   openPannel();
+        // }
+      };
+      if (isPconBlocked(currentEpisode.CatalogInfo)) {
+        DeviceEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.content,
+          data: currentEpisode,
+          onSuccess: openPannel,
+        });
+      } else {
+        openPannel();
       }
-     }
-     if (isPconBlocked(currentEpisode.CatalogInfo)) {
-      DeviceEventEmitter.emit("openPinVerificationPopup", {
-        pinType: PinType.content,
-        data: currentEpisode,
-        onSuccess: openPannel,
-      });
-    } else {
-      openPannel();
-    }
     },
     [AppStrings?.str_details_cta_more_info]: toggleSidePanel,
     [AppStrings?.str_details_cta_play]: () => {},
@@ -320,199 +355,232 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       }
     },
     [AppStrings?.str_dvr_resolve_conflict]: () => {
-       //if no conflict:
-    let id  = getItemId(currentEpisode);
-    const subs = GLOBALS.allSubscriptionGroups ;
-    let conflictedSubscriptionGroup: any|undefined = findConflictedGroupBySeriesOrProgramId(id, subs?.SubscriptionGroups);
-    const [{ Definition: definition }] = conflictedSubscriptionGroup || {};
-    const conflictedItems = conflictedSubscriptionGroup?.[0]?.SubscriptionItems?.filter((si: any) =>  si.ItemState  === 'Conflicts');
-    if(conflictedSubscriptionGroup && conflictedItems && conflictedItems.length){
-      // determine if series conflict
-    if(definition === Definition.SINGLE_PROGRAM || definition === Definition.SINGLE_TIME){
+      //if no conflict:
+      let id = getItemId(currentEpisode);
+      const subs = GLOBALS.allSubscriptionGroups;
+      let conflictedSubscriptionGroup: any | undefined =
+        findConflictedGroupBySeriesOrProgramId(id, subs?.SubscriptionGroups);
+      const [{ Definition: definition }] = conflictedSubscriptionGroup || {};
+      const conflictedItems =
+        conflictedSubscriptionGroup?.[0]?.SubscriptionItems?.filter(
+          (si: any) => si.ItemState === "Conflicts"
+        );
+      if (
+        conflictedSubscriptionGroup &&
+        conflictedItems &&
+        conflictedItems.length
+      ) {
+        // determine if series conflict
+        if (
+          definition === Definition.SINGLE_PROGRAM ||
+          definition === Definition.SINGLE_TIME
+        ) {
+          DeviceEventEmitter.emit("openPopup", {
+            buttons: [
+              {
+                title: "OK",
+                onPress: async () => {
+                  await forceResolveConflict(conflictedSubscriptionGroup);
+                  DeviceEventEmitter.emit("closePopup", undefined);
+                },
+              },
+              {
+                title: AppStrings?.str_dvr_resolve_conflict_manual,
+                onPress: () => {
+                  conflictContext.ProgramId = id;
+                  conflictContext.isEpisode = true;
+                  DeviceEventEmitter.emit("openConflictResolution", {
+                    passedInPops: true,
+                    drawerPercentage: 0.35,
+                    navigation: props.navigation,
+                    allSubscriptions: subs,
+                  });
+                },
+              },
+              {
+                title: AppStrings?.str_dvr_donot_record,
+                onPress: async () => {
+                  await cancelRecordingFromConflictPopup(
+                    conflictedSubscriptionGroup,
+                    false,
+                    false
+                  );
+                  DeviceEventEmitter.emit("closePopup", undefined);
+                },
+              },
+            ],
+            description: AppStrings?.str_dvr_conflict_popup_warning_program,
+          });
+        } else {
+          DeviceEventEmitter.emit("openPopup", {
+            buttons: [
+              {
+                title: AppStrings?.str_dvr_series_conflict_modal_record_all,
+                onPress: async () => {
+                  await forceResolveConflict(conflictedSubscriptionGroup);
+                  DeviceEventEmitter.emit("closePopup", undefined);
+                },
+              },
+              {
+                title: AppStrings?.str_dvr_series_modal_recod_no_conflict,
+                onPress: async () => {
+                  await cancelRecordingFromConflictPopup(
+                    conflictedSubscriptionGroup,
+                    true,
+                    true
+                  );
+                  DeviceEventEmitter.emit("closePopup", undefined);
+                },
+              },
+              {
+                title: AppStrings?.str_dvr_series_conflict_modal_chose_show,
+                onPress: () => {
+                  conflictContext.ProgramId = id;
+                  conflictContext.isEpisode = true;
+                  DeviceEventEmitter.emit("openConflictResolution", {
+                    passedInPops: true,
+                    drawerPercentage: 0.35,
+                    navigation: props.navigation,
+                    allSubscriptions: subs,
+                  });
+                },
+              },
+              {
+                title: AppStrings?.str_dvr_donot_record,
+                onPress: async () => {
+                  await cancelRecordingFromConflictPopup(
+                    conflictedSubscriptionGroup,
+                    true,
+                    false
+                  );
+                  DeviceEventEmitter.emit("closePopup", undefined);
+                },
+              },
+            ],
+            description: AppStrings?.str_dvr_conflict_popup_warning_series,
+          });
+        }
+      } else {
         DeviceEventEmitter.emit("openPopup", {
           buttons: [
             {
-              title: AppStrings?.str_dvr_resolve_conflict_auto,
+              title: "OK",
               onPress: async () => {
-                await forceResolveConflict(conflictedSubscriptionGroup);
-                DeviceEventEmitter.emit("closePopup",undefined);
+                DeviceEventEmitter.emit("closePopup", undefined);
               },
             },
-            {
-              title: AppStrings?.str_dvr_resolve_conflict_manual,
-              onPress: () => {
-                conflictContext.ProgramId = id;
-                conflictContext.isEpisode = true;
-                DeviceEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
-              },
-            },
-            {
-              title: AppStrings?.str_dvr_donot_record,
-              onPress: async () => {
-                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  false, false) ;
-                DeviceEventEmitter.emit("closePopup",undefined);
-              },
-            }
           ],
-          description: AppStrings?.str_dvr_conflict_popup_warning_program
-        });
-      }else {
-        DeviceEventEmitter.emit("openPopup", {
-          buttons: [
-            {
-              title: AppStrings?.str_dvr_series_conflict_modal_record_all,
-              onPress: async () => {
-                await forceResolveConflict(conflictedSubscriptionGroup);
-                DeviceEventEmitter.emit("closePopup",undefined);
-              },
-            },
-            {
-              title: AppStrings?.str_dvr_series_modal_recod_no_conflict,
-              onPress: async () => {
-                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup,  true, true) ;
-                DeviceEventEmitter.emit("closePopup",undefined);
-              },
-            },
-            {
-              title: AppStrings?.str_dvr_series_conflict_modal_chose_show,
-              onPress: () => {
-                conflictContext.ProgramId = id;
-                conflictContext.isEpisode = true;
-                DeviceEventEmitter.emit("openConflictResolution", {passedInPops: true, drawerPercentage: 0.35,  navigation: props.navigation, allSubscriptions: subs});
-              },
-            },
-            {
-              title: AppStrings?.str_dvr_donot_record,
-              onPress: async () => {
-                await cancelRecordingFromConflictPopup(conflictedSubscriptionGroup, true, false);
-                DeviceEventEmitter.emit("closePopup",undefined);
-              },
-            }
-          ],
-          description: AppStrings?.str_dvr_conflict_popup_warning_series
+          description: AppStrings?.str_dvr_no_conflict_exists,
         });
       }
-    }else {
-      DeviceEventEmitter.emit("openPopup", {
-        buttons: [
-          {
-            title: "OK",
-            onPress: async () => {
-              DeviceEventEmitter.emit("closePopup", undefined);
-            },
-          }
-        ],
-        description: AppStrings?.str_dvr_no_conflict_exists
-      });
-    }
     },
     [AppStrings?.str_details_cta_playdvr]: () => {},
     [AppStrings?.str_details_cta_rent]: () => {
-      if(isPurchaseLocked()){
+      if (isPurchaseLocked()) {
         DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
-            udpData: episodeDetailsData
+            udpData: episodeDetailsData,
           },
           onSuccess: () => {
             DeviceEventEmitter.emit("openPurchase", {
-              params:{
+              params: {
                 udpAssetData: episodeDetailsData,
                 panelTitle: AppStrings?.str_details_cta_rent,
               },
-              drawerPercentage:0.37
+              drawerPercentage: 0.37,
             });
           },
         });
-      }else {
+      } else {
         DeviceEventEmitter.emit("openPurchase", {
-          params:{
+          params: {
             udpAssetData: episodeDetailsData,
             panelTitle: AppStrings?.str_details_cta_rent,
           },
-          drawerPercentage:0.37
+          drawerPercentage: 0.37,
         });
       }
     },
     [AppStrings?.str_details_cta_buy]: () => {
-      if(isPurchaseLocked()){
+      if (isPurchaseLocked()) {
         DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
-            udpData: episodeDetailsData
+            udpData: episodeDetailsData,
           },
           onSuccess: () => {
             DeviceEventEmitter.emit("openPurchase", {
-              params:{
+              params: {
                 udpAssetData: episodeDetailsData,
                 panelTitle: AppStrings?.str_details_cta_buy,
               },
-              drawerPercentage:0.37
+              drawerPercentage: 0.37,
             });
           },
         });
-      }else {
+      } else {
         DeviceEventEmitter.emit("openPurchase", {
-          params:{
+          params: {
             udpAssetData: episodeDetailsData,
             panelTitle: AppStrings?.str_details_cta_buy,
           },
-          drawerPercentage:0.37
+          drawerPercentage: 0.37,
         });
       }
     },
     [AppStrings?.str_details_cta_rentbuy]: () => {
-      if(isPurchaseLocked()){
+      if (isPurchaseLocked()) {
         DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
-            udpData: episodeDetailsData
+            udpData: episodeDetailsData,
           },
           onSuccess: () => {
             DeviceEventEmitter.emit("openPurchase", {
-              params:{
+              params: {
                 udpAssetData: episodeDetailsData,
                 panelTitle: AppStrings?.str_details_cta_rentbuy,
               },
-              drawerPercentage:0.37
+              drawerPercentage: 0.37,
             });
           },
         });
-      }else {
+      } else {
         DeviceEventEmitter.emit("openPurchase", {
-          params:{
+          params: {
             udpAssetData: episodeDetailsData,
             panelTitle: AppStrings?.str_details_cta_rentbuy,
           },
-          drawerPercentage:0.37
+          drawerPercentage: 0.37,
         });
       }
     },
     [AppStrings?.str_details_cta_package]: () => {
       episodeDetailsData["purchasePackage"] = true;
-      if(isPurchaseLocked()){
+      if (isPurchaseLocked()) {
         DeviceEventEmitter.emit("openPinVerificationPopup", {
           pinType: PinType.purchase,
           data: {
-            udpData: episodeDetailsData
+            udpData: episodeDetailsData,
           },
           onSuccess: () => {
             DeviceEventEmitter.emit("openPurchase", {
-              params:{
+              params: {
                 udpAssetData: episodeDetailsData,
                 panelTitle: AppStrings?.str_details_cta_package,
               },
-              drawerPercentage:0.37
+              drawerPercentage: 0.37,
             });
           },
         });
-      }else {
+      } else {
         DeviceEventEmitter.emit("openPurchase", {
-          params:{
+          params: {
             udpAssetData: episodeDetailsData,
             panelTitle: AppStrings?.str_details_cta_package,
           },
-          drawerPercentage:0.37
+          drawerPercentage: 0.37,
         });
       }
     },
@@ -523,58 +591,58 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         }
       );
       if (networks && networks.length > 0) {
-        if(isPurchaseLocked()){
+        if (isPurchaseLocked()) {
           DeviceEventEmitter.emit("openPinVerificationPopup", {
             pinType: PinType.purchase,
             data: {
-              udpData: episodeDetailsData
+              udpData: episodeDetailsData,
             },
             onSuccess: () => {
               DeviceEventEmitter.emit("openPurchase", {
-                params:{
+                params: {
                   udpAssetData: episodeDetailsData,
                   panelTitle: AppStrings?.str_details_cta_subscribe,
                 },
-                drawerPercentage:0.37,
-                "isPurchaseNetwork": true
+                drawerPercentage: 0.37,
+                isPurchaseNetwork: true,
               });
             },
           });
-        }else {
+        } else {
           DeviceEventEmitter.emit("openPurchase", {
-            params:{
+            params: {
               udpAssetData: episodeDetailsData,
               panelTitle: AppStrings?.str_details_cta_subscribe,
             },
-            drawerPercentage:0.37,
-            "isPurchaseNetwork": true
+            drawerPercentage: 0.37,
+            isPurchaseNetwork: true,
           });
         }
       } else {
         episodeDetailsData["subscriptionExists"] = true;
-        if(isPurchaseLocked()){
+        if (isPurchaseLocked()) {
           DeviceEventEmitter.emit("openPinVerificationPopup", {
             pinType: PinType.purchase,
             data: {
-              udpData: episodeDetailsData
+              udpData: episodeDetailsData,
             },
             onSuccess: () => {
               DeviceEventEmitter.emit("openPurchase", {
-                params:{
+                params: {
                   udpAssetData: episodeDetailsData,
                   panelTitle: AppStrings?.str_details_cta_subscribe,
                 },
-                drawerPercentage:0.37
+                drawerPercentage: 0.37,
               });
             },
           });
-        }else {
+        } else {
           DeviceEventEmitter.emit("openPurchase", {
-            params:{
+            params: {
               udpAssetData: episodeDetailsData,
               panelTitle: AppStrings?.str_details_cta_subscribe,
             },
-            drawerPercentage:0.37
+            drawerPercentage: 0.37,
           });
         }
       }
@@ -708,7 +776,11 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
     return data.data;
   };
 
-  const { data: subscrptionGroups } = useQuery(['dvr', 'get-all-subscriptionGroups'], getAllSubscriptionGroups, { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors });
+  const { data: subscrptionGroups } = useQuery(
+    ["dvr", "get-all-subscriptionGroups"],
+    getAllSubscriptionGroups,
+    { ...defaultQueryOptions, enabled: !!GLOBALS.bootstrapSelectors }
+  );
 
   const { data: seasonPlayOptions, isLoading } = useQuery(
     ["get-seasonsPlayData", currentSeason],
@@ -833,7 +905,14 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
       return;
     }
     // Adding mount as a dependency to make the CTA useEffect re-fire after "DVR updated" duplex message is obtained
-  }, [seasonPlayOptions, episodePlayOptions, episodeDiscoveryData, episodeSchedules, mount, subscrptionGroups]);
+  }, [
+    seasonPlayOptions,
+    episodePlayOptions,
+    episodeDiscoveryData,
+    episodeSchedules,
+    mount,
+    subscrptionGroups,
+  ]);
 
   // useEffect(() => {
   //   appQueryCache.subscribe((event) => {
@@ -1050,6 +1129,9 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   };
 
   const renderEpisodeListItem = (episodeItem: any) => {
+    const episodeListConfig = getUIdef("EpisodeList")?.config || {
+      maxTextLength: 25,
+    };
     const { item: episode, index } = episodeItem;
     const { Description = "" } = episode?.CatalogInfo;
     const name =
@@ -1158,7 +1240,9 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={episodeStyles.episodeItemTitle}>{name}</Text>
+                <Text style={episodeStyles.episodeItemTitle}>
+                  {minifyText(name, episodeListConfig.maxTextLength)}
+                </Text>
                 {episode.dvrItemsState && (
                   <View
                     style={{
@@ -1242,7 +1326,9 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={episodeStyles.episodeItemTitle}>{name}</Text>
+                <Text style={[episodeStyles.episodeItemTitle]}>
+                  {minifyText(name, episodeListConfig?.maxTextLength)}
+                </Text>
                 {episode.dvrItemsState && (
                   <View
                     style={{

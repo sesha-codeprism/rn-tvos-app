@@ -53,6 +53,11 @@ const SettingsLandingScreen: React.FunctionComponent<Props> = (props: any) => {
           action: "developer_settings",
           icon: "",
         },
+        {
+          title: "Devices",
+          action: "devices",
+          icon: "",
+        },
       ]
     : [
         {
