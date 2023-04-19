@@ -375,27 +375,7 @@ export const deleteUserProfile = async (id: string) => {
   return response;
 };
 export const deleteDeviceById = async (id: string) => {
-//   fetch("https://ottapp-appgw-client-a.dev.mr.tv3cloud.com/S1/subscriber/devices-byid/99ecfca2-a5c9-9ecf-ca2a-5c99ecfca2a5", {
-//   "headers": {
-//     "accept": "text/plain, */*; q=0.01",
-//     "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
-//     "authorization": "OAUTH2 access_token=\"AuthToken1vVTZjqs4EP2a8NLqiM1gP-SBkI2kG7KQTidvBpyEYDCxTbavv6aV1kijuSONdHskV9kUx8dyHVd5TZaTKiW9o5S16FhexxypwQm959Whxlzeuxm5dEvelRcrpazJuikrFUQLhGgI_9tGIcXv8C3wL1x6JCUW3VtJBcN1l_GDil6FcqauAzV9uTwjlczlXS1TivOy_V_hkvSqT7HMIuOwOMqP5pWmBXQOOKj88evsnaVvG3_XPBJ7EcZzoS0JpmXvLfgYBgMtJhWuZJD1MrLHDZXagFzylMT3mvQ2JPGPnJXkGVSo9BXCxNKRmbwaCAPLsbNXy9oTbCdqqXlpypovuppjgbOuJEIaHVtnjaSMFe3dFdnXSWtB-L8DRwTLhpMxZ02tkLbuuDaE2nPjf7nymCsC0TMgNG2zY_YN3VIeKnNt5SwXKd9a-2UoM59ry4IGQi3Q0W3otFHLMVyoeZSyK8m-0ye-89cxffkVM_5Z4DJPORNsL5_P4Fti2Ers_EZizqiSmKUvOCvz6ieIG5XTP83LasKxZD_GWzMuMX25Ml7slRj_0zEvJa7w4c9nSzSJSHme_CTzi1K5LWTNa-SR8fyBZc6qdyyKnoWgYSOEdBMA4JjA0KHpWtBx1Ps3kGPawIAOdIEDdMt11GSbCo1cR3cBsBEEwHQRMqEqEmRYCOgt1tRdbXirc05EVPUMxQVtXe3WfK5Km2TPoAtUUQEteiY8ZgWpVvmhUh3XJ1zGx6ZMap5Xsods3x1AAB196Lmmql7kAc9x7OFwaNp9E7muPxj4dl-L5sOlF0fLVTAOvXi9HPaW7_q6nPQNQpdQ3He3t-liclWta3pSRb1NFl4-nrunRzmyos3uEk62KAzg6ILitKxW4jEHuzNYBPsQ2f2Dc37jfnGbgmo2YxSNaGCQibso8Cwk9805GFy42O68aXWZR2s98c6TSdQ2nPQkDyx80KkzdT93InSmRvTmfc53u8Rr1nRN6wDJe8IV9LOiYn0-0m39aMUODiPKByl5N5ojmZToNOnfceTGj-vueOqfEZrV1-aikJ-zjVlA39y6fJxWq7miGgBaWaV7nC7mV3IJojgreFzV4Fo07mHWdrt6fw9v6_E6WBN6cqLxPiyWuA5X2xWT1umG6d68j-qDz_esaDbHtkcurjJ4mNOPUt1rNAWzYXhlg-g9uHasgRq_AA\"",
-//     "sec-ch-ua": "\"Chromium\";v=\"112\", \"Google Chrome\";v=\"112\", \"Not:A-Brand\";v=\"99\"",
-//     "sec-ch-ua-mobile": "?0",
-//     "sec-ch-ua-platform": "\"macOS\"",
-//     "sec-fetch-dest": "empty",
-//     "sec-fetch-mode": "cors",
-//     "sec-fetch-site": "same-site",
-//     "x-clientconfig": "f=16;t=2",
-//     "x-tv3-profiles": "18b42f82-9b14-4c32-8b9c-deccb91eb5c5",
-//     "x-tv3-transactionid": "4fcfa22cf4fbeafdb9c9b4f900dbb54933f019a9-6-1681802414049",
-//     "cookie": "redirect_uri=https%3A%2F%2Freachclient.dev.mr.tv3cloud.com%2F%23settings%239p47tyn6908; oauth=refresh_token=0.AVAAHn5axl-Zm0mNpVaHTbXXyWbw77LR4C1Hrs-VWmlB5CW2AC4.AgABAAEAAAD--DLA3VO7QrddgJg7WevrAgDs_wUA9P8DowuCmFqgURZO9JHBOIdXdbDf-XOakpgKsBxqyrsihs8RznjhEjLdileNWB9McEIFfVSudUSl31g_jEBnxG2XXfmLmg7gnychxrYy52q4_PEFpAb8exqNn5sKMyBhwTSDlLgTP7rYLisltPPPTMdaZVvjwmjiFYyZeOvBQQM4blORKKcjnfQf0q1S11SCV9pNZ7c-_Oww7o52gOJHup9kava4f1QGSx_GbZoy8K6cW8HRfTMqUYEfWFM3QDy1F287XLW3ruciMIDUyXkX9H2JDZj3I5W7P2LWoLah4tYwueLXzwrOex28knDeimjyUh0XstKSAPMLoncCZMbOuTAuq_TBBLcgZ-eEZlL8Qxio0LoQ-n3uhAjl5eEQypDo8nocMiF24eLeszq7DgdfonfAyOQ6Ewh6tHjMDJGm_cK8oLgb6RXnBIySzwD1TpxRvWc8t49xLtXigKORB2evtPMJcb2gOFBjLaXswCQucqvIetslo5BajBF5KuVNJ_HprO2xZiwNdeq0IVMnpJ9MNVRj4lSBWliw2_IgInHS2BsXnKvrrYnkwOOKcUHBFg00kDpvktt8B79EyzmKEQyuHhAVbgqHLcELOAPNRHtEr_Jv170CdEGQG7HYoSBPpJYli9hf1vCuSahJvskmxbe54GBKhINvOWTwz5I8vOTojg_I_khMwOld0h4MceZPjmlq8zbMC7qt_ABzIAxiNKAzn6XprwLwFdcR28ctcF-EaOClbJPDErblf31CLsPwjc2GJtM086PH715iy2DzEIGoTcXuG35q30bNIxg4gfRXqjRP4DknZn4FCNRcA4cp_T3t-_h4mW4C7NrXoxuu3iJ6hnUTaEDwRgnXRBOSpVbsUpCTiX6-7DHNslUYvEZlpV4rQIlbVIAAaRq7YO4_nDtSmUZ5_MvW0GfsyS32zfP_m_P8HXRJdszWyfsZM_WkfU4KNR0-4FRPfl9vyhbZtfkLbqRCBuCA4fMT-xv-O_rq2QlfcgoDQKH4PKUJLYX8jVLnPqikZKlVPE5lhshJIKlJFPZajHyKb_WAJ6F0Z6OybMQbNGnSrnICPIKMTaXWrFFvm7kaKA-oAJc1uZ3YAuBDpds5Fv9Jmb-5YZUjAh8dUPQWWEHVJlLu8rZhfRJKoHbcSYWlWc2JunkPU11j1nPNX3LHqB_oZRw33PLiYRqtA9TbeLn3ssk_2bjbrOEYdsjfa9WnbtPhMI-EwCd0KWEcQ7BMXTg8XDxlv6xvp8nzM40Iwyb3zvjJriY2KcPIFjsDJxlBJCg3s7hKiEVF4cDJLaxw7cG0l3JLnYG4uiT5AczyTCVsHtI5S8NlykmU1eWKnIgB; access-token=AuthToken1vVTZjqs4EP2a8NLqiM1gP-SBkI2kG7KQTidvBpyEYDCxTbavv6aV1kijuSONdHskV9kUx8dyHVd5TZaTKiW9o5S16FhexxypwQm959Whxlzeuxm5dEvelRcrpazJuikrFUQLhGgI_9tGIcXv8C3wL1x6JCUW3VtJBcN1l_GDil6FcqauAzV9uTwjlczlXS1TivOy_V_hkvSqT7HMIuOwOMqP5pWmBXQOOKj88evsnaVvG3_XPBJ7EcZzoS0JpmXvLfgYBgMtJhWuZJD1MrLHDZXagFzylMT3mvQ2JPGPnJXkGVSo9BXCxNKRmbwaCAPLsbNXy9oTbCdqqXlpypovuppjgbOuJEIaHVtnjaSMFe3dFdnXSWtB-L8DRwTLhpMxZ02tkLbuuDaE2nPjf7nymCsC0TMgNG2zY_YN3VIeKnNt5SwXKd9a-2UoM59ry4IGQi3Q0W3otFHLMVyoeZSyK8m-0ye-89cxffkVM_5Z4DJPORNsL5_P4Fti2Ers_EZizqiSmKUvOCvz6ieIG5XTP83LasKxZD_GWzMuMX25Ml7slRj_0zEvJa7w4c9nSzSJSHme_CTzi1K5LWTNa-SR8fyBZc6qdyyKnoWgYSOEdBMA4JjA0KHpWtBx1Ps3kGPawIAOdIEDdMt11GSbCo1cR3cBsBEEwHQRMqEqEmRYCOgt1tRdbXirc05EVPUMxQVtXe3WfK5Km2TPoAtUUQEteiY8ZgWpVvmhUh3XJ1zGx6ZMap5Xsods3x1AAB196Lmmql7kAc9x7OFwaNp9E7muPxj4dl-L5sOlF0fLVTAOvXi9HPaW7_q6nPQNQpdQ3He3t-liclWta3pSRb1NFl4-nrunRzmyos3uEk62KAzg6ILitKxW4jEHuzNYBPsQ2f2Dc37jfnGbgmo2YxSNaGCQibso8Cwk9805GFy42O68aXWZR2s98c6TSdQ2nPQkDyx80KkzdT93InSmRvTmfc53u8Rr1nRN6wDJe8IV9LOiYn0-0m39aMUODiPKByl5N5ojmZToNOnfceTGj-vueOqfEZrV1-aikJ-zjVlA39y6fJxWq7miGgBaWaV7nC7mV3IJojgreFzV4Fo07mHWdrt6fw9v6_E6WBN6cqLxPiyWuA5X2xWT1umG6d68j-qDz_esaDbHtkcurjJ4mNOPUt1rNAWzYXhlg-g9uHasgRq_AA",
-//     "Referer": "https://reachclient.dev.mr.tv3cloud.com/",
-//     "Referrer-Policy": "strict-origin-when-cross-origin"
-//   },
-//   "body": null,
-//   "method": "DELETE"
-// });
+
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || "") +
     `/devices-byid/${id}`;

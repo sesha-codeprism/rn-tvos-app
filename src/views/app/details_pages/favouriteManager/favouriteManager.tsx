@@ -3,12 +3,12 @@ import {
   FlatList,
   ImageBackground,
   Pressable,
-  PressableProps,
   StyleSheet,
+  TVMenuControl,
   Text,
   View,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {
   invalidateQueryBasedOnSpecificKeys,
@@ -16,24 +16,19 @@ import {
 } from "../../../../config/queries";
 import { PageContainer } from "../../../../components/PageContainer";
 import { AppImages } from "../../../../assets/images";
-import { SCREEN_WIDTH } from "../../../../utils/dimensions";
-import MFSwimLane from "../../../../components/MFSwimLane";
-import { AppStrings } from "../../../../config/strings";
 import FastImage from "react-native-fast-image";
 import { getImageUri } from "../../../../utils/Subscriber.utils";
 import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { unpinItem } from "../../../../../backend/subscriber/subscriber";
 import NotificationType from "../../../../@types/NotificationType";
 import { getItemId } from "../../../../utils/dataUtils";
-import { Feed } from "../../../../@types/HubsResponse";
-import { ContentType } from "../../../../utils/common";
-import { GLOBALS } from "../../../../utils/globals";
 import { DuplexManager } from "../../../../modules/duplex/DuplexManager";
 import {
   assetTypeObject,
   itemTypeString,
 } from "../../../../utils/analytics/consts";
-import { PinnedItemType } from "../../../../utils/pinnedItemType";
+import MFText from "../../../../components/MFText";
+import { AppStrings } from "../../../../config/strings";
 interface FavouriteManagerProps {
   navigation: NativeStackNavigationProp<any>;
   route: any;
@@ -56,6 +51,7 @@ const FavouriteManagerScreen = (props: FavouriteManagerProps) => {
   };
   useEffect(() => {
     getItemPinned();
+    TVMenuControl.enableTVMenuKey();
   }, []);
   const handleFavFocus = (item: any) => {
     console.log("Current focussed item", item);
@@ -88,7 +84,21 @@ const FavouriteManagerScreen = (props: FavouriteManagerProps) => {
       Alert.alert("Something went wrong");
     }
   };
-
+  const renderNoResults = () => {
+    return (
+      <View style={styles.noSearchResultContainer}>
+        <FastImage
+          style={{ height: 260, width: 250 }}
+          source={AppImages.noSearchResult}
+        />
+        <MFText
+          textStyle={styles.noSeasrchResultTitle}
+          displayText={"No Favorites Found"}
+          shouldRenderText={true}
+        />
+      </View>
+    );
+  };
   const renderFavListItem = (data: any) => {
     console.log("data inside render item", data);
     const { item, index } = data;
@@ -141,9 +151,6 @@ const FavouriteManagerScreen = (props: FavouriteManagerProps) => {
             >
               {item.metadataLine2}
             </Text>
-            {/* <Text style={styles.itemDescription} numberOfLines={2}>
-            {Description}
-          </Text> */}
             {currentFavItem?.Id === item?.Id && (
               <Text
                 style={
@@ -209,47 +216,28 @@ const FavouriteManagerScreen = (props: FavouriteManagerProps) => {
             <View style={styles.headerUnderLine} />
           </View>
 
-          <View style={styles.favList}>
-            <FlatList
-              data={favList}
-              keyExtractor={(x, i) => i.toString()}
-              // ItemSeparatorComponent={(x, i) => (
-              //   <View
-              //     style={{
-              //       backgroundColor: "transparent",
-              //       height: 5,
-              //       width: SCREEN_WIDTH,
-              //     }}
-              //   />
-              // )}
-              renderItem={
-                ({ item, index }) => {
-                  return renderFavListItem({ item, index });
-                }
-                // return (
-                //   <MFSwimLane
-                //     ref={index === 0 ? firstCardRef : null}
-                //     key={index}
-                //     //@ts-ignore
-                //     feed={{ Name: "All Recordings" }}
-                //     data={favList}
-                //     limitSwimlaneItemsTo={10}
-                //     swimLaneKey={swimLaneKey}
-                //     updateSwimLaneKey={updateSwimLaneKey}
-                //     cardStyle={"16x9"}
-                //     onPress={(event) => {
-                //       console.log("event", event);
-                //     }}
-                //     onFocus={() => {
-                //       setTimeout(() => {
-                //         setSwimLaneFocused(true);
-                //       }, 500);
+          {favList.length ? (
+            <View style={styles.favList}>
+              <FlatList
+                data={favList}
+                keyExtractor={(x, i) => i.toString()}
+                // ItemSeparatorComponent={(x, i) => (
+                //   <View
+                //     style={{
+                //       backgroundColor: "transparent",
+                //       height: 5,
+                //       width: SCREEN_WIDTH,
                 //     }}
                 //   />
-                // );
-              }
-            />
-          </View>
+                // )}
+                renderItem={({ item, index }) => {
+                  return renderFavListItem({ item, index });
+                }}
+              />
+            </View>
+          ) : (
+            renderNoResults()
+          )}
         </View>
       </ImageBackground>
     </PageContainer>
@@ -300,7 +288,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     marginTop: 25,
-    paddingBottom:200,
+    paddingBottom: 200,
   },
   itemShowcard: {
     flexDirection: "row",
@@ -363,5 +351,22 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 38,
     textAlign: "center",
+  },
+  noSearchResultContainer: {
+    alignContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 100,
+    backgroundColor: "#00030E",
+    height: "100%",
+  },
+  noSeasrchResultTitle: {
+    fontSize: 38,
+    fontWeight: "600",
+    letterSpacing: 0,
+    lineHeight: 55,
+    color: "#EEEEEE",
+    textAlign: "center",
+    marginTop: 20,
   },
 });
