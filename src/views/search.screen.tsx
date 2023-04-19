@@ -26,6 +26,7 @@ import { ItemShowType } from "../utils/common";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/dimensions";
 import { GLOBALS } from "../utils/globals";
 import { getUIdef } from "../utils/uidefinition";
+import { NavigationTarget, browseType } from "../utils/analytics/consts";
 
 // const Search = requireNativeComponent('NKSearchComponent');
 
@@ -58,7 +59,9 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
   const [searchResult, setSearchResult] = useState<
     SearchResultObject[] | undefined
   >();
-  const [trendingData, setTrendingData] = useState<any>(GLOBALS.moviesAndTvShows);
+  const [trendingData, setTrendingData] = useState<any>(
+    GLOBALS.moviesAndTvShows
+  );
   const [showTrending, setShowTrending] = useState(true);
   const [showSearchResults, setShowSearchResult] = useState(false);
   const [swimLaneKey, setSwimLaneKey] = useState("");
@@ -125,6 +128,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
       <FlatList
         data={trendingData}
         keyExtractor={(x, i) => i.toString()}
+        contentContainerStyle={{paddingBottom: 100}}
         ItemSeparatorComponent={(x, i) => (
           <View
             style={{
@@ -156,7 +160,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
                   setSwimLaneFocused(true);
                 }, 500);
               }}
-              renderViewAll={item.items.length >= 15 ? true: false}
+              renderViewAll={item.items.length >= 15 ? true : false}
               navigation={props.navigation}
             />
           );
@@ -262,6 +266,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
       <FlatList
         data={searchResult}
         keyExtractor={(x, i) => i.toString()}
+        contentContainerStyle={{paddingBottom: 100}}
         ItemSeparatorComponent={(x, i) => (
           <View
             style={{
@@ -300,7 +305,22 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
               ref={index === 0 ? firstCardRef : null}
               key={index}
               //@ts-ignore
-              feed={{ Name: mediaTypes }}
+              feed={
+                mediaTypes === "Person"
+                  ? {
+                      Name: mediaTypes,
+                    }
+                  : {
+                      Name: mediaTypes,
+                      NavigationTargetUri: browseType.browsesearch,
+                      NavigationTargetVisibility:
+                        NavigationTarget.SHOW_FEED_ALWAYS,
+                      FeedType: "Dynamic",
+                      SearchString: searchString,
+                      // mediaTypes: mediaTypes,
+                    }
+              }
+              navigation={props.navigation}
               data={massagedlistItems}
               limitSwimlaneItemsTo={10}
               swimLaneKey={swimLaneKey}
@@ -322,6 +342,7 @@ const SearchScreen: React.FunctionComponent<SearchScreenProps> = (props) => {
                   setSwimLaneFocused(true);
                 }, 500);
               }}
+              renderViewAll={mediaTypes === "Person" ? false : true}
             />
           );
         }}
