@@ -5,6 +5,7 @@ import {
   Image,
   ImageBackground,
   PressableProps,
+  Route,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -22,6 +23,7 @@ import MFGridView from "../../../../components/MFGridView";
 import {
   appUIDefinition,
   defaultQueryOptions,
+  lang,
 } from "../../../../config/constants";
 import { HomeScreenStyles } from "../../Homescreen.styles";
 import { SubscriberFeed } from "../../../../@types/SubscriberFeed";
@@ -39,7 +41,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { getUIdef } from "../../../../utils/uidefinition";
 import BrowseFilter from "./BrowseFilters";
 import { useQuery } from "react-query";
-import { getDataFromUDL, getMassagedData } from "../../../../../backend";
+import { getDataFromUDL, getMassagedData, UDLType } from "../../../../../backend";
 import { DefaultStore } from "../../../../utils/DiscoveryUtils";
 import { GLOBALS } from "../../../../utils/globals";
 import {
@@ -48,17 +50,14 @@ import {
   createInitialFilterState,
 } from "./BrowseUtils/BrowseUtils";
 import { Routes } from "../../../../config/navigation/RouterOutlet";
-import { browseType, ShowType } from "../../../../utils/common";
+import { browseType, ItemShowType, ShowType } from "../../../../utils/common";
 import { metadataSeparator } from "../../../../utils/Subscriber.utils";
 import { globalStyles } from "../../../../config/styles/GlobalStyles";
 import { debounce2 } from "../../../../utils/app/app.utilities";
 import _ from "lodash";
 import { AppStrings, getFontIcon } from "../../../../config/strings";
-import {
-  isAdultContentBlock,
-  isPconBlocked,
-} from "../../../../utils/pconControls";
-import { fontIconsObject, PinType } from "../../../../utils/analytics/consts";
+import { isAdultContentBlock, isPconBlocked } from "../../../../utils/pconControls";
+import { fontIconsObject, Layout, PinType, sourceTypeString } from "../../../../utils/analytics/consts";
 import { getItemId } from "../../../../utils/dataUtils";
 import {
   assetTypeObject,
@@ -711,6 +710,68 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       </View>
     );
   };
+
+  const navtigate = async (data : any) => {
+    //Store and zone Navigation need to be implemented
+    const id = getItemId(data);
+    let route: Route["name"] | undefined = undefined;
+
+    let feed: any = undefined;
+    let initialFilter = "";
+    if (
+        data?.assetType?.sourceType === sourceTypeString.PERSON
+    ) {
+        // Navigate to person details page
+        route = "PersonDetails";
+    } else if (data.ItemType === ItemShowType.liveTvGuide) {
+        route = Routes.Guide;
+        initialFilter = data?.filterId;
+    } else if (data.ItemType === ItemShowType.Package) {
+        // Navigate to Package Details
+        route = Routes.PackageDetails;
+    } else if (
+        data.ItemType === ItemShowType.DvrRecording &&
+        data?.SeriesId
+    ) {
+        route = Routes.DvrRecordedEpisode;
+    } else if (data.ItemType === ItemShowType.SvodPackage) {
+        route = undefined;
+    } else {
+        // Navigate to details page
+        route = Routes.Details;
+    }
+
+    if (data.ItemType === ItemShowType.SvodPackage) {
+        let isSvodData = undefined;
+        let udlParam: string = "";
+        udlParam = `udl://${UDLType.Discovery}/getpackageDetails/` +
+        `?packageId=${id}&$groups=${
+        GLOBALS.store!.rightsGroupIds
+        }&$lang=${lang}&storeId=${DefaultStore.Id}`;
+        const currentSelectedFeed = await getDataFromUDL(udlParam);
+        feed = browseFeed;
+
+        if (currentSelectedFeed?.data) {
+            isSvodData = { ...feed, ...currentSelectedFeed.data };
+        }
+        if (isSvodData?.Layout === Layout.Category) {
+            route = Routes.BrowseCategory;
+        } else {
+            route = Routes.BrowseGallery;
+        }
+        if (route) {
+            props.navigation.push(route, {
+                feed: isSvodData,
+                title: isSvodData.Name,
+            });
+        }
+    } else if (route) {
+        props.navigation.push(route, {
+            feed:data,
+        });
+    }
+  }
+
   const handlePress = (event: any) => {
     console.log("handlePress inside browse gallery", event);
     const IsAdult = event.IsAdult;
@@ -718,26 +779,18 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
       DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.adult,
         data: event,
-        onSuccess: () => {
-          props.navigation.navigate(Routes.Details, {
-            feed: event,
-          });
+        onSuccess: () => { navtigate(event);
         },
       });
     } else if (isPconBlocked(event)) {
       DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.content,
         data: event,
-        onSuccess: () => {
-          props.navigation.navigate(Routes.Details, {
-            feed: event,
-          });
+        onSuccess: () => { navtigate(event);
         },
       });
     } else {
-      props.navigation.navigate(Routes.Details, {
-        feed: event,
-      });
+      navtigate(event);
     }
     // props.navigation.push(Routes.Details, { feed: event });
   };
