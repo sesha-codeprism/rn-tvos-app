@@ -37,6 +37,7 @@ extension FullGuideComponent.MKFullGuideStorageManager {
   public func setQualityValues(value: [Swift.String])
   public func setChannelMapRights(value: Swift.Dictionary<Swift.String, Any>)
   public func setCategories(categories: [Swift.String])
+  public func setSubscriptionGroupResponse(value: Swift.Dictionary<Swift.String, Any>)
 }
 public protocol ActionHandlerDelegate {
   func favouriteChannelSelected()
