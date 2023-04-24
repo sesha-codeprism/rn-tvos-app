@@ -261,7 +261,7 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     console.log("onPressSwim",event);
     //@ts-ignore
     if (event.Schedule) {
-      event["isFromEPG"] = true;
+      // event["isFromEPG"] = true;
       props.navigation.navigate(Routes.Details, {
         feed: event,
       });
