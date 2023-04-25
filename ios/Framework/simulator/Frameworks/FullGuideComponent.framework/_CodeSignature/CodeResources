@@ -10,7 +10,7 @@
 		</data>
 		<key>EPGViewController.storyboardc/EPGViewController.nib</key>
 		<data>
-		QiQ9zCUKbTwBNsD1M8VnTHlImtc=
+		xjdu5fZwSIeww3tzwzqXW8Isv1o=
 		</data>
 		<key>EPGViewController.storyboardc/FilterViewControllerId.nib</key>
 		<data>
@@ -22,7 +22,7 @@
 		</data>
 		<key>EPGViewController.storyboardc/LMc-Pm-Z4h-view-45s-ks-Twn.nib</key>
 		<data>
-		HZWSnOwcLuEhSjEnokv/zLLuTKM=
+		AKJtQqBblj7T1APBagq+WeEDeBI=
 		</data>
 		<key>EPGViewController.storyboardc/UIViewController-ye0-cS-pmP.nib</key>
 		<data>
@@ -34,11 +34,11 @@
 		</data>
 		<key>EPGViewController.storyboardc/stb-iC-LEn-view-L1W-8E-Efy.nib</key>
 		<data>
-		SGvYsjafEpx2maW6tFXfIVVLiXQ=
+		WD56oB8+zCwHpGIGFuwh0y1wmos=
 		</data>
 		<key>EPGViewController.storyboardc/ye0-cS-pmP-view-UKr-HT-bAA.nib</key>
 		<data>
-		dF9f5EQydNbZHGf2o2Ws0SL6Lfk=
+		lngQ+5OUbizfh18TdJETwvUy/IM=
 		</data>
 		<key>EditedData.json</key>
 		<data>
@@ -54,15 +54,15 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		unqTFq8bqVNX299ufFLN76Lz7gs=
+		BJxJLYKuDzoO//OBJri+JqhE4gM=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.abi.json</key>
 		<data>
-		DxsiIzB2Gr2BdmHyc7Wl5pj6MOE=
+		fdjUQaHNRk9vN2redWiDMmRJVXs=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.private.swiftinterface</key>
 		<data>
-		wchlW9gLhdFZGlajs6MZW4qc6Q0=
+		ru8My4OQcID7tl+lpq1fL71JSZA=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.swiftdoc</key>
 		<data>
@@ -70,19 +70,19 @@
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.swiftinterface</key>
 		<data>
-		wchlW9gLhdFZGlajs6MZW4qc6Q0=
+		ru8My4OQcID7tl+lpq1fL71JSZA=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.swiftmodule</key>
 		<data>
-		gIFxwisiN+vIW6OU5vu2+DStv+M=
+		el+E1M4Krk+lq+HV3z+fQLFTge8=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.abi.json</key>
 		<data>
-		DxsiIzB2Gr2BdmHyc7Wl5pj6MOE=
+		fdjUQaHNRk9vN2redWiDMmRJVXs=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.private.swiftinterface</key>
 		<data>
-		putlhr32EaXQqqcxEeqrCRW8sww=
+		uxSFxvLAfPJj8tHFu+1UbsmOIvw=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.swiftdoc</key>
 		<data>
@@ -90,11 +90,11 @@
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.swiftinterface</key>
 		<data>
-		putlhr32EaXQqqcxEeqrCRW8sww=
+		uxSFxvLAfPJj8tHFu+1UbsmOIvw=
 		</data>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.swiftmodule</key>
 		<data>
-		QXoUc74MM3lV1Hva9/hnnWr6vrk=
+		tqc3SxnEm8On2tYeEMjxVFMZsIA=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -114,7 +114,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			U0NqU3DmE4NzmV3jkunxiKmkTiMKeq6h5vI9bAE3gvg=
+			RJMjAjW3sn3MyMWP/Fp5OJ5IENQrMVKz6oZsLl/pmcY=
 			</data>
 		</dict>
 		<key>EPGViewController.storyboardc/FilterViewControllerId.nib</key>
@@ -135,7 +135,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zdARb23EDdF/FZqwUiOmgCWA02qYcDbHvgtlpP/LoD0=
+			ShgaEPVbq72E7ktUHQYxww1QKzVEfaJXeJxpVTdr70Y=
 			</data>
 		</dict>
 		<key>EPGViewController.storyboardc/UIViewController-ye0-cS-pmP.nib</key>
@@ -156,14 +156,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			VAGqRejSGcVGpDJcfTOBcjPVIcYfFl5vOYmo5Ibhlts=
+			yh+RntnZdzYnh1/oYFVKO9bZyWubctcvKzanupHpBo4=
 			</data>
 		</dict>
 		<key>EPGViewController.storyboardc/ye0-cS-pmP-view-UKr-HT-bAA.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			D5HuECJaT8pN+WlTYU92X84JIJL/y3/uQG9XdsRA4gM=
+			cYM0dM/pVwPHNzxvjTmk++a0RquO+mb1lI5e0c8SmEI=
 			</data>
 		</dict>
 		<key>EditedData.json</key>
@@ -191,14 +191,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			fCFjbdltlfV0z830qRbBk7jdz7qIOb8Zgrch7PFUf8Q=
+			cVdZadXEZYQefRzqwPZwtZjSjnWpux+6WMEPjKXoK8w=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ig2ZZ/4TorPh7s+MjM0SsMCr0cHvwldaYVegs46R8Ww=
+			itPn6VraJL8Y83O4IBIw5jZ3UTz4WkkNx7mUE8HORqY=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.swiftdoc</key>
@@ -212,28 +212,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ig2ZZ/4TorPh7s+MjM0SsMCr0cHvwldaYVegs46R8Ww=
+			itPn6VraJL8Y83O4IBIw5jZ3UTz4WkkNx7mUE8HORqY=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/arm64-apple-tvos-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			kjlPA19vi8PbRooeEUoldciM4aMXHVO9HUuotbvzI3w=
+			erkjj4s/M9ba/RXWhIvRLfXyQ6A4BehDhHN5ktFqRR8=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			fCFjbdltlfV0z830qRbBk7jdz7qIOb8Zgrch7PFUf8Q=
+			cVdZadXEZYQefRzqwPZwtZjSjnWpux+6WMEPjKXoK8w=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			2Z5HqVq7LsWYeijfpSA0DuQKlWCZ2/U7JsApA+CtM10=
+			aaCIHatxGSAqaUcLK3ZQJryvjLfVhe358pedydfRpoE=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.swiftdoc</key>
@@ -247,14 +247,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			2Z5HqVq7LsWYeijfpSA0DuQKlWCZ2/U7JsApA+CtM10=
+			aaCIHatxGSAqaUcLK3ZQJryvjLfVhe358pedydfRpoE=
 			</data>
 		</dict>
 		<key>Modules/FullGuideComponent.swiftmodule/x86_64-apple-tvos-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			vBrQysOn9dXXw25qpYS9DcNbomSOCZZkWvXBUd3g37g=
+			O1dNyFV7q2L4lst/Os+Qpl0NqbIN9rjebUYHORZqIKA=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
