@@ -149,7 +149,7 @@ const Video: React.FunctionComponent<VideoPlayerProps> = (
             (mediaUID || playbackUri) && (
                 <MKPlayerView
                     style={playerStyles.player}
-                    playerConig={{
+                    playerConfig={{
                         server_url,
                         live,
                         stsToken,

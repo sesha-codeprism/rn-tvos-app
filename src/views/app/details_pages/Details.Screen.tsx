@@ -852,8 +852,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             Id
           )
           .then((bookmark) => {
-            udpDataAsset["playSource"] = sourceTypeString.DVR;
-            navigateToPlayer({udpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
+            const newUdpDataAsset  = {...udpDataAsset, "playSource": sourceTypeString.DVR};
+            navigateToPlayer({udpDataAsset: newUdpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
           });
         },
       });
@@ -869,8 +869,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
             Id
           )
           .then((bookmark) => {
-            udpDataAsset["playSource"] = sourceTypeString.DVR;
-            navigateToPlayer({udpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
+            const newUdpDataAsset = {...udpDataAsset, playSource:  sourceTypeString.DVR}
+            navigateToPlayer({udpDataAsset: newUdpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
           });
         },
       });
@@ -882,8 +882,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         Id
       )
       .then((bookmark) => {
-        udpDataAsset["playSource"] = sourceTypeString.DVR;
-        navigateToPlayer({udpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
+        const newUdpDataAsset = {...udpDataAsset, playSource:  sourceTypeString.DVR}
+        navigateToPlayer({udpDataAsset: newUdpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
       });
     }
    
@@ -894,29 +894,30 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         udpDataAsset.usablePlayActions,
         false
       );
+      const newUdpDataAsset = {...udpDataAsset};
       getBookmark(
-        getVodVideoProfileId(udpDataAsset.usablePlayActions, false),
+        getVodVideoProfileId(newUdpDataAsset.usablePlayActions, false),
         udlBookMark.VOD
       )
         .then((bookmark) => {
-          udpDataAsset["playSource"] = sourceTypeString.VOD;
-          udpDataAsset["playAction"] = playAction;
+          newUdpDataAsset["playSource"] = sourceTypeString.VOD;
+          newUdpDataAsset["playAction"] = playAction;
           if (
-            udpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP
+            newUdpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP
           ) {
-            udpDataAsset["combinedEntitlements"] = [];
+            newUdpDataAsset["combinedEntitlements"] = [];
           }
-          navigateToPlayer({udpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
+          navigateToPlayer({udpDataAsset: newUdpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
         })
         .catch(() => {
-          udpDataAsset["playSource"] = sourceTypeString.VOD;
-          udpDataAsset["playAction"] = playAction;
+          newUdpDataAsset["playSource"] = sourceTypeString.VOD;
+          newUdpDataAsset["playAction"] = playAction;
           if (
-            udpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP
+            newUdpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP
           ) {
-            udpDataAsset["combinedEntitlements"] = [];
+            newUdpDataAsset["combinedEntitlements"] = [];
           }
-          navigateToPlayer({udpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
+          navigateToPlayer({udpDataAsset: newUdpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
         });
     },
     [AppStrings?.str_details_cta_trailer]: () => {
@@ -924,29 +925,31 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         udpDataAsset.usablePlayActions,
         true
       );
-      udpDataAsset["playSource"] = sourceTypeString.VOD;
-      udpDataAsset["isTrailer"] = true;
-      udpDataAsset["playAction"] = playAction;
-      navigateToPlayer({udpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
+      const newUdpDataAsset = {...udpDataAsset};
+      newUdpDataAsset["playSource"] = sourceTypeString.VOD;
+      newUdpDataAsset["isTrailer"] = true;
+      newUdpDataAsset["playAction"] = playAction;
+      navigateToPlayer({udpDataAsset: newUdpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
     },
     [AppStrings?.str_details_cta_play_from_beginning]: () => {
       const playAction = getRestrictionsForVod(
         udpDataAsset.usablePlayActions,
         false
       );
-      udpDataAsset["restart"] = true;
+      const newUdpDataAsset = {...udpDataAsset, restart: true};
 
-      udpDataAsset["playSource"] = sourceTypeString.VOD;
-      udpDataAsset["playAction"] = playAction;
-      if (udpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP) {
-        udpDataAsset["combinedEntitlements"] = [];
+      newUdpDataAsset["playSource"] = sourceTypeString.VOD;
+      newUdpDataAsset["playAction"] = playAction;
+      if (newUdpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP) {
+        newUdpDataAsset["combinedEntitlements"] = [];
       }
-      navigateToPlayer({udpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
+      navigateToPlayer({udpDataAsset: newUdpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
     },
     [AppStrings?.str_details_cta_watch_live]: () => {
       let isHDMIblocked = udpDataAsset?.combinedEntitlements?.some(
         (entitlement: string) => entitlement == pbr.RestrictionsType.HI
       );
+      const newUdpDataAsset = {...udpDataAsset};
       if (isHDMIblocked) {
         // displayModal({
         //   text: AppStrings?.str_restrictions.apple_tv_blocked,
@@ -960,8 +963,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         // });
         return;
       }
-      if (udpDataAsset?.ppvInfo?.hasPPV && !udpDataAsset?.ppvInfo?.isinHome) {
-        const isOutOfHomeBlocked = udpDataAsset?.ppvInfo?.Entitlement?.some(
+      if (newUdpDataAsset?.ppvInfo?.hasPPV && !newUdpDataAsset?.ppvInfo?.isinHome) {
+        const isOutOfHomeBlocked = newUdpDataAsset?.ppvInfo?.Entitlement?.some(
           (entitlement: string) =>
             entitlement == pbr.RestrictionsType.OUTOFHOME_BLOCKED ||
             entitlement == pbr.RestrictionsType.OH
@@ -980,8 +983,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           return;
         }
       }
-      udpDataAsset["playSource"] = sourceTypeString.LIVE;
-      navigateToPlayer({udpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
+      newUdpDataAsset["playSource"] = sourceTypeString.LIVE;
+      navigateToPlayer({udpDataAsset: newUdpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
     },
     [AppStrings?.str_details_cta_restart]: () => {
       const restart = () => {
