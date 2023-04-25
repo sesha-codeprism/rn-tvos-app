@@ -462,6 +462,17 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
                   });
                 },
               });
+            }else {
+              DeviceEventEmitter.emit("openPurchase", {
+                params:{
+                  udpAssetData: {
+                    ...packageData,
+                    purchaseActions: packageActions?.PurchaseActions
+                  },
+                  panelTitle: AppStrings?.str_details_cta_rentbuy,
+                },
+                drawerPercentage:0.37
+              });
             }
           }}
         />
@@ -533,6 +544,17 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
                   });
                 },
               });
+            }else {
+              DeviceEventEmitter.emit("openPurchase", {
+                params:{
+                  udpAssetData: {
+                    ...packageData,
+                    purchaseActions: packageActions?.PurchaseActions
+                  },
+                  panelTitle: AppStrings?.str_details_cta_rentbuy,
+                },
+                drawerPercentage:0.37
+              });
             }
           }}
         />
@@ -603,6 +625,17 @@ const PackageDetailsScreen: React.FunctionComponent<PackageDetailsProps> = (
                     drawerPercentage:0.37
                   });
                 },
+              });
+            }else{
+              DeviceEventEmitter.emit("openPurchase", {
+                params:{
+                  udpAssetData: {
+                    ...packageData,
+                    purchaseActions: packageActions?.PurchaseActions
+                  },
+                  panelTitle: AppStrings?.str_details_cta_rentbuy,
+                },
+                drawerPercentage:0.37
               });
             }
           }}
