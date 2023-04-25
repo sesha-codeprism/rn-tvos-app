@@ -8,7 +8,7 @@ import { MFGlobalsConfig } from "../../backend/configs/globals";
 export const Log =
   __DEV__ && global && global.console
     ? console.log.bind(global.console)
-    : () => {};
+    : () => { };
 
 export const updateStore = (MFStore: any) => {
   const sanitizedStore = {
@@ -160,6 +160,13 @@ export function isHash(str: string) {
   let sha256Regex = new RegExp(/^([a-f0-9]{64})$/);
   return sha256Regex.test(str);
 }
+
+export const generateColor = () => {
+  const randomColor = Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, '0');
+  return `#${randomColor}`;
+};
 
 export const minifyText = (text: string, maxLength: number) => {
   return text.length <= maxLength ? text : `${text.substring(0, maxLength)}...`;

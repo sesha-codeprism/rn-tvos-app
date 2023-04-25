@@ -3,20 +3,14 @@ import React, { useRef } from "react";
 import {
   Animated,
   NativeSyntheticEvent,
-  StyleProp,
   StyleSheet,
   TargetedEvent,
-  TextStyle,
   View,
-  ViewStyle,
 } from "react-native";
-import FastImage, { ImageStyle } from "react-native-fast-image";
+import FastImage from "react-native-fast-image";
 import { SubscriberFeed } from "../../@types/SubscriberFeed";
-import { MetadataStyles } from "../../@types/UIDefinition";
 import { appUIDefinition } from "../../config/constants";
-import { getNetworkInfo, getMetadataLine2 } from "../../utils/assetUtils";
 import { SCREEN_WIDTH } from "../../utils/dimensions";
-import { GLOBALS } from "../../utils/globals";
 import MFText from "../MFText";
 import { getMetadataInfo, MetadataType } from "./MFMetadataUtils";
 
@@ -98,15 +92,18 @@ const MFMetaData: React.FunctionComponent<MFMetaDataProps> = (props) => {
   }
   function getTextComponent(metadata: string, styles: any): React.ReactElement {
     return (
-      <MFText
-        shouldRenderText
-        displayText={
-          metadata.length > 50
-            ? metadata.substring(0, 50).concat("...")
-            : metadata
-        }
-        textStyle={styles}
-      />
+      metadata !== undefined &&
+      metadata.length > 0 && (
+        <MFText
+          shouldRenderText
+          displayText={
+            metadata.length > 50
+              ? metadata.substring(0, 50).concat("...")
+              : metadata
+          }
+          textStyle={styles}
+        />
+      )
     );
   }
 

@@ -24,6 +24,7 @@ import { SCREEN_WIDTH } from "../../utils/dimensions";
 import MFMetaData from "../MFMetadata/MFMetaData";
 import { format } from "../../utils/DiscoveryUtils";
 import { appUIDefinition, layout2x3 } from "../../config/constants";
+import { generateColor } from "../../utils/helpers";
 // export interface FeedsObject {
 //   imageSource?: string;
 //   imageStyles?: StyleProp<ImageStyle>;
@@ -226,6 +227,8 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
         ? props.updateSwimLaneKey(
             props.libraryItems[Object.keys(props.libraryItems)[0]][index].title
           )
+        : props.updateSwimLaneKey && props.feed?.Uri
+        ? props.updateSwimLaneKey(props.feed?.Uri)
         : null;
     };
 
@@ -338,9 +341,6 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
                       }
                       showTitleOnlyOnFocus={false}
                       titlePlacement={props.titlePlacement}
-                      // overlayComponent={
-
-                      // }
                       progressComponent={props.progressElement}
                       showProgress={props.shouldRenderProgress}
                       shouldRenderText
@@ -398,7 +398,8 @@ const MFFilmStrip: React.FunctionComponent<MFFilmStripProps> = React.forwardRef(
         currentFeed &&
         props.swimLaneKey?.trim().length! > 0 &&
         (props.swimLaneKey === props.title ||
-          props.swimLaneKey === currentFeed?.title) ? (
+          props.swimLaneKey === currentFeed?.title ||
+          props.swimLaneKey === props.feed?.Uri) ? (
           <View
             style={{
               width: 500,

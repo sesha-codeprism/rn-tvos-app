@@ -332,8 +332,8 @@ export const getCatchupPivotItems = async (id?: string, params?: any) => {
 export const getCatchupItems = async (id?: string, params?: any) => {
   let uri: string;
   const { accessToken } = GLOBALS.store!;
-  const { $skip, $top, $lang, $groups, storeId, pivots} = params;
-  const {$orderBy, StationId, Uri } = GLOBALS.selectedFeed;
+  const { $skip, $top, $lang, $groups, storeId, pivots } = params;
+  const { $orderBy, StationId, Uri } = GLOBALS.selectedFeed;
   uri = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.discovery || '') + `/v3/libraries/catchup/items`
 
   const type: SourceType = SourceType.PACKAGE;
@@ -353,7 +353,7 @@ export const getCatchupItems = async (id?: string, params?: any) => {
     headers: {
       Authorization: `OAUTH2 access_token="${accessToken}"`,
     },
-  }); 
+  });
   const sourceType = response.data?.length && response.data[0]?.SourceType;
   return massageCatchupFeed(response.data, sourceType);
 }

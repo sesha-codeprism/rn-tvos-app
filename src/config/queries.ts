@@ -6,6 +6,9 @@ import { FeedItem, HubsResponse } from "../@types/HubsResponse";
 import { DefaultStore } from "../utils/DiscoveryUtils";
 import { GLOBALS } from "../utils/globals";
 import { appUIDefinition, lang, pivots } from "./constants";
+import { config } from "./config";
+import { AppStrings } from "./strings";
+import { FeedContents } from "../components/MFSwimLane";
 
 export const queryClient = new QueryClient()
 export const appQueryCache = queryClient.getQueryCache();
@@ -76,6 +79,20 @@ const getUDLData = async (uri: string, pageNo: number = 0, shouldMassageData: bo
     }
 }
 
+export const getGuideDataFromUIDef = (feed: any) => {
+    const shortcuts = (config.guide.guideFilteredFeed as any)[feed.Uri];
+    const shortcutsLength = shortcuts.length;
+
+    for (let i = 0; i < shortcutsLength; i++) {
+        shortcuts[i].title =
+            AppStrings?.str_guide_filters[shortcuts[i].stringId];
+    }
+    return shortcuts;
+    // return new FeedContents(feed, shortcuts);
+
+
+}
+
 export const getAllFeedDataForFeed = (feed: FeedItem, nowNextMap: any, currentSlots: any, channelRights: any) => {
     return useQueries(
         feed.Feeds.map(element => {
@@ -89,6 +106,11 @@ export const getAllFeedDataForFeed = (feed: FeedItem, nowNextMap: any, currentSl
                 queryFn: () => getUDLData(element.Uri),
                 staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime,
                 enabled: !!GLOBALS.allSubscriptionGroups && !!GLOBALS.viewableSubscriptions && !!GLOBALS.scheduledSubscriptions
+            } : element.Uri.toLowerCase().includes('uidef') ? {
+                queryKey: ['feed', element.Uri],
+                queryFn: () => getGuideDataFromUIDef(element),
+                staleTime: appUIDefinition.config.queryStaleTime, cacheTime: appUIDefinition.config.queryCacheTime,
+                enabled: !!nowNextMap
             } : {
                 queryKey: ['feed', element.Uri],
                 queryFn: () => getUDLData(element.Uri),
@@ -96,6 +118,7 @@ export const getAllFeedDataForFeed = (feed: FeedItem, nowNextMap: any, currentSl
                 enabled: !!nowNextMap
             }
         }),
+
     )
 
 }
