@@ -15,82 +15,109 @@ export interface IUrlParamValue {
   encodeValue?: boolean; // Default true
 }
 
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
+
+const handleError = (error: any) => {
+  console.log("Handling error", error);
+  //TODO: Activate this
+  throw Error(error);
+}
 
 const GET = async ({ url, params = {}, headers = {} }: MFRequest) => {
-  const axiosRequest = axios.get(url, {
-    headers: {
-      ...headers,
-    },
-    params: {
-      ...params,
-    },
-  });
-  axiosRequest.then((response: any) => {
-    return response; // handle success
-  });
-  axiosRequest.catch(function (error: any) {
-    return error; // handle error
-  });
-  return axiosRequest;
+  try {
+    const axiosRequest = axios.get(url, {
+      headers: {
+        ...headers,
+      } as AxiosHeaders,
+      params: {
+        ...params,
+      },
+    });
+    axiosRequest.then((response: any) => {
+      return response; // handle success
+    });
+    axiosRequest.catch(function (error: any) {
+      handleError(error)
+      return error
+      // return error; // handle error
+    });
+    return axiosRequest;
+  } catch (err) {
+    handleError(err)
+  }
 };
 
 const POST = async ({ url, params = {}, headers = {} }: MFRequest) => {
-  const axiosRequest = axios.post(
-    url,
-    {
-      ...params,
-    },
-    {
-      headers: {
-        ...headers,
+  try {
+    const axiosRequest = axios.post(
+      url,
+      {
+        ...params,
       },
-    }
-  );
-  axiosRequest.then((response: any) => {
-    return response; // handle success
-  });
-  axiosRequest.catch(function (error: any) {
-    return error; // handle error
-  });
-  return axiosRequest;
+      {
+        headers: {
+          ...headers,
+        } as AxiosHeaders,
+      }
+    );
+    axiosRequest.then((response: any) => {
+      return response; // handle success
+    });
+    axiosRequest.catch(function (error: any) {
+      handleError(error)
+      // return error; // handle error
+    });
+    return axiosRequest;
+  } catch (err) {
+    handleError(err)
+  }
 };
 const PUT = async ({ url, params = {}, headers = {} }: MFRequest) => {
-  const axiosRequest = axios.put(
-    url,
-    {
-      ...params,
-    },
-    {
-      headers: {
-        ...headers,
+  try {
+    const axiosRequest = axios.put(
+      url,
+      {
+        ...params,
       },
-    }
-  );
-  axiosRequest.then((response: any) => {
-    return response; // handle success
-  });
-  axiosRequest.catch(function (error: any) {
-    return error; // handle error
-  });
-  return axiosRequest;
+      {
+        headers: {
+          ...headers,
+        } as AxiosHeaders,
+      }
+    );
+    axiosRequest.then((response: any) => {
+      return response; // handle success
+    });
+    axiosRequest.catch(function (error: any) {
+      handleError(error)
+      // return error; // handle error
+    });
+    return axiosRequest;
+  } catch (err) {
+    handleError(err)
+  }
 };
 const DELETE = async ({ url, headers = {} }: MFRequest) => {
-  const axiosRequest = axios.delete(
-    url,
-    {
-      headers: {
-        ...headers,
-      },
-    }
-  );
-  axiosRequest.then((response: any) => {
-    return response; // handle success
-  });
-  axiosRequest.catch(function (error: any) {
-    return error; // handle error
-  });
-  return axiosRequest;
+  try {
+    const axiosRequest = axios.delete(
+      url,
+      {
+        headers: {
+          ...headers,
+        } as AxiosHeaders,
+      }
+    );
+    axiosRequest.then((response: any) => {
+      return response; // handle success
+    });
+    axiosRequest.catch(function (error: any) {
+      handleError(error)
+      // return error; // handle error
+    });
+    return axiosRequest;
+  } catch (err) {
+    handleError(err)
+  }
 };
 
 export { GET, POST, DELETE, PUT };

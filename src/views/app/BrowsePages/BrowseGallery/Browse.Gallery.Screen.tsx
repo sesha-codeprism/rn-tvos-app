@@ -171,7 +171,7 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
     }
     const dataArray = dataSource;
     if (dataArray.length > 0) {
-      const newArray = isSearch? dataSet : dataArray.concat(dataSet);
+      const newArray = isSearch ? dataSet : dataArray.concat(dataSet);
       setDataSource(newArray);
     } else {
       setDataSource(dataSet);
@@ -222,15 +222,11 @@ const GalleryScreen: React.FunctionComponent<GalleryScreenProps> = (props) => {
   const pivotQuery = useQuery(
     "pivots",
     async () => {
-      try {
-        console.log("Requesting pivots for:", pivotURL);
-        const pivots = await getDataFromUDL(pivotURL);
+      const pivots = await getDataFromUDL(pivotURL);
+      if (pivots.status > 200 && pivots.status < 300) {
         const firstFilter = createInitialFilterState(pivots.data, baseValues);
         setFilterState(firstFilter);
         return pivots;
-      } catch (e) {
-        console.log("Some error in getting pivots", e);
-        return undefined;
       }
     },
     {

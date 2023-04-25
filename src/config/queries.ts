@@ -1,4 +1,4 @@
-import { QueryClient, useQueries, useQuery, useQueryClient } from "react-query";
+import { QueryCache, QueryClient, useQueries, useQuery, useQueryClient } from "react-query";
 import { getDataFromUDL, getMassagedData } from "../../backend";
 import { getAllSubscriberProfiles } from "../../backend/subscriber/subscriber";
 import { parseUdl, UdlProviders } from "../../backend/udl/provider";
@@ -10,7 +10,25 @@ import { config } from "./config";
 import { AppStrings } from "./strings";
 import { FeedContents } from "../components/MFSwimLane";
 
-export const queryClient = new QueryClient()
+export const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            onError: (err) => {
+                //@ts-ignore
+                throw new Error(err)
+            }
+        }
+    }
+});
+
+// export const queryClient = new QueryClient({
+//     queryCache: new QueryCache({
+//         onError: (error) => {
+//             //@ts-ignore
+//             throw new Error(error)
+//         }
+//     }),
+// })
 export const appQueryCache = queryClient.getQueryCache();
 export interface QueryResponse {
     data: any;
