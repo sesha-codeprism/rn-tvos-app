@@ -46,24 +46,24 @@ export type VideoPlayerPropsExplicit = {
 }
 
 type VideoPlayerStateExplicit = {
-            server_url?: string,
-            live?: boolean,
-            stsToken?: string,
-            tenantId?: string,
-            playbackUri?: string,
-            locale?: string,
-            ownerUID?: string,
-            bookmarkPosition?: number,
-            userToken?: string,
-            mediaUID?: string,
-            appToken?: string,
-            primaryAccount?: string,
-            subtitleTrack?: string,
-            ccEnabled?: string,
-            audioTrack?: string,
-            maxBitrate?: string,
-            catalogInfo?: any,
-            schedule?: any
+    server_url?: string,
+    live?: boolean,
+    stsToken?: string,
+    tenantId?: string,
+    playbackUri?: string,
+    locale?: string,
+    ownerUID?: string,
+    bookmarkPosition?: number,
+    userToken?: string,
+    mediaUID?: string,
+    appToken?: string,
+    primaryAccount?: string,
+    subtitleTrack?: string,
+    ccEnabled?: string,
+    audioTrack?: string,
+    maxBitrate?: string,
+    catalogInfo?: any,
+    schedule?: any
 }
 
 
@@ -106,155 +106,174 @@ const Video: React.FunctionComponent<VideoPlayerProps> = (
     }
 
     /// only for testing
-    useEffect(() => {
-        const timer = setTimeout(()=> {
-            setShowBingeBar(true)
-        }, 5000);
-        return  () => {
-            clearTimeout(timer);
-        }
-    }, []);
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         setShowBingeBar(true)
+    //     }, 5000);
+    //     return () => {
+    //         clearTimeout(timer);
+    //     }
+    // }, []);
 
-    useEffect(() => {
-        setPlayerConfig({
-            server_url,
-            live,
-            stsToken,
-            tenantId,
-            playbackUri,
-            locale,
-            ownerUID,
-            bookmarkPosition,
-            userToken,
-            mediaUID,
-            appToken,
-            primaryAccount,
-            subtitleTrack,
-            ccEnabled,
-            audioTrack,
-            maxBitrate,
-            catalogInfo,
-            schedule
-        })
-    }, [server_url, live, stsToken, tenantId, playbackUri,  locale,  ownerUID, bookmarkPosition, userToken, mediaUID, appToken, primaryAccount,  subtitleTrack, ccEnabled, audioTrack, maxBitrate, catalogInfo, schedule]);
+    // useEffect(() => {
+    //     setPlayerConfig({
+    //         server_url,
+    //         live,
+    //         stsToken,
+    //         tenantId,
+    //         playbackUri,
+    //         locale,
+    //         ownerUID,
+    //         bookmarkPosition,
+    //         userToken,
+    //         mediaUID,
+    //         appToken,
+    //         primaryAccount,
+    //         subtitleTrack,
+    //         ccEnabled,
+    //         audioTrack,
+    //         maxBitrate,
+    //         catalogInfo,
+    //         schedule
+    //     })
+    // }, [server_url, live, stsToken, tenantId, playbackUri,  locale,  ownerUID, bookmarkPosition, userToken, mediaUID, appToken, primaryAccount,  subtitleTrack, ccEnabled, audioTrack, maxBitrate, catalogInfo, schedule]);
 
 
     return (<View style={playerStyles.playerContainer}>
-        {
+        {/* {
             !(s_player_config?.mediaUID || s_player_config?.playbackUri) && (
                 <MFLoader/>
             ) 
-        }
+        } */}
         {
-            (s_player_config?.mediaUID || s_player_config?.playbackUri) && (
-                    <MKPlayerView
-                                style={playerStyles.player}
-                                playerConig={s_player_config}
-                                onExit={onExit}
-                                onSubtitlePressed={onSubtitlePressed}
-                                onBitratePressed={onBitratePressed}
-                            />
+            (mediaUID || playbackUri) && (
+                <MKPlayerView
+                    style={playerStyles.player}
+                    playerConig={{
+                        server_url,
+                        live,
+                        stsToken,
+                        tenantId,
+                        playbackUri,
+                        locale,
+                        ownerUID,
+                        bookmarkPosition,
+                        userToken,
+                        mediaUID,
+                        appToken,
+                        primaryAccount,
+                        subtitleTrack,
+                        ccEnabled,
+                        audioTrack,
+                        maxBitrate,
+                        catalogInfo,
+                        schedule
+                    }}
+                    onExit={onExit}
+                    onSubtitlePressed={onSubtitlePressed}
+                    onBitratePressed={onBitratePressed}
+                />
             )
         }
         {
             showBingeBar && (
                 <View style={playerStyles.bingeBarStyle}>
-                 <Image
-                    source={ getRenderImageURI("16x9", mockData)|| AppImages.bgPlaceholdere}
-                    style={HomeScreenStyles.landScapeCardImageStyles}
-                  />
-                    <View style={{width: (appUIDefinition.config.height16x9 * 16) / 9, display:"flex", flexDirection: "row", alignContent: "space-around"}}>
-                    <MFButton
-                        variant={MFButtonVariant.Contained}
-                        iconSource={0}
-                        onPress={() => {
-                            console.log('Continue Clicked')
-                        }}
-                        onFocus={()=> {
-                            console.log('Continue Focussed')
-                        }}
-                        imageSource={0}
-                        style={{
-                            height: 70,
-                            width: 180,
-                            backgroundColor: "#EEEEEE",
-                            marginBottom: 10
-                           }}
-                        textStyle={{
-                            height: 38,
-                            width: 150,
-                            color: "#EEEEEE",
-                            fontFamily: "Inter-Regular",
-                            fontSize: 25,
-                            fontWeight: "600",
-                            letterSpacing: 0,
-                            lineHeight: 38,
-                            textAlign: "center"
-                        }}
-                        avatarSource={undefined}
-                        textLabel={"Continue"}
-                        containedButtonProps={{
-                            containedButtonStyle: {
-                                unFocusedBackgroundColor:
-                                    globalStyles.backgroundColors.shade3,
-                                elevation: 0,
-                                enabled: true,
-                                focusedBackgroundColor:
-                                    globalStyles.backgroundColors.primary1,
-                                hoverColor: "red",
-                                hasTVPreferredFocus: false,
-                                unFocusedTextColor: globalStyles.fontColors.lightGrey,
-                            },
-                        }}
+                    <Image
+                        source={getRenderImageURI("16x9", mockData) || AppImages.bgPlaceholdere}
+                        style={HomeScreenStyles.landScapeCardImageStyles}
                     />
-                    <MFButton
-                        variant={MFButtonVariant.Contained}
-                        iconSource={0}
-                        onPress={() => {
-                            console.log('Dissmiss Clicked')
-                        }}
-                        onFocus={()=> {
-                            console.log('Dissmiss Focussed')
-                        }}
-                        imageSource={0}
-                        style={{
-                            height: 70,
-                            width: 180,
-                            backgroundColor: "#EEEEEE",
-                            marginBottom: 10
-                           }}
-                        textStyle={{
-                            height: 38,
-                            width: 150,
-                            color: "#EEEEEE",
-                            fontFamily: "Inter-Regular",
-                            fontSize: 25,
-                            fontWeight: "600",
-                            letterSpacing: 0,
-                            lineHeight: 38,
-                            textAlign: "center"
-                        }}
-                        avatarSource={undefined}
-                        textLabel={"Dissmiss"}
-                        containedButtonProps={{
-                            containedButtonStyle: {
-                                unFocusedBackgroundColor:
-                                    globalStyles.backgroundColors.shade3,
-                                elevation: 0,
-                                enabled: true,
-                                focusedBackgroundColor:
-                                    globalStyles.backgroundColors.primary1,
-                                hoverColor: "red",
-                                hasTVPreferredFocus: false,
-                                unFocusedTextColor: globalStyles.fontColors.lightGrey,
-                            },
-                        }}
-                    />
+                    <View style={{ width: (appUIDefinition.config.height16x9 * 16) / 9, display: "flex", flexDirection: "row", alignContent: "space-around" }}>
+                        <MFButton
+                            variant={MFButtonVariant.Contained}
+                            iconSource={0}
+                            onPress={() => {
+                                console.log('Continue Clicked')
+                            }}
+                            onFocus={() => {
+                                console.log('Continue Focussed')
+                            }}
+                            imageSource={0}
+                            style={{
+                                height: 70,
+                                width: 180,
+                                backgroundColor: "#EEEEEE",
+                                marginBottom: 10
+                            }}
+                            textStyle={{
+                                height: 38,
+                                width: 150,
+                                color: "#EEEEEE",
+                                fontFamily: "Inter-Regular",
+                                fontSize: 25,
+                                fontWeight: "600",
+                                letterSpacing: 0,
+                                lineHeight: 38,
+                                textAlign: "center"
+                            }}
+                            avatarSource={undefined}
+                            textLabel={"Continue"}
+                            containedButtonProps={{
+                                containedButtonStyle: {
+                                    unFocusedBackgroundColor:
+                                        globalStyles.backgroundColors.shade3,
+                                    elevation: 0,
+                                    enabled: true,
+                                    focusedBackgroundColor:
+                                        globalStyles.backgroundColors.primary1,
+                                    hoverColor: "red",
+                                    hasTVPreferredFocus: false,
+                                    unFocusedTextColor: globalStyles.fontColors.lightGrey,
+                                },
+                            }}
+                        />
+                        <MFButton
+                            variant={MFButtonVariant.Contained}
+                            iconSource={0}
+                            onPress={() => {
+                                console.log('Dissmiss Clicked')
+                            }}
+                            onFocus={() => {
+                                console.log('Dissmiss Focussed')
+                            }}
+                            imageSource={0}
+                            style={{
+                                height: 70,
+                                width: 180,
+                                backgroundColor: "#EEEEEE",
+                                marginBottom: 10
+                            }}
+                            textStyle={{
+                                height: 38,
+                                width: 150,
+                                color: "#EEEEEE",
+                                fontFamily: "Inter-Regular",
+                                fontSize: 25,
+                                fontWeight: "600",
+                                letterSpacing: 0,
+                                lineHeight: 38,
+                                textAlign: "center"
+                            }}
+                            avatarSource={undefined}
+                            textLabel={"Dissmiss"}
+                            containedButtonProps={{
+                                containedButtonStyle: {
+                                    unFocusedBackgroundColor:
+                                        globalStyles.backgroundColors.shade3,
+                                    elevation: 0,
+                                    enabled: true,
+                                    focusedBackgroundColor:
+                                        globalStyles.backgroundColors.primary1,
+                                    hoverColor: "red",
+                                    hasTVPreferredFocus: false,
+                                    unFocusedTextColor: globalStyles.fontColors.lightGrey,
+                                },
+                            }}
+                        />
                     </View>
                 </View>
             )
         }
-     
+
     </View>)
 }
 
@@ -262,13 +281,13 @@ export default Video;
 
 const playerStyles = StyleSheet.create(
     {
-        playerContainer: { 
-            alignContent: "center", 
-            alignItems: "center", 
+        playerContainer: {
+            alignContent: "center",
+            alignItems: "center",
             padding: 0
         },
         player: {
-            width: screenWidth, 
+            width: screenWidth,
             height: screenHeight
         },
         bingeBarStyle: {

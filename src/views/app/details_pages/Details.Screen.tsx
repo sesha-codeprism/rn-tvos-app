@@ -32,6 +32,7 @@ import {
   SubscriptionPackages,
   getEpisodeInfo,
   massageDiscoveryFeed,
+  getRestrictionsForVod
 } from "../../../utils/assetUtils";
 import {
   isScheduleCurrent,
@@ -905,7 +906,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           ) {
             udpDataAsset["combinedEntitlements"] = [];
           }
-          navigateToPlayer(bookmark);
+          navigateToPlayer({udpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
         })
         .catch(() => {
           udpDataAsset["playSource"] = sourceTypeString.VOD;
@@ -915,7 +916,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           ) {
             udpDataAsset["combinedEntitlements"] = [];
           }
-          navigateToPlayer();
+          navigateToPlayer({udpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
         });
     },
     [AppStrings?.str_details_cta_trailer]: () => {
@@ -926,7 +927,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       udpDataAsset["playSource"] = sourceTypeString.VOD;
       udpDataAsset["isTrailer"] = true;
       udpDataAsset["playAction"] = playAction;
-      navigateToPlayer();
+      navigateToPlayer({udpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
     },
     [AppStrings?.str_details_cta_play_from_beginning]: () => {
       const playAction = getRestrictionsForVod(
@@ -940,7 +941,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
       if (udpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP) {
         udpDataAsset["combinedEntitlements"] = [];
       }
-      navigateToPlayer();
+      navigateToPlayer({udpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
     },
     [AppStrings?.str_details_cta_watch_live]: () => {
       let isHDMIblocked = udpDataAsset?.combinedEntitlements?.some(
@@ -980,7 +981,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         }
       }
       udpDataAsset["playSource"] = sourceTypeString.LIVE;
-      navigateToPlayer();
+      navigateToPlayer({udpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
     },
     [AppStrings?.str_details_cta_restart]: () => {
       const restart = () => {
@@ -1642,25 +1643,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     });
   };
 
-  const navigateToPlayer = (bookmark?: any) => {
-    //TODO: Finish implementation of navigate to player..
-    const data: any = feed;
-    const play = () => {
-      featureNotImplementedAlert();
-    };
-    console.log("navigateToPlayer", props);
-    let details = discoveryProgramData;
-    if (isPconBlocked(details)) {
-      DeviceEventEmitter.emit("openPinVerificationPopup", {
-        pinType: PinType.content,
-        data: data,
-        onSuccess: play,
-      });
-    } else {
-      // To be implemented Play action
-      play();
-    }
-  };
 
   const handleRestart = (bookmark?: any) => {
     navigateToPlayer({udpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
@@ -1971,10 +1953,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     setIsCTAButtonFocused(true);
   }, [udpDataAsset?.ctaButtons?.length]);
 
-  const getRestrictionsForVod = (
-    usablePlayActions: any,
-    isTrailer: boolean
-  ) => {};
 
   const renderCTAButtonGroup = () => {
     // const { visible, panelName } = sidePanelState;
