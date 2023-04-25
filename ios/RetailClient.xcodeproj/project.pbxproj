@@ -112,6 +112,20 @@
 		6CE37960294D49DF965B9FB6 /* space.svg in Resources */ = {isa = PBXBuildFile; fileRef = ADE603BAB892478299C3CB58 /* space.svg */; };
 		7550FAE82B874BF5AE1F8584 /* profile_pic_8.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0E26AB68BF47DAA75043FB /* profile_pic_8.png */; };
 		7C2FA9082B8B4E588768D17F /* unchecked_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 40409ED1952643D88DC9B839 /* unchecked_circle.png */; };
+		7D11784429F7CD2400DD23E8 /* FullGuideComponent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC9B1DE029642AFF0019A926 /* FullGuideComponent.framework */; };
+		7D11784529F7CD2400DD23E8 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC9B1DE229642B000019A926 /* Alamofire.framework */; };
+		7D11784629F7CD2400DD23E8 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC9B1DE329642B010019A926 /* Reachability.framework */; };
+		7D11784729F7CD2400DD23E8 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC9B1DE129642AFF0019A926 /* Kingfisher.framework */; };
+		7D11784C29F7CDF400DD23E8 /* BitmovinAnalyticsCollector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D11784929F7CD2500DD23E8 /* BitmovinAnalyticsCollector.framework */; };
+		7D11784D29F7CDF400DD23E8 /* BitmovinAnalyticsCollector.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7D11784929F7CD2500DD23E8 /* BitmovinAnalyticsCollector.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7D11784E29F7CDF400DD23E8 /* BitmovinPlayer.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D11784A29F7CD2500DD23E8 /* BitmovinPlayer.xcframework */; };
+		7D11784F29F7CDF400DD23E8 /* BitmovinPlayer.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7D11784A29F7CD2500DD23E8 /* BitmovinPlayer.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7D11785029F7CDF400DD23E8 /* MKPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D11784B29F7CD2500DD23E8 /* MKPlayer.framework */; };
+		7D11785129F7CDF400DD23E8 /* MKPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7D11784B29F7CD2500DD23E8 /* MKPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7D11785329F7CE2300DD23E8 /* BootstrapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D11785229F7CE2300DD23E8 /* BootstrapData.swift */; };
+		7D11785429F7CE2300DD23E8 /* BootstrapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D11785229F7CE2300DD23E8 /* BootstrapData.swift */; };
+		7D11785629F7CE4100DD23E8 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D11785529F7CE4100DD23E8 /* Log.swift */; };
+		7D11785729F7CE4100DD23E8 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D11785529F7CE4100DD23E8 /* Log.swift */; };
 		7D29FD7E29F7AAE800178267 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6D29F7AAE700178267 /* Date.swift */; };
 		7D29FD7F29F7AAE800178267 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6D29F7AAE700178267 /* Date.swift */; };
 		7D29FD8029F7AAE800178267 /* DraggableProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6E29F7AAE700178267 /* DraggableProgressView.swift */; };
@@ -128,8 +142,6 @@
 		7D29FD8B29F7AAE800178267 /* Player.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D29FD7329F7AAE700178267 /* Player.storyboard */; };
 		7D29FD8C29F7AAE800178267 /* MKPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7529F7AAE800178267 /* MKPlayerView.m */; };
 		7D29FD8D29F7AAE800178267 /* MKPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7529F7AAE800178267 /* MKPlayerView.m */; };
-		7D29FD8E29F7AAE800178267 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7629F7AAE800178267 /* PlayerView.swift */; };
-		7D29FD8F29F7AAE800178267 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7629F7AAE800178267 /* PlayerView.swift */; };
 		7D29FD9029F7AAE800178267 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7729F7AAE800178267 /* Constant.swift */; };
 		7D29FD9129F7AAE800178267 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7729F7AAE800178267 /* Constant.swift */; };
 		7D29FD9229F7AAE800178267 /* AppDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7829F7AAE800178267 /* AppDataManager.swift */; };
@@ -268,9 +280,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				7D11784F29F7CDF400DD23E8 /* BitmovinPlayer.xcframework in Embed Frameworks */,
 				BC9B1DE729642B020019A926 /* Kingfisher.framework in Embed Frameworks */,
 				BC9B1DE929642B020019A926 /* Alamofire.framework in Embed Frameworks */,
+				7D11785129F7CDF400DD23E8 /* MKPlayer.framework in Embed Frameworks */,
 				BC9B1DE529642B010019A926 /* FullGuideComponent.framework in Embed Frameworks */,
+				7D11784D29F7CDF400DD23E8 /* BitmovinAnalyticsCollector.framework in Embed Frameworks */,
 				BC9B1DEB29642B030019A926 /* Reachability.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -350,6 +365,12 @@
 		7AA8E905BB5C42BB889A5A83 /* bg_placeholder.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = bg_placeholder.png; path = ../src/assets/images/bg_placeholder.png; sourceTree = "<group>"; };
 		7B9DAB63B6273FB87ED198A6 /* Pods-RetailClient-tvOS_Player.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS_Player.release.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS_Player/Pods-RetailClient-tvOS_Player.release.xcconfig"; sourceTree = "<group>"; };
 		7BC0532DA00B40BD94D54E3E /* edit.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = edit.png; path = ../src/assets/images/edit.png; sourceTree = "<group>"; };
+		7D11784829F7CD2400DD23E8 /* Framework */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Framework; sourceTree = "<group>"; };
+		7D11784929F7CD2500DD23E8 /* BitmovinAnalyticsCollector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BitmovinAnalyticsCollector.framework; path = Framework/AppleTV/BitmovinAnalyticsCollector.framework; sourceTree = "<group>"; };
+		7D11784A29F7CD2500DD23E8 /* BitmovinPlayer.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = BitmovinPlayer.xcframework; path = Framework/AppleTV/BitmovinPlayer.xcframework; sourceTree = "<group>"; };
+		7D11784B29F7CD2500DD23E8 /* MKPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MKPlayer.framework; path = Framework/AppleTV/MKPlayer.framework; sourceTree = "<group>"; };
+		7D11785229F7CE2300DD23E8 /* BootstrapData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BootstrapData.swift; path = MKPlayer/Models/BootstrapData.swift; sourceTree = "<group>"; };
+		7D11785529F7CE4100DD23E8 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Log.swift; path = MKPlayer/common/Log.swift; sourceTree = "<group>"; };
 		7D29FD6D29F7AAE700178267 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Date.swift; path = MKPlayer/Extensions/Date.swift; sourceTree = "<group>"; };
 		7D29FD6E29F7AAE700178267 /* DraggableProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DraggableProgressView.swift; path = MKPlayer/Views/DraggableProgressView.swift; sourceTree = "<group>"; };
 		7D29FD6F29F7AAE700178267 /* AppDataModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDataModels.swift; path = MKPlayer/Models/AppDataModels.swift; sourceTree = "<group>"; };
@@ -359,7 +380,6 @@
 		7D29FD7329F7AAE700178267 /* Player.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Player.storyboard; path = MKPlayer/Views/Player.storyboard; sourceTree = "<group>"; };
 		7D29FD7429F7AAE800178267 /* MKPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MKPlayerView.h; path = MKPlayer/MKPlayerView.h; sourceTree = "<group>"; };
 		7D29FD7529F7AAE800178267 /* MKPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MKPlayerView.m; path = MKPlayer/MKPlayerView.m; sourceTree = "<group>"; };
-		7D29FD7629F7AAE800178267 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerView.swift; path = MKPlayer/Views/PlayerView.swift; sourceTree = "<group>"; };
 		7D29FD7729F7AAE800178267 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constant.swift; path = MKPlayer/common/Constant.swift; sourceTree = "<group>"; };
 		7D29FD7829F7AAE800178267 /* AppDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDataManager.swift; path = MKPlayer/Models/AppDataManager.swift; sourceTree = "<group>"; };
 		7D29FD7929F7AAE800178267 /* SubTitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubTitleCell.swift; path = MKPlayer/Views/SubTitleCell.swift; sourceTree = "<group>"; };
@@ -466,12 +486,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D11784C29F7CDF400DD23E8 /* BitmovinAnalyticsCollector.framework in Frameworks */,
+				7D11784729F7CD2400DD23E8 /* Kingfisher.framework in Frameworks */,
 				BCF149BC2962F04100F6271C /* CoreData.framework in Frameworks */,
 				BC9B1DEA29642B030019A926 /* Reachability.framework in Frameworks */,
 				BC9B1DE429642B010019A926 /* FullGuideComponent.framework in Frameworks */,
 				BC9B1DE629642B020019A926 /* Kingfisher.framework in Frameworks */,
+				7D11784E29F7CDF400DD23E8 /* BitmovinPlayer.xcframework in Frameworks */,
+				7D11784629F7CD2400DD23E8 /* Reachability.framework in Frameworks */,
 				BC9B1DE829642B020019A926 /* Alamofire.framework in Frameworks */,
+				7D11784429F7CD2400DD23E8 /* FullGuideComponent.framework in Frameworks */,
+				7D11785029F7CDF400DD23E8 /* MKPlayer.framework in Frameworks */,
 				BFDDEA625E0F8F7B9CBEA26C /* libPods-RetailClient-tvOS_Player.a in Frameworks */,
+				7D11784529F7CD2400DD23E8 /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -557,6 +584,10 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7D11784929F7CD2500DD23E8 /* BitmovinAnalyticsCollector.framework */,
+				7D11784A29F7CD2500DD23E8 /* BitmovinPlayer.xcframework */,
+				7D11784829F7CD2400DD23E8 /* Framework */,
+				7D11784B29F7CD2500DD23E8 /* MKPlayer.framework */,
 				59E9D3D229E456B200CA1770 /* libswiftCore.tbd */,
 				BC9B1DE229642B000019A926 /* Alamofire.framework */,
 				BC9B1DE029642AFF0019A926 /* FullGuideComponent.framework */,
@@ -651,6 +682,8 @@
 		7D29FD6C29F7AAA200178267 /* MKPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				7D11785529F7CE4100DD23E8 /* Log.swift */,
+				7D11785229F7CE2300DD23E8 /* BootstrapData.swift */,
 				7D29FD7829F7AAE800178267 /* AppDataManager.swift */,
 				7D29FD6F29F7AAE700178267 /* AppDataModels.swift */,
 				7D29FD7729F7AAE800178267 /* Constant.swift */,
@@ -663,7 +696,6 @@
 				7D29FD7529F7AAE800178267 /* MKPlayerView.m */,
 				7D29FD7229F7AAE700178267 /* MKPlayerView.swift */,
 				7D29FD7329F7AAE700178267 /* Player.storyboard */,
-				7D29FD7629F7AAE800178267 /* PlayerView.swift */,
 				7D29FD7B29F7AAE800178267 /* PlayerViewController.swift */,
 				7D29FD7C29F7AAE800178267 /* String.swift */,
 				7D29FD7929F7AAE800178267 /* SubTitleCell.swift */,
@@ -1413,6 +1445,7 @@
 			files = (
 				59C74696294A45BB009D2E1D /* RCTSearchViewTVOS.m in Sources */,
 				7D29FD9629F7AAE800178267 /* UIViewcontroller.swift in Sources */,
+				7D11785629F7CE4100DD23E8 /* Log.swift in Sources */,
 				7D29FD9429F7AAE800178267 /* SubTitleCell.swift in Sources */,
 				7D29FD9A29F7AAE800178267 /* String.swift in Sources */,
 				7D29FD7E29F7AAE800178267 /* Date.swift in Sources */,
@@ -1420,12 +1453,12 @@
 				8168724527307BAC00960AFF /* MKGuide.swift in Sources */,
 				009FA7412738F53600417869 /* ContentView.swift in Sources */,
 				7D29FD9C29F7AAE800178267 /* MKPlayerManager.swift in Sources */,
+				7D11785329F7CE2300DD23E8 /* BootstrapData.swift in Sources */,
 				7D29FD9829F7AAE800178267 /* PlayerViewController.swift in Sources */,
 				7D29FD8C29F7AAE800178267 /* MKPlayerView.m in Sources */,
 				7D29FD8629F7AAE800178267 /* CurrentPositionView.swift in Sources */,
 				0035DCA5276BB1A600360F43 /* SampleViewController.swift in Sources */,
 				59C7468E294A45BB009D2E1D /* RCTSearchViewTVOSManager.m in Sources */,
-				7D29FD8E29F7AAE800178267 /* PlayerView.swift in Sources */,
 				7D29FD8829F7AAE800178267 /* MKPlayerView.swift in Sources */,
 				59C74692294A45BB009D2E1D /* SearchRestultsViewTVOSController.m in Sources */,
 				7D29FD8229F7AAE800178267 /* AppDataModels.swift in Sources */,
@@ -1462,6 +1495,7 @@
 			files = (
 				BCF149AF2962F04100F6271C /* RCTSearchViewTVOS.m in Sources */,
 				7D29FD9729F7AAE800178267 /* UIViewcontroller.swift in Sources */,
+				7D11785729F7CE4100DD23E8 /* Log.swift in Sources */,
 				7D29FD9529F7AAE800178267 /* SubTitleCell.swift in Sources */,
 				7D29FD9B29F7AAE800178267 /* String.swift in Sources */,
 				7D29FD7F29F7AAE800178267 /* Date.swift in Sources */,
@@ -1469,12 +1503,12 @@
 				BCF149B12962F04100F6271C /* MKGuide.swift in Sources */,
 				BCC177A92965B56D00B9752A /* MKGuideBridgeManager.swift in Sources */,
 				7D29FD9D29F7AAE800178267 /* MKPlayerManager.swift in Sources */,
+				7D11785429F7CE2300DD23E8 /* BootstrapData.swift in Sources */,
 				7D29FD9929F7AAE800178267 /* PlayerViewController.swift in Sources */,
 				7D29FD8D29F7AAE800178267 /* MKPlayerView.m in Sources */,
 				7D29FD8729F7AAE800178267 /* CurrentPositionView.swift in Sources */,
 				BCF149B22962F04100F6271C /* ContentView.swift in Sources */,
 				BCF149B32962F04100F6271C /* SampleViewController.swift in Sources */,
-				7D29FD8F29F7AAE800178267 /* PlayerView.swift in Sources */,
 				7D29FD8929F7AAE800178267 /* MKPlayerView.swift in Sources */,
 				BCC177A62965B4BF00B9752A /* MKGuideBridgeManager.m in Sources */,
 				7D29FD8329F7AAE800178267 /* AppDataModels.swift in Sources */,
