@@ -114,6 +114,7 @@ import {
   isPurchaseLocked,
 } from "../../../utils/pconControls";
 import { getAllSubscriptionGroups } from "../../../customHooks/useAllSubscriptionGroups";
+import { navigateToPlayer } from "../../../components/VideoPlayer/PlayerUtils";
 
 interface AssetData {
   id: string;
@@ -832,16 +833,27 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const handlePlayDvr = () => {
-    console.log("handlePlayDvr", props);
+    const {
+      subscriptionItemForProgram,
+    } = udpDataAsset || {};
     const data: any = feed;
+    const IsAdult = subscriptionItemForProgram.IsAdult;
     let details = discoveryProgramData;
-    const IsAdult = details.IsAdult;
     if (IsAdult && isAdultContentBlock()) {
       DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.adult,
         data: data,
         onSuccess: () => {
-          // To be implemented Play action
+          const { Id, ProgramDetails: {UniversalProgramId}, PlayInfo} = subscriptionItemForProgram ||  {};
+          getBookmark(
+            UniversalProgramId,
+            udlBookMark.RECORDING,
+            Id
+          )
+          .then((bookmark) => {
+            udpDataAsset["playSource"] = sourceTypeString.DVR;
+            navigateToPlayer({udpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
+          });
         },
       });
     } else if (isPconBlocked(details)) {
@@ -849,13 +861,31 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         pinType: PinType.content,
         data: data,
         onSuccess: () => {
-          // To be implemented Play action
+          const { Id, ProgramDetails: {UniversalProgramId}, PlayInfo} = subscriptionItemForProgram ||  {};
+          getBookmark(
+            UniversalProgramId,
+            udlBookMark.RECORDING,
+            Id
+          )
+          .then((bookmark) => {
+            udpDataAsset["playSource"] = sourceTypeString.DVR;
+            navigateToPlayer({udpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
+          });
         },
       });
     } else {
-      // To be implemented Play action
+      const { Id, ProgramDetails: {UniversalProgramId}, PlayInfo} = subscriptionItemForProgram ||  {};
+      getBookmark(
+        UniversalProgramId,
+        udlBookMark.RECORDING,
+        Id
+      )
+      .then((bookmark) => {
+        udpDataAsset["playSource"] = sourceTypeString.DVR;
+        navigateToPlayer({udpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
+      });
     }
-    // route.params.feed.SeriesDetails
+   
   };
   const ctaButtonPress = {
     [AppStrings?.str_details_cta_play]: () => {
@@ -1633,8 +1663,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const handleRestart = (bookmark?: any) => {
-    featureNotImplementedAlert();
-    //TODO: Finish implementation of Handle restart..
+    navigateToPlayer({udpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
   };
 
   const getDiscoverySchedules = async (assetData: AssetData) => {

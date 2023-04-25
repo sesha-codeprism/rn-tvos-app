@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { DeviceEventEmitter, Pressable, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { MFSelectCheckedBox, MFSelectUnCheckedBox } from "../../../../components/MFSelectBox";
+import { MFSelectCheckedBox, MFSelectUnCheckedBox } from "../../../MFSelectBox";
 import { AppStrings } from "../../../../config/strings";
 import MFSettingsStyles from "../../../../config/styles/MFSettingsStyles";
 import { NativeModules } from 'react-native';
@@ -9,7 +9,7 @@ import { parse, Schema } from 'bcp-47';
 
 import { GLOBALS } from "../../../../utils/globals";
 import { MKPAudioTrack, MKPSubtitleTrack } from "./videoDataTypes";
-import MFLoader from "../../../../components/MFLoader";
+import MFLoader from "../../../MFLoader";
 import { getUIdef, scaleAttributes } from "../../../../utils/uidefinition";
 
 export type PlayerSubtitleSideMenuProps = {

@@ -5,8 +5,8 @@ import Settings from "../components/MFSideMenu/SettingsContainer";
 import ConflictResolutionPanel from "../views/app/details_pages/details_panels/ConflictsContainer";
 import { ConflictResolutionContext } from "../contexts/conflictResolutionContext";
 import MFPinPopup from "../components/MFPinPopup";
-import PlayerSubtitlePanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerSubtitlePanel";
-import PlayerQualityPanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerQualityPanel";
+import PlayerSubtitlePanel from "../components/VideoPlayer/VideoPlayerSidePanels/PlayerSubtitlePanel";
+import PlayerQualityPanel from "../components/VideoPlayer/VideoPlayerSidePanels/PlayerQualityPanel";
 import Purchase from "../components/MFSideMenu/PurchaseContainer";
 
 export const Empty = (props: any) => {

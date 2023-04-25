@@ -14,7 +14,7 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import { Empty } from "../../MFDrawersContainer";
+import { Empty } from "../../../views/MFDrawersContainer";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;

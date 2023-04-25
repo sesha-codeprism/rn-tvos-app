@@ -13,11 +13,11 @@ import { GLOBALS } from "../../../../utils/globals";
 import {
     MFSelectCheckedBox,
     MFSelectUnCheckedBox,
-} from "../../../../components/MFSelectBox";
+} from "../../../MFSelectBox";
 
 import { MFGlobalsConfig } from "../../../../../backend/configs/globals";
 import { NativeModules } from 'react-native';
-import MFLoader from "../../../../components/MFLoader";
+import MFLoader from "../../../MFLoader";
 import { getUIdef, scaleAttributes } from "../../../../utils/uidefinition";
 import { MKPVideoQuality } from "./videoDataTypes";
 interface Props {

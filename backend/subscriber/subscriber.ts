@@ -14,6 +14,7 @@ import { config } from "../../src/config/config";
 import { SourceType } from "../../src/utils/common";
 import { FeedContents } from "../../src/components/MFSwimLane";
 import { massageDiscoveryFeed } from "../../src/utils/assetUtils";
+import { BookmarkType as udlBookMark } from "../../src/utils/Subscriber.utils";
 export type PinType = "adult" | "parentalcontrol" | "purchase";
 export interface SearchParam {
   searchString: string;
@@ -138,6 +139,54 @@ const getBookmarks = async (uri: string, params: any) => {
   });
   return response;
 };
+
+export const publishBookmark =async (arg0: string, payload: any, type: udlBookMark) => {
+  let bookmarkType = "videos";
+  if (type === udlBookMark.RECORDING) {
+      bookmarkType = "recordings";
+  } else if (type === udlBookMark.CATCHUP) {
+      bookmarkType = "catchup";
+  }
+  const url = 
+  parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriberbkmark || '') + `/v3/${bookmarkType}/${Id}/bookmark&storeId=${DefaultStore.Id}`;
+  const response = await PUT({
+    url: url,
+    params: {
+      ...payload,
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
+    },
+  });
+return response;
+}
+
+export const getAssetBookmark  = async (type: udlBookMark, programId: string, bookmarkId: string = programId) => {
+  const { accessToken } = GLOBALS.store!;
+  let bookmarkType = "videos";
+  let url = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriberbkmark || '') + `/v3/${bookmarkType}/${programId}/bookmark`;
+  if (type === udlBookMark.RECORDING) {
+    bookmarkType = "recordings";
+    url = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriberbkmark || '') +
+            `/v3/programs/${programId}/${bookmarkType}/${bookmarkId}/bookmark`;
+} else if (type === udlBookMark.CATCHUP) {
+    bookmarkType = "catchup";
+    url = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriberbkmark || '') +
+            `/v3/${bookmarkType}/${programId}/bookmark`;
+}
+  const response = await GET({
+    url: url,
+    params: {
+      storeId: DefaultStore.Id
+    },
+    headers: {
+      Authorization: `OAUTH2 access_token="${accessToken}"`,
+      'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? undefined : GLOBALS.userProfile?.Id
+    },
+  });
+  return response.data
+}
 
 export const getSubscriberPins = async (params?: any) => {
   const url: string =
