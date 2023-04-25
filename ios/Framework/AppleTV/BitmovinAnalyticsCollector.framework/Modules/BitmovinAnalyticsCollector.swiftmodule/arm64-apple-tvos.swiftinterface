@@ -1,0 +1,757 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)
+// swift-module-flags: -target arm64-apple-tvos12.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name BitmovinAnalyticsCollector
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import AVFoundation
+import AVKit
+@_exported import BitmovinAnalyticsCollector
+import BitmovinPlayer
+import CoreMedia
+import Foundation
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+public protocol AdAdapter {
+  func releaseAdapter()
+  func getModuleInformation() -> BitmovinAnalyticsCollector.AdModuleInformation
+  func isAutoPlayEnabled() -> Swift.Bool
+}
+@_hasMissingDesignatedInitializers public class AdEventData : Swift.Codable {
+  public func setEventData(eventData: BitmovinAnalyticsCollector.EventData)
+  public func setAdBreak(adBreak: BitmovinAnalyticsCollector.AnalyticsAdBreak)
+  public func setAdSample(adSample: BitmovinAnalyticsCollector.AdSample)
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers public class AdModelMapper {
+  @objc deinit
+}
+public class AdModuleInformation {
+  public init(name: Swift.String, version: Swift.String?)
+  @objc deinit
+}
+public enum AdPosition : Swift.String {
+  case pre
+  case mid
+  case post
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class AdSample {
+  @objc deinit
+}
+public class AnalyticsAd {
+  public var isLinear: Swift.Bool
+  public var width: Swift.Int
+  public var height: Swift.Int
+  public var id: Swift.String?
+  public var mediaFileUrl: Swift.String?
+  public var clickThroughUrl: Swift.String?
+  public var bitrate: Swift.Int?
+  public var minBitrate: Swift.Int?
+  public var maxBitrate: Swift.Int?
+  public var mimeType: Swift.String?
+  public var adSystemName: Swift.String?
+  public var adSystemVersion: Swift.String?
+  public var advertiserName: Swift.String?
+  public var advertiserId: Swift.String?
+  public var apiFramework: Swift.String?
+  public var creativeAdId: Swift.String?
+  public var creativeId: Swift.String?
+  public var universalAdIdRegistry: Swift.String?
+  public var universalAdIdValue: Swift.String?
+  public var description: Swift.String?
+  public var minSuggestedDuration: Foundation.TimeInterval?
+  public var surveyUrl: Swift.String?
+  public var surveyType: Swift.String?
+  public var title: Swift.String?
+  public var wrapperAdsCount: Swift.Int?
+  public var codec: Swift.String?
+  public var pricingValue: Swift.Int64?
+  public var pricingModel: Swift.String?
+  public var pricingCurrency: Swift.String?
+  public var skippableAfter: Foundation.TimeInterval?
+  public var skippable: Swift.Bool?
+  public var duration: Foundation.TimeInterval?
+  public var dealId: Swift.String?
+  public init()
+  @objc deinit
+}
+public class AnalyticsAdBreak {
+  public var id: Swift.String
+  public var ads: Swift.Array<BitmovinAnalyticsCollector.AnalyticsAd>
+  public var position: BitmovinAnalyticsCollector.AdPosition?
+  public var offset: Swift.String?
+  public var scheduleTime: Foundation.TimeInterval?
+  public var replaceContentDuration: Foundation.TimeInterval?
+  public var preloadOffset: Swift.Int64?
+  public var tagType: BitmovinAnalyticsCollector.AnalyticsAdTagType?
+  public var tagUrl: Swift.String?
+  public var persistent: Swift.Bool?
+  public var fallbackIndex: Swift.Int
+  public init(id: Swift.String, ads: Swift.Array<BitmovinAnalyticsCollector.AnalyticsAd>)
+  @objc deinit
+}
+public enum AnalyticsAdQuartile {
+  case FIRST_QUARTILE
+  case MIDPOINT
+  case THIRD_QUARTILE
+  public static func == (a: BitmovinAnalyticsCollector.AnalyticsAdQuartile, b: BitmovinAnalyticsCollector.AnalyticsAdQuartile) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum AnalyticsAdTagType : Swift.String {
+  case VAST
+  case VMAP
+  case VPAID
+  case UNKNOWN
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@objc @_hasMissingDesignatedInitializers public class BitmovinAdAdapter : ObjectiveC.NSObject, BitmovinAnalyticsCollector.AdAdapter {
+  public func releaseAdapter()
+  public func getModuleInformation() -> BitmovinAnalyticsCollector.AdModuleInformation
+  public func isAutoPlayEnabled() -> Swift.Bool
+  @objc deinit
+}
+extension BitmovinAnalyticsCollector.BitmovinAdAdapter : BitmovinPlayer.PlayerListener {
+  @objc dynamic public func onAdManifestLoaded(_ event: BitmovinPlayer.AdManifestLoadedEvent, player: BitmovinPlayer.Player)
+  @objc dynamic public func onAdStarted(_ event: BitmovinPlayer.AdStartedEvent, player: BitmovinPlayer.Player)
+  @objc dynamic public func onAdFinished(_ event: BitmovinPlayer.AdFinishedEvent, player: BitmovinPlayer.Player)
+  @objc dynamic public func onAdBreakStarted(_ event: BitmovinPlayer.AdBreakStartedEvent, player: BitmovinPlayer.Player)
+  @objc dynamic public func onAdBreakFinished(_ event: BitmovinPlayer.AdBreakFinishedEvent, player: BitmovinPlayer.Player)
+  @objc dynamic public func onAdClicked(_ event: BitmovinPlayer.AdClickedEvent, player: BitmovinPlayer.Player)
+  @objc dynamic public func onAdSkipped(_ event: BitmovinPlayer.AdSkippedEvent, player: BitmovinPlayer.Player)
+  @objc dynamic public func onAdError(_ event: BitmovinPlayer.AdErrorEvent, player: BitmovinPlayer.Player)
+  @objc dynamic public func onAdQuartile(_ event: BitmovinPlayer.AdQuartileEvent, player: BitmovinPlayer.Player)
+}
+@_hasMissingDesignatedInitializers public class BitmovinAdAnalytics {
+  @objc deinit
+  public func onAdManifestLoaded(adBreak: BitmovinAnalyticsCollector.AnalyticsAdBreak, downloadTime: Foundation.TimeInterval)
+  public func onAdStarted(ad: BitmovinAnalyticsCollector.AnalyticsAd)
+  public func onAdFinished()
+  public func onAdBreakStarted(adBreak: BitmovinAnalyticsCollector.AnalyticsAdBreak)
+  public func onAdBreakFinished()
+  public func onAdClicked(clickThroughUrl: Swift.String?)
+  public func onAdSkipped()
+  public func onAdError(adBreak: BitmovinAnalyticsCollector.AnalyticsAdBreak, code: Swift.Int?, message: Swift.String?)
+  public func onAdQuartile(quartile: BitmovinAnalyticsCollector.AnalyticsAdQuartile)
+}
+@objc @_inheritsConvenienceInitializers public class BitmovinAnalytics : BitmovinAnalyticsCollector.BitmovinPlayerCollector {
+  @objc override public init(config: BitmovinAnalyticsCollector.BitmovinAnalyticsConfig)
+  @objc public func attachBitmovinPlayer(player: BitmovinPlayer.Player)
+  @objc deinit
+}
+@objc @objcMembers public class BitmovinAnalyticsConfig : ObjectiveC.NSObject {
+  @objc public var cdnProvider: Swift.String?
+  @objc public var customData1: Swift.String?
+  @objc public var customData2: Swift.String?
+  @objc public var customData3: Swift.String?
+  @objc public var customData4: Swift.String?
+  @objc public var customData5: Swift.String?
+  @objc public var customData6: Swift.String?
+  @objc public var customData7: Swift.String?
+  @objc public var customData8: Swift.String?
+  @objc public var customData9: Swift.String?
+  @objc public var customData10: Swift.String?
+  @objc public var customData11: Swift.String?
+  @objc public var customData12: Swift.String?
+  @objc public var customData13: Swift.String?
+  @objc public var customData14: Swift.String?
+  @objc public var customData15: Swift.String?
+  @objc public var customData16: Swift.String?
+  @objc public var customData17: Swift.String?
+  @objc public var customData18: Swift.String?
+  @objc public var customData19: Swift.String?
+  @objc public var customData20: Swift.String?
+  @objc public var customData21: Swift.String?
+  @objc public var customData22: Swift.String?
+  @objc public var customData23: Swift.String?
+  @objc public var customData24: Swift.String?
+  @objc public var customData25: Swift.String?
+  @objc public var customData26: Swift.String?
+  @objc public var customData27: Swift.String?
+  @objc public var customData28: Swift.String?
+  @objc public var customData29: Swift.String?
+  @objc public var customData30: Swift.String?
+  @objc public var customerUserId: Swift.String?
+  @objc public var experimentName: Swift.String?
+  @objc public var videoId: Swift.String?
+  @objc public var title: Swift.String?
+  @objc public var key: Swift.String
+  @objc public var playerKey: Swift.String
+  @objc public var path: Swift.String?
+  @objc public var isLive: Swift.Bool
+  @objc public var ads: Swift.Bool
+  @available(*, deprecated, message: "No longer possible to change default value of 59700ms")
+  @objc public var heartbeatInterval: Swift.Int
+  @objc public var randomizeUserId: Swift.Bool
+  @objc public init(key: Swift.String, playerKey: Swift.String)
+  @objc public init(key: Swift.String)
+  @objc deinit
+}
+@objc open class BitmovinAnalyticsInternal : ObjectiveC.NSObject {
+  public static let ErrorMessageKey: Swift.String
+  public static let ErrorCodeKey: Swift.String
+  public static let ErrorDataKey: Swift.String
+  public static let msInSec: Swift.Double
+  public var config: BitmovinAnalyticsCollector.BitmovinAnalyticsConfig {
+    get
+  }
+  public var stateMachine: BitmovinAnalyticsCollector.StateMachine {
+    get
+  }
+  public var adAnalytics: BitmovinAnalyticsCollector.BitmovinAdAnalytics? {
+    get
+  }
+  public init(config: BitmovinAnalyticsCollector.BitmovinAnalyticsConfig)
+  @objc deinit
+  @objc public func detachPlayer()
+  public func attach(adapter: BitmovinAnalyticsCollector.PlayerAdapter)
+  public func attachAd(adAdapter: BitmovinAnalyticsCollector.AdAdapter)
+  @objc public func getCustomData() -> BitmovinAnalyticsCollector.CustomData
+  @objc public func setCustomData(customData: BitmovinAnalyticsCollector.CustomData)
+  @objc public func setCustomDataOnce(customData: BitmovinAnalyticsCollector.CustomData)
+  @objc public func getUserId() -> Swift.String
+}
+extension BitmovinAnalyticsCollector.BitmovinAnalyticsInternal {
+  public var version: Swift.String {
+    get
+  }
+}
+extension BitmovinAnalyticsCollector.BitmovinAnalyticsInternal {
+  public static func createAnalytics(config: BitmovinAnalyticsCollector.BitmovinAnalyticsConfig) -> BitmovinAnalyticsCollector.BitmovinAnalyticsInternal
+}
+@objc public class BitmovinPlayerCollector : ObjectiveC.NSObject, BitmovinAnalyticsCollector.Collector {
+  public typealias TPlayer = BitmovinPlayer.Player
+  @objc public init(config: BitmovinAnalyticsCollector.BitmovinAnalyticsConfig)
+  @objc public func attachPlayer(player: BitmovinPlayer.Player)
+  @objc public func detachPlayer()
+  @objc public func getCustomData() -> BitmovinAnalyticsCollector.CustomData
+  @objc public func setCustomData(customData: BitmovinAnalyticsCollector.CustomData)
+  @objc public func setCustomDataOnce(customData: BitmovinAnalyticsCollector.CustomData)
+  @objc public func addSourceMetadata(playerSource: BitmovinPlayer.Source, sourceMetadata: BitmovinAnalyticsCollector.SourceMetadata)
+  @objc public func getUserId() -> Swift.String
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class BitmovinPlayerUtil {
+  @objc deinit
+}
+public enum CastTech : Swift.String {
+  case AirPlay
+  case GoogleCast
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct CdnProvider {
+  public static let bitmovin: Swift.String
+  public static let akamai: Swift.String
+  public static let fastly: Swift.String
+  public static let maxcdn: Swift.String
+  public static let cloudfront: Swift.String
+  public static let chinacache: Swift.String
+  public static let bitgravity: Swift.String
+}
+public protocol Collector {
+  associatedtype TPlayer
+  func attachPlayer(player: Self.TPlayer)
+  func detachPlayer()
+  func getCustomData() -> BitmovinAnalyticsCollector.CustomData
+  func setCustomData(customData: BitmovinAnalyticsCollector.CustomData)
+  func setCustomDataOnce(customData: BitmovinAnalyticsCollector.CustomData)
+  func getUserId() -> Swift.String
+}
+@objc open class CorePlayerAdapter : ObjectiveC.NSObject {
+  public var stateMachine: BitmovinAnalyticsCollector.StateMachine {
+    get
+  }
+  public init(stateMachine: BitmovinAnalyticsCollector.StateMachine)
+  open func stopMonitoring()
+  public func destroy()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc @objcMembers public class CustomData : ObjectiveC.NSObject {
+  @objc public var customData1: Swift.String?
+  @objc public var customData2: Swift.String?
+  @objc public var customData3: Swift.String?
+  @objc public var customData4: Swift.String?
+  @objc public var customData5: Swift.String?
+  @objc public var customData6: Swift.String?
+  @objc public var customData7: Swift.String?
+  @objc public var customData8: Swift.String?
+  @objc public var customData9: Swift.String?
+  @objc public var customData10: Swift.String?
+  @objc public var customData11: Swift.String?
+  @objc public var customData12: Swift.String?
+  @objc public var customData13: Swift.String?
+  @objc public var customData14: Swift.String?
+  @objc public var customData15: Swift.String?
+  @objc public var customData16: Swift.String?
+  @objc public var customData17: Swift.String?
+  @objc public var customData18: Swift.String?
+  @objc public var customData19: Swift.String?
+  @objc public var customData20: Swift.String?
+  @objc public var customData21: Swift.String?
+  @objc public var customData22: Swift.String?
+  @objc public var customData23: Swift.String?
+  @objc public var customData24: Swift.String?
+  @objc public var customData25: Swift.String?
+  @objc public var customData26: Swift.String?
+  @objc public var customData27: Swift.String?
+  @objc public var customData28: Swift.String?
+  @objc public var customData29: Swift.String?
+  @objc public var customData30: Swift.String?
+  @objc public var experimentName: Swift.String?
+  @objc override dynamic public init()
+  @objc deinit
+}
+public enum DeviceClass : Swift.String, Swift.Codable {
+  case TV
+  case Phone
+  case Tablet
+  case Wearable
+  case Desktop
+  case Console
+  case Other
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class DeviceInformationDto : Swift.Codable {
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers public class DeviceInformationUtils {
+  @objc deinit
+}
+public class DownloadSpeedInfoDto : Swift.Codable {
+  public init()
+  public var segmentsDownloadCount: Swift.Int
+  public var segmentsDownloadSize: Swift.Int64
+  public var segmentsDownloadTime: Swift.Int64
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+public class DownloadSpeedMeter {
+  public init()
+  public func add(measurement: BitmovinAnalyticsCollector.SpeedMeasurement)
+  public func getInfoAndReset() -> BitmovinAnalyticsCollector.DownloadSpeedInfoDto
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class DrmPerformanceInfo {
+  @objc deinit
+}
+public enum DrmType : Swift.String {
+  case fairplay
+  case widevine
+  case playready
+  case clearkey
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public class ErrorData {
+  public var code: Swift.Int?
+  public var message: Swift.String?
+  public var data: Swift.String?
+  public init(code: Swift.Int?, message: Swift.String?, data: Swift.String?)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class EventData : Swift.Codable {
+  public var domain: Swift.String?
+  public var path: Swift.String?
+  public var language: Swift.String?
+  public var userAgent: Swift.String?
+  public var deviceInformation: BitmovinAnalyticsCollector.DeviceInformationDto?
+  public var errorCode: Swift.Int?
+  public var errorMessage: Swift.String?
+  public var errorData: Swift.String?
+  public var screenWidth: Swift.Int?
+  public var screenHeight: Swift.Int?
+  public var isLive: Swift.Bool
+  public var isCasting: Swift.Bool?
+  public var castTech: Swift.String?
+  public var isMuted: Swift.Bool?
+  public var videoDuration: Swift.Int64
+  public var time: Swift.Int64?
+  public var videoWindowWidth: Swift.Int
+  public var videoWindowHeight: Swift.Int
+  public var droppedFrames: Swift.Int
+  public var played: Swift.Int64
+  public var buffered: Swift.Int64
+  public var paused: Swift.Int64
+  public var ad: Swift.Int64
+  public var seeked: Swift.Int64
+  public var videoPlaybackWidth: Swift.Int?
+  public var videoPlaybackHeight: Swift.Int?
+  public var videoBitrate: Swift.Double
+  public var audioBitrate: Swift.Double
+  public var videoTimeStart: Swift.Int64
+  public var videoTimeEnd: Swift.Int64
+  public var videoStartupTime: Swift.Int64
+  public var duration: Swift.Int64
+  public var startupTime: Swift.Int64
+  public var analyticsVersion: Swift.String
+  public var key: Swift.String?
+  public var playerKey: Swift.String?
+  public var player: Swift.String?
+  public var playerTech: Swift.String?
+  public var cdnProvider: Swift.String?
+  public var streamFormat: Swift.String?
+  public var videoId: Swift.String?
+  public var videoTitle: Swift.String?
+  public var customUserId: Swift.String?
+  public var customData1: Swift.String?
+  public var customData2: Swift.String?
+  public var customData3: Swift.String?
+  public var customData4: Swift.String?
+  public var customData5: Swift.String?
+  public var customData6: Swift.String?
+  public var customData7: Swift.String?
+  public var customData8: Swift.String?
+  public var customData9: Swift.String?
+  public var customData10: Swift.String?
+  public var customData11: Swift.String?
+  public var customData12: Swift.String?
+  public var customData13: Swift.String?
+  public var customData14: Swift.String?
+  public var customData15: Swift.String?
+  public var customData16: Swift.String?
+  public var customData17: Swift.String?
+  public var customData18: Swift.String?
+  public var customData19: Swift.String?
+  public var customData20: Swift.String?
+  public var customData21: Swift.String?
+  public var customData22: Swift.String?
+  public var customData23: Swift.String?
+  public var customData24: Swift.String?
+  public var customData25: Swift.String?
+  public var customData26: Swift.String?
+  public var customData27: Swift.String?
+  public var customData28: Swift.String?
+  public var customData29: Swift.String?
+  public var customData30: Swift.String?
+  public var experimentName: Swift.String?
+  public var userId: Swift.String?
+  public var impressionId: Swift.String
+  public var state: Swift.String?
+  public var m3u8Url: Swift.String?
+  public var mpdUrl: Swift.String?
+  public var progUrl: Swift.String?
+  public var playerStartupTime: Swift.Int64
+  public var pageLoadType: Swift.Int
+  public var pageLoadTime: Swift.Int64
+  public var version: Swift.String?
+  public var sequenceNumber: Swift.Int32
+  public var drmType: Swift.String?
+  public var drmLoadTime: Swift.Int64?
+  public var platform: Swift.String
+  public var videoCodec: Swift.String?
+  public var audioCodec: Swift.String?
+  public var supportedVideoCodecs: [Swift.String]?
+  public var subtitleEnabled: Swift.Bool?
+  public var subtitleLanguage: Swift.String?
+  public var audioLanguage: Swift.String?
+  public var videoStartFailed: Swift.Bool?
+  public var videoStartFailedReason: Swift.String?
+  public var downloadSpeedInfo: BitmovinAnalyticsCollector.DownloadSpeedInfoDto?
+  public func jsonString() -> Swift.String
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers public class LicenseCallData : Swift.Codable {
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+public protocol PlayerAdapter {
+  func decorateEventData(eventData: BitmovinAnalyticsCollector.EventData)
+  func initialize()
+  func stopMonitoring()
+  func destroy()
+  func resetSourceState()
+  var drmDownloadTime: Swift.Int64? { get }
+  var currentTime: CoreMedia.CMTime? { get }
+  var currentSourceMetadata: BitmovinAnalyticsCollector.SourceMetadata? { get }
+}
+public enum PlayerState : Swift.String {
+  case ad
+  case adFinished
+  case ready
+  case startup
+  case buffering
+  case error
+  case playing
+  case paused
+  case qualitychange
+  case seeking
+  case subtitlechange
+  case audiochange
+  case playAttemptFailed
+  case sourceChanged
+  case customdatachange
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum PlayerType : Swift.String {
+  case avplayer
+  case bitmovin
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class QualityChangeCounter {
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class RebufferingTimeoutHandler {
+  @objc deinit
+}
+@objc @objcMembers public class SourceMetadata : ObjectiveC.NSObject {
+  @objc public init(videoId: Swift.String? = nil, title: Swift.String? = nil, path: Swift.String? = nil, isLive: Swift.Bool = false, cdnProvider: Swift.String? = nil, customData1: Swift.String? = nil, customData2: Swift.String? = nil, customData3: Swift.String? = nil, customData4: Swift.String? = nil, customData5: Swift.String? = nil, customData6: Swift.String? = nil, customData7: Swift.String? = nil, customData8: Swift.String? = nil, customData9: Swift.String? = nil, customData10: Swift.String? = nil, customData11: Swift.String? = nil, customData12: Swift.String? = nil, customData13: Swift.String? = nil, customData14: Swift.String? = nil, customData15: Swift.String? = nil, customData16: Swift.String? = nil, customData17: Swift.String? = nil, customData18: Swift.String? = nil, customData19: Swift.String? = nil, customData20: Swift.String? = nil, customData21: Swift.String? = nil, customData22: Swift.String? = nil, customData23: Swift.String? = nil, customData24: Swift.String? = nil, customData25: Swift.String? = nil, customData26: Swift.String? = nil, customData27: Swift.String? = nil, customData28: Swift.String? = nil, customData29: Swift.String? = nil, customData30: Swift.String? = nil, experimentName: Swift.String? = nil)
+  @objc public var videoId: Swift.String? {
+    get
+  }
+  @objc public var title: Swift.String? {
+    get
+  }
+  @objc public var path: Swift.String? {
+    get
+  }
+  @objc public var isLive: Swift.Bool {
+    get
+  }
+  @objc public var cdnProvider: Swift.String? {
+    get
+  }
+  @objc public var customData1: Swift.String? {
+    get
+  }
+  @objc public var customData2: Swift.String? {
+    get
+  }
+  @objc public var customData3: Swift.String? {
+    get
+  }
+  @objc public var customData4: Swift.String? {
+    get
+  }
+  @objc public var customData5: Swift.String? {
+    get
+  }
+  @objc public var customData6: Swift.String? {
+    get
+  }
+  @objc public var customData7: Swift.String? {
+    get
+  }
+  @objc public var customData8: Swift.String? {
+    get
+  }
+  @objc public var customData9: Swift.String? {
+    get
+  }
+  @objc public var customData10: Swift.String? {
+    get
+  }
+  @objc public var customData11: Swift.String? {
+    get
+  }
+  @objc public var customData12: Swift.String? {
+    get
+  }
+  @objc public var customData13: Swift.String? {
+    get
+  }
+  @objc public var customData14: Swift.String? {
+    get
+  }
+  @objc public var customData15: Swift.String? {
+    get
+  }
+  @objc public var customData16: Swift.String? {
+    get
+  }
+  @objc public var customData17: Swift.String? {
+    get
+  }
+  @objc public var customData18: Swift.String? {
+    get
+  }
+  @objc public var customData19: Swift.String? {
+    get
+  }
+  @objc public var customData20: Swift.String? {
+    get
+  }
+  @objc public var customData21: Swift.String? {
+    get
+  }
+  @objc public var customData22: Swift.String? {
+    get
+  }
+  @objc public var customData23: Swift.String? {
+    get
+  }
+  @objc public var customData24: Swift.String? {
+    get
+  }
+  @objc public var customData25: Swift.String? {
+    get
+  }
+  @objc public var customData26: Swift.String? {
+    get
+  }
+  @objc public var customData27: Swift.String? {
+    get
+  }
+  @objc public var customData28: Swift.String? {
+    get
+  }
+  @objc public var customData29: Swift.String? {
+    get
+  }
+  @objc public var customData30: Swift.String? {
+    get
+  }
+  @objc public var experimentName: Swift.String? {
+    get
+  }
+  @objc deinit
+}
+@_inheritsConvenienceInitializers public class SourceMetadataProvider<TSource> : ObjectiveC.NSObject where TSource : AnyObject {
+  public func add(source: TSource, sourceMetadata: BitmovinAnalyticsCollector.SourceMetadata)
+  public func get(source: TSource?) -> BitmovinAnalyticsCollector.SourceMetadata?
+  public func clear()
+  @objc override dynamic public init()
+  @objc deinit
+}
+public struct SpeedMeasurement {
+  public init()
+  public var downloadTime: Swift.Int64
+  public var numberOfBytesTransferred: Swift.Int64
+  public var numberOfSegmentsDownloaded: Swift.Int
+}
+extension BitmovinAnalyticsCollector.SpeedMeasurement {
+  public static func + (left: BitmovinAnalyticsCollector.SpeedMeasurement, right: BitmovinAnalyticsCollector.SpeedMeasurement) -> BitmovinAnalyticsCollector.SpeedMeasurement
+  public static func += (left: inout BitmovinAnalyticsCollector.SpeedMeasurement, right: BitmovinAnalyticsCollector.SpeedMeasurement)
+}
+@_hasMissingDesignatedInitializers public class StateMachine {
+  public var state: BitmovinAnalyticsCollector.PlayerState {
+    get
+  }
+  public var didAttemptPlayingVideo: Swift.Bool {
+    get
+  }
+  public var didStartPlayingVideo: Swift.Bool {
+    get
+  }
+  public var qualityChangeCounter: BitmovinAnalyticsCollector.QualityChangeCounter
+  public var rebufferingTimeoutHandler: BitmovinAnalyticsCollector.RebufferingTimeoutHandler
+  @objc deinit
+  public func reset()
+  public func transitionState(destinationState: BitmovinAnalyticsCollector.PlayerState, time: CoreMedia.CMTime?)
+  public func play(time: CoreMedia.CMTime?)
+  public func pause(time: CoreMedia.CMTime?)
+  public func playing(time: CoreMedia.CMTime?)
+  public func seek(time: CoreMedia.CMTime?, overrideEnterTimestamp: Swift.Int64? = nil)
+  public func videoQualityChange(time: CoreMedia.CMTime?, setQualityFunction: @escaping () -> Swift.Void)
+  public func audioQualityChange(time: CoreMedia.CMTime?)
+  public func error(withError error: BitmovinAnalyticsCollector.ErrorData, time: CoreMedia.CMTime?)
+  public func sourceChange(_ previousVideoDuration: CoreMedia.CMTime?, _ nextVideotimeStart: CoreMedia.CMTime?, _ shouldStartup: Swift.Bool)
+  public func rebufferTimeoutReached(time: CoreMedia.CMTime?)
+  public func setDidStartPlayingVideo()
+  public func startVideoStartFailedTimer()
+  public func clearVideoStartFailedTimer()
+  public func setVideoStartFailed(withReason reason: Swift.String)
+  public func resetVideoStartFailed()
+  public func onPlayAttemptFailed(withReason reason: Swift.String = VideoStartFailedReason.unknown)
+  public func onPlayAttemptFailed(withError error: BitmovinAnalyticsCollector.ErrorData)
+  public func getErrorData() -> BitmovinAnalyticsCollector.ErrorData?
+  public func setErrorData(error: BitmovinAnalyticsCollector.ErrorData?)
+}
+public enum StreamType : Swift.String {
+  case progressive
+  case hls
+  case dash
+  case unknown
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public protocol UserIdProvider {
+  func getUserId() -> Swift.String
+}
+@_hasMissingDesignatedInitializers public class Util {
+  public static func timeIntervalToCMTime(_ timeInterval: Foundation.TimeInterval) -> CoreMedia.CMTime?
+  public static func streamType(from url: Swift.String) -> BitmovinAnalyticsCollector.StreamType?
+  @objc deinit
+}
+extension Foundation.Date {
+  public var timeIntervalSince1970Millis: Swift.Int64 {
+    get
+  }
+}
+extension Swift.Double {
+  public var milliseconds: Swift.Int64? {
+    get
+  }
+}
+public struct VideoStartFailedReason {
+  public static var pageClosed: Swift.String
+  public static var playerError: Swift.String
+  public static var timeout: Swift.String
+  public static var unknown: Swift.String
+}
+extension BitmovinAnalyticsCollector.AdPosition : Swift.Equatable {}
+extension BitmovinAnalyticsCollector.AdPosition : Swift.Hashable {}
+extension BitmovinAnalyticsCollector.AdPosition : Swift.RawRepresentable {}
+extension BitmovinAnalyticsCollector.AnalyticsAdQuartile : Swift.Equatable {}
+extension BitmovinAnalyticsCollector.AnalyticsAdQuartile : Swift.Hashable {}
+extension BitmovinAnalyticsCollector.AnalyticsAdTagType : Swift.Equatable {}
+extension BitmovinAnalyticsCollector.AnalyticsAdTagType : Swift.Hashable {}
+extension BitmovinAnalyticsCollector.AnalyticsAdTagType : Swift.RawRepresentable {}
+extension BitmovinAnalyticsCollector.CastTech : Swift.Equatable {}
+extension BitmovinAnalyticsCollector.CastTech : Swift.Hashable {}
+extension BitmovinAnalyticsCollector.CastTech : Swift.RawRepresentable {}
+extension BitmovinAnalyticsCollector.DeviceClass : Swift.Equatable {}
+extension BitmovinAnalyticsCollector.DeviceClass : Swift.Hashable {}
+extension BitmovinAnalyticsCollector.DeviceClass : Swift.RawRepresentable {}
+extension BitmovinAnalyticsCollector.DrmType : Swift.Equatable {}
+extension BitmovinAnalyticsCollector.DrmType : Swift.Hashable {}
+extension BitmovinAnalyticsCollector.DrmType : Swift.RawRepresentable {}
+extension BitmovinAnalyticsCollector.PlayerState : Swift.Equatable {}
+extension BitmovinAnalyticsCollector.PlayerState : Swift.Hashable {}
+extension BitmovinAnalyticsCollector.PlayerState : Swift.RawRepresentable {}
+extension BitmovinAnalyticsCollector.PlayerType : Swift.Equatable {}
+extension BitmovinAnalyticsCollector.PlayerType : Swift.Hashable {}
+extension BitmovinAnalyticsCollector.PlayerType : Swift.RawRepresentable {}
+extension BitmovinAnalyticsCollector.StreamType : Swift.Equatable {}
+extension BitmovinAnalyticsCollector.StreamType : Swift.Hashable {}
+extension BitmovinAnalyticsCollector.StreamType : Swift.RawRepresentable {}

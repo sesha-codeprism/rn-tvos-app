@@ -120,11 +120,20 @@ public struct AVAssetImageDataProvider : Kingfisher.ImageDataProvider {
 public protocol CacheSerializer {
   func data(with image: Kingfisher.KFCrossPlatformImage, original: Foundation.Data?) -> Foundation.Data?
   func image(with data: Foundation.Data, options: Kingfisher.KingfisherParsedOptionsInfo) -> Kingfisher.KFCrossPlatformImage?
+  var originalDataUsed: Swift.Bool { get }
+}
+extension Kingfisher.CacheSerializer {
+  public var originalDataUsed: Swift.Bool {
+    get
+  }
 }
 public struct DefaultCacheSerializer : Kingfisher.CacheSerializer {
   public static let `default`: Kingfisher.DefaultCacheSerializer
   public var compressionQuality: CoreFoundation.CGFloat
   public var preferCacheOriginalData: Swift.Bool
+  public var originalDataUsed: Swift.Bool {
+    get
+  }
   public init()
   public func data(with image: Kingfisher.KFCrossPlatformImage, original: Foundation.Data?) -> Foundation.Data?
   public func image(with data: Foundation.Data, options: Kingfisher.KingfisherParsedOptionsInfo) -> Kingfisher.KFCrossPlatformImage?
@@ -188,6 +197,7 @@ extension Kingfisher.DiskStorage {
     public var pathExtension: Swift.String?
     public var usesHashedFileName: Swift.Bool
     public var autoExtAfterHashedFileName: Swift.Bool
+    public var cachePathBlock: ((_ directory: Foundation.URL, _ cacheName: Swift.String) -> Foundation.URL)!
     public init(name: Swift.String, sizeLimit: Swift.UInt, fileManager: Foundation.FileManager = .default, directory: Foundation.URL? = nil)
   }
 }
@@ -323,6 +333,12 @@ open class ImageCache {
   public func isCached(forKey key: Swift.String, processorIdentifier identifier: Swift.String = DefaultImageProcessor.default.identifier) -> Swift.Bool
   open func hash(forKey key: Swift.String, processorIdentifier identifier: Swift.String = DefaultImageProcessor.default.identifier) -> Swift.String
   open func calculateDiskStorageSize(completion handler: @escaping ((Swift.Result<Swift.UInt, Kingfisher.KingfisherError>) -> Swift.Void))
+  #if compiler(>=5.3) && $EffectfulProp
+  @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+  open var diskStorageSize: Swift.UInt {
+    get async throws
+  }
+  #endif
   open func cachePath(forKey key: Swift.String, processorIdentifier identifier: Swift.String = DefaultImageProcessor.default.identifier) -> Swift.String
 }
 extension UIKit.UIApplication : Kingfisher.KingfisherCompatible {
@@ -366,6 +382,12 @@ public struct LocalFileImageDataProvider : Kingfisher.ImageDataProvider {
   public init(fileURL: Foundation.URL, cacheKey: Swift.String? = nil, loadingQueue: Kingfisher.ExecutionQueue = .dispatch(DispatchQueue.global(qos: .userInitiated)))
   public var cacheKey: Swift.String
   public func data(handler: @escaping (Swift.Result<Foundation.Data, Swift.Error>) -> Swift.Void)
+  #if compiler(>=5.3) && $EffectfulProp
+  @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+  public var data: Foundation.Data {
+    get async throws
+  }
+  #endif
   public var contentURL: Foundation.URL? {
     get
   }
@@ -666,7 +688,15 @@ public struct DownsamplingImageProcessor : Kingfisher.ImageProcessor {
 infix operator |> : AdditionPrecedence
 public func |> (left: Kingfisher.ImageProcessor, right: Kingfisher.ImageProcessor) -> Kingfisher.ImageProcessor
 public struct ImageProgressive {
+  public enum UpdatingStrategy {
+    case `default`
+    case keepCurrent
+    case replace(Kingfisher.KFCrossPlatformImage?)
+  }
+  @available(*, deprecated, renamed: "init()", message: "Getting a default `ImageProgressive` is deprecated due to its syntax symatic is not clear. Use `ImageProgressive.init` instead.")
   public static let `default`: Kingfisher.ImageProgressive
+  public let onImageUpdated: Kingfisher.Delegate<Kingfisher.KFCrossPlatformImage, Kingfisher.ImageProgressive.UpdatingStrategy>
+  public init()
   public init(isBlur: Swift.Bool, isFastestScan: Swift.Bool, scanInterval: Foundation.TimeInterval)
 }
 public enum ImageTransition {
@@ -771,7 +801,7 @@ extension Kingfisher.KF.Builder {
   public func fade(duration: Foundation.TimeInterval) -> Self
   public func keepCurrentImageWhileLoading(_ enabled: Swift.Bool = true) -> Self
   public func onlyLoadFirstFrame(_ enabled: Swift.Bool = true) -> Self
-  public func progressiveJPEG(_ progressive: Kingfisher.ImageProgressive? = .default) -> Self
+  public func progressiveJPEG(_ progressive: Kingfisher.ImageProgressive? = .init()) -> Self
 }
 extension Kingfisher.KF.Builder {
   @available(*, deprecated, message: "This is not necessary anymore since `@StateObject` is used. It does nothing now and please just remove it.")
@@ -838,6 +868,7 @@ extension Kingfisher.KFImageProtocol {
   public func placeholder<P>(@SwiftUI.ViewBuilder _ content: @escaping () -> P) -> Self where P : SwiftUI.View
   public func cancelOnDisappear(_ flag: Swift.Bool) -> Self
   public func fade(duration: Foundation.TimeInterval) -> Self
+  public func startLoadingBeforeViewAppear(_ flag: Swift.Bool = true) -> Self
 }
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
 public protocol KFImageProtocol : Kingfisher.KFOptionSetter, SwiftUI.View {
@@ -853,6 +884,7 @@ extension Kingfisher.KFImageProtocol {
   public init(source: Kingfisher.Source?)
   public init(_ url: Foundation.URL?)
   public func configure(_ block: @escaping (Self.HoldingView) -> Self.HoldingView) -> Self
+  public func contentConfigure<V>(_ block: @escaping (Self.HoldingView) -> V) -> Self where V : SwiftUI.View
 }
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
 public protocol KFImageHoldingView : SwiftUI.View {
@@ -1058,6 +1090,7 @@ public struct RetrieveImageResult {
   public let cacheType: Kingfisher.CacheType
   public let source: Kingfisher.Source
   public let originalSource: Kingfisher.Source
+  public let data: () -> Foundation.Data?
 }
 public struct PropagationError {
   public let source: Kingfisher.Source
@@ -1072,6 +1105,7 @@ public class KingfisherManager {
   public init(downloader: Kingfisher.ImageDownloader, cache: Kingfisher.ImageCache)
   @discardableResult
   public func retrieveImage(with resource: Kingfisher.Resource, options: Kingfisher.KingfisherOptionsInfo? = nil, progressBlock: Kingfisher.DownloadProgressBlock? = nil, downloadTaskUpdated: Kingfisher.DownloadTaskUpdatedBlock? = nil, completionHandler: ((Swift.Result<Kingfisher.RetrieveImageResult, Kingfisher.KingfisherError>) -> Swift.Void)?) -> Kingfisher.DownloadTask?
+  @discardableResult
   public func retrieveImage(with source: Kingfisher.Source, options: Kingfisher.KingfisherOptionsInfo? = nil, progressBlock: Kingfisher.DownloadProgressBlock? = nil, downloadTaskUpdated: Kingfisher.DownloadTaskUpdatedBlock? = nil, completionHandler: ((Swift.Result<Kingfisher.RetrieveImageResult, Kingfisher.KingfisherError>) -> Swift.Void)?) -> Kingfisher.DownloadTask?
   @objc deinit
 }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -112,6 +112,8 @@
 		6CE37960294D49DF965B9FB6 /* space.svg in Resources */ = {isa = PBXBuildFile; fileRef = ADE603BAB892478299C3CB58 /* space.svg */; };
 		7550FAE82B874BF5AE1F8584 /* profile_pic_8.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0E26AB68BF47DAA75043FB /* profile_pic_8.png */; };
 		7C2FA9082B8B4E588768D17F /* unchecked_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 40409ED1952643D88DC9B839 /* unchecked_circle.png */; };
+		7D29FD6929F7A32700178267 /* MKPlayer in Resources */ = {isa = PBXBuildFile; fileRef = 7D29FD6829F7A32600178267 /* MKPlayer */; };
+		7D29FD6A29F7A32700178267 /* MKPlayer in Resources */ = {isa = PBXBuildFile; fileRef = 7D29FD6829F7A32600178267 /* MKPlayer */; };
 		8147B2FA273DF77B00A45F38 /* NativeText.m in Sources */ = {isa = PBXBuildFile; fileRef = 8147B2F9273DF77B00A45F38 /* NativeText.m */; };
 		8147B2FB273DF77B00A45F38 /* NativeText.m in Sources */ = {isa = PBXBuildFile; fileRef = 8147B2F9273DF77B00A45F38 /* NativeText.m */; };
 		8147B2FC273DF77B00A45F38 /* NativeText.m in Sources */ = {isa = PBXBuildFile; fileRef = 8147B2F9273DF77B00A45F38 /* NativeText.m */; };
@@ -318,6 +320,7 @@
 		7AA8E905BB5C42BB889A5A83 /* bg_placeholder.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = bg_placeholder.png; path = ../src/assets/images/bg_placeholder.png; sourceTree = "<group>"; };
 		7B9DAB63B6273FB87ED198A6 /* Pods-RetailClient-tvOS_Player.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS_Player.release.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS_Player/Pods-RetailClient-tvOS_Player.release.xcconfig"; sourceTree = "<group>"; };
 		7BC0532DA00B40BD94D54E3E /* edit.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = edit.png; path = ../src/assets/images/edit.png; sourceTree = "<group>"; };
+		7D29FD6829F7A32600178267 /* MKPlayer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MKPlayer; sourceTree = "<group>"; };
 		8147B2F8273DF77B00A45F38 /* NativeText.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NativeText.h; sourceTree = "<group>"; };
 		8147B2F9273DF77B00A45F38 /* NativeText.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NativeText.m; sourceTree = "<group>"; };
 		8168723A273073D200960AFF /* MKGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKGuide.swift; sourceTree = "<group>"; };
@@ -474,6 +477,7 @@
 		13B07FAE1A68108700A75B9A /* RetailClient */ = {
 			isa = PBXGroup;
 			children = (
+				7D29FD6829F7A32600178267 /* MKPlayer */,
 				BCC177A32965B46C00B9752A /* GuideComponent */,
 				59C74688294A45BA009D2E1D /* RCTSearchViewTVOS.h */,
 				59C7468B294A45BB009D2E1D /* RCTSearchViewTVOS.m */,
@@ -827,7 +831,7 @@
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "RetailClient" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -943,6 +947,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				008B0289271EF933009DED3B /* MKFullGuide in Resources */,
+				7D29FD6929F7A32700178267 /* MKPlayer in Resources */,
 				59A99AAC2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */,
 				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
 				59A99AB82853229B00560F39 /* Inter-Bold.ttf in Resources */,
@@ -981,6 +986,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				594E610C2977FEA9004C1D05 /* Mediakind-Icons.otf in Resources */,
+				7D29FD6A29F7A32700178267 /* MKPlayer in Resources */,
 				BCF149BF2962F04100F6271C /* MKFullGuide in Resources */,
 				BCF149C02962F04100F6271C /* Inter-ExtraLight.ttf in Resources */,
 				BCF149C12962F04100F6271C /* Images.xcassets in Resources */,
@@ -1872,7 +1878,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 14.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 			};
 			name = Debug;
 		};
@@ -1921,7 +1927,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "RetailClient-tvOS-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 14.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 			};
 			name = Release;
 		};

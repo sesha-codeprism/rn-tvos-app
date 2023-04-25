@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/Alamofire-Swift.h</key>
 		<data>
-		/F/m8u1T3tt7wjT97GlW9tfuTKA=
+		scjY59/zWtxDOS7AXHRkIQq+6c0=
 		</data>
 		<key>Headers/Alamofire-umbrella.h</key>
 		<data>
@@ -14,47 +14,47 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		+VpYPBdABEQOoy9PxRme4TcZgJA=
+		aP/7e7H1/cvUJ6fRhqJBkWVqtME=
 		</data>
 		<key>Modules/Alamofire.swiftmodule/arm64-apple-tvos-simulator.abi.json</key>
 		<data>
-		QXFLdeKDdjY88qxIaP7+jQw8Q8M=
+		/9R7nXZz2c6+Vf+SPVjMhohp8FE=
 		</data>
 		<key>Modules/Alamofire.swiftmodule/arm64-apple-tvos-simulator.private.swiftinterface</key>
 		<data>
-		k4wehBNyDgOLU9WeWEDsox36jUg=
+		vgHOkmGrLzFhtgEl8v0VQ2Xc/mY=
 		</data>
 		<key>Modules/Alamofire.swiftmodule/arm64-apple-tvos-simulator.swiftdoc</key>
 		<data>
-		1Zoy4U6cUcjBHDm1/uCFQZ70zrg=
+		g8Xtmf5YoI+EC6Bykly2KD3ar5Q=
 		</data>
 		<key>Modules/Alamofire.swiftmodule/arm64-apple-tvos-simulator.swiftinterface</key>
 		<data>
-		k4wehBNyDgOLU9WeWEDsox36jUg=
+		vgHOkmGrLzFhtgEl8v0VQ2Xc/mY=
 		</data>
 		<key>Modules/Alamofire.swiftmodule/arm64-apple-tvos-simulator.swiftmodule</key>
 		<data>
-		N0OD7CbEs/ej0Q1eHfAKKOI//4k=
+		TNeK8LOfZEQRAs1qE3mWHlTiWzY=
 		</data>
 		<key>Modules/Alamofire.swiftmodule/x86_64-apple-tvos-simulator.abi.json</key>
 		<data>
-		QXFLdeKDdjY88qxIaP7+jQw8Q8M=
+		/9R7nXZz2c6+Vf+SPVjMhohp8FE=
 		</data>
 		<key>Modules/Alamofire.swiftmodule/x86_64-apple-tvos-simulator.private.swiftinterface</key>
 		<data>
-		aoqZC6w2XNfxio1xq2+2q111wqU=
+		xJeB3BUUibd57EWNEbUK9JnKdEQ=
 		</data>
 		<key>Modules/Alamofire.swiftmodule/x86_64-apple-tvos-simulator.swiftdoc</key>
 		<data>
-		P0lXOY01Wi3fDPP2AtJILT0QNa4=
+		8FABmHsVwcOO4XZYD6KyWnWFOi0=
 		</data>
 		<key>Modules/Alamofire.swiftmodule/x86_64-apple-tvos-simulator.swiftinterface</key>
 		<data>
-		aoqZC6w2XNfxio1xq2+2q111wqU=
+		xJeB3BUUibd57EWNEbUK9JnKdEQ=
 		</data>
 		<key>Modules/Alamofire.swiftmodule/x86_64-apple-tvos-simulator.swiftmodule</key>
 		<data>
-		9nsIaUfPgyZ1keKd37fI9PJ32IM=
+		NZPc7BWt7EWYOTQiGKFT3QSqjVk=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -67,11 +67,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			/F/m8u1T3tt7wjT97GlW9tfuTKA=
+			scjY59/zWtxDOS7AXHRkIQq+6c0=
 			</data>
 			<key>hash2</key>
 			<data>
-			C0+FpsvWTiA0iEC7KTNnsT0O6socSWLRAHsRMJBAaa4=
+			eVEMtwvQ80WIKAUtC+aKRnfDoTlxkARQFRY14qGVsyc=
 			</data>
 		</dict>
 		<key>Headers/Alamofire-umbrella.h</key>
@@ -89,110 +89,110 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			QXFLdeKDdjY88qxIaP7+jQw8Q8M=
+			/9R7nXZz2c6+Vf+SPVjMhohp8FE=
 			</data>
 			<key>hash2</key>
 			<data>
-			QnzEhzfTEhgPptdUSpRvA6v99rtIpCbKtoPmLjU3R8I=
+			lHdvyJxTxYjTl21cBAgWTn0R5Nmm3BnUxXoaT5YAVOc=
 			</data>
 		</dict>
 		<key>Modules/Alamofire.swiftmodule/arm64-apple-tvos-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			k4wehBNyDgOLU9WeWEDsox36jUg=
+			vgHOkmGrLzFhtgEl8v0VQ2Xc/mY=
 			</data>
 			<key>hash2</key>
 			<data>
-			WerlsIIdFC2GQIyRlPkuSkqHZ8iC+eLB7q4RClzmVbw=
+			jwShiD0Qp57oVnI8cQRYXg6PND44yzz4TZfiI89Tfq4=
 			</data>
 		</dict>
 		<key>Modules/Alamofire.swiftmodule/arm64-apple-tvos-simulator.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			1Zoy4U6cUcjBHDm1/uCFQZ70zrg=
+			g8Xtmf5YoI+EC6Bykly2KD3ar5Q=
 			</data>
 			<key>hash2</key>
 			<data>
-			iu0JDFEG2iBJFBIOcmJhW1UYduFXjJivYMgW1YSBQdI=
+			AGlXLu7GYA5CsqWW7oOpTyOy1h48KAjkIkMaxQvgC2I=
 			</data>
 		</dict>
 		<key>Modules/Alamofire.swiftmodule/arm64-apple-tvos-simulator.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			k4wehBNyDgOLU9WeWEDsox36jUg=
+			vgHOkmGrLzFhtgEl8v0VQ2Xc/mY=
 			</data>
 			<key>hash2</key>
 			<data>
-			WerlsIIdFC2GQIyRlPkuSkqHZ8iC+eLB7q4RClzmVbw=
+			jwShiD0Qp57oVnI8cQRYXg6PND44yzz4TZfiI89Tfq4=
 			</data>
 		</dict>
 		<key>Modules/Alamofire.swiftmodule/arm64-apple-tvos-simulator.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			N0OD7CbEs/ej0Q1eHfAKKOI//4k=
+			TNeK8LOfZEQRAs1qE3mWHlTiWzY=
 			</data>
 			<key>hash2</key>
 			<data>
-			H3hIOMuJ7Pf9u2iQgFggPbfqvfyx6S3QRlYU4A70ics=
+			Kc+xSS7IEfRtrKzMJzGauJGKr5J3Hs4K8aeyDYRG6Ts=
 			</data>
 		</dict>
 		<key>Modules/Alamofire.swiftmodule/x86_64-apple-tvos-simulator.abi.json</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			QXFLdeKDdjY88qxIaP7+jQw8Q8M=
+			/9R7nXZz2c6+Vf+SPVjMhohp8FE=
 			</data>
 			<key>hash2</key>
 			<data>
-			QnzEhzfTEhgPptdUSpRvA6v99rtIpCbKtoPmLjU3R8I=
+			lHdvyJxTxYjTl21cBAgWTn0R5Nmm3BnUxXoaT5YAVOc=
 			</data>
 		</dict>
 		<key>Modules/Alamofire.swiftmodule/x86_64-apple-tvos-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			aoqZC6w2XNfxio1xq2+2q111wqU=
+			xJeB3BUUibd57EWNEbUK9JnKdEQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			AAjvsELtE6fzwkePtgHrQaJE5UHXTV744rm6njVgUxI=
+			JPS9xJG7maT7GYm7NDDd0ifAA3fivU8bbK56X44KcRk=
 			</data>
 		</dict>
 		<key>Modules/Alamofire.swiftmodule/x86_64-apple-tvos-simulator.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			P0lXOY01Wi3fDPP2AtJILT0QNa4=
+			8FABmHsVwcOO4XZYD6KyWnWFOi0=
 			</data>
 			<key>hash2</key>
 			<data>
-			wyGJh8d7Y/IYY78XoxZPS1RESIDoGqR2HO+yGPU3+gI=
+			L2R26y4FziCA5uw7NUVk7gSML/KNdfmI9tfTxfJwiEE=
 			</data>
 		</dict>
 		<key>Modules/Alamofire.swiftmodule/x86_64-apple-tvos-simulator.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			aoqZC6w2XNfxio1xq2+2q111wqU=
+			xJeB3BUUibd57EWNEbUK9JnKdEQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			AAjvsELtE6fzwkePtgHrQaJE5UHXTV744rm6njVgUxI=
+			JPS9xJG7maT7GYm7NDDd0ifAA3fivU8bbK56X44KcRk=
 			</data>
 		</dict>
 		<key>Modules/Alamofire.swiftmodule/x86_64-apple-tvos-simulator.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			9nsIaUfPgyZ1keKd37fI9PJ32IM=
+			NZPc7BWt7EWYOTQiGKFT3QSqjVk=
 			</data>
 			<key>hash2</key>
 			<data>
-			LovmbdzVm6jDHHwZAnsYLY7TB2Hrdp9wjoCW1akVlkk=
+			mRofR5yQ4Xd/Yc8z67geyl0odqefGrqEvSqlOYURLnY=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

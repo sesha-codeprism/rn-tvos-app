@@ -1,0 +1,11 @@
+framework module MKPlayer {
+  umbrella header "MKPlayer.h"
+
+  export *
+  module * { export * }
+}
+
+module MKPlayer.Swift {
+    header "MKPlayer-Swift.h"
+    requires objc
+}

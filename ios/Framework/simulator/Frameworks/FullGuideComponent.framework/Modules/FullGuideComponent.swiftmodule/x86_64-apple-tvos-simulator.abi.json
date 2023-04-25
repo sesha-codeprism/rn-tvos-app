@@ -3559,6 +3559,122 @@
           },
           {
             "kind": "Var",
+            "name": "RecordingImageView",
+            "printedName": "RecordingImageView",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "WeakStorage",
+                "printedName": "UIKit.UIImageView?"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@FullGuideComponent@objc(cs)EPGProgramsCell(py)RecordingImageView",
+            "mangledName": "$s18FullGuideComponent15EPGProgramsCellC18RecordingImageViewSo07UIImageH0CSgvp",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "Custom",
+              "HasStorage",
+              "ReferenceOwnership",
+              "IBOutlet",
+              "ObjC"
+            ],
+            "fixedbinaryorder": 2,
+            "ownership": 1,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ImplicitlyUnwrappedOptional",
+                    "printedName": "UIKit.UIImageView?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "UIImageView",
+                        "printedName": "UIKit.UIImageView",
+                        "usr": "c:objc(cs)UIImageView"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@FullGuideComponent@objc(cs)EPGProgramsCell(im)RecordingImageView",
+                "mangledName": "$s18FullGuideComponent15EPGProgramsCellC18RecordingImageViewSo07UIImageH0CSgvg",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ImplicitlyUnwrappedOptional",
+                    "printedName": "UIKit.UIImageView?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "UIImageView",
+                        "printedName": "UIKit.UIImageView",
+                        "usr": "c:objc(cs)UIImageView"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@FullGuideComponent@objc(cs)EPGProgramsCell(im)setRecordingImageView:",
+                "mangledName": "$s18FullGuideComponent15EPGProgramsCellC18RecordingImageViewSo07UIImageH0CSgvs",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent15EPGProgramsCellC18RecordingImageViewSo07UIImageH0CSgvM",
+                "mangledName": "$s18FullGuideComponent15EPGProgramsCellC18RecordingImageViewSo07UIImageH0CSgvM",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
             "name": "canBecomeFocused",
             "printedName": "canBecomeFocused",
             "children": [
@@ -3632,7 +3748,7 @@
               "HasStorage",
               "ReferenceOwnership"
             ],
-            "fixedbinaryorder": 2,
+            "fixedbinaryorder": 3,
             "ownership": 1,
             "hasStorage": true,
             "accessors": [
@@ -3748,7 +3864,7 @@
               "Custom",
               "HasStorage"
             ],
-            "fixedbinaryorder": 3,
+            "fixedbinaryorder": 4,
             "hasStorage": true,
             "accessors": [
               {
@@ -3876,7 +3992,7 @@
               "Custom",
               "HasStorage"
             ],
-            "fixedbinaryorder": 4,
+            "fixedbinaryorder": 5,
             "hasStorage": true,
             "accessors": [
               {
@@ -4031,7 +4147,7 @@
               "HasStorage",
               "RawDocComment"
             ],
-            "fixedbinaryorder": 5,
+            "fixedbinaryorder": 6,
             "hasStorage": true,
             "accessors": [
               {
@@ -36619,6 +36735,158 @@
             ]
           },
           {
+            "kind": "Var",
+            "name": "subsriptionGroupResponse",
+            "printedName": "subsriptionGroupResponse",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "[Swift.String : Any]?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Dictionary",
+                    "printedName": "[Swift.String : Any]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ProtocolComposition",
+                        "printedName": "Any"
+                      }
+                    ],
+                    "usr": "s:SD"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC24subsriptionGroupResponseSDySSypGSgvp",
+            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC24subsriptionGroupResponseSDySSypGSgvp",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "[Swift.String : Any]?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Dictionary",
+                        "printedName": "[Swift.String : Any]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "ProtocolComposition",
+                            "printedName": "Any"
+                          }
+                        ],
+                        "usr": "s:SD"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC24subsriptionGroupResponseSDySSypGSgvg",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC24subsriptionGroupResponseSDySSypGSgvg",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "[Swift.String : Any]?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Dictionary",
+                        "printedName": "[Swift.String : Any]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "ProtocolComposition",
+                            "printedName": "Any"
+                          }
+                        ],
+                        "usr": "s:SD"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC24subsriptionGroupResponseSDySSypGSgvs",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC24subsriptionGroupResponseSDySSypGSgvs",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC24subsriptionGroupResponseSDySSypGSgvM",
+                "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC24subsriptionGroupResponseSDySSypGSgvM",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
             "kind": "Function",
             "name": "clearCacheData",
             "printedName": "clearCacheData()",
@@ -37202,6 +37470,47 @@
             "isOpen": true,
             "isFromExtension": true,
             "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setSubscriptionGroupResponse",
+            "printedName": "setSubscriptionGroupResponse(value:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[Swift.String : Any]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "usr": "s:SD"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC28setSubscriptionGroupResponse5valueySDySSypG_tF",
+            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC28setSubscriptionGroupResponse5valueySDySSypG_tF",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
           }
         ],
         "declKind": "Class",
@@ -37311,7 +37620,7 @@
                 "name": "HTTPMethod",
                 "printedName": "Alamofire.HTTPMethod",
                 "hasDefaultArg": true,
-                "usr": "s:9Alamofire10HTTPMethodO"
+                "usr": "s:9Alamofire10HTTPMethodV"
               },
               {
                 "kind": "TypeNominal",
@@ -37442,8 +37751,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:18FullGuideComponent6ClientC9doRequest8endpoint6method10parameters10useHeaders13ignoreNilData14isJsonResponse9onSuccess0R4FailySS_9Alamofire10HTTPMethodOSDySSypGSgS3byyp_SitcyypSg_SitcSgtF",
-            "mangledName": "$s18FullGuideComponent6ClientC9doRequest8endpoint6method10parameters10useHeaders13ignoreNilData14isJsonResponse9onSuccess0R4FailySS_9Alamofire10HTTPMethodOSDySSypGSgS3byyp_SitcyypSg_SitcSgtF",
+            "usr": "s:18FullGuideComponent6ClientC9doRequest8endpoint6method10parameters10useHeaders13ignoreNilData14isJsonResponse9onSuccess0R4FailySS_9Alamofire10HTTPMethodVSDySSypGSgS3byyp_SitcyypSg_SitcSgtF",
+            "mangledName": "$s18FullGuideComponent6ClientC9doRequest8endpoint6method10parameters10useHeaders13ignoreNilData14isJsonResponse9onSuccess0R4FailySS_9Alamofire10HTTPMethodVSDySSypGSgS3byyp_SitcyypSg_SitcSgtF",
             "moduleName": "FullGuideComponent",
             "isOpen": true,
             "funcSelfKind": "NonMutating"
@@ -39450,6 +39759,346 @@
             "mangledName": "$ss8SendableP"
           }
         ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FullGuideComponent",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "SubscriptionGroupModel",
+        "printedName": "SubscriptionGroupModel",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "shared",
+            "printedName": "shared",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "SubscriptionGroupModel",
+                "printedName": "FullGuideComponent.SubscriptionGroupModel",
+                "usr": "s:18FullGuideComponent22SubscriptionGroupModelC"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:18FullGuideComponent22SubscriptionGroupModelC6sharedACvpZ",
+            "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC6sharedACvpZ",
+            "moduleName": "FullGuideComponent",
+            "static": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "SubscriptionGroupModel",
+                    "printedName": "FullGuideComponent.SubscriptionGroupModel",
+                    "usr": "s:18FullGuideComponent22SubscriptionGroupModelC"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent22SubscriptionGroupModelC6sharedACvgZ",
+                "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC6sharedACvgZ",
+                "moduleName": "FullGuideComponent",
+                "static": true,
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent",
+                  "Final"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "subscriptionGroup",
+            "printedName": "subscriptionGroup",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "[[Swift.String : Any]]?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Array",
+                    "printedName": "[[Swift.String : Any]]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Dictionary",
+                        "printedName": "[Swift.String : Any]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "ProtocolComposition",
+                            "printedName": "Any"
+                          }
+                        ],
+                        "usr": "s:SD"
+                      }
+                    ],
+                    "usr": "s:Sa"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:18FullGuideComponent22SubscriptionGroupModelC012subscriptionE0SaySDySSypGGSgvp",
+            "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC012subscriptionE0SaySDySSypGGSgvp",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage"
+            ],
+            "fixedbinaryorder": 0,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "[[Swift.String : Any]]?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Array",
+                        "printedName": "[[Swift.String : Any]]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Dictionary",
+                            "printedName": "[Swift.String : Any]",
+                            "children": [
+                              {
+                                "kind": "TypeNominal",
+                                "name": "String",
+                                "printedName": "Swift.String",
+                                "usr": "s:SS"
+                              },
+                              {
+                                "kind": "TypeNominal",
+                                "name": "ProtocolComposition",
+                                "printedName": "Any"
+                              }
+                            ],
+                            "usr": "s:SD"
+                          }
+                        ],
+                        "usr": "s:Sa"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent22SubscriptionGroupModelC012subscriptionE0SaySDySSypGGSgvg",
+                "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC012subscriptionE0SaySDySSypGGSgvg",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "[[Swift.String : Any]]?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Array",
+                        "printedName": "[[Swift.String : Any]]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Dictionary",
+                            "printedName": "[Swift.String : Any]",
+                            "children": [
+                              {
+                                "kind": "TypeNominal",
+                                "name": "String",
+                                "printedName": "Swift.String",
+                                "usr": "s:SS"
+                              },
+                              {
+                                "kind": "TypeNominal",
+                                "name": "ProtocolComposition",
+                                "printedName": "Any"
+                              }
+                            ],
+                            "usr": "s:SD"
+                          }
+                        ],
+                        "usr": "s:Sa"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent22SubscriptionGroupModelC012subscriptionE0SaySDySSypGGSgvs",
+                "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC012subscriptionE0SaySDySSypGGSgvs",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:18FullGuideComponent22SubscriptionGroupModelC012subscriptionE0SaySDySSypGGSgvM",
+                "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC012subscriptionE0SaySDySSypGGSgvM",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "isOpen": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "callparse",
+            "printedName": "callparse()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:18FullGuideComponent22SubscriptionGroupModelC9callparseyyF",
+            "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC9callparseyyF",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "parseSubscriptionGroup",
+            "printedName": "parseSubscriptionGroup()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:18FullGuideComponent22SubscriptionGroupModelC05parsedE0yyF",
+            "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC05parsedE0yyF",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "validatesubscriptionIdfrom",
+            "printedName": "validatesubscriptionIdfrom(programId:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:18FullGuideComponent22SubscriptionGroupModelC26validatesubscriptionIdfrom9programIdSbSS_tF",
+            "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC26validatesubscriptionIdfrom9programIdSbSS_tF",
+            "moduleName": "FullGuideComponent",
+            "isOpen": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "SubscriptionGroupModel",
+                "printedName": "FullGuideComponent.SubscriptionGroupModel",
+                "usr": "s:18FullGuideComponent22SubscriptionGroupModelC"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:18FullGuideComponent22SubscriptionGroupModelCACycfc",
+            "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelCACycfc",
+            "moduleName": "FullGuideComponent",
+            "implicit": true,
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:18FullGuideComponent22SubscriptionGroupModelC",
+        "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC",
+        "moduleName": "FullGuideComponent",
+        "isOpen": true
       },
       {
         "kind": "Import",
@@ -51730,6 +52379,35 @@
             ],
             "usr": "s:10Accelerate0A6BufferP",
             "mangledName": "$s10Accelerate0A6BufferP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "AlamofireExtended",
+            "printedName": "AlamofireExtended",
+            "children": [
+              {
+                "kind": "TypeWitness",
+                "name": "ExtendedType",
+                "printedName": "ExtendedType",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Array",
+                    "printedName": "[τ_0_0]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GenericTypeParam",
+                        "printedName": "τ_0_0"
+                      }
+                    ],
+                    "usr": "s:Sa"
+                  }
+                ]
+              }
+            ],
+            "usr": "s:9Alamofire0A8ExtendedP",
+            "mangledName": "$s9Alamofire0A8ExtendedP"
           }
         ]
       },
@@ -55483,98 +56161,175 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "BooleanLiteral",
-      "offset": 805,
+      "offset": 862,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "IntegerLiteral",
-      "offset": 895,
+      "offset": 952,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "FloatLiteral",
-      "offset": 1001,
+      "offset": 1058,
       "length": 4,
       "value": "0.85"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 1179,
+      "offset": 1199,
+      "length": 11,
+      "value": "\"ProgramId\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 1243,
+      "length": 41,
+      "value": "\"progranId in jsonDataSource\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 1283,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 1414,
+      "length": 40,
+      "value": "\"recorins in programcell \""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 1453,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 1543,
+      "length": 18,
+      "value": "\"ic_record_series\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1609,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1682,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 1745,
+      "length": 19,
+      "value": "\"ic_record_program\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 1798,
+      "length": 45,
+      "value": "\"recorins in programcell after\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 1842,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 1935,
       "length": 9,
       "value": "\"No Name\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 1358,
+      "offset": 2114,
       "length": 22,
       "value": "\"2017-06-23T04:30:43Z\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 1490,
+      "offset": 2246,
       "length": 22,
       "value": "\"2017-06-23T04:30:43Z\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 1542,
+      "offset": 2298,
       "length": 127,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 1599,
+      "offset": 2355,
       "length": 9,
       "value": "\"No Name\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 1609,
+      "offset": 2365,
       "length": 1,
       "value": "\" - \""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 1639,
+      "offset": 2395,
       "length": 2,
       "value": "\" to \""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 1668,
+      "offset": 2424,
       "length": 1,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "IntegerLiteral",
-      "offset": 1835,
+      "offset": 2591,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "FloatLiteral",
-      "offset": 1925,
+      "offset": 2681,
       "length": 4,
       "value": "0.85"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "FloatLiteral",
-      "offset": 5920,
+      "offset": 6678,
       "length": 3,
       "value": "1.0"
     },
@@ -58011,7 +58766,7 @@
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
       "offset": 2175,
-      "length": 10230,
+      "length": 10286,
       "value": "\"\""
     },
     {
@@ -58038,42 +58793,42 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/MKFullGuideStorageManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 2382,
+      "offset": 2442,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 884,
+      "offset": 877,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 929,
+      "offset": 922,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 976,
+      "offset": 969,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 2586,
+      "offset": 2587,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 2649,
+      "offset": 2650,
       "length": 5,
       "value": "false"
     },

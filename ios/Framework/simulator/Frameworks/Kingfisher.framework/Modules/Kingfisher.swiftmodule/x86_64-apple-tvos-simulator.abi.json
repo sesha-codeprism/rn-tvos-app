@@ -4888,6 +4888,92 @@
             ],
             "reqNewWitnessTableEntry": true,
             "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "originalDataUsed",
+            "printedName": "originalDataUsed",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:10Kingfisher15CacheSerializerP16originalDataUsedSbvp",
+            "mangledName": "$s10Kingfisher15CacheSerializerP16originalDataUsedSbvp",
+            "moduleName": "Kingfisher",
+            "protocolReq": true,
+            "declAttributes": [
+              "RawDocComment"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:10Kingfisher15CacheSerializerP16originalDataUsedSbvg",
+                "mangledName": "$s10Kingfisher15CacheSerializerP16originalDataUsedSbvg",
+                "moduleName": "Kingfisher",
+                "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.CacheSerializer>",
+                "sugared_genericSig": "<Self where Self : Kingfisher.CacheSerializer>",
+                "protocolReq": true,
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "originalDataUsed",
+            "printedName": "originalDataUsed",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:10Kingfisher15CacheSerializerPAAE16originalDataUsedSbvp",
+            "mangledName": "$s10Kingfisher15CacheSerializerPAAE16originalDataUsedSbvp",
+            "moduleName": "Kingfisher",
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:10Kingfisher15CacheSerializerPAAE16originalDataUsedSbvg",
+                "mangledName": "$s10Kingfisher15CacheSerializerPAAE16originalDataUsedSbvg",
+                "moduleName": "Kingfisher",
+                "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.CacheSerializer>",
+                "sugared_genericSig": "<Self where Self : Kingfisher.CacheSerializer>",
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
           }
         ],
         "declKind": "Protocol",
@@ -5123,6 +5209,47 @@
                 "moduleName": "Kingfisher",
                 "implicit": true,
                 "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "originalDataUsed",
+            "printedName": "originalDataUsed",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:10Kingfisher22DefaultCacheSerializerV16originalDataUsedSbvp",
+            "mangledName": "$s10Kingfisher22DefaultCacheSerializerV16originalDataUsedSbvp",
+            "moduleName": "Kingfisher",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:10Kingfisher22DefaultCacheSerializerV16originalDataUsedSbvg",
+                "mangledName": "$s10Kingfisher22DefaultCacheSerializerV16originalDataUsedSbvg",
+                "moduleName": "Kingfisher",
+                "accessorKind": "get"
               }
             ]
           },
@@ -7492,6 +7619,195 @@
               },
               {
                 "kind": "Var",
+                "name": "cachePathBlock",
+                "printedName": "cachePathBlock",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ImplicitlyUnwrappedOptional",
+                    "printedName": "((Foundation.URL, Swift.String) -> Foundation.URL)?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "(Foundation.URL, Swift.String) -> Foundation.URL",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "URL",
+                            "printedName": "Foundation.URL",
+                            "usr": "s:10Foundation3URLV"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Tuple",
+                            "printedName": "(Foundation.URL, Swift.String)",
+                            "children": [
+                              {
+                                "kind": "TypeNominal",
+                                "name": "URL",
+                                "printedName": "Foundation.URL",
+                                "usr": "s:10Foundation3URLV"
+                              },
+                              {
+                                "kind": "TypeNominal",
+                                "name": "String",
+                                "printedName": "Swift.String",
+                                "usr": "s:SS"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Var",
+                "usr": "s:10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvp",
+                "mangledName": "$s10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvp",
+                "moduleName": "Kingfisher",
+                "declAttributes": [
+                  "HasInitialValue",
+                  "HasStorage",
+                  "AccessControl",
+                  "RawDocComment"
+                ],
+                "hasStorage": true,
+                "accessors": [
+                  {
+                    "kind": "Accessor",
+                    "name": "Get",
+                    "printedName": "Get()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ImplicitlyUnwrappedOptional",
+                        "printedName": "((Foundation.URL, Swift.String) -> Foundation.URL)?",
+                        "children": [
+                          {
+                            "kind": "TypeFunc",
+                            "name": "Function",
+                            "printedName": "(Foundation.URL, Swift.String) -> Foundation.URL",
+                            "children": [
+                              {
+                                "kind": "TypeNominal",
+                                "name": "URL",
+                                "printedName": "Foundation.URL",
+                                "usr": "s:10Foundation3URLV"
+                              },
+                              {
+                                "kind": "TypeNominal",
+                                "name": "Tuple",
+                                "printedName": "(Foundation.URL, Swift.String)",
+                                "children": [
+                                  {
+                                    "kind": "TypeNominal",
+                                    "name": "URL",
+                                    "printedName": "Foundation.URL",
+                                    "usr": "s:10Foundation3URLV"
+                                  },
+                                  {
+                                    "kind": "TypeNominal",
+                                    "name": "String",
+                                    "printedName": "Swift.String",
+                                    "usr": "s:SS"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvg",
+                    "mangledName": "$s10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvg",
+                    "moduleName": "Kingfisher",
+                    "implicit": true,
+                    "accessorKind": "get"
+                  },
+                  {
+                    "kind": "Accessor",
+                    "name": "Set",
+                    "printedName": "Set()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ImplicitlyUnwrappedOptional",
+                        "printedName": "((Foundation.URL, Swift.String) -> Foundation.URL)?",
+                        "children": [
+                          {
+                            "kind": "TypeFunc",
+                            "name": "Function",
+                            "printedName": "(Foundation.URL, Swift.String) -> Foundation.URL",
+                            "children": [
+                              {
+                                "kind": "TypeNominal",
+                                "name": "URL",
+                                "printedName": "Foundation.URL",
+                                "usr": "s:10Foundation3URLV"
+                              },
+                              {
+                                "kind": "TypeNominal",
+                                "name": "Tuple",
+                                "printedName": "(Foundation.URL, Swift.String)",
+                                "children": [
+                                  {
+                                    "kind": "TypeNominal",
+                                    "name": "URL",
+                                    "printedName": "Foundation.URL",
+                                    "usr": "s:10Foundation3URLV"
+                                  },
+                                  {
+                                    "kind": "TypeNominal",
+                                    "name": "String",
+                                    "printedName": "Swift.String",
+                                    "usr": "s:SS"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvs",
+                    "mangledName": "$s10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvs",
+                    "moduleName": "Kingfisher",
+                    "implicit": true,
+                    "accessorKind": "set"
+                  },
+                  {
+                    "kind": "Accessor",
+                    "name": "Modify",
+                    "printedName": "Modify()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvM",
+                    "mangledName": "$s10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvM",
+                    "moduleName": "Kingfisher",
+                    "implicit": true,
+                    "accessorKind": "_modify"
+                  }
+                ]
+              },
+              {
+                "kind": "Var",
                 "name": "name",
                 "printedName": "name",
                 "children": [
@@ -7632,193 +7948,6 @@
                     "moduleName": "Kingfisher",
                     "implicit": true,
                     "accessorKind": "get"
-                  }
-                ]
-              },
-              {
-                "kind": "Var",
-                "name": "cachePathBlock",
-                "printedName": "cachePathBlock",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "((Foundation.URL, Swift.String) -> Foundation.URL)?",
-                    "children": [
-                      {
-                        "kind": "TypeFunc",
-                        "name": "Function",
-                        "printedName": "(Foundation.URL, Swift.String) -> Foundation.URL",
-                        "children": [
-                          {
-                            "kind": "TypeNominal",
-                            "name": "URL",
-                            "printedName": "Foundation.URL",
-                            "usr": "s:10Foundation3URLV"
-                          },
-                          {
-                            "kind": "TypeNominal",
-                            "name": "Tuple",
-                            "printedName": "(Foundation.URL, Swift.String)",
-                            "children": [
-                              {
-                                "kind": "TypeNominal",
-                                "name": "URL",
-                                "printedName": "Foundation.URL",
-                                "usr": "s:10Foundation3URLV"
-                              },
-                              {
-                                "kind": "TypeNominal",
-                                "name": "String",
-                                "printedName": "Swift.String",
-                                "usr": "s:SS"
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ],
-                    "usr": "s:Sq"
-                  }
-                ],
-                "declKind": "Var",
-                "usr": "s:10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvp",
-                "mangledName": "$s10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvp",
-                "moduleName": "Kingfisher",
-                "declAttributes": [
-                  "HasInitialValue",
-                  "HasStorage"
-                ],
-                "hasStorage": true,
-                "accessors": [
-                  {
-                    "kind": "Accessor",
-                    "name": "Get",
-                    "printedName": "Get()",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "ImplicitlyUnwrappedOptional",
-                        "printedName": "((Foundation.URL, Swift.String) -> Foundation.URL)?",
-                        "children": [
-                          {
-                            "kind": "TypeFunc",
-                            "name": "Function",
-                            "printedName": "(Foundation.URL, Swift.String) -> Foundation.URL",
-                            "children": [
-                              {
-                                "kind": "TypeNominal",
-                                "name": "URL",
-                                "printedName": "Foundation.URL",
-                                "usr": "s:10Foundation3URLV"
-                              },
-                              {
-                                "kind": "TypeNominal",
-                                "name": "Tuple",
-                                "printedName": "(Foundation.URL, Swift.String)",
-                                "children": [
-                                  {
-                                    "kind": "TypeNominal",
-                                    "name": "URL",
-                                    "printedName": "Foundation.URL",
-                                    "usr": "s:10Foundation3URLV"
-                                  },
-                                  {
-                                    "kind": "TypeNominal",
-                                    "name": "String",
-                                    "printedName": "Swift.String",
-                                    "usr": "s:SS"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ],
-                        "usr": "s:Sq"
-                      }
-                    ],
-                    "declKind": "Accessor",
-                    "usr": "s:10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvg",
-                    "mangledName": "$s10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvg",
-                    "moduleName": "Kingfisher",
-                    "implicit": true,
-                    "accessorKind": "get"
-                  },
-                  {
-                    "kind": "Accessor",
-                    "name": "Set",
-                    "printedName": "Set()",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Void",
-                        "printedName": "()"
-                      },
-                      {
-                        "kind": "TypeNominal",
-                        "name": "ImplicitlyUnwrappedOptional",
-                        "printedName": "((Foundation.URL, Swift.String) -> Foundation.URL)?",
-                        "children": [
-                          {
-                            "kind": "TypeFunc",
-                            "name": "Function",
-                            "printedName": "(Foundation.URL, Swift.String) -> Foundation.URL",
-                            "children": [
-                              {
-                                "kind": "TypeNominal",
-                                "name": "URL",
-                                "printedName": "Foundation.URL",
-                                "usr": "s:10Foundation3URLV"
-                              },
-                              {
-                                "kind": "TypeNominal",
-                                "name": "Tuple",
-                                "printedName": "(Foundation.URL, Swift.String)",
-                                "children": [
-                                  {
-                                    "kind": "TypeNominal",
-                                    "name": "URL",
-                                    "printedName": "Foundation.URL",
-                                    "usr": "s:10Foundation3URLV"
-                                  },
-                                  {
-                                    "kind": "TypeNominal",
-                                    "name": "String",
-                                    "printedName": "Swift.String",
-                                    "usr": "s:SS"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ],
-                        "usr": "s:Sq"
-                      }
-                    ],
-                    "declKind": "Accessor",
-                    "usr": "s:10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvs",
-                    "mangledName": "$s10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvs",
-                    "moduleName": "Kingfisher",
-                    "implicit": true,
-                    "accessorKind": "set"
-                  },
-                  {
-                    "kind": "Accessor",
-                    "name": "Modify",
-                    "printedName": "Modify()",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Void",
-                        "printedName": "()"
-                      }
-                    ],
-                    "declKind": "Accessor",
-                    "usr": "s:10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvM",
-                    "mangledName": "$s10Kingfisher11DiskStorageO6ConfigV14cachePathBlock10Foundation3URLVAI_SStcSgvM",
-                    "moduleName": "Kingfisher",
-                    "implicit": true,
-                    "accessorKind": "_modify"
                   }
                 ]
               },
@@ -12668,6 +12797,57 @@
             "funcSelfKind": "NonMutating"
           },
           {
+            "kind": "Var",
+            "name": "diskStorageSize",
+            "printedName": "diskStorageSize",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UInt",
+                "printedName": "Swift.UInt",
+                "usr": "s:Su"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:10Kingfisher10ImageCacheC15diskStorageSizeSuvp",
+            "mangledName": "$s10Kingfisher10ImageCacheC15diskStorageSizeSuvp",
+            "moduleName": "Kingfisher",
+            "isOpen": true,
+            "intro_Macosx": "10.15",
+            "intro_iOS": "13.0",
+            "intro_tvOS": "13.0",
+            "intro_watchOS": "6.0",
+            "declAttributes": [
+              "AccessControl",
+              "Available",
+              "Available",
+              "Available",
+              "Available"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UInt",
+                    "printedName": "Swift.UInt",
+                    "usr": "s:Su"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:10Kingfisher10ImageCacheC15diskStorageSizeSuvg",
+                "mangledName": "$s10Kingfisher10ImageCacheC15diskStorageSizeSuvg",
+                "moduleName": "Kingfisher",
+                "isOpen": true,
+                "throwing": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
             "kind": "Function",
             "name": "cachePath",
             "printedName": "cachePath(forKey:processorIdentifier:)",
@@ -13619,6 +13799,55 @@
               "AccessControl"
             ],
             "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "data",
+            "printedName": "data",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Data",
+                "printedName": "Foundation.Data",
+                "usr": "s:10Foundation4DataV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:10Kingfisher26LocalFileImageDataProviderV4data10Foundation0E0Vvp",
+            "mangledName": "$s10Kingfisher26LocalFileImageDataProviderV4data10Foundation0E0Vvp",
+            "moduleName": "Kingfisher",
+            "intro_Macosx": "10.15",
+            "intro_iOS": "13.0",
+            "intro_tvOS": "13.0",
+            "intro_watchOS": "6.0",
+            "declAttributes": [
+              "AccessControl",
+              "Available",
+              "Available",
+              "Available",
+              "Available"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Data",
+                    "printedName": "Foundation.Data",
+                    "usr": "s:10Foundation4DataV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:10Kingfisher26LocalFileImageDataProviderV4data10Foundation0E0Vvg",
+                "mangledName": "$s10Kingfisher26LocalFileImageDataProviderV4data10Foundation0E0Vvg",
+                "moduleName": "Kingfisher",
+                "throwing": true,
+                "accessorKind": "get"
+              }
+            ]
           },
           {
             "kind": "Var",
@@ -24906,6 +25135,153 @@
         "printedName": "ImageProgressive",
         "children": [
           {
+            "kind": "TypeDecl",
+            "name": "UpdatingStrategy",
+            "printedName": "UpdatingStrategy",
+            "children": [
+              {
+                "kind": "Var",
+                "name": "default",
+                "printedName": "default",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Kingfisher.ImageProgressive.UpdatingStrategy.Type) -> Kingfisher.ImageProgressive.UpdatingStrategy",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "UpdatingStrategy",
+                        "printedName": "Kingfisher.ImageProgressive.UpdatingStrategy",
+                        "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Metatype",
+                        "printedName": "Kingfisher.ImageProgressive.UpdatingStrategy.Type",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "UpdatingStrategy",
+                            "printedName": "Kingfisher.ImageProgressive.UpdatingStrategy",
+                            "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "declKind": "EnumElement",
+                "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO7defaultyA2EmF",
+                "mangledName": "$s10Kingfisher16ImageProgressiveV16UpdatingStrategyO7defaultyA2EmF",
+                "moduleName": "Kingfisher"
+              },
+              {
+                "kind": "Var",
+                "name": "keepCurrent",
+                "printedName": "keepCurrent",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Kingfisher.ImageProgressive.UpdatingStrategy.Type) -> Kingfisher.ImageProgressive.UpdatingStrategy",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "UpdatingStrategy",
+                        "printedName": "Kingfisher.ImageProgressive.UpdatingStrategy",
+                        "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Metatype",
+                        "printedName": "Kingfisher.ImageProgressive.UpdatingStrategy.Type",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "UpdatingStrategy",
+                            "printedName": "Kingfisher.ImageProgressive.UpdatingStrategy",
+                            "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "declKind": "EnumElement",
+                "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO11keepCurrentyA2EmF",
+                "mangledName": "$s10Kingfisher16ImageProgressiveV16UpdatingStrategyO11keepCurrentyA2EmF",
+                "moduleName": "Kingfisher"
+              },
+              {
+                "kind": "Var",
+                "name": "replace",
+                "printedName": "replace",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Kingfisher.ImageProgressive.UpdatingStrategy.Type) -> (UIKit.UIImage?) -> Kingfisher.ImageProgressive.UpdatingStrategy",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "(UIKit.UIImage?) -> Kingfisher.ImageProgressive.UpdatingStrategy",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "UpdatingStrategy",
+                            "printedName": "Kingfisher.ImageProgressive.UpdatingStrategy",
+                            "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Optional",
+                            "printedName": "UIKit.UIImage?",
+                            "children": [
+                              {
+                                "kind": "TypeNominal",
+                                "name": "UIImage",
+                                "printedName": "UIKit.UIImage",
+                                "usr": "c:objc(cs)UIImage"
+                              }
+                            ],
+                            "usr": "s:Sq"
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Metatype",
+                        "printedName": "Kingfisher.ImageProgressive.UpdatingStrategy.Type",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "UpdatingStrategy",
+                            "printedName": "Kingfisher.ImageProgressive.UpdatingStrategy",
+                            "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "declKind": "EnumElement",
+                "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO7replaceyAESo7UIImageCSgcAEmF",
+                "mangledName": "$s10Kingfisher16ImageProgressiveV16UpdatingStrategyO7replaceyAESo7UIImageCSgcAEmF",
+                "moduleName": "Kingfisher"
+              }
+            ],
+            "declKind": "Enum",
+            "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO",
+            "mangledName": "$s10Kingfisher16ImageProgressiveV16UpdatingStrategyO",
+            "moduleName": "Kingfisher",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ]
+          },
+          {
             "kind": "Var",
             "name": "default",
             "printedName": "default",
@@ -24922,10 +25298,12 @@
             "mangledName": "$s10Kingfisher16ImageProgressiveV7defaultACvpZ",
             "moduleName": "Kingfisher",
             "static": true,
+            "deprecated": true,
             "declAttributes": [
               "HasInitialValue",
               "HasStorage",
               "AccessControl",
+              "Available",
               "RawDocComment"
             ],
             "isLet": true,
@@ -25086,6 +25464,102 @@
             ]
           },
           {
+            "kind": "Var",
+            "name": "onImageUpdated",
+            "printedName": "onImageUpdated",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Delegate",
+                "printedName": "Kingfisher.Delegate<UIKit.UIImage, Kingfisher.ImageProgressive.UpdatingStrategy>",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIImage",
+                    "printedName": "UIKit.UIImage",
+                    "usr": "c:objc(cs)UIImage"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UpdatingStrategy",
+                    "printedName": "Kingfisher.ImageProgressive.UpdatingStrategy",
+                    "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO"
+                  }
+                ],
+                "usr": "s:10Kingfisher8DelegateC"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:10Kingfisher16ImageProgressiveV02onB7UpdatedAA8DelegateCySo7UIImageCAC16UpdatingStrategyOGvp",
+            "mangledName": "$s10Kingfisher16ImageProgressiveV02onB7UpdatedAA8DelegateCySo7UIImageCAC16UpdatingStrategyOGvp",
+            "moduleName": "Kingfisher",
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage",
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Delegate",
+                    "printedName": "Kingfisher.Delegate<UIKit.UIImage, Kingfisher.ImageProgressive.UpdatingStrategy>",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "UIImage",
+                        "printedName": "UIKit.UIImage",
+                        "usr": "c:objc(cs)UIImage"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "UpdatingStrategy",
+                        "printedName": "Kingfisher.ImageProgressive.UpdatingStrategy",
+                        "usr": "s:10Kingfisher16ImageProgressiveV16UpdatingStrategyO"
+                      }
+                    ],
+                    "usr": "s:10Kingfisher8DelegateC"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:10Kingfisher16ImageProgressiveV02onB7UpdatedAA8DelegateCySo7UIImageCAC16UpdatingStrategyOGvg",
+                "mangledName": "$s10Kingfisher16ImageProgressiveV02onB7UpdatedAA8DelegateCySo7UIImageCAC16UpdatingStrategyOGvg",
+                "moduleName": "Kingfisher",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "ImageProgressive",
+                "printedName": "Kingfisher.ImageProgressive",
+                "usr": "s:10Kingfisher16ImageProgressiveV"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:10Kingfisher16ImageProgressiveVACycfc",
+            "mangledName": "$s10Kingfisher16ImageProgressiveVACycfc",
+            "moduleName": "Kingfisher",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "init_kind": "Designated"
+          },
+          {
             "kind": "Constructor",
             "name": "init",
             "printedName": "init(isBlur:isFastestScan:scanInterval:)",
@@ -25120,7 +25594,8 @@
             "mangledName": "$s10Kingfisher16ImageProgressiveV6isBlur0D11FastestScan12scanIntervalACSb_SbSdtcfc",
             "moduleName": "Kingfisher",
             "declAttributes": [
-              "AccessControl"
+              "AccessControl",
+              "RawDocComment"
             ],
             "init_kind": "Designated"
           }
@@ -25132,134 +25607,6 @@
         "declAttributes": [
           "AccessControl"
         ]
-      },
-      {
-        "kind": "TypeDecl",
-        "name": "ImageSettable",
-        "printedName": "ImageSettable",
-        "children": [
-          {
-            "kind": "Var",
-            "name": "image",
-            "printedName": "image",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "UIKit.UIImage?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UIImage",
-                    "printedName": "UIKit.UIImage",
-                    "usr": "c:objc(cs)UIImage"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:10Kingfisher13ImageSettableP5imageSo7UIImageCSgvp",
-            "mangledName": "$s10Kingfisher13ImageSettableP5imageSo7UIImageCSgvp",
-            "moduleName": "Kingfisher",
-            "protocolReq": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Optional",
-                    "printedName": "UIKit.UIImage?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "UIImage",
-                        "printedName": "UIKit.UIImage",
-                        "usr": "c:objc(cs)UIImage"
-                      }
-                    ],
-                    "usr": "s:Sq"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:10Kingfisher13ImageSettableP5imageSo7UIImageCSgvg",
-                "mangledName": "$s10Kingfisher13ImageSettableP5imageSo7UIImageCSgvg",
-                "moduleName": "Kingfisher",
-                "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.ImageSettable>",
-                "sugared_genericSig": "<Self where Self : Kingfisher.ImageSettable>",
-                "protocolReq": true,
-                "reqNewWitnessTableEntry": true,
-                "accessorKind": "get"
-              },
-              {
-                "kind": "Accessor",
-                "name": "Set",
-                "printedName": "Set()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Optional",
-                    "printedName": "UIKit.UIImage?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "UIImage",
-                        "printedName": "UIKit.UIImage",
-                        "usr": "c:objc(cs)UIImage"
-                      }
-                    ],
-                    "usr": "s:Sq"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:10Kingfisher13ImageSettableP5imageSo7UIImageCSgvs",
-                "mangledName": "$s10Kingfisher13ImageSettableP5imageSo7UIImageCSgvs",
-                "moduleName": "Kingfisher",
-                "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.ImageSettable>",
-                "sugared_genericSig": "<Self where Self : Kingfisher.ImageSettable>",
-                "protocolReq": true,
-                "reqNewWitnessTableEntry": true,
-                "accessorKind": "set"
-              },
-              {
-                "kind": "Accessor",
-                "name": "Modify",
-                "printedName": "Modify()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:10Kingfisher13ImageSettableP5imageSo7UIImageCSgvM",
-                "mangledName": "$s10Kingfisher13ImageSettableP5imageSo7UIImageCSgvM",
-                "moduleName": "Kingfisher",
-                "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.ImageSettable>",
-                "sugared_genericSig": "<Self where Self : Kingfisher.ImageSettable>",
-                "protocolReq": true,
-                "implicit": true,
-                "reqNewWitnessTableEntry": true,
-                "accessorKind": "_modify"
-              }
-            ]
-          }
-        ],
-        "declKind": "Protocol",
-        "usr": "s:10Kingfisher13ImageSettableP",
-        "mangledName": "$s10Kingfisher13ImageSettableP",
-        "moduleName": "Kingfisher",
-        "genericSig": "<τ_0_0 : AnyObject>",
-        "sugared_genericSig": "<Self : AnyObject>"
       },
       {
         "kind": "TypeDecl",
@@ -30133,6 +30480,7 @@
                 "declAttributes": [
                   "HasInitialValue",
                   "HasStorage",
+                  "SetterAccess",
                   "RawDocComment"
                 ],
                 "fixedbinaryorder": 2,
@@ -30160,17 +30508,39 @@
                       "Transparent"
                     ],
                     "accessorKind": "get"
-                  },
+                  }
+                ]
+              },
+              {
+                "kind": "Var",
+                "name": "animating",
+                "printedName": "animating",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Var",
+                "usr": "s:10Kingfisher7KFImageV11ImageBinderC9animatingSbvp",
+                "mangledName": "$s10Kingfisher7KFImageV11ImageBinderC9animatingSbvp",
+                "moduleName": "Kingfisher",
+                "isOpen": true,
+                "declAttributes": [
+                  "HasInitialValue",
+                  "HasStorage",
+                  "SetterAccess"
+                ],
+                "fixedbinaryorder": 3,
+                "hasStorage": true,
+                "accessors": [
                   {
                     "kind": "Accessor",
-                    "name": "Set",
-                    "printedName": "Set()",
+                    "name": "Get",
+                    "printedName": "Get()",
                     "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Void",
-                        "printedName": "()"
-                      },
                       {
                         "kind": "TypeNominal",
                         "name": "Bool",
@@ -30179,34 +30549,15 @@
                       }
                     ],
                     "declKind": "Accessor",
-                    "usr": "s:10Kingfisher7KFImageV11ImageBinderC6loadedSbvs",
-                    "mangledName": "$s10Kingfisher7KFImageV11ImageBinderC6loadedSbvs",
-                    "moduleName": "Kingfisher",
-                    "implicit": true,
-                    "isOpen": true,
-                    "accessorKind": "set"
-                  },
-                  {
-                    "kind": "Accessor",
-                    "name": "Modify",
-                    "printedName": "Modify()",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Void",
-                        "printedName": "()"
-                      }
-                    ],
-                    "declKind": "Accessor",
-                    "usr": "s:10Kingfisher7KFImageV11ImageBinderC6loadedSbvM",
-                    "mangledName": "$s10Kingfisher7KFImageV11ImageBinderC6loadedSbvM",
+                    "usr": "s:10Kingfisher7KFImageV11ImageBinderC9animatingSbvg",
+                    "mangledName": "$s10Kingfisher7KFImageV11ImageBinderC9animatingSbvg",
                     "moduleName": "Kingfisher",
                     "implicit": true,
                     "isOpen": true,
                     "declAttributes": [
                       "Transparent"
                     ],
-                    "accessorKind": "_modify"
+                    "accessorKind": "get"
                   }
                 ]
               },
@@ -30239,7 +30590,7 @@
                   "HasInitialValue",
                   "HasStorage"
                 ],
-                "fixedbinaryorder": 3,
+                "fixedbinaryorder": 4,
                 "hasStorage": true,
                 "accessors": [
                   {
@@ -30351,7 +30702,7 @@
                   "HasInitialValue",
                   "HasStorage"
                 ],
-                "fixedbinaryorder": 4,
+                "fixedbinaryorder": 5,
                 "hasStorage": true,
                 "accessors": [
                   {
@@ -30400,6 +30751,9 @@
                     "moduleName": "Kingfisher",
                     "implicit": true,
                     "isOpen": true,
+                    "declAttributes": [
+                      "Transparent"
+                    ],
                     "accessorKind": "set"
                   },
                   {
@@ -30425,6 +30779,48 @@
                     "accessorKind": "_modify"
                   }
                 ]
+              },
+              {
+                "kind": "Function",
+                "name": "markLoading",
+                "printedName": "markLoading()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Func",
+                "usr": "s:10Kingfisher7KFImageV11ImageBinderC11markLoadingyyF",
+                "mangledName": "$s10Kingfisher7KFImageV11ImageBinderC11markLoadingyyF",
+                "moduleName": "Kingfisher",
+                "isOpen": true,
+                "funcSelfKind": "NonMutating"
+              },
+              {
+                "kind": "Function",
+                "name": "markLoaded",
+                "printedName": "markLoaded(sendChangeEvent:)",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Func",
+                "usr": "s:10Kingfisher7KFImageV11ImageBinderC10markLoaded15sendChangeEventySb_tF",
+                "mangledName": "$s10Kingfisher7KFImageV11ImageBinderC10markLoaded15sendChangeEventySb_tF",
+                "moduleName": "Kingfisher",
+                "isOpen": true,
+                "funcSelfKind": "NonMutating"
               },
               {
                 "kind": "Function",
@@ -30986,6 +31382,161 @@
               },
               {
                 "kind": "Var",
+                "name": "contentConfiguration",
+                "printedName": "contentConfiguration",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "((τ_0_0) -> SwiftUI.AnyView)?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "(τ_0_0) -> SwiftUI.AnyView",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "AnyView",
+                            "printedName": "SwiftUI.AnyView",
+                            "usr": "s:7SwiftUI7AnyViewV"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "GenericTypeParam",
+                            "printedName": "τ_0_0"
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Var",
+                "usr": "s:10Kingfisher7KFImageV7ContextC20contentConfiguration7SwiftUI7AnyViewVxcSgvp",
+                "mangledName": "$s10Kingfisher7KFImageV7ContextC20contentConfiguration7SwiftUI7AnyViewVxcSgvp",
+                "moduleName": "Kingfisher",
+                "isOpen": true,
+                "declAttributes": [
+                  "HasInitialValue",
+                  "HasStorage"
+                ],
+                "hasStorage": true,
+                "accessors": [
+                  {
+                    "kind": "Accessor",
+                    "name": "Get",
+                    "printedName": "Get()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "((τ_0_0) -> SwiftUI.AnyView)?",
+                        "children": [
+                          {
+                            "kind": "TypeFunc",
+                            "name": "Function",
+                            "printedName": "(τ_0_0) -> SwiftUI.AnyView",
+                            "children": [
+                              {
+                                "kind": "TypeNominal",
+                                "name": "AnyView",
+                                "printedName": "SwiftUI.AnyView",
+                                "usr": "s:7SwiftUI7AnyViewV"
+                              },
+                              {
+                                "kind": "TypeNominal",
+                                "name": "GenericTypeParam",
+                                "printedName": "τ_0_0"
+                              }
+                            ]
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:10Kingfisher7KFImageV7ContextC20contentConfiguration7SwiftUI7AnyViewVxcSgvg",
+                    "mangledName": "$s10Kingfisher7KFImageV7ContextC20contentConfiguration7SwiftUI7AnyViewVxcSgvg",
+                    "moduleName": "Kingfisher",
+                    "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.KFImageHoldingView>",
+                    "sugared_genericSig": "<HoldingView where HoldingView : Kingfisher.KFImageHoldingView>",
+                    "implicit": true,
+                    "isOpen": true,
+                    "accessorKind": "get"
+                  },
+                  {
+                    "kind": "Accessor",
+                    "name": "Set",
+                    "printedName": "Set()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "((τ_0_0) -> SwiftUI.AnyView)?",
+                        "children": [
+                          {
+                            "kind": "TypeFunc",
+                            "name": "Function",
+                            "printedName": "(τ_0_0) -> SwiftUI.AnyView",
+                            "children": [
+                              {
+                                "kind": "TypeNominal",
+                                "name": "AnyView",
+                                "printedName": "SwiftUI.AnyView",
+                                "usr": "s:7SwiftUI7AnyViewV"
+                              },
+                              {
+                                "kind": "TypeNominal",
+                                "name": "GenericTypeParam",
+                                "printedName": "τ_0_0"
+                              }
+                            ]
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:10Kingfisher7KFImageV7ContextC20contentConfiguration7SwiftUI7AnyViewVxcSgvs",
+                    "mangledName": "$s10Kingfisher7KFImageV7ContextC20contentConfiguration7SwiftUI7AnyViewVxcSgvs",
+                    "moduleName": "Kingfisher",
+                    "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.KFImageHoldingView>",
+                    "sugared_genericSig": "<HoldingView where HoldingView : Kingfisher.KFImageHoldingView>",
+                    "implicit": true,
+                    "isOpen": true,
+                    "accessorKind": "set"
+                  },
+                  {
+                    "kind": "Accessor",
+                    "name": "Modify",
+                    "printedName": "Modify()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:10Kingfisher7KFImageV7ContextC20contentConfiguration7SwiftUI7AnyViewVxcSgvM",
+                    "mangledName": "$s10Kingfisher7KFImageV7ContextC20contentConfiguration7SwiftUI7AnyViewVxcSgvM",
+                    "moduleName": "Kingfisher",
+                    "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.KFImageHoldingView>",
+                    "sugared_genericSig": "<HoldingView where HoldingView : Kingfisher.KFImageHoldingView>",
+                    "implicit": true,
+                    "isOpen": true,
+                    "accessorKind": "_modify"
+                  }
+                ]
+              },
+              {
+                "kind": "Var",
                 "name": "cancelOnDisappear",
                 "printedName": "cancelOnDisappear",
                 "children": [
@@ -31488,6 +32039,101 @@
                       "Final"
                     ],
                     "accessorKind": "get"
+                  }
+                ]
+              },
+              {
+                "kind": "Var",
+                "name": "startLoadingBeforeViewAppear",
+                "printedName": "startLoadingBeforeViewAppear",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Var",
+                "usr": "s:10Kingfisher7KFImageV7ContextC28startLoadingBeforeViewAppearSbvp",
+                "mangledName": "$s10Kingfisher7KFImageV7ContextC28startLoadingBeforeViewAppearSbvp",
+                "moduleName": "Kingfisher",
+                "isOpen": true,
+                "declAttributes": [
+                  "HasInitialValue",
+                  "HasStorage"
+                ],
+                "hasStorage": true,
+                "accessors": [
+                  {
+                    "kind": "Accessor",
+                    "name": "Get",
+                    "printedName": "Get()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Bool",
+                        "printedName": "Swift.Bool",
+                        "usr": "s:Sb"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:10Kingfisher7KFImageV7ContextC28startLoadingBeforeViewAppearSbvg",
+                    "mangledName": "$s10Kingfisher7KFImageV7ContextC28startLoadingBeforeViewAppearSbvg",
+                    "moduleName": "Kingfisher",
+                    "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.KFImageHoldingView>",
+                    "sugared_genericSig": "<HoldingView where HoldingView : Kingfisher.KFImageHoldingView>",
+                    "implicit": true,
+                    "isOpen": true,
+                    "accessorKind": "get"
+                  },
+                  {
+                    "kind": "Accessor",
+                    "name": "Set",
+                    "printedName": "Set()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Bool",
+                        "printedName": "Swift.Bool",
+                        "usr": "s:Sb"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:10Kingfisher7KFImageV7ContextC28startLoadingBeforeViewAppearSbvs",
+                    "mangledName": "$s10Kingfisher7KFImageV7ContextC28startLoadingBeforeViewAppearSbvs",
+                    "moduleName": "Kingfisher",
+                    "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.KFImageHoldingView>",
+                    "sugared_genericSig": "<HoldingView where HoldingView : Kingfisher.KFImageHoldingView>",
+                    "implicit": true,
+                    "isOpen": true,
+                    "accessorKind": "set"
+                  },
+                  {
+                    "kind": "Accessor",
+                    "name": "Modify",
+                    "printedName": "Modify()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:10Kingfisher7KFImageV7ContextC28startLoadingBeforeViewAppearSbvM",
+                    "mangledName": "$s10Kingfisher7KFImageV7ContextC28startLoadingBeforeViewAppearSbvM",
+                    "moduleName": "Kingfisher",
+                    "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.KFImageHoldingView>",
+                    "sugared_genericSig": "<HoldingView where HoldingView : Kingfisher.KFImageHoldingView>",
+                    "implicit": true,
+                    "isOpen": true,
+                    "accessorKind": "_modify"
                   }
                 ]
               },
@@ -32683,6 +33329,37 @@
             "funcSelfKind": "NonMutating"
           },
           {
+            "kind": "Function",
+            "name": "startLoadingBeforeViewAppear",
+            "printedName": "startLoadingBeforeViewAppear(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "GenericTypeParam",
+                "printedName": "τ_0_0"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "hasDefaultArg": true,
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:10Kingfisher15KFImageProtocolPAAE28startLoadingBeforeViewAppearyxSbF",
+            "mangledName": "$s10Kingfisher15KFImageProtocolPAAE28startLoadingBeforeViewAppearyxSbF",
+            "moduleName": "Kingfisher",
+            "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.KFImageProtocol>",
+            "sugared_genericSig": "<Self where Self : Kingfisher.KFImageProtocol>",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
             "kind": "Var",
             "name": "body",
             "printedName": "body",
@@ -32850,6 +33527,47 @@
             "moduleName": "Kingfisher",
             "genericSig": "<τ_0_0 where τ_0_0 : Kingfisher.KFImageProtocol>",
             "sugared_genericSig": "<Self where Self : Kingfisher.KFImageProtocol>",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "contentConfigure",
+            "printedName": "contentConfigure(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "GenericTypeParam",
+                "printedName": "τ_0_0"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(τ_0_0.HoldingView) -> τ_1_0",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_1_0"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "DependentMember",
+                    "printedName": "τ_0_0.HoldingView"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:10Kingfisher15KFImageProtocolPAAE16contentConfigureyxqd__11HoldingViewQzc7SwiftUI0G0Rd__lF",
+            "mangledName": "$s10Kingfisher15KFImageProtocolPAAE16contentConfigureyxqd__11HoldingViewQzc7SwiftUI0G0Rd__lF",
+            "moduleName": "Kingfisher",
+            "genericSig": "<τ_0_0, τ_1_0 where τ_0_0 : Kingfisher.KFImageProtocol, τ_1_0 : SwiftUI.View>",
+            "sugared_genericSig": "<Self, V where Self : Kingfisher.KFImageProtocol, V : SwiftUI.View>",
             "declAttributes": [
               "AccessControl",
               "RawDocComment"
@@ -44945,9 +45663,94 @@
             ]
           },
           {
+            "kind": "Var",
+            "name": "data",
+            "printedName": "data",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "() -> Foundation.Data?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Foundation.Data?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Data",
+                        "printedName": "Foundation.Data",
+                        "usr": "s:10Foundation4DataV"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:10Kingfisher19RetrieveImageResultV4data10Foundation4DataVSgycvp",
+            "mangledName": "$s10Kingfisher19RetrieveImageResultV4data10Foundation4DataVSgycvp",
+            "moduleName": "Kingfisher",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "() -> Foundation.Data?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "Foundation.Data?",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Data",
+                            "printedName": "Foundation.Data",
+                            "usr": "s:10Foundation4DataV"
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      }
+                    ]
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:10Kingfisher19RetrieveImageResultV4data10Foundation4DataVSgycvg",
+                "mangledName": "$s10Kingfisher19RetrieveImageResultV4data10Foundation4DataVSgycvg",
+                "moduleName": "Kingfisher",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
             "kind": "Constructor",
             "name": "init",
-            "printedName": "init(image:cacheType:source:originalSource:)",
+            "printedName": "init(image:cacheType:source:originalSource:data:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -44978,11 +45781,37 @@
                 "name": "Source",
                 "printedName": "Kingfisher.Source",
                 "usr": "s:10Kingfisher6SourceO"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "() -> Foundation.Data?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Foundation.Data?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Data",
+                        "printedName": "Foundation.Data",
+                        "usr": "s:10Foundation4DataV"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ]
               }
             ],
             "declKind": "Constructor",
-            "usr": "s:10Kingfisher19RetrieveImageResultV5image9cacheType6source14originalSourceACSo7UIImageC_AA05CacheG0OAA0J0OAMtcfc",
-            "mangledName": "$s10Kingfisher19RetrieveImageResultV5image9cacheType6source14originalSourceACSo7UIImageC_AA05CacheG0OAA0J0OAMtcfc",
+            "usr": "s:10Kingfisher19RetrieveImageResultV5image9cacheType6source14originalSource4dataACSo7UIImageC_AA05CacheG0OAA0J0OAN10Foundation4DataVSgyctcfc",
+            "mangledName": "$s10Kingfisher19RetrieveImageResultV5image9cacheType6source14originalSource4dataACSo7UIImageC_AA05CacheG0OAA0J0OAN10Foundation4DataVSgyctcfc",
             "moduleName": "Kingfisher",
             "implicit": true,
             "init_kind": "Designated"
@@ -45866,6 +46695,7 @@
             "isOpen": true,
             "declAttributes": [
               "AccessControl",
+              "DiscardableResult",
               "RawDocComment"
             ],
             "funcSelfKind": "NonMutating"
@@ -46027,7 +46857,7 @@
           {
             "kind": "Function",
             "name": "retrieveImage",
-            "printedName": "retrieveImage(with:options:downloadTaskUpdated:completionHandler:)",
+            "printedName": "retrieveImage(with:options:downloadTaskUpdated:progressiveImageSetter:referenceTaskIdentifierChecker:completionHandler:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -46093,6 +46923,68 @@
               {
                 "kind": "TypeNominal",
                 "name": "Optional",
+                "printedName": "((UIKit.UIImage?) -> ())?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(UIKit.UIImage?) -> ()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "UIKit.UIImage?",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "UIImage",
+                            "printedName": "UIKit.UIImage",
+                            "usr": "c:objc(cs)UIImage"
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      }
+                    ]
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "(() -> Swift.Bool)?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "() -> Swift.Bool",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Bool",
+                        "printedName": "Swift.Bool",
+                        "usr": "s:Sb"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      }
+                    ]
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
                 "printedName": "((Swift.Result<Kingfisher.RetrieveImageResult, Kingfisher.KingfisherError>) -> ())?",
                 "children": [
                   {
@@ -46132,8 +47024,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:10Kingfisher0A7ManagerC13retrieveImage4with7options19downloadTaskUpdated17completionHandlerAA08DownloadH0VSgAA6SourceO_AA0A17ParsedOptionsInfoVyAKcSgys6ResultOyAA08RetrievedQ0VAA0A5ErrorOGcSgtF",
-            "mangledName": "$s10Kingfisher0A7ManagerC13retrieveImage4with7options19downloadTaskUpdated17completionHandlerAA08DownloadH0VSgAA6SourceO_AA0A17ParsedOptionsInfoVyAKcSgys6ResultOyAA08RetrievedQ0VAA0A5ErrorOGcSgtF",
+            "usr": "s:10Kingfisher0A7ManagerC13retrieveImage4with7options19downloadTaskUpdated011progressiveD6Setter09referenceH17IdentifierChecker17completionHandlerAA08DownloadH0VSgAA6SourceO_AA0A17ParsedOptionsInfoVyAMcSgySo7UIImageCSgcSgSbycSgys6ResultOyAA08RetrievedW0VAA0A5ErrorOGcSgtF",
+            "mangledName": "$s10Kingfisher0A7ManagerC13retrieveImage4with7options19downloadTaskUpdated011progressiveD6Setter09referenceH17IdentifierChecker17completionHandlerAA08DownloadH0VSgAA6SourceO_AA0A17ParsedOptionsInfoVyAMcSgySo7UIImageCSgcSgSbycSgys6ResultOyAA08RetrievedW0VAA0A5ErrorOGcSgtF",
             "moduleName": "Kingfisher",
             "isOpen": true,
             "funcSelfKind": "NonMutating"
@@ -54855,7 +55747,7 @@
               {
                 "kind": "Constructor",
                 "name": "init",
-                "printedName": "init(_:key:expiration:)",
+                "printedName": "init(_:expiration:)",
                 "children": [
                   {
                     "kind": "TypeNominal",
@@ -54877,20 +55769,14 @@
                   },
                   {
                     "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  },
-                  {
-                    "kind": "TypeNominal",
                     "name": "StorageExpiration",
                     "printedName": "Kingfisher.StorageExpiration",
                     "usr": "s:10Kingfisher17StorageExpirationO"
                   }
                 ],
                 "declKind": "Constructor",
-                "usr": "s:10Kingfisher13MemoryStorageO017BackgroundKeepingC6ObjectC_3key10expirationAEy_xGx_SSAA0C10ExpirationOtcfc",
-                "mangledName": "$s10Kingfisher13MemoryStorageO017BackgroundKeepingC6ObjectC_3key10expirationAEy_xGx_SSAA0C10ExpirationOtcfc",
+                "usr": "s:10Kingfisher13MemoryStorageO017BackgroundKeepingC6ObjectC_10expirationAEy_xGx_AA0C10ExpirationOtcfc",
+                "mangledName": "$s10Kingfisher13MemoryStorageO017BackgroundKeepingC6ObjectC_10expirationAEy_xGx_AA0C10ExpirationOtcfc",
                 "moduleName": "Kingfisher",
                 "genericSig": "<τ_0_0>",
                 "sugared_genericSig": "<T>",
@@ -55100,57 +55986,6 @@
               },
               {
                 "kind": "Var",
-                "name": "key",
-                "printedName": "key",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "declKind": "Var",
-                "usr": "s:10Kingfisher13MemoryStorageO0C6ObjectC3keySSvp",
-                "mangledName": "$s10Kingfisher13MemoryStorageO0C6ObjectC3keySSvp",
-                "moduleName": "Kingfisher",
-                "declAttributes": [
-                  "HasStorage",
-                  "Final"
-                ],
-                "fixedbinaryorder": 2,
-                "isLet": true,
-                "hasStorage": true,
-                "accessors": [
-                  {
-                    "kind": "Accessor",
-                    "name": "Get",
-                    "printedName": "Get()",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "String",
-                        "printedName": "Swift.String",
-                        "usr": "s:SS"
-                      }
-                    ],
-                    "declKind": "Accessor",
-                    "usr": "s:10Kingfisher13MemoryStorageO0C6ObjectC3keySSvg",
-                    "mangledName": "$s10Kingfisher13MemoryStorageO0C6ObjectC3keySSvg",
-                    "moduleName": "Kingfisher",
-                    "genericSig": "<τ_0_0>",
-                    "sugared_genericSig": "<T>",
-                    "implicit": true,
-                    "declAttributes": [
-                      "Transparent",
-                      "Final"
-                    ],
-                    "accessorKind": "get"
-                  }
-                ]
-              },
-              {
-                "kind": "Var",
                 "name": "estimatedExpiration",
                 "printedName": "estimatedExpiration",
                 "children": [
@@ -55170,7 +56005,7 @@
                   "HasStorage",
                   "SetterAccess"
                 ],
-                "fixedbinaryorder": 3,
+                "fixedbinaryorder": 2,
                 "hasStorage": true,
                 "accessors": [
                   {
@@ -55203,7 +56038,7 @@
               {
                 "kind": "Constructor",
                 "name": "init",
-                "printedName": "init(_:key:expiration:)",
+                "printedName": "init(_:expiration:)",
                 "children": [
                   {
                     "kind": "TypeNominal",
@@ -55225,20 +56060,14 @@
                   },
                   {
                     "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  },
-                  {
-                    "kind": "TypeNominal",
                     "name": "StorageExpiration",
                     "printedName": "Kingfisher.StorageExpiration",
                     "usr": "s:10Kingfisher17StorageExpirationO"
                   }
                 ],
                 "declKind": "Constructor",
-                "usr": "s:10Kingfisher13MemoryStorageO0C6ObjectC_3key10expirationAEy_xGx_SSAA0C10ExpirationOtcfc",
-                "mangledName": "$s10Kingfisher13MemoryStorageO0C6ObjectC_3key10expirationAEy_xGx_SSAA0C10ExpirationOtcfc",
+                "usr": "s:10Kingfisher13MemoryStorageO0C6ObjectC_10expirationAEy_xGx_AA0C10ExpirationOtcfc",
+                "mangledName": "$s10Kingfisher13MemoryStorageO0C6ObjectC_10expirationAEy_xGx_AA0C10ExpirationOtcfc",
                 "moduleName": "Kingfisher",
                 "genericSig": "<τ_0_0>",
                 "sugared_genericSig": "<T>",
@@ -55273,8 +56102,8 @@
               },
               {
                 "kind": "Var",
-                "name": "expired",
-                "printedName": "expired",
+                "name": "isExpired",
+                "printedName": "isExpired",
                 "children": [
                   {
                     "kind": "TypeNominal",
@@ -55284,8 +56113,8 @@
                   }
                 ],
                 "declKind": "Var",
-                "usr": "s:10Kingfisher13MemoryStorageO0C6ObjectC7expiredSbvp",
-                "mangledName": "$s10Kingfisher13MemoryStorageO0C6ObjectC7expiredSbvp",
+                "usr": "s:10Kingfisher13MemoryStorageO0C6ObjectC9isExpiredSbvp",
+                "mangledName": "$s10Kingfisher13MemoryStorageO0C6ObjectC9isExpiredSbvp",
                 "moduleName": "Kingfisher",
                 "isOpen": true,
                 "accessors": [
@@ -55302,8 +56131,8 @@
                       }
                     ],
                     "declKind": "Accessor",
-                    "usr": "s:10Kingfisher13MemoryStorageO0C6ObjectC7expiredSbvg",
-                    "mangledName": "$s10Kingfisher13MemoryStorageO0C6ObjectC7expiredSbvg",
+                    "usr": "s:10Kingfisher13MemoryStorageO0C6ObjectC9isExpiredSbvg",
+                    "mangledName": "$s10Kingfisher13MemoryStorageO0C6ObjectC9isExpiredSbvg",
                     "moduleName": "Kingfisher",
                     "genericSig": "<τ_0_0>",
                     "sugared_genericSig": "<T>",
@@ -59690,7 +60519,7 @@
           {
             "kind": "Function",
             "name": "append",
-            "printedName": "append(_:url:callback:)",
+            "printedName": "append(_:callback:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -59706,20 +60535,14 @@
               },
               {
                 "kind": "TypeNominal",
-                "name": "URL",
-                "printedName": "Foundation.URL",
-                "usr": "s:10Foundation3URLV"
-              },
-              {
-                "kind": "TypeNominal",
                 "name": "TaskCallback",
                 "printedName": "Kingfisher.SessionDataTask.TaskCallback",
                 "usr": "s:10Kingfisher15SessionDataTaskC0D8CallbackV"
               }
             ],
             "declKind": "Func",
-            "usr": "s:10Kingfisher15SessionDelegateC6append_3url8callbackAA12DownloadTaskVAA0b4DataH0C_10Foundation3URLVAJ0H8CallbackVtF",
-            "mangledName": "$s10Kingfisher15SessionDelegateC6append_3url8callbackAA12DownloadTaskVAA0b4DataH0C_10Foundation3URLVAJ0H8CallbackVtF",
+            "usr": "s:10Kingfisher15SessionDelegateC6append_8callbackAA12DownloadTaskVAA0b4DataG0C_AI0G8CallbackVtF",
+            "mangledName": "$s10Kingfisher15SessionDelegateC6append_8callbackAA12DownloadTaskVAA0b4DataG0C_AI0G8CallbackVtF",
             "moduleName": "Kingfisher",
             "isOpen": true,
             "funcSelfKind": "NonMutating"
@@ -60801,61 +61624,6 @@
                 "accessorKind": "get"
               }
             ]
-          },
-          {
-            "kind": "Var",
-            "name": "asProvider",
-            "printedName": "asProvider",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "Kingfisher.ImageDataProvider?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "ImageDataProvider",
-                    "printedName": "Kingfisher.ImageDataProvider",
-                    "usr": "s:10Kingfisher17ImageDataProviderP"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:10Kingfisher6SourceO10asProviderAA09ImageDataD0_pSgvp",
-            "mangledName": "$s10Kingfisher6SourceO10asProviderAA09ImageDataD0_pSgvp",
-            "moduleName": "Kingfisher",
-            "isFromExtension": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Optional",
-                    "printedName": "Kingfisher.ImageDataProvider?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "ImageDataProvider",
-                        "printedName": "Kingfisher.ImageDataProvider",
-                        "usr": "s:10Kingfisher17ImageDataProviderP"
-                      }
-                    ],
-                    "usr": "s:Sq"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:10Kingfisher6SourceO10asProviderAA09ImageDataD0_pSgvg",
-                "mangledName": "$s10Kingfisher6SourceO10asProviderAA09ImageDataD0_pSgvg",
-                "moduleName": "Kingfisher",
-                "isFromExtension": true,
-                "accessorKind": "get"
-              }
-            ]
           }
         ],
         "declKind": "Enum",
@@ -60898,153 +61666,6 @@
         "name": "TimeConstants",
         "printedName": "TimeConstants",
         "children": [
-          {
-            "kind": "Var",
-            "name": "secondsInOneMinute",
-            "printedName": "secondsInOneMinute",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Int",
-                "printedName": "Swift.Int",
-                "usr": "s:Si"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:10Kingfisher13TimeConstantsV18secondsInOneMinuteSivpZ",
-            "mangledName": "$s10Kingfisher13TimeConstantsV18secondsInOneMinuteSivpZ",
-            "moduleName": "Kingfisher",
-            "static": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Int",
-                    "printedName": "Swift.Int",
-                    "usr": "s:Si"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:10Kingfisher13TimeConstantsV18secondsInOneMinuteSivgZ",
-                "mangledName": "$s10Kingfisher13TimeConstantsV18secondsInOneMinuteSivgZ",
-                "moduleName": "Kingfisher",
-                "static": true,
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "minutesInOneHour",
-            "printedName": "minutesInOneHour",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Int",
-                "printedName": "Swift.Int",
-                "usr": "s:Si"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:10Kingfisher13TimeConstantsV16minutesInOneHourSivpZ",
-            "mangledName": "$s10Kingfisher13TimeConstantsV16minutesInOneHourSivpZ",
-            "moduleName": "Kingfisher",
-            "static": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Int",
-                    "printedName": "Swift.Int",
-                    "usr": "s:Si"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:10Kingfisher13TimeConstantsV16minutesInOneHourSivgZ",
-                "mangledName": "$s10Kingfisher13TimeConstantsV16minutesInOneHourSivgZ",
-                "moduleName": "Kingfisher",
-                "static": true,
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "hoursInOneDay",
-            "printedName": "hoursInOneDay",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Int",
-                "printedName": "Swift.Int",
-                "usr": "s:Si"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:10Kingfisher13TimeConstantsV13hoursInOneDaySivpZ",
-            "mangledName": "$s10Kingfisher13TimeConstantsV13hoursInOneDaySivpZ",
-            "moduleName": "Kingfisher",
-            "static": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Int",
-                    "printedName": "Swift.Int",
-                    "usr": "s:Si"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:10Kingfisher13TimeConstantsV13hoursInOneDaySivgZ",
-                "mangledName": "$s10Kingfisher13TimeConstantsV13hoursInOneDaySivgZ",
-                "moduleName": "Kingfisher",
-                "static": true,
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              }
-            ]
-          },
           {
             "kind": "Var",
             "name": "secondsInOneDay",
@@ -62682,57 +63303,6 @@
         "children": [
           {
             "kind": "Var",
-            "name": "size",
-            "printedName": "size",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Int",
-                "printedName": "Swift.Int",
-                "usr": "s:Si"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:10Kingfisher3MD5C4sizeSivpZ",
-            "mangledName": "$s10Kingfisher3MD5C4sizeSivpZ",
-            "moduleName": "Kingfisher",
-            "static": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "Final",
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Int",
-                    "printedName": "Swift.Int",
-                    "usr": "s:Si"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:10Kingfisher3MD5C4sizeSivgZ",
-                "mangledName": "$s10Kingfisher3MD5C4sizeSivgZ",
-                "moduleName": "Kingfisher",
-                "static": true,
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent",
-                  "Final"
-                ],
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
             "name": "message",
             "printedName": "message",
             "children": [
@@ -62757,8 +63327,7 @@
             "moduleName": "Kingfisher",
             "declAttributes": [
               "Final",
-              "HasStorage",
-              "RawDocComment"
+              "HasStorage"
             ],
             "fixedbinaryorder": 0,
             "isLet": true,
@@ -63062,6 +63631,45 @@
                 "accessorKind": "get"
               }
             ]
+          },
+          {
+            "kind": "Function",
+            "name": "decoded",
+            "printedName": "decoded(on:scale:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreGraphics.CGImage?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGImage",
+                    "printedName": "CoreGraphics.CGImage",
+                    "usr": "c:@T@CGImageRef"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "CGContext",
+                "printedName": "CoreGraphics.CGContext",
+                "usr": "c:@T@CGContextRef"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "CGFloat",
+                "printedName": "CoreGraphics.CGFloat",
+                "usr": "s:14CoreFoundation7CGFloatV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:So10CGImageRefa10KingfisherE7decoded2on5scaleABSgSo09CGContextB0a_14CoreFoundation7CGFloatVtF",
+            "mangledName": "$sSo10CGImageRefa10KingfisherE7decoded2on5scaleABSgSo09CGContextB0a_12CoreGraphics7CGFloatVtF",
+            "moduleName": "Kingfisher",
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
           }
         ],
         "declKind": "Class",
@@ -63968,45 +64576,6 @@
             ]
           },
           {
-            "kind": "Var",
-            "name": "isFuture",
-            "printedName": "isFuture",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:10Foundation4DateV10KingfisherE8isFutureSbvp",
-            "mangledName": "$s10Foundation4DateV10KingfisherE8isFutureSbvp",
-            "moduleName": "Kingfisher",
-            "isFromExtension": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Bool",
-                    "printedName": "Swift.Bool",
-                    "usr": "s:Sb"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:10Foundation4DateV10KingfisherE8isFutureSbvg",
-                "mangledName": "$s10Foundation4DateV10KingfisherE8isFutureSbvg",
-                "moduleName": "Kingfisher",
-                "isFromExtension": true,
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
             "kind": "Function",
             "name": "isPast",
             "printedName": "isPast(referenceDate:)",
@@ -64027,31 +64596,6 @@
             "declKind": "Func",
             "usr": "s:10Foundation4DateV10KingfisherE6isPast09referenceB0SbAC_tF",
             "mangledName": "$s10Foundation4DateV10KingfisherE6isPast09referenceB0SbAC_tF",
-            "moduleName": "Kingfisher",
-            "isFromExtension": true,
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "isFuture",
-            "printedName": "isFuture(referenceDate:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Date",
-                "printedName": "Foundation.Date",
-                "usr": "s:10Foundation4DateV"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:10Foundation4DateV10KingfisherE8isFuture09referenceB0SbAC_tF",
-            "mangledName": "$s10Foundation4DateV10KingfisherE8isFuture09referenceB0SbAC_tF",
             "moduleName": "Kingfisher",
             "isFromExtension": true,
             "funcSelfKind": "NonMutating"
@@ -65249,382 +65793,6 @@
       },
       {
         "kind": "TypeDecl",
-        "name": "Dictionary",
-        "printedName": "Dictionary",
-        "children": [
-          {
-            "kind": "Function",
-            "name": "keysSortedByValue",
-            "printedName": "keysSortedByValue(_:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Array",
-                "printedName": "[τ_0_0]",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "GenericTypeParam",
-                    "printedName": "τ_0_0"
-                  }
-                ],
-                "usr": "s:Sa"
-              },
-              {
-                "kind": "TypeFunc",
-                "name": "Function",
-                "printedName": "(τ_0_1, τ_0_1) -> Swift.Bool",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Bool",
-                    "printedName": "Swift.Bool",
-                    "usr": "s:Sb"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Tuple",
-                    "printedName": "(τ_0_1, τ_0_1)",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "GenericTypeParam",
-                        "printedName": "τ_0_1"
-                      },
-                      {
-                        "kind": "TypeNominal",
-                        "name": "GenericTypeParam",
-                        "printedName": "τ_0_1"
-                      }
-                    ]
-                  }
-                ],
-                "typeAttributes": [
-                  "noescape"
-                ]
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:SD10KingfisherE17keysSortedByValueySayxGSbq__q_tXEF",
-            "mangledName": "$sSD10KingfisherE17keysSortedByValueySayxGSbq__q_tXEF",
-            "moduleName": "Kingfisher",
-            "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Hashable>",
-            "sugared_genericSig": "<Key, Value where Key : Swift.Hashable>",
-            "isFromExtension": true,
-            "funcSelfKind": "NonMutating"
-          }
-        ],
-        "declKind": "Struct",
-        "usr": "s:SD",
-        "mangledName": "$sSD",
-        "moduleName": "Swift",
-        "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Hashable>",
-        "sugared_genericSig": "<Key, Value where Key : Swift.Hashable>",
-        "declAttributes": [
-          "Frozen"
-        ],
-        "isExternal": true,
-        "conformances": [
-          {
-            "kind": "Conformance",
-            "name": "Equatable",
-            "printedName": "Equatable",
-            "usr": "s:SQ",
-            "mangledName": "$sSQ"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Encodable",
-            "printedName": "Encodable",
-            "usr": "s:SE",
-            "mangledName": "$sSE"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Decodable",
-            "printedName": "Decodable",
-            "usr": "s:Se",
-            "mangledName": "$sSe"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Sequence",
-            "printedName": "Sequence",
-            "children": [
-              {
-                "kind": "TypeWitness",
-                "name": "Element",
-                "printedName": "Element",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Tuple",
-                    "printedName": "(key: τ_0_0, value: τ_0_1)",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "GenericTypeParam",
-                        "printedName": "τ_0_0"
-                      },
-                      {
-                        "kind": "TypeNominal",
-                        "name": "GenericTypeParam",
-                        "printedName": "τ_0_1"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Iterator",
-                "printedName": "Iterator",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Iterator",
-                    "printedName": "Swift.Dictionary<τ_0_0, τ_0_1>.Iterator",
-                    "usr": "s:SD8IteratorV"
-                  }
-                ]
-              }
-            ],
-            "usr": "s:ST",
-            "mangledName": "$sST"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Collection",
-            "printedName": "Collection",
-            "children": [
-              {
-                "kind": "TypeWitness",
-                "name": "Element",
-                "printedName": "Element",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Tuple",
-                    "printedName": "(key: τ_0_0, value: τ_0_1)",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "GenericTypeParam",
-                        "printedName": "τ_0_0"
-                      },
-                      {
-                        "kind": "TypeNominal",
-                        "name": "GenericTypeParam",
-                        "printedName": "τ_0_1"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Index",
-                "printedName": "Index",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Index",
-                    "printedName": "Swift.Dictionary<τ_0_0, τ_0_1>.Index",
-                    "usr": "s:SD5IndexV"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Iterator",
-                "printedName": "Iterator",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Iterator",
-                    "printedName": "Swift.Dictionary<τ_0_0, τ_0_1>.Iterator",
-                    "usr": "s:SD8IteratorV"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "SubSequence",
-                "printedName": "SubSequence",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Slice",
-                    "printedName": "Swift.Slice<[τ_0_0 : τ_0_1]>",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Dictionary",
-                        "printedName": "[τ_0_0 : τ_0_1]",
-                        "children": [
-                          {
-                            "kind": "TypeNominal",
-                            "name": "GenericTypeParam",
-                            "printedName": "τ_0_0"
-                          },
-                          {
-                            "kind": "TypeNominal",
-                            "name": "GenericTypeParam",
-                            "printedName": "τ_0_1"
-                          }
-                        ],
-                        "usr": "s:SD"
-                      }
-                    ],
-                    "usr": "s:s5SliceV"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Indices",
-                "printedName": "Indices",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "DefaultIndices",
-                    "printedName": "Swift.DefaultIndices<[τ_0_0 : τ_0_1]>",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Dictionary",
-                        "printedName": "[τ_0_0 : τ_0_1]",
-                        "children": [
-                          {
-                            "kind": "TypeNominal",
-                            "name": "GenericTypeParam",
-                            "printedName": "τ_0_0"
-                          },
-                          {
-                            "kind": "TypeNominal",
-                            "name": "GenericTypeParam",
-                            "printedName": "τ_0_1"
-                          }
-                        ],
-                        "usr": "s:SD"
-                      }
-                    ],
-                    "usr": "s:SI"
-                  }
-                ]
-              }
-            ],
-            "usr": "s:Sl",
-            "mangledName": "$sSl"
-          },
-          {
-            "kind": "Conformance",
-            "name": "ExpressibleByDictionaryLiteral",
-            "printedName": "ExpressibleByDictionaryLiteral",
-            "children": [
-              {
-                "kind": "TypeWitness",
-                "name": "Key",
-                "printedName": "Key",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "GenericTypeParam",
-                    "printedName": "τ_0_0"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Value",
-                "printedName": "Value",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "GenericTypeParam",
-                    "printedName": "τ_0_1"
-                  }
-                ]
-              }
-            ],
-            "usr": "s:s30ExpressibleByDictionaryLiteralP",
-            "mangledName": "$ss30ExpressibleByDictionaryLiteralP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Hashable",
-            "printedName": "Hashable",
-            "usr": "s:SH",
-            "mangledName": "$sSH"
-          },
-          {
-            "kind": "Conformance",
-            "name": "_HasCustomAnyHashableRepresentation",
-            "printedName": "_HasCustomAnyHashableRepresentation",
-            "usr": "s:s35_HasCustomAnyHashableRepresentationP",
-            "mangledName": "$ss35_HasCustomAnyHashableRepresentationP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "CustomStringConvertible",
-            "printedName": "CustomStringConvertible",
-            "usr": "s:s23CustomStringConvertibleP",
-            "mangledName": "$ss23CustomStringConvertibleP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "CustomDebugStringConvertible",
-            "printedName": "CustomDebugStringConvertible",
-            "usr": "s:s28CustomDebugStringConvertibleP",
-            "mangledName": "$ss28CustomDebugStringConvertibleP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "CustomReflectable",
-            "printedName": "CustomReflectable",
-            "usr": "s:s17CustomReflectableP",
-            "mangledName": "$ss17CustomReflectableP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Sendable",
-            "printedName": "Sendable",
-            "usr": "s:s8SendableP",
-            "mangledName": "$ss8SendableP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "_ObjectiveCBridgeable",
-            "printedName": "_ObjectiveCBridgeable",
-            "children": [
-              {
-                "kind": "TypeWitness",
-                "name": "_ObjectiveCType",
-                "printedName": "_ObjectiveCType",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "NSDictionary",
-                    "printedName": "Foundation.NSDictionary",
-                    "usr": "c:objc(cs)NSDictionary"
-                  }
-                ]
-              }
-            ],
-            "usr": "s:s21_ObjectiveCBridgeableP",
-            "mangledName": "$ss21_ObjectiveCBridgeableP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "CVarArg",
-            "printedName": "CVarArg",
-            "usr": "s:s7CVarArgP",
-            "mangledName": "$ss7CVarArgP"
-          }
-        ]
-      },
-      {
-        "kind": "TypeDecl",
         "name": "UIApplication",
         "printedName": "UIApplication",
         "declKind": "Class",
@@ -66445,51 +66613,6 @@
                 "declKind": "Accessor",
                 "usr": "s:So7UIColorC10KingfisherE15rgbaDescriptionSSvg",
                 "mangledName": "$sSo7UIColorC10KingfisherE15rgbaDescriptionSSvg",
-                "moduleName": "Kingfisher",
-                "isOpen": true,
-                "isFromExtension": true,
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "hex",
-            "printedName": "hex",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:So7UIColorC10KingfisherE3hexSSvp",
-            "mangledName": "$sSo7UIColorC10KingfisherE3hexSSvp",
-            "moduleName": "Kingfisher",
-            "deprecated": true,
-            "isOpen": true,
-            "declAttributes": [
-              "Available"
-            ],
-            "isFromExtension": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:So7UIColorC10KingfisherE3hexSSvg",
-                "mangledName": "$sSo7UIColorC10KingfisherE3hexSSvg",
                 "moduleName": "Kingfisher",
                 "isOpen": true,
                 "isFromExtension": true,
@@ -68419,172 +68542,6 @@
             ],
             "isFromExtension": true,
             "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "matchSuccess",
-            "printedName": "matchSuccess(with:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "GenericTypeParam",
-                "printedName": "τ_1_0"
-              },
-              {
-                "kind": "TypeFunc",
-                "name": "Function",
-                "printedName": "(τ_0_0?) -> τ_1_0",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "GenericTypeParam",
-                    "printedName": "τ_1_0"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Optional",
-                    "printedName": "τ_0_0?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "GenericTypeParam",
-                        "printedName": "τ_0_0"
-                      }
-                    ],
-                    "usr": "s:Sq"
-                  }
-                ],
-                "typeAttributes": [
-                  "noescape"
-                ]
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:s6ResultO10KingfisherE12matchSuccess4withqd__qd__xSgXE_tlF",
-            "mangledName": "$ss6ResultO10KingfisherE12matchSuccess4withqd__qd__xSgXE_tlF",
-            "moduleName": "Kingfisher",
-            "genericSig": "<τ_0_0, τ_0_1, τ_1_0 where τ_0_1 : Swift.Error>",
-            "sugared_genericSig": "<Success, Failure, Output where Failure : Swift.Error>",
-            "isFromExtension": true,
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "matchFailure",
-            "printedName": "matchFailure(with:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "GenericTypeParam",
-                "printedName": "τ_1_0"
-              },
-              {
-                "kind": "TypeFunc",
-                "name": "Function",
-                "printedName": "(Swift.Error?) -> τ_1_0",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "GenericTypeParam",
-                    "printedName": "τ_1_0"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Optional",
-                    "printedName": "Swift.Error?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Error",
-                        "printedName": "Swift.Error",
-                        "usr": "s:s5ErrorP"
-                      }
-                    ],
-                    "usr": "s:Sq"
-                  }
-                ],
-                "typeAttributes": [
-                  "noescape"
-                ]
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:s6ResultO10KingfisherE12matchFailure4withqd__qd__s5Error_pSgXE_tlF",
-            "mangledName": "$ss6ResultO10KingfisherE12matchFailure4withqd__qd__s5Error_pSgXE_tlF",
-            "moduleName": "Kingfisher",
-            "genericSig": "<τ_0_0, τ_0_1, τ_1_0 where τ_0_1 : Swift.Error>",
-            "sugared_genericSig": "<Success, Failure, Output where Failure : Swift.Error>",
-            "isFromExtension": true,
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "match",
-            "printedName": "match(with:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "GenericTypeParam",
-                "printedName": "τ_1_0"
-              },
-              {
-                "kind": "TypeFunc",
-                "name": "Function",
-                "printedName": "(τ_0_0?, Swift.Error?) -> τ_1_0",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "GenericTypeParam",
-                    "printedName": "τ_1_0"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Tuple",
-                    "printedName": "(τ_0_0?, Swift.Error?)",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Optional",
-                        "printedName": "τ_0_0?",
-                        "children": [
-                          {
-                            "kind": "TypeNominal",
-                            "name": "GenericTypeParam",
-                            "printedName": "τ_0_0"
-                          }
-                        ],
-                        "usr": "s:Sq"
-                      },
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Optional",
-                        "printedName": "Swift.Error?",
-                        "children": [
-                          {
-                            "kind": "TypeNominal",
-                            "name": "Error",
-                            "printedName": "Swift.Error",
-                            "usr": "s:s5ErrorP"
-                          }
-                        ],
-                        "usr": "s:Sq"
-                      }
-                    ]
-                  }
-                ],
-                "typeAttributes": [
-                  "noescape"
-                ]
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:s6ResultO10KingfisherE5match4withqd__qd__xSg_s5Error_pSgtXE_tlF",
-            "mangledName": "$ss6ResultO10KingfisherE5match4withqd__qd__xSg_s5Error_pSgtXE_tlF",
-            "moduleName": "Kingfisher",
-            "genericSig": "<τ_0_0, τ_0_1, τ_1_0 where τ_0_1 : Swift.Error>",
-            "sugared_genericSig": "<Success, Failure, Output where Failure : Swift.Error>",
-            "isFromExtension": true,
-            "funcSelfKind": "NonMutating"
           }
         ],
         "declKind": "Enum",
@@ -69402,449 +69359,6 @@
             "mangledName": "$s7SwiftUI18_FormatSpecifiableP"
           }
         ]
-      },
-      {
-        "kind": "TypeDecl",
-        "name": "NSMutableData",
-        "printedName": "NSMutableData",
-        "children": [
-          {
-            "kind": "Function",
-            "name": "appendBytes",
-            "printedName": "appendBytes(_:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Array",
-                "printedName": "[Swift.UInt8]",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UInt8",
-                    "printedName": "Swift.UInt8",
-                    "usr": "s:s5UInt8V"
-                  }
-                ],
-                "usr": "s:Sa"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:So13NSMutableDataC10KingfisherE11appendBytesyySays5UInt8VGF",
-            "mangledName": "$sSo13NSMutableDataC10KingfisherE11appendBytesyySays5UInt8VGF",
-            "moduleName": "Kingfisher",
-            "isOpen": true,
-            "declAttributes": [
-              "RawDocComment"
-            ],
-            "isFromExtension": true,
-            "funcSelfKind": "NonMutating"
-          }
-        ],
-        "declKind": "Class",
-        "usr": "c:objc(cs)NSMutableData",
-        "moduleName": "Foundation",
-        "isOpen": true,
-        "objc_name": "NSMutableData",
-        "declAttributes": [
-          "ObjC",
-          "NonSendable",
-          "Dynamic"
-        ],
-        "superclassUsr": "c:objc(cs)NSData",
-        "isExternal": true,
-        "inheritsConvenienceInitializers": true,
-        "superclassNames": [
-          "Foundation.NSData",
-          "ObjectiveC.NSObject"
-        ],
-        "conformances": [
-          {
-            "kind": "Conformance",
-            "name": "Equatable",
-            "printedName": "Equatable",
-            "usr": "s:SQ",
-            "mangledName": "$sSQ"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Hashable",
-            "printedName": "Hashable",
-            "usr": "s:SH",
-            "mangledName": "$sSH"
-          },
-          {
-            "kind": "Conformance",
-            "name": "CVarArg",
-            "printedName": "CVarArg",
-            "usr": "s:s7CVarArgP",
-            "mangledName": "$ss7CVarArgP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "_KeyValueCodingAndObservingPublishing",
-            "printedName": "_KeyValueCodingAndObservingPublishing",
-            "usr": "s:10Foundation37_KeyValueCodingAndObservingPublishingP",
-            "mangledName": "$s10Foundation37_KeyValueCodingAndObservingPublishingP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "_KeyValueCodingAndObserving",
-            "printedName": "_KeyValueCodingAndObserving",
-            "usr": "s:10Foundation27_KeyValueCodingAndObservingP",
-            "mangledName": "$s10Foundation27_KeyValueCodingAndObservingP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "CustomStringConvertible",
-            "printedName": "CustomStringConvertible",
-            "usr": "s:s23CustomStringConvertibleP",
-            "mangledName": "$ss23CustomStringConvertibleP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "CustomDebugStringConvertible",
-            "printedName": "CustomDebugStringConvertible",
-            "usr": "s:s28CustomDebugStringConvertibleP",
-            "mangledName": "$ss28CustomDebugStringConvertibleP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "DataProtocol",
-            "printedName": "DataProtocol",
-            "children": [
-              {
-                "kind": "TypeWitness",
-                "name": "Regions",
-                "printedName": "Regions",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Array",
-                    "printedName": "[Foundation.Data]",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Data",
-                        "printedName": "Foundation.Data",
-                        "usr": "s:10Foundation4DataV"
-                      }
-                    ],
-                    "usr": "s:Sa"
-                  }
-                ]
-              }
-            ],
-            "usr": "s:10Foundation12DataProtocolP",
-            "mangledName": "$s10Foundation12DataProtocolP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "RandomAccessCollection",
-            "printedName": "RandomAccessCollection",
-            "children": [
-              {
-                "kind": "TypeWitness",
-                "name": "Element",
-                "printedName": "Element",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UInt8",
-                    "printedName": "Swift.UInt8",
-                    "usr": "s:s5UInt8V"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Index",
-                "printedName": "Index",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Int",
-                    "printedName": "Swift.Int",
-                    "usr": "s:Si"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "SubSequence",
-                "printedName": "SubSequence",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Slice",
-                    "printedName": "Swift.Slice<Foundation.NSData>",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "NSData",
-                        "printedName": "Foundation.NSData",
-                        "usr": "c:objc(cs)NSData"
-                      }
-                    ],
-                    "usr": "s:s5SliceV"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Indices",
-                "printedName": "Indices",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Range",
-                    "printedName": "Swift.Range<Swift.Int>",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Int",
-                        "printedName": "Swift.Int",
-                        "usr": "s:Si"
-                      }
-                    ],
-                    "usr": "s:Sn"
-                  }
-                ]
-              }
-            ],
-            "usr": "s:Sk",
-            "mangledName": "$sSk"
-          },
-          {
-            "kind": "Conformance",
-            "name": "BidirectionalCollection",
-            "printedName": "BidirectionalCollection",
-            "children": [
-              {
-                "kind": "TypeWitness",
-                "name": "Element",
-                "printedName": "Element",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UInt8",
-                    "printedName": "Swift.UInt8",
-                    "usr": "s:s5UInt8V"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Index",
-                "printedName": "Index",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Int",
-                    "printedName": "Swift.Int",
-                    "usr": "s:Si"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "SubSequence",
-                "printedName": "SubSequence",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Slice",
-                    "printedName": "Swift.Slice<Foundation.NSData>",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "NSData",
-                        "printedName": "Foundation.NSData",
-                        "usr": "c:objc(cs)NSData"
-                      }
-                    ],
-                    "usr": "s:s5SliceV"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Indices",
-                "printedName": "Indices",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Range",
-                    "printedName": "Swift.Range<Swift.Int>",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Int",
-                        "printedName": "Swift.Int",
-                        "usr": "s:Si"
-                      }
-                    ],
-                    "usr": "s:Sn"
-                  }
-                ]
-              }
-            ],
-            "usr": "s:SK",
-            "mangledName": "$sSK"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Collection",
-            "printedName": "Collection",
-            "children": [
-              {
-                "kind": "TypeWitness",
-                "name": "Element",
-                "printedName": "Element",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UInt8",
-                    "printedName": "Swift.UInt8",
-                    "usr": "s:s5UInt8V"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Index",
-                "printedName": "Index",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Int",
-                    "printedName": "Swift.Int",
-                    "usr": "s:Si"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Iterator",
-                "printedName": "Iterator",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "IndexingIterator",
-                    "printedName": "Swift.IndexingIterator<Foundation.NSData>",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "NSData",
-                        "printedName": "Foundation.NSData",
-                        "usr": "c:objc(cs)NSData"
-                      }
-                    ],
-                    "usr": "s:s16IndexingIteratorV"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "SubSequence",
-                "printedName": "SubSequence",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Slice",
-                    "printedName": "Swift.Slice<Foundation.NSData>",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "NSData",
-                        "printedName": "Foundation.NSData",
-                        "usr": "c:objc(cs)NSData"
-                      }
-                    ],
-                    "usr": "s:s5SliceV"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Indices",
-                "printedName": "Indices",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Range",
-                    "printedName": "Swift.Range<Swift.Int>",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Int",
-                        "printedName": "Swift.Int",
-                        "usr": "s:Si"
-                      }
-                    ],
-                    "usr": "s:Sn"
-                  }
-                ]
-              }
-            ],
-            "usr": "s:Sl",
-            "mangledName": "$sSl"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Sequence",
-            "printedName": "Sequence",
-            "children": [
-              {
-                "kind": "TypeWitness",
-                "name": "Element",
-                "printedName": "Element",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UInt8",
-                    "printedName": "Swift.UInt8",
-                    "usr": "s:s5UInt8V"
-                  }
-                ]
-              },
-              {
-                "kind": "TypeWitness",
-                "name": "Iterator",
-                "printedName": "Iterator",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "IndexingIterator",
-                    "printedName": "Swift.IndexingIterator<Foundation.NSData>",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "NSData",
-                        "printedName": "Foundation.NSData",
-                        "usr": "c:objc(cs)NSData"
-                      }
-                    ],
-                    "usr": "s:s16IndexingIteratorV"
-                  }
-                ]
-              }
-            ],
-            "usr": "s:ST",
-            "mangledName": "$sST"
-          },
-          {
-            "kind": "Conformance",
-            "name": "_HasCustomAnyHashableRepresentation",
-            "printedName": "_HasCustomAnyHashableRepresentation",
-            "usr": "s:s35_HasCustomAnyHashableRepresentationP",
-            "mangledName": "$ss35_HasCustomAnyHashableRepresentationP"
-          }
-        ]
       }
     ],
     "json_format_version": 8
@@ -69986,28 +69500,28 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Views\/AnimatedImageView.swift",
       "kind": "IntegerLiteral",
-      "offset": 21759,
+      "offset": 23145,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Views\/AnimatedImageView.swift",
       "kind": "Array",
-      "offset": 22323,
+      "offset": 23709,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Cache\/CacheSerializer.swift",
       "kind": "FloatLiteral",
-      "offset": 3111,
+      "offset": 3582,
       "length": 3,
       "value": "1.0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Cache\/CacheSerializer.swift",
       "kind": "BooleanLiteral",
-      "offset": 3429,
+      "offset": 3900,
       "length": 5,
       "value": "false"
     },
@@ -70056,7 +69570,7 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Cache\/DiskStorage.swift",
       "kind": "BooleanLiteral",
-      "offset": 19633,
+      "offset": 19718,
       "length": 4,
       "value": "true"
     },
@@ -70140,7 +69654,14 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/SwiftUI\/ImageBinder.swift",
       "kind": "BooleanLiteral",
-      "offset": 1980,
+      "offset": 1993,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/SwiftUI\/ImageBinder.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2037,
       "length": 5,
       "value": "false"
     },
@@ -70245,7 +69766,14 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/SwiftUI\/ImageContext.swift",
       "kind": "BooleanLiteral",
-      "offset": 1805,
+      "offset": 1873,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/SwiftUI\/ImageContext.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2196,
       "length": 5,
       "value": "false"
     },
@@ -70469,49 +69997,49 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Image\/ImageProgressive.swift",
       "kind": "BooleanLiteral",
-      "offset": 1668,
+      "offset": 2536,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Image\/ImageProgressive.swift",
       "kind": "BooleanLiteral",
-      "offset": 1697,
+      "offset": 2565,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Image\/ImageProgressive.swift",
       "kind": "IntegerLiteral",
-      "offset": 1725,
+      "offset": 2593,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Image\/ImageProgressive.swift",
       "kind": "BooleanLiteral",
-      "offset": 2409,
+      "offset": 4159,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Image\/ImageProgressive.swift",
       "kind": "IntegerLiteral",
-      "offset": 4807,
+      "offset": 6557,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Image\/ImageProgressive.swift",
       "kind": "IntegerLiteral",
-      "offset": 4845,
+      "offset": 6595,
       "length": 2,
       "value": "1"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Image\/ImageProgressive.swift",
       "kind": "Array",
-      "offset": 9284,
+      "offset": 11034,
       "length": 2,
       "value": "[]"
     },
@@ -70539,7 +70067,7 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/General\/KF.swift",
       "kind": "BooleanLiteral",
-      "offset": 18087,
+      "offset": 18086,
       "length": 4,
       "value": "true"
     },
@@ -70547,6 +70075,13 @@
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/SwiftUI\/KFImage.swift",
       "kind": "BooleanLiteral",
       "offset": 3520,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/SwiftUI\/KFImageOptions.swift",
+      "kind": "BooleanLiteral",
+      "offset": 6835,
       "length": 4,
       "value": "true"
     },
@@ -70623,7 +70158,14 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/General\/KFOptionsSetter.swift",
       "kind": "FloatLiteral",
-      "offset": 25198,
+      "offset": 25190,
+      "length": 3,
+      "value": "0.5"
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/General\/KFOptionsSetter.swift",
+      "kind": "FloatLiteral",
+      "offset": 26449,
       "length": 3,
       "value": "0.5"
     },
@@ -70631,13 +70173,6 @@
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/General\/KFOptionsSetter.swift",
       "kind": "FloatLiteral",
       "offset": 26457,
-      "length": 3,
-      "value": "0.5"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/General\/KFOptionsSetter.swift",
-      "kind": "FloatLiteral",
-      "offset": 26465,
       "length": 3,
       "value": "0.5"
     },
@@ -70651,7 +70186,7 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/General\/KingfisherManager.swift",
       "kind": "Array",
-      "offset": 30443,
+      "offset": 33421,
       "length": 2,
       "value": "[]"
     },
@@ -70777,28 +70312,28 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Cache\/MemoryStorage.swift",
       "kind": "IntegerLiteral",
-      "offset": 8769,
+      "offset": 8734,
       "length": 3,
       "value": "300"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Cache\/MemoryStorage.swift",
       "kind": "BooleanLiteral",
-      "offset": 9649,
+      "offset": 9614,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Cache\/MemoryStorage.swift",
       "kind": "IntegerLiteral",
-      "offset": 10244,
+      "offset": 10209,
       "length": 3,
       "value": "120"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Cache\/MemoryStorage.swift",
       "kind": "BooleanLiteral",
-      "offset": 10507,
+      "offset": 10472,
       "length": 4,
       "value": "true"
     },
@@ -70847,63 +70382,35 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Cache\/Storage.swift",
       "kind": "IntegerLiteral",
-      "offset": 1340,
-      "length": 2,
-      "value": "60"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Cache\/Storage.swift",
-      "kind": "IntegerLiteral",
-      "offset": 1377,
-      "length": 2,
-      "value": "60"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Cache\/Storage.swift",
-      "kind": "IntegerLiteral",
-      "offset": 1411,
-      "length": 2,
-      "value": "24"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Cache\/Storage.swift",
-      "kind": "IntegerLiteral",
-      "offset": 1447,
+      "offset": 1337,
       "length": 6,
       "value": "86400"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Utility\/String+MD5.swift",
       "kind": "IntegerLiteral",
-      "offset": 4807,
+      "offset": 4627,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Utility\/String+MD5.swift",
-      "kind": "IntegerLiteral",
-      "offset": 5421,
-      "length": 2,
-      "value": "16"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Utility\/String+MD5.swift",
       "kind": "Array",
-      "offset": 5611,
+      "offset": 5395,
       "length": 344,
       "value": "[7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21]"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Utility\/String+MD5.swift",
       "kind": "Array",
-      "offset": 6053,
+      "offset": 5837,
       "length": 1292,
       "value": "[0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501, 0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be, 0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821, 0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa, 0xd62f105d, 0x02441453, 0xd8a1e681, 0xe7d3fbc8, 0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed, 0xa9e3e905, 0xfcefa3f8, 0x676f02d9, 0x8d2a4c8a, 0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c, 0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70, 0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x4881d05, 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665, 0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1, 0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1, 0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391]"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/Pods\/Kingfisher\/Sources\/Utility\/String+MD5.swift",
       "kind": "Array",
-      "offset": 7382,
+      "offset": 7166,
       "length": 48,
       "value": "[0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]"
     }
