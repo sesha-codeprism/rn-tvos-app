@@ -112,8 +112,38 @@
 		6CE37960294D49DF965B9FB6 /* space.svg in Resources */ = {isa = PBXBuildFile; fileRef = ADE603BAB892478299C3CB58 /* space.svg */; };
 		7550FAE82B874BF5AE1F8584 /* profile_pic_8.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0E26AB68BF47DAA75043FB /* profile_pic_8.png */; };
 		7C2FA9082B8B4E588768D17F /* unchecked_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 40409ED1952643D88DC9B839 /* unchecked_circle.png */; };
-		7D29FD6929F7A32700178267 /* MKPlayer in Resources */ = {isa = PBXBuildFile; fileRef = 7D29FD6829F7A32600178267 /* MKPlayer */; };
-		7D29FD6A29F7A32700178267 /* MKPlayer in Resources */ = {isa = PBXBuildFile; fileRef = 7D29FD6829F7A32600178267 /* MKPlayer */; };
+		7D29FD7E29F7AAE800178267 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6D29F7AAE700178267 /* Date.swift */; };
+		7D29FD7F29F7AAE800178267 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6D29F7AAE700178267 /* Date.swift */; };
+		7D29FD8029F7AAE800178267 /* DraggableProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6E29F7AAE700178267 /* DraggableProgressView.swift */; };
+		7D29FD8129F7AAE800178267 /* DraggableProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6E29F7AAE700178267 /* DraggableProgressView.swift */; };
+		7D29FD8229F7AAE800178267 /* AppDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6F29F7AAE700178267 /* AppDataModels.swift */; };
+		7D29FD8329F7AAE800178267 /* AppDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6F29F7AAE700178267 /* AppDataModels.swift */; };
+		7D29FD8429F7AAE800178267 /* MKPlayer in Resources */ = {isa = PBXBuildFile; fileRef = 7D29FD7029F7AAE700178267 /* MKPlayer */; };
+		7D29FD8529F7AAE800178267 /* MKPlayer in Resources */ = {isa = PBXBuildFile; fileRef = 7D29FD7029F7AAE700178267 /* MKPlayer */; };
+		7D29FD8629F7AAE800178267 /* CurrentPositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7129F7AAE700178267 /* CurrentPositionView.swift */; };
+		7D29FD8729F7AAE800178267 /* CurrentPositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7129F7AAE700178267 /* CurrentPositionView.swift */; };
+		7D29FD8829F7AAE800178267 /* MKPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7229F7AAE700178267 /* MKPlayerView.swift */; };
+		7D29FD8929F7AAE800178267 /* MKPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7229F7AAE700178267 /* MKPlayerView.swift */; };
+		7D29FD8A29F7AAE800178267 /* Player.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D29FD7329F7AAE700178267 /* Player.storyboard */; };
+		7D29FD8B29F7AAE800178267 /* Player.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D29FD7329F7AAE700178267 /* Player.storyboard */; };
+		7D29FD8C29F7AAE800178267 /* MKPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7529F7AAE800178267 /* MKPlayerView.m */; };
+		7D29FD8D29F7AAE800178267 /* MKPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7529F7AAE800178267 /* MKPlayerView.m */; };
+		7D29FD8E29F7AAE800178267 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7629F7AAE800178267 /* PlayerView.swift */; };
+		7D29FD8F29F7AAE800178267 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7629F7AAE800178267 /* PlayerView.swift */; };
+		7D29FD9029F7AAE800178267 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7729F7AAE800178267 /* Constant.swift */; };
+		7D29FD9129F7AAE800178267 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7729F7AAE800178267 /* Constant.swift */; };
+		7D29FD9229F7AAE800178267 /* AppDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7829F7AAE800178267 /* AppDataManager.swift */; };
+		7D29FD9329F7AAE800178267 /* AppDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7829F7AAE800178267 /* AppDataManager.swift */; };
+		7D29FD9429F7AAE800178267 /* SubTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7929F7AAE800178267 /* SubTitleCell.swift */; };
+		7D29FD9529F7AAE800178267 /* SubTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7929F7AAE800178267 /* SubTitleCell.swift */; };
+		7D29FD9629F7AAE800178267 /* UIViewcontroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7A29F7AAE800178267 /* UIViewcontroller.swift */; };
+		7D29FD9729F7AAE800178267 /* UIViewcontroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7A29F7AAE800178267 /* UIViewcontroller.swift */; };
+		7D29FD9829F7AAE800178267 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7B29F7AAE800178267 /* PlayerViewController.swift */; };
+		7D29FD9929F7AAE800178267 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7B29F7AAE800178267 /* PlayerViewController.swift */; };
+		7D29FD9A29F7AAE800178267 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7C29F7AAE800178267 /* String.swift */; };
+		7D29FD9B29F7AAE800178267 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7C29F7AAE800178267 /* String.swift */; };
+		7D29FD9C29F7AAE800178267 /* MKPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7D29F7AAE800178267 /* MKPlayerManager.swift */; };
+		7D29FD9D29F7AAE800178267 /* MKPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7D29F7AAE800178267 /* MKPlayerManager.swift */; };
 		8147B2FA273DF77B00A45F38 /* NativeText.m in Sources */ = {isa = PBXBuildFile; fileRef = 8147B2F9273DF77B00A45F38 /* NativeText.m */; };
 		8147B2FB273DF77B00A45F38 /* NativeText.m in Sources */ = {isa = PBXBuildFile; fileRef = 8147B2F9273DF77B00A45F38 /* NativeText.m */; };
 		8147B2FC273DF77B00A45F38 /* NativeText.m in Sources */ = {isa = PBXBuildFile; fileRef = 8147B2F9273DF77B00A45F38 /* NativeText.m */; };
@@ -320,7 +350,23 @@
 		7AA8E905BB5C42BB889A5A83 /* bg_placeholder.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = bg_placeholder.png; path = ../src/assets/images/bg_placeholder.png; sourceTree = "<group>"; };
 		7B9DAB63B6273FB87ED198A6 /* Pods-RetailClient-tvOS_Player.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetailClient-tvOS_Player.release.xcconfig"; path = "Target Support Files/Pods-RetailClient-tvOS_Player/Pods-RetailClient-tvOS_Player.release.xcconfig"; sourceTree = "<group>"; };
 		7BC0532DA00B40BD94D54E3E /* edit.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = edit.png; path = ../src/assets/images/edit.png; sourceTree = "<group>"; };
-		7D29FD6829F7A32600178267 /* MKPlayer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MKPlayer; sourceTree = "<group>"; };
+		7D29FD6D29F7AAE700178267 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Date.swift; path = MKPlayer/Extensions/Date.swift; sourceTree = "<group>"; };
+		7D29FD6E29F7AAE700178267 /* DraggableProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DraggableProgressView.swift; path = MKPlayer/Views/DraggableProgressView.swift; sourceTree = "<group>"; };
+		7D29FD6F29F7AAE700178267 /* AppDataModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDataModels.swift; path = MKPlayer/Models/AppDataModels.swift; sourceTree = "<group>"; };
+		7D29FD7029F7AAE700178267 /* MKPlayer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MKPlayer; sourceTree = "<group>"; };
+		7D29FD7129F7AAE700178267 /* CurrentPositionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CurrentPositionView.swift; path = MKPlayer/Views/CurrentPositionView.swift; sourceTree = "<group>"; };
+		7D29FD7229F7AAE700178267 /* MKPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MKPlayerView.swift; path = MKPlayer/MKPlayerView.swift; sourceTree = "<group>"; };
+		7D29FD7329F7AAE700178267 /* Player.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Player.storyboard; path = MKPlayer/Views/Player.storyboard; sourceTree = "<group>"; };
+		7D29FD7429F7AAE800178267 /* MKPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MKPlayerView.h; path = MKPlayer/MKPlayerView.h; sourceTree = "<group>"; };
+		7D29FD7529F7AAE800178267 /* MKPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MKPlayerView.m; path = MKPlayer/MKPlayerView.m; sourceTree = "<group>"; };
+		7D29FD7629F7AAE800178267 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerView.swift; path = MKPlayer/Views/PlayerView.swift; sourceTree = "<group>"; };
+		7D29FD7729F7AAE800178267 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constant.swift; path = MKPlayer/common/Constant.swift; sourceTree = "<group>"; };
+		7D29FD7829F7AAE800178267 /* AppDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDataManager.swift; path = MKPlayer/Models/AppDataManager.swift; sourceTree = "<group>"; };
+		7D29FD7929F7AAE800178267 /* SubTitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubTitleCell.swift; path = MKPlayer/Views/SubTitleCell.swift; sourceTree = "<group>"; };
+		7D29FD7A29F7AAE800178267 /* UIViewcontroller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewcontroller.swift; path = MKPlayer/Extensions/UIViewcontroller.swift; sourceTree = "<group>"; };
+		7D29FD7B29F7AAE800178267 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerViewController.swift; path = MKPlayer/ViewControllers/PlayerViewController.swift; sourceTree = "<group>"; };
+		7D29FD7C29F7AAE800178267 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = String.swift; path = MKPlayer/Extensions/String.swift; sourceTree = "<group>"; };
+		7D29FD7D29F7AAE800178267 /* MKPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MKPlayerManager.swift; path = MKPlayer/MKPlayerManager.swift; sourceTree = "<group>"; };
 		8147B2F8273DF77B00A45F38 /* NativeText.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NativeText.h; sourceTree = "<group>"; };
 		8147B2F9273DF77B00A45F38 /* NativeText.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NativeText.m; sourceTree = "<group>"; };
 		8168723A273073D200960AFF /* MKGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKGuide.swift; sourceTree = "<group>"; };
@@ -477,7 +523,7 @@
 		13B07FAE1A68108700A75B9A /* RetailClient */ = {
 			isa = PBXGroup;
 			children = (
-				7D29FD6829F7A32600178267 /* MKPlayer */,
+				7D29FD6C29F7AAA200178267 /* MKPlayer */,
 				BCC177A32965B46C00B9752A /* GuideComponent */,
 				59C74688294A45BA009D2E1D /* RCTSearchViewTVOS.h */,
 				59C7468B294A45BB009D2E1D /* RCTSearchViewTVOS.m */,
@@ -600,6 +646,30 @@
 				4054B205DBE54CD1A132D2DD /* ViewMore.png */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		7D29FD6C29F7AAA200178267 /* MKPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				7D29FD7829F7AAE800178267 /* AppDataManager.swift */,
+				7D29FD6F29F7AAE700178267 /* AppDataModels.swift */,
+				7D29FD7729F7AAE800178267 /* Constant.swift */,
+				7D29FD7129F7AAE700178267 /* CurrentPositionView.swift */,
+				7D29FD6D29F7AAE700178267 /* Date.swift */,
+				7D29FD6E29F7AAE700178267 /* DraggableProgressView.swift */,
+				7D29FD7029F7AAE700178267 /* MKPlayer */,
+				7D29FD7D29F7AAE800178267 /* MKPlayerManager.swift */,
+				7D29FD7429F7AAE800178267 /* MKPlayerView.h */,
+				7D29FD7529F7AAE800178267 /* MKPlayerView.m */,
+				7D29FD7229F7AAE700178267 /* MKPlayerView.swift */,
+				7D29FD7329F7AAE700178267 /* Player.storyboard */,
+				7D29FD7629F7AAE800178267 /* PlayerView.swift */,
+				7D29FD7B29F7AAE800178267 /* PlayerViewController.swift */,
+				7D29FD7C29F7AAE800178267 /* String.swift */,
+				7D29FD7929F7AAE800178267 /* SubTitleCell.swift */,
+				7D29FD7A29F7AAE800178267 /* UIViewcontroller.swift */,
+			);
+			name = MKPlayer;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -947,10 +1017,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				008B0289271EF933009DED3B /* MKFullGuide in Resources */,
-				7D29FD6929F7A32700178267 /* MKPlayer in Resources */,
+				7D29FD8429F7AAE800178267 /* MKPlayer in Resources */,
 				59A99AAC2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */,
 				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
 				59A99AB82853229B00560F39 /* Inter-Bold.ttf in Resources */,
+				7D29FD8A29F7AAE800178267 /* Player.storyboard in Resources */,
 				59A99ABC2853229B00560F39 /* Inter-Medium.ttf in Resources */,
 				59A99AA82853229B00560F39 /* Inter-Thin.ttf in Resources */,
 				591E32CD295793F400D60141 /* Mediakind-Icons.otf in Resources */,
@@ -986,10 +1057,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				594E610C2977FEA9004C1D05 /* Mediakind-Icons.otf in Resources */,
-				7D29FD6A29F7A32700178267 /* MKPlayer in Resources */,
+				7D29FD8529F7AAE800178267 /* MKPlayer in Resources */,
 				BCF149BF2962F04100F6271C /* MKFullGuide in Resources */,
 				BCF149C02962F04100F6271C /* Inter-ExtraLight.ttf in Resources */,
 				BCF149C12962F04100F6271C /* Images.xcassets in Resources */,
+				7D29FD8B29F7AAE800178267 /* Player.storyboard in Resources */,
 				BCF149C22962F04100F6271C /* Inter-Bold.ttf in Resources */,
 				BCF149C32962F04100F6271C /* Inter-Medium.ttf in Resources */,
 				BCF149C42962F04100F6271C /* Inter-Thin.ttf in Resources */,
@@ -1340,19 +1412,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				59C74696294A45BB009D2E1D /* RCTSearchViewTVOS.m in Sources */,
+				7D29FD9629F7AAE800178267 /* UIViewcontroller.swift in Sources */,
+				7D29FD9429F7AAE800178267 /* SubTitleCell.swift in Sources */,
+				7D29FD9A29F7AAE800178267 /* String.swift in Sources */,
+				7D29FD7E29F7AAE800178267 /* Date.swift in Sources */,
 				8168724427307BAC00960AFF /* MKGuide.h in Sources */,
 				8168724527307BAC00960AFF /* MKGuide.swift in Sources */,
 				009FA7412738F53600417869 /* ContentView.swift in Sources */,
+				7D29FD9C29F7AAE800178267 /* MKPlayerManager.swift in Sources */,
+				7D29FD9829F7AAE800178267 /* PlayerViewController.swift in Sources */,
+				7D29FD8C29F7AAE800178267 /* MKPlayerView.m in Sources */,
+				7D29FD8629F7AAE800178267 /* CurrentPositionView.swift in Sources */,
 				0035DCA5276BB1A600360F43 /* SampleViewController.swift in Sources */,
 				59C7468E294A45BB009D2E1D /* RCTSearchViewTVOSManager.m in Sources */,
+				7D29FD8E29F7AAE800178267 /* PlayerView.swift in Sources */,
+				7D29FD8829F7AAE800178267 /* MKPlayerView.swift in Sources */,
 				59C74692294A45BB009D2E1D /* SearchRestultsViewTVOSController.m in Sources */,
+				7D29FD8229F7AAE800178267 /* AppDataModels.swift in Sources */,
 				8168724327307B9F00960AFF /* MKGuideManager.swift in Sources */,
 				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
 				0F6088C02720633E0052254E /* MKGuide.m in Sources */,
 				BCC177A52965B4BF00B9752A /* MKGuideBridgeManager.m in Sources */,
 				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
 				8147B2FC273DF77B00A45F38 /* NativeText.m in Sources */,
+				7D29FD9029F7AAE800178267 /* Constant.swift in Sources */,
+				7D29FD9229F7AAE800178267 /* AppDataManager.swift in Sources */,
 				BCC177A82965B56D00B9752A /* MKGuideBridgeManager.swift in Sources */,
+				7D29FD8029F7AAE800178267 /* DraggableProgressView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1375,19 +1461,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				BCF149AF2962F04100F6271C /* RCTSearchViewTVOS.m in Sources */,
+				7D29FD9729F7AAE800178267 /* UIViewcontroller.swift in Sources */,
+				7D29FD9529F7AAE800178267 /* SubTitleCell.swift in Sources */,
+				7D29FD9B29F7AAE800178267 /* String.swift in Sources */,
+				7D29FD7F29F7AAE800178267 /* Date.swift in Sources */,
 				BCF149B02962F04100F6271C /* MKGuide.h in Sources */,
 				BCF149B12962F04100F6271C /* MKGuide.swift in Sources */,
 				BCC177A92965B56D00B9752A /* MKGuideBridgeManager.swift in Sources */,
+				7D29FD9D29F7AAE800178267 /* MKPlayerManager.swift in Sources */,
+				7D29FD9929F7AAE800178267 /* PlayerViewController.swift in Sources */,
+				7D29FD8D29F7AAE800178267 /* MKPlayerView.m in Sources */,
+				7D29FD8729F7AAE800178267 /* CurrentPositionView.swift in Sources */,
 				BCF149B22962F04100F6271C /* ContentView.swift in Sources */,
 				BCF149B32962F04100F6271C /* SampleViewController.swift in Sources */,
+				7D29FD8F29F7AAE800178267 /* PlayerView.swift in Sources */,
+				7D29FD8929F7AAE800178267 /* MKPlayerView.swift in Sources */,
 				BCC177A62965B4BF00B9752A /* MKGuideBridgeManager.m in Sources */,
+				7D29FD8329F7AAE800178267 /* AppDataModels.swift in Sources */,
 				BCF149B42962F04100F6271C /* RCTSearchViewTVOSManager.m in Sources */,
 				BCF149B52962F04100F6271C /* SearchRestultsViewTVOSController.m in Sources */,
 				BCF149B62962F04100F6271C /* MKGuideManager.swift in Sources */,
 				BCF149B72962F04100F6271C /* main.m in Sources */,
 				BCF149B82962F04100F6271C /* MKGuide.m in Sources */,
 				BCF149B92962F04100F6271C /* AppDelegate.m in Sources */,
+				7D29FD9129F7AAE800178267 /* Constant.swift in Sources */,
+				7D29FD9329F7AAE800178267 /* AppDataManager.swift in Sources */,
 				BCF149BA2962F04100F6271C /* NativeText.m in Sources */,
+				7D29FD8129F7AAE800178267 /* DraggableProgressView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
