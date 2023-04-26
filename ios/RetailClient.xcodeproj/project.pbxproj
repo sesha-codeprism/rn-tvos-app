@@ -132,8 +132,6 @@
 		7D29FD8129F7AAE800178267 /* DraggableProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6E29F7AAE700178267 /* DraggableProgressView.swift */; };
 		7D29FD8229F7AAE800178267 /* AppDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6F29F7AAE700178267 /* AppDataModels.swift */; };
 		7D29FD8329F7AAE800178267 /* AppDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD6F29F7AAE700178267 /* AppDataModels.swift */; };
-		7D29FD8429F7AAE800178267 /* MKPlayer in Resources */ = {isa = PBXBuildFile; fileRef = 7D29FD7029F7AAE700178267 /* MKPlayer */; };
-		7D29FD8529F7AAE800178267 /* MKPlayer in Resources */ = {isa = PBXBuildFile; fileRef = 7D29FD7029F7AAE700178267 /* MKPlayer */; };
 		7D29FD8629F7AAE800178267 /* CurrentPositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7129F7AAE700178267 /* CurrentPositionView.swift */; };
 		7D29FD8729F7AAE800178267 /* CurrentPositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7129F7AAE700178267 /* CurrentPositionView.swift */; };
 		7D29FD8829F7AAE800178267 /* MKPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D29FD7229F7AAE700178267 /* MKPlayerView.swift */; };
@@ -374,7 +372,6 @@
 		7D29FD6D29F7AAE700178267 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Date.swift; path = MKPlayer/Extensions/Date.swift; sourceTree = "<group>"; };
 		7D29FD6E29F7AAE700178267 /* DraggableProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DraggableProgressView.swift; path = MKPlayer/Views/DraggableProgressView.swift; sourceTree = "<group>"; };
 		7D29FD6F29F7AAE700178267 /* AppDataModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDataModels.swift; path = MKPlayer/Models/AppDataModels.swift; sourceTree = "<group>"; };
-		7D29FD7029F7AAE700178267 /* MKPlayer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MKPlayer; sourceTree = "<group>"; };
 		7D29FD7129F7AAE700178267 /* CurrentPositionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CurrentPositionView.swift; path = MKPlayer/Views/CurrentPositionView.swift; sourceTree = "<group>"; };
 		7D29FD7229F7AAE700178267 /* MKPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MKPlayerView.swift; path = MKPlayer/MKPlayerView.swift; sourceTree = "<group>"; };
 		7D29FD7329F7AAE700178267 /* Player.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Player.storyboard; path = MKPlayer/Views/Player.storyboard; sourceTree = "<group>"; };
@@ -690,7 +687,6 @@
 				7D29FD7129F7AAE700178267 /* CurrentPositionView.swift */,
 				7D29FD6D29F7AAE700178267 /* Date.swift */,
 				7D29FD6E29F7AAE700178267 /* DraggableProgressView.swift */,
-				7D29FD7029F7AAE700178267 /* MKPlayer */,
 				7D29FD7D29F7AAE800178267 /* MKPlayerManager.swift */,
 				7D29FD7429F7AAE800178267 /* MKPlayerView.h */,
 				7D29FD7529F7AAE800178267 /* MKPlayerView.m */,
@@ -1049,7 +1045,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				008B0289271EF933009DED3B /* MKFullGuide in Resources */,
-				7D29FD8429F7AAE800178267 /* MKPlayer in Resources */,
 				59A99AAC2853229B00560F39 /* Inter-ExtraLight.ttf in Resources */,
 				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
 				59A99AB82853229B00560F39 /* Inter-Bold.ttf in Resources */,
@@ -1089,7 +1084,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				594E610C2977FEA9004C1D05 /* Mediakind-Icons.otf in Resources */,
-				7D29FD8529F7AAE800178267 /* MKPlayer in Resources */,
 				BCF149BF2962F04100F6271C /* MKFullGuide in Resources */,
 				BCF149C02962F04100F6271C /* Inter-ExtraLight.ttf in Resources */,
 				BCF149C12962F04100F6271C /* Images.xcassets in Resources */,
