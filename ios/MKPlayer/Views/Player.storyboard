@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="21507" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yNC-xH-zix">
     <device id="appleTV" appearance="dark"/>
     <dependencies>
-        <deployment identifier="tvOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -363,6 +362,24 @@
                                             <fontDescription key="titleFontDescription" type="system" weight="heavy" pointSize="25"/>
                                         </buttonConfiguration>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0L1-sX-1UT">
+                                        <rect key="frame" x="1372" y="-712" width="200" height="104"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="104" id="XKZ-Ua-hXN"/>
+                                            <constraint firstAttribute="width" constant="200" id="c77-1l-BRg"/>
+                                        </constraints>
+                                        <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Guide">
+                                            <backgroundConfiguration key="background">
+                                                <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
+                                            </backgroundConfiguration>
+                                            <fontDescription key="titleFontDescription" type="system" weight="heavy" pointSize="25"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="guideButtonPressed:" destination="yNC-xH-zix" eventType="primaryActionTriggered" id="hV2-Cb-mxt"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -370,6 +387,7 @@
                                     <constraint firstItem="HTW-7m-qPF" firstAttribute="centerY" secondItem="WdN-aL-arI" secondAttribute="centerY" id="3c3-74-op6"/>
                                     <constraint firstAttribute="bottom" secondItem="Qr3-0M-XGT" secondAttribute="bottom" constant="4" id="69I-zP-6XU"/>
                                     <constraint firstItem="Qr3-0M-XGT" firstAttribute="leading" secondItem="rIO-y8-dQB" secondAttribute="trailing" constant="50" id="9E9-pP-am8"/>
+                                    <constraint firstItem="0L1-sX-1UT" firstAttribute="trailing" secondItem="Qr3-0M-XGT" secondAttribute="trailing" id="ItH-It-fw6"/>
                                     <constraint firstItem="Qr3-0M-XGT" firstAttribute="top" secondItem="WdN-aL-arI" secondAttribute="top" constant="4" id="Nbx-xX-cHO"/>
                                     <constraint firstItem="HTW-7m-qPF" firstAttribute="leading" secondItem="WdN-aL-arI" secondAttribute="leading" id="ZMo-99-wsL"/>
                                     <constraint firstItem="TS9-CC-S9N" firstAttribute="centerY" secondItem="WdN-aL-arI" secondAttribute="centerY" id="bWz-p5-zmu"/>
@@ -392,6 +410,7 @@
                             <constraint firstItem="oQp-Yu-E4s" firstAttribute="bottom" secondItem="GnK-DW-9D2" secondAttribute="bottom" id="Lt3-Mg-kfe"/>
                             <constraint firstAttribute="trailing" secondItem="oQp-Yu-E4s" secondAttribute="trailing" id="RgC-PQ-urU"/>
                             <constraint firstItem="dKL-Yk-LjS" firstAttribute="bottom" secondItem="WdN-aL-arI" secondAttribute="bottom" constant="36" id="ZoV-Uy-sXZ"/>
+                            <constraint firstItem="0L1-sX-1UT" firstAttribute="top" secondItem="dKL-Yk-LjS" secondAttribute="top" constant="100" id="j0V-OB-3gn"/>
                             <constraint firstItem="WdN-aL-arI" firstAttribute="leading" secondItem="dKL-Yk-LjS" secondAttribute="leading" constant="90" id="voi-DT-jlv"/>
                         </constraints>
                     </view>
@@ -400,6 +419,7 @@
                         <outlet property="btnAD" destination="rIO-y8-dQB" id="Y2c-tT-ctH"/>
                         <outlet property="btnBitRate" destination="dgb-C2-kmP" id="EBM-pn-XRU"/>
                         <outlet property="btnGoLive" destination="Qr3-0M-XGT" id="oXP-Km-a2B"/>
+                        <outlet property="btnGuide" destination="0L1-sX-1UT" id="ta1-ld-717"/>
                         <outlet property="btnPIP" destination="Ewl-Bl-qpa" id="ABS-ey-zOu"/>
                         <outlet property="btnRestart" destination="HTW-7m-qPF" id="tPF-qX-HS9"/>
                         <outlet property="btnSubtitle" destination="TS9-CC-S9N" id="05y-vw-kSb"/>
@@ -426,7 +446,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="logo" width="225" height="225"/>
+        <image name="logo" width="225" height="135"/>
         <image name="pip" width="512" height="512"/>
         <systemColor name="placeholderTextColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>

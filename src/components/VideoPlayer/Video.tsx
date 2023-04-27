@@ -12,6 +12,7 @@ import MFButton, { MFButtonVariant } from '../MFButton/MFButton';
 import { appUIDefinition } from '../../config/constants';
 import { AppImages } from '../../assets/images';
 import { getRenderImageURI } from './PlayerUtils';
+import { event } from 'react-native-reanimated';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
 const MKPlayerView = requireNativeComponent("MKPlayer");
@@ -104,6 +105,12 @@ const Video: React.FunctionComponent<VideoPlayerProps> = (
     const onBitratePressed = (event: { nativeEvent: { program: any } }) => {
         props?.navigation.pop()
     }
+    const onAudioPressed = (event: { nativeEvent: { program: any } }) => {
+        props?.navigation.pop()
+    } 
+    const onGuidePressed = (event: { nativeEvent: { program: any } }) => {
+        props?.navigation.pop()
+    }
 
     /// only for testing
     // useEffect(() => {
@@ -172,6 +179,8 @@ const Video: React.FunctionComponent<VideoPlayerProps> = (
                     onExit={onExit}
                     onSubtitlePressed={onSubtitlePressed}
                     onBitratePressed={onBitratePressed}
+                    onAudioPressed={onAudioPressed}
+                    onGuidePressed={onGuidePressed}
                 />
             )
         }

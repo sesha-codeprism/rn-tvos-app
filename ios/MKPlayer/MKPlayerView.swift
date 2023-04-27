@@ -11,8 +11,10 @@ import MKPlayer
 
 public protocol MKPlayerCallbacksDelegate {
   func onPlayerExit()
-  func onSubtitlePressed(sender: Any)
-  func onBitRatePressed(sender: Any)
+  func onSubtitleClicked(tracks: [[String : String]])
+  func onAudioClicked(tracks: [[String : String]])
+  func onBitRateClicked(sender: Any)
+  func onGuideClicked(sender: Any)
 }
 
 class MKPlayerView: UIView {
@@ -20,6 +22,8 @@ class MKPlayerView: UIView {
   @objc var onExit: RCTBubblingEventBlock?
   @objc var onBitratePressed: RCTBubblingEventBlock?
   @objc var onSubtitlePressed: RCTBubblingEventBlock?
+  @objc var onAudioPressed: RCTBubblingEventBlock?
+  @objc var onGuidePressed: RCTBubblingEventBlock?
  // @objc var onFavourite: RCTBubblingEventBlock?
   //var player: MKPlayer?
   weak var playerVC: PlayViewController?
@@ -66,13 +70,21 @@ class MKPlayerView: UIView {
 }
 
 extension MKPlayerView: MKPlayerCallbacksDelegate {
-  func onSubtitlePressed(sender: Any) {
+  func onAudioClicked(tracks: [[String:String]]) {
+    if onAudioPressed != nil {
+      onAudioPressed!(["tracks": tracks] )
+    }
+    print("Audio Tracks: \(tracks)")
+  }
+  
+  func onSubtitleClicked(tracks: [[String:String]]) {
     if onSubtitlePressed != nil {
-      onSubtitlePressed?(nil)
+      onSubtitlePressed!(["tracks": tracks] )
+      print("Subtitle Tracks: \(tracks)")
     }
   }
   
-  func onBitRatePressed(sender: Any) {
+  func onBitRateClicked(sender: Any) {
     if onBitratePressed != nil {
       onBitratePressed?(nil)
     }
@@ -82,6 +94,18 @@ extension MKPlayerView: MKPlayerCallbacksDelegate {
     if onExit != nil {
       onExit?(nil)
     }
+  }
+  func onGuideClicked(sender: Any) {
+    if onGuidePressed != nil {
+      onGuidePressed?(nil)
+    }
+  }
+  @objc public func setSubtitle(identifier: String) {
+    self.playerVC?.player?.setSubtitle(trackIdentifier: identifier)
+  }
+  
+  @objc public func setAudio(identifier: String) {
+    self.playerVC?.player?.setAudio(trackIdentifier: identifier)
   }
 }
 

@@ -48,6 +48,7 @@ class PlayViewController: UIViewController {
   @IBOutlet weak var btnBitRate: UIButton!
   @IBOutlet weak var btnAD: UIButton!
   @IBOutlet weak var btnGoLive: UIButton!
+  @IBOutlet weak var btnGuide: UIButton!
 //    @IBOutlet weak var liveLatencyLabel: UILabel!
 //    @IBOutlet weak var videoFrameRateLabel: UILabel!
     
@@ -314,6 +315,7 @@ print("ShowControls")
         self.controlPanelView.isHidden = shouldHide
         self.infoView.isHidden = shouldHide
         self.channelDetailsView.isHidden = shouldHide
+        self.btnGuide.isHidden = shouldHide
     }
 
 }
@@ -481,17 +483,34 @@ extension PlayViewController {
 //            //self.collectionView.reloadData()
 //        }
     }
-
+  private func getTracksDict(tracks: [MKPTrack]) -> [[String: String]] {
+    var tracksArr = [[String: String]]()
+    for track in tracks {
+      var trk: [String: String]
+      if track.type == MKPTrackType.audio {
+        trk = ["identifier": track.identifier , "label": track.label, "language": (track as? MKPAudioTrack)?.language ?? "en"]
+      } else {
+        trk = ["identifier": track.identifier , "label": track.label ]
+      }
+      tracksArr.append(trk)
+    }
+    return tracksArr
+  }
+  @IBAction func guideButtonPressed(_ sender: Any) {
+    print("guideButtonPressed")
+    self.callbackDelegate?.onGuideClicked(sender: sender)
+  }
   @IBAction func subtitleButtonPressed(_ sender: Any) {
     print("subtitleButtonPressed")
-    self.callbackDelegate?.onSubtitlePressed(sender: sender)
+    self.callbackDelegate?.onSubtitleClicked(tracks: self.getTracksDict(tracks: tracks["subtitleTrack"] ?? [])   )
   }
   @IBAction func audioDescButtonPressed(_ sender: Any) {
     print("audioDescButtonPressed")
+    self.callbackDelegate?.onAudioClicked(tracks: self.getTracksDict(tracks: tracks["audioTrack"] ?? []))
   }
   @IBAction func bitrateButtonPressed(_ sender: Any) {
     print("bitrateButtonPressed")
-    self.callbackDelegate?.onBitRatePressed(sender: sender)
+    self.callbackDelegate?.onBitRateClicked(sender: sender)
   }
   @IBAction func goLiveButtonPressed(_ sender: Any) {
     print("goLiveButtonPressed")
