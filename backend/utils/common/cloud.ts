@@ -1,3 +1,4 @@
+import { DeviceEventEmitter } from "react-native";
 import { MFRequest } from "../../@types/globals";
 
 export interface IUrlParams {
@@ -17,11 +18,20 @@ export interface IUrlParamValue {
 
 import axios, { AxiosHeaders } from "axios";
 
+const showNotification = (error: any) => {
+  DeviceEventEmitter.emit("createNotification", {
+    id: new Date(),
+    iconName: "dismiss",
+    subtitle: error?.message,
+  });
+};
+
 const handleError = (error: any) => {
-  console.log("Handling error", error);
+  //console.log("Handling error", error);
   //TODO: Activate this
+  showNotification(error);
   throw Error(error);
-}
+};
 
 const GET = async ({ url, params = {}, headers = {} }: MFRequest) => {
   try {
@@ -37,13 +47,13 @@ const GET = async ({ url, params = {}, headers = {} }: MFRequest) => {
       return response; // handle success
     });
     axiosRequest.catch(function (error: any) {
-      handleError(error)
-      return error
+      handleError(error);
+      return error;
       // return error; // handle error
     });
     return axiosRequest;
   } catch (err) {
-    handleError(err)
+    handleError(err);
   }
 };
 
@@ -64,12 +74,12 @@ const POST = async ({ url, params = {}, headers = {} }: MFRequest) => {
       return response; // handle success
     });
     axiosRequest.catch(function (error: any) {
-      handleError(error)
+      handleError(error);
       // return error; // handle error
     });
     return axiosRequest;
   } catch (err) {
-    handleError(err)
+    handleError(err);
   }
 };
 const PUT = async ({ url, params = {}, headers = {} }: MFRequest) => {
@@ -89,34 +99,31 @@ const PUT = async ({ url, params = {}, headers = {} }: MFRequest) => {
       return response; // handle success
     });
     axiosRequest.catch(function (error: any) {
-      handleError(error)
+      handleError(error);
       // return error; // handle error
     });
     return axiosRequest;
   } catch (err) {
-    handleError(err)
+    handleError(err);
   }
 };
 const DELETE = async ({ url, headers = {} }: MFRequest) => {
   try {
-    const axiosRequest = axios.delete(
-      url,
-      {
-        headers: {
-          ...headers,
-        } as AxiosHeaders,
-      }
-    );
+    const axiosRequest = axios.delete(url, {
+      headers: {
+        ...headers,
+      } as AxiosHeaders,
+    });
     axiosRequest.then((response: any) => {
       return response; // handle success
     });
     axiosRequest.catch(function (error: any) {
-      handleError(error)
+      handleError(error);
       // return error; // handle error
     });
     return axiosRequest;
   } catch (err) {
-    handleError(err)
+    handleError(err);
   }
 };
 
