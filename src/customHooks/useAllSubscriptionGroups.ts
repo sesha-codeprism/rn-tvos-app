@@ -46,8 +46,8 @@ export const getAllSubscriptionGroups = async () => {
                 []),
         ],
     };
-    NativeModules.MKGuideBridgeManager.setSubscriptionGroupResponse(allSubscriptionGroups.SubscriptionGroups);
-    console.log("allSubscriptionGroups", allSubscriptionGroups)
+    console.log("allSubscriptionGroups", allSubscriptionGroups, allSubscriptionGroups.SubscriptionGroups.length)
+    NativeModules.MKGuideBridgeManager.setSubscriptionGroupResponse(allSubscriptionGroups);
     GLOBALS.allSubscriptionGroups = allSubscriptionGroups;
     return { allSubscriptions: viewable, viewableSubscriptions: GLOBALS.viewableSubscriptions, scheduledSubscriptions: GLOBALS.scheduledSubscriptions };
 }
