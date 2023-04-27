@@ -46,7 +46,7 @@ export const getAllSubscriptionGroups = async () => {
                 []),
         ],
     };
-    NativeModules.MKGuideBridgeManager.setSubscriptionGroupResponse(allSubscriptionGroups);
+    NativeModules.MKGuideBridgeManager.setSubscriptionGroupResponse(allSubscriptionGroups.SubscriptionGroups);
     console.log("allSubscriptionGroups", allSubscriptionGroups)
     GLOBALS.allSubscriptionGroups = allSubscriptionGroups;
     return { allSubscriptions: viewable, viewableSubscriptions: GLOBALS.viewableSubscriptions, scheduledSubscriptions: GLOBALS.scheduledSubscriptions };
@@ -65,7 +65,6 @@ const useAllSubscriptionGroups = (globals: any) => {
         if (!subscrptionGroups.data) {
             return;
         }
-        queryClient.refetchQueries(["dvrfeed"]);
     }, [subscrptionGroups.data, subscrptionGroups.isSuccess, GLOBALS])
     return subscrptionGroups.data;
 }
