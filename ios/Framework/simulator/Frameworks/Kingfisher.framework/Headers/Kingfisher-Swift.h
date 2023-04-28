@@ -289,7 +289,6 @@ SWIFT_CLASS("_TtC10Kingfisher17AnimatedImageView")
 
 
 
-
 SWIFT_CLASS_NAMED("SessionDelegate")
 @interface KFSessionDelegate : NSObject
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
@@ -615,7 +614,6 @@ SWIFT_CLASS("_TtC10Kingfisher17AnimatedImageView")
 - (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
-
 
 
 

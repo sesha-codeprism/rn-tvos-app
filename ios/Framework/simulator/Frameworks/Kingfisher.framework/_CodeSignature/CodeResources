@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/Kingfisher-Swift.h</key>
 		<data>
-		rF6Aa9ACI0JcCbNvJHHr+ykxhjs=
+		2NKM3HhYan5Uqeh99q3UMJe+8KI=
 		</data>
 		<key>Headers/Kingfisher-umbrella.h</key>
 		<data>
@@ -14,47 +14,47 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		X++nkj5UzULQGk+FHSUVd+v6uOE=
+		guzYeCvctFgFjN+gUVwW7LJh9NQ=
 		</data>
 		<key>Modules/Kingfisher.swiftmodule/arm64-apple-tvos-simulator.abi.json</key>
 		<data>
-		rH6Bnk2wgeI98V0BvcZ9nzvRcOQ=
+		/I3FKfi1WpAOW5p4PxjOa6sACFc=
 		</data>
 		<key>Modules/Kingfisher.swiftmodule/arm64-apple-tvos-simulator.private.swiftinterface</key>
 		<data>
-		tpQryANWQsqNvyO29VnYSgnEtwA=
+		0x+l6dpaPhyC9tAoDt1wkiNezro=
 		</data>
 		<key>Modules/Kingfisher.swiftmodule/arm64-apple-tvos-simulator.swiftdoc</key>
 		<data>
-		CYram1goQeyxJ0isz9Tn1KpnHdE=
+		8uQbVMgaHnSMGmuFHMVWIoXhxcI=
 		</data>
 		<key>Modules/Kingfisher.swiftmodule/arm64-apple-tvos-simulator.swiftinterface</key>
 		<data>
-		tpQryANWQsqNvyO29VnYSgnEtwA=
+		0x+l6dpaPhyC9tAoDt1wkiNezro=
 		</data>
 		<key>Modules/Kingfisher.swiftmodule/arm64-apple-tvos-simulator.swiftmodule</key>
 		<data>
-		jma6kwdR/4ZssBHfiJzSb5eH1U4=
+		Fo6lQgLH2I6ht4AEJZHUIx037/U=
 		</data>
 		<key>Modules/Kingfisher.swiftmodule/x86_64-apple-tvos-simulator.abi.json</key>
 		<data>
-		rH6Bnk2wgeI98V0BvcZ9nzvRcOQ=
+		/I3FKfi1WpAOW5p4PxjOa6sACFc=
 		</data>
 		<key>Modules/Kingfisher.swiftmodule/x86_64-apple-tvos-simulator.private.swiftinterface</key>
 		<data>
-		UJ4cUHbDfNY7gFokfkmK288h9NE=
+		x+WdsiYGL6NtCXS5Sm+7V4PlBPc=
 		</data>
 		<key>Modules/Kingfisher.swiftmodule/x86_64-apple-tvos-simulator.swiftdoc</key>
 		<data>
-		pO5cnC1Fnr+iosurJlIbEmj+WME=
+		ocOlJG+rDnlOA3T8HDxTLHp/Tas=
 		</data>
 		<key>Modules/Kingfisher.swiftmodule/x86_64-apple-tvos-simulator.swiftinterface</key>
 		<data>
-		UJ4cUHbDfNY7gFokfkmK288h9NE=
+		x+WdsiYGL6NtCXS5Sm+7V4PlBPc=
 		</data>
 		<key>Modules/Kingfisher.swiftmodule/x86_64-apple-tvos-simulator.swiftmodule</key>
 		<data>
-		9Lr8KvnUtFbzujhEVlAk3kZ3Bks=
+		oEnqaVZTjpCR2+h2+FnHUUn8Qwo=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -67,7 +67,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ltnjY6+LtT6l46HOdnjhvezeYJ7QbIWuMm9bXKC64AU=
+			uI88w0kjLwBdhYOpprUUWhFFpUgstsaTl9N7WvVEgPE=
 			</data>
 		</dict>
 		<key>Headers/Kingfisher-umbrella.h</key>
@@ -81,70 +81,70 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			bH+jdNIeRozCfDEJnK+ah5hUHZxlWrDCzFDMI3jHGKE=
+			jcnpuOI6FQZMqqgZ0QtNBf/Thh4m2GL8cQUO+SRKAew=
 			</data>
 		</dict>
 		<key>Modules/Kingfisher.swiftmodule/arm64-apple-tvos-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			33ZTyd1yegyCrTb6QkdpNjTVIsZEDph1t0BZssT2a+A=
+			dvyOTCcrJ7qsNVKYcNaqH7p3DzbupbzQ/O5ufjGrN+A=
 			</data>
 		</dict>
 		<key>Modules/Kingfisher.swiftmodule/arm64-apple-tvos-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			n+LrDtKY2jmibsbEbJ2lC1Rzt0JYBSLF/To2ntEn9vU=
+			H6ZFaLRKBfW/fHvFeEPQWZXmryUJ3TQSkaUGjX4mrWw=
 			</data>
 		</dict>
 		<key>Modules/Kingfisher.swiftmodule/arm64-apple-tvos-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			33ZTyd1yegyCrTb6QkdpNjTVIsZEDph1t0BZssT2a+A=
+			dvyOTCcrJ7qsNVKYcNaqH7p3DzbupbzQ/O5ufjGrN+A=
 			</data>
 		</dict>
 		<key>Modules/Kingfisher.swiftmodule/arm64-apple-tvos-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			tRKBCOXkBkNZ1a5idIr3emS8C6jllwse2FR1QIqfz+A=
+			JNdBhrKufef3DHTrBH/svBwLOdZQn4dmAXkKFyCWqLY=
 			</data>
 		</dict>
 		<key>Modules/Kingfisher.swiftmodule/x86_64-apple-tvos-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			bH+jdNIeRozCfDEJnK+ah5hUHZxlWrDCzFDMI3jHGKE=
+			jcnpuOI6FQZMqqgZ0QtNBf/Thh4m2GL8cQUO+SRKAew=
 			</data>
 		</dict>
 		<key>Modules/Kingfisher.swiftmodule/x86_64-apple-tvos-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			b9DluBY6nv5GxOeAbRyO5d1k6NIJkNUpqeLO19PhvpM=
+			ejJq3whIbUM7B50P79ulbLPIIFlLYKqJQqwvSp5u210=
 			</data>
 		</dict>
 		<key>Modules/Kingfisher.swiftmodule/x86_64-apple-tvos-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			PkVLF1m+1g19QOhM7zH3p7NtuIr1vhaEC7duslPaD4s=
+			5PTLRxW2CxgY+wWCzmvaeV06gf3xRxDgkLC5hNBiK5o=
 			</data>
 		</dict>
 		<key>Modules/Kingfisher.swiftmodule/x86_64-apple-tvos-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			b9DluBY6nv5GxOeAbRyO5d1k6NIJkNUpqeLO19PhvpM=
+			ejJq3whIbUM7B50P79ulbLPIIFlLYKqJQqwvSp5u210=
 			</data>
 		</dict>
 		<key>Modules/Kingfisher.swiftmodule/x86_64-apple-tvos-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ftOm0CWDv7xOeOizDrOOFun6S8hyrzFTqETFk2L6xZA=
+			qULgh+ejmpF4xebIoHe0RvFuv1VJtT6xzT/s9PxMkRI=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

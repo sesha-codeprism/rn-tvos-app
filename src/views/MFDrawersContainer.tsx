@@ -5,9 +5,9 @@ import Settings from "../components/MFSideMenu/SettingsContainer";
 import ConflictResolutionPanel from "../views/app/details_pages/details_panels/ConflictsContainer";
 import { ConflictResolutionContext } from "../contexts/conflictResolutionContext";
 import MFPinPopup from "../components/MFPinPopup";
-import PlayerSubtitlePanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerSubtitlePanel";
-import PlayerQualityPanel from "./VideoPlayer/VideoPlayerSidePanels/PlayerQualityPanel";
 import Purchase from "../components/MFSideMenu/PurchaseContainer";
+import PlayerSubtitlePanel from "../components/VideoPlayer/VideoPlayerSidePanels/PlayerSubtitlePanel";
+import PlayerQualityPanel from "../components/VideoPlayer/VideoPlayerSidePanels/PlayerQualityPanel";
 
 export const Empty = (props: any) => {
   return <View style={{ height: 1, backgroundColor: "black" }}></View>;

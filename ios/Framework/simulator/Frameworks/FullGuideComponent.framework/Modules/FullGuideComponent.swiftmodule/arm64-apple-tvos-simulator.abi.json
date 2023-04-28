@@ -901,55 +901,6 @@
             "children": [
               {
                 "kind": "Var",
-                "name": "channel",
-                "printedName": "channel",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "declKind": "Var",
-                "usr": "s:18FullGuideComponent9ConstantsV06FilterD0V7channelSSvpZ",
-                "mangledName": "$s18FullGuideComponent9ConstantsV06FilterD0V7channelSSvpZ",
-                "moduleName": "FullGuideComponent",
-                "static": true,
-                "declAttributes": [
-                  "HasInitialValue",
-                  "HasStorage"
-                ],
-                "isLet": true,
-                "hasStorage": true,
-                "accessors": [
-                  {
-                    "kind": "Accessor",
-                    "name": "Get",
-                    "printedName": "Get()",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "String",
-                        "printedName": "Swift.String",
-                        "usr": "s:SS"
-                      }
-                    ],
-                    "declKind": "Accessor",
-                    "usr": "s:18FullGuideComponent9ConstantsV06FilterD0V7channelSSvgZ",
-                    "mangledName": "$s18FullGuideComponent9ConstantsV06FilterD0V7channelSSvgZ",
-                    "moduleName": "FullGuideComponent",
-                    "static": true,
-                    "implicit": true,
-                    "declAttributes": [
-                      "Transparent"
-                    ],
-                    "accessorKind": "get"
-                  }
-                ]
-              },
-              {
-                "kind": "Var",
                 "name": "qualityLevel",
                 "printedName": "qualityLevel",
                 "children": [
@@ -1608,6 +1559,195 @@
             "declKind": "Struct",
             "usr": "s:18FullGuideComponent9ConstantsV06FilterD0V",
             "mangledName": "$s18FullGuideComponent9ConstantsV06FilterD0V",
+            "moduleName": "FullGuideComponent",
+            "declAttributes": [
+              "RawDocComment"
+            ],
+            "conformances": [
+              {
+                "kind": "Conformance",
+                "name": "Sendable",
+                "printedName": "Sendable",
+                "usr": "s:s8SendableP",
+                "mangledName": "$ss8SendableP"
+              }
+            ]
+          },
+          {
+            "kind": "TypeDecl",
+            "name": "buttonUI",
+            "printedName": "buttonUI",
+            "children": [
+              {
+                "kind": "Var",
+                "name": "buttonFocusColor",
+                "printedName": "buttonFocusColor",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Var",
+                "usr": "s:18FullGuideComponent9ConstantsV8buttonUIV0E10FocusColorSo7UIColorCvpZ",
+                "mangledName": "$s18FullGuideComponent9ConstantsV8buttonUIV0E10FocusColorSo7UIColorCvpZ",
+                "moduleName": "FullGuideComponent",
+                "static": true,
+                "declAttributes": [
+                  "HasInitialValue",
+                  "HasStorage"
+                ],
+                "isLet": true,
+                "hasStorage": true,
+                "accessors": [
+                  {
+                    "kind": "Accessor",
+                    "name": "Get",
+                    "printedName": "Get()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "UIColor",
+                        "printedName": "UIKit.UIColor",
+                        "usr": "c:objc(cs)UIColor"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:18FullGuideComponent9ConstantsV8buttonUIV0E10FocusColorSo7UIColorCvgZ",
+                    "mangledName": "$s18FullGuideComponent9ConstantsV8buttonUIV0E10FocusColorSo7UIColorCvgZ",
+                    "moduleName": "FullGuideComponent",
+                    "static": true,
+                    "implicit": true,
+                    "declAttributes": [
+                      "Transparent"
+                    ],
+                    "accessorKind": "get"
+                  }
+                ]
+              },
+              {
+                "kind": "Var",
+                "name": "initialBackgroundColor",
+                "printedName": "initialBackgroundColor",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Var",
+                "usr": "s:18FullGuideComponent9ConstantsV8buttonUIV22initialBackgroundColorSo7UIColorCvpZ",
+                "mangledName": "$s18FullGuideComponent9ConstantsV8buttonUIV22initialBackgroundColorSo7UIColorCvpZ",
+                "moduleName": "FullGuideComponent",
+                "static": true,
+                "declAttributes": [
+                  "HasInitialValue",
+                  "HasStorage"
+                ],
+                "isLet": true,
+                "hasStorage": true,
+                "accessors": [
+                  {
+                    "kind": "Accessor",
+                    "name": "Get",
+                    "printedName": "Get()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "UIColor",
+                        "printedName": "UIKit.UIColor",
+                        "usr": "c:objc(cs)UIColor"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:18FullGuideComponent9ConstantsV8buttonUIV22initialBackgroundColorSo7UIColorCvgZ",
+                    "mangledName": "$s18FullGuideComponent9ConstantsV8buttonUIV22initialBackgroundColorSo7UIColorCvgZ",
+                    "moduleName": "FullGuideComponent",
+                    "static": true,
+                    "implicit": true,
+                    "declAttributes": [
+                      "Transparent"
+                    ],
+                    "accessorKind": "get"
+                  }
+                ]
+              },
+              {
+                "kind": "Var",
+                "name": "buttonLabelFontSize",
+                "printedName": "buttonLabelFontSize",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIFont",
+                    "printedName": "UIKit.UIFont",
+                    "usr": "c:objc(cs)UIFont"
+                  }
+                ],
+                "declKind": "Var",
+                "usr": "s:18FullGuideComponent9ConstantsV8buttonUIV0E13LabelFontSizeSo6UIFontCvpZ",
+                "mangledName": "$s18FullGuideComponent9ConstantsV8buttonUIV0E13LabelFontSizeSo6UIFontCvpZ",
+                "moduleName": "FullGuideComponent",
+                "static": true,
+                "declAttributes": [
+                  "HasInitialValue",
+                  "HasStorage"
+                ],
+                "isLet": true,
+                "hasStorage": true,
+                "accessors": [
+                  {
+                    "kind": "Accessor",
+                    "name": "Get",
+                    "printedName": "Get()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "UIFont",
+                        "printedName": "UIKit.UIFont",
+                        "usr": "c:objc(cs)UIFont"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:18FullGuideComponent9ConstantsV8buttonUIV0E13LabelFontSizeSo6UIFontCvgZ",
+                    "mangledName": "$s18FullGuideComponent9ConstantsV8buttonUIV0E13LabelFontSizeSo6UIFontCvgZ",
+                    "moduleName": "FullGuideComponent",
+                    "static": true,
+                    "implicit": true,
+                    "declAttributes": [
+                      "Transparent"
+                    ],
+                    "accessorKind": "get"
+                  }
+                ]
+              },
+              {
+                "kind": "Constructor",
+                "name": "init",
+                "printedName": "init()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "buttonUI",
+                    "printedName": "FullGuideComponent.Constants.buttonUI",
+                    "usr": "s:18FullGuideComponent9ConstantsV8buttonUIV"
+                  }
+                ],
+                "declKind": "Constructor",
+                "usr": "s:18FullGuideComponent9ConstantsV8buttonUIVAEycfc",
+                "mangledName": "$s18FullGuideComponent9ConstantsV8buttonUIVAEycfc",
+                "moduleName": "FullGuideComponent",
+                "implicit": true,
+                "init_kind": "Designated"
+              }
+            ],
+            "declKind": "Struct",
+            "usr": "s:18FullGuideComponent9ConstantsV8buttonUIV",
+            "mangledName": "$s18FullGuideComponent9ConstantsV8buttonUIV",
             "moduleName": "FullGuideComponent",
             "declAttributes": [
               "RawDocComment"
@@ -2317,411 +2457,6 @@
         "declKind": "Struct",
         "usr": "s:18FullGuideComponent9ConstantsV",
         "mangledName": "$s18FullGuideComponent9ConstantsV",
-        "moduleName": "FullGuideComponent",
-        "conformances": [
-          {
-            "kind": "Conformance",
-            "name": "Sendable",
-            "printedName": "Sendable",
-            "usr": "s:s8SendableP",
-            "mangledName": "$ss8SendableP"
-          }
-        ]
-      },
-      {
-        "kind": "TypeDecl",
-        "name": "Fonts",
-        "printedName": "Fonts",
-        "children": [
-          {
-            "kind": "Var",
-            "name": "buttonLabelFont",
-            "printedName": "buttonLabelFont",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "UIKit.UIFont?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UIFont",
-                    "printedName": "UIKit.UIFont",
-                    "usr": "c:objc(cs)UIFont"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:18FullGuideComponent5FontsV15buttonLabelFontSo6UIFontCSgvpZ",
-            "mangledName": "$s18FullGuideComponent5FontsV15buttonLabelFontSo6UIFontCSgvpZ",
-            "moduleName": "FullGuideComponent",
-            "static": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Optional",
-                    "printedName": "UIKit.UIFont?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "UIFont",
-                        "printedName": "UIKit.UIFont",
-                        "usr": "c:objc(cs)UIFont"
-                      }
-                    ],
-                    "usr": "s:Sq"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent5FontsV15buttonLabelFontSo6UIFontCSgvgZ",
-                "mangledName": "$s18FullGuideComponent5FontsV15buttonLabelFontSo6UIFontCSgvgZ",
-                "moduleName": "FullGuideComponent",
-                "static": true,
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "cellLabelFont",
-            "printedName": "cellLabelFont",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "UIKit.UIFont?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UIFont",
-                    "printedName": "UIKit.UIFont",
-                    "usr": "c:objc(cs)UIFont"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:18FullGuideComponent5FontsV13cellLabelFontSo6UIFontCSgvpZ",
-            "mangledName": "$s18FullGuideComponent5FontsV13cellLabelFontSo6UIFontCSgvpZ",
-            "moduleName": "FullGuideComponent",
-            "static": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Optional",
-                    "printedName": "UIKit.UIFont?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "UIFont",
-                        "printedName": "UIKit.UIFont",
-                        "usr": "c:objc(cs)UIFont"
-                      }
-                    ],
-                    "usr": "s:Sq"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent5FontsV13cellLabelFontSo6UIFontCSgvgZ",
-                "mangledName": "$s18FullGuideComponent5FontsV13cellLabelFontSo6UIFontCSgvgZ",
-                "moduleName": "FullGuideComponent",
-                "static": true,
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Constructor",
-            "name": "init",
-            "printedName": "init()",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Fonts",
-                "printedName": "FullGuideComponent.Fonts",
-                "usr": "s:18FullGuideComponent5FontsV"
-              }
-            ],
-            "declKind": "Constructor",
-            "usr": "s:18FullGuideComponent5FontsVACycfc",
-            "mangledName": "$s18FullGuideComponent5FontsVACycfc",
-            "moduleName": "FullGuideComponent",
-            "implicit": true,
-            "init_kind": "Designated"
-          }
-        ],
-        "declKind": "Struct",
-        "usr": "s:18FullGuideComponent5FontsV",
-        "mangledName": "$s18FullGuideComponent5FontsV",
-        "moduleName": "FullGuideComponent",
-        "conformances": [
-          {
-            "kind": "Conformance",
-            "name": "Sendable",
-            "printedName": "Sendable",
-            "usr": "s:s8SendableP",
-            "mangledName": "$ss8SendableP"
-          }
-        ]
-      },
-      {
-        "kind": "TypeDecl",
-        "name": "Colors",
-        "printedName": "Colors",
-        "children": [
-          {
-            "kind": "Var",
-            "name": "focusColor",
-            "printedName": "focusColor",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "UIColor",
-                "printedName": "UIKit.UIColor",
-                "usr": "c:objc(cs)UIColor"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:18FullGuideComponent6ColorsV10focusColorSo7UIColorCvpZ",
-            "mangledName": "$s18FullGuideComponent6ColorsV10focusColorSo7UIColorCvpZ",
-            "moduleName": "FullGuideComponent",
-            "static": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UIColor",
-                    "printedName": "UIKit.UIColor",
-                    "usr": "c:objc(cs)UIColor"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent6ColorsV10focusColorSo7UIColorCvgZ",
-                "mangledName": "$s18FullGuideComponent6ColorsV10focusColorSo7UIColorCvgZ",
-                "moduleName": "FullGuideComponent",
-                "static": true,
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "cellUnfocusColor",
-            "printedName": "cellUnfocusColor",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "UIColor",
-                "printedName": "UIKit.UIColor",
-                "usr": "c:objc(cs)UIColor"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:18FullGuideComponent6ColorsV16cellUnfocusColorSo7UIColorCvpZ",
-            "mangledName": "$s18FullGuideComponent6ColorsV16cellUnfocusColorSo7UIColorCvpZ",
-            "moduleName": "FullGuideComponent",
-            "static": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "HasStorage",
-              "RawDocComment"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UIColor",
-                    "printedName": "UIKit.UIColor",
-                    "usr": "c:objc(cs)UIColor"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent6ColorsV16cellUnfocusColorSo7UIColorCvgZ",
-                "mangledName": "$s18FullGuideComponent6ColorsV16cellUnfocusColorSo7UIColorCvgZ",
-                "moduleName": "FullGuideComponent",
-                "static": true,
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "buttonUnfocusColor",
-            "printedName": "buttonUnfocusColor",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "UIColor",
-                "printedName": "UIKit.UIColor",
-                "usr": "c:objc(cs)UIColor"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:18FullGuideComponent6ColorsV18buttonUnfocusColorSo7UIColorCvpZ",
-            "mangledName": "$s18FullGuideComponent6ColorsV18buttonUnfocusColorSo7UIColorCvpZ",
-            "moduleName": "FullGuideComponent",
-            "static": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UIColor",
-                    "printedName": "UIKit.UIColor",
-                    "usr": "c:objc(cs)UIColor"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent6ColorsV18buttonUnfocusColorSo7UIColorCvgZ",
-                "mangledName": "$s18FullGuideComponent6ColorsV18buttonUnfocusColorSo7UIColorCvgZ",
-                "moduleName": "FullGuideComponent",
-                "static": true,
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "initialBackgroundColor",
-            "printedName": "initialBackgroundColor",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "UIColor",
-                "printedName": "UIKit.UIColor",
-                "usr": "c:objc(cs)UIColor"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:18FullGuideComponent6ColorsV22initialBackgroundColorSo7UIColorCvpZ",
-            "mangledName": "$s18FullGuideComponent6ColorsV22initialBackgroundColorSo7UIColorCvpZ",
-            "moduleName": "FullGuideComponent",
-            "static": true,
-            "declAttributes": [
-              "HasInitialValue",
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UIColor",
-                    "printedName": "UIKit.UIColor",
-                    "usr": "c:objc(cs)UIColor"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent6ColorsV22initialBackgroundColorSo7UIColorCvgZ",
-                "mangledName": "$s18FullGuideComponent6ColorsV22initialBackgroundColorSo7UIColorCvgZ",
-                "moduleName": "FullGuideComponent",
-                "static": true,
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Constructor",
-            "name": "init",
-            "printedName": "init()",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Colors",
-                "printedName": "FullGuideComponent.Colors",
-                "usr": "s:18FullGuideComponent6ColorsV"
-              }
-            ],
-            "declKind": "Constructor",
-            "usr": "s:18FullGuideComponent6ColorsVACycfc",
-            "mangledName": "$s18FullGuideComponent6ColorsVACycfc",
-            "moduleName": "FullGuideComponent",
-            "implicit": true,
-            "init_kind": "Designated"
-          }
-        ],
-        "declKind": "Struct",
-        "usr": "s:18FullGuideComponent6ColorsV",
-        "mangledName": "$s18FullGuideComponent6ColorsV",
         "moduleName": "FullGuideComponent",
         "conformances": [
           {
@@ -5295,6 +5030,7 @@
             "mangledName": "$s18FullGuideComponent8EPGLabelC5frameACSo6CGRectV_tcfc",
             "moduleName": "FullGuideComponent",
             "overriding": true,
+            "implicit": true,
             "objc_name": "initWithFrame:",
             "declAttributes": [
               "Dynamic",
@@ -5335,6 +5071,7 @@
             "mangledName": "$s18FullGuideComponent8EPGLabelC5coderACSgSo7NSCoderC_tcfc",
             "moduleName": "FullGuideComponent",
             "overriding": true,
+            "implicit": true,
             "objc_name": "initWithCoder:",
             "declAttributes": [
               "Dynamic",
@@ -5343,27 +5080,6 @@
               "Required"
             ],
             "init_kind": "Designated"
-          },
-          {
-            "kind": "Function",
-            "name": "setupAlignmentAndFont",
-            "printedName": "setupAlignmentAndFont()",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:18FullGuideComponent8EPGLabelC21setupAlignmentAndFontyyF",
-            "mangledName": "$s18FullGuideComponent8EPGLabelC21setupAlignmentAndFontyyF",
-            "moduleName": "FullGuideComponent",
-            "isOpen": true,
-            "declAttributes": [
-              "Custom"
-            ],
-            "funcSelfKind": "NonMutating"
           }
         ],
         "declKind": "Class",
@@ -7892,12 +7608,12 @@
               {
                 "kind": "TypeNominal",
                 "name": "WeakStorage",
-                "printedName": "FullGuideComponent.CustomisedButton?"
+                "printedName": "UIKit.UIButton?"
               }
             ],
             "declKind": "Var",
             "usr": "c:@M@FullGuideComponent@objc(cs)EPGViewController(py)jumpToLiveButton",
-            "mangledName": "$s18FullGuideComponent17EPGViewControllerC16jumpToLiveButtonAA010CustomisedI0CSgvp",
+            "mangledName": "$s18FullGuideComponent17EPGViewControllerC16jumpToLiveButtonSo8UIButtonCSgvp",
             "moduleName": "FullGuideComponent",
             "isOpen": true,
             "declAttributes": [
@@ -7920,13 +7636,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -7934,7 +7650,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)EPGViewController(im)jumpToLiveButton",
-                "mangledName": "$s18FullGuideComponent17EPGViewControllerC16jumpToLiveButtonAA010CustomisedI0CSgvg",
+                "mangledName": "$s18FullGuideComponent17EPGViewControllerC16jumpToLiveButtonSo8UIButtonCSgvg",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -7956,13 +7672,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -7970,7 +7686,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)EPGViewController(im)setJumpToLiveButton:",
-                "mangledName": "$s18FullGuideComponent17EPGViewControllerC16jumpToLiveButtonAA010CustomisedI0CSgvs",
+                "mangledName": "$s18FullGuideComponent17EPGViewControllerC16jumpToLiveButtonSo8UIButtonCSgvs",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -7991,8 +7707,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent17EPGViewControllerC16jumpToLiveButtonAA010CustomisedI0CSgvM",
-                "mangledName": "$s18FullGuideComponent17EPGViewControllerC16jumpToLiveButtonAA010CustomisedI0CSgvM",
+                "usr": "s:18FullGuideComponent17EPGViewControllerC16jumpToLiveButtonSo8UIButtonCSgvM",
+                "mangledName": "$s18FullGuideComponent17EPGViewControllerC16jumpToLiveButtonSo8UIButtonCSgvM",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -8008,12 +7724,12 @@
               {
                 "kind": "TypeNominal",
                 "name": "WeakStorage",
-                "printedName": "FullGuideComponent.CustomisedButton?"
+                "printedName": "UIKit.UIButton?"
               }
             ],
             "declKind": "Var",
             "usr": "c:@M@FullGuideComponent@objc(cs)EPGViewController(py)filterButton",
-            "mangledName": "$s18FullGuideComponent17EPGViewControllerC12filterButtonAA010CustomisedG0CSgvp",
+            "mangledName": "$s18FullGuideComponent17EPGViewControllerC12filterButtonSo8UIButtonCSgvp",
             "moduleName": "FullGuideComponent",
             "isOpen": true,
             "declAttributes": [
@@ -8036,13 +7752,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -8050,7 +7766,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)EPGViewController(im)filterButton",
-                "mangledName": "$s18FullGuideComponent17EPGViewControllerC12filterButtonAA010CustomisedG0CSgvg",
+                "mangledName": "$s18FullGuideComponent17EPGViewControllerC12filterButtonSo8UIButtonCSgvg",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -8072,13 +7788,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -8086,7 +7802,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)EPGViewController(im)setFilterButton:",
-                "mangledName": "$s18FullGuideComponent17EPGViewControllerC12filterButtonAA010CustomisedG0CSgvs",
+                "mangledName": "$s18FullGuideComponent17EPGViewControllerC12filterButtonSo8UIButtonCSgvs",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -8107,8 +7823,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent17EPGViewControllerC12filterButtonAA010CustomisedG0CSgvM",
-                "mangledName": "$s18FullGuideComponent17EPGViewControllerC12filterButtonAA010CustomisedG0CSgvM",
+                "usr": "s:18FullGuideComponent17EPGViewControllerC12filterButtonSo8UIButtonCSgvM",
+                "mangledName": "$s18FullGuideComponent17EPGViewControllerC12filterButtonSo8UIButtonCSgvM",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -8124,12 +7840,12 @@
               {
                 "kind": "TypeNominal",
                 "name": "WeakStorage",
-                "printedName": "FullGuideComponent.CustomisedButton?"
+                "printedName": "UIKit.UIButton?"
               }
             ],
             "declKind": "Var",
             "usr": "c:@M@FullGuideComponent@objc(cs)EPGViewController(py)favouriteButton",
-            "mangledName": "$s18FullGuideComponent17EPGViewControllerC15favouriteButtonAA010CustomisedG0CSgvp",
+            "mangledName": "$s18FullGuideComponent17EPGViewControllerC15favouriteButtonSo8UIButtonCSgvp",
             "moduleName": "FullGuideComponent",
             "isOpen": true,
             "declAttributes": [
@@ -8152,13 +7868,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -8166,7 +7882,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)EPGViewController(im)favouriteButton",
-                "mangledName": "$s18FullGuideComponent17EPGViewControllerC15favouriteButtonAA010CustomisedG0CSgvg",
+                "mangledName": "$s18FullGuideComponent17EPGViewControllerC15favouriteButtonSo8UIButtonCSgvg",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -8188,13 +7904,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -8202,7 +7918,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)EPGViewController(im)setFavouriteButton:",
-                "mangledName": "$s18FullGuideComponent17EPGViewControllerC15favouriteButtonAA010CustomisedG0CSgvs",
+                "mangledName": "$s18FullGuideComponent17EPGViewControllerC15favouriteButtonSo8UIButtonCSgvs",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -8223,8 +7939,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent17EPGViewControllerC15favouriteButtonAA010CustomisedG0CSgvM",
-                "mangledName": "$s18FullGuideComponent17EPGViewControllerC15favouriteButtonAA010CustomisedG0CSgvM",
+                "usr": "s:18FullGuideComponent17EPGViewControllerC15favouriteButtonSo8UIButtonCSgvM",
+                "mangledName": "$s18FullGuideComponent17EPGViewControllerC15favouriteButtonSo8UIButtonCSgvM",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -10574,38 +10290,6 @@
           },
           {
             "kind": "Function",
-            "name": "viewDidDisappear",
-            "printedName": "viewDidDisappear(_:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "c:@M@FullGuideComponent@objc(cs)EPGViewController(im)viewDidDisappear:",
-            "mangledName": "$s18FullGuideComponent17EPGViewControllerC16viewDidDisappearyySbF",
-            "moduleName": "FullGuideComponent",
-            "overriding": true,
-            "isOpen": true,
-            "objc_name": "viewDidDisappear:",
-            "declAttributes": [
-              "Dynamic",
-              "ObjC",
-              "Custom",
-              "Override"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
             "name": "viewDidAppear",
             "printedName": "viewDidAppear(_:)",
             "children": [
@@ -12348,30 +12032,6 @@
             "declKind": "Func",
             "usr": "c:@CM@FullGuideComponent@objc(cs)EPGViewController(im)menuPressed",
             "mangledName": "$s18FullGuideComponent17EPGViewControllerC11menuPressedyyF",
-            "moduleName": "FullGuideComponent",
-            "isOpen": true,
-            "declAttributes": [
-              "Dynamic",
-              "Custom",
-              "ObjC"
-            ],
-            "isFromExtension": true,
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "reloadTableViewOnDuplexcallReceive",
-            "printedName": "reloadTableViewOnDuplexcallReceive()",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "c:@CM@FullGuideComponent@objc(cs)EPGViewController(im)reloadTableViewOnDuplexcallReceive",
-            "mangledName": "$s18FullGuideComponent17EPGViewControllerC34reloadTableViewOnDuplexcallReceiveyyF",
             "moduleName": "FullGuideComponent",
             "isOpen": true,
             "declAttributes": [
@@ -37851,56 +37511,6 @@
             ],
             "isFromExtension": true,
             "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "convertToDictionary",
-            "printedName": "convertToDictionary(text:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "[Swift.String : Any]?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Dictionary",
-                    "printedName": "[Swift.String : Any]",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "String",
-                        "printedName": "Swift.String",
-                        "usr": "s:SS"
-                      },
-                      {
-                        "kind": "TypeNominal",
-                        "name": "ProtocolComposition",
-                        "printedName": "Any"
-                      }
-                    ],
-                    "usr": "s:SD"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:18FullGuideComponent06MKFullB14StorageManagerC19convertToDictionary4textSDySSypGSgSS_tF",
-            "mangledName": "$s18FullGuideComponent06MKFullB14StorageManagerC19convertToDictionary4textSDySSypGSgSS_tF",
-            "moduleName": "FullGuideComponent",
-            "isOpen": true,
-            "declAttributes": [
-              "RawDocComment"
-            ],
-            "isFromExtension": true,
-            "funcSelfKind": "NonMutating"
           }
         ],
         "declKind": "Class",
@@ -40162,288 +39772,6 @@
       },
       {
         "kind": "TypeDecl",
-        "name": "recordingStatus",
-        "printedName": "recordingStatus",
-        "children": [
-          {
-            "kind": "Var",
-            "name": "recordProgram",
-            "printedName": "recordProgram",
-            "children": [
-              {
-                "kind": "TypeFunc",
-                "name": "Function",
-                "printedName": "(FullGuideComponent.recordingStatus.Type) -> FullGuideComponent.recordingStatus",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "recordingStatus",
-                    "printedName": "FullGuideComponent.recordingStatus",
-                    "usr": "s:18FullGuideComponent15recordingStatusO"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Metatype",
-                    "printedName": "FullGuideComponent.recordingStatus.Type",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "recordingStatus",
-                        "printedName": "FullGuideComponent.recordingStatus",
-                        "usr": "s:18FullGuideComponent15recordingStatusO"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ],
-            "declKind": "EnumElement",
-            "usr": "s:18FullGuideComponent15recordingStatusO13recordProgramyA2CmF",
-            "mangledName": "$s18FullGuideComponent15recordingStatusO13recordProgramyA2CmF",
-            "moduleName": "FullGuideComponent",
-            "fixedbinaryorder": 0
-          },
-          {
-            "kind": "Var",
-            "name": "recordSeries",
-            "printedName": "recordSeries",
-            "children": [
-              {
-                "kind": "TypeFunc",
-                "name": "Function",
-                "printedName": "(FullGuideComponent.recordingStatus.Type) -> FullGuideComponent.recordingStatus",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "recordingStatus",
-                    "printedName": "FullGuideComponent.recordingStatus",
-                    "usr": "s:18FullGuideComponent15recordingStatusO"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Metatype",
-                    "printedName": "FullGuideComponent.recordingStatus.Type",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "recordingStatus",
-                        "printedName": "FullGuideComponent.recordingStatus",
-                        "usr": "s:18FullGuideComponent15recordingStatusO"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ],
-            "declKind": "EnumElement",
-            "usr": "s:18FullGuideComponent15recordingStatusO12recordSeriesyA2CmF",
-            "mangledName": "$s18FullGuideComponent15recordingStatusO12recordSeriesyA2CmF",
-            "moduleName": "FullGuideComponent",
-            "fixedbinaryorder": 1
-          },
-          {
-            "kind": "Var",
-            "name": "conflicts",
-            "printedName": "conflicts",
-            "children": [
-              {
-                "kind": "TypeFunc",
-                "name": "Function",
-                "printedName": "(FullGuideComponent.recordingStatus.Type) -> FullGuideComponent.recordingStatus",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "recordingStatus",
-                    "printedName": "FullGuideComponent.recordingStatus",
-                    "usr": "s:18FullGuideComponent15recordingStatusO"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Metatype",
-                    "printedName": "FullGuideComponent.recordingStatus.Type",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "recordingStatus",
-                        "printedName": "FullGuideComponent.recordingStatus",
-                        "usr": "s:18FullGuideComponent15recordingStatusO"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ],
-            "declKind": "EnumElement",
-            "usr": "s:18FullGuideComponent15recordingStatusO9conflictsyA2CmF",
-            "mangledName": "$s18FullGuideComponent15recordingStatusO9conflictsyA2CmF",
-            "moduleName": "FullGuideComponent",
-            "fixedbinaryorder": 2
-          },
-          {
-            "kind": "Var",
-            "name": "hideIcon",
-            "printedName": "hideIcon",
-            "children": [
-              {
-                "kind": "TypeFunc",
-                "name": "Function",
-                "printedName": "(FullGuideComponent.recordingStatus.Type) -> FullGuideComponent.recordingStatus",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "recordingStatus",
-                    "printedName": "FullGuideComponent.recordingStatus",
-                    "usr": "s:18FullGuideComponent15recordingStatusO"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Metatype",
-                    "printedName": "FullGuideComponent.recordingStatus.Type",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "recordingStatus",
-                        "printedName": "FullGuideComponent.recordingStatus",
-                        "usr": "s:18FullGuideComponent15recordingStatusO"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ],
-            "declKind": "EnumElement",
-            "usr": "s:18FullGuideComponent15recordingStatusO8hideIconyA2CmF",
-            "mangledName": "$s18FullGuideComponent15recordingStatusO8hideIconyA2CmF",
-            "moduleName": "FullGuideComponent",
-            "fixedbinaryorder": 3
-          },
-          {
-            "kind": "Var",
-            "name": "rawValue",
-            "printedName": "rawValue",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:18FullGuideComponent15recordingStatusO8rawValueSSvp",
-            "mangledName": "$s18FullGuideComponent15recordingStatusO8rawValueSSvp",
-            "moduleName": "FullGuideComponent",
-            "implicit": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent15recordingStatusO8rawValueSSvg",
-                "mangledName": "$s18FullGuideComponent15recordingStatusO8rawValueSSvg",
-                "moduleName": "FullGuideComponent",
-                "implicit": true,
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Constructor",
-            "name": "init",
-            "printedName": "init(rawValue:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "FullGuideComponent.recordingStatus?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "recordingStatus",
-                    "printedName": "FullGuideComponent.recordingStatus",
-                    "usr": "s:18FullGuideComponent15recordingStatusO"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              }
-            ],
-            "declKind": "Constructor",
-            "usr": "s:18FullGuideComponent15recordingStatusO8rawValueACSgSS_tcfc",
-            "mangledName": "$s18FullGuideComponent15recordingStatusO8rawValueACSgSS_tcfc",
-            "moduleName": "FullGuideComponent",
-            "implicit": true,
-            "init_kind": "Designated"
-          }
-        ],
-        "declKind": "Enum",
-        "usr": "s:18FullGuideComponent15recordingStatusO",
-        "mangledName": "$s18FullGuideComponent15recordingStatusO",
-        "moduleName": "FullGuideComponent",
-        "enumRawTypeName": "String",
-        "isEnumExhaustive": true,
-        "conformances": [
-          {
-            "kind": "Conformance",
-            "name": "Equatable",
-            "printedName": "Equatable",
-            "usr": "s:SQ",
-            "mangledName": "$sSQ"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Hashable",
-            "printedName": "Hashable",
-            "usr": "s:SH",
-            "mangledName": "$sSH"
-          },
-          {
-            "kind": "Conformance",
-            "name": "RawRepresentable",
-            "printedName": "RawRepresentable",
-            "children": [
-              {
-                "kind": "TypeWitness",
-                "name": "RawValue",
-                "printedName": "RawValue",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ]
-              }
-            ],
-            "usr": "s:SY",
-            "mangledName": "$sSY"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Sendable",
-            "printedName": "Sendable",
-            "usr": "s:s8SendableP",
-            "mangledName": "$ss8SendableP"
-          }
-        ]
-      },
-      {
-        "kind": "TypeDecl",
         "name": "SubscriptionGroupModel",
         "printedName": "SubscriptionGroupModel",
         "children": [
@@ -40728,9 +40056,9 @@
             "children": [
               {
                 "kind": "TypeNominal",
-                "name": "recordingStatus",
-                "printedName": "FullGuideComponent.recordingStatus",
-                "usr": "s:18FullGuideComponent15recordingStatusO"
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
               },
               {
                 "kind": "TypeNominal",
@@ -40740,8 +40068,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:18FullGuideComponent22SubscriptionGroupModelC26validatesubscriptionIdfrom9programIdAA15recordingStatusOSS_tF",
-            "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC26validatesubscriptionIdfrom9programIdAA15recordingStatusOSS_tF",
+            "usr": "s:18FullGuideComponent22SubscriptionGroupModelC26validatesubscriptionIdfrom9programIdSbSS_tF",
+            "mangledName": "$s18FullGuideComponent22SubscriptionGroupModelC26validatesubscriptionIdfrom9programIdSbSS_tF",
             "moduleName": "FullGuideComponent",
             "isOpen": true,
             "funcSelfKind": "NonMutating"
@@ -42935,12 +42263,12 @@
               {
                 "kind": "TypeNominal",
                 "name": "WeakStorage",
-                "printedName": "FullGuideComponent.CustomisedButton?"
+                "printedName": "UIKit.UIButton?"
               }
             ],
             "declKind": "Var",
             "usr": "c:@M@FullGuideComponent@objc(cs)FilterViewController(py)confirmButton",
-            "mangledName": "$s18FullGuideComponent20FilterViewControllerC13confirmButtonAA010CustomisedH0CSgvp",
+            "mangledName": "$s18FullGuideComponent20FilterViewControllerC13confirmButtonSo8UIButtonCSgvp",
             "moduleName": "FullGuideComponent",
             "isOpen": true,
             "declAttributes": [
@@ -42963,13 +42291,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -42977,7 +42305,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)FilterViewController(im)confirmButton",
-                "mangledName": "$s18FullGuideComponent20FilterViewControllerC13confirmButtonAA010CustomisedH0CSgvg",
+                "mangledName": "$s18FullGuideComponent20FilterViewControllerC13confirmButtonSo8UIButtonCSgvg",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -42999,13 +42327,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -43013,7 +42341,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)FilterViewController(im)setConfirmButton:",
-                "mangledName": "$s18FullGuideComponent20FilterViewControllerC13confirmButtonAA010CustomisedH0CSgvs",
+                "mangledName": "$s18FullGuideComponent20FilterViewControllerC13confirmButtonSo8UIButtonCSgvs",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -43034,8 +42362,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent20FilterViewControllerC13confirmButtonAA010CustomisedH0CSgvM",
-                "mangledName": "$s18FullGuideComponent20FilterViewControllerC13confirmButtonAA010CustomisedH0CSgvM",
+                "usr": "s:18FullGuideComponent20FilterViewControllerC13confirmButtonSo8UIButtonCSgvM",
+                "mangledName": "$s18FullGuideComponent20FilterViewControllerC13confirmButtonSo8UIButtonCSgvM",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -43051,12 +42379,12 @@
               {
                 "kind": "TypeNominal",
                 "name": "WeakStorage",
-                "printedName": "FullGuideComponent.CustomisedButton?"
+                "printedName": "UIKit.UIButton?"
               }
             ],
             "declKind": "Var",
             "usr": "c:@M@FullGuideComponent@objc(cs)FilterViewController(py)clearButton",
-            "mangledName": "$s18FullGuideComponent20FilterViewControllerC11clearButtonAA010CustomisedH0CSgvp",
+            "mangledName": "$s18FullGuideComponent20FilterViewControllerC11clearButtonSo8UIButtonCSgvp",
             "moduleName": "FullGuideComponent",
             "isOpen": true,
             "declAttributes": [
@@ -43079,13 +42407,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -43093,7 +42421,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)FilterViewController(im)clearButton",
-                "mangledName": "$s18FullGuideComponent20FilterViewControllerC11clearButtonAA010CustomisedH0CSgvg",
+                "mangledName": "$s18FullGuideComponent20FilterViewControllerC11clearButtonSo8UIButtonCSgvg",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -43115,13 +42443,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -43129,7 +42457,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)FilterViewController(im)setClearButton:",
-                "mangledName": "$s18FullGuideComponent20FilterViewControllerC11clearButtonAA010CustomisedH0CSgvs",
+                "mangledName": "$s18FullGuideComponent20FilterViewControllerC11clearButtonSo8UIButtonCSgvs",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -43150,8 +42478,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent20FilterViewControllerC11clearButtonAA010CustomisedH0CSgvM",
-                "mangledName": "$s18FullGuideComponent20FilterViewControllerC11clearButtonAA010CustomisedH0CSgvM",
+                "usr": "s:18FullGuideComponent20FilterViewControllerC11clearButtonSo8UIButtonCSgvM",
+                "mangledName": "$s18FullGuideComponent20FilterViewControllerC11clearButtonSo8UIButtonCSgvM",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -43167,12 +42495,12 @@
               {
                 "kind": "TypeNominal",
                 "name": "WeakStorage",
-                "printedName": "FullGuideComponent.CustomisedButton?"
+                "printedName": "UIKit.UIButton?"
               }
             ],
             "declKind": "Var",
             "usr": "c:@M@FullGuideComponent@objc(cs)FilterViewController(py)cancelButton",
-            "mangledName": "$s18FullGuideComponent20FilterViewControllerC12cancelButtonAA010CustomisedH0CSgvp",
+            "mangledName": "$s18FullGuideComponent20FilterViewControllerC12cancelButtonSo8UIButtonCSgvp",
             "moduleName": "FullGuideComponent",
             "isOpen": true,
             "declAttributes": [
@@ -43195,13 +42523,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -43209,7 +42537,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)FilterViewController(im)cancelButton",
-                "mangledName": "$s18FullGuideComponent20FilterViewControllerC12cancelButtonAA010CustomisedH0CSgvg",
+                "mangledName": "$s18FullGuideComponent20FilterViewControllerC12cancelButtonSo8UIButtonCSgvg",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -43231,13 +42559,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "FullGuideComponent.CustomisedButton?",
+                    "printedName": "UIKit.UIButton?",
                     "children": [
                       {
                         "kind": "TypeNominal",
-                        "name": "CustomisedButton",
-                        "printedName": "FullGuideComponent.CustomisedButton",
-                        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
+                        "name": "UIButton",
+                        "printedName": "UIKit.UIButton",
+                        "usr": "c:objc(cs)UIButton"
                       }
                     ],
                     "usr": "s:Sq"
@@ -43245,7 +42573,7 @@
                 ],
                 "declKind": "Accessor",
                 "usr": "c:@M@FullGuideComponent@objc(cs)FilterViewController(im)setCancelButton:",
-                "mangledName": "$s18FullGuideComponent20FilterViewControllerC12cancelButtonAA010CustomisedH0CSgvs",
+                "mangledName": "$s18FullGuideComponent20FilterViewControllerC12cancelButtonSo8UIButtonCSgvs",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -43266,8 +42594,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:18FullGuideComponent20FilterViewControllerC12cancelButtonAA010CustomisedH0CSgvM",
-                "mangledName": "$s18FullGuideComponent20FilterViewControllerC12cancelButtonAA010CustomisedH0CSgvM",
+                "usr": "s:18FullGuideComponent20FilterViewControllerC12cancelButtonSo8UIButtonCSgvM",
+                "mangledName": "$s18FullGuideComponent20FilterViewControllerC12cancelButtonSo8UIButtonCSgvM",
                 "moduleName": "FullGuideComponent",
                 "implicit": true,
                 "isOpen": true,
@@ -52003,244 +51331,6 @@
         ]
       },
       {
-        "kind": "Import",
-        "name": "UIKit",
-        "printedName": "UIKit",
-        "declKind": "Import",
-        "moduleName": "FullGuideComponent",
-        "declAttributes": [
-          "RawDocComment"
-        ]
-      },
-      {
-        "kind": "TypeDecl",
-        "name": "CustomisedButton",
-        "printedName": "CustomisedButton",
-        "children": [
-          {
-            "kind": "Constructor",
-            "name": "init",
-            "printedName": "init(coder:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "FullGuideComponent.CustomisedButton?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "CustomisedButton",
-                    "printedName": "FullGuideComponent.CustomisedButton",
-                    "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "NSCoder",
-                "printedName": "Foundation.NSCoder",
-                "usr": "c:objc(cs)NSCoder"
-              }
-            ],
-            "declKind": "Constructor",
-            "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton(im)initWithCoder:",
-            "mangledName": "$s18FullGuideComponent16CustomisedButtonC5coderACSgSo7NSCoderC_tcfc",
-            "moduleName": "FullGuideComponent",
-            "overriding": true,
-            "objc_name": "initWithCoder:",
-            "declAttributes": [
-              "Dynamic",
-              "ObjC",
-              "Custom",
-              "Required"
-            ],
-            "init_kind": "Designated"
-          },
-          {
-            "kind": "Function",
-            "name": "didUpdateFocus",
-            "printedName": "didUpdateFocus(in:with:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "UIFocusUpdateContext",
-                "printedName": "UIKit.UIFocusUpdateContext",
-                "usr": "c:objc(cs)UIFocusUpdateContext"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "UIFocusAnimationCoordinator",
-                "printedName": "UIKit.UIFocusAnimationCoordinator",
-                "usr": "c:objc(cs)UIFocusAnimationCoordinator"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton(im)didUpdateFocusInContext:withAnimationCoordinator:",
-            "mangledName": "$s18FullGuideComponent16CustomisedButtonC14didUpdateFocus2in4withySo07UIFocusG7ContextC_So0K20AnimationCoordinatorCtF",
-            "moduleName": "FullGuideComponent",
-            "overriding": true,
-            "isOpen": true,
-            "objc_name": "didUpdateFocusInContext:withAnimationCoordinator:",
-            "declAttributes": [
-              "Dynamic",
-              "ObjC",
-              "Custom",
-              "Override"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "setupFont",
-            "printedName": "setupFont()",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:18FullGuideComponent16CustomisedButtonC9setupFontyyF",
-            "mangledName": "$s18FullGuideComponent16CustomisedButtonC9setupFontyyF",
-            "moduleName": "FullGuideComponent",
-            "isOpen": true,
-            "declAttributes": [
-              "Custom"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Constructor",
-            "name": "init",
-            "printedName": "init(frame:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "CustomisedButton",
-                "printedName": "FullGuideComponent.CustomisedButton",
-                "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "CGRect",
-                "printedName": "CoreFoundation.CGRect",
-                "usr": "c:@S@CGRect"
-              }
-            ],
-            "declKind": "Constructor",
-            "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton(im)initWithFrame:",
-            "mangledName": "$s18FullGuideComponent16CustomisedButtonC5frameACSo6CGRectV_tcfc",
-            "moduleName": "FullGuideComponent",
-            "overriding": true,
-            "implicit": true,
-            "objc_name": "initWithFrame:",
-            "declAttributes": [
-              "Dynamic",
-              "ObjC",
-              "Custom",
-              "Override"
-            ],
-            "init_kind": "Designated"
-          }
-        ],
-        "declKind": "Class",
-        "usr": "c:@M@FullGuideComponent@objc(cs)CustomisedButton",
-        "mangledName": "$s18FullGuideComponent16CustomisedButtonC",
-        "moduleName": "FullGuideComponent",
-        "isOpen": true,
-        "declAttributes": [
-          "Custom",
-          "ObjC"
-        ],
-        "superclassUsr": "c:objc(cs)UIButton",
-        "superclassNames": [
-          "UIKit.UIButton",
-          "UIKit.UIControl",
-          "UIKit.UIView",
-          "UIKit.UIResponder",
-          "ObjectiveC.NSObject"
-        ],
-        "conformances": [
-          {
-            "kind": "Conformance",
-            "name": "Equatable",
-            "printedName": "Equatable",
-            "usr": "s:SQ",
-            "mangledName": "$sSQ"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Hashable",
-            "printedName": "Hashable",
-            "usr": "s:SH",
-            "mangledName": "$sSH"
-          },
-          {
-            "kind": "Conformance",
-            "name": "CVarArg",
-            "printedName": "CVarArg",
-            "usr": "s:s7CVarArgP",
-            "mangledName": "$ss7CVarArgP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "_KeyValueCodingAndObservingPublishing",
-            "printedName": "_KeyValueCodingAndObservingPublishing",
-            "usr": "s:10Foundation37_KeyValueCodingAndObservingPublishingP",
-            "mangledName": "$s10Foundation37_KeyValueCodingAndObservingPublishingP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "_KeyValueCodingAndObserving",
-            "printedName": "_KeyValueCodingAndObserving",
-            "usr": "s:10Foundation27_KeyValueCodingAndObservingP",
-            "mangledName": "$s10Foundation27_KeyValueCodingAndObservingP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "CustomStringConvertible",
-            "printedName": "CustomStringConvertible",
-            "usr": "s:s23CustomStringConvertibleP",
-            "mangledName": "$ss23CustomStringConvertibleP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "CustomDebugStringConvertible",
-            "printedName": "CustomDebugStringConvertible",
-            "usr": "s:s28CustomDebugStringConvertibleP",
-            "mangledName": "$ss28CustomDebugStringConvertibleP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "__DefaultCustomPlaygroundQuickLookable",
-            "printedName": "__DefaultCustomPlaygroundQuickLookable",
-            "usr": "s:s38__DefaultCustomPlaygroundQuickLookableP",
-            "mangledName": "$ss38__DefaultCustomPlaygroundQuickLookableP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Sendable",
-            "printedName": "Sendable",
-            "usr": "s:s8SendableP",
-            "mangledName": "$ss8SendableP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "KingfisherCompatible",
-            "printedName": "KingfisherCompatible",
-            "usr": "s:10Kingfisher0A10CompatibleP",
-            "mangledName": "$s10Kingfisher0A10CompatibleP"
-          }
-        ]
-      },
-      {
         "kind": "TypeDecl",
         "name": "UIImage",
         "printedName": "UIImage",
@@ -52298,69 +51388,6 @@
                 "declKind": "Accessor",
                 "usr": "s:So7UIImageC18FullGuideComponentE17chanelPlaceholderABSgvgZ",
                 "mangledName": "$sSo7UIImageC18FullGuideComponentE17chanelPlaceholderABSgvgZ",
-                "moduleName": "FullGuideComponent",
-                "static": true,
-                "declAttributes": [
-                  "Final"
-                ],
-                "isFromExtension": true,
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "detailPlaceholder",
-            "printedName": "detailPlaceholder",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "UIKit.UIImage?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "UIImage",
-                    "printedName": "UIKit.UIImage",
-                    "usr": "c:objc(cs)UIImage"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:So7UIImageC18FullGuideComponentE17detailPlaceholderABSgvpZ",
-            "mangledName": "$sSo7UIImageC18FullGuideComponentE17detailPlaceholderABSgvpZ",
-            "moduleName": "FullGuideComponent",
-            "static": true,
-            "declAttributes": [
-              "Final"
-            ],
-            "isFromExtension": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Optional",
-                    "printedName": "UIKit.UIImage?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "UIImage",
-                        "printedName": "UIKit.UIImage",
-                        "usr": "c:objc(cs)UIImage"
-                      }
-                    ],
-                    "usr": "s:Sq"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:So7UIImageC18FullGuideComponentE17detailPlaceholderABSgvgZ",
-                "mangledName": "$sSo7UIImageC18FullGuideComponentE17detailPlaceholderABSgvgZ",
                 "moduleName": "FullGuideComponent",
                 "static": true,
                 "declAttributes": [
@@ -56882,359 +55909,233 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 992,
-      "length": 10,
-      "value": "\"channels\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 1037,
+      "offset": 997,
       "length": 14,
       "value": "\"QualityLevel\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1078,
+      "offset": 1038,
       "length": 6,
       "value": "\"Type\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1109,
+      "offset": 1069,
       "length": 4,
       "value": "\"Id\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1154,
+      "offset": 1114,
       "length": 20,
       "value": "\"ServiceCollections\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1207,
+      "offset": 1167,
       "length": 12,
       "value": "\"ServiceIds\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1250,
+      "offset": 1210,
       "length": 10,
       "value": "\"Services\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1299,
+      "offset": 1259,
       "length": 25,
       "value": "\"Playable On This Device\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1357,
+      "offset": 1317,
       "length": 12,
       "value": "\"Subscribed\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1403,
+      "offset": 1363,
       "length": 14,
       "value": "\"All Channels\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1443,
+      "offset": 1403,
       "length": 5,
       "value": "\"All\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1478,
+      "offset": 1438,
       "length": 9,
       "value": "\"quality\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1518,
+      "offset": 1478,
       "length": 10,
       "value": "\"category\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 1559,
+      "offset": 1519,
       "length": 10,
       "value": "\"filterBy\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 1688,
-      "length": 24,
-      "value": "\"FilterViewControllerID\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 1757,
-      "length": 22,
-      "value": "\"DateSelectionVCSegue\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 1891,
-      "length": 10,
-      "value": "\"StartUtc\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 1930,
-      "length": 8,
-      "value": "\"EndUtc\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 1966,
-      "length": 7,
-      "value": "\"mm:ss\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 2004,
-      "length": 10,
-      "value": "\"hh:mm:ss\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 2043,
-      "length": 8,
-      "value": "\"h:mm a\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 2079,
-      "length": 7,
-      "value": "\"MM\/dd\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 2116,
-      "length": 9,
-      "value": "\"hh:mm a\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 2154,
-      "length": 8,
-      "value": "\"MMM dd\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 2187,
-      "length": 4,
-      "value": "\"AM\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 2216,
-      "length": 4,
-      "value": "\"PM\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 2291,
-      "length": 16,
-      "value": "\"Inter-SemiBold\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "IntegerLiteral",
-      "offset": 2315,
+      "offset": 1636,
       "length": 2,
-      "value": "25"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 2363,
-      "length": 16,
-      "value": "\"Inter-SemiBold\""
+      "value": "22"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "IntegerLiteral",
-      "offset": 2387,
-      "length": 2,
-      "value": "29"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2450,
-      "length": 1,
-      "value": "5"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2452,
+      "offset": 1639,
       "length": 3,
       "value": "255"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "IntegerLiteral",
-      "offset": 2464,
+      "offset": 1651,
       "length": 2,
       "value": "60"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "IntegerLiteral",
-      "offset": 2467,
+      "offset": 1654,
       "length": 3,
       "value": "255"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "IntegerLiteral",
-      "offset": 2478,
+      "offset": 1665,
       "length": 3,
-      "value": "105"
+      "value": "102"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "IntegerLiteral",
-      "offset": 2482,
-      "length": 3,
-      "value": "255"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "FloatLiteral",
-      "offset": 2494,
-      "length": 3,
-      "value": "1.0"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2555,
-      "length": 2,
-      "value": "32"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2558,
-      "length": 3,
-      "value": "255"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2570,
-      "length": 2,
-      "value": "33"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2573,
-      "length": 3,
-      "value": "255"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2584,
-      "length": 2,
-      "value": "36"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2587,
+      "offset": 1669,
       "length": 3,
       "value": "255"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "FloatLiteral",
-      "offset": 2599,
+      "offset": 1681,
       "length": 3,
       "value": "1.0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
       "kind": "IntegerLiteral",
-      "offset": 2653,
+      "offset": 1815,
       "length": 2,
-      "value": "66"
+      "value": "25"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2656,
-      "length": 3,
-      "value": "255"
+      "kind": "StringLiteral",
+      "offset": 1934,
+      "length": 24,
+      "value": "\"FilterViewControllerID\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2668,
-      "length": 2,
-      "value": "66"
+      "kind": "StringLiteral",
+      "offset": 2003,
+      "length": 22,
+      "value": "\"DateSelectionVCSegue\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2671,
-      "length": 3,
-      "value": "255"
+      "kind": "StringLiteral",
+      "offset": 2137,
+      "length": 10,
+      "value": "\"StartUtc\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2682,
-      "length": 2,
-      "value": "66"
+      "kind": "StringLiteral",
+      "offset": 2176,
+      "length": 8,
+      "value": "\"EndUtc\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "IntegerLiteral",
-      "offset": 2685,
-      "length": 3,
-      "value": "255"
+      "kind": "StringLiteral",
+      "offset": 2212,
+      "length": 7,
+      "value": "\"mm:ss\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
-      "kind": "FloatLiteral",
-      "offset": 2697,
-      "length": 3,
-      "value": "1.0"
+      "kind": "StringLiteral",
+      "offset": 2250,
+      "length": 10,
+      "value": "\"hh:mm:ss\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
+      "kind": "StringLiteral",
+      "offset": 2289,
+      "length": 8,
+      "value": "\"h:mm a\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
+      "kind": "StringLiteral",
+      "offset": 2325,
+      "length": 7,
+      "value": "\"MM\/dd\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
+      "kind": "StringLiteral",
+      "offset": 2362,
+      "length": 9,
+      "value": "\"hh:mm a\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
+      "kind": "StringLiteral",
+      "offset": 2400,
+      "length": 8,
+      "value": "\"MMM dd\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
+      "kind": "StringLiteral",
+      "offset": 2433,
+      "length": 4,
+      "value": "\"AM\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Constants.swift",
+      "kind": "StringLiteral",
+      "offset": 2462,
+      "length": 4,
+      "value": "\"PM\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/FilterTableViewCell.swift",
@@ -57303,83 +56204,132 @@
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
       "offset": 1414,
-      "length": 49,
+      "length": 40,
       "value": "\"recorins in programcell \""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 1462,
+      "offset": 1453,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 1543,
+      "length": 18,
+      "value": "\"ic_record_series\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "BooleanLiteral",
-      "offset": 1507,
+      "offset": 1609,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
-      "kind": "StringLiteral",
-      "offset": 1678,
-      "length": 9,
-      "value": "\"No Name\""
+      "kind": "BooleanLiteral",
+      "offset": 1682,
+      "length": 4,
+      "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 1857,
-      "length": 22,
-      "value": "\"2017-06-23T04:30:43Z\""
+      "offset": 1745,
+      "length": 19,
+      "value": "\"ic_record_program\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 1989,
-      "length": 22,
-      "value": "\"2017-06-23T04:30:43Z\""
+      "offset": 1798,
+      "length": 45,
+      "value": "\"recorins in programcell after\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 2195,
-      "length": 68,
+      "offset": 1842,
+      "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 2252,
+      "offset": 1935,
       "length": 9,
       "value": "\"No Name\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "StringLiteral",
-      "offset": 2262,
+      "offset": 2114,
+      "length": 22,
+      "value": "\"2017-06-23T04:30:43Z\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 2246,
+      "length": 22,
+      "value": "\"2017-06-23T04:30:43Z\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 2298,
+      "length": 127,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 2355,
+      "length": 9,
+      "value": "\"No Name\""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 2365,
+      "length": 1,
+      "value": "\" - \""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 2395,
+      "length": 2,
+      "value": "\" to \""
+    },
+    {
+      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
+      "kind": "StringLiteral",
+      "offset": 2424,
       "length": 1,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "IntegerLiteral",
-      "offset": 2429,
+      "offset": 2591,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "FloatLiteral",
-      "offset": 2519,
+      "offset": 2681,
       "length": 4,
       "value": "0.85"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGProgramsCell.swift",
       "kind": "FloatLiteral",
-      "offset": 6539,
+      "offset": 6678,
       "length": 3,
       "value": "1.0"
     },
@@ -57393,70 +56343,70 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/UILabelFontable.swift",
       "kind": "IntegerLiteral",
-      "offset": 862,
+      "offset": 801,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/UILabelFontable.swift",
       "kind": "IntegerLiteral",
-      "offset": 994,
+      "offset": 933,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/UILabelFontable.swift",
       "kind": "StringLiteral",
-      "offset": 2063,
+      "offset": 1622,
       "length": 18,
       "value": "\"OpenSans-Regular\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/UILabelFontable.swift",
       "kind": "StringLiteral",
-      "offset": 2099,
+      "offset": 1658,
       "length": 15,
       "value": "\"OpenSans-Bold\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/UILabelFontable.swift",
       "kind": "StringLiteral",
-      "offset": 2132,
+      "offset": 1691,
       "length": 16,
       "value": "\"OpenSans-Light\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/UILabelFontable.swift",
       "kind": "StringLiteral",
-      "offset": 2169,
+      "offset": 1728,
       "length": 19,
       "value": "\"OpenSans-SemiBold\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/UILabelFontable.swift",
       "kind": "StringLiteral",
-      "offset": 2063,
+      "offset": 1622,
       "length": 18,
       "value": "\"OpenSans-Regular\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/UILabelFontable.swift",
       "kind": "StringLiteral",
-      "offset": 2099,
+      "offset": 1658,
       "length": 15,
       "value": "\"OpenSans-Bold\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/UILabelFontable.swift",
       "kind": "StringLiteral",
-      "offset": 2132,
+      "offset": 1691,
       "length": 16,
       "value": "\"OpenSans-Light\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/UILabelFontable.swift",
       "kind": "StringLiteral",
-      "offset": 2169,
+      "offset": 1728,
       "length": 19,
       "value": "\"OpenSans-SemiBold\""
     },
@@ -57491,119 +56441,119 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "Array",
-      "offset": 2443,
+      "offset": 2419,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 2666,
+      "offset": 2642,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 2710,
+      "offset": 2686,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "Dictionary",
-      "offset": 3105,
+      "offset": 3081,
       "length": 3,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "StringLiteral",
-      "offset": 3192,
+      "offset": 3168,
       "length": 27,
       "value": "\"Loading Channels Data ...\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "IntegerLiteral",
-      "offset": 4025,
+      "offset": 4001,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "StringLiteral",
-      "offset": 4061,
+      "offset": 4037,
       "length": 26,
       "value": "\"No Information Available\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "StringLiteral",
-      "offset": 4115,
+      "offset": 4091,
       "length": 19,
       "value": "\"No Info Available\""
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 20771,
+      "offset": 20464,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 51856,
+      "offset": 51549,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 52338,
+      "offset": 52031,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 52435,
+      "offset": 52128,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 52561,
+      "offset": 52254,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "Array",
-      "offset": 57133,
+      "offset": 56826,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 57414,
+      "offset": 57107,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 59345,
+      "offset": 59038,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 95010,
+      "offset": 94643,
       "length": 5,
       "value": "false"
     },
@@ -59816,7 +58766,7 @@
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/EPGChannelCell.swift",
       "kind": "StringLiteral",
       "offset": 2175,
-      "length": 10230,
+      "length": 10286,
       "value": "\"\""
     },
     {
@@ -59871,14 +58821,14 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 2583,
+      "offset": 2587,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/Manager\/client.swift",
       "kind": "BooleanLiteral",
-      "offset": 2646,
+      "offset": 2650,
       "length": 5,
       "value": "false"
     },
@@ -59974,93 +58924,37 @@
       "value": "\"ChannelNumber\""
     },
     {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/SubscriptionGroupModel.swift",
-      "kind": "StringLiteral",
-      "offset": 188,
-      "length": 19,
-      "value": "\"ic_record_program\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/SubscriptionGroupModel.swift",
-      "kind": "StringLiteral",
-      "offset": 232,
-      "length": 18,
-      "value": "\"ic_record_series\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/SubscriptionGroupModel.swift",
-      "kind": "StringLiteral",
-      "offset": 272,
-      "length": 14,
-      "value": "\"ic_conflicts\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/SubscriptionGroupModel.swift",
-      "kind": "StringLiteral",
-      "offset": 307,
-      "length": 2,
-      "value": "\"\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/SubscriptionGroupModel.swift",
-      "kind": "StringLiteral",
-      "offset": 188,
-      "length": 19,
-      "value": "\"ic_record_program\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/SubscriptionGroupModel.swift",
-      "kind": "StringLiteral",
-      "offset": 232,
-      "length": 18,
-      "value": "\"ic_record_series\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/SubscriptionGroupModel.swift",
-      "kind": "StringLiteral",
-      "offset": 272,
-      "length": 14,
-      "value": "\"ic_conflicts\""
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/SubscriptionGroupModel.swift",
-      "kind": "StringLiteral",
-      "offset": 307,
-      "length": 2,
-      "value": "\"\""
-    },
-    {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/FilterViewController.swift",
       "kind": "Dictionary",
-      "offset": 1476,
+      "offset": 1452,
       "length": 3,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/FilterViewController.swift",
       "kind": "Array",
-      "offset": 1532,
+      "offset": 1508,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/FilterViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1754,
+      "offset": 1730,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/FilterViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1868,
+      "offset": 1844,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/FilterViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1981,
+      "offset": 1957,
       "length": 5,
       "value": "false"
     },
@@ -60074,7 +58968,7 @@
     {
       "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/FocusableView.swift",
       "kind": "IntegerLiteral",
-      "offset": 2513,
+      "offset": 2488,
       "length": 1,
       "value": "2"
     },
@@ -60644,13 +59538,6 @@
       "offset": 299,
       "length": 4,
       "value": "true"
-    },
-    {
-      "filePath": "\/Users\/prathibha\/Documents\/UMC\/framework\/MKFullGuideComponent\/FullGuideComponent\/FullGuideComponent\/Guide\/CustomisedButton.swift",
-      "kind": "StringLiteral",
-      "offset": 117,
-      "length": 16,
-      "value": "\"FullGuideComponent.CustomisedButton\""
     }
   ]
 }

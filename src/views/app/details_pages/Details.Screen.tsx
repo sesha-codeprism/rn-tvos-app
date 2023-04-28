@@ -32,6 +32,7 @@ import {
   SubscriptionPackages,
   getEpisodeInfo,
   massageDiscoveryFeed,
+  getRestrictionsForVod
 } from "../../../utils/assetUtils";
 import {
   isScheduleCurrent,
@@ -114,6 +115,7 @@ import {
   isPurchaseLocked,
 } from "../../../utils/pconControls";
 import { getAllSubscriptionGroups } from "../../../customHooks/useAllSubscriptionGroups";
+import { navigateToPlayer } from "../../../components/VideoPlayer/PlayerUtils";
 
 interface AssetData {
   id: string;
@@ -832,16 +834,27 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
   };
 
   const handlePlayDvr = () => {
-    console.log("handlePlayDvr", props);
+    const {
+      subscriptionItemForProgram,
+    } = udpDataAsset || {};
     const data: any = feed;
+    const IsAdult = subscriptionItemForProgram.IsAdult;
     let details = discoveryProgramData;
-    const IsAdult = details.IsAdult;
     if (IsAdult && isAdultContentBlock()) {
       DeviceEventEmitter.emit("openPinVerificationPopup", {
         pinType: PinType.adult,
         data: data,
         onSuccess: () => {
-          // To be implemented Play action
+          const { Id, ProgramDetails: {UniversalProgramId}, PlayInfo} = subscriptionItemForProgram ||  {};
+          getBookmark(
+            UniversalProgramId,
+            udlBookMark.RECORDING,
+            Id
+          )
+          .then((bookmark) => {
+            const newUdpDataAsset  = {...udpDataAsset, "playSource": sourceTypeString.DVR};
+            navigateToPlayer({udpDataAsset: newUdpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
+          });
         },
       });
     } else if (isPconBlocked(details)) {
@@ -849,13 +862,31 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         pinType: PinType.content,
         data: data,
         onSuccess: () => {
-          // To be implemented Play action
+          const { Id, ProgramDetails: {UniversalProgramId}, PlayInfo} = subscriptionItemForProgram ||  {};
+          getBookmark(
+            UniversalProgramId,
+            udlBookMark.RECORDING,
+            Id
+          )
+          .then((bookmark) => {
+            const newUdpDataAsset = {...udpDataAsset, playSource:  sourceTypeString.DVR}
+            navigateToPlayer({udpDataAsset: newUdpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
+          });
         },
       });
     } else {
-      // To be implemented Play action
+      const { Id, ProgramDetails: {UniversalProgramId}, PlayInfo} = subscriptionItemForProgram ||  {};
+      getBookmark(
+        UniversalProgramId,
+        udlBookMark.RECORDING,
+        Id
+      )
+      .then((bookmark) => {
+        const newUdpDataAsset = {...udpDataAsset, playSource:  sourceTypeString.DVR}
+        navigateToPlayer({udpDataAsset: newUdpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
+      });
     }
-    // route.params.feed.SeriesDetails
+   
   };
   const ctaButtonPress = {
     [AppStrings?.str_details_cta_play]: () => {
@@ -863,29 +894,30 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         udpDataAsset.usablePlayActions,
         false
       );
+      const newUdpDataAsset = {...udpDataAsset};
       getBookmark(
-        getVodVideoProfileId(udpDataAsset.usablePlayActions, false),
+        getVodVideoProfileId(newUdpDataAsset.usablePlayActions, false),
         udlBookMark.VOD
       )
         .then((bookmark) => {
-          udpDataAsset["playSource"] = sourceTypeString.VOD;
-          udpDataAsset["playAction"] = playAction;
+          newUdpDataAsset["playSource"] = sourceTypeString.VOD;
+          newUdpDataAsset["playAction"] = playAction;
           if (
-            udpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP
+            newUdpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP
           ) {
-            udpDataAsset["combinedEntitlements"] = [];
+            newUdpDataAsset["combinedEntitlements"] = [];
           }
-          navigateToPlayer(bookmark);
+          navigateToPlayer({udpDataAsset: newUdpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
         })
         .catch(() => {
-          udpDataAsset["playSource"] = sourceTypeString.VOD;
-          udpDataAsset["playAction"] = playAction;
+          newUdpDataAsset["playSource"] = sourceTypeString.VOD;
+          newUdpDataAsset["playAction"] = playAction;
           if (
-            udpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP
+            newUdpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP
           ) {
-            udpDataAsset["combinedEntitlements"] = [];
+            newUdpDataAsset["combinedEntitlements"] = [];
           }
-          navigateToPlayer();
+          navigateToPlayer({udpDataAsset: newUdpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
         });
     },
     [AppStrings?.str_details_cta_trailer]: () => {
@@ -893,29 +925,31 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         udpDataAsset.usablePlayActions,
         true
       );
-      udpDataAsset["playSource"] = sourceTypeString.VOD;
-      udpDataAsset["isTrailer"] = true;
-      udpDataAsset["playAction"] = playAction;
-      navigateToPlayer();
+      const newUdpDataAsset = {...udpDataAsset};
+      newUdpDataAsset["playSource"] = sourceTypeString.VOD;
+      newUdpDataAsset["isTrailer"] = true;
+      newUdpDataAsset["playAction"] = playAction;
+      navigateToPlayer({udpDataAsset: newUdpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
     },
     [AppStrings?.str_details_cta_play_from_beginning]: () => {
       const playAction = getRestrictionsForVod(
         udpDataAsset.usablePlayActions,
         false
       );
-      udpDataAsset["restart"] = true;
+      const newUdpDataAsset = {...udpDataAsset, restart: true};
 
-      udpDataAsset["playSource"] = sourceTypeString.VOD;
-      udpDataAsset["playAction"] = playAction;
-      if (udpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP) {
-        udpDataAsset["combinedEntitlements"] = [];
+      newUdpDataAsset["playSource"] = sourceTypeString.VOD;
+      newUdpDataAsset["playAction"] = playAction;
+      if (newUdpDataAsset?.assetType?.sourceType === sourceTypeString.CATCHUP) {
+        newUdpDataAsset["combinedEntitlements"] = [];
       }
-      navigateToPlayer();
+      navigateToPlayer({udpDataAsset: newUdpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
     },
     [AppStrings?.str_details_cta_watch_live]: () => {
       let isHDMIblocked = udpDataAsset?.combinedEntitlements?.some(
         (entitlement: string) => entitlement == pbr.RestrictionsType.HI
       );
+      const newUdpDataAsset = {...udpDataAsset};
       if (isHDMIblocked) {
         // displayModal({
         //   text: AppStrings?.str_restrictions.apple_tv_blocked,
@@ -929,8 +963,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
         // });
         return;
       }
-      if (udpDataAsset?.ppvInfo?.hasPPV && !udpDataAsset?.ppvInfo?.isinHome) {
-        const isOutOfHomeBlocked = udpDataAsset?.ppvInfo?.Entitlement?.some(
+      if (newUdpDataAsset?.ppvInfo?.hasPPV && !newUdpDataAsset?.ppvInfo?.isinHome) {
+        const isOutOfHomeBlocked = newUdpDataAsset?.ppvInfo?.Entitlement?.some(
           (entitlement: string) =>
             entitlement == pbr.RestrictionsType.OUTOFHOME_BLOCKED ||
             entitlement == pbr.RestrictionsType.OH
@@ -949,8 +983,8 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
           return;
         }
       }
-      udpDataAsset["playSource"] = sourceTypeString.LIVE;
-      navigateToPlayer();
+      newUdpDataAsset["playSource"] = sourceTypeString.LIVE;
+      navigateToPlayer({udpDataAsset: newUdpDataAsset, undefined, subscriberPlayOptionsData: playActionsData}, props.navigation);
     },
     [AppStrings?.str_details_cta_restart]: () => {
       const restart = () => {
@@ -1612,29 +1646,9 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     });
   };
 
-  const navigateToPlayer = (bookmark?: any) => {
-    //TODO: Finish implementation of navigate to player..
-    const data: any = feed;
-    const play = () => {
-      featureNotImplementedAlert();
-    };
-    console.log("navigateToPlayer", props);
-    let details = discoveryProgramData;
-    if (isPconBlocked(details)) {
-      DeviceEventEmitter.emit("openPinVerificationPopup", {
-        pinType: PinType.content,
-        data: data,
-        onSuccess: play,
-      });
-    } else {
-      // To be implemented Play action
-      play();
-    }
-  };
 
   const handleRestart = (bookmark?: any) => {
-    featureNotImplementedAlert();
-    //TODO: Finish implementation of Handle restart..
+    navigateToPlayer({udpDataAsset, bookmark, subscriberPlayOptionsData: playActionsData}, props.navigation);
   };
 
   const getDiscoverySchedules = async (assetData: AssetData) => {
@@ -1942,10 +1956,6 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     setIsCTAButtonFocused(true);
   }, [udpDataAsset?.ctaButtons?.length]);
 
-  const getRestrictionsForVod = (
-    usablePlayActions: any,
-    isTrailer: boolean
-  ) => {};
 
   const renderCTAButtonGroup = () => {
     // const { visible, panelName } = sidePanelState;

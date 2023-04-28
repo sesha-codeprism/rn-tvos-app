@@ -26,6 +26,8 @@ import {
 } from '../utils/DVRUtils'
 import { getUIdef } from "./uidefinition";
 import DeviceInfo from "react-native-device-info";
+import { getAssetBookmark } from "../../backend/subscriber/subscriber";
+import { BookmarkType as udlBookMark } from "../utils/Subscriber.utils";
 
 
 const detailsConfig = getUIdef("Details")?.config;
@@ -6990,56 +6992,18 @@ export const getBookmark = (
                 : type === udlBookMark.CATCHUP
                     ? `CATCHUP_Bookmark`
                     : `VOD_Bookmark`;
-        if (!cachedBookmarkData.has(Id)) {
-            getStore()
-                .dispatch(
-                    actionCreators.subscriber.bookmark.request(
-                        type,
-                        Id,
-                        programId
-                    )
-                )
-                .promise.then(() => {
-                    bookMarkKey[key] = selectors.subscriber.bookmark.get(
-                        getStore().getState(),
-                        type,
-                        Id,
-                        programId
-                    );
-                    cachedBookmarkData.set(Id);
+
+
+           return getAssetBookmark(type, Id, programId)
+                .then((resolved: any) => {
+                    bookMarkKey[key] = resolved;
                     resolve(bookMarkKey);
                 })
                 .catch(() => {
-                    cachedBookmarkData.set(Id);
                     bookMarkKey[key] = { TimeSeconds: 0 };
                     reject(bookMarkKey);
                 });
-        } else {
-            getStore()
-                .dispatch(
-                    actionCreators.subscriber.bookmark.reload(
-                        type,
-                        Id,
-                        programId
-                    )
-                )
-                .then(() => {
-                    bookMarkKey[key] = selectors.subscriber.bookmark.get(
-                        getStore().getState(),
-                        type,
-                        Id,
-                        programId
-                    );
-                    cachedBookmarkData.set(Id);
-                    resolve(bookMarkKey);
-                })
-                .catch(() => {
-                    cachedBookmarkData.set(Id);
-                    bookMarkKey[key] = { TimeSeconds: 0 };
-                    reject(bookMarkKey);
-                });
-        }
-    });
+        });
 };
 
 export const isRecordingWatched = (

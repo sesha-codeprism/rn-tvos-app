@@ -60,14 +60,13 @@ import PackageDetailsScreen from "../../views/app/details_pages/package_details/
 import FavouriteManagerScreen from "../../views/app/details_pages/favouriteManager/favouriteManager";
 import DVRManagerScreen from "../../views/app/dvr_manager/dvr_manager.screen";
 import DvrRecordedEpisode from "../../views/app/dvr_manager/dvr_recordedEpisodeList";
-import PlayerTest from  "../../views/VideoPlayer/PlayerTest";
-import  Video from "../../views/VideoPlayer/Video";
 import FavoriteChannelsScreen from "../../views/app/details_pages/favoriteChannels/favoriteChannels";
 import { PurchaseOptionsPanel } from "../../views/app/details_pages/PurchaseOptionPanel";
 import { PurchaseInformationPanel } from "../../views/app/details_pages/PurchaseInformationPanel";
 import { PurchaseNetworkSelectionPanel } from "../../views/app/details_pages/package_details/PurchaseNetworkSelectionPanel";
 import { TermsAndConditions } from "../../views/app/details_pages/TermsAndConfitions";
 import DevicesScreen from "../../views/app/settings_screens/devices/devices.screen";
+import Video from "../../components/VideoPlayer/Video";
 
 interface RouterOutletProps {
   initialState: any;
@@ -131,7 +130,6 @@ export const Routes = {
   DvrRecordedEpisode:"DvrRecordedEpisode",
   FavouriteManager: "FavouriteManager",
   DvrManager: "DvrManager",
-  PlayerTest: "PlayerTest",
   Video: "Video",
   FavoriteChannelsManager: "FavoriteChannelsManager",
   DvrManager: "DvrManager",
@@ -374,7 +372,6 @@ export const AppNavigator: React.FunctionComponent<RouterOutletProps> = (
         name={Routes.FavouriteManager}
         component={FavouriteManagerScreen}
       />
-      <Stack.Screen name={Routes.PlayerTest} component={PlayerTest}/>
       <Stack.Screen name={Routes.Video} component={Video}/>
       <Stack.Screen
         name={Routes.FavoriteChannelsManager}
