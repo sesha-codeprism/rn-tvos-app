@@ -66,7 +66,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
     }
     return () => {
       DeviceEventEmitter.removeAllListeners();
-    }
+    };
   }, []);
 
   const updateProfile = (userProfile: UserProfile) => {
