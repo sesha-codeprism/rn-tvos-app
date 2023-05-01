@@ -12,6 +12,8 @@ import { DefaultStore } from '../DiscoveryUtils';
 import { NativeModules } from 'react-native';
 import { getChannelMap, makeSlabUrl } from "../../utils/live/LiveUtils";
 import { getChannelRights } from "../../../backend/live/live";
+import { GET } from '../../../backend/utils/common/cloud';
+import { updateUIDefinition } from '../../config/constants';
 
 
 
@@ -185,7 +187,9 @@ export const setNativeModuleData = async () => {
             NativeModules.MKGuideBridgeManager.setChannelmapId(GLOBALS.bootstrapSelectors?.ChannelMapId);
             NativeModules.MKGuideBridgeManager.setEnvironment(GLOBALS.bootstrapSelectors?.ServiceMap.Services);
             NativeModules.MKGuideBridgeManager.setQualityforFilters(["HD", "SD", "4k"]);
+            // NativeModules.MKGuideBridgeManager.setCategoriesForCategorisedFilter(["Sports"])
             const channelRights = await getChannelRights();
+            updateUIFromBlob()
             NativeModules.MKGuideBridgeManager.setchannelMapRights(channelRights?.data);
             resolve()
         } catch (e) {
@@ -193,4 +197,23 @@ export const setNativeModuleData = async () => {
 
         }
     });
-}   
+}
+
+export const updateUIFromBlob = async () => {
+    const versionSet = GLOBALS.bootstrapSelectors?.VersionSet;
+    let blobId;
+    if (versionSet && versionSet.Versions && versionSet.Versions.length) {
+        if (versionSet.IsDefaultStore) {
+            blobId = versionSet.Versions[0].CustomizedBuildId;
+            console.log("Blob name:", blobId)
+            const defaultBlob = GLOBALS.bootstrapSelectors?.ServiceMap.Services.client.split("/")[4];
+            const url = GLOBALS.bootstrapSelectors?.ServiceMap.Services.client.replace(defaultBlob, blobId);
+            const uidefinition = await GET({
+                uri: url
+            });
+            updateUIDefinition(uidefinition);
+
+
+        }
+    }
+}
