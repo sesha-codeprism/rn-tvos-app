@@ -1509,7 +1509,7 @@ const DetailsScreen: React.FunctionComponent<DetailsScreenProps> = (props) => {
     if (
       channel &&
       networkInfo?.Number &&
-      networkInfo.Number?.toString() !== channel.number
+      networkInfo.Number?.toString() !== channel?.number
     ) {
       networkInfo = [channel];
     }

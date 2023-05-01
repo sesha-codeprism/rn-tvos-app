@@ -257,7 +257,7 @@ export class LiveChannelMap {
             force
         );
         if (ci.channel) {
-            this._byNumber[ci.channel.Number] = ci; // manage other caches.
+            this._byNumber[ci?.channel?.Number] = ci; // manage other caches.
         }
         return ci;
     }
@@ -316,10 +316,10 @@ export class LiveChannelMap {
             if (!returnNonPlayable && !isChannelPlayableOnDevice(channel)) {
                 continue;
             }
-            const newdiff = Math.abs(value - channel.Number);
+            const newdiff = Math.abs(value - channel?.Number);
             if (newdiff < diff) {
                 diff = newdiff;
-                closestChannel = channel.Number;
+                closestChannel = channel?.Number;
             } else if (newdiff > diff) {
                 break;
             }
@@ -1321,9 +1321,9 @@ export function createLiveShowcardModel(channel: IChannel, channelMap: LiveChann
     let service = channelMap.getService(channel);
     let pipService = channelMap.getPipService(channel);
     if (schedule) {
-        id = makeId(channel.Number, schedule.Name, schedule.StationId, schedule.EndUtc);
+        id = makeId(channel?.Number, schedule.Name, schedule.StationId, schedule.EndUtc);
     } else {
-        id = makeId(channel.Number, channel.Name, channel.StationId, channel.ServiceCollectionId, (service && service.Id));
+        id = makeId(channel?.Number, channel.Name, channel.StationId, channel.ServiceCollectionId, (service && service.Id));
     }
 
     let liveShowcardModel = {
@@ -1380,7 +1380,7 @@ export const updateVariant = (channelMap: LiveChannelMap, nowNextScheduleMap: No
             if (newChannelModel.$type === "EPISODE-LIVE") {
                 uniqueId = "series-" + newChannelModel.Schedule.SeriesId;
             } else if (!!ch.IsTif) {
-                uniqueId = "channel-" + newChannelModel.ChannelInfo.channel.Number.toString();
+                uniqueId = "channel-" + newChannelModel.ChannelInfo?.channel?.Number.toString();
             } else {
                 uniqueId = "station-" + ch.StationId;
             }
