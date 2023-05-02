@@ -177,6 +177,9 @@
 		B068E93C390541DFB3672038 /* profile_pic_7.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E5A2714BC24CC19880016D /* profile_pic_7.png */; };
 		B25B8D3DB4534952A3F1336B /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 3079E792BB854BA3B33777CE /* arrow_right.png */; };
 		BB30589128CD4393931872A3 /* overlay_landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 09228C411289408C8244E88D /* overlay_landscape.png */; };
+		BC0DC4032A015CB9000348C9 /* BitmovinAnalyticsCollector.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BC0DC4002A015CB9000348C9 /* BitmovinAnalyticsCollector.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		BC0DC4042A015CBA000348C9 /* MKPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BC0DC4012A015CB9000348C9 /* MKPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		BC0DC4052A015CBA000348C9 /* BitmovinPlayer.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BC0DC4022A015CB9000348C9 /* BitmovinPlayer.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BC4AD05EE51C4F2BBD97895C /* selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 93BC4F9D73694038BE692886 /* selected.png */; };
 		BC9B1DE429642B010019A926 /* FullGuideComponent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC9B1DE029642AFF0019A926 /* FullGuideComponent.framework */; };
 		BC9B1DE529642B010019A926 /* FullGuideComponent.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BC9B1DE029642AFF0019A926 /* FullGuideComponent.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -264,6 +267,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				BC0DC4032A015CB9000348C9 /* BitmovinAnalyticsCollector.framework in Embed Frameworks */,
+				BC0DC4042A015CBA000348C9 /* MKPlayer.framework in Embed Frameworks */,
+				BC0DC4052A015CBA000348C9 /* BitmovinPlayer.xcframework in Embed Frameworks */,
 				BCF5F72F29640176004CD3AF /* Kingfisher.framework in Embed Frameworks */,
 				BCF5F73529640178004CD3AF /* FullGuideComponent.framework in Embed Frameworks */,
 				BCF5F72D29640176004CD3AF /* Reachability.framework in Embed Frameworks */,
@@ -406,6 +412,9 @@
 		ADE603BAB892478299C3CB58 /* space.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = space.svg; path = ../src/assets/images/space.svg; sourceTree = "<group>"; };
 		B6C572129E524239A3CB86B1 /* profile_pic_6.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = profile_pic_6.png; path = ../src/assets/images/profile_pic_6.png; sourceTree = "<group>"; };
 		B7CF4B199C994A6B86C55E68 /* placeholder.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = placeholder.png; path = ../src/assets/images/placeholder.png; sourceTree = "<group>"; };
+		BC0DC4002A015CB9000348C9 /* BitmovinAnalyticsCollector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BitmovinAnalyticsCollector.framework; path = Framework/simulator/Frameworks/BitmovinAnalyticsCollector.framework; sourceTree = "<group>"; };
+		BC0DC4012A015CB9000348C9 /* MKPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MKPlayer.framework; path = Framework/simulator/Frameworks/MKPlayer.framework; sourceTree = "<group>"; };
+		BC0DC4022A015CB9000348C9 /* BitmovinPlayer.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = BitmovinPlayer.xcframework; path = Framework/simulator/Frameworks/BitmovinPlayer.xcframework; sourceTree = "<group>"; };
 		BC9B1DE029642AFF0019A926 /* FullGuideComponent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FullGuideComponent.framework; path = Framework/AppleTV/FullGuideComponent.framework; sourceTree = "<group>"; };
 		BC9B1DE129642AFF0019A926 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Framework/AppleTV/Kingfisher.framework; sourceTree = "<group>"; };
 		BC9B1DE229642B000019A926 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Framework/AppleTV/Alamofire.framework; sourceTree = "<group>"; };
@@ -710,6 +719,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				BC0DC4002A015CB9000348C9 /* BitmovinAnalyticsCollector.framework */,
+				BC0DC4022A015CB9000348C9 /* BitmovinPlayer.xcframework */,
+				BC0DC4012A015CB9000348C9 /* MKPlayer.framework */,
 				59E102BE29E5BB0300106328 /* Images.xcassets */,
 				594E610B2977FEA8004C1D05 /* Mediakind-Icons.otf */,
 				13B07FAE1A68108700A75B9A /* RetailClient */,

@@ -82,6 +82,10 @@ public class MKGuideBridgeManager: NSObject {
     print("setCategoriesForCategorisedFilter in swift = \(value)")
     MKFullGuideStorageManager.shared.setCategories(categories: value)
   }
-  
+
+  @objc func setSubscriptionGroupResponse(_ value: Dictionary<String, Any>) {
+    print("setSubscriptionGroupResponse in swift = \(value)")
+    MKFullGuideStorageManager.shared.setSubscriptionGroupResponse(value: value)
+  }
 }
 

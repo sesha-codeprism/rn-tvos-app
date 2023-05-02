@@ -21,5 +21,6 @@ RCT_EXTERN_METHOD(clearCacheData)
 RCT_EXTERN_METHOD(setchannelMapRights:(NSDictionary)value)
 RCT_EXTERN_METHOD(setQualityforFilters:(NSArray)value)
 RCT_EXTERN_METHOD(setCategoriesForCategorisedFilter:(NSArray)value)
+RCT_EXTERN_METHOD(setSubscriptionGroupResponse:(NSDictionary)value)
 
 @end
