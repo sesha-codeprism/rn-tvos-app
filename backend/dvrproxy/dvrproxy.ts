@@ -16,7 +16,7 @@ export const DVRPROXY_URL = GLOBALS.bootstrapSelectors?.ServiceMap.Services.dvr;
 
 
 export const getViewableSubscriptionStems = async (uri: string, params: any) => {
-    const subscriptionGroups = queryClient.getQueryData(['dvr', 'get-all-subscriptionGroups']);
+    const subscriptionGroups = GLOBALS.viewableSubscriptions;
     console.log("subscriptionGroups", subscriptionGroups)
     if (!subscriptionGroups) {
         console.error("No subscriptionGroups");
@@ -25,7 +25,7 @@ export const getViewableSubscriptionStems = async (uri: string, params: any) => 
     const channelMap = GLOBALS.channelMap;
     const recordingBookmarks = await getAllRecordingBookmarks();
     //@ts-ignore
-    const selectedFeedContent = subscriptionGroups.viewableSubscriptions;
+    const selectedFeedContent = subscriptionGroups;
     let feedContent = selectedFeedContent
         ? cloneDeep(selectedFeedContent)
         : selectedFeedContent;

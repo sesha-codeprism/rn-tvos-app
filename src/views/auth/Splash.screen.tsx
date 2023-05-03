@@ -37,6 +37,7 @@ import { updateStore } from "../../utils/helpers";
 import { GlobalContext } from "../../contexts/globalContext";
 import {
   invalidateQueryBasedOnSpecificKeys,
+  queryClient,
   resetCaches,
 } from "../../config/queries";
 import { useQuery } from "react-query";
@@ -56,6 +57,7 @@ import {
   getNotification,
   setNotification,
 } from "../../components/MFNotification/NotificationStore";
+import { getAllSubscriptionGroups } from "../../customHooks/useAllSubscriptionGroups";
 
 // LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 
@@ -165,7 +167,10 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
           GLOBALS.rootNavigation.replace(Routes.ShortCode);
         }
       } else if (message?.type === NotificationType.dvrUpdated) {
-        invalidateQueryBasedOnSpecificKeys("dvr", "get-all-subscriptionGroups");
+        // invalidateQueryBasedOnSpecificKeys("dvr", "get-all-subscriptionGroups");
+        getAllSubscriptionGroups().then(() => {
+          queryClient.refetchQueries(["dvrfeed"]);
+        });
       } else if (message?.type === NotificationType.easmessage) {
         const { payload } = message;
         const localeStr =
@@ -236,7 +241,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         DeviceEventEmitter.emit("FavoriteChannelUpdated", message);
       } else if (message?.type === NotificationType.UINotification) {
         const notification = getNotification();
-        console.log('notification', notification);
+        console.log("notification", notification);
         if (
           notification &&
           notification.payload.messageId !== message.payload.messageId
