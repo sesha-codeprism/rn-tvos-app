@@ -84,9 +84,7 @@ export const config = {
         seekAccumulationTimeout: 1000, // in milliseconds
         seekCompletionTimeout: 10000,
         supportedEncodings: {
-            Hls : 1, 
-            SmoothStreaming : 2, 
-            Jitp : 3
+            Hls: 1,
         },
         audioDescriptionTrackLanguageCode: ["est", "afr", "enm", "frm"],
         skipBackSeconds: 7,
