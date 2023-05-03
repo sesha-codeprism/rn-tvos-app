@@ -276,11 +276,40 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
     console.log("onPressSwim", event);
     //@ts-ignore
     if (event.Schedule) {
-      // event["isFromEPG"] = true;
-      props.navigation.navigate(Routes.Details, {
-        feed: event,
-      });
-      
+      const IsAdult = event.Schedule.IsAdult;
+      if (IsAdult && isAdultContentBlock()) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          // title: "test 1",
+          // subtitle: "sub title test 1",
+          // bodyTitle: "bodyTitle1",
+          // bodySubitle: "bodySubitle",
+          pinType: PinType.adult,
+          data: event,
+          onSuccess: () => {
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else if (isPconBlocked(event.Schedule)) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          // title: "test 1",
+          // subtitle: "sub title test 1",
+          // bodyTitle: "bodyTitle1",
+          // bodySubitle: "bodySubitle",
+          pinType: PinType.content,
+          data: event,
+          onSuccess: () => {
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else {
+        props.navigation.navigate(Routes.Details, {
+          feed: event,
+        });
+      }
     } else if (event.ItemType === ItemType.PACKAGE) {
       props.navigation.navigate(Routes.PackageDetails, {
         feed: event,
@@ -302,10 +331,44 @@ const HomeScreen: React.FunctionComponent<HomeScreenProps> = (
         props.navigation.navigate(Routes[`${route}`], payload);
       }
     } else {
-      props.navigation.navigate(Routes.Details, {
-        feed: event,
-      });
-      
+      // if data is available directly
+      const IsAdult = event.IsAdult;
+      if (IsAdult && isAdultContentBlock()) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.adult,
+          data: event,
+          onSuccess: () => {
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else if (isPconBlocked(event.Ratings)) {
+        MFEventEmitter.emit("openPinVerificationPopup", {
+          pinType: PinType.content,
+          data: event,
+          onSuccess: () => {
+            props.navigation.navigate(Routes.Details, {
+              feed: event,
+            });
+          },
+        });
+      } else if (event.ItemType === ItemType.LIVETVGUIDE) {
+        if (event.filterId) {
+          NativeModules.MKGuideBridgeManager.setCategoriesForCategorisedFilter([
+            event.filterId,
+          ]);
+        } else {
+          NativeModules.MKGuideBridgeManager.setCategoriesForCategorisedFilter(
+            []
+          );
+        }
+        props.navigation.navigate("guide");
+      } else {
+        props.navigation.navigate(Routes.Details, {
+          feed: event,
+        });
+      }
     }
   };
   return (

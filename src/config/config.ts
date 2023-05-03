@@ -2,35 +2,94 @@ export enum Protocol {
     http = "http",
     https = "https"
 }
+
+export interface NameValueString {
+    name: string;
+    value: string;
+}
+
+export interface Config {
+    authenticationType: "web" | "native" | undefined;
+    checkedInProfileId: string | undefined,
+    csrfToken: string | undefined;
+    authToken: string | undefined;
+    refreshToken: string | undefined;
+    oauth: string | undefined;
+    tenant: string | undefined;
+    deviceId: string | undefined;
+    deviceType: string | undefined;
+    netInfo: any | undefined;
+    protocol: Protocol | undefined;
+    hostname: string | undefined;
+    supportedLocales: NameValueString[] | undefined;
+    currentLocale: {
+        full: string;
+        short: string;
+        isRTL: boolean;
+    } | undefined;
+    deviceInfo: DeviceInfo | undefined;
+    needAuthentication: boolean;
+    adultToken: undefined
+}
+
+export interface DeviceInfo {
+    deviceType: DeviceType;
+    os: OS;
+    connectionInfo?: string;
+    netInfo: any;
+}
+
+export enum DeviceType {
+    Mobile = "Mobile",
+    Tablet = "Tablet",
+    TV = "TV",
+    Unknown = "Unknown",
+}
+
+export enum OS {
+    android = "android",
+    ios = "ios",
+    web = "web",
+    macos = "macos",
+    windows = "windows",
+}
+
+export interface UserAgent {
+    is1ft: boolean;
+    is2ft: boolean;
+    is10ft: boolean;
+    isAndroid: boolean;
+    isIOS: boolean;
+    isWeb: boolean;
+}
+
 export const config = {
-    skin: "skt.default.prodb",
+    skin: "mr.default.devtest",
     id: "applicationConfig",
     name: "Application Configuration",
     whyDidYouRun: false, // developer config, to be turned on for perf log generation, default value 'false'.
     protocol: "https" as Protocol,
-    hostname: "reachclient.prodb.skt.tv3cloud.com",
-    buildVersion: "version.YYYYMMDD.varBuildNum.constBuildNum-commitID",
+    hostname: "reachclient.dev.mr.tv3cloud.com",
+    buildVersion: "1.8(11)",
     deviceId: (global as any).deviceId,
     deviceType: "AppleTV",
     prefixType: "10ft",
     oauth: "LIVEID",
-    tenantId: "tenantID",
+    tenantId: "default",
     authenticationType: "native",
     allowPinReset: true,
-    allowAdultLocks: false,
+    allowAdultLocks: true,
     adultContentMasking: true,
     allowPurchase: false,
-    parentalControlsMultipPin: true,
+    parentalControlsMultipPin: false,
     defaultFeedItemsCount: 16,
     defaultSkip: 0,
-    defaultTop: 30,
     defaultOrderBy: "Popularity",
     longPressThreshold: 500,
     inhomeDetection: {
         inHomeDefault: false,
-        connectionUrl: "mediafirst.bsm.esb-qa.sasktel.com",
-        inHomeApiEndpoint:
-            "/rest/ST_Process_MaxProvisioning/REST/DeviceInHome/{accountId}?jsonFormat=stream",
+        connectionUrl: "mkinhome.azurewebsites.net",
+        inHomeApiEndpoint: "/v1/ihd/users/userAccount/{accountId}/isInHome",
         useSubscriberInHome: false,
     },
     excludeStores: {
@@ -38,39 +97,40 @@ export const config = {
     },
     audioLanguages: {
         primary: "en",
-        secondary: "en",
-        tracks: ["en"],
+        secondary: "fr",
+        tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
     },
     onScreenLanguage: {
-        primary: "en-CA",
-        tracks: ["en-CA"],
+        primary: "en-US",
+        tracks: ["en-US", "fr-CA", "en-CA", "es-CL", "hu-HU"],
     },
     subtitleLanguages: {
         primary: "en",
-        secondary: "en",
-        tracks: ["en"],
+        secondary: "fr",
+        tracks: ["en", "fr", "es", "de", "sa", "hi", "kn", "pt"],
     },
     bitrates10ft: [
         {
             localizedText: "str_bitrate_option_0",
-            id: "7040",
+            id: "51200",
             icon: "quality_best",
             default: true,
         },
         {
             localizedText: "str_bitrate_option_1",
-            id: "4324",
+            id: "2884",
             icon: "quality_better",
         },
         {
             localizedText: "str_bitrate_option_2",
-            id: "3250",
+            id: "1500",
             icon: "quality_good",
         },
     ],
     settings: {
         developerEnabled: false,
-        subtitleEnabled: false,
+        subtitleEnabled: true,
+        audioLanguageEnabled: true,
     },
     profileNameMaxLength: 20,
     numberOfProfiles: 8,
@@ -81,10 +141,10 @@ export const config = {
         HideFeedbackControlsTimerInSec: 2,
         ForceHideFeedbackControlsTimerInSec: 5,
         areYouStillWatchingTimerInMin: 240,
-        seekAccumulationTimeout: 1000, // in milliseconds
-        seekCompletionTimeout: 10000,
         supportedEncodings: {
-            Hls: 1,
+            Hls: 2,
+            SmoothStreaming: 1,
+            Jitp: 3
         },
         audioDescriptionTrackLanguageCode: ["est", "afr", "enm", "frm"],
         skipBackSeconds: 7,
@@ -125,7 +185,7 @@ export const config = {
                         contentType: "GENERIC",
                         sourceType: "LIVE",
                     },
-                    id: "live/feeds/allSubscribed/",
+                    id: "live/feeds/allChannels/",
                     image16x9KeyArtURL: {
                         uri: "AllChannels",
                     },
@@ -144,17 +204,17 @@ export const config = {
                         contentType: "GENERIC",
                         sourceType: "LIVE",
                     },
-                    id: "live/feeds/allCanadianSatellite/",
+                    id: "live/feeds/allChannels/",
                     image16x9KeyArtURL: {
-                        uri: "Business",
+                        uri: "AllChannels",
                     },
                     metadataLine2: "",
                     metadataLine3: "",
-                    stringId: "all_canadian_satellite",
-                    title: "Canadian Satellite",
-                    Name: "Canadian Satellite",
+                    stringId: "all_apps",
+                    title: "Apps",
+                    Name: "Apps",
                     ItemType: "liveTvGuide",
-                    filterId: "Canadian Satellite",
+                    filterId: "App",
                 },
                 {
                     $type: "PROGRAM-LIVE",
@@ -163,13 +223,49 @@ export const config = {
                         contentType: "GENERIC",
                         sourceType: "LIVE",
                     },
-                    id: "live/feeds/allDigital/",
+                    id: "live/feeds/allChannels/",
                     image16x9KeyArtURL: {
-                        uri: "DefaultBackground",
+                        uri: "AllChannels",
                     },
                     metadataLine2: "",
                     metadataLine3: "",
-                    stringId: "all_digital",
+                    stringId: "all_broadcast",
+                    title: "Broadcast",
+                    Name: "Broadcast",
+                    ItemType: "liveTvGuide",
+                    filterId: "Broadcast",
+                }, {
+                    $type: "PROGRAM-LIVE",
+                    assetType: {
+                        itemType: "GENERIC-LIVE",
+                        contentType: "GENERIC",
+                        sourceType: "LIVE",
+                    },
+                    id: "live/feeds/allChannels/",
+                    image16x9KeyArtURL: {
+                        uri: "AllChannels",
+                    },
+                    metadataLine2: "",
+                    metadataLine3: "",
+                    stringId: "all_cable",
+                    title: "Cable",
+                    Name: "Cable",
+                    ItemType: "liveTvGuide",
+                    filterId: "Cable",
+                }, {
+                    $type: "PROGRAM-LIVE",
+                    assetType: {
+                        itemType: "GENERIC-LIVE",
+                        contentType: "GENERIC",
+                        sourceType: "LIVE",
+                    },
+                    id: "live/feeds/allChannels/",
+                    image16x9KeyArtURL: {
+                        uri: "AllChannels",
+                    },
+                    metadataLine2: "",
+                    metadataLine3: "",
+                    stringId: "all_cable",
                     title: "Digital",
                     Name: "Digital",
                     ItemType: "liveTvGuide",
@@ -182,51 +278,13 @@ export const config = {
                         contentType: "GENERIC",
                         sourceType: "LIVE",
                     },
-                    id: "live/feeds/allEntertainment/",
+                    id: "live/feeds/allChannels/",
                     image16x9KeyArtURL: {
-                        uri: "DefaultBackground",
+                        uri: "AllChannels",
                     },
                     metadataLine2: "",
                     metadataLine3: "",
-                    stringId: "all_Entertainment",
-                    title: "Entertainment",
-                    Name: "Entertainment",
-                    ItemType: "liveTvGuide",
-                    filterId: "Entertainment",
-                },
-                {
-                    $type: "PROGRAM-LIVE",
-                    assetType: {
-                        itemType: "GENERIC-LIVE",
-                        contentType: "GENERIC",
-                        sourceType: "LIVE",
-                    },
-                    id: "live/feeds/allFrench/",
-                    image16x9KeyArtURL: {
-                        uri: "DefaultBackground",
-                    },
-                    metadataLine2: "",
-                    metadataLine3: "",
-                    stringId: "all_French",
-                    title: "French",
-                    Name: "French",
-                    ItemType: "liveTvGuide",
-                    filterId: "French",
-                },
-                {
-                    $type: "PROGRAM-LIVE",
-                    assetType: {
-                        itemType: "GENERIC-LIVE",
-                        contentType: "GENERIC",
-                        sourceType: "LIVE",
-                    },
-                    id: "live/feeds/fullPowerBroadcast/",
-                    image16x9KeyArtURL: {
-                        uri: "DefaultBackground",
-                    },
-                    metadataLine2: "",
-                    metadataLine3: "",
-                    stringId: "all_full_power_broadcast",
+                    stringId: "all_cable",
                     title: "Full Power Broadcast",
                     Name: "Full Power Broadcast",
                     ItemType: "liveTvGuide",
@@ -239,146 +297,13 @@ export const config = {
                         contentType: "GENERIC",
                         sourceType: "LIVE",
                     },
-                    id: "live/feeds/allKids/",
+                    id: "live/feeds/allChannels/",
                     image16x9KeyArtURL: {
-                        uri: "Children",
+                        uri: "AllChannels",
                     },
                     metadataLine2: "",
                     metadataLine3: "",
-                    stringId: "all_kids",
-                    title: "Kids",
-                    Name: "Kids",
-                    ItemType: "liveTvGuide",
-                    filterId: "Kids",
-                },
-                {
-                    $type: "PROGRAM-LIVE",
-                    assetType: {
-                        itemType: "GENERIC-LIVE",
-                        contentType: "GENERIC",
-                        sourceType: "LIVE",
-                    },
-                    id: "live/feeds/allKnowledge/",
-                    image16x9KeyArtURL: {
-                        uri: "DefaultBackground",
-                    },
-                    metadataLine2: "",
-                    metadataLine3: "",
-                    stringId: "all_Knowledge",
-                    title: "Knowledge",
-                    Name: "Knowledge",
-                    ItemType: "liveTvGuide",
-                    filterId: "Knowledge",
-                },
-                {
-                    $type: "PROGRAM-LIVE",
-                    assetType: {
-                        itemType: "GENERIC-LIVE",
-                        contentType: "GENERIC",
-                        sourceType: "LIVE",
-                    },
-                    id: "live/feeds/allLife/",
-                    image16x9KeyArtURL: {
-                        uri: "DefaultBackground",
-                    },
-                    metadataLine2: "",
-                    metadataLine3: "",
-                    stringId: "all_Life",
-                    title: "Life",
-                    Name: "Life",
-                    ItemType: "liveTvGuide",
-                    filterId: "Life",
-                },
-                {
-                    $type: "PROGRAM-LIVE",
-                    assetType: {
-                        itemType: "GENERIC-LIVE",
-                        contentType: "GENERIC",
-                        sourceType: "LIVE",
-                    },
-                    id: "live/feeds/allMovies/",
-                    image16x9KeyArtURL: {
-                        uri: "Movies",
-                    },
-                    metadataLine2: "",
-                    metadataLine3: "",
-                    stringId: "all_Movies",
-                    title: "Movies",
-                    Name: "Movies",
-                    ItemType: "liveTvGuide",
-                    filterId: "Movies",
-                },
-                {
-                    $type: "PROGRAM-LIVE",
-                    assetType: {
-                        itemType: "GENERIC-LIVE",
-                        contentType: "GENERIC",
-                        sourceType: "LIVE",
-                    },
-                    id: "live/feeds/allMulticultural/",
-                    image16x9KeyArtURL: {
-                        uri: "DefaultBackground",
-                    },
-                    metadataLine2: "",
-                    metadataLine3: "",
-                    stringId: "all_Multicultural",
-                    title: "Multicultural",
-                    Name: "Multicultural",
-                    ItemType: "liveTvGuide",
-                    filterId: "Multicultural",
-                },
-                {
-                    $type: "PROGRAM-LIVE",
-                    assetType: {
-                        itemType: "GENERIC-LIVE",
-                        contentType: "GENERIC",
-                        sourceType: "LIVE",
-                    },
-                    id: "live/feeds/allNetworks/",
-                    image16x9KeyArtURL: {
-                        uri: "DefaultBackground",
-                    },
-                    metadataLine2: "",
-                    metadataLine3: "",
-                    stringId: "all_Networks",
-                    title: "Networks",
-                    Name: "Networks",
-                    ItemType: "liveTvGuide",
-                    filterId: "Networks",
-                },
-                {
-                    $type: "PROGRAM-LIVE",
-                    assetType: {
-                        itemType: "GENERIC-LIVE",
-                        contentType: "GENERIC",
-                        sourceType: "LIVE",
-                    },
-                    id: "live/feeds/allNews/",
-                    image16x9KeyArtURL: {
-                        uri: "News",
-                    },
-                    metadataLine2: "",
-                    metadataLine3: "",
-                    stringId: "all_News",
-                    title: "News",
-                    Name: "News",
-                    ItemType: "liveTvGuide",
-                    filterId: "News",
-                },
-                {
-                    $type: "PROGRAM-LIVE",
-                    assetType: {
-                        itemType: "GENERIC-LIVE",
-                        contentType: "GENERIC",
-                        sourceType: "LIVE",
-                    },
-                    id: "live/feeds/allPPV/",
-                    image16x9KeyArtURL: {
-                        uri: "DefaultBackground",
-                    },
-                    metadataLine2: "",
-                    metadataLine3: "",
-                    stringId: "all_PPV",
+                    stringId: "all_cable",
                     title: "PPV",
                     Name: "PPV",
                     ItemType: "liveTvGuide",
@@ -391,63 +316,64 @@ export const config = {
                         contentType: "GENERIC",
                         sourceType: "LIVE",
                     },
-                    id: "live/feeds/allSports/",
+                    id: "live/feeds/allChannels/",
                     image16x9KeyArtURL: {
-                        uri: "Sports",
+                        uri: "AllChannels",
                     },
                     metadataLine2: "",
                     metadataLine3: "",
-                    stringId: "all_Sports",
-                    title: "Sports",
-                    Name: "Sports",
+                    stringId: "all_cable",
+                    title: "Premium",
+                    Name: "Premium",
                     ItemType: "liveTvGuide",
-                    filterId: "Sports",
-                },
+                    filterId: "Premium",
+                }
+
             ],
         },
         epgConfig: {
             font: {
                 H1: {
-                    file: "Montserrat-Bold.ttf",
+                    file: "Inter-Bold.ttf",
                     size: "58",
-                    color: "#EEEEEE",
+                    color: "#F1F1F1FF",
                 },
                 H2: {
-                    file: "Montserrat-Bold.ttf",
+                    file: "Inter-Bold.ttf",
                     size: "24",
-                    color: "#EEEEEE",
+                    color: "#F1F1F1FF",
                 },
                 H3: {
-                    file: "Montserrat-Medium.ttf",
+                    file: "Inter-SemiBold.ttf",
                     size: "22",
-                    color: "#EEEEEE",
+                    color: "#F1F1F1FF",
                 },
                 H4: {
-                    file: "Montserrat-Medium.ttf",
+                    file: "Inter-SemiBold.ttf",
                     size: "20",
-                    color: "#EEEEEE",
+                    color: "#F1F1F1FF",
                 },
                 tag: {
-                    file: "Montserrat-Regular.ttf",
+                    file: "Inter-Regular.ttf",
                     size: "20",
-                    color: "#A7A7A7",
+                    color: "#F1F1F180",
                 },
                 body: {
-                    file: "Montserrat-Medium.ttf",
+                    file: "Inter-SemiBold.ttf",
                     size: "16",
-                    color: "#A7A7A7",
+                    color: "#F1F1F180",
                 },
             },
             view: {
                 backgroundColor: "#00000000",
-                focusColor: "#DC1895",
+                focusColor: "#053C69",
             },
             filterButton: {
                 backgroundColor: "#424242FF",
-                backgroundfocusColor: "#DC1895",
+                backgroundFocusColor: "#082A4A",
             },
             filterToggleButton: {
-                backgroundFocusColor: "#DC1895",
+                backgroundFocusColor: "#082A4A",
             },
             list: {
                 verticalStreamingRange: 2.0,
@@ -455,7 +381,7 @@ export const config = {
             },
             button: {
                 backgroundColor: "#424242FF",
-                backgroundfocusColor: "#DC1895",
+                backgroundfocusColor: "#082A4A",
                 jumpToDate: {
                     enabled: true,
                 },
@@ -493,8 +419,8 @@ export const config = {
                     format: "%I:%M %p",
                 },
                 days: {
-                    forward: 13,
-                    backward: 7,
+                    forward: 7,
+                    backward: 1,
                 },
             },
             icon: {
@@ -520,10 +446,7 @@ export const config = {
             filterLocalData: {
                 enabled: false,
             },
-            isDefaultSubscribedFilterEnabled: true,
-            enableMiniEPG: false,
             // @TODO Get filters from Redux Reducer
-
             filters: [
                 {
                     title: "Filter By",
@@ -532,58 +455,20 @@ export const config = {
                             title: "Favorite Channels",
                             tag: "Favorites",
                         },
-                        {
-                            title: "Playable on this Device",
-                            tag: "Playable",
-                        },
-                        {
-                            title: "Subscribed",
-                            tag: "Subscribed",
-                        },
                     ],
                 },
                 {
                     title: "Category",
                     entries: [
                         {
-                            title: "Networks",
-                            tag: "Networks",
-                            stringId: "all_networks",
+                            title: "Children",
+                            tag: "Children",
+                            stringId: "all_children",
                         },
                         {
-                            title: "Kids",
-                            tag: "Kids",
-                            stringId: "all_kids",
-                        },
-                        {
-                            title: "Entertainment",
-                            tag: "Entertainment",
-                            stringId: "all_entertainment",
-                        },
-                        {
-                            title: "Movies",
-                            tag: "Movies",
-                            stringId: "all_movies",
-                        },
-                        {
-                            title: "News",
-                            tag: "News",
-                            stringId: "all_news",
-                        },
-                        {
-                            title: "Life",
-                            tag: "Life",
-                            stringId: "all_life",
-                        },
-                        {
-                            title: "Multicultural",
-                            tag: "Multicultural",
-                            stringId: "all_multicultural",
-                        },
-                        {
-                            title: "Application",
-                            tag: "Application",
-                            stringId: "all_application",
+                            title: "Music",
+                            tag: "Music",
+                            stringId: "all_music",
                         },
                         {
                             title: "Sports",
@@ -591,29 +476,9 @@ export const config = {
                             stringId: "all_sports",
                         },
                         {
-                            title: "Knowledge",
-                            tag: "Knowledge",
-                            stringId: "all_knowledge",
-                        },
-                        {
-                            title: "French",
-                            tag: "French",
-                            stringId: "all_french",
-                        },
-                        {
-                            title: "Canadian Satellite",
-                            tag: "Canadian Satellite",
-                            stringId: "all_canadian_satellite",
-                        },
-                        {
-                            title: "Digital",
-                            tag: "Digital",
-                            stringId: "all_digital",
-                        },
-                        {
-                            title: "PPV",
-                            tag: "PPV",
-                            stringId: "all_ppv",
+                            title: "News",
+                            tag: "News",
+                            stringId: "all_news",
                         },
                     ],
                 },
@@ -654,18 +519,6 @@ export const config = {
                 tomorrow: "tomorrow",
                 viewAll: "view_all",
                 yesterday: "yesterday",
-                january: "january",
-                february: "february",
-                march: "march",
-                april: "april",
-                may: "may",
-                june: "june",
-                july: "july",
-                august: "august",
-                september: "september",
-                october: "october",
-                november: "november",
-                december: "december",
             },
             scrollLimited: {
                 enabled: true,
@@ -678,8 +531,7 @@ export const config = {
         feeds: {
             Continue: {
                 itemTypes: "Title,Catchup,Recording",
-            },
-            Library: {
+            }, Library: {
                 itemTypes: "Title,PayPerView",
             },
             default: "Title",
@@ -693,7 +545,7 @@ export const config = {
         enableAllChannels: true,
         inProgressMinBufferMsec: 60000,
         inProgressPlaybackDisabled: false,
-        restrictedRecording: false,
+        restrictedRecording: true,
     },
     appInsights: {
         InstrumentationKey: "f857600d-1346-44e2-bb59-8c5e96430833",
@@ -703,7 +555,6 @@ export const config = {
         intervalMilliSec: 300000,
         maxSize: 800000,
         warnSize: 5000000,
-        playerAnalyticsInterval: 180, // playerAnalyticsInterval must be >= 60(seconds)
     },
     easConfig: {
         epochMillisecondsDiff: 2208988800000,
@@ -721,20 +572,12 @@ export const config = {
     },
     pconConfig: {
         ratingProvider: {
-            default: ["CanadaTV", "SaskFilm"],
+            default: ["MPAA", "USTV", "EIRIN"],
         },
         logUnknownRatingSystems: false,
     },
-    pconDefaultConfig: {
-        defaultRestrictedAge: 17,
-    },
     favoriteConfig: {
         $top: 100,
-    },
-    appTimeout: {
-        liveTimeOut: 90, //minutes
-        guideTimeout: 90, //minutes
-        sessionInactivityTimeout: 90, //minutes
     },
     udlExpiry: {
         bootstrap: {
@@ -753,10 +596,10 @@ export const config = {
             categoriesSubcategories: 240,
             subCategoryItems: 240,
             collectionItems: 0,
-            libraryItems: 480,
+            libraryItems: 240,
             libraryPivots: 240,
             catchupPivotItems: 240,
-            catchupItems: 480,
+            catchupItems: 240,
             catchupPivots: 240,
             packages: 240,
             packageTitles: 240,
@@ -765,19 +608,19 @@ export const config = {
             person: 240,
             searchFilters: 0,
             subscriptionPackageCategories: 240,
-            subscriptionPackageItems: 480,
+            subscriptionPackageItems: 240,
             subscriptionPackageCategoryItems: 240,
         },
         search: {
             search: 0,
         },
         subscriber: {
-            pinnedItems: 480,
-            purchasedItems: 480,
+            pinnedItems: 240,
+            purchasedItems: 240,
             devices: 240,
             dynamicFeeds: 240,
             locationInfo: 240,
-            playOptions: 500,
+            playOptions: 400,
             profiles: 1500,
             profilesUpdate: 0,
             program: 240,
@@ -788,17 +631,15 @@ export const config = {
             account: 400,
             packageActions: 240,
             bookmark: 240,
-            pinnedItem: 480,
+            pinnedItem: 240,
             allRecordingBookmarks: 240,
         },
         live: {
             catalogCache: 1800,
-            catchup: typeof 480,
+            catchup: typeof 240,
             channelRights: 0,
             scheduleCache: 1300,
             recentlyAired: 1300,
         },
     },
-    ppvFeedExpiry: 600,
-    ppvAutoPurchasePrice: 1, // PPV that costs less than "ppvAutoPurchasePrice" will be considered as Free-PPV & it'll be auto purchased.
 };
