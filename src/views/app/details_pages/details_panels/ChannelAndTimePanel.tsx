@@ -85,7 +85,7 @@ const ChannelAndTime: React.FunctionComponent<ChannelAndTimeProps> = (
   const getChannelByNumber = (channelNumber: number) => {
     if (GLOBALS.channelMap.Channels?.length) {
       return GLOBALS.channelMap.Channels.find(
-        (channel: any) => channel.Number === channelNumber
+        (channel: any) => channel?.Number === channelNumber
       );
     }
   };

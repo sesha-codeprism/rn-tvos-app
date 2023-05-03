@@ -262,8 +262,8 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
             );
             if (channel) {
               return {
-                key: channel.Number,
-                title: `${channel.Number} ${channel.Name}`,
+                key: channel?.Number,
+                title: `${channel?.Number} ${channel.Name}`,
               };
             }
           })
@@ -293,7 +293,7 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
       }
       const channel = GLOBALS.channelMap
         ?.getChannels()
-        .find((channel: any) => channel.Number === parseInt(selectedChannel));
+        .find((channel: any) => channel?.Number === parseInt(selectedChannel));
       const recording = {
         ...GLOBALS.recordingData,
         Settings: {
@@ -629,7 +629,7 @@ const RecordingOptions: React.FunctionComponent<RecordingOptionsProps> = (
   const getChannelByNumber = (channelNumber: number) => {
     if (GLOBALS.channelMap.Channels?.length) {
       return GLOBALS.channelMap.Channels.find(
-        (channel: any) => channel.Number === channelNumber
+        (channel: any) => channel?.Number === channelNumber
       );
     }
   };

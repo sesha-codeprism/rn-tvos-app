@@ -104,7 +104,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
         Schedule: schedule,
       },
       programId: programId || expChannel.service.Id,
-      channelNumber: expChannel.channel.Number,
+      channelNumber: expChannel?.channel?.Number,
       channelName: expChannel.channel.Name,
       id: programId,
       networkInfo: "",
@@ -200,7 +200,7 @@ const SplashScreen: React.FunctionComponent<Props> = (props: Props) => {
                 // if (this.props.currentRoute.name === Routes.VideoPlayer) {
                 //   this.props.popRoute();
                 // }
-                if (expChannel && expChannel.channel.Number) {
+                if (expChannel && expChannel?.channel?.Number) {
                   playinfo["playSource"] = sourceTypeString.LIVE;
                   //TODO: Navigate to player
                   // this.props.pushRoute("VideoPlayer", {

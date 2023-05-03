@@ -4072,7 +4072,7 @@ export const getRefreshedService = (
 ): any => {
     let ch;
     if (typeof channel === "object") {
-        ch = channelMap.findChannelByNumber(channel.Number);
+        ch = channelMap.findChannelByNumber(channel?.Number);
     } else if (typeof channel === "number" || typeof channel === "string") {
         ch = channelMap.findChannelByNumber(channel);
     }
@@ -5568,7 +5568,7 @@ const getPlayableLiveSchedule = (
             validLiveSchedule = schedule;
             validLiveChannel = channel;
             // Contextual button based on passed in channelNumber
-            if ((ChannelNumber === +params.ChannelNumber) || (ChannelNumber === +params.channel.Number)) {
+            if ((ChannelNumber === +params.ChannelNumber) || (ChannelNumber === +params?.channel?.Number)) {
                 contextualChannel = channel;
                 return true;
             }
@@ -6443,7 +6443,7 @@ export const findChannelByStationId = (
         channelMap?.Channels
     );
     if (ci.channel) {
-        _byNumber[ci.channel.Number] = ci; // manage other caches.
+        _byNumber[ci?.channel?.Number] = ci; // manage other caches.
     }
     return ci;
 };
