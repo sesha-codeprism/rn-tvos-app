@@ -74,6 +74,7 @@ import {
 import { GlobalContext } from "../../../../contexts/globalContext";
 import NotificationType from "../../../../@types/NotificationType";
 import { getAllSubscriptionGroups } from "../../../../customHooks/useAllSubscriptionGroups";
+import MFLoader from "../../../../components/MFLoader";
 
 interface EpisodeListProps {
   navigation: NativeStackNavigationProp<any>;
@@ -111,6 +112,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
   const [route, setRoute] = useState(DetailRoutes.MoreInfo);
   const [screenProps, setScreenProps] = useState<any>();
   const [mount, setMount] = useState(false);
+  const [ctaLoaded, setCTALoaded] = useState(false);
   const currentContext = useContext(GlobalContext);
   const [incomingDuplexMessage, setIncomingDuplexMessage] = useState<
     any | null
@@ -181,6 +183,10 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         case NotificationType.Purchase:
         case NotificationType.Subscription:
           setIncomingDuplexMessage(message);
+          break;
+        case NotificationType.dvrUpdated:
+          setCTALoaded(false);
+          break;
       }
     }
   };
@@ -847,8 +853,6 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
           selectedEpisodeSeasonNumber =
             selectedEpisode.CatalogInfo.SeasonNumber;
         }
-        //TODO: Find out what this is supposed to do..
-        // const liveSchedules = selectors.live.scheduleCache.get(state);
 
         let filteredEpisodePlayOptions = undefined;
         for (const episodePlayOptions of seasonPlayOptions.Episodes) {
@@ -898,6 +902,7 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
         ) {
           // set Initial cta buttons for the selected episode
           setCTAList(ctaButtons);
+          setCTALoaded(true);
         }
       }
     } else {
@@ -1370,81 +1375,84 @@ const EpisodeList: React.FunctionComponent<EpisodeListProps> = (props) => {
           </Pressable>
         )}
         <View style={episodeStyles.buttonContainer}>
-          {isSelectedEpisode && (
-            <ScrollView
-              horizontal
-              snapToAlignment={"start"}
-              snapToInterval={snapToInterval}
-            >
-              {ctaList?.length > 0 &&
-                ctaList?.map((cta: any, index: number) => {
-                  let fontIconStyle: {
-                    [key: string]: any;
-                  };
-                  if (
-                    cta?.buttonAction ===
-                    AppStrings?.str_details_program_record_button
-                  ) {
-                    fontIconStyle = episodeStyles.ctaFontIconStyle;
-                  }
-                  return (
-                    <MFButton
-                      key={`ctaBtn_${cta.buttonText}_${index}`}
-                      ref={
-                        index === 0
-                          ? firstButtonRef
-                          : (buttonRefObject as any)[cta.buttonText]
-                      }
-                      focusable
-                      iconSource={0}
-                      hasTVPreferredFocus={index === 0}
-                      imageSource={0}
-                      avatarSource={undefined}
-                      onFocus={() => {
-                        setOpen(false);
-                        drawerRef.current.close();
-                        drawerRef.current.resetRoutes();
-                      }}
-                      variant={MFButtonVariant.FontIcon}
-                      fontIconSource={cta.iconSource}
-                      fontIconTextStyle={StyleSheet.flatten([
-                        episodeStyles.textStyle,
-                        {
-                          fontSize: 90,
-                          color: cta.buttonText?.includes("Record")
-                            ? globalStyles.fontColors.badge
-                            : "white",
-                        },
-                      ])}
-                      onPress={ctaButtonPress[cta.buttonAction]}
-                      textStyle={{
-                        color: "#EEEEEE",
-                        fontFamily: "Inter-SemiBold",
-                        fontSize: 25,
-                        fontWeight: "600",
-                        textAlign: "center",
-                        marginLeft: 21,
-                      }}
-                      textLabel={cta.buttonText}
-                      style={{
-                        height: 62,
-                        alignSelf: "center",
-                        padding: 12,
-                        backgroundColor: "#424242",
-                        borderRadius: 6,
-                        paddingHorizontal: 35,
-                        zIndex: 100,
-                      }}
-                      focusedStyle={episodeStyles.focusedUnderLine}
-                      fontIconProps={{
-                        iconPlacement: "Left",
-                        shouldRenderImage: true,
-                      }}
-                    />
-                  );
-                })}
-            </ScrollView>
-          )}
+          {isSelectedEpisode &&
+            (ctaLoaded ? (
+              <ScrollView
+                horizontal
+                snapToAlignment={"start"}
+                snapToInterval={snapToInterval}
+              >
+                {ctaList?.length > 0 &&
+                  ctaList?.map((cta: any, index: number) => {
+                    let fontIconStyle: {
+                      [key: string]: any;
+                    };
+                    if (
+                      cta?.buttonAction ===
+                      AppStrings?.str_details_program_record_button
+                    ) {
+                      fontIconStyle = episodeStyles.ctaFontIconStyle;
+                    }
+                    return (
+                      <MFButton
+                        key={`ctaBtn_${cta.buttonText}_${index}`}
+                        ref={
+                          index === 0
+                            ? firstButtonRef
+                            : (buttonRefObject as any)[cta.buttonText]
+                        }
+                        focusable
+                        iconSource={0}
+                        hasTVPreferredFocus={index === 0}
+                        imageSource={0}
+                        avatarSource={undefined}
+                        onFocus={() => {
+                          setOpen(false);
+                          drawerRef.current.close();
+                          drawerRef.current.resetRoutes();
+                        }}
+                        variant={MFButtonVariant.FontIcon}
+                        fontIconSource={cta.iconSource}
+                        fontIconTextStyle={StyleSheet.flatten([
+                          episodeStyles.textStyle,
+                          {
+                            fontSize: 90,
+                            color: cta.buttonText?.includes("Record")
+                              ? globalStyles.fontColors.badge
+                              : "white",
+                          },
+                        ])}
+                        onPress={ctaButtonPress[cta.buttonAction]}
+                        textStyle={{
+                          color: "#EEEEEE",
+                          fontFamily: "Inter-SemiBold",
+                          fontSize: 25,
+                          fontWeight: "600",
+                          textAlign: "center",
+                          marginLeft: 21,
+                        }}
+                        textLabel={cta.buttonText}
+                        style={{
+                          height: 62,
+                          alignSelf: "center",
+                          padding: 12,
+                          backgroundColor: "#424242",
+                          borderRadius: 6,
+                          paddingHorizontal: 35,
+                          zIndex: 100,
+                        }}
+                        focusedStyle={episodeStyles.focusedUnderLine}
+                        fontIconProps={{
+                          iconPlacement: "Left",
+                          shouldRenderImage: true,
+                        }}
+                      />
+                    );
+                  })}
+              </ScrollView>
+            ) : (
+              <MFLoader />
+            ))}
         </View>
       </View>
     );

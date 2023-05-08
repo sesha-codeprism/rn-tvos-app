@@ -5,7 +5,7 @@ import { getSubscriptiongroups } from '../../backend/dvrproxy/dvrproxy';
 import { defaultQueryOptions } from '../config/constants';
 import { queryClient } from '../config/queries';
 import { GLOBALS } from '../utils/globals';
-import { NativeModules } from 'react-native';
+import { DeviceEventEmitter, NativeModules } from 'react-native';
 
 
 export const getAllSubscriptionGroups = async () => {
@@ -49,6 +49,7 @@ export const getAllSubscriptionGroups = async () => {
     console.log("allSubscriptionGroups", allSubscriptionGroups, allSubscriptionGroups.SubscriptionGroups.length)
     NativeModules.MKGuideBridgeManager.setSubscriptionGroupResponse(allSubscriptionGroups);
     GLOBALS.allSubscriptionGroups = allSubscriptionGroups;
+    DeviceEventEmitter.emit("SubscriptionsUpdated", { allSubscriptions: viewable, viewableSubscriptions: GLOBALS.viewableSubscriptions, scheduledSubscriptions: GLOBALS.scheduledSubscriptions })
     return { allSubscriptions: viewable, viewableSubscriptions: GLOBALS.viewableSubscriptions, scheduledSubscriptions: GLOBALS.scheduledSubscriptions };
 }
 
