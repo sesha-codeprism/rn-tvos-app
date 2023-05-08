@@ -15,6 +15,7 @@ interface SelectOptionsPanelProps {
 const SelectOptionsPanel: React.FunctionComponent<SelectOptionsPanelProps> = (
   props
 ) => {
+  //console.log("props in SelectOptionsPanel", props.route.params);
   const { title, subTitle, options = [] } = props.route.params;
   const [selectedItem, setSelectedItem] = useState("");
 
@@ -25,18 +26,18 @@ const SelectOptionsPanel: React.FunctionComponent<SelectOptionsPanelProps> = (
       const currentSelected = options.filter(
         (e: any) => e.key == currentData.Settings.RecyclingDisabled
       );
-      setSelectedItem(currentSelected[0].title);
+      setSelectedItem(currentSelected[0]?.title);
     } else if (subTitle.toLowerCase().includes("stop")) {
       // Currently trying to set options for Strop recording after..
       const currentSelected = options.filter(
         (e: any) => e.key === currentData.Settings.EndLateSeconds
       );
-      setSelectedItem(currentSelected[0].title);
+      setSelectedItem(currentSelected[0]?.title);
     } else if (subTitle.toLowerCase().includes("show")) {
       const currentSelected = options.filter(
         (e: any) => e.key === currentData.Settings.ShowType
       );
-      setSelectedItem(currentSelected[0].title);
+      setSelectedItem(currentSelected[0]?.title);
     } else if (subTitle.toLowerCase().includes("channel")) {
       const channelInfo = GLOBALS.recordingData.Settings.ChannelNumber;
       let channelNumber: any;
@@ -48,12 +49,12 @@ const SelectOptionsPanel: React.FunctionComponent<SelectOptionsPanelProps> = (
       const currentSelected = options.filter(
         (e: any) => e.key === Number.parseInt(channelNumber)
       );
-      setSelectedItem(currentSelected[0].title);
+      setSelectedItem(currentSelected[0]?.title);
     } else if (subTitle.toLowerCase().includes("time")) {
       const currentSelected = options.filter(
         (e: any) => e.key === currentData.Settings.AirtimeDomain
       );
-      setSelectedItem(currentSelected[0].title);
+      setSelectedItem(currentSelected[0]?.title);
     }
   };
 
@@ -62,7 +63,6 @@ const SelectOptionsPanel: React.FunctionComponent<SelectOptionsPanelProps> = (
   }, []);
 
   const handleOnPress = (index: number) => {
-    console.log(options[index]);
     let currentData = GLOBALS.recordingData;
     const element = options[index];
     if (subTitle.toLowerCase().includes("keep")) {
