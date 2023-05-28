@@ -31,18 +31,34 @@ import { GLOBALS } from "../../utils/globals";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { appQueryCache, queryClient } from "../../config/queries";
 
-interface MFMenuProps {
+/**Props to configure MFMenu */
+export interface MFMenuProps {
+  /** Navigation prop to navigate to other screens */
   navigation: any;
+  /** @deprecated List of hubs to render in button group */
   hubsData?: HubsList;
+  /** Should RTL be enabled in MFMenu */
   enableRTL?: boolean;
+  /**List of hubs to render in button group */
   hubList?: Array<FeedItem>;
+  /** Function to trigger on hub press */
   onPress?: null | ((event: number) => void) | undefined;
+  /** Function to trigger on hub focus */
   onFocus?: null | ((event: number) => void) | undefined;
+  /** Function to trigger on settings button press */
   onPressSettings?: any;
+  /** Function to set carousel card focus when focus moves from menu to carousel */
   setCardFocus?: any;
+  /** Function to set setting reference*/
   setSetttingsRef?: (ref: any) => void;
 }
 
+/**
+ * A functional component that renders an a MFMenu.
+ * Uses MFButtonGroup to render list of buttons as menu options
+ * @param {MFMenuProps} props - The props required for MFMenu.
+ * @returns {JSX.Element} - The rendered MFMenu.
+ */
 const MFMenu = (props: MFMenuProps) => {
   const [hubs1, setHubs1] = useState(Array<ButtonVariantProps>());
   const [isIdentityAssigned, setIdentityAssigned] = useState(false);

@@ -29,8 +29,8 @@ const showNotification = (error: any) => {
 const handleError = (error: any) => {
   //console.log("Handling error", error);
   //TODO: Activate this
-  showNotification(error);
-  throw Error(error);
+  // showNotification(error);
+  // throw Error(error);
 };
 
 const GET = async ({ url, params = {}, headers = {} }: MFRequest) => {

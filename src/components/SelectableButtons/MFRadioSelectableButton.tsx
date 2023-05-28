@@ -10,12 +10,19 @@ import {
 } from "react-native";
 import { getFontIcon } from "../../config/strings";
 
+/** Props for SelectableRadioButton */
 interface MFRadioSelectableButtonProps {
+  /** Is the button selected */
   selected: boolean;
+  /** Rendered text label */
   label: string;
+  /** Icon to be rendered alongside label when button is selected */
   selectedIcon?: string;
+  /** Icon to be rendered alongside label when button is not selected  */
   unSelectedIcon?: string;
+  /** Should the button have TVPreferredFocus */
   hasTVPreferredFocus?: boolean;
+  /** Function to trigger when button is focused */
   onFocus?:
     | null
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
@@ -29,6 +36,12 @@ interface MFRadioSelectableButtonProps {
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
 }
 
+/**
+ * A functional component that renders an a Radio button.
+ * Used when only one value from a list should be selected
+ * @param {MFRadioSelectableButtonProps} props - The props required for Radio button.
+ * @returns {JSX.Element} - The rendered Radio Button.
+ */
 const MFRadioSelectableButton: React.FunctionComponent<
   MFRadioSelectableButtonProps
 > = (props) => {

@@ -10,11 +10,17 @@ import {
 } from "react-native";
 import { getFontIcon } from "../../config/strings";
 
+/** Props for SelectableButton */
 interface MFSelectableButtonProps {
+  /** Rendered text label */
   title: string;
+  /** Rendered subtitle of the button */
   subTitle?: string;
+  /** Icon to be rendered on the right of the text label e.g. A chevron icon */
   rightIcon?: string;
+  /** Should the button have TVPreferredFocus */
   hasTVPreferredFocus?: boolean;
+  /** Function to trigger when button is focused */
   onFocus?:
     | null
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
@@ -27,7 +33,12 @@ interface MFSelectableButtonProps {
   /** Event to be triggered with selected */
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
 }
-
+/**
+ * A functional component that renders an a Selectable button button.
+ * Used when a value from a list should be selected
+ * @param {MFSelectableButtonProps} props - The props required for Selectable button.
+ * @returns {JSX.Element} - The rendered Selectable Button.
+ */
 const MFSelectableButton: React.FunctionComponent<MFSelectableButtonProps> = (
   props
 ) => {

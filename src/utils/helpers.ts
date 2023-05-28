@@ -145,7 +145,7 @@ export function convertStringToHashKey(str: string): string {
 }
 
 export function getPasscodeHash(passcode: string, accountId: string): string {
-  if (!isHash(passcode)) {
+  if (passcode && !isHash(passcode)) {
     let encryptedPasscode: string = convertStringToHashKey(
       passcode + accountId
     );

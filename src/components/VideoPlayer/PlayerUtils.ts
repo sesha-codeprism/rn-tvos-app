@@ -4,44 +4,45 @@ import { GLOBALS } from "../../utils/globals";
 import { config } from "../../config/config";
 import { AppStrings } from "../../config/strings";
 import { Routes } from "../../config/navigation/RouterOutlet";
+const mockData = require("./mockData.json")
 
 export const getRenderImageURI = (renderType: any, data: any) => {
     switch (renderType) {
-      case "16x9":
-        //* : Return the !undefined 16x9 image or undefined otherwise */
-        if (data.image16x9KeyArtURL) {
-          return data.image16x9KeyArtURL.uri;
-        } else if (data.image16x9PosterURL) {
-          return data.image16x9PosterURL.uri;
-        } else {
-          return undefined;
-        }
-      case "2x3":
-        //* : Return the !undefined 2x3 image or undefined otherwise */
-        if (data.image2x3KeyArtURL) {
-          return data.image2x3KeyArtURL.uri;
-        } else if (data.image2x3PosterURL) {
-          return data.image2x3PosterURL.uri;
-        } else {
-          return undefined;
-        }
-      case "3x4":
-        //* : Return the !undefined 3x4 image or undefined otherwise */
-        //@ts-ignore
-        if (data.image3x4PosterURL) {
-          //@ts-ignore
-          return data.image3x4PosterURL.uri;
-          //@ts-ignore
-        } else if (data.image3x4KeyArtURL) {
-          //@ts-ignore
-          return data.image3x4KeyArtURL.uri;
-        } else {
-          return undefined;
-        }
-      default:
-        return undefined;
+        case "16x9":
+            //* : Return the !undefined 16x9 image or undefined otherwise */
+            if (data.image16x9KeyArtURL) {
+                return data.image16x9KeyArtURL.uri;
+            } else if (data.image16x9PosterURL) {
+                return data.image16x9PosterURL.uri;
+            } else {
+                return undefined;
+            }
+        case "2x3":
+            //* : Return the !undefined 2x3 image or undefined otherwise */
+            if (data.image2x3KeyArtURL) {
+                return data.image2x3KeyArtURL.uri;
+            } else if (data.image2x3PosterURL) {
+                return data.image2x3PosterURL.uri;
+            } else {
+                return undefined;
+            }
+        case "3x4":
+            //* : Return the !undefined 3x4 image or undefined otherwise */
+            //@ts-ignore
+            if (data.image3x4PosterURL) {
+                //@ts-ignore
+                return data.image3x4PosterURL.uri;
+                //@ts-ignore
+            } else if (data.image3x4KeyArtURL) {
+                //@ts-ignore
+                return data.image3x4KeyArtURL.uri;
+            } else {
+                return undefined;
+            }
+        default:
+            return undefined;
     }
-  };
+};
 
 export const navigateToPlayer = (params: any, navigation: any) => {
     const { udpDataAsset, bookmark, subscriberPlayOptionsData } = params || {};
@@ -122,14 +123,14 @@ export const navigateToPlayer = (params: any, navigation: any) => {
             openPlayer(playObj, bookmark, navigation);
         } else {
             if (udpDataAsset && !udpDataAsset.Bookmark) {
-                udpDataAsset.Bookmark = Bookmark || bookmark || {TimeSeconds:0};
+                udpDataAsset.Bookmark = Bookmark || bookmark || { TimeSeconds: 0 };
             }
             openPlayer(udpDataAsset, bookmark, navigation);
         }
     }
 }
 
-const  getEntitlements = (data: any) => {
+const getEntitlements = (data: any) => {
     const {
         ChannelInfo = {},
         playAction = undefined,
@@ -162,26 +163,42 @@ const  getEntitlements = (data: any) => {
     else return combinedEntitlements;
 };
 
-const openPlayer =  (udpDataAsset: any, bookmark: any, navigation: any) => {
+const openPlayer = (udpDataAsset: any, bookmark: any, navigation: any) => {
     const {
-            title = undefined,
-            ChannelInfo = {},
-            currentCatchupSchedule = {},
-            Bookmark = {},
-            subscriptionItemForProgram: { PlayInfo = undefined } = {},
-            ProgramDetails = {},
-            playAction = undefined,
-            usablePlayActions = undefined,
-            playSource,
-            restart = undefined,
-            catchupPlayinfo = {},
-            isTrailer = false,
-            ppvInfo = {}
+        title = undefined,
+        ChannelInfo = {},
+        currentCatchupSchedule = {},
+        Bookmark = {},
+        subscriptionItemForProgram: { PlayInfo = undefined } = {},
+        ProgramDetails = {},
+        playAction = undefined,
+        usablePlayActions = undefined,
+        playSource,
+        restart = undefined,
+        catchupPlayinfo = {},
+        isTrailer = false,
+        ppvInfo = {}
     } = udpDataAsset;
+
+    // const {
+    //     title = undefined,
+    //     ChannelInfo = {},
+    //     currentCatchupSchedule = {},
+    //     Bookmark = {},
+    //     subscriptionItemForProgram: { PlayInfo = undefined } = {},
+    //     ProgramDetails = {},
+    //     playAction = undefined,
+    //     usablePlayActions = undefined,
+    //     playSource,
+    //     restart = undefined,
+    //     catchupPlayinfo = {},
+    //     isTrailer = false,
+    //     ppvInfo = {}
+    // } = mockData;
 
     let Service: any;
 
-    const combinedEntitlementsObj: any =  {};
+    const combinedEntitlementsObj: any = {};
     const combinedEntitlements = getEntitlements(udpDataAsset);
     if (combinedEntitlements) {
         for (let entitle of combinedEntitlements) {
@@ -206,9 +223,10 @@ const openPlayer =  (udpDataAsset: any, bookmark: any, navigation: any) => {
 
     let bookmarkPosition = Bookmark?.TimeSeconds;
     const serverURL = GLOBALS.bootstrapSelectors?.ServiceMap.Services.defaultAccHostName;
+    //const serverURL = 'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8';
     const userToken = GLOBALS.bootstrapSelectors?.UserId;
     const primaryAccount = GLOBALS.bootstrapSelectors?.AccountId;
-    const stsToken = GLOBALS.store?.accessToken;
+    const stsToken = `OAUTH2 access_token="${GLOBALS.store!.accessToken}"`
 
     let ownerUID = dataSource?.ownerId;
     let mediaUID = dataSource?.mediaId;
@@ -216,7 +234,7 @@ const openPlayer =  (udpDataAsset: any, bookmark: any, navigation: any) => {
         dataSource?.appToken ||
         ChannelInfo?.Channel?.ServiceCollectionId;
 
-    let mode =  playBackMode[sourceTypeString.VOD];
+    let mode = playBackMode[sourceTypeString.VOD];
     let startTime;
     let videoURI = "";
     const dvrPlayInfo = PlayInfo || udpDataAsset?.PlayInfo;
@@ -233,25 +251,25 @@ const openPlayer =  (udpDataAsset: any, bookmark: any, navigation: any) => {
 
         navigation.navigate(Routes.Video, {
 
-              server_url: serverURL,
-              live: true,
-              stsToken: stsToken,
-              tenantId: GLOBALS.bootstrapSelectors?.TenantId,
-              locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
-              ownerUID: ownerUID || config?.playerConfig?.owner_uid,
-              bookmarkPosition: bookmarkPosition,
-              userToken: userToken,
-              mediaUID: mediaUID,
-              appToken: appToken,
-              primaryAccount: primaryAccount,
-              subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
-              ccEnabled: GLOBALS.store!.settings.display.closedCaption,
-              audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
-              maxBitrate:  GLOBALS.store!.settings.display.bitrates10ft,
-              catalogInfo: udpDataAsset,
-              schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
-            
-          });
+            server_url: serverURL,
+            live: false,
+            stsToken: stsToken,
+            tenantId: GLOBALS.bootstrapSelectors?.TenantId,
+            locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
+            ownerUID: ownerUID || config?.playerConfig?.owner_uid,
+            bookmarkPosition: bookmarkPosition,
+            userToken: userToken,
+            mediaUID: mediaUID,
+            appToken: appToken,
+            primaryAccount: primaryAccount,
+            subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
+            ccEnabled: GLOBALS.store!.settings.display.closedCaption,
+            audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
+            maxBitrate: GLOBALS.store!.settings.display.bitrates10ft,
+            catalogInfo: udpDataAsset,
+            schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
+
+        });
     } else if (
         playSource === sourceTypeString.CATCHUP &&
         currentCatchupSchedule
@@ -272,51 +290,51 @@ const openPlayer =  (udpDataAsset: any, bookmark: any, navigation: any) => {
                 mediaUID = catchupPlayinfo.MediaId;
                 appToken = catchupPlayinfo.RecordingToken;
                 navigation.navigate(Routes.Video, {
-                     
-                      server_url: serverURL,
-                      live: false,
-                      stsToken: stsToken,
-                      tenantId: GLOBALS.bootstrapSelectors?.TenantId,
-                      locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
-                      ownerUID: ownerUID || config?.playerConfig?.owner_uid,
-                      bookmarkPosition: bookmarkPosition,
-                      userToken: userToken,
-                      mediaUID: mediaUID,
-                      appToken: appToken,
-                      primaryAccount: primaryAccount,
-                      subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
-                      ccEnabled: GLOBALS.store!.settings.display.closedCaption,
-                      audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
-                      maxBitrate:  GLOBALS.store!.settings.display.bitrates10ft,
-                      catalogInfo: udpDataAsset,
-                      schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
-                    
-                  });
+
+                    server_url: serverURL,
+                    live: false,
+                    stsToken: stsToken,
+                    tenantId: GLOBALS.bootstrapSelectors?.TenantId,
+                    locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
+                    ownerUID: ownerUID || config?.playerConfig?.owner_uid,
+                    bookmarkPosition: bookmarkPosition,
+                    userToken: userToken,
+                    mediaUID: mediaUID,
+                    appToken: appToken,
+                    primaryAccount: primaryAccount,
+                    subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
+                    ccEnabled: GLOBALS.store!.settings.display.closedCaption,
+                    audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
+                    maxBitrate: GLOBALS.store!.settings.display.bitrates10ft,
+                    catalogInfo: udpDataAsset,
+                    schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
+
+                });
             } else {
                 throw Error(AppStrings
                     ?.str_playback_error_unavailable_restart_tv_info);
             }
         } else {
             navigation.navigate(Routes.Video, {
- 
-                  server_url: serverURL,
-                  live: false,
-                  stsToken: stsToken,
-                  tenantId: GLOBALS.bootstrapSelectors?.TenantId,
-                  locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
-                  ownerUID: ownerUID || config?.playerConfig?.owner_uid,
-                  bookmarkPosition: bookmarkPosition,
-                  userToken: userToken,
-                  mediaUID: mediaUID,
-                  appToken: appToken,
-                  primaryAccount: primaryAccount,
-                  subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
-                  ccEnabled: GLOBALS.store!.settings.display.closedCaption,
-                  audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
-                  maxBitrate:  GLOBALS.store!.settings.display.bitrates10ft,
-                  catalogInfo: udpDataAsset,
-                  schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
-              });
+
+                server_url: serverURL,
+                live: false,
+                stsToken: stsToken,
+                tenantId: GLOBALS.bootstrapSelectors?.TenantId,
+                locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
+                ownerUID: ownerUID || config?.playerConfig?.owner_uid,
+                bookmarkPosition: bookmarkPosition,
+                userToken: userToken,
+                mediaUID: mediaUID,
+                appToken: appToken,
+                primaryAccount: primaryAccount,
+                subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
+                ccEnabled: GLOBALS.store!.settings.display.closedCaption,
+                audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
+                maxBitrate: GLOBALS.store!.settings.display.bitrates10ft,
+                catalogInfo: udpDataAsset,
+                schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
+            });
         }
     } else if (playSource === sourceTypeString.DVR && dvrPlayInfo) {
         // DVR Play back
@@ -340,25 +358,25 @@ const openPlayer =  (udpDataAsset: any, bookmark: any, navigation: any) => {
         }
 
         navigation.navigate(Routes.Video, {
- 
-              server_url: serverURL,
-              live: false,
-              stsToken: stsToken,
-              tenantId: GLOBALS.bootstrapSelectors?.TenantId,
-              locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
-              ownerUID: ownerUID || config?.playerConfig?.owner_uid,
-              bookmarkPosition: bookmarkPosition,
-              userToken: userToken,
-              mediaUID: mediaUID,
-              appToken: appToken,
-              primaryAccount: primaryAccount,
-              subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
-              ccEnabled: GLOBALS.store!.settings.display.closedCaption,
-              audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
-              maxBitrate:  GLOBALS.store!.settings.display.bitrates10ft,
-              catalogInfo: udpDataAsset,
-              schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
-          });
+
+            server_url: serverURL,
+            live: false,
+            stsToken: stsToken,
+            tenantId: GLOBALS.bootstrapSelectors?.TenantId,
+            locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
+            ownerUID: ownerUID || config?.playerConfig?.owner_uid,
+            bookmarkPosition: bookmarkPosition,
+            userToken: userToken,
+            mediaUID: mediaUID,
+            appToken: appToken,
+            primaryAccount: primaryAccount,
+            subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
+            ccEnabled: GLOBALS.store!.settings.display.closedCaption,
+            audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
+            maxBitrate: GLOBALS.store!.settings.display.bitrates10ft,
+            catalogInfo: udpDataAsset,
+            schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
+        });
     } else if (playSource === sourceTypeString.DVR && dataSource) {
         if (bookmark.DVR_Bookmark) {
             if (
@@ -374,24 +392,24 @@ const openPlayer =  (udpDataAsset: any, bookmark: any, navigation: any) => {
         }
         navigation.navigate(Routes.Video, {
 
-              server_url: serverURL,
-              live: true,
-              stsToken: stsToken,
-              tenantId: GLOBALS.bootstrapSelectors?.TenantId,
-              locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
-              ownerUID: ownerUID || config?.playerConfig?.owner_uid,
-              bookmarkPosition: bookmarkPosition,
-              userToken: userToken,
-              mediaUID: mediaUID,
-              appToken: appToken,
-              primaryAccount: primaryAccount,
-              subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
-              ccEnabled: GLOBALS.store!.settings.display.closedCaption,
-              audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
-              maxBitrate:  GLOBALS.store!.settings.display.bitrates10ft,
-              catalogInfo: udpDataAsset,
-              schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
-          });
+            server_url: serverURL,
+            live: true,
+            stsToken: stsToken,
+            tenantId: GLOBALS.bootstrapSelectors?.TenantId,
+            locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
+            ownerUID: ownerUID || config?.playerConfig?.owner_uid,
+            bookmarkPosition: bookmarkPosition,
+            userToken: userToken,
+            mediaUID: mediaUID,
+            appToken: appToken,
+            primaryAccount: primaryAccount,
+            subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
+            ccEnabled: GLOBALS.store!.settings.display.closedCaption,
+            audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
+            maxBitrate: GLOBALS.store!.settings.display.bitrates10ft,
+            catalogInfo: udpDataAsset,
+            schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
+        });
     } else {
         const supportedPlayActions = getRestrictionsForVod(
             usablePlayActions,
@@ -414,39 +432,39 @@ const openPlayer =  (udpDataAsset: any, bookmark: any, navigation: any) => {
             (playAction && playAction?.VideoProfile?.Id) ||
             (usablePlayActions && usablePlayActions[0]?.VideoProfile?.Id);
         const PlaybackUri = (playAction && playAction?.VideoProfile?.PlaybackUri) ||
-                            (usablePlayActions && usablePlayActions[0]?.VideoProfile?.PlaybackUri);
+            (usablePlayActions && usablePlayActions[0]?.VideoProfile?.PlaybackUri);
         mode = +playBackMode[playSource];
         ownerUID = config.playerConfig.owner_uid;
         appToken = undefined;
 
         navigation.navigate(Routes.Video, {
-            
-              server_url: serverURL,
-              live: false,
-              stsToken: stsToken,
-              tenantId: GLOBALS.bootstrapSelectors?.TenantId,
-              playbackUri: PlaybackUri,
-              locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
-              ownerUID: ownerUID || config?.playerConfig?.owner_uid,
-              bookmarkPosition: bookmarkPosition,
-              userToken: userToken,
-              mediaUID: mediaUID,
-              appToken: appToken,
-              primaryAccount: primaryAccount,
-              subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
-              ccEnabled: GLOBALS.store!.settings.display.closedCaption,
-              audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
-              maxBitrate:  GLOBALS.store!.settings.display.bitrates10ft,
-              catalogInfo: udpDataAsset,
-              schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
-          });
+
+            server_url: serverURL,
+            live: false,
+            stsToken: stsToken,
+            tenantId: GLOBALS.bootstrapSelectors?.TenantId,
+            playbackUri: PlaybackUri,
+            locale: GLOBALS.store?.settings.display?.onScreenLanguage?.languageCode,
+            ownerUID: ownerUID || config?.playerConfig?.owner_uid,
+            bookmarkPosition: bookmarkPosition,
+            userToken: userToken,
+            mediaUID: mediaUID,
+            appToken: appToken,
+            primaryAccount: primaryAccount,
+            subtitleTrack: GLOBALS.store!.settings.display.subtitleConfig.primary || GLOBALS.store!.settings.display.subtitleConfig.secondary,
+            ccEnabled: GLOBALS.store!.settings.display.closedCaption,
+            audioTrack: GLOBALS.store!.settings.audio.audioLanguages.primary || GLOBALS.store!.settings.audio.audioLanguages.secondary,
+            maxBitrate: GLOBALS.store!.settings.display.bitrates10ft,
+            catalogInfo: udpDataAsset,
+            schedule: ChannelInfo?.Schedule?.ChannelInfo?.Schedule || ChannelInfo?.Schedule
+        });
     }
 }
 
-export const updateBookmark = (udpDataAsset:  any, duration:  number, currentTime: number) => {
+export const updateBookmark = (udpDataAsset: any, duration: number, currentTime: number) => {
     const {
         Bookmark: {
-            Id :  BookmarkId  = undefined,
+            Id: BookmarkId = undefined,
             BookmarkType: TypeOfCurrentBookmark = undefined,
             RecordingId = undefined,
         } = {},
@@ -542,9 +560,9 @@ export const updateBookmark = (udpDataAsset:  any, duration:  number, currentTim
                     TimeSeconds:
                         timeleft < 20
                             ? playAction?.CatalogInfo?.RuntimeSeconds ||
-                              playAction?.Bookmark?.RuntimeSeconds ||
-                              udpDataAsset?.CatalogInfo?.RuntimeSeconds||
-                              0
+                            playAction?.Bookmark?.RuntimeSeconds ||
+                            udpDataAsset?.CatalogInfo?.RuntimeSeconds ||
+                            0
                             : Math.round(currentTime),
                 },
                 type

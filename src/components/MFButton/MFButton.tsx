@@ -171,6 +171,11 @@ export interface MFButtonProps {
   fontIconProps?: MFFontIconProps;
 }
 
+/**
+ * A functional component that renders an interactive button.
+ * @param {MFButtonProps} props - The props for customising MFButton.
+ * @returns {React.forwardRef} - The rendered MFButton.
+ */
 const MFButton = React.forwardRef(({ ...props }: MFButtonProps, ref) => {
   const [focused, setFocused] = useState(false);
 

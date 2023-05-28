@@ -5,18 +5,29 @@ import MFNotificationCard, { Notification } from "./MFNotificationCard";
 import { config } from "../../config/config";
 import { getUIdef, scaleAttributes } from "../../utils/uidefinition";
 
+/** Props of NotificationProvider */
 interface NotificationProviderProps {
+  /** List of notifications to be displayed */
   notifications?: Notification[];
+  /** List of elements to be rendered */
   children?: React.ReactNode;
+  /** Trigger function to display notification */
   setNotifications?: (notifications: Notification[]) => void;
+  /** Function to create a UINotifcation from anywhere in the app */
   createNotification?: (notification: Notification) => void;
 }
 
+/**
+ * A functional component that renders an a NotificationProvider.
+ * Holds all the UINotifications and renders them at once
+ * @param {NotificationProviderProps} props - The props required for MFMenu.
+ * @returns {JSX.Element} - The rendered MFMenu.
+ */
 const MFNotificationProvider = (props: NotificationProviderProps) => {
-  const [notifications, setNotifications] = useState< Notification[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const createNotification = (notification: Notification) => {
-    setNotifications([...notifications, notification])
+    setNotifications([...notifications, notification]);
     // setTimeout(() => {
     //   closeNotification(notification);
     // }, 3000);
@@ -30,12 +41,18 @@ const MFNotificationProvider = (props: NotificationProviderProps) => {
   };
 
   useEffect(() => {
-    const createNotificationSubscription = DeviceEventEmitter.addListener("createNotification", createNotification);
-    const closeNotificationSubscription = DeviceEventEmitter.addListener("closeNotification", closeNotification);
+    const createNotificationSubscription = DeviceEventEmitter.addListener(
+      "createNotification",
+      createNotification
+    );
+    const closeNotificationSubscription = DeviceEventEmitter.addListener(
+      "closeNotification",
+      closeNotification
+    );
     return () => {
       createNotificationSubscription.remove();
       closeNotificationSubscription.remove();
-    }
+    };
   }, []);
 
   return (

@@ -20,13 +20,25 @@ import { Empty } from "../../views/MFDrawersContainer";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
-interface PurchaseContainerProps {
+/** Props for the container holding PurchaseMenu */
+export interface PurchaseContainerProps {
+  /** Extent of drawer view in percentage of entire screen */
   drawerPercentage: number;
-  params:any;
+  /** Configuration params required for Purchase container */
+  params: any;
+  /** Props required for navigation */
   navigation?: any;
 }
+
+/**
+ * A functional component that renders Purchase container for PVOD implementation.
+ * @param {PurchaseContainerProps} props - The props required for Purchase container side menu.
+ * @returns {JSX.Element} - The rendered Purchase container side menu.
+ */
 const PurchaseContainer = (props: PurchaseContainerProps) => {
-  const offset = useSharedValue(GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage) ;
+  const offset = useSharedValue(
+    GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage
+  );
   const [isReady, setIsReady] = React.useState(false);
   const [initialState, setInitialState] = React.useState();
 
@@ -60,7 +72,9 @@ const PurchaseContainer = (props: PurchaseContainerProps) => {
 
   const openDrawer = () => {
     offset.value = withTiming(
-      GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
+      GLOBALS.enableRTL
+        ? 0
+        : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage,
       {
         duration: 10,
         easing: Easing.out(Easing.ease),
@@ -73,7 +87,7 @@ const PurchaseContainer = (props: PurchaseContainerProps) => {
       duration: 10,
       easing: Easing.in(Easing.linear),
     });
-    SettingsRN.set({ PURCHASE_NAVIGATION_HISTORY: {} })
+    SettingsRN.set({ PURCHASE_NAVIGATION_HISTORY: {} });
     DeviceEventEmitter.emit("closeClosePurchase", null);
   };
 
@@ -102,7 +116,10 @@ const PurchaseContainer = (props: PurchaseContainerProps) => {
         presentationStyle={"overFullScreen"}
       >
         <Animated.View style={[styles.container, animatedStyles]}>
-          <PurchasePanelNavigator initialState={initialState} params={props.params} />
+          <PurchasePanelNavigator
+            initialState={initialState}
+            params={props.params}
+          />
         </Animated.View>
       </Modal>
     );

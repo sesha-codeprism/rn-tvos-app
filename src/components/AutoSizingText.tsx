@@ -8,20 +8,37 @@ import {
 } from "react-native";
 import { getScaledValue } from "../utils/dimensions";
 
-interface Props {
+/** Props for Auto-scrolling text component */
+export interface Props {
+  /** Style Object */
   style?: {
+    /** Style for the text */
     textStyle?: { [key: string]: any };
+    /** Style for the container rendering the text */
     containerStyle?: { [key: string]: any };
   };
+  /** View padding to be added at the end of the text string */
   endPadding?: number;
+  /** Duration of scrolling animation in ms */
   duration?: number;
+  /** Delay of animation in ms */
   delay?: number;
+  /** Does the text scroll left to right */
   isLeftToRight?: boolean;
+  /** Does the text scroll top to bottom */
   isTopToBottom?: boolean;
+  /** Is text horizontal? Defaults to true when @param {isLeftToRight}  is true*/
   isHorizontal?: boolean;
+  /** Text label to auto scroll */
   value: string;
 }
 
+/**
+ * A functional component that renders an auto -scrolling text view.
+ * Text auto scrolls after specified delay (if any) and scrolls in specified direction
+ * @param {Props} props - The props required Auto scrolling text view
+ * @returns {JSX.Element} - The rendered Auto scrolling text view
+ */
 const AutoScrollingText = ({
   style,
   endPadding = getScaledValue(100),

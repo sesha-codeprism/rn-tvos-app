@@ -1,15 +1,28 @@
 import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 import React from "react";
 import AutoScrollingText from "../AutoSizingText";
-interface Props {
+/** Props required for SideMenuLayout */
+export interface Props {
+  /** Title of the SideMeny */
   title?: string;
+  /** Style of the rendered title */
   titleStyles?: StyleProp<TextStyle>;
+  /** Subtitle of the SideMenu */
   subTitle?: string;
+  /** Style of the rendered Subtitle */
   subTitleStyles?: StyleProp<TextStyle>;
+  /** Styles of the container holding the SideMenu */
   contentContainerStyle?: any;
+  /** Should the title and subtitle be inverted Defaults to false */
   isTitleInverted?: boolean;
 }
 
+/**
+ * A functional component that renders an a SideMenu template.
+ * Wraps side menu content with a container with title and subtitle in header
+ * @param {Props} props - The props required for SideMenu component.
+ * @returns {JSX.Element} - The rendered SideMenu.
+ */
 const SideMenuLayout: React.FunctionComponent<Props> = (props) => {
   return (
     <View style={styles.root} pointerEvents="box-none">

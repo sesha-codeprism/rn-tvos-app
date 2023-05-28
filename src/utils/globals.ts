@@ -64,12 +64,12 @@ export interface EditUserProfileObject {
   UserCreated: boolean;
   // optOutPersonalDataUse: boolean;
 }
-interface ParentalControll {
+export interface ParentalControll {
   contentLock: { [key: string]: any };
   adultLock: { [key: string]: any };
   purchaseLock: any;
 }
-interface Ratings {
+export interface Ratings {
   action: string;
   age: number;
   subTitle: string;
@@ -81,12 +81,12 @@ export interface TrendingItems {
   Elements: string
 }
 
-interface OnScreenLanguage {
+export interface OnScreenLanguage {
   title: string;
   languageCode: string;
   enableRTL: boolean;
 }
-interface GLOBALSType {
+export interface GLOBALSType {
   /** Information about the device running the app */
   deviceInfo: MFDeviceInfo;
   /** Bootstrap response coming from backend */

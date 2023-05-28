@@ -21,56 +21,98 @@ import { MFUnderlinedButtonProps } from "../MFButtonsVariants/MFUnderlinedButton
 import { SCREEN_WIDTH } from "../../utils/dimensions";
 import { MFFontIconProps } from "../MFButtonsVariants/MFFontIconButton";
 
+/**Interface for textstyles for ButtonText */
 export interface MFButtonTextStyle {
+  /** Base TextStyles */
   textStyle: StyleProp<TextStyle>;
+  /** Text Style when button is focused */
   focusedStyle: StyleProp<TextStyle>;
+  /** Text style when button is unfocused */
   unfocusedStyle: StyleProp<TextStyle>;
+  /** Text style when for fonticon button */
   fontIconTextStyle?: StyleProp<TextStyle>;
 }
+
+/** Props that define the variant of the button in button group */
 export interface ButtonVariantProps {
+  /** The variant of the button that is rendered */
   variant: MFButtonVariant | any;
+  /** Text label that is rendered */
   textLabel: string;
+  /** Icon source of the button */
   iconSource?: Source | number | any;
+  /** Source of the image that is rendered */
   imageSource?: Source | number | any;
+  /** Source of avatar rendered as part of avatar button */
   avatarSource?: Source | number | any;
+  /** Styles of image rendered */
   imageStyles?: StyleProp<ImageStyle>;
+  /** Styles for the rendered icon */
   iconStyles?: StyleProp<ImageStyle>;
+  /** Styles for the avatar rendered */
   avatarStyles?: StyleProp<ImageStyle>;
+  /** Source of the fonticon renderedd */
   fontIconSource?: string;
+  /** Base style of the button */
   style?: StyleProp<ViewStyle>;
+  /** Style of the button when focused */
   focusedStyle?: StyleProp<ViewStyle>;
+  /** @param {MFButtonTextStyle} Style of the text label */
   textStyle?: MFButtonTextStyle;
+  /** Should RTL be enabled for this button group */
   enableRTL?: boolean;
+  /** Should the icon/image/fonicon scaling should be enabled */
   shouldEnableScaling?: boolean;
 }
 export interface MFButtonGroupProps {
+  /** @param {ButtonVariantProps} List of buttons to be rendered in the group */
   buttonsList: Array<ButtonVariantProps>;
+  /** Props for avatar variant button */
   avatarButtonProps?: MFAvatarButtonProps;
+  /** Props for contained variant button */
   containedButtonProps?: MFContainedButtonProps;
+  /** Props of outlined variant button */
   outlinedButtonProps?: MFOutlinedButtonProps;
+  /** @deprecated Props for underlined variant button */
   underlinedButtonProps?: MFUnderlinedButtonProps;
+  /** Props for Font icon variant buttons */
   fontIconProps?: MFFontIconProps;
+  /** Should the button have TVPreferredFocus*/
   hasTVPreferredFocus?: boolean;
+  /** Should RTL be enabled */
   enableRTL?: boolean;
+  /** Is this ButtonGroup scrolling vertically */
   vertical?: boolean;
+  /** @deprecated Styles when button group is focused */
   focusedStyle?: StyleProp<ViewStyle>;
+  /** @deprecated Style of buttongroup*/
   style?: StyleProp<ViewStyle>;
+  /** @deprecated Function to execute when hubs change */
   onHubChanged: (hubIndex: number) => void;
+  /** Function to execute when button is focused in buttongroup */
   onFocus?:
     | null
     | ((event: NativeSyntheticEvent<TargetedEvent>, hubIndex: number) => void)
     | undefined;
+  /** Function to execute when button is blurred in buttongroup */
   onBlur?:
     | null
     | ((event: NativeSyntheticEvent<TargetedEvent>, hubIndex: number) => void)
     | undefined;
+  /** Function to execute when button is pressed in button group */
   onPress?:
     | null
     | ((event: GestureResponderEvent, hubIndex: number, param: any) => void)
     | undefined;
+  /** Event to setCardFocus when focus moves from button group to carousel card */
   setCardFocus?: any;
 }
 
+/**
+ * A functional component that renders an a group of MFButtons.
+ * @param {MFButtonGroupProps} props - The props required for MFButtonGroup.
+ * @returns {JSX.Element} - The rendered MFButtonGroup.
+ */
 const MFButtonGroup: React.FunctionComponent<MFButtonGroupProps> = (props) => {
   const [index, setIndex] = useState(0);
   const [hubIndex, setHubIndex] = useState(0);

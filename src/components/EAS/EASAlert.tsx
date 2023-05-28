@@ -6,11 +6,20 @@ import { AppStrings } from "../../config/strings";
 import AutoScrollingText from "../AutoSizingText";
 import SoundPlayer from "react-native-sound-player";
 
-interface EASProps {
+/**
+ * Props required for EAS alert
+ */
+export interface EASProps {
+  /** EAS Message that is displayed */
   easMessage: any;
 }
 
+/**
+ * Component that renders EAS Alert
+ * @param EASProps
+ */
 const EASAlert: React.FunctionComponent<EASProps> = (props) => {
+  /** URL that returns audio file */
   let audioBaseDynamicUri = "";
   let easAudioURL = "";
 

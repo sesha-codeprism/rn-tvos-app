@@ -20,8 +20,9 @@
     "Remove Node Modules & Pods": "rm -rf node_modules && rm yarn.lock && rm -rf /ios/Pods && rm /ios/Podfile.lock",
     "test": "jest ",
     "lint": "eslint .",
-    "Archive project": "cd ios && xcodebuild archive -workspace RetailClient.xcworkspace -scheme RetailClient-tvOS -archivePath ~/Downloads/MFRetailClient.xcarchive | xcpretty",
-    "Generate IPA from Archive": "cd ios && xcodebuild -exportArchive -archivePath ~/Downloads/MFRetailClient.xcarchive -exportPath ~/Downloads -exportOptionsPlist ExportOptions.plist -allowProvisioningUpdates | xcpretty"
+    "Archive project": "cd ios && xcodebuild archive -workspace RetailClient.xcworkspace -scheme RetailClient-tvOS -archivePath ~/Downloads/MFRetailClient.xcarchive",
+    "Generate IPA from Archive": "cd ios && xcodebuild -exportArchive -archivePath ~/Downloads/MFRetailClient.xcarchive -exportPath ~/Downloads -exportOptionsPlist ExportOptions.plist -allowProvisioningUpdates",
+    "Generate Documentation": "npx typedoc --entryPointStrategy expand ./src --entryPointStrategy expand ./backend  --skipErrorChecking"
   },
   "engines": {
     "node": "<17",
@@ -67,7 +68,8 @@
     "react-query": "3.34.12",
     "react-redux": "^8.0.2",
     "react-syntax-highlighter": "^15.4.5",
-    "rxjs": "^7.8.0"
+    "rxjs": "^7.8.0",
+    "ts-docs-gen": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -100,7 +102,7 @@
     "reactotron-react-native": "^5.0.0",
     "strip-json-comments": "^5.0.0",
     "ts-jest": "26.5.5",
-    "typedoc": "^0.22.17",
+    "typedoc": "^0.24.7c",
     "typescript": "^4.7.3",
     "util": "^0.12.5"
   },

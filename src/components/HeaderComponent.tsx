@@ -5,11 +5,20 @@ import { getUIdef, scaleAttributes } from "../utils/uidefinition";
 import { globalStyles as g } from "../config/styles/GlobalStyles";
 import AutoScrollingText from "./AutoSizingText";
 
-interface HeaderComponentProps {
+/** Props for Header component */
+export interface HeaderComponentProps {
+  /** Title string to be rendered */
   heading: string;
+  /** Subtitle string to be rendered */
   subHeading: string;
+  /** Should the title and subtitle be swapped */
   inverted?: boolean;
 }
+/**
+ * A Functional component that renders a Header component for Side Menu panels
+ * @param {HeaderComponentProps} props - Propsfor Header component
+ * @returns {JSX.Element} rendered  Header component
+ */
 const HeaderComponent: React.FunctionComponent<HeaderComponentProps> = (
   props
 ) => {

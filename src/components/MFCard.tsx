@@ -3,7 +3,6 @@ import MFText from "./MFText";
 import {
   Animated,
   NativeSyntheticEvent,
-  Pressable,
   StyleProp,
   StyleSheet,
   TargetedEvent,
@@ -11,14 +10,13 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import FastImage, { ImageStyle } from "react-native-fast-image";
+import { ImageStyle } from "react-native-fast-image";
 import { Feed } from "../@types/HubsResponse";
-import { appUIDefinition, debounceTime } from "../config/constants";
+import { appUIDefinition } from "../config/constants";
 import Styles from "./MFButtonsVariants/MFButtonStyles";
-import { AppImages } from "../assets/images";
 import { globalStyles } from "../config/styles/GlobalStyles";
 import { getFontIcon } from "../config/strings";
-
+/** All supported Aspect Ratios */
 export enum AspectRatios {
   "2:3" = "2:3",
   "4:3" = "4:3",
@@ -27,36 +25,60 @@ export enum AspectRatios {
   "3:4" = "3:4",
   "9:16" = "9:16",
 }
-
+/** Enum to decide on Title Placement */
 export enum TitlePlacement {
   "overlayCenter",
   "overlayTop",
   "overlayBottom",
   "beneath",
 }
+/** Props for MFCard */
 export interface MFCardProps {
+  /** Text label to be rendered */
   title: string;
+  /** Subtitle string to be rendered */
   subTitle?: string;
+  /** Feed information to be rendered as card */
   data?: Feed;
+  /** Should RTL be enabled as card */
   enableRTL?: boolean;
+  /** Specification of layout type of card */
   layoutType: "LandScape" | "Portrait" | "Circular";
+  /** Should the progress indicator be rendered */
   showProgress?: boolean;
+  /** Component to be rendered as progress component */
   progressComponent?: React.ReactElement | undefined;
+  /** Should title be rendered only when card is focused */
   showTitleOnlyOnFocus?: boolean;
+  /** Style of card */
   style?: StyleProp<ViewStyle>;
+  /** Style of the background image */
   imageStyle?: StyleProp<ImageStyle>;
+  /** style of card when focused */
   focusedStyle?: StyleProp<ViewStyle>;
+  /** Placement of title w.r.t card */
   titlePlacement?: TitlePlacement;
+  /** Component to be rendered on top of the card */
   overlayComponent?: React.ReactElement;
+  /** Should the text component be rendered */
   shouldRenderText: boolean;
+  /** Function to execute when card is focused */
   onFocus?: null | ((event: any) => void) | undefined;
+  /** Function to execute then card is unfocused */
   onBlur?:
     | null
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
     | undefined;
+  /** Function to execute then card is pressed */
   onPress?: null | ((event: any) => void) | undefined;
 }
 
+/**
+ * A functional component that renders a showcard
+ * @deprecated Please use MFLibrary card for Showcard, this is used only for "ViewAll" scenario
+ * @param {MFCardProps} props - Props for MFCard
+ * @returns {React.ForwardedRef} - The rendered MFCard
+ */
 const MFCard: React.FunctionComponent<MFCardProps> = React.forwardRef(
   ({ ...props }, ref: any) => {
     const [focused, setFocused] = useState(false);
