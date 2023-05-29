@@ -55,7 +55,7 @@ class MKPlayerView: UIView {
     if let config = playerConfig {
       AppDataManager.shared.currentSourceConfig = SourceConfig(title: "Sintel", isLive: config["live"] as? Bool ?? false, mediaId: config["mediaUID"] as? String ?? nil, applicationToken: config["appToken"] as? String ?? nil)
         
-      AppDataManager.shared.currentEnvironmentConfig = EnvironmentConfig(environment: "TMO ProdA", serverUrl: config["server_url"] as? String ?? "https://ottapp-appgw-amp-a.proda.tmo.tv3cloud.com", clientUrl: config["server_url"] as? String ?? "https://ottapp-appgw-client-a.proda.tmo.tv3cloud.com")
+      AppDataManager.shared.currentEnvironmentConfig = EnvironmentConfig(environment: "SKT ProdB", serverUrl: config["server_url"] as? String ?? "https://ottapp-appgw-amp-a.prodb.skt.tv3cloud.com", clientUrl: config["server_url"] as? String ?? "https://ottapp-appgw-client-a.prodb.skt.tv3cloud.com")
       AppDataManager.shared.stsToken = config["stsToken"] as? String ?? authToken
     }
     

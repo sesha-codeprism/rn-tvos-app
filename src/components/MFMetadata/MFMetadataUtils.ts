@@ -6,8 +6,16 @@ import { getNetworkInfo } from '../../utils/assetUtils';
 import { replacePlaceHoldersInTemplatedString } from '../../utils/strings';
 import { chooseRating, metadataSeparator } from '../../utils/Subscriber.utils';
 
+/** Enum to specify the type of metadata element */
 export enum MetadataType { "text", "image", "icon" }
 
+
+/**
+ * Function to retrieve the metadata information from the template string based on the provided subscriberFeed information
+ * @param {string} templateString - The template string that specifies what metadata is to be rendered.
+ * @param {SubscriberFeed} item - Subsciber feed information.
+ * @returns {Object} Returns an Object with metadata type and resolved metadata to be rendered
+ */
 export function getMetadataInfo(templateString: string, item: SubscriberFeed): { type: MetadataType | undefined, metadataInfo: string } {
     let metadataLine1: string = '';
     let metadataType: MetadataType | undefined = undefined;
@@ -23,6 +31,12 @@ export function getMetadataInfo(templateString: string, item: SubscriberFeed): {
 }
 
 
+/**
+ * Function to resolve metadata based on template string and Subscriber feed information
+ * @param {string} templateString - The template string that specifies what metadata is to be rendered.
+ * @param {SubscriberFeed} item - Subsciber feed information.
+ * @returns {string} Returns the metadata string with template string replaced by supplied information.
+ */
 export function getResolvedMetadata(templateString: string, item: any): string {
     if (!item) {
         return "";

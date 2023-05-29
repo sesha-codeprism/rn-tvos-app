@@ -1,14 +1,14 @@
 # Introduction
 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.
+Retail Client v3 is an enhanced version of Retail Client v2, developed exclusively for Apple TV with Typescript, React-Query and Native codebase (Objective-C and Swift).Performance and quality of the application have risen several times since switching to pure Typescript with React-Query and removing You.I framework's needs and dependencies.
 
 ## Table of Contents
 
 - [Project Setup](#project-setup)
 - [Build and Run](#build-and-run)
+- [Configuration and Styling](#configuration-and-styling)
 - [Common Issues](#common-issues)
 - [Writing and Running Tests](#writing-and-running-tests)
-
 
 ## Project Setup
 
@@ -26,6 +26,8 @@ NPM scripts to perform setup actions are available in `NPM Scripts` section. The
 
 ## Build and Run
 
+Note: The scheme `RetailClient-tvOS` is exclusive for simultor runtime while the scheme `RetailClient-tvOS_Player` is exlusive for physical TV device
+
 To build and run the project,
 
 1. Open XCode
@@ -34,6 +36,24 @@ To build and run the project,
 3. Clean build folder (Product tab -> Clean Build folder or CMD + Shift + K)
    ![Cleaning Build Folder](./readme/screenshot2.png)
 4. Hit `Run` Button to launch the application on Simulator or connected Apple TV.
+
+## Configuration and Styling
+
+Styling and Customisation in Client v3 application are driven through `uidefinition.json` and `config.ts` files. Each folder inside skins folder represents an operator supported by Client v3 application and each operator has specifically configured UI styling and configuration settings, which are stored in these files.
+
+When building or running the app for a specific operator, all the files in that specific operator's folder are copied into `src/config/` and `src/assets/` folder.
+
+For parsing `uidefinition.json`, the NPM script `uidef` is executed using `yarn run uidef` or by using NPM scripts tag in VSCode. This parses the `uidefinition.json`, cleans up the comments and replaces template strings with values. This creates the `uidefinition.parsed.json` inside `src/config/` folder.
+
+All the CSS styles used in Client v3 application are derived from `uidefinition.json` while providing fallback styles incase no styles are specified in `uidefinition.json`.
+
+## Changing environment
+
+To build the app for a different environment (default is devtest "https://reachclient.dev.mr.tv3cloud.com/"), the following process is required:
+
+- Open `backend/globals.ts`
+- The line `let url = "https://reachclient.dev.mr.tv3cloud.com/";` should be replaced by required url
+- An uninstall and clean install of the app is required for the new env change is applied
 
 ## Generate production version
 

@@ -18,10 +18,19 @@ import { Empty } from "../../views/MFDrawersContainer";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-interface SettingsContainerProps {
+/** Props for the container holding Settings container */
+
+export interface SettingsContainerProps {
+  /** Extent of drawer view in percentage of entire screen */
   drawerPercentage: number;
+  /** Props required for navigation */
   navigation?: any;
 }
+/**
+ * A functional component that renders container for rendering Settings view.
+ * @param {SettingsContainerProps} props - The props required for Settings container side menu.
+ * @returns {JSX.Element} - The rendered Settings container side menu.
+ */
 const SettingsContainer = (props: SettingsContainerProps) => {
   const offset = useSharedValue(
     GLOBALS.enableRTL ? 0 : SCREEN_WIDTH - SCREEN_WIDTH * props.drawerPercentage

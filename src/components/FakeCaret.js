@@ -7,9 +7,20 @@ import React, {
 } from "react";
 import { Animated, Text } from "react-native";
 
-const CaretDefaultComponent = () => {
+/**
+ * A Functional component that returns default caret component
+ * @returns {Text} component with caret content
+ */
+export const CaretDefaultComponent = () => {
   return <Text>_</Text>;
 };
+
+/**
+ * A functional component to render a fake caret symbol in text fields
+ * @param animatedStyle - Animated style of caret
+ * @param CaretComponent - Component to render at caret
+ * @returns {forwardRef} - A fake caret component
+ */
 export const FakeCaret = forwardRef(
   ({ animatedStyle = {}, CaretComponent = CaretDefaultComponent }, ref) => {
     const [visible, setVisible] = useState(true);

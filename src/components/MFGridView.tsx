@@ -12,9 +12,11 @@ import { SubscriberFeed } from "../@types/SubscriberFeed";
 import MFCard, { AspectRatios, TitlePlacement } from "./MFCard";
 import MFLibraryCard from "./MFLibraryCard";
 import MFOverlay from "./MFOverlay";
-
+/** Props for MFGrid */
 interface MFGridProps {
+  /** List of Subscriber feed to render as Grid */
   dataSource?: Array<SubscriberFeed>;
+  /** Styles of root container that holds Grid view */
   railContainerStyles?: StyleProp<ViewStyle>;
   /** MFilmStrip Rail title Styles */
   railTitleStyles?: StyleProp<TextStyle>;
@@ -30,18 +32,26 @@ interface MFGridProps {
   focusedStyle?: StyleProp<ViewStyle>;
   /** Placement of the title on the card - Top, Center, Bottom or Beneath */
   cardStyle?: "16x9" | "3x4" | "2x3";
+  /** Specification of title placement */
   titlePlacement?: TitlePlacement;
+  /** Function to execute when grid element is focused */
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
-
+  /** Function to execute when grid element is pressed/selected */
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
-
+  /** Function to execute when grid element is unfocused */
   onBlur?: null | ((event: SubscriberFeed) => void) | undefined;
   /** Handler for when Flatlist end is reached */
   onEndReached?: null | (() => void) | undefined;
+  /** Should auto focus on the first card in the grid */
   autoFocusOnFirstCard?: boolean;
+  /** Id of the selected card */
   selectedId: any;
 }
-
+/**
+ * A functional component to render a collection of SubscriberFeed as GridView
+ * @param { MFGridProps} props - Props required for MFGridView
+ * @returns {React.ForwardedRef} - Renders a Grid view representation of SubscriberFeed
+ */
 const MFGridView: React.FunctionComponent<MFGridProps> = React.forwardRef(
   ({ ...props }, ref: any) => {
     return (

@@ -10,29 +10,22 @@ import {
   View,
   ViewStyle,
   TouchableOpacity,
-  Image,
   ImageBackground,
 } from "react-native";
-import FastImage, { ImageStyle } from "react-native-fast-image";
+import { ImageStyle } from "react-native-fast-image";
 import { MFThemeObject } from "../@types/MFTheme";
 import { appUIDefinition } from "../config/constants";
 import { SubscriberFeed } from "../@types/SubscriberFeed";
 import { AppImages } from "../assets/images";
-import { Value } from "react-native-reanimated";
 import { SCREEN_HEIGHT } from "../utils/dimensions";
-import { globalStyles } from "../config/styles/GlobalStyles";
 import { sourceTypeString } from "../utils/analytics/consts";
 import dateUtils from "../utils/dateUtils";
 import MFOverlay from "./MFOverlay";
-import {
-  invalidateQueryBasedOnSpecificKeys,
-  queryClient,
-} from "../config/queries";
-import useLiveData, { getLiveData } from "../customHooks/useLiveData";
+import { queryClient } from "../config/queries";
+import { getLiveData } from "../customHooks/useLiveData";
 import { GLOBALS } from "../utils/globals";
-import { debounce2 } from "../utils/app/app.utilities";
-const MFTheme: MFThemeObject = require("../config/theme/theme.json");
 
+/** All supported Aspect Ratios */
 export enum AspectRatios {
   "2:3" = "2:3",
   "4:3" = "4:3",
@@ -42,39 +35,66 @@ export enum AspectRatios {
   "9:16" = "9:16",
 }
 
+/** Enum to decide on Title Placement */
 export enum TitlePlacement {
   "overlayCenter",
   "overlayTop",
   "overlayBottom",
   "beneath",
 }
+
+/** Props for MFLibraryCard */
 export interface MFLibraryCardProps {
+  /** Text label to be rendered */
   title: string;
+  /** Subtitle string to be rendered */
   subTitle?: string;
+  /** Feed information to be rendered as card */
   data: SubscriberFeed;
+  /** Should RTL be enabled for card */
   enableRTL?: boolean;
+  /** Specification of layout type of card */
   layoutType: "LandScape" | "Portrait" | "Circular";
+  /** Should the progress indicator be rendered */
   showProgress?: boolean;
+  /** Component to be rendered as progress component */
   progressComponent?: React.ReactElement | undefined;
+  /** Should title be rendered only when card is focused */
   showTitleOnlyOnFocus?: boolean;
+  /** Style of card */
   style?: StyleProp<ViewStyle>;
+  /** Style of the background image */
   imageStyle?: StyleProp<ImageStyle>;
+  /** style of card when focused */
   focusedStyle?: StyleProp<ViewStyle>;
+  /** Placement of title w.r.t card */
   titlePlacement?: TitlePlacement;
-  cardStyle?: "16x9" | "3x4" | "2x3";
+  /** Component to be rendered on top of the card */
   overlayComponent?: React.ReactElement;
+  /** Should the text component be rendered */
   shouldRenderText: boolean;
+  /** Function to execute when card is focused */
   onFocus?: null | ((event: SubscriberFeed) => void) | undefined;
+  /** Function to execute then card is unfocused */
   onBlur?:
     | null
     | ((event: NativeSyntheticEvent<TargetedEvent>) => void)
     | undefined;
+  /** Function to execute then card is pressed */
   onPress?: null | ((event: SubscriberFeed) => void) | undefined;
+  /** Should autofocus on the first card */
   autoFocusOnFirstCard?: boolean;
+  /** ID of the selected card */
   libraryCardId?: string;
+  /** Event to trigger on long press of card */
   onLongPress?: any;
 }
 
+/**
+ * A functional component that renders a showcard
+ * @param {MFLibraryCardProps} props - Props for MFCard
+ * @returns {React.ForwardedRef} - The rendered MFCard
+ */
 const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
   React.forwardRef(({ ...props }, ref: any) => {
     const [focused, setFocused] = useState(false);
@@ -104,17 +124,17 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
     // const [progressUpdateInterval, setProgressUpdateInterval] = useState(0);
     // const [clearIntervalTimeout, setClearIntervalTimeout] = useState(0);
     // const [progressBookmarkTimeout, setProgressBookmarkTimeout] = useState(0);
-    const _onPress = (event: GestureResponderEvent) => {
+    const _onPress = () => {
       console.log("onPress called");
       props.onPress && props.onPress(props.data);
     };
-    const _onLongPress = (event: GestureResponderEvent) => {
+    const _onLongPress = () => {
       console.log("onLongPress called");
 
       props.onLongPress && props.onLongPress(props.data);
     };
 
-    const _onFocus = (event: NativeSyntheticEvent<TargetedEvent>) => {
+    const _onFocus = () => {
       setFocused(true);
       Animated.timing(fadeAnim, {
         useNativeDriver: true,
@@ -187,7 +207,7 @@ const MFLibraryCard: React.FunctionComponent<MFLibraryCardProps> =
         stopUpdateTimer();
         console.log("Invalidating the live queries");
         console.log("Refreshing details");
-        getLiveData(GLOBALS.channelRights).then((resp) => {
+        getLiveData(GLOBALS.channelRights).then(() => {
           queryClient.refetchQueries(["live"]);
         });
       }, timeToEnd);

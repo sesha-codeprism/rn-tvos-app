@@ -13,9 +13,18 @@ import EASAlert from "./EASAlert";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-interface EASContainerProps {
+
+/** Props for Modal that renders EASAlert */
+export interface EASContainerProps {
+  /** EAS details for EAS alert */
   easDetails: any;
 }
+/**
+ * A functional component that renders a modal for EAS Alert.
+ * @param {EASContainerProps} props - The props EASModal.
+ * @returns {JSX.Element} - The rendered EASModal.
+ */
+
 const EASModal = (props: EASContainerProps) => {
   const closeDrawer = () => {
     console.log("Requestiong modal close");

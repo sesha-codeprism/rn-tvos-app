@@ -1,17 +1,34 @@
 import React from "react";
-import { DeviceEventEmitter, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import {
+  DeviceEventEmitter,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { StyleSheet } from "react-native";
 import { getFontIcon } from "../config/strings";
 import { globalStyles } from "../config/styles/GlobalStyles";
 import { SCREEN_WIDTH } from "../utils/dimensions";
 import MFButton, { MFButtonVariant } from "./MFButton/MFButton";
 import { TopBarWithTitle } from "./TopBarWithTitle";
-
-type Props = { error: Error; resetError: () => void };
+/** Props for Error fallback component */
+export type Props = {
+  /** Error thrown by JS */
+  error: Error;
+  /** Function to reset error and restart JS stack */
+  resetError: () => void;
+};
 
 //@ts-ignore
 const dismiss_icon = getFontIcon("dismiss");
 
+/**
+ * A functional component that renders fallback screen on error.
+ * When an error is thrown, this screen is used as fallback to prevent appcrash
+ * @param {Props} props - The props required for Error fallback screen.
+ * @returns {JSX.Element} - The rendered Error fallback screen.
+ */
 const ErrorFallbackComponent = (props: Props) => (
   <View style={styles.container}>
     <TopBarWithTitle title=" " />
@@ -51,7 +68,7 @@ const ErrorFallbackComponent = (props: Props) => (
           styles.button,
           { backgroundColor: globalStyles.backgroundColors.primary1 },
         ]}
-        onPress={() => DeviceEventEmitter.emit('closeAll',  undefined)}
+        onPress={() => DeviceEventEmitter.emit("closeAll", undefined)}
         iconButtonStyles={{
           shouldRenderImage: true,
           iconPlacement: "Left",

@@ -14,10 +14,15 @@ import { SCREEN_WIDTH } from "../../utils/dimensions";
 import MFText from "../MFText";
 import { getMetadataInfo, MetadataType } from "./MFMetadataUtils";
 
-interface MFMetaDataProps {
+export interface MFMetaDataProps {
+  /** Subscriber feed information that the carousel card above the metadata is rendering */
   currentFeed: SubscriberFeed;
 }
-
+/**
+ * A functional component that renders an a Metadata under a Carousel card.
+ * @param {MFMetaDataProps} props - The props required for MFMetadata component.
+ * @returns {JSX.Element} - The rendered Metadata.
+ */
 const MFMetaData: React.FunctionComponent<MFMetaDataProps> = (props) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const translateAnim = useRef(new Animated.Value(0)).current;

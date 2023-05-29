@@ -29,12 +29,27 @@ const browseCategoryConfig = getUIdef("BrowseCategory")?.config || {};
 
 
 export const assetObject = {
+  /** Id 0 for programs */
   0: "programs",
+  /** Id 1 for seaons */
   1: "season",
+  /** Id 2 for series */
   2: "series",
+  /** Id 3 for programs */
   3: "series"
 };
 
+/**
+ * This is a TypeScript function that retrieves program play actions using GET request with
+ * specific parameters and headers.
+ * @param {string} uri - The `uri` parameter is a string that represents the base URI for the API
+ * endpoint being called. It is not used in the `getProgramPlayActions` function, but it may be used in other
+ * parts of the codebase.
+ * @param {any} params - The `params` object contains the query parameters that will be sent along with
+ * the GET request to the specified URL. The parameters include:
+ * @returns The `getProgramPlayActions` function is returning a Promise that resolves to the response object
+ * from the `GET` request made to the specified URL with the given parameters and headers.
+ */
 const getProgramPlayActions = async (itemID: string, params: any) => {
   const { id } = params;
   const uri: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v4/programs/${id}/play-options/`;
@@ -53,17 +68,21 @@ const getProgramPlayActions = async (itemID: string, params: any) => {
     return undefined;
   }
 };
-
+/**
+ * This is a TypeScript function that retrieves Similar programs using GET request with
+ * specific parameters and headers.
+ * @param {string} uri - The `uri` parameter is a string that represents the base URI for the API
+ * endpoint being called. It is not used in the `getSimilarPrograms` function, but it may be used in other
+ * parts of the codebase.
+ * @param {any} params - The `params` object contains the query parameters that will be sent along with
+ * the GET request to the specified URL. The parameters include:
+ * @returns The `getSimilarPrograms` function is returning a Promise that resolves to the response object
+ * from the `GET` request made to the specified URL with the given parameters and headers.
+ */
 const getSimilarPrograms = async (itemId: string, params: any) => {
   console.log(params)
   const { itemType, id } = params;
-  //   const res = {
-  //     name: "subscriber/getSimilarPrograms",
-  //     count: 20,
-  //     response: [1, 2, 3],
-  //   };
-  //   return res;
-  // };
+
   const url: string = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap?.Services.subscriber || '') + `/v4/${(assetObject as any)[itemType || 0]
     }/${id}/similar-items/`;
   const response = await GET({
@@ -78,7 +97,14 @@ const getSimilarPrograms = async (itemId: string, params: any) => {
 }
 
 
-
+/**
+ * This is a TypeScript function that retrieves Recommended program details using GET request with
+ * specific parameters and headers.
+ * @param {any} params - The `params` object contains the query parameters that will be sent along with
+ * the GET request to the specified URL. The parameters include:
+ * @returns The `getYouMightLike` function is returning a Promise that resolves to the response object
+ * from the `GET` request made to the specified URL with the given parameters and headers.
+ */
 const getYouMightLike = async (params: any) => {
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || "") +
@@ -101,6 +127,14 @@ const getYouMightLike = async (params: any) => {
   });
   return response;
 };
+/**
+ * This is a TypeScript function that retrieves search items using search key using GET request with
+ * specific parameters and headers.
+ * @param {SearchParam} params - The `params` object contains the query parameters that will be sent along with
+ * the GET request to the specified URL. The parameters include:
+ * @returns The `searchItems` function is returning a Promise that resolves to the response object
+ * from the `GET` request made to the specified URL with the given parameters and headers.
+ */
 export const searchItems = async (params: SearchParam) => {
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.search || "") +
@@ -117,7 +151,18 @@ export const searchItems = async (params: SearchParam) => {
   return response;
 };
 
-const getBookmarks = async (uri: string, params: any) => {
+/**
+ * This is a TypeScript function that retrieves bookmarks from a specified URI using GET request with
+ * specific parameters and headers.
+ * @param {string} uri - The `uri` parameter is a string that represents the base URI for the API
+ * endpoint being called. It is not used in the `getBookmarks` function, but it may be used in other
+ * parts of the codebase.
+ * @param {any} params - The `params` object contains the query parameters that will be sent along with
+ * the GET request to the specified URL. The parameters include:
+ * @returns The `getBookmarks` function is returning a Promise that resolves to the response object
+ * from the `GET` request made to the specified URL with the given parameters and headers.
+ */
+export const getBookmarks = async (uri: string, params: any) => {
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || "") +
     "/v4/libraries/Continue";
@@ -140,15 +185,26 @@ const getBookmarks = async (uri: string, params: any) => {
   return response;
 };
 
-export const publishBookmark =async (arg0: string, payload: any, type: udlBookMark) => {
+/**
+ * This is a TypeScript function that publishes bookmark to backend using PUT request with
+ * specific parameters and headers.
+ * @param {string} uri - The `uri` parameter is a string that represents the base URI for the API
+ * endpoint being called. It is not used in the `publishBookMark` function, but it may be used in other
+ * parts of the codebase.
+ * @param {any} payload - The `payload` object contains the query parameters that will be sent along with
+ * the GET request to the specified URL. The parameters include:
+ * @returns The `publishBookmark` function is returning a Promise that resolves to the response object
+ * from the `PUT` request made to the specified URL with the given parameters and headers.
+ */
+export const publishBookmark = async (uri: string, payload: any, type: udlBookMark) => {
   let bookmarkType = "videos";
   if (type === udlBookMark.RECORDING) {
-      bookmarkType = "recordings";
+    bookmarkType = "recordings";
   } else if (type === udlBookMark.CATCHUP) {
-      bookmarkType = "catchup";
+    bookmarkType = "catchup";
   }
-  const url = 
-  parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriberbkmark || '') + `/v3/${bookmarkType}/${Id}/bookmark&storeId=${DefaultStore.Id}`;
+  const url =
+    parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriberbkmark || '') + `/v3/${bookmarkType}/${Id}/bookmark&storeId=${DefaultStore.Id}`;
   const response = await PUT({
     url: url,
     params: {
@@ -159,22 +215,30 @@ export const publishBookmark =async (arg0: string, payload: any, type: udlBookMa
       'x-tv3-profiles': GLOBALS.userProfile?.Name?.toLocaleLowerCase() === 'default' ? '' : GLOBALS.userProfile?.Id
     },
   });
-return response;
+  return response;
 }
-
-export const getAssetBookmark  = async (type: udlBookMark, programId: string, bookmarkId: string = programId) => {
+/**
+ * This is a TypeScript function that retrieves AssetBookMark information using GET request with
+ * specific parameters and headers.
+ * @param {udlBookMark} type - The `type` parameter represents the type of bookmark to get the information for
+ * @param {string} programId - The `programId` string represents the id of the program 
+ * @param {string} bookmarkId - The `bookmarkId` represents the id of the bookmark
+ * @returns The `getAssetBookmark` function is returning a Promise that resolves to the response object
+ * from the `GET` request made to the specified URL with the given parameters and headers.
+ */
+export const getAssetBookmark = async (type: udlBookMark, programId: string, bookmarkId: string = programId) => {
   const { accessToken } = GLOBALS.store!;
   let bookmarkType = "videos";
   let url = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriberbkmark || '') + `/v3/${bookmarkType}/${programId}/bookmark`;
   if (type === udlBookMark.RECORDING) {
     bookmarkType = "recordings";
     url = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriberbkmark || '') +
-            `/v3/programs/${programId}/${bookmarkType}/${bookmarkId}/bookmark`;
-} else if (type === udlBookMark.CATCHUP) {
+      `/v3/programs/${programId}/${bookmarkType}/${bookmarkId}/bookmark`;
+  } else if (type === udlBookMark.CATCHUP) {
     bookmarkType = "catchup";
     url = parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriberbkmark || '') +
-            `/v3/${bookmarkType}/${programId}/bookmark`;
-}
+      `/v3/${bookmarkType}/${programId}/bookmark`;
+  }
   const response = await GET({
     url: url,
     params: {
@@ -187,7 +251,14 @@ export const getAssetBookmark  = async (type: udlBookMark, programId: string, bo
   });
   return response.data
 }
-
+/**
+ * This is a TypeScript function that retrieves Subscriber viewed items information using GET request with
+ * specific parameters and headers.
+ * @param {any} params - The `params` object contains the query parameters that will be sent along with
+ * the GET request to the specified URL. The parameters include:
+ * @returns The `getSubscriberPins` function is returning a Promise that resolves to the response object
+ * from the `GET` request made to the specified URL with the given parameters and headers.
+ */
 export const getSubscriberPins = async (params?: any) => {
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || "") +
@@ -211,6 +282,16 @@ export const getSubscriberPins = async (params?: any) => {
   return response;
 };
 
+/**
+ * This is a TypeScript function that retrieves reminders from a specified URL with specific parameters
+ * and headers.
+ * @param {any} [params] - The `params` object is an optional parameter that can be passed to the
+ * `getReminders` function. It contains the query parameters that will be appended to the URL when
+ * making the GET request. The parameters include:
+ * @returns The function `getReminders` is returning a Promise that resolves to the response of a GET
+ * request to a specific URL with certain parameters and headers. The response is likely to be related
+ * to reminders for titles, catchups, and recordings for a subscriber.
+ */
 const getReminders = async (params?: any) => {
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || "") +
@@ -233,6 +314,7 @@ const getReminders = async (params?: any) => {
   });
   return response;
 };
+
 const getSubscriberSubscriptions = async (params?: any) => {
   const url: string =
     parseUri(GLOBALS.bootstrapSelectors?.ServiceMap.Services.subscriber || "") +
@@ -811,10 +893,10 @@ export const getDynamicFeeds = async (id?: string, params?: any) => {
       )
     );
   }
-  if(Id){ 
-    return {data : feedContents[0].items};
+  if (Id) {
+    return { data: feedContents[0].items };
   }
-  
+
   return feedContents;
 }
 

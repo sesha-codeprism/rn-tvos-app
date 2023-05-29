@@ -6,23 +6,44 @@ import { getFontIcon } from "../../config/strings";
 import { globalStyles } from "../../config/styles/GlobalStyles";
 import { getUIdef, scaleAttributes } from "../../utils/uidefinition";
 
+/**
+ * Interface for UINotification
+ */
 export interface Notification {
+  /** ID of the notification */
   id: string;
+  /** Icon displayed in the notification */
   iconName: keyof typeof mkIcons;
+  /** Text label displayed  */
   title?: string;
+  /** Second message line displayed in UI Notification */
   subtitle?: string;
 }
+/** Props for NotificationCard */
 interface NotificationCardProps {
+  /** Id of the notification card */
   id: string;
+  /** Text label displayed  */
   title?: string;
+  /** Second message line displayed in UI Notification */
   subtitle?: string;
+  /** Icon displayed in the notification */
   iconName: keyof typeof mkIcons;
+  /** Style of the icon displayed */
   iconStyle?: { [key: string]: any };
+  /** Function to trigger on notification closure */
   onCloseNotification: (arg0: Notification) => void;
+  /** The duration of message display */
   duration: number;
+  /** Styles of the container that displays the UINotification */
   containerStyle?: { [key: string]: any };
 }
 
+/**
+ * A functional component that renders an a MFNotificationCard.
+ * @param {NotificationCardProps} props - The props required for MFMenu.
+ * @returns {JSX.Element} - The rendered MFNotificationCard.
+ */
 const MFNotificationCard = (props: NotificationCardProps) => {
   const [progress, setProgress] = useState(0);
   const [horizontalPosition, setHorizontalPosition] = useState(
@@ -63,7 +84,7 @@ const MFNotificationCard = (props: NotificationCardProps) => {
     const { duration } = props;
     // Calculate how much each tick should increase the progress to allow for the duration.
     const increment = 100 / (duration / config.notificationsConfig.tick);
-    
+
     if (progress < 100) {
       const newProgress = progress + increment;
       setProgress(newProgress);
